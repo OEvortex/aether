@@ -7,8 +7,8 @@
         {
             "id": "01-ai-yi-large",
             "name": "01-ai/yi-large",
-            "tooltip": "01-ai/yi-large by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "01-ai/yi-large",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "01-ai/yi-large",
             "capabilities": {
@@ -19,8 +19,8 @@
         {
             "id": "abacusai-dracarys-llama-3-1-70b-instruct",
             "name": "abacusai/dracarys-llama-3.1-70b-instruct",
-            "tooltip": "abacusai/dracarys-llama-3.1-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "abacusai/dracarys-llama-3.1-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "abacusai/dracarys-llama-3.1-70b-instruct",
             "capabilities": {
@@ -31,8 +31,8 @@
         {
             "id": "adept-fuyu-8b",
             "name": "adept/fuyu-8b",
-            "tooltip": "adept/fuyu-8b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "adept/fuyu-8b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "adept/fuyu-8b",
             "capabilities": {
@@ -43,8 +43,8 @@
         {
             "id": "ai21labs-jamba-1-5-large-instruct",
             "name": "ai21labs/jamba-1.5-large-instruct",
-            "tooltip": "ai21labs/jamba-1.5-large-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ai21labs/jamba-1.5-large-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ai21labs/jamba-1.5-large-instruct",
             "capabilities": {
@@ -55,8 +55,8 @@
         {
             "id": "ai21labs-jamba-1-5-mini-instruct",
             "name": "ai21labs/jamba-1.5-mini-instruct",
-            "tooltip": "ai21labs/jamba-1.5-mini-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ai21labs/jamba-1.5-mini-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ai21labs/jamba-1.5-mini-instruct",
             "capabilities": {
@@ -67,8 +67,8 @@
         {
             "id": "aisingapore-sea-lion-7b-instruct",
             "name": "aisingapore/sea-lion-7b-instruct",
-            "tooltip": "aisingapore/sea-lion-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "aisingapore/sea-lion-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "aisingapore/sea-lion-7b-instruct",
             "capabilities": {
@@ -79,8 +79,8 @@
         {
             "id": "baai-bge-m3",
             "name": "baai/bge-m3",
-            "tooltip": "baai/bge-m3 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "baai/bge-m3",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "baai/bge-m3",
             "capabilities": {
@@ -91,8 +91,8 @@
         {
             "id": "baichuan-inc-baichuan2-13b-chat",
             "name": "baichuan-inc/baichuan2-13b-chat",
-            "tooltip": "baichuan-inc/baichuan2-13b-chat by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "baichuan-inc/baichuan2-13b-chat",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "baichuan-inc/baichuan2-13b-chat",
             "capabilities": {
@@ -103,8 +103,8 @@
         {
             "id": "bigcode-starcoder2-15b",
             "name": "bigcode/starcoder2-15b",
-            "tooltip": "bigcode/starcoder2-15b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "bigcode/starcoder2-15b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "bigcode/starcoder2-15b",
             "capabilities": {
@@ -115,8 +115,8 @@
         {
             "id": "bigcode-starcoder2-7b",
             "name": "bigcode/starcoder2-7b",
-            "tooltip": "bigcode/starcoder2-7b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "bigcode/starcoder2-7b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "bigcode/starcoder2-7b",
             "capabilities": {
@@ -127,8 +127,8 @@
         {
             "id": "bytedance-seed-oss-36b-instruct",
             "name": "bytedance/seed-oss-36b-instruct",
-            "tooltip": "bytedance/seed-oss-36b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "bytedance/seed-oss-36b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "bytedance/seed-oss-36b-instruct",
             "capabilities": {
@@ -139,8 +139,8 @@
         {
             "id": "databricks-dbrx-instruct",
             "name": "databricks/dbrx-instruct",
-            "tooltip": "databricks/dbrx-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "databricks/dbrx-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "databricks/dbrx-instruct",
             "capabilities": {
@@ -151,7 +151,7 @@
         {
             "id": "deepseek-ai-deepseek-coder-6-7b-instruct",
             "name": "deepseek-ai/deepseek-coder-6.7b-instruct",
-            "tooltip": "deepseek-ai/deepseek-coder-6.7b-instruct by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-coder-6.7b-instruct",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-coder-6.7b-instruct",
@@ -163,7 +163,7 @@
         {
             "id": "deepseek-ai-deepseek-r1-distill-llama-8b",
             "name": "deepseek-ai/deepseek-r1-distill-llama-8b",
-            "tooltip": "deepseek-ai/deepseek-r1-distill-llama-8b by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-r1-distill-llama-8b",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-r1-distill-llama-8b",
@@ -175,7 +175,7 @@
         {
             "id": "deepseek-ai-deepseek-r1-distill-qwen-14b",
             "name": "deepseek-ai/deepseek-r1-distill-qwen-14b",
-            "tooltip": "deepseek-ai/deepseek-r1-distill-qwen-14b by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-r1-distill-qwen-14b",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-r1-distill-qwen-14b",
@@ -187,7 +187,7 @@
         {
             "id": "deepseek-ai-deepseek-r1-distill-qwen-32b",
             "name": "deepseek-ai/deepseek-r1-distill-qwen-32b",
-            "tooltip": "deepseek-ai/deepseek-r1-distill-qwen-32b by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-r1-distill-qwen-32b",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-r1-distill-qwen-32b",
@@ -199,7 +199,7 @@
         {
             "id": "deepseek-ai-deepseek-r1-distill-qwen-7b",
             "name": "deepseek-ai/deepseek-r1-distill-qwen-7b",
-            "tooltip": "deepseek-ai/deepseek-r1-distill-qwen-7b by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-r1-distill-qwen-7b",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-r1-distill-qwen-7b",
@@ -211,7 +211,7 @@
         {
             "id": "deepseek-ai-deepseek-v3-1",
             "name": "deepseek-ai/deepseek-v3.1",
-            "tooltip": "deepseek-ai/deepseek-v3.1 by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-v3.1",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-v3.1",
@@ -223,7 +223,7 @@
         {
             "id": "deepseek-ai-deepseek-v3-1-terminus",
             "name": "deepseek-ai/deepseek-v3.1-terminus",
-            "tooltip": "deepseek-ai/deepseek-v3.1-terminus by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-v3.1-terminus",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-v3.1-terminus",
@@ -235,7 +235,7 @@
         {
             "id": "deepseek-ai-deepseek-v3-2",
             "name": "deepseek-ai/deepseek-v3.2",
-            "tooltip": "deepseek-ai/deepseek-v3.2 by NVIDIA NIM",
+            "tooltip": "deepseek-ai/deepseek-v3.2",
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/deepseek-v3.2",
@@ -247,8 +247,8 @@
         {
             "id": "google-codegemma-1-1-7b",
             "name": "google/codegemma-1.1-7b",
-            "tooltip": "google/codegemma-1.1-7b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/codegemma-1.1-7b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/codegemma-1.1-7b",
             "capabilities": {
@@ -259,8 +259,8 @@
         {
             "id": "google-codegemma-7b",
             "name": "google/codegemma-7b",
-            "tooltip": "google/codegemma-7b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/codegemma-7b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/codegemma-7b",
             "capabilities": {
@@ -271,8 +271,8 @@
         {
             "id": "google-deplot",
             "name": "google/deplot",
-            "tooltip": "google/deplot by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/deplot",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/deplot",
             "capabilities": {
@@ -283,8 +283,8 @@
         {
             "id": "google-gemma-2-27b-it",
             "name": "google/gemma-2-27b-it",
-            "tooltip": "google/gemma-2-27b-it by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/gemma-2-27b-it",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/gemma-2-27b-it",
             "capabilities": {
@@ -295,8 +295,8 @@
         {
             "id": "google-gemma-2-2b-it",
             "name": "google/gemma-2-2b-it",
-            "tooltip": "google/gemma-2-2b-it by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/gemma-2-2b-it",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/gemma-2-2b-it",
             "capabilities": {
@@ -307,8 +307,8 @@
         {
             "id": "google-gemma-2-9b-it",
             "name": "google/gemma-2-9b-it",
-            "tooltip": "google/gemma-2-9b-it by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/gemma-2-9b-it",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/gemma-2-9b-it",
             "capabilities": {
@@ -319,8 +319,8 @@
         {
             "id": "google-gemma-2b",
             "name": "google/gemma-2b",
-            "tooltip": "google/gemma-2b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/gemma-2b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/gemma-2b",
             "capabilities": {
@@ -331,7 +331,7 @@
         {
             "id": "google-gemma-3-12b-it",
             "name": "google/gemma-3-12b-it",
-            "tooltip": "google/gemma-3-12b-it by NVIDIA NIM",
+            "tooltip": "google/gemma-3-12b-it",
             "maxInputTokens": 114688,
             "maxOutputTokens": 16384,
             "model": "google/gemma-3-12b-it",
@@ -343,7 +343,7 @@
         {
             "id": "google-gemma-3-1b-it",
             "name": "google/gemma-3-1b-it",
-            "tooltip": "google/gemma-3-1b-it by NVIDIA NIM",
+            "tooltip": "google/gemma-3-1b-it",
             "maxInputTokens": 114688,
             "maxOutputTokens": 16384,
             "model": "google/gemma-3-1b-it",
@@ -355,7 +355,7 @@
         {
             "id": "google-gemma-3-27b-it",
             "name": "google/gemma-3-27b-it",
-            "tooltip": "google/gemma-3-27b-it by NVIDIA NIM",
+            "tooltip": "google/gemma-3-27b-it",
             "maxInputTokens": 114688,
             "maxOutputTokens": 16384,
             "model": "google/gemma-3-27b-it",
@@ -367,7 +367,7 @@
         {
             "id": "google-gemma-3-4b-it",
             "name": "google/gemma-3-4b-it",
-            "tooltip": "google/gemma-3-4b-it by NVIDIA NIM",
+            "tooltip": "google/gemma-3-4b-it",
             "maxInputTokens": 114688,
             "maxOutputTokens": 16384,
             "model": "google/gemma-3-4b-it",
@@ -379,7 +379,7 @@
         {
             "id": "google-gemma-3n-e2b-it",
             "name": "google/gemma-3n-e2b-it",
-            "tooltip": "google/gemma-3n-e2b-it by NVIDIA NIM",
+            "tooltip": "google/gemma-3n-e2b-it",
             "maxInputTokens": 114688,
             "maxOutputTokens": 16384,
             "model": "google/gemma-3n-e2b-it",
@@ -391,7 +391,7 @@
         {
             "id": "google-gemma-3n-e4b-it",
             "name": "google/gemma-3n-e4b-it",
-            "tooltip": "google/gemma-3n-e4b-it by NVIDIA NIM",
+            "tooltip": "google/gemma-3n-e4b-it",
             "maxInputTokens": 114688,
             "maxOutputTokens": 16384,
             "model": "google/gemma-3n-e4b-it",
@@ -403,8 +403,8 @@
         {
             "id": "google-gemma-7b",
             "name": "google/gemma-7b",
-            "tooltip": "google/gemma-7b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/gemma-7b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/gemma-7b",
             "capabilities": {
@@ -415,8 +415,8 @@
         {
             "id": "google-paligemma",
             "name": "google/paligemma",
-            "tooltip": "google/paligemma by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/paligemma",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/paligemma",
             "capabilities": {
@@ -427,8 +427,8 @@
         {
             "id": "google-recurrentgemma-2b",
             "name": "google/recurrentgemma-2b",
-            "tooltip": "google/recurrentgemma-2b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/recurrentgemma-2b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/recurrentgemma-2b",
             "capabilities": {
@@ -439,8 +439,8 @@
         {
             "id": "google-shieldgemma-9b",
             "name": "google/shieldgemma-9b",
-            "tooltip": "google/shieldgemma-9b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "google/shieldgemma-9b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "google/shieldgemma-9b",
             "capabilities": {
@@ -451,8 +451,8 @@
         {
             "id": "gotocompany-gemma-2-9b-cpt-sahabatai-instruct",
             "name": "gotocompany/gemma-2-9b-cpt-sahabatai-instruct",
-            "tooltip": "gotocompany/gemma-2-9b-cpt-sahabatai-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "gotocompany/gemma-2-9b-cpt-sahabatai-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "gotocompany/gemma-2-9b-cpt-sahabatai-instruct",
             "capabilities": {
@@ -463,8 +463,8 @@
         {
             "id": "ibm-granite-3-0-3b-a800m-instruct",
             "name": "ibm/granite-3.0-3b-a800m-instruct",
-            "tooltip": "ibm/granite-3.0-3b-a800m-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ibm/granite-3.0-3b-a800m-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ibm/granite-3.0-3b-a800m-instruct",
             "capabilities": {
@@ -475,8 +475,8 @@
         {
             "id": "ibm-granite-3-0-8b-instruct",
             "name": "ibm/granite-3.0-8b-instruct",
-            "tooltip": "ibm/granite-3.0-8b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ibm/granite-3.0-8b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ibm/granite-3.0-8b-instruct",
             "capabilities": {
@@ -487,8 +487,8 @@
         {
             "id": "ibm-granite-3-3-8b-instruct",
             "name": "ibm/granite-3.3-8b-instruct",
-            "tooltip": "ibm/granite-3.3-8b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ibm/granite-3.3-8b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ibm/granite-3.3-8b-instruct",
             "capabilities": {
@@ -499,8 +499,8 @@
         {
             "id": "ibm-granite-34b-code-instruct",
             "name": "ibm/granite-34b-code-instruct",
-            "tooltip": "ibm/granite-34b-code-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ibm/granite-34b-code-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ibm/granite-34b-code-instruct",
             "capabilities": {
@@ -511,8 +511,8 @@
         {
             "id": "ibm-granite-8b-code-instruct",
             "name": "ibm/granite-8b-code-instruct",
-            "tooltip": "ibm/granite-8b-code-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ibm/granite-8b-code-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ibm/granite-8b-code-instruct",
             "capabilities": {
@@ -523,8 +523,8 @@
         {
             "id": "ibm-granite-guardian-3-0-8b",
             "name": "ibm/granite-guardian-3.0-8b",
-            "tooltip": "ibm/granite-guardian-3.0-8b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "ibm/granite-guardian-3.0-8b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "ibm/granite-guardian-3.0-8b",
             "capabilities": {
@@ -535,8 +535,8 @@
         {
             "id": "igenius-colosseum-355b-instruct-16k",
             "name": "igenius/colosseum_355b_instruct_16k",
-            "tooltip": "igenius/colosseum_355b_instruct_16k by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "igenius/colosseum_355b_instruct_16k",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "igenius/colosseum_355b_instruct_16k",
             "capabilities": {
@@ -547,8 +547,8 @@
         {
             "id": "igenius-italia-10b-instruct-16k",
             "name": "igenius/italia_10b_instruct_16k",
-            "tooltip": "igenius/italia_10b_instruct_16k by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "igenius/italia_10b_instruct_16k",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "igenius/italia_10b_instruct_16k",
             "capabilities": {
@@ -559,8 +559,8 @@
         {
             "id": "institute-of-science-tokyo-llama-3-1-swallow-70b-instruct-v0-1",
             "name": "institute-of-science-tokyo/llama-3.1-swallow-70b-instruct-v0.1",
-            "tooltip": "institute-of-science-tokyo/llama-3.1-swallow-70b-instruct-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "institute-of-science-tokyo/llama-3.1-swallow-70b-instruct-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "institute-of-science-tokyo/llama-3.1-swallow-70b-instruct-v0.1",
             "capabilities": {
@@ -571,8 +571,8 @@
         {
             "id": "institute-of-science-tokyo-llama-3-1-swallow-8b-instruct-v0-1",
             "name": "institute-of-science-tokyo/llama-3.1-swallow-8b-instruct-v0.1",
-            "tooltip": "institute-of-science-tokyo/llama-3.1-swallow-8b-instruct-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "institute-of-science-tokyo/llama-3.1-swallow-8b-instruct-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "institute-of-science-tokyo/llama-3.1-swallow-8b-instruct-v0.1",
             "capabilities": {
@@ -583,8 +583,8 @@
         {
             "id": "marin-marin-8b-instruct",
             "name": "marin/marin-8b-instruct",
-            "tooltip": "marin/marin-8b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "marin/marin-8b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "marin/marin-8b-instruct",
             "capabilities": {
@@ -595,8 +595,8 @@
         {
             "id": "mediatek-breeze-7b-instruct",
             "name": "mediatek/breeze-7b-instruct",
-            "tooltip": "mediatek/breeze-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mediatek/breeze-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mediatek/breeze-7b-instruct",
             "capabilities": {
@@ -607,8 +607,8 @@
         {
             "id": "meta-codellama-70b",
             "name": "meta/codellama-70b",
-            "tooltip": "meta/codellama-70b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/codellama-70b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/codellama-70b",
             "capabilities": {
@@ -619,8 +619,8 @@
         {
             "id": "meta-llama-3-1-405b-instruct",
             "name": "meta/llama-3.1-405b-instruct",
-            "tooltip": "meta/llama-3.1-405b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.1-405b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.1-405b-instruct",
             "capabilities": {
@@ -631,8 +631,8 @@
         {
             "id": "meta-llama-3-1-70b-instruct",
             "name": "meta/llama-3.1-70b-instruct",
-            "tooltip": "meta/llama-3.1-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.1-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.1-70b-instruct",
             "capabilities": {
@@ -643,8 +643,8 @@
         {
             "id": "meta-llama-3-1-8b-instruct",
             "name": "meta/llama-3.1-8b-instruct",
-            "tooltip": "meta/llama-3.1-8b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.1-8b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.1-8b-instruct",
             "capabilities": {
@@ -655,8 +655,8 @@
         {
             "id": "meta-llama-3-2-11b-vision-instruct",
             "name": "meta/llama-3.2-11b-vision-instruct",
-            "tooltip": "meta/llama-3.2-11b-vision-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.2-11b-vision-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.2-11b-vision-instruct",
             "capabilities": {
@@ -667,8 +667,8 @@
         {
             "id": "meta-llama-3-2-1b-instruct",
             "name": "meta/llama-3.2-1b-instruct",
-            "tooltip": "meta/llama-3.2-1b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.2-1b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.2-1b-instruct",
             "capabilities": {
@@ -679,8 +679,8 @@
         {
             "id": "meta-llama-3-2-3b-instruct",
             "name": "meta/llama-3.2-3b-instruct",
-            "tooltip": "meta/llama-3.2-3b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.2-3b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.2-3b-instruct",
             "capabilities": {
@@ -691,8 +691,8 @@
         {
             "id": "meta-llama-3-2-90b-vision-instruct",
             "name": "meta/llama-3.2-90b-vision-instruct",
-            "tooltip": "meta/llama-3.2-90b-vision-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.2-90b-vision-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.2-90b-vision-instruct",
             "capabilities": {
@@ -703,8 +703,8 @@
         {
             "id": "meta-llama-3-3-70b-instruct",
             "name": "meta/llama-3.3-70b-instruct",
-            "tooltip": "meta/llama-3.3-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-3.3-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-3.3-70b-instruct",
             "capabilities": {
@@ -715,8 +715,8 @@
         {
             "id": "meta-llama-4-maverick-17b-128e-instruct",
             "name": "meta/llama-4-maverick-17b-128e-instruct",
-            "tooltip": "meta/llama-4-maverick-17b-128e-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-4-maverick-17b-128e-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-4-maverick-17b-128e-instruct",
             "capabilities": {
@@ -727,8 +727,8 @@
         {
             "id": "meta-llama-4-scout-17b-16e-instruct",
             "name": "meta/llama-4-scout-17b-16e-instruct",
-            "tooltip": "meta/llama-4-scout-17b-16e-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-4-scout-17b-16e-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-4-scout-17b-16e-instruct",
             "capabilities": {
@@ -739,8 +739,8 @@
         {
             "id": "meta-llama-guard-4-12b",
             "name": "meta/llama-guard-4-12b",
-            "tooltip": "meta/llama-guard-4-12b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama-guard-4-12b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama-guard-4-12b",
             "capabilities": {
@@ -751,8 +751,8 @@
         {
             "id": "meta-llama2-70b",
             "name": "meta/llama2-70b",
-            "tooltip": "meta/llama2-70b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama2-70b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama2-70b",
             "capabilities": {
@@ -763,8 +763,8 @@
         {
             "id": "meta-llama3-70b-instruct",
             "name": "meta/llama3-70b-instruct",
-            "tooltip": "meta/llama3-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama3-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama3-70b-instruct",
             "capabilities": {
@@ -775,8 +775,8 @@
         {
             "id": "meta-llama3-8b-instruct",
             "name": "meta/llama3-8b-instruct",
-            "tooltip": "meta/llama3-8b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "meta/llama3-8b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta/llama3-8b-instruct",
             "capabilities": {
@@ -787,8 +787,8 @@
         {
             "id": "microsoft-kosmos-2",
             "name": "microsoft/kosmos-2",
-            "tooltip": "microsoft/kosmos-2 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/kosmos-2",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/kosmos-2",
             "capabilities": {
@@ -799,8 +799,8 @@
         {
             "id": "microsoft-phi-3-medium-128k-instruct",
             "name": "microsoft/phi-3-medium-128k-instruct",
-            "tooltip": "microsoft/phi-3-medium-128k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-medium-128k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-medium-128k-instruct",
             "capabilities": {
@@ -811,8 +811,8 @@
         {
             "id": "microsoft-phi-3-medium-4k-instruct",
             "name": "microsoft/phi-3-medium-4k-instruct",
-            "tooltip": "microsoft/phi-3-medium-4k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-medium-4k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-medium-4k-instruct",
             "capabilities": {
@@ -823,8 +823,8 @@
         {
             "id": "microsoft-phi-3-mini-128k-instruct",
             "name": "microsoft/phi-3-mini-128k-instruct",
-            "tooltip": "microsoft/phi-3-mini-128k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-mini-128k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-mini-128k-instruct",
             "capabilities": {
@@ -835,8 +835,8 @@
         {
             "id": "microsoft-phi-3-mini-4k-instruct",
             "name": "microsoft/phi-3-mini-4k-instruct",
-            "tooltip": "microsoft/phi-3-mini-4k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-mini-4k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-mini-4k-instruct",
             "capabilities": {
@@ -847,8 +847,8 @@
         {
             "id": "microsoft-phi-3-small-128k-instruct",
             "name": "microsoft/phi-3-small-128k-instruct",
-            "tooltip": "microsoft/phi-3-small-128k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-small-128k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-small-128k-instruct",
             "capabilities": {
@@ -859,8 +859,8 @@
         {
             "id": "microsoft-phi-3-small-8k-instruct",
             "name": "microsoft/phi-3-small-8k-instruct",
-            "tooltip": "microsoft/phi-3-small-8k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-small-8k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-small-8k-instruct",
             "capabilities": {
@@ -871,8 +871,8 @@
         {
             "id": "microsoft-phi-3-vision-128k-instruct",
             "name": "microsoft/phi-3-vision-128k-instruct",
-            "tooltip": "microsoft/phi-3-vision-128k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3-vision-128k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3-vision-128k-instruct",
             "capabilities": {
@@ -883,8 +883,8 @@
         {
             "id": "microsoft-phi-3-5-mini-instruct",
             "name": "microsoft/phi-3.5-mini-instruct",
-            "tooltip": "microsoft/phi-3.5-mini-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3.5-mini-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3.5-mini-instruct",
             "capabilities": {
@@ -895,8 +895,8 @@
         {
             "id": "microsoft-phi-3-5-moe-instruct",
             "name": "microsoft/phi-3.5-moe-instruct",
-            "tooltip": "microsoft/phi-3.5-moe-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3.5-moe-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3.5-moe-instruct",
             "capabilities": {
@@ -907,8 +907,8 @@
         {
             "id": "microsoft-phi-3-5-vision-instruct",
             "name": "microsoft/phi-3.5-vision-instruct",
-            "tooltip": "microsoft/phi-3.5-vision-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-3.5-vision-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-3.5-vision-instruct",
             "capabilities": {
@@ -919,8 +919,8 @@
         {
             "id": "microsoft-phi-4-mini-flash-reasoning",
             "name": "microsoft/phi-4-mini-flash-reasoning",
-            "tooltip": "microsoft/phi-4-mini-flash-reasoning by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-4-mini-flash-reasoning",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-4-mini-flash-reasoning",
             "capabilities": {
@@ -931,8 +931,8 @@
         {
             "id": "microsoft-phi-4-mini-instruct",
             "name": "microsoft/phi-4-mini-instruct",
-            "tooltip": "microsoft/phi-4-mini-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-4-mini-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-4-mini-instruct",
             "capabilities": {
@@ -943,8 +943,8 @@
         {
             "id": "microsoft-phi-4-multimodal-instruct",
             "name": "microsoft/phi-4-multimodal-instruct",
-            "tooltip": "microsoft/phi-4-multimodal-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "microsoft/phi-4-multimodal-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "microsoft/phi-4-multimodal-instruct",
             "capabilities": {
@@ -955,7 +955,7 @@
         {
             "id": "minimaxai-minimax-m2-1",
             "name": "minimaxai/minimax-m2.1",
-            "tooltip": "minimaxai/minimax-m2.1 by NVIDIA NIM",
+            "tooltip": "minimaxai/minimax-m2.1",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "minimaxai/minimax-m2.1",
@@ -967,7 +967,7 @@
         {
             "id": "minimaxai-minimax-m2-5",
             "name": "minimaxai/minimax-m2.5",
-            "tooltip": "minimaxai/minimax-m2.5 by NVIDIA NIM",
+            "tooltip": "minimaxai/minimax-m2.5",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "minimaxai/minimax-m2.5",
@@ -979,8 +979,8 @@
         {
             "id": "mistralai-codestral-22b-instruct-v0-1",
             "name": "mistralai/codestral-22b-instruct-v0.1",
-            "tooltip": "mistralai/codestral-22b-instruct-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/codestral-22b-instruct-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/codestral-22b-instruct-v0.1",
             "capabilities": {
@@ -991,7 +991,7 @@
         {
             "id": "mistralai-devstral-2-123b-instruct-2512",
             "name": "mistralai/devstral-2-123b-instruct-2512",
-            "tooltip": "mistralai/devstral-2-123b-instruct-2512 by NVIDIA NIM",
+            "tooltip": "mistralai/devstral-2-123b-instruct-2512",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "mistralai/devstral-2-123b-instruct-2512",
@@ -1003,8 +1003,8 @@
         {
             "id": "mistralai-magistral-small-2506",
             "name": "mistralai/magistral-small-2506",
-            "tooltip": "mistralai/magistral-small-2506 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/magistral-small-2506",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/magistral-small-2506",
             "capabilities": {
@@ -1015,8 +1015,8 @@
         {
             "id": "mistralai-mamba-codestral-7b-v0-1",
             "name": "mistralai/mamba-codestral-7b-v0.1",
-            "tooltip": "mistralai/mamba-codestral-7b-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mamba-codestral-7b-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mamba-codestral-7b-v0.1",
             "capabilities": {
@@ -1027,8 +1027,8 @@
         {
             "id": "mistralai-mathstral-7b-v0-1",
             "name": "mistralai/mathstral-7b-v0.1",
-            "tooltip": "mistralai/mathstral-7b-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mathstral-7b-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mathstral-7b-v0.1",
             "capabilities": {
@@ -1039,8 +1039,8 @@
         {
             "id": "mistralai-ministral-14b-instruct-2512",
             "name": "mistralai/ministral-14b-instruct-2512",
-            "tooltip": "mistralai/ministral-14b-instruct-2512 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/ministral-14b-instruct-2512",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/ministral-14b-instruct-2512",
             "capabilities": {
@@ -1051,8 +1051,8 @@
         {
             "id": "mistralai-mistral-7b-instruct-v0-2",
             "name": "mistralai/mistral-7b-instruct-v0.2",
-            "tooltip": "mistralai/mistral-7b-instruct-v0.2 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-7b-instruct-v0.2",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-7b-instruct-v0.2",
             "capabilities": {
@@ -1063,8 +1063,8 @@
         {
             "id": "mistralai-mistral-7b-instruct-v0-3",
             "name": "mistralai/mistral-7b-instruct-v0.3",
-            "tooltip": "mistralai/mistral-7b-instruct-v0.3 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-7b-instruct-v0.3",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-7b-instruct-v0.3",
             "capabilities": {
@@ -1075,8 +1075,8 @@
         {
             "id": "mistralai-mistral-large",
             "name": "mistralai/mistral-large",
-            "tooltip": "mistralai/mistral-large by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-large",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-large",
             "capabilities": {
@@ -1087,8 +1087,8 @@
         {
             "id": "mistralai-mistral-large-2-instruct",
             "name": "mistralai/mistral-large-2-instruct",
-            "tooltip": "mistralai/mistral-large-2-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-large-2-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-large-2-instruct",
             "capabilities": {
@@ -1099,8 +1099,8 @@
         {
             "id": "mistralai-mistral-large-3-675b-instruct-2512",
             "name": "mistralai/mistral-large-3-675b-instruct-2512",
-            "tooltip": "mistralai/mistral-large-3-675b-instruct-2512 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-large-3-675b-instruct-2512",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-large-3-675b-instruct-2512",
             "capabilities": {
@@ -1111,8 +1111,8 @@
         {
             "id": "mistralai-mistral-medium-3-instruct",
             "name": "mistralai/mistral-medium-3-instruct",
-            "tooltip": "mistralai/mistral-medium-3-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-medium-3-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-medium-3-instruct",
             "capabilities": {
@@ -1123,8 +1123,8 @@
         {
             "id": "mistralai-mistral-nemotron",
             "name": "mistralai/mistral-nemotron",
-            "tooltip": "mistralai/mistral-nemotron by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-nemotron",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-nemotron",
             "capabilities": {
@@ -1135,8 +1135,8 @@
         {
             "id": "mistralai-mistral-small-24b-instruct",
             "name": "mistralai/mistral-small-24b-instruct",
-            "tooltip": "mistralai/mistral-small-24b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-small-24b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-small-24b-instruct",
             "capabilities": {
@@ -1147,8 +1147,8 @@
         {
             "id": "mistralai-mistral-small-3-1-24b-instruct-2503",
             "name": "mistralai/mistral-small-3.1-24b-instruct-2503",
-            "tooltip": "mistralai/mistral-small-3.1-24b-instruct-2503 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mistral-small-3.1-24b-instruct-2503",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mistral-small-3.1-24b-instruct-2503",
             "capabilities": {
@@ -1159,8 +1159,8 @@
         {
             "id": "mistralai-mixtral-8x22b-instruct-v0-1",
             "name": "mistralai/mixtral-8x22b-instruct-v0.1",
-            "tooltip": "mistralai/mixtral-8x22b-instruct-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mixtral-8x22b-instruct-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mixtral-8x22b-instruct-v0.1",
             "capabilities": {
@@ -1171,8 +1171,8 @@
         {
             "id": "mistralai-mixtral-8x22b-v0-1",
             "name": "mistralai/mixtral-8x22b-v0.1",
-            "tooltip": "mistralai/mixtral-8x22b-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mixtral-8x22b-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mixtral-8x22b-v0.1",
             "capabilities": {
@@ -1183,8 +1183,8 @@
         {
             "id": "mistralai-mixtral-8x7b-instruct-v0-1",
             "name": "mistralai/mixtral-8x7b-instruct-v0.1",
-            "tooltip": "mistralai/mixtral-8x7b-instruct-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "mistralai/mixtral-8x7b-instruct-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "mistralai/mixtral-8x7b-instruct-v0.1",
             "capabilities": {
@@ -1195,7 +1195,7 @@
         {
             "id": "moonshotai-kimi-k2-instruct",
             "name": "moonshotai/kimi-k2-instruct",
-            "tooltip": "moonshotai/kimi-k2-instruct by NVIDIA NIM",
+            "tooltip": "moonshotai/kimi-k2-instruct",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "moonshotai/kimi-k2-instruct",
@@ -1207,7 +1207,7 @@
         {
             "id": "moonshotai-kimi-k2-instruct-0905",
             "name": "moonshotai/kimi-k2-instruct-0905",
-            "tooltip": "moonshotai/kimi-k2-instruct-0905 by NVIDIA NIM",
+            "tooltip": "moonshotai/kimi-k2-instruct-0905",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "moonshotai/kimi-k2-instruct-0905",
@@ -1219,7 +1219,7 @@
         {
             "id": "moonshotai-kimi-k2-thinking",
             "name": "moonshotai/kimi-k2-thinking",
-            "tooltip": "moonshotai/kimi-k2-thinking by NVIDIA NIM",
+            "tooltip": "moonshotai/kimi-k2-thinking",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "moonshotai/kimi-k2-thinking",
@@ -1231,7 +1231,7 @@
         {
             "id": "moonshotai-kimi-k2-5",
             "name": "moonshotai/kimi-k2.5",
-            "tooltip": "moonshotai/kimi-k2.5 by NVIDIA NIM",
+            "tooltip": "moonshotai/kimi-k2.5",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "moonshotai/kimi-k2.5",
@@ -1243,8 +1243,8 @@
         {
             "id": "nv-mistralai-mistral-nemo-12b-instruct",
             "name": "nv-mistralai/mistral-nemo-12b-instruct",
-            "tooltip": "nv-mistralai/mistral-nemo-12b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nv-mistralai/mistral-nemo-12b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nv-mistralai/mistral-nemo-12b-instruct",
             "capabilities": {
@@ -1255,8 +1255,8 @@
         {
             "id": "nvidia-cosmos-reason2-8b",
             "name": "nvidia/cosmos-reason2-8b",
-            "tooltip": "nvidia/cosmos-reason2-8b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/cosmos-reason2-8b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/cosmos-reason2-8b",
             "capabilities": {
@@ -1267,8 +1267,8 @@
         {
             "id": "nvidia-embed-qa-4",
             "name": "nvidia/embed-qa-4",
-            "tooltip": "nvidia/embed-qa-4 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/embed-qa-4",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/embed-qa-4",
             "capabilities": {
@@ -1279,8 +1279,8 @@
         {
             "id": "nvidia-llama-3-1-nemoguard-8b-content-safety",
             "name": "nvidia/llama-3.1-nemoguard-8b-content-safety",
-            "tooltip": "nvidia/llama-3.1-nemoguard-8b-content-safety by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemoguard-8b-content-safety",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemoguard-8b-content-safety",
             "capabilities": {
@@ -1291,8 +1291,8 @@
         {
             "id": "nvidia-llama-3-1-nemoguard-8b-topic-control",
             "name": "nvidia/llama-3.1-nemoguard-8b-topic-control",
-            "tooltip": "nvidia/llama-3.1-nemoguard-8b-topic-control by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemoguard-8b-topic-control",
             "capabilities": {
@@ -1303,8 +1303,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-51b-instruct",
             "name": "nvidia/llama-3.1-nemotron-51b-instruct",
-            "tooltip": "nvidia/llama-3.1-nemotron-51b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-51b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-51b-instruct",
             "capabilities": {
@@ -1315,8 +1315,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-70b-instruct",
             "name": "nvidia/llama-3.1-nemotron-70b-instruct",
-            "tooltip": "nvidia/llama-3.1-nemotron-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-70b-instruct",
             "capabilities": {
@@ -1327,8 +1327,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-70b-reward",
             "name": "nvidia/llama-3.1-nemotron-70b-reward",
-            "tooltip": "nvidia/llama-3.1-nemotron-70b-reward by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-70b-reward",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-70b-reward",
             "capabilities": {
@@ -1339,8 +1339,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-nano-4b-v1-1",
             "name": "nvidia/llama-3.1-nemotron-nano-4b-v1.1",
-            "tooltip": "nvidia/llama-3.1-nemotron-nano-4b-v1.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-nano-4b-v1.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-nano-4b-v1.1",
             "capabilities": {
@@ -1351,8 +1351,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-nano-8b-v1",
             "name": "nvidia/llama-3.1-nemotron-nano-8b-v1",
-            "tooltip": "nvidia/llama-3.1-nemotron-nano-8b-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-nano-8b-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-nano-8b-v1",
             "capabilities": {
@@ -1363,8 +1363,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-nano-vl-8b-v1",
             "name": "nvidia/llama-3.1-nemotron-nano-vl-8b-v1",
-            "tooltip": "nvidia/llama-3.1-nemotron-nano-vl-8b-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-nano-vl-8b-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-nano-vl-8b-v1",
             "capabilities": {
@@ -1375,8 +1375,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-safety-guard-8b-v3",
             "name": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
-            "tooltip": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
             "capabilities": {
@@ -1387,8 +1387,8 @@
         {
             "id": "nvidia-llama-3-1-nemotron-ultra-253b-v1",
             "name": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-            "tooltip": "nvidia/llama-3.1-nemotron-ultra-253b-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
             "capabilities": {
@@ -1399,8 +1399,8 @@
         {
             "id": "nvidia-llama-3-2-nemoretriever-1b-vlm-embed-v1",
             "name": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
-            "tooltip": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
             "capabilities": {
@@ -1411,8 +1411,8 @@
         {
             "id": "nvidia-llama-3-2-nemoretriever-300m-embed-v1",
             "name": "nvidia/llama-3.2-nemoretriever-300m-embed-v1",
-            "tooltip": "nvidia/llama-3.2-nemoretriever-300m-embed-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.2-nemoretriever-300m-embed-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.2-nemoretriever-300m-embed-v1",
             "capabilities": {
@@ -1423,8 +1423,8 @@
         {
             "id": "nvidia-llama-3-2-nv-embedqa-1b-v1",
             "name": "nvidia/llama-3.2-nv-embedqa-1b-v1",
-            "tooltip": "nvidia/llama-3.2-nv-embedqa-1b-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.2-nv-embedqa-1b-v1",
             "capabilities": {
@@ -1435,8 +1435,8 @@
         {
             "id": "nvidia-llama-3-2-nv-embedqa-1b-v2",
             "name": "nvidia/llama-3.2-nv-embedqa-1b-v2",
-            "tooltip": "nvidia/llama-3.2-nv-embedqa-1b-v2 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.2-nv-embedqa-1b-v2",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.2-nv-embedqa-1b-v2",
             "capabilities": {
@@ -1447,8 +1447,8 @@
         {
             "id": "nvidia-llama-3-3-nemotron-super-49b-v1",
             "name": "nvidia/llama-3.3-nemotron-super-49b-v1",
-            "tooltip": "nvidia/llama-3.3-nemotron-super-49b-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.3-nemotron-super-49b-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.3-nemotron-super-49b-v1",
             "capabilities": {
@@ -1459,8 +1459,8 @@
         {
             "id": "nvidia-llama-3-3-nemotron-super-49b-v1-5",
             "name": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
-            "tooltip": "nvidia/llama-3.3-nemotron-super-49b-v1.5 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
             "capabilities": {
@@ -1471,8 +1471,8 @@
         {
             "id": "nvidia-llama-nemotron-embed-vl-1b-v2",
             "name": "nvidia/llama-nemotron-embed-vl-1b-v2",
-            "tooltip": "nvidia/llama-nemotron-embed-vl-1b-v2 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama-nemotron-embed-vl-1b-v2",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama-nemotron-embed-vl-1b-v2",
             "capabilities": {
@@ -1483,8 +1483,8 @@
         {
             "id": "nvidia-llama3-chatqa-1-5-70b",
             "name": "nvidia/llama3-chatqa-1.5-70b",
-            "tooltip": "nvidia/llama3-chatqa-1.5-70b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama3-chatqa-1.5-70b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama3-chatqa-1.5-70b",
             "capabilities": {
@@ -1495,8 +1495,8 @@
         {
             "id": "nvidia-llama3-chatqa-1-5-8b",
             "name": "nvidia/llama3-chatqa-1.5-8b",
-            "tooltip": "nvidia/llama3-chatqa-1.5-8b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/llama3-chatqa-1.5-8b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/llama3-chatqa-1.5-8b",
             "capabilities": {
@@ -1507,8 +1507,8 @@
         {
             "id": "nvidia-mistral-nemo-minitron-8b-8k-instruct",
             "name": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
-            "tooltip": "nvidia/mistral-nemo-minitron-8b-8k-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
             "capabilities": {
@@ -1519,8 +1519,8 @@
         {
             "id": "nvidia-mistral-nemo-minitron-8b-base",
             "name": "nvidia/mistral-nemo-minitron-8b-base",
-            "tooltip": "nvidia/mistral-nemo-minitron-8b-base by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/mistral-nemo-minitron-8b-base",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/mistral-nemo-minitron-8b-base",
             "capabilities": {
@@ -1531,8 +1531,8 @@
         {
             "id": "nvidia-nemoretriever-parse",
             "name": "nvidia/nemoretriever-parse",
-            "tooltip": "nvidia/nemoretriever-parse by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemoretriever-parse",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemoretriever-parse",
             "capabilities": {
@@ -1543,8 +1543,8 @@
         {
             "id": "nvidia-nemotron-3-nano-30b-a3b",
             "name": "nvidia/nemotron-3-nano-30b-a3b",
-            "tooltip": "nvidia/nemotron-3-nano-30b-a3b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-3-nano-30b-a3b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-3-nano-30b-a3b",
             "capabilities": {
@@ -1555,8 +1555,8 @@
         {
             "id": "nvidia-nemotron-4-340b-instruct",
             "name": "nvidia/nemotron-4-340b-instruct",
-            "tooltip": "nvidia/nemotron-4-340b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-4-340b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-4-340b-instruct",
             "capabilities": {
@@ -1567,8 +1567,8 @@
         {
             "id": "nvidia-nemotron-4-340b-reward",
             "name": "nvidia/nemotron-4-340b-reward",
-            "tooltip": "nvidia/nemotron-4-340b-reward by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-4-340b-reward",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-4-340b-reward",
             "capabilities": {
@@ -1579,8 +1579,8 @@
         {
             "id": "nvidia-nemotron-4-mini-hindi-4b-instruct",
             "name": "nvidia/nemotron-4-mini-hindi-4b-instruct",
-            "tooltip": "nvidia/nemotron-4-mini-hindi-4b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-4-mini-hindi-4b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-4-mini-hindi-4b-instruct",
             "capabilities": {
@@ -1591,8 +1591,8 @@
         {
             "id": "nvidia-nemotron-content-safety-reasoning-4b",
             "name": "nvidia/nemotron-content-safety-reasoning-4b",
-            "tooltip": "nvidia/nemotron-content-safety-reasoning-4b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-content-safety-reasoning-4b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-content-safety-reasoning-4b",
             "capabilities": {
@@ -1603,8 +1603,8 @@
         {
             "id": "nvidia-nemotron-mini-4b-instruct",
             "name": "nvidia/nemotron-mini-4b-instruct",
-            "tooltip": "nvidia/nemotron-mini-4b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-mini-4b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-mini-4b-instruct",
             "capabilities": {
@@ -1615,8 +1615,8 @@
         {
             "id": "nvidia-nemotron-nano-12b-v2-vl",
             "name": "nvidia/nemotron-nano-12b-v2-vl",
-            "tooltip": "nvidia/nemotron-nano-12b-v2-vl by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-nano-12b-v2-vl",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-nano-12b-v2-vl",
             "capabilities": {
@@ -1627,8 +1627,8 @@
         {
             "id": "nvidia-nemotron-nano-3-30b-a3b",
             "name": "nvidia/nemotron-nano-3-30b-a3b",
-            "tooltip": "nvidia/nemotron-nano-3-30b-a3b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-nano-3-30b-a3b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-nano-3-30b-a3b",
             "capabilities": {
@@ -1639,8 +1639,8 @@
         {
             "id": "nvidia-nemotron-parse",
             "name": "nvidia/nemotron-parse",
-            "tooltip": "nvidia/nemotron-parse by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nemotron-parse",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nemotron-parse",
             "capabilities": {
@@ -1651,8 +1651,8 @@
         {
             "id": "nvidia-neva-22b",
             "name": "nvidia/neva-22b",
-            "tooltip": "nvidia/neva-22b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/neva-22b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/neva-22b",
             "capabilities": {
@@ -1663,8 +1663,8 @@
         {
             "id": "nvidia-nv-embed-v1",
             "name": "nvidia/nv-embed-v1",
-            "tooltip": "nvidia/nv-embed-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nv-embed-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nv-embed-v1",
             "capabilities": {
@@ -1675,8 +1675,8 @@
         {
             "id": "nvidia-nv-embedcode-7b-v1",
             "name": "nvidia/nv-embedcode-7b-v1",
-            "tooltip": "nvidia/nv-embedcode-7b-v1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nv-embedcode-7b-v1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nv-embedcode-7b-v1",
             "capabilities": {
@@ -1687,8 +1687,8 @@
         {
             "id": "nvidia-nv-embedqa-e5-v5",
             "name": "nvidia/nv-embedqa-e5-v5",
-            "tooltip": "nvidia/nv-embedqa-e5-v5 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nv-embedqa-e5-v5",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nv-embedqa-e5-v5",
             "capabilities": {
@@ -1699,8 +1699,8 @@
         {
             "id": "nvidia-nv-embedqa-mistral-7b-v2",
             "name": "nvidia/nv-embedqa-mistral-7b-v2",
-            "tooltip": "nvidia/nv-embedqa-mistral-7b-v2 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nv-embedqa-mistral-7b-v2",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nv-embedqa-mistral-7b-v2",
             "capabilities": {
@@ -1711,8 +1711,8 @@
         {
             "id": "nvidia-nvclip",
             "name": "nvidia/nvclip",
-            "tooltip": "nvidia/nvclip by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nvclip",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nvclip",
             "capabilities": {
@@ -1723,8 +1723,8 @@
         {
             "id": "nvidia-nvidia-nemotron-nano-9b-v2",
             "name": "nvidia/nvidia-nemotron-nano-9b-v2",
-            "tooltip": "nvidia/nvidia-nemotron-nano-9b-v2 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/nvidia-nemotron-nano-9b-v2",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/nvidia-nemotron-nano-9b-v2",
             "capabilities": {
@@ -1735,8 +1735,8 @@
         {
             "id": "nvidia-riva-translate-4b-instruct",
             "name": "nvidia/riva-translate-4b-instruct",
-            "tooltip": "nvidia/riva-translate-4b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/riva-translate-4b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/riva-translate-4b-instruct",
             "capabilities": {
@@ -1747,8 +1747,8 @@
         {
             "id": "nvidia-riva-translate-4b-instruct-v1-1",
             "name": "nvidia/riva-translate-4b-instruct-v1.1",
-            "tooltip": "nvidia/riva-translate-4b-instruct-v1.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/riva-translate-4b-instruct-v1.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/riva-translate-4b-instruct-v1.1",
             "capabilities": {
@@ -1759,8 +1759,8 @@
         {
             "id": "nvidia-streampetr",
             "name": "nvidia/streampetr",
-            "tooltip": "nvidia/streampetr by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/streampetr",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/streampetr",
             "capabilities": {
@@ -1771,8 +1771,8 @@
         {
             "id": "nvidia-usdcode-llama-3-1-70b-instruct",
             "name": "nvidia/usdcode-llama-3.1-70b-instruct",
-            "tooltip": "nvidia/usdcode-llama-3.1-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/usdcode-llama-3.1-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/usdcode-llama-3.1-70b-instruct",
             "capabilities": {
@@ -1783,8 +1783,8 @@
         {
             "id": "nvidia-vila",
             "name": "nvidia/vila",
-            "tooltip": "nvidia/vila by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "nvidia/vila",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "nvidia/vila",
             "capabilities": {
@@ -1795,8 +1795,8 @@
         {
             "id": "openai-gpt-oss-120b",
             "name": "openai/gpt-oss-120b",
-            "tooltip": "openai/gpt-oss-120b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "openai/gpt-oss-120b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "openai/gpt-oss-120b",
             "capabilities": {
@@ -1807,8 +1807,8 @@
         {
             "id": "openai-gpt-oss-120b",
             "name": "openai/gpt-oss-120b",
-            "tooltip": "openai/gpt-oss-120b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "openai/gpt-oss-120b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "openai/gpt-oss-120b",
             "capabilities": {
@@ -1819,8 +1819,8 @@
         {
             "id": "openai-gpt-oss-20b",
             "name": "openai/gpt-oss-20b",
-            "tooltip": "openai/gpt-oss-20b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "openai/gpt-oss-20b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "openai/gpt-oss-20b",
             "capabilities": {
@@ -1831,8 +1831,8 @@
         {
             "id": "openai-gpt-oss-20b",
             "name": "openai/gpt-oss-20b",
-            "tooltip": "openai/gpt-oss-20b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "openai/gpt-oss-20b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "openai/gpt-oss-20b",
             "capabilities": {
@@ -1843,8 +1843,8 @@
         {
             "id": "opengpt-x-teuken-7b-instruct-commercial-v0-4",
             "name": "opengpt-x/teuken-7b-instruct-commercial-v0.4",
-            "tooltip": "opengpt-x/teuken-7b-instruct-commercial-v0.4 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "opengpt-x/teuken-7b-instruct-commercial-v0.4",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "opengpt-x/teuken-7b-instruct-commercial-v0.4",
             "capabilities": {
@@ -1855,8 +1855,8 @@
         {
             "id": "qwen-qwen2-7b-instruct",
             "name": "qwen/qwen2-7b-instruct",
-            "tooltip": "qwen/qwen2-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen2-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen2-7b-instruct",
             "capabilities": {
@@ -1867,8 +1867,8 @@
         {
             "id": "qwen-qwen2-5-7b-instruct",
             "name": "qwen/qwen2.5-7b-instruct",
-            "tooltip": "qwen/qwen2.5-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen2.5-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen2.5-7b-instruct",
             "capabilities": {
@@ -1879,8 +1879,8 @@
         {
             "id": "qwen-qwen2-5-coder-32b-instruct",
             "name": "qwen/qwen2.5-coder-32b-instruct",
-            "tooltip": "qwen/qwen2.5-coder-32b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen2.5-coder-32b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen2.5-coder-32b-instruct",
             "capabilities": {
@@ -1891,8 +1891,8 @@
         {
             "id": "qwen-qwen2-5-coder-7b-instruct",
             "name": "qwen/qwen2.5-coder-7b-instruct",
-            "tooltip": "qwen/qwen2.5-coder-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen2.5-coder-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen2.5-coder-7b-instruct",
             "capabilities": {
@@ -1903,8 +1903,8 @@
         {
             "id": "qwen-qwen3-235b-a22b",
             "name": "qwen/qwen3-235b-a22b",
-            "tooltip": "qwen/qwen3-235b-a22b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen3-235b-a22b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen3-235b-a22b",
             "capabilities": {
@@ -1915,8 +1915,8 @@
         {
             "id": "qwen-qwen3-coder-480b-a35b-instruct",
             "name": "qwen/qwen3-coder-480b-a35b-instruct",
-            "tooltip": "qwen/qwen3-coder-480b-a35b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen3-coder-480b-a35b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen3-coder-480b-a35b-instruct",
             "capabilities": {
@@ -1927,8 +1927,8 @@
         {
             "id": "qwen-qwen3-next-80b-a3b-instruct",
             "name": "qwen/qwen3-next-80b-a3b-instruct",
-            "tooltip": "qwen/qwen3-next-80b-a3b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen3-next-80b-a3b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen3-next-80b-a3b-instruct",
             "capabilities": {
@@ -1939,8 +1939,8 @@
         {
             "id": "qwen-qwen3-next-80b-a3b-thinking",
             "name": "qwen/qwen3-next-80b-a3b-thinking",
-            "tooltip": "qwen/qwen3-next-80b-a3b-thinking by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwen3-next-80b-a3b-thinking",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwen3-next-80b-a3b-thinking",
             "capabilities": {
@@ -1951,7 +1951,7 @@
         {
             "id": "qwen-qwen3-5-397b-a17b",
             "name": "qwen/qwen3.5-397b-a17b",
-            "tooltip": "qwen/qwen3.5-397b-a17b by NVIDIA NIM",
+            "tooltip": "qwen/qwen3.5-397b-a17b",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "qwen/qwen3.5-397b-a17b",
@@ -1963,8 +1963,8 @@
         {
             "id": "qwen-qwq-32b",
             "name": "qwen/qwq-32b",
-            "tooltip": "qwen/qwq-32b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "qwen/qwq-32b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "qwen/qwq-32b",
             "capabilities": {
@@ -1975,8 +1975,8 @@
         {
             "id": "rakuten-rakutenai-7b-chat",
             "name": "rakuten/rakutenai-7b-chat",
-            "tooltip": "rakuten/rakutenai-7b-chat by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "rakuten/rakutenai-7b-chat",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "rakuten/rakutenai-7b-chat",
             "capabilities": {
@@ -1987,8 +1987,8 @@
         {
             "id": "rakuten-rakutenai-7b-instruct",
             "name": "rakuten/rakutenai-7b-instruct",
-            "tooltip": "rakuten/rakutenai-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "rakuten/rakutenai-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "rakuten/rakutenai-7b-instruct",
             "capabilities": {
@@ -1999,8 +1999,8 @@
         {
             "id": "sarvamai-sarvam-m",
             "name": "sarvamai/sarvam-m",
-            "tooltip": "sarvamai/sarvam-m by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "sarvamai/sarvam-m",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "sarvamai/sarvam-m",
             "capabilities": {
@@ -2011,8 +2011,8 @@
         {
             "id": "snowflake-arctic-embed-l",
             "name": "snowflake/arctic-embed-l",
-            "tooltip": "snowflake/arctic-embed-l by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "snowflake/arctic-embed-l",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "snowflake/arctic-embed-l",
             "capabilities": {
@@ -2023,8 +2023,8 @@
         {
             "id": "speakleash-bielik-11b-v2-3-instruct",
             "name": "speakleash/bielik-11b-v2.3-instruct",
-            "tooltip": "speakleash/bielik-11b-v2.3-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "speakleash/bielik-11b-v2.3-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "speakleash/bielik-11b-v2.3-instruct",
             "capabilities": {
@@ -2035,8 +2035,8 @@
         {
             "id": "speakleash-bielik-11b-v2-6-instruct",
             "name": "speakleash/bielik-11b-v2.6-instruct",
-            "tooltip": "speakleash/bielik-11b-v2.6-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "speakleash/bielik-11b-v2.6-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "speakleash/bielik-11b-v2.6-instruct",
             "capabilities": {
@@ -2047,8 +2047,8 @@
         {
             "id": "stepfun-ai-step-3-5-flash",
             "name": "stepfun-ai/step-3.5-flash",
-            "tooltip": "stepfun-ai/step-3.5-flash by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "stepfun-ai/step-3.5-flash",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "stepfun-ai/step-3.5-flash",
             "capabilities": {
@@ -2059,8 +2059,8 @@
         {
             "id": "stockmark-stockmark-2-100b-instruct",
             "name": "stockmark/stockmark-2-100b-instruct",
-            "tooltip": "stockmark/stockmark-2-100b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "stockmark/stockmark-2-100b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "stockmark/stockmark-2-100b-instruct",
             "capabilities": {
@@ -2071,8 +2071,8 @@
         {
             "id": "thudm-chatglm3-6b",
             "name": "thudm/chatglm3-6b",
-            "tooltip": "thudm/chatglm3-6b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "thudm/chatglm3-6b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "thudm/chatglm3-6b",
             "capabilities": {
@@ -2083,8 +2083,8 @@
         {
             "id": "tiiuae-falcon3-7b-instruct",
             "name": "tiiuae/falcon3-7b-instruct",
-            "tooltip": "tiiuae/falcon3-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "tiiuae/falcon3-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "tiiuae/falcon3-7b-instruct",
             "capabilities": {
@@ -2095,8 +2095,8 @@
         {
             "id": "tokyotech-llm-llama-3-swallow-70b-instruct-v0-1",
             "name": "tokyotech-llm/llama-3-swallow-70b-instruct-v0.1",
-            "tooltip": "tokyotech-llm/llama-3-swallow-70b-instruct-v0.1 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "tokyotech-llm/llama-3-swallow-70b-instruct-v0.1",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "tokyotech-llm/llama-3-swallow-70b-instruct-v0.1",
             "capabilities": {
@@ -2107,8 +2107,8 @@
         {
             "id": "upstage-solar-10-7b-instruct",
             "name": "upstage/solar-10.7b-instruct",
-            "tooltip": "upstage/solar-10.7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "upstage/solar-10.7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "upstage/solar-10.7b-instruct",
             "capabilities": {
@@ -2119,8 +2119,8 @@
         {
             "id": "utter-project-eurollm-9b-instruct",
             "name": "utter-project/eurollm-9b-instruct",
-            "tooltip": "utter-project/eurollm-9b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "utter-project/eurollm-9b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "utter-project/eurollm-9b-instruct",
             "capabilities": {
@@ -2131,8 +2131,8 @@
         {
             "id": "writer-palmyra-creative-122b",
             "name": "writer/palmyra-creative-122b",
-            "tooltip": "writer/palmyra-creative-122b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "writer/palmyra-creative-122b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "writer/palmyra-creative-122b",
             "capabilities": {
@@ -2143,8 +2143,8 @@
         {
             "id": "writer-palmyra-fin-70b-32k",
             "name": "writer/palmyra-fin-70b-32k",
-            "tooltip": "writer/palmyra-fin-70b-32k by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "writer/palmyra-fin-70b-32k",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "writer/palmyra-fin-70b-32k",
             "capabilities": {
@@ -2155,8 +2155,8 @@
         {
             "id": "writer-palmyra-med-70b",
             "name": "writer/palmyra-med-70b",
-            "tooltip": "writer/palmyra-med-70b by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "writer/palmyra-med-70b",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "writer/palmyra-med-70b",
             "capabilities": {
@@ -2167,8 +2167,8 @@
         {
             "id": "writer-palmyra-med-70b-32k",
             "name": "writer/palmyra-med-70b-32k",
-            "tooltip": "writer/palmyra-med-70b-32k by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "writer/palmyra-med-70b-32k",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "writer/palmyra-med-70b-32k",
             "capabilities": {
@@ -2179,8 +2179,8 @@
         {
             "id": "yentinglin-llama-3-taiwan-70b-instruct",
             "name": "yentinglin/llama-3-taiwan-70b-instruct",
-            "tooltip": "yentinglin/llama-3-taiwan-70b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "yentinglin/llama-3-taiwan-70b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "yentinglin/llama-3-taiwan-70b-instruct",
             "capabilities": {
@@ -2191,8 +2191,8 @@
         {
             "id": "z-ai-glm4-7",
             "name": "z-ai/glm4.7",
-            "tooltip": "z-ai/glm4.7 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "z-ai/glm4.7",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "z-ai/glm4.7",
             "capabilities": {
@@ -2203,8 +2203,8 @@
         {
             "id": "z-ai-glm5",
             "name": "z-ai/glm5",
-            "tooltip": "z-ai/glm5 by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "z-ai/glm5",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "z-ai/glm5",
             "capabilities": {
@@ -2215,8 +2215,8 @@
         {
             "id": "zyphra-zamba2-7b-instruct",
             "name": "zyphra/zamba2-7b-instruct",
-            "tooltip": "zyphra/zamba2-7b-instruct by NVIDIA NIM",
-            "maxInputTokens": 114688,
+            "tooltip": "zyphra/zamba2-7b-instruct",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "zyphra/zamba2-7b-instruct",
             "capabilities": {

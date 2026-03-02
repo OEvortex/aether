@@ -743,6 +743,16 @@
                     "default": "",
                     "description": "Bailian base URL or proxy endpoint (optional).",
                     "scope": "application"
+                },
+                "chp.modelscope.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "anthropic",
+                    "description": "Select SDK compatibility mode for ModelScope.",
+                    "scope": "application"
                 }
             }
         },

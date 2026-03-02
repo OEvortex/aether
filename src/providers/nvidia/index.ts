@@ -1,1 +1,0 @@
-export { NvidiaProvider } from "./nvidiaProvider";

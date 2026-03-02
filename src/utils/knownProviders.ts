@@ -90,6 +90,13 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 				top_p: null,
 			},
 		},
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	aiping: {
 		displayName: "AIPing",
@@ -120,7 +127,14 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		displayName: "Chutes AI",
 		family: "Chutes AI",
 		description: "Chutes AI endpoint integration",
-		openai: { baseUrl: "https://api.chutes.ai/v1" },
+		openai: { baseUrl: "https://llm.chutes.ai/v1" },
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	codex: {
 		displayName: "OpenAI Codex",
@@ -138,7 +152,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "DeepInfra",
 		description: "OpenAI-compatible endpoints from DeepInfra",
 		openai: { baseUrl: "https://api.deepinfra.com/v1/openai" },
-		// Auto-fetch model list - updates static JSON config in background
+		apiKeyTemplate: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -153,6 +167,14 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		description: "DeepSeek model family",
 		openai: { baseUrl: "https://api.deepseek.com/v1" },
 		anthropic: { baseUrl: "https://api.deepseek.com/anthropic" },
+		apiKeyTemplate: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	geminicli: {
 		displayName: "Gemini CLI",
@@ -164,6 +186,13 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "Hugging Face",
 		description: "Hugging Face Router endpoint integration",
 		openai: { baseUrl: "https://router.huggingface.co/v1" },
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	kilo: {
 		displayName: "Kilo AI",
@@ -182,7 +211,15 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		displayName: "LightningAI",
 		family: "LightningAI",
 		description: "LightningAI endpoint integration",
-		openai: { baseUrl: "https://api.lightning.ai/v1" },
+		openai: { baseUrl: "https://lightning.ai/api/v1" },
+		apiKeyTemplate: "APIKey/Username/StudioName",
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	minimax: {
 		displayName: "MiniMax",
@@ -192,14 +229,23 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 	},
 	mistral: {
 		displayName: "Mistral AI",
-		family: "Mistral AI",
+		family: "Mistral",
 		description: "Mistral AI model endpoints",
 		openai: { baseUrl: "https://api.mistral.ai/v1" },
+		apiKeyTemplate: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 	},
 	modelscope: {
 		displayName: "ModelScope",
 		family: "ModelScope",
-		openai: { baseUrl: "https://api.modelscope.cn/v1" },
+		openai: { baseUrl: "https://api-inference.modelscope.ai/v1" },
+		anthropic: { baseUrl: "https://api-inference.modelscope.ai" },
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	moonshot: {
 		displayName: "MoonshotAI",
@@ -213,16 +259,22 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "NVIDIA",
 		description: "NVIDIA NIM hosted model endpoints",
 		openai: { baseUrl: "https://integrate.api.nvidia.com/v1" },
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	ollama: {
 		displayName: "Ollama",
 		family: "Ollama",
-		description:
-			"Ollama - use Ollama's OpenAI compatible API (v1/chat/completions)",
+		description: "Ollama - use Ollama's OpenAI / Anthropic compatible API",
 		openai: { baseUrl: "https://ollama.com/v1" },
 		anthropic: { baseUrl: "https://ollama.com" },
 		fetchModels: true,
-		modelsEndpoint: "/v1/model",
+		modelsEndpoint: "/model",
 		modelParser: {
 			arrayPath: "data",
 			descriptionField: "id",
@@ -233,7 +285,14 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		displayName: "OpenCode",
 		family: "OpenCode",
 		description: "OpenCode endpoint integration",
-		openai: { baseUrl: "https://api.opencode.ai/v1" },
+		openai: { baseUrl: "https://opencode.ai/zen/v1" },
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	qwencli: {
 		displayName: "Qwen CLI",
@@ -256,6 +315,13 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "Zenmux",
 		description: "Zenmux endpoint integration",
 		openai: { baseUrl: "https://api.zenmux.ai/v1" },
+		fetchModels: true,
+		modelsEndpoint: "/models",
+		modelParser: {
+			arrayPath: "data",
+			descriptionField: "id",
+			cooldownMinutes: 10,
+		},
 	},
 	zhipu: {
 		displayName: "Zhipu AI",
@@ -263,7 +329,6 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		description: "GLM family models and coding plan features",
 		openai: {
 			baseUrl: "https://open.bigmodel.cn/api/paas/v4",
-			customHeader: { "X-Request-Id": "copilot-helper" },
 		},
 	},
 };
@@ -318,53 +383,21 @@ const specializedProviderFactories: Record<string, ProviderFactory> = {
 		() => import("../providers/blackbox/index.js"),
 		"BlackboxProvider",
 	),
-	chutes: createLazyFactory(
-		() => import("../providers/chutes/chutesProvider.js"),
-		"ChutesProvider",
-	),
-	deepinfra: createLazyFactory(
-		() => import("../providers/deepinfra/deepinfraProvider.js"),
-		"DeepInfraProvider",
-	),
 	geminicli: createLazyFactory(
 		() => import("../providers/geminicli/provider.js"),
 		"GeminiCliProvider",
-	),
-	huggingface: createLazyFactory(
-		() => import("../providers/huggingface/provider.js"),
-		"HuggingfaceProvider",
-	),
-	lightningai: createLazyFactory(
-		() => import("../providers/lightningai/provider.js"),
-		"LightningAIProvider",
 	),
 	minimax: createLazyFactory(
 		() => import("../providers/minimax/minimaxProvider.js"),
 		"MiniMaxProvider",
 	),
-	mistral: createLazyFactory(
-		() => import("../providers/mistral/mistralProvider.js"),
-		"MistralProvider",
-	),
 	moonshot: createLazyFactory(
 		() => import("../providers/moonshot/moonshotProvider.js"),
 		"MoonshotProvider",
 	),
-	nvidia: createLazyFactory(
-		() => import("../providers/nvidia/index.js"),
-		"NvidiaProvider",
-	),
-	opencode: createLazyFactory(
-		() => import("../providers/opencode/opencodeProvider.js"),
-		"OpenCodeProvider",
-	),
 	qwencli: createLazyFactory(
 		() => import("../providers/qwencli/provider.js"),
 		"QwenCliProvider",
-	),
-	zenmux: createLazyFactory(
-		() => import("../providers/zenmux/provider.js"),
-		"ZenmuxProvider",
 	),
 	zhipu: createLazyFactory(
 		() => import("../providers/zhipu/zhipuProvider.js"),
@@ -570,11 +603,8 @@ function getDefaultFeatures(providerId: string): ProviderMetadata["features"] {
 let providerRegistryCache: ProviderMetadata[] | null = null;
 
 export function getAllProviders(): ProviderMetadata[] {
-	if (providerRegistryCache) {
-		return providerRegistryCache;
-	}
-
-	const metadata: ProviderMetadata[] = Object.entries(configProviders).map(
+	const mergedConfig = buildConfigProvider(configProviders);
+	const metadata: ProviderMetadata[] = Object.entries(mergedConfig).map(
 		([providerId, providerConfig]) => {
 			const knownProvider = KnownProviders[providerId];
 			const features = getDefaultFeatures(providerId);
@@ -621,7 +651,6 @@ export function getAllProviders(): ProviderMetadata[] {
 	for (const [index, provider] of metadata.entries()) {
 		provider.order = index + 1;
 	}
-	providerRegistryCache = metadata;
 	return metadata;
 }
 

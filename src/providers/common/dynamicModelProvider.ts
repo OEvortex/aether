@@ -107,9 +107,15 @@ export class DynamicModelProvider extends GenericModelProvider {
 
 	private async fetchModels(apiKey?: string): Promise<FetchedModel[]> {
 		const endpoint = this.knownConfig.modelsEndpoint || "/models";
-		const baseUrl = (
+		let baseUrl = (
 			this.knownConfig.openai?.baseUrl || this.providerConfig.baseUrl
 		).replace(/\/$/, "");
+
+		// Avoid double /v1 if both baseUrl and endpoint contain it
+		if (baseUrl.endsWith("/v1") && endpoint.startsWith("/v1/")) {
+			baseUrl = baseUrl.slice(0, -3);
+		}
+
 		const url = endpoint.startsWith("http")
 			? endpoint
 			: `${baseUrl}${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
@@ -163,7 +169,10 @@ export class DynamicModelProvider extends GenericModelProvider {
 			const descField = parser.descriptionField || "description";
 			const contextField = parser.contextLengthField || "context_length";
 
-			const modelConfigs: ModelConfig[] = models.map((m) => {
+			const modelConfigs: ModelConfig[] = [];
+			const seenIds = new Set<string>();
+
+			for (const m of models) {
 				const modelId = String(m[idField] || m.id);
 				const contextLen = Number(m[contextField]) || 128000;
 				const { maxInputTokens, maxOutputTokens } = resolveGlobalTokenLimits(
@@ -181,7 +190,12 @@ export class DynamicModelProvider extends GenericModelProvider {
 					.replace(/[^a-zA-Z0-9-]/g, "-")
 					.toLowerCase();
 
-				return {
+				if (seenIds.has(cleanId)) {
+					continue;
+				}
+				seenIds.add(cleanId);
+
+				modelConfigs.push({
 					id: cleanId,
 					name: String(m[nameField] || modelId),
 					tooltip: String(m[descField] || `${modelId}`),
@@ -189,8 +203,8 @@ export class DynamicModelProvider extends GenericModelProvider {
 					maxOutputTokens,
 					model: modelId,
 					capabilities: resolveGlobalCapabilities(modelId, {}),
-				};
-			});
+				});
+			}
 
 			// Update in-memory configuration if changed
 			const oldModelsJson = JSON.stringify(this.baseProviderConfig.models);

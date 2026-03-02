@@ -35,7 +35,8 @@ const DEVSTRAL_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
 // DeepSeek models: 160K total context (1k=1024), 16K output / 144K input
 const DEEPSEEK_TOTAL_TOKENS = 160 * 1024; // 163840
 const DEEPSEEK_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
-const DEEPSEEK_MAX_INPUT_TOKENS = DEEPSEEK_TOTAL_TOKENS - DEEPSEEK_MAX_OUTPUT_TOKENS; // 147456
+const DEEPSEEK_MAX_INPUT_TOKENS =
+	DEEPSEEK_TOTAL_TOKENS - DEEPSEEK_MAX_OUTPUT_TOKENS; // 147456
 // Fixed 128K family (1k=1024): 16K output / 112K input
 export const FIXED_128K_MAX_INPUT_TOKENS = 128 * 1024 - 16 * 1024; // 114688
 export const FIXED_128K_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
@@ -52,7 +53,8 @@ const MINIMAX_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
 // Fixed 64K family (1k=1024): some vendors expose smaller "64k" models where output is 8k
 const FIXED_64K_TOTAL_TOKENS = 64 * 1024; // 65536
 const FIXED_64K_MAX_OUTPUT_TOKENS = 8 * 1024; // 8192
-const FIXED_64K_MAX_INPUT_TOKENS = FIXED_64K_TOTAL_TOKENS - FIXED_64K_MAX_OUTPUT_TOKENS; // 57344
+const FIXED_64K_MAX_INPUT_TOKENS =
+	FIXED_64K_TOTAL_TOKENS - FIXED_64K_MAX_OUTPUT_TOKENS; // 57344
 // Gemma 3 models: 128K total context (1k=1024), 16K output / 112K input
 const GEMA3_TOTAL_TOKENS = 128 * 1024; // 131072
 const GEMA3_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
@@ -63,11 +65,14 @@ const QWEN35_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
 // Gemini large-context families (1,000,000 total)
 const GEMINI_1M_TOTAL_TOKENS = 1000000;
 const GEMINI25_MAX_OUTPUT_TOKENS = 32 * 1024; // Gemini 2.5 -> 32K output (32768)
-const GEMINI25_MAX_INPUT_TOKENS = GEMINI_1M_TOTAL_TOKENS - GEMINI25_MAX_OUTPUT_TOKENS;
+const GEMINI25_MAX_INPUT_TOKENS =
+	GEMINI_1M_TOTAL_TOKENS - GEMINI25_MAX_OUTPUT_TOKENS;
 const GEMINI2_MAX_OUTPUT_TOKENS = 32 * 1024; // Gemini 2 -> 32K output (32768)
-const GEMINI2_MAX_INPUT_TOKENS = GEMINI_1M_TOTAL_TOKENS - GEMINI2_MAX_OUTPUT_TOKENS;
+const GEMINI2_MAX_INPUT_TOKENS =
+	GEMINI_1M_TOTAL_TOKENS - GEMINI2_MAX_OUTPUT_TOKENS;
 const GEMINI3_MAX_OUTPUT_TOKENS = 64 * 1024; // Gemini 3 / 3.1 -> 64K output (65536)
-const GEMINI3_MAX_INPUT_TOKENS = GEMINI_1M_TOTAL_TOKENS - GEMINI3_MAX_OUTPUT_TOKENS;
+const GEMINI3_MAX_INPUT_TOKENS =
+	GEMINI_1M_TOTAL_TOKENS - GEMINI3_MAX_OUTPUT_TOKENS;
 // GPT-5 (400K total -> 1k=1024, 64K output / 336K input)
 const GPT5_MAX_INPUT_TOKENS = 400 * 1024 - 64 * 1024; // 344064
 const GPT5_MAX_OUTPUT_TOKENS = 64 * 1024; // 65536
@@ -178,6 +183,10 @@ export function isMinimaxModel(modelId: string): boolean {
 	return /minimax[-_]?m2/i.test(modelId);
 }
 
+export function isClaudeOpus46Model(modelId: string): boolean {
+	return /claude[-_]?opus[-_]?4(?:\.|-)6/i.test(modelId);
+}
+
 // Check if GPT model supports vision (excludes gpt-oss)
 export function isVisionGptModel(modelId: string): boolean {
 	return /gpt/i.test(modelId) && !/gpt-oss/i.test(modelId);
@@ -185,7 +194,10 @@ export function isVisionGptModel(modelId: string): boolean {
 
 export function isMingFlashOmniModel(modelId: string): boolean {
 	// inclusionAI Ming-flash-omni-2.0 — single-provider 64K model with 8K output
-	return /ming[-_]?flash[-_]?omni[-_]?2(?:\.|-)0/i.test(modelId) || /ming-flash-omni-2-0/i.test(modelId);
+	return (
+		/ming[-_]?flash[-_]?omni[-_]?2(?:\.|-)0/i.test(modelId) ||
+		/ming-flash-omni-2-0/i.test(modelId)
+	);
 }
 
 export function getDefaultMaxOutputTokensForContext(
@@ -338,14 +350,22 @@ export function resolveGlobalTokenLimits(
 		};
 	}
 
+	// Claude Opus 4.6 (special case: 1M context / 64K output)
+	if (isClaudeOpus46Model(modelId)) {
+		return {
+			maxInputTokens: 936000,
+			maxOutputTokens: 64000,
+		};
+	}
+
 	const minReservedInputTokens =
-		typeof options.minReservedInputTokens === 'number' &&
+		typeof options.minReservedInputTokens === "number" &&
 		options.minReservedInputTokens > 0
 			? options.minReservedInputTokens
 			: DEFAULT_MIN_RESERVED_INPUT_TOKENS;
 
 	const safeContextLength =
-		typeof contextLength === 'number' && contextLength > minReservedInputTokens
+		typeof contextLength === "number" && contextLength > minReservedInputTokens
 			? contextLength
 			: options.defaultContextLength;
 
@@ -354,7 +374,10 @@ export function resolveGlobalTokenLimits(
 		options.defaultMaxOutputTokens,
 	);
 	maxOutput = Math.floor(
-		Math.max(1, Math.min(maxOutput, safeContextLength - minReservedInputTokens)),
+		Math.max(
+			1,
+			Math.min(maxOutput, safeContextLength - minReservedInputTokens),
+		),
 	);
 
 	return {

@@ -6,7 +6,7 @@
         {
             "id": "claude-opus-4-6",
             "name": "claude-opus-4-6",
-            "tooltip": "claude-opus-4-6 by OpenCode",
+            "tooltip": "claude-opus-4-6",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-opus-4-6",
@@ -18,7 +18,7 @@
         {
             "id": "claude-opus-4-5",
             "name": "claude-opus-4-5",
-            "tooltip": "claude-opus-4-5 by OpenCode",
+            "tooltip": "claude-opus-4-5",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-opus-4-5",
@@ -30,7 +30,7 @@
         {
             "id": "claude-opus-4-1",
             "name": "claude-opus-4-1",
-            "tooltip": "claude-opus-4-1 by OpenCode",
+            "tooltip": "claude-opus-4-1",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-opus-4-1",
@@ -42,7 +42,7 @@
         {
             "id": "claude-sonnet-4-6",
             "name": "claude-sonnet-4-6",
-            "tooltip": "claude-sonnet-4-6 by OpenCode",
+            "tooltip": "claude-sonnet-4-6",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-sonnet-4-6",
@@ -54,7 +54,7 @@
         {
             "id": "claude-sonnet-4-5",
             "name": "claude-sonnet-4-5",
-            "tooltip": "claude-sonnet-4-5 by OpenCode",
+            "tooltip": "claude-sonnet-4-5",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-sonnet-4-5",
@@ -66,7 +66,7 @@
         {
             "id": "claude-sonnet-4",
             "name": "claude-sonnet-4",
-            "tooltip": "claude-sonnet-4 by OpenCode",
+            "tooltip": "claude-sonnet-4",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-sonnet-4",
@@ -78,7 +78,7 @@
         {
             "id": "claude-3-5-haiku",
             "name": "claude-3-5-haiku",
-            "tooltip": "claude-3-5-haiku by OpenCode",
+            "tooltip": "claude-3-5-haiku",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-3-5-haiku",
@@ -90,7 +90,7 @@
         {
             "id": "claude-haiku-4-5",
             "name": "claude-haiku-4-5",
-            "tooltip": "claude-haiku-4-5 by OpenCode",
+            "tooltip": "claude-haiku-4-5",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "claude-haiku-4-5",
@@ -100,9 +100,9 @@
             }
         },
         {
-            "id": "gemini-3.1-pro",
+            "id": "gemini-3-1-pro",
             "name": "gemini-3.1-pro",
-            "tooltip": "gemini-3.1-pro by OpenCode",
+            "tooltip": "gemini-3.1-pro",
             "maxInputTokens": 934464,
             "maxOutputTokens": 65536,
             "model": "gemini-3.1-pro",
@@ -114,7 +114,7 @@
         {
             "id": "gemini-3-pro",
             "name": "gemini-3-pro",
-            "tooltip": "gemini-3-pro by OpenCode",
+            "tooltip": "gemini-3-pro",
             "maxInputTokens": 934464,
             "maxOutputTokens": 65536,
             "model": "gemini-3-pro",
@@ -126,7 +126,7 @@
         {
             "id": "gemini-3-flash",
             "name": "gemini-3-flash",
-            "tooltip": "gemini-3-flash by OpenCode",
+            "tooltip": "gemini-3-flash",
             "maxInputTokens": 934464,
             "maxOutputTokens": 65536,
             "model": "gemini-3-flash",
@@ -136,9 +136,9 @@
             }
         },
         {
-            "id": "gpt-5.3-codex",
+            "id": "gpt-5-3-codex",
             "name": "gpt-5.3-codex",
-            "tooltip": "gpt-5.3-codex by OpenCode",
+            "tooltip": "gpt-5.3-codex",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.3-codex",
@@ -148,9 +148,9 @@
             }
         },
         {
-            "id": "gpt-5.2",
+            "id": "gpt-5-2",
             "name": "gpt-5.2",
-            "tooltip": "gpt-5.2 by OpenCode",
+            "tooltip": "gpt-5.2",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.2",
@@ -160,9 +160,9 @@
             }
         },
         {
-            "id": "gpt-5.2-codex",
+            "id": "gpt-5-2-codex",
             "name": "gpt-5.2-codex",
-            "tooltip": "gpt-5.2-codex by OpenCode",
+            "tooltip": "gpt-5.2-codex",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.2-codex",
@@ -172,9 +172,9 @@
             }
         },
         {
-            "id": "gpt-5.1",
+            "id": "gpt-5-1",
             "name": "gpt-5.1",
-            "tooltip": "gpt-5.1 by OpenCode",
+            "tooltip": "gpt-5.1",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.1",
@@ -184,9 +184,9 @@
             }
         },
         {
-            "id": "gpt-5.1-codex-max",
+            "id": "gpt-5-1-codex-max",
             "name": "gpt-5.1-codex-max",
-            "tooltip": "gpt-5.1-codex-max by OpenCode",
+            "tooltip": "gpt-5.1-codex-max",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.1-codex-max",
@@ -196,9 +196,9 @@
             }
         },
         {
-            "id": "gpt-5.1-codex",
+            "id": "gpt-5-1-codex",
             "name": "gpt-5.1-codex",
-            "tooltip": "gpt-5.1-codex by OpenCode",
+            "tooltip": "gpt-5.1-codex",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.1-codex",
@@ -208,9 +208,9 @@
             }
         },
         {
-            "id": "gpt-5.1-codex-mini",
+            "id": "gpt-5-1-codex-mini",
             "name": "gpt-5.1-codex-mini",
-            "tooltip": "gpt-5.1-codex-mini by OpenCode",
+            "tooltip": "gpt-5.1-codex-mini",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5.1-codex-mini",
@@ -222,7 +222,7 @@
         {
             "id": "gpt-5",
             "name": "gpt-5",
-            "tooltip": "gpt-5 by OpenCode",
+            "tooltip": "gpt-5",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5",
@@ -234,7 +234,7 @@
         {
             "id": "gpt-5-codex",
             "name": "gpt-5-codex",
-            "tooltip": "gpt-5-codex by OpenCode",
+            "tooltip": "gpt-5-codex",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5-codex",
@@ -246,7 +246,7 @@
         {
             "id": "gpt-5-nano",
             "name": "gpt-5-nano",
-            "tooltip": "gpt-5-nano by OpenCode",
+            "tooltip": "gpt-5-nano",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "model": "gpt-5-nano",
@@ -258,7 +258,7 @@
         {
             "id": "glm-5",
             "name": "glm-5",
-            "tooltip": "glm-5 by OpenCode",
+            "tooltip": "glm-5",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "glm-5",
@@ -268,9 +268,9 @@
             }
         },
         {
-            "id": "glm-4.7",
+            "id": "glm-4-7",
             "name": "glm-4.7",
-            "tooltip": "glm-4.7 by OpenCode",
+            "tooltip": "glm-4.7",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "glm-4.7",
@@ -280,9 +280,9 @@
             }
         },
         {
-            "id": "glm-4.6",
+            "id": "glm-4-6",
             "name": "glm-4.6",
-            "tooltip": "glm-4.6 by OpenCode",
+            "tooltip": "glm-4.6",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "glm-4.6",
@@ -292,9 +292,9 @@
             }
         },
         {
-            "id": "minimax-m2.5",
+            "id": "minimax-m2-5",
             "name": "minimax-m2.5",
-            "tooltip": "minimax-m2.5 by OpenCode",
+            "tooltip": "minimax-m2.5",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "minimax-m2.5",
@@ -304,9 +304,9 @@
             }
         },
         {
-            "id": "minimax-m2.5-free",
+            "id": "minimax-m2-5-free",
             "name": "minimax-m2.5-free",
-            "tooltip": "minimax-m2.5-free by OpenCode",
+            "tooltip": "minimax-m2.5-free",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "minimax-m2.5-free",
@@ -316,9 +316,9 @@
             }
         },
         {
-            "id": "minimax-m2.1",
+            "id": "minimax-m2-1",
             "name": "minimax-m2.1",
-            "tooltip": "minimax-m2.1 by OpenCode",
+            "tooltip": "minimax-m2.1",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "minimax-m2.1",
@@ -328,9 +328,9 @@
             }
         },
         {
-            "id": "minimax-m2.1-free",
+            "id": "minimax-m2-1-free",
             "name": "minimax-m2.1-free",
-            "tooltip": "minimax-m2.1-free by OpenCode",
+            "tooltip": "minimax-m2.1-free",
             "maxInputTokens": 172032,
             "maxOutputTokens": 32768,
             "model": "minimax-m2.1-free",
@@ -340,9 +340,9 @@
             }
         },
         {
-            "id": "kimi-k2.5",
+            "id": "kimi-k2-5",
             "name": "kimi-k2.5",
-            "tooltip": "kimi-k2.5 by OpenCode",
+            "tooltip": "kimi-k2.5",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "kimi-k2.5",
@@ -352,9 +352,9 @@
             }
         },
         {
-            "id": "kimi-k2.5-free",
+            "id": "kimi-k2-5-free",
             "name": "kimi-k2.5-free",
-            "tooltip": "kimi-k2.5-free by OpenCode",
+            "tooltip": "kimi-k2.5-free",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "kimi-k2.5-free",
@@ -366,7 +366,7 @@
         {
             "id": "kimi-k2",
             "name": "kimi-k2",
-            "tooltip": "kimi-k2 by OpenCode",
+            "tooltip": "kimi-k2",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "kimi-k2",
@@ -378,7 +378,7 @@
         {
             "id": "kimi-k2-thinking",
             "name": "kimi-k2-thinking",
-            "tooltip": "kimi-k2-thinking by OpenCode",
+            "tooltip": "kimi-k2-thinking",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "kimi-k2-thinking",
@@ -390,8 +390,8 @@
         {
             "id": "trinity-large-preview-free",
             "name": "trinity-large-preview-free",
-            "tooltip": "trinity-large-preview-free by OpenCode",
-            "maxInputTokens": 114688,
+            "tooltip": "trinity-large-preview-free",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "trinity-large-preview-free",
             "capabilities": {
@@ -402,8 +402,8 @@
         {
             "id": "big-pickle",
             "name": "big-pickle",
-            "tooltip": "big-pickle by OpenCode",
-            "maxInputTokens": 114688,
+            "tooltip": "big-pickle",
+            "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "big-pickle",
             "capabilities": {
@@ -414,7 +414,7 @@
         {
             "id": "glm-5-free",
             "name": "glm-5-free",
-            "tooltip": "glm-5-free by OpenCode",
+            "tooltip": "glm-5-free",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "glm-5-free",
@@ -423,5 +423,6 @@
                 "imageInput": false
             }
         }
-    ]
+    ],
+    "family": "OpenCode"
 }
