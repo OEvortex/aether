@@ -421,8 +421,9 @@ export class ConfigManager {
 			{},
 		);
 		const settingsOverrides: UserConfigOverrides = {};
+		const mergedProviderKeys = Object.keys(buildConfigProvider(configProviders));
 
-		for (const providerKey of Object.keys(configProviders)) {
+		for (const providerKey of mergedProviderKeys) {
 			const baseUrl = config.get<string>(`${providerKey}.baseUrl`, "").trim();
 			const sdkMode = config.get<string>(`${providerKey}.sdkMode`, "").trim();
 			

@@ -146,6 +146,11 @@ export class AccountUI {
 				authType: "apiKey" as const,
 			},
 			{
+				label: "AIHubMix",
+				value: ProviderKey.AIHubMix,
+				authType: "apiKey" as const,
+			},
+			{
 				label: "Moonshot",
 				value: ProviderKey.Moonshot,
 				authType: "apiKey" as const,
@@ -178,6 +183,11 @@ export class AccountUI {
 			{
 				label: "Mistral",
 				value: ProviderKey.Mistral,
+				authType: "apiKey" as const,
+			},
+			{
+				label: "ModelScope",
+				value: ProviderKey.ModelScope,
 				authType: "apiKey" as const,
 			},
 			{

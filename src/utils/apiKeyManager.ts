@@ -31,7 +31,9 @@ export class ApiKeyManager {
 		}
 		try {
 			const { configProviders } = await import("../providers/config/index.js");
-			ApiKeyManager.builtinProviders = new Set(Object.keys(configProviders));
+			const { buildConfigProvider } = await import("./knownProviders.js");
+			const mergedProviders = buildConfigProvider(configProviders);
+			ApiKeyManager.builtinProviders = new Set(Object.keys(mergedProviders));
 		} catch (error) {
 			Logger.warn("Failed to get built-in provider list:", error);
 			ApiKeyManager.builtinProviders = new Set();
@@ -176,6 +178,11 @@ export class ApiKeyManager {
 			} else {
 				await ApiKeyManager.setApiKey(vendor, apiKey.trim());
 				vscode.window.showInformationMessage(`${displayName} API key set`);
+			}
+			try {
+				await vscode.commands.executeCommand(`chp.${vendor}.refreshModels`);
+			} catch {
+				// Ignore: not all providers expose a refresh command
 			}
 			// After API key changes, related components will automatically update through ConfigManager's configuration listeners
 			Logger.debug(`API key updated: ${vendor}`);

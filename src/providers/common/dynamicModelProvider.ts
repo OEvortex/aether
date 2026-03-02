@@ -358,7 +358,20 @@ export class DynamicModelProvider extends GenericModelProvider {
 			},
 		);
 
-		const disposables = [providerDisposable, setApiKeyCommand];
+		const refreshModelsCommand = vscode.commands.registerCommand(
+			`chp.${providerKey}.refreshModels`,
+			async () => {
+				await provider.modelInfoCache?.invalidateCache(providerKey);
+				provider.scheduleModelRefresh(true, true);
+				provider._onDidChangeLanguageModelChatInformation.fire(undefined);
+			},
+		);
+
+		const disposables = [
+			providerDisposable,
+			setApiKeyCommand,
+			refreshModelsCommand,
+		];
 		for (const d of disposables) {
 			context.subscriptions.push(d);
 		}
