@@ -196,24 +196,24 @@
             }
         },
         {
-            "id": "qwen-qwen2-5-7b-instruct",
-            "name": "Qwen/Qwen2.5-7B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-7B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-7B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "meta-llama-llama-3-2-3b-instruct",
             "name": "meta-llama/Llama-3.2-3B-Instruct",
             "tooltip": "meta-llama/Llama-3.2-3B-Instruct",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta-llama/Llama-3.2-3B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-qwen2-5-7b-instruct",
+            "name": "Qwen/Qwen2.5-7B-Instruct",
+            "tooltip": "Qwen/Qwen2.5-7B-Instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen2.5-7B-Instruct",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -352,18 +352,6 @@
             }
         },
         {
-            "id": "qwen-qwen3-next-80b-a3b-instruct",
-            "name": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "qwen-qwen3-14b",
             "name": "Qwen/Qwen3-14B",
             "tooltip": "Qwen/Qwen3-14B",
@@ -388,24 +376,24 @@
             }
         },
         {
-            "id": "qwen-qwen2-5-vl-7b-instruct",
-            "name": "Qwen/Qwen2.5-VL-7B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-VL-7B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-VL-7B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "meta-llama-meta-llama-3-8b-instruct",
             "name": "meta-llama/Meta-Llama-3-8B-Instruct",
             "tooltip": "meta-llama/Meta-Llama-3-8B-Instruct",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "meta-llama/Meta-Llama-3-8B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-qwen3-next-80b-a3b-instruct",
+            "name": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -460,12 +448,36 @@
             }
         },
         {
+            "id": "qwen-qwen2-5-vl-7b-instruct",
+            "name": "Qwen/Qwen2.5-VL-7B-Instruct",
+            "tooltip": "Qwen/Qwen2.5-VL-7B-Instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen2.5-VL-7B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
             "id": "qwen-qwen3-4b-thinking-2507",
             "name": "Qwen/Qwen3-4B-Thinking-2507",
             "tooltip": "Qwen/Qwen3-4B-Thinking-2507",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "Qwen/Qwen3-4B-Thinking-2507",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "google-gemma-3n-e4b-it",
+            "name": "google/gemma-3n-E4B-it",
+            "tooltip": "google/gemma-3n-E4B-it",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "model": "google/gemma-3n-E4B-it",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -496,24 +508,24 @@
             }
         },
         {
-            "id": "google-gemma-3n-e4b-it",
-            "name": "google/gemma-3n-E4B-it",
-            "tooltip": "google/gemma-3n-E4B-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "google/gemma-3n-E4B-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "qwen-qwen2-5-coder-7b-instruct",
             "name": "Qwen/Qwen2.5-Coder-7B-Instruct",
             "tooltip": "Qwen/Qwen2.5-Coder-7B-Instruct",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "servicenow-ai-apriel-1-6-15b-thinker",
+            "name": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+            "tooltip": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -532,12 +544,12 @@
             }
         },
         {
-            "id": "servicenow-ai-apriel-1-6-15b-thinker",
-            "name": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
-            "tooltip": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+            "id": "qwen-qwen3-32b",
+            "name": "Qwen/Qwen3-32B",
+            "tooltip": "Qwen/Qwen3-32B",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+            "model": "Qwen/Qwen3-32B",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -592,24 +604,24 @@
             }
         },
         {
-            "id": "qwen-qwen3-30b-a3b",
-            "name": "Qwen/Qwen3-30B-A3B",
-            "tooltip": "Qwen/Qwen3-30B-A3B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-30B-A3B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "zai-org-glm-4-6v-flash",
             "name": "zai-org/GLM-4.6V-Flash",
             "tooltip": "zai-org/GLM-4.6V-Flash",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "zai-org/GLM-4.6V-Flash",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-qwen3-30b-a3b",
+            "name": "Qwen/Qwen3-30B-A3B",
+            "tooltip": "Qwen/Qwen3-30B-A3B",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen3-30B-A3B",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -634,18 +646,6 @@
             "maxInputTokens": 147456,
             "maxOutputTokens": 16384,
             "model": "deepseek-ai/DeepSeek-V3.2-Exp",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-32b",
-            "name": "Qwen/Qwen3-32B",
-            "tooltip": "Qwen/Qwen3-32B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-32B",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -688,24 +688,24 @@
             }
         },
         {
-            "id": "zai-org-glm-4-5-air",
-            "name": "zai-org/GLM-4.5-Air",
-            "tooltip": "zai-org/GLM-4.5-Air",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5-Air",
+            "id": "qwen-qwen3-next-80b-a3b-thinking",
+            "name": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen3-Next-80B-A3B-Thinking",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             }
         },
         {
-            "id": "qwen-qwen2-5-vl-72b-instruct",
-            "name": "Qwen/Qwen2.5-VL-72B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-VL-72B-Instruct",
+            "id": "swiss-ai-apertus-8b-instruct-2509",
+            "name": "swiss-ai/Apertus-8B-Instruct-2509",
+            "tooltip": "swiss-ai/Apertus-8B-Instruct-2509",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-VL-72B-Instruct",
+            "model": "swiss-ai/Apertus-8B-Instruct-2509",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -736,24 +736,24 @@
             }
         },
         {
-            "id": "meta-llama-llama-3-1-70b-instruct",
-            "name": "meta-llama/Llama-3.1-70B-Instruct",
-            "tooltip": "meta-llama/Llama-3.1-70B-Instruct",
+            "id": "qwen-qwen2-5-vl-72b-instruct",
+            "name": "Qwen/Qwen2.5-VL-72B-Instruct",
+            "tooltip": "Qwen/Qwen2.5-VL-72B-Instruct",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-3.1-70B-Instruct",
+            "model": "Qwen/Qwen2.5-VL-72B-Instruct",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             }
         },
         {
-            "id": "swiss-ai-apertus-8b-instruct-2509",
-            "name": "swiss-ai/Apertus-8B-Instruct-2509",
-            "tooltip": "swiss-ai/Apertus-8B-Instruct-2509",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "swiss-ai/Apertus-8B-Instruct-2509",
+            "id": "zai-org-glm-4-5-air",
+            "name": "zai-org/GLM-4.5-Air",
+            "tooltip": "zai-org/GLM-4.5-Air",
+            "maxInputTokens": 98304,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.5-Air",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -772,18 +772,6 @@
             }
         },
         {
-            "id": "openai-gpt-oss-safeguard-20b",
-            "name": "openai/gpt-oss-safeguard-20b",
-            "tooltip": "openai/gpt-oss-safeguard-20b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-oss-safeguard-20b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "deepseek-ai-deepseek-v3",
             "name": "deepseek-ai/DeepSeek-V3",
             "tooltip": "deepseek-ai/DeepSeek-V3",
@@ -796,12 +784,24 @@
             }
         },
         {
-            "id": "qwen-qwen3-next-80b-a3b-thinking",
-            "name": "Qwen/Qwen3-Next-80B-A3B-Thinking",
-            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+            "id": "meta-llama-llama-3-1-70b-instruct",
+            "name": "meta-llama/Llama-3.1-70B-Instruct",
+            "tooltip": "meta-llama/Llama-3.1-70B-Instruct",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+            "model": "meta-llama/Llama-3.1-70B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "openai-gpt-oss-safeguard-20b",
+            "name": "openai/gpt-oss-safeguard-20b",
+            "tooltip": "openai/gpt-oss-safeguard-20b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "openai/gpt-oss-safeguard-20b",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -844,204 +844,12 @@
             }
         },
         {
-            "id": "deepseek-ai-deepseek-v3-0324",
-            "name": "deepseek-ai/DeepSeek-V3-0324",
-            "tooltip": "deepseek-ai/DeepSeek-V3-0324",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3-0324",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-instruct-2507",
-            "name": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-            "tooltip": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-aya-vision-32b",
-            "name": "CohereLabs/aya-vision-32b",
-            "tooltip": "CohereLabs/aya-vision-32b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/aya-vision-32b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-4-5-vl-424b-a47b-base-pt",
-            "name": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
-            "tooltip": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "sao10k-l3-8b-stheno-v3-2",
             "name": "Sao10K/L3-8B-Stheno-v3.2",
             "tooltip": "Sao10K/L3-8B-Stheno-v3.2",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "Sao10K/L3-8B-Stheno-v3.2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-autoglm-phone-9b-multilingual",
-            "name": "zai-org/AutoGLM-Phone-9B-Multilingual",
-            "tooltip": "zai-org/AutoGLM-Phone-9B-Multilingual",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "zai-org/AutoGLM-Phone-9B-Multilingual",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-prover-v2-671b",
-            "name": "deepseek-ai/DeepSeek-Prover-V2-671B",
-            "tooltip": "deepseek-ai/DeepSeek-Prover-V2-671B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-Prover-V2-671B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-4-maverick-17b-128e-instruct-fp8",
-            "name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "tooltip": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-1-terminus",
-            "name": "deepseek-ai/DeepSeek-V3.1-Terminus",
-            "tooltip": "deepseek-ai/DeepSeek-V3.1-Terminus",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.1-Terminus",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "aisingapore-qwen-sea-lion-v4-32b-it",
-            "name": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
-            "tooltip": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5v",
-            "name": "zai-org/GLM-4.5V",
-            "tooltip": "zai-org/GLM-4.5V",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5V",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-command-a-reasoning-08-2025",
-            "name": "CohereLabs/command-a-reasoning-08-2025",
-            "tooltip": "CohereLabs/command-a-reasoning-08-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/command-a-reasoning-08-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "allenai-olmo-3-1-32b-think",
-            "name": "allenai/Olmo-3.1-32B-Think",
-            "tooltip": "allenai/Olmo-3.1-32B-Think",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "allenai/Olmo-3.1-32B-Think",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6v",
-            "name": "zai-org/GLM-4.6V",
-            "tooltip": "zai-org/GLM-4.6V",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6V",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-command-a-translate-08-2025",
-            "name": "CohereLabs/command-a-translate-08-2025",
-            "tooltip": "CohereLabs/command-a-translate-08-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/command-a-translate-08-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "allenai-olmo-3-1-32b-instruct",
-            "name": "allenai/Olmo-3.1-32B-Instruct",
-            "tooltip": "allenai/Olmo-3.1-32B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "allenai/Olmo-3.1-32B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6v-fp8",
-            "name": "zai-org/GLM-4.6V-FP8",
-            "tooltip": "zai-org/GLM-4.6V-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6V-FP8",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1060,12 +868,204 @@
             }
         },
         {
+            "id": "qwen-qwen3-235b-a22b-instruct-2507",
+            "name": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+            "tooltip": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "baidu-ernie-4-5-vl-424b-a47b-base-pt",
+            "name": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
+            "tooltip": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai-deepseek-prover-v2-671b",
+            "name": "deepseek-ai/DeepSeek-Prover-V2-671B",
+            "tooltip": "deepseek-ai/DeepSeek-Prover-V2-671B",
+            "maxInputTokens": 147456,
+            "maxOutputTokens": 16384,
+            "model": "deepseek-ai/DeepSeek-Prover-V2-671B",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "aisingapore-qwen-sea-lion-v4-32b-it",
+            "name": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
+            "tooltip": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "meta-llama-llama-4-maverick-17b-128e-instruct-fp8",
+            "name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+            "tooltip": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org-autoglm-phone-9b-multilingual",
+            "name": "zai-org/AutoGLM-Phone-9B-Multilingual",
+            "tooltip": "zai-org/AutoGLM-Phone-9B-Multilingual",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "zai-org/AutoGLM-Phone-9B-Multilingual",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai-deepseek-v3-1-terminus",
+            "name": "deepseek-ai/DeepSeek-V3.1-Terminus",
+            "tooltip": "deepseek-ai/DeepSeek-V3.1-Terminus",
+            "maxInputTokens": 147456,
+            "maxOutputTokens": 16384,
+            "model": "deepseek-ai/DeepSeek-V3.1-Terminus",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "allenai-olmo-3-1-32b-think",
+            "name": "allenai/Olmo-3.1-32B-Think",
+            "tooltip": "allenai/Olmo-3.1-32B-Think",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "allenai/Olmo-3.1-32B-Think",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org-glm-4-5v",
+            "name": "zai-org/GLM-4.5V",
+            "tooltip": "zai-org/GLM-4.5V",
+            "maxInputTokens": 98304,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.5V",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
             "id": "zai-org-glm-4-7-fp8",
             "name": "zai-org/GLM-4.7-FP8",
             "tooltip": "zai-org/GLM-4.7-FP8",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "zai-org/GLM-4.7-FP8",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "coherelabs-aya-vision-32b",
+            "name": "CohereLabs/aya-vision-32b",
+            "tooltip": "CohereLabs/aya-vision-32b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "CohereLabs/aya-vision-32b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "allenai-olmo-3-1-32b-instruct",
+            "name": "allenai/Olmo-3.1-32B-Instruct",
+            "tooltip": "allenai/Olmo-3.1-32B-Instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "allenai/Olmo-3.1-32B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org-glm-4-6v",
+            "name": "zai-org/GLM-4.6V",
+            "tooltip": "zai-org/GLM-4.6V",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.6V",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "coherelabs-command-a-reasoning-08-2025",
+            "name": "CohereLabs/command-a-reasoning-08-2025",
+            "tooltip": "CohereLabs/command-a-reasoning-08-2025",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "CohereLabs/command-a-reasoning-08-2025",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai-deepseek-v3-0324",
+            "name": "deepseek-ai/DeepSeek-V3-0324",
+            "tooltip": "deepseek-ai/DeepSeek-V3-0324",
+            "maxInputTokens": 147456,
+            "maxOutputTokens": 16384,
+            "model": "deepseek-ai/DeepSeek-V3-0324",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org-glm-4-6v-fp8",
+            "name": "zai-org/GLM-4.6V-FP8",
+            "tooltip": "zai-org/GLM-4.6V-FP8",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.6V-FP8",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "coherelabs-command-a-translate-08-2025",
+            "name": "CohereLabs/command-a-translate-08-2025",
+            "tooltip": "CohereLabs/command-a-translate-08-2025",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "CohereLabs/command-a-translate-08-2025",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1096,156 +1096,12 @@
             }
         },
         {
-            "id": "coherelabs-command-a-vision-07-2025",
-            "name": "CohereLabs/command-a-vision-07-2025",
-            "tooltip": "CohereLabs/command-a-vision-07-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/command-a-vision-07-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5",
-            "name": "zai-org/GLM-4.5",
-            "tooltip": "zai-org/GLM-4.5",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5v-fp8",
-            "name": "zai-org/GLM-4.5V-FP8",
-            "tooltip": "zai-org/GLM-4.5V-FP8",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5V-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-instruct",
-            "name": "moonshotai/Kimi-K2-Instruct",
-            "tooltip": "moonshotai/Kimi-K2-Instruct",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/Kimi-K2-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
             "id": "baidu-ernie-4-5-vl-28b-a3b-pt",
             "name": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
             "tooltip": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6-fp8",
-            "name": "zai-org/GLM-4.6-FP8",
-            "tooltip": "zai-org/GLM-4.6-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "aisingapore-gemma-sea-lion-v4-27b-it",
-            "name": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
-            "tooltip": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5-air-fp8",
-            "name": "zai-org/GLM-4.5-Air-FP8",
-            "tooltip": "zai-org/GLM-4.5-Air-FP8",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5-Air-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-30b-a3b-thinking",
-            "name": "Qwen/Qwen3-VL-30B-A3B-Thinking",
-            "tooltip": "Qwen/Qwen3-VL-30B-A3B-Thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-VL-30B-A3B-Thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6",
-            "name": "zai-org/GLM-4.6",
-            "tooltip": "zai-org/GLM-4.6",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "swiss-ai-apertus-70b-instruct-2509",
-            "name": "swiss-ai/Apertus-70B-Instruct-2509",
-            "tooltip": "swiss-ai/Apertus-70B-Instruct-2509",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "swiss-ai/Apertus-70B-Instruct-2509",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-480b-a35b-instruct-fp8",
-            "name": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-            "tooltip": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-coder-3b-instruct",
-            "name": "Qwen/Qwen2.5-Coder-3B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-Coder-3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-Coder-3B-Instruct",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1264,36 +1120,36 @@
             }
         },
         {
-            "id": "dicta-il-dictalm-3-0-24b-thinking",
-            "name": "dicta-il/DictaLM-3.0-24B-Thinking",
-            "tooltip": "dicta-il/DictaLM-3.0-24B-Thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "dicta-il/DictaLM-3.0-24B-Thinking",
+            "id": "zai-org-glm-4-6-fp8",
+            "name": "zai-org/GLM-4.6-FP8",
+            "tooltip": "zai-org/GLM-4.6-FP8",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.6-FP8",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             }
         },
         {
-            "id": "deepcogito-cogito-671b-v2-1",
-            "name": "deepcogito/cogito-671b-v2.1",
-            "tooltip": "deepcogito/cogito-671b-v2.1",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "deepcogito/cogito-671b-v2.1",
+            "id": "moonshotai-kimi-k2-instruct",
+            "name": "moonshotai/Kimi-K2-Instruct",
+            "tooltip": "moonshotai/Kimi-K2-Instruct",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "moonshotai/Kimi-K2-Instruct",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             }
         },
         {
-            "id": "qwen-qwen3-235b-a22b",
-            "name": "Qwen/Qwen3-235B-A22B",
-            "tooltip": "Qwen/Qwen3-235B-A22B",
+            "id": "qwen-qwen3-vl-30b-a3b-thinking",
+            "name": "Qwen/Qwen3-VL-30B-A3B-Thinking",
+            "tooltip": "Qwen/Qwen3-VL-30B-A3B-Thinking",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-235B-A22B",
+            "model": "Qwen/Qwen3-VL-30B-A3B-Thinking",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1312,24 +1168,36 @@
             }
         },
         {
-            "id": "deepcogito-cogito-671b-v2-1-fp8",
-            "name": "deepcogito/cogito-671b-v2.1-FP8",
-            "tooltip": "deepcogito/cogito-671b-v2.1-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "deepcogito/cogito-671b-v2.1-FP8",
+            "id": "zai-org-glm-4-6",
+            "name": "zai-org/GLM-4.6",
+            "tooltip": "zai-org/GLM-4.6",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.6",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             }
         },
         {
-            "id": "deepseek-ai-deepseek-v3-1",
-            "name": "deepseek-ai/DeepSeek-V3.1",
-            "tooltip": "deepseek-ai/DeepSeek-V3.1",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.1",
+            "id": "zai-org-glm-4-5-air-fp8",
+            "name": "zai-org/GLM-4.5-Air-FP8",
+            "tooltip": "zai-org/GLM-4.5-Air-FP8",
+            "maxInputTokens": 98304,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.5-Air-FP8",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org-glm-4-5v-fp8",
+            "name": "zai-org/GLM-4.5V-FP8",
+            "tooltip": "zai-org/GLM-4.5V-FP8",
+            "maxInputTokens": 98304,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.5V-FP8",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1360,12 +1228,36 @@
             }
         },
         {
-            "id": "alpindale-wizardlm-2-8x22b",
-            "name": "alpindale/WizardLM-2-8x22B",
-            "tooltip": "alpindale/WizardLM-2-8x22B",
+            "id": "qwen-qwen3-coder-480b-a35b-instruct-fp8",
+            "name": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+            "tooltip": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "alpindale/WizardLM-2-8x22B",
+            "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "aisingapore-gemma-sea-lion-v4-27b-it",
+            "name": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+            "tooltip": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai-deepseek-v3-1",
+            "name": "deepseek-ai/DeepSeek-V3.1",
+            "tooltip": "deepseek-ai/DeepSeek-V3.1",
+            "maxInputTokens": 147456,
+            "maxOutputTokens": 16384,
+            "model": "deepseek-ai/DeepSeek-V3.1",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1384,12 +1276,24 @@
             }
         },
         {
-            "id": "meta-llama-meta-llama-3-70b-instruct",
-            "name": "meta-llama/Meta-Llama-3-70B-Instruct",
-            "tooltip": "meta-llama/Meta-Llama-3-70B-Instruct",
+            "id": "deepcogito-cogito-671b-v2-1",
+            "name": "deepcogito/cogito-671b-v2.1",
+            "tooltip": "deepcogito/cogito-671b-v2.1",
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
-            "model": "meta-llama/Meta-Llama-3-70B-Instruct",
+            "model": "deepcogito/cogito-671b-v2.1",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "swiss-ai-apertus-70b-instruct-2509",
+            "name": "swiss-ai/Apertus-70B-Instruct-2509",
+            "tooltip": "swiss-ai/Apertus-70B-Instruct-2509",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "swiss-ai/Apertus-70B-Instruct-2509",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1402,6 +1306,90 @@
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "CohereLabs/c4ai-command-a-03-2025",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepcogito-cogito-671b-v2-1-fp8",
+            "name": "deepcogito/cogito-671b-v2.1-FP8",
+            "tooltip": "deepcogito/cogito-671b-v2.1-FP8",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "deepcogito/cogito-671b-v2.1-FP8",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "dicta-il-dictalm-3-0-24b-thinking",
+            "name": "dicta-il/DictaLM-3.0-24B-Thinking",
+            "tooltip": "dicta-il/DictaLM-3.0-24B-Thinking",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "dicta-il/DictaLM-3.0-24B-Thinking",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "alpindale-wizardlm-2-8x22b",
+            "name": "alpindale/WizardLM-2-8x22B",
+            "tooltip": "alpindale/WizardLM-2-8x22B",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "alpindale/WizardLM-2-8x22B",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-qwen2-5-coder-3b-instruct",
+            "name": "Qwen/Qwen2.5-Coder-3B-Instruct",
+            "tooltip": "Qwen/Qwen2.5-Coder-3B-Instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen2.5-Coder-3B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "coherelabs-command-a-vision-07-2025",
+            "name": "CohereLabs/command-a-vision-07-2025",
+            "tooltip": "CohereLabs/command-a-vision-07-2025",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "CohereLabs/command-a-vision-07-2025",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "meta-llama-meta-llama-3-70b-instruct",
+            "name": "meta-llama/Meta-Llama-3-70B-Instruct",
+            "tooltip": "meta-llama/Meta-Llama-3-70B-Instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "meta-llama/Meta-Llama-3-70B-Instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-qwen3-235b-a22b",
+            "name": "Qwen/Qwen3-235B-A22B",
+            "tooltip": "Qwen/Qwen3-235B-A22B",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "Qwen/Qwen3-235B-A22B",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
@@ -1486,6 +1474,18 @@
             "maxInputTokens": 111616,
             "maxOutputTokens": 16384,
             "model": "baidu/ERNIE-4.5-21B-A3B-PT",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org-glm-4-5",
+            "name": "zai-org/GLM-4.5",
+            "tooltip": "zai-org/GLM-4.5",
+            "maxInputTokens": 98304,
+            "maxOutputTokens": 32768,
+            "model": "zai-org/GLM-4.5",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false

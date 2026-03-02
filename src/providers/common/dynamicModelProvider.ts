@@ -45,6 +45,7 @@ export class DynamicModelProvider extends GenericModelProvider {
 	private readonly knownConfig: KnownProviderConfig;
 	private readonly configFilePath: string;
 	private lastFetchTime = 0;
+	private isRefreshing = false;
 	private get fetchCooldownMs(): number {
 		const cooldownMinutes = this.knownConfig.modelParser?.cooldownMinutes;
 		return (cooldownMinutes ?? 10) * 60 * 1000;
@@ -83,13 +84,28 @@ export class DynamicModelProvider extends GenericModelProvider {
 		// Throttled background fetch and update
 		const now = Date.now();
 		if (now - this.lastFetchTime > this.fetchCooldownMs) {
-			this.refreshModelsAsync(options.silent ?? true);
+			this.scheduleModelRefresh(options.silent ?? true);
 		}
 
 		return this.dedupeModelInfos(currentModels);
 	}
 
+	private scheduleModelRefresh(silent: boolean, force = false): void {
+		if (!force) {
+			const now = Date.now();
+			if (now - this.lastFetchTime <= this.fetchCooldownMs) {
+				return;
+			}
+		}
+		void this.refreshModelsAsync(silent);
+	}
+
 	private async refreshModelsAsync(silent: boolean): Promise<void> {
+		if (this.isRefreshing) {
+			return;
+		}
+
+		this.isRefreshing = true;
 		this.lastFetchTime = Date.now();
 		try {
 			const apiKey = await this.ensureApiKey(silent);
@@ -112,6 +128,8 @@ export class DynamicModelProvider extends GenericModelProvider {
 				`[${this.providerKey}] Background model refresh failed:`,
 				err,
 			);
+		} finally {
+			this.isRefreshing = false;
 		}
 	}
 
@@ -335,6 +353,7 @@ export class DynamicModelProvider extends GenericModelProvider {
 					supportsBaseUrl: true,
 				});
 				await provider.modelInfoCache?.invalidateCache(providerKey);
+				provider.scheduleModelRefresh(true, true);
 				provider._onDidChangeLanguageModelChatInformation.fire(undefined);
 			},
 		);
@@ -343,6 +362,9 @@ export class DynamicModelProvider extends GenericModelProvider {
 		for (const d of disposables) {
 			context.subscriptions.push(d);
 		}
+
+		// Warm-up fetch once during activation when key already exists
+		provider.scheduleModelRefresh(true, true);
 
 		return { provider, disposables };
 	}

@@ -43,11 +43,43 @@ export class AccountManager {
 	/** Provider configuration */
 	private static providerConfigs = new Map<string, ProviderAccountConfig>([
 		[
+			ProviderKey.AIHubMix,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
 			ProviderKey.Antigravity,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: true,
 				supportsApiKey: false,
+			},
+		],
+		[
+			ProviderKey.Blackbox,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: false,
+			},
+		],
+		[
+			ProviderKey.ChatJimmy,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: false,
+			},
+		],
+		[
+			ProviderKey.Chutes,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
 			},
 		],
 		[
@@ -59,39 +91,7 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.Zhipu,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.Moonshot,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.MiniMax,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
 			ProviderKey.Compatible,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.DeepSeek,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
@@ -107,7 +107,7 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.AIHubMix,
+			ProviderKey.DeepSeek,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
@@ -115,39 +115,55 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.Chutes,
+			ProviderKey.GeminiCli,
 			{
 				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.OpenCode,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.Nvidia,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.Blackbox,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
+				supportsOAuth: true,
+				supportsApiKey: false,
 			},
 		],
 		[
 			ProviderKey.Huggingface,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
+			ProviderKey.Kilo,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
+			ProviderKey.Kimi,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
+			ProviderKey.LightningAI,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
+			ProviderKey.MiniMax,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
+			ProviderKey.MiniMaxCoding,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
@@ -171,7 +187,7 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.OpenAI,
+			ProviderKey.Moonshot,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
@@ -179,31 +195,7 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.Kimi,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.Kilo,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.MiniMaxCoding,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: false,
-				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.LightningAI,
+			ProviderKey.Nvidia,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
@@ -219,14 +211,21 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.Zenmux,
+			ProviderKey.OpenAI,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
 				supportsApiKey: true,
 			},
 		],
-		// Register CLI OAuth providers so they can be managed via AccountManager
+		[
+			ProviderKey.OpenCode,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
 		[
 			ProviderKey.QwenCli,
 			{
@@ -236,11 +235,19 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.GeminiCli,
+			ProviderKey.Zenmux,
 			{
 				supportsMultiAccount: true,
-				supportsOAuth: true,
-				supportsApiKey: false,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
+			ProviderKey.Zhipu,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
 			},
 		],
 	]);

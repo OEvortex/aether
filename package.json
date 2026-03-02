@@ -49,6 +49,10 @@
     ],
     "activationEvents": [
         "onFileSystem:chp-settings",
+        "onLanguageModelTool:chp_google_web_search",
+        "onLanguageModelTool:chp_minimaxWebSearch",
+        "onLanguageModelTool:chp_zhipuWebSearch",
+        "onStartupFinished",
         "onLanguageModelProvider:chp.aihubmix",
         "onLanguageModelProvider:chp.antigravity",
         "onLanguageModelProvider:chp.blackbox",
@@ -70,11 +74,7 @@
         "onLanguageModelProvider:chp.opencode",
         "onLanguageModelProvider:chp.qwencli",
         "onLanguageModelProvider:chp.zenmux",
-        "onLanguageModelProvider:chp.zhipu",
-        "onLanguageModelTool:chp_google_web_search",
-        "onLanguageModelTool:chp_minimaxWebSearch",
-        "onLanguageModelTool:chp_zhipuWebSearch",
-        "onStartupFinished"
+        "onLanguageModelProvider:chp.zhipu"
     ],
     "contributes": {
         "commands": [
@@ -385,112 +385,6 @@
                     "description": "MiniMax Coding Plan access site. minimaxi.com is domestic site (recommended), minimax.io is international site.",
                     "scope": "application"
                 },
-                "chp.zhipu.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "ZhipuAI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.minimax.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "MiniMax base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.moonshot.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "MoonshotAI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.deepseek.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "DeepSeek base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.chutes.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Chutes base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.zenmux.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Zenmux base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.opencode.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "OpenCode base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.blackbox.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Blackbox base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.huggingface.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Hugging Face base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.lightningai.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Lightning AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.deepinfra.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "DeepInfra base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.nvidia.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "NVIDIA NIM base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.mistral.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Mistral AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.ollama.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Ollama base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.ollama.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for Ollama.",
-                    "scope": "application"
-                },
-                "chp.qwencli.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Qwen CLI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.geminicli.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Gemini CLI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
                 "chp.geminicli.thinkingLevel": {
                     "type": "string",
                     "enum": [
@@ -509,18 +403,6 @@
                     "minimum": 1024,
                     "maximum": 24576,
                     "description": "Thinking budget (in tokens) for Gemini 2.5 models. Ignored for Gemini 3 models which use thinkingLevel instead. Default is 8192 tokens.",
-                    "scope": "application"
-                },
-                "chp.antigravity.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Antigravity base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.codex.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Codex base URL or proxy endpoint (optional).",
                     "scope": "application"
                 },
                 "chp.fimCompletion.enabled": {
@@ -685,6 +567,132 @@
                     "description": "AIHubMix base URL or proxy endpoint (optional).",
                     "scope": "application"
                 },
+                "chp.antigravity.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Antigravity base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.blackbox.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Blackbox AI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.chatjimmy.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "ChatJimmy base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.chutes.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Chutes AI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.codex.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "OpenAI Codex base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.deepinfra.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "DeepInfra base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.deepseek.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "DeepSeek base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.geminicli.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Gemini CLI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.huggingface.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Hugging Face base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.kilo.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Kilo AI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.lightningai.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "LightningAI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.minimax.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "MiniMax base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.mistral.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Mistral AI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.modelscope.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "ModelScope base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.moonshot.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "MoonshotAI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.nvidia.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "NVIDIA NIM base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.ollama.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Ollama base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.opencode.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "OpenCode base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.qwencli.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Qwen CLI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.zenmux.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Zenmux base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
+                "chp.zhipu.baseUrl": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Zhipu AI base URL or proxy endpoint (optional).",
+                    "scope": "application"
+                },
                 "chp.aihubmix.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -693,18 +701,6 @@
                     ],
                     "default": "anthropic",
                     "description": "Select SDK compatibility mode for AIHubMix.",
-                    "scope": "application"
-                },
-                "chp.aiping.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "AIPing base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.chatjimmy.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "ChatJimmy base URL or proxy endpoint (optional).",
                     "scope": "application"
                 },
                 "chp.deepseek.sdkMode": {
@@ -717,26 +713,14 @@
                     "description": "Select SDK compatibility mode for DeepSeek.",
                     "scope": "application"
                 },
-                "chp.kilo.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Kilo AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.modelscope.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "ModelScope base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.moonshot.sdkMode": {
+                "chp.minimax.sdkMode": {
                     "type": "string",
                     "enum": [
                         "openai",
                         "anthropic"
                     ],
                     "default": "anthropic",
-                    "description": "Select SDK compatibility mode for MoonshotAI.",
+                    "description": "Select SDK compatibility mode for MiniMax.",
                     "scope": "application"
                 },
                 "chp.modelscope.sdkMode": {
@@ -749,14 +733,24 @@
                     "description": "Select SDK compatibility mode for ModelScope.",
                     "scope": "application"
                 },
-                "chp.minimax.sdkMode": {
+                "chp.moonshot.sdkMode": {
                     "type": "string",
                     "enum": [
                         "openai",
                         "anthropic"
                     ],
                     "default": "anthropic",
-                    "description": "Select SDK compatibility mode for MiniMax.",
+                    "description": "Select SDK compatibility mode for MoonshotAI.",
+                    "scope": "application"
+                },
+                "chp.ollama.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "anthropic",
+                    "description": "Select SDK compatibility mode for Ollama.",
                     "scope": "application"
                 }
             }
@@ -1324,6 +1318,7 @@
         "format": "biome format",
         "format:check": "biome format --check",
         "watch": "node esbuild.config.js --watch --dev",
+        "sync-providers": "node scripts/sync-providers.js",
         "package": "vsce package",
         "publish": "vsce publish --allow-proposed-apis chatProvider chatParticipantAdditions defaultChatParticipant",
         "pretest": "npm run compile:dev",

@@ -571,6 +571,15 @@ body {
     color: var(--vscode-button-secondaryForeground);
 }
 
+.action-button.danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.action-button.danger:hover {
+    background-color: #d32f2f;
+}
+
 /* API Keys Section */
 .api-keys-section {
     margin-top: 12px;
