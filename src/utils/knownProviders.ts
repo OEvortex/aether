@@ -29,6 +29,8 @@ export interface KnownProviderConfig
 	apiKeyTemplate?: string;
 	/** Whether this provider requires an API key */
 	supportsApiKey?: boolean;
+	/** Whether this provider has an open/unauthenticated model endpoint that can be fetched without API key */
+	openModelEndpoint?: boolean;
 	/** Provider family identifier (optional) */
 	family?: string;
 	/** Enable auto-fetching models from endpoint with cooldown */
@@ -125,6 +127,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "Chutes AI",
 		description: "Chutes AI endpoint integration",
 		openai: { baseUrl: "https://llm.chutes.ai/v1" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -149,7 +152,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "DeepInfra",
 		description: "OpenAI-compatible endpoints from DeepInfra",
 		openai: { baseUrl: "https://api.deepinfra.com/v1/openai" },
-		apiKeyTemplate: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -183,6 +186,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "Hugging Face",
 		description: "Hugging Face Router endpoint integration",
 		openai: { baseUrl: "https://router.huggingface.co/v1" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -196,6 +200,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "Kilo AI",
 		description: "Kilo AI endpoint integration",
 		openai: { baseUrl: "https://api.kilo.ai/api/gateway" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -209,7 +214,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "LightningAI",
 		description: "LightningAI endpoint integration",
 		openai: { baseUrl: "https://lightning.ai/api/v1" },
-		apiKeyTemplate: "APIKey/Username/StudioName",
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -245,6 +250,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "ModelScope",
 		openai: { baseUrl: "https://api-inference.modelscope.ai/v1" },
 		anthropic: { baseUrl: "https://api-inference.modelscope.ai" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -272,6 +278,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "NanoGPT",
 		description: "NanoGPT endpoint integration",
 		openai: { baseUrl: "https://nano-gpt.com/api/v1" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -285,6 +292,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "NVIDIA",
 		description: "NVIDIA NIM hosted model endpoints",
 		openai: { baseUrl: "https://integrate.api.nvidia.com/v1" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -299,6 +307,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		description: "Ollama - use Ollama's OpenAI / Anthropic compatible API",
 		openai: { baseUrl: "https://ollama.com/v1" },
 		anthropic: { baseUrl: "https://ollama.com" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -312,6 +321,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "OpenCode",
 		description: "OpenCode endpoint integration",
 		openai: { baseUrl: "https://opencode.ai/zen/v1" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {
@@ -331,6 +341,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 		family: "Zenmux",
 		description: "Zenmux endpoint integration",
 		openai: { baseUrl: "https://zenmux.ai/api/v1" },
+		openModelEndpoint: true,
 		fetchModels: true,
 		modelsEndpoint: "/models",
 		modelParser: {

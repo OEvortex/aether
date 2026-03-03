@@ -135,6 +135,11 @@ export interface ProviderConfig {
 	baseUrl: string;
 	apiKeyTemplate: string;
 	supportsApiKey?: boolean;
+	/**
+	 * Whether this provider has an open/unauthenticated model endpoint
+	 * that can be fetched without an API key
+	 */
+	openModelEndpoint?: boolean;
 	models: ModelConfig[];
 	/**
 	 * Provider family identifier (optional)

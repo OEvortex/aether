@@ -268,12 +268,17 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 			const vscodeVersion = vscode.version;
 			const userAgent = `better-copilot-chat/${extVersion} VSCode/${vscodeVersion}`;
 
+			// Build headers - only add Authorization if apiKey is provided
+			const headers: Record<string, string> = {
+				"User-Agent": userAgent,
+			};
+			if (apiKey) {
+				headers.Authorization = `Bearer ${apiKey}`;
+			}
+
 			const resp = await fetch(modelsUrl, {
 				method: "GET",
-				headers: {
-					Authorization: `Bearer ${apiKey}`,
-					"User-Agent": userAgent,
-				},
+				headers,
 				signal: abortController.signal,
 			});
 
@@ -449,6 +454,13 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	}
 
 	/**
+	 * Check if this provider has an open model endpoint (no API key required for fetching models)
+	 */
+	protected hasOpenModelEndpoint(): boolean {
+		return this.providerConfig.openModelEndpoint === true;
+	}
+
+	/**
 	 * Fetch models from API and update cache + config file asynchronously (non-blocking)
 	 */
 	protected fetchAndUpdateModelsAsync(apiKey: string): void {
@@ -521,11 +533,17 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 		// Try to fetch more models from API dynamically in background
 		// Only attempt if we have a valid baseUrl (not needed for no-config providers)
 		if (this.shouldFetchModelsFromApi()) {
-			// Try to get API key silently - won't prompt user
-			const apiKey = await ApiKeyManager.getApiKey(this.providerKey);
-			if (apiKey && !options.silent) {
-				// Fetch additional models from API in background (non-blocking)
-				this.fetchAndUpdateModelsAsync(apiKey);
+			// Check if provider has open model endpoint (no API key required)
+			if (this.hasOpenModelEndpoint() && !options.silent) {
+				// Fetch models without API key for open endpoints
+				this.fetchAndUpdateModelsAsync("");
+			} else {
+				// Try to get API key silently - won't prompt user
+				const apiKey = await ApiKeyManager.getApiKey(this.providerKey);
+				if (apiKey && !options.silent) {
+					// Fetch additional models from API in background (non-blocking)
+					this.fetchAndUpdateModelsAsync(apiKey);
+				}
 			}
 		}
 
