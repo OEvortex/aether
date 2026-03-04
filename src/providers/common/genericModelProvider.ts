@@ -3,6 +3,8 @@
  *  Dynamically create provider implementation based on configuration file
  *--------------------------------------------------------------------------------------------*/
 
+import * as fs from "fs/promises";
+import * as path from "path";
 import type {
 	CancellationToken,
 	LanguageModelChatInformation,
@@ -12,8 +14,6 @@ import type {
 	ProvideLanguageModelChatResponseOptions,
 } from "vscode";
 import * as vscode from "vscode";
-import * as fs from "fs/promises";
-import * as path from "path";
 import { AccountManager } from "../../accounts";
 import type { Account } from "../../accounts/types";
 import type { ModelConfig, ProviderConfig } from "../../types/sharedTypes";
@@ -26,9 +26,9 @@ import {
 	OpenAIHandler,
 	TokenCounter,
 } from "../../utils";
-import { getUserAgent } from "../../utils/userAgent";
 import { KnownProviders } from "../../utils/knownProviders";
 import { ProviderWizard } from "../../utils/providerWizard";
+import { getUserAgent } from "../../utils/userAgent";
 import { MoonshotWizard } from "../moonshot/moonshotWizard";
 
 /**
@@ -214,7 +214,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 						displayName: providerConfig.displayName,
 						apiKeyTemplate: providerConfig.apiKeyTemplate,
 						supportsApiKey: true,
-						supportsBaseUrl: true
+						supportsBaseUrl: true,
 					});
 				}
 				// Clear cache after configuration change
@@ -256,7 +256,9 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	 * Fetch models dynamically from the provider's API endpoint
 	 * Returns the fetched models or empty array if the request fails
 	 */
-	protected async fetchModelsFromApi(apiKey: string): Promise<LanguageModelChatInformation[]> {
+	protected async fetchModelsFromApi(
+		apiKey: string,
+	): Promise<LanguageModelChatInformation[]> {
 		try {
 			const baseUrl = this.providerConfig.baseUrl;
 			const modelsEndpoint = this.providerConfig.modelsEndpoint || "/models";
@@ -295,11 +297,15 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 
 			const parsed = await resp.json();
 			const models = this.parseApiModelsResponse(parsed);
-			Logger.info(`[${this.providerKey}] Successfully fetched ${models.length} models from API`);
+			Logger.info(
+				`[${this.providerKey}] Successfully fetched ${models.length} models from API`,
+			);
 			return models;
 		} catch (err) {
 			if (err instanceof Error && err.name === "AbortError") {
-				Logger.warn(`[${this.providerKey}] Model fetch timeout (15s). Using pre-configured models.`);
+				Logger.warn(
+					`[${this.providerKey}] Model fetch timeout (15s). Using pre-configured models.`,
+				);
 			} else {
 				Logger.warn(
 					`[${this.providerKey}] Error fetching models from API:`,
@@ -314,13 +320,16 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	 * Parse the API response and convert to LanguageModelChatInformation
 	 * Subclasses can override this to handle provider-specific response formats
 	 */
-	protected parseApiModelsResponse(resp: unknown): LanguageModelChatInformation[] {
+	protected parseApiModelsResponse(
+		resp: unknown,
+	): LanguageModelChatInformation[] {
 		// Default implementation for OpenAI-compatible /v1/models response
 		// Format: { data: [{ id: string, ... }] }
 		const modelParser = this.providerConfig.modelParser;
 		const arrayPath = modelParser?.arrayPath || "data";
 		const idField = modelParser?.idField || "id";
-		const nameField = modelParser?.nameField || modelParser?.descriptionField || "id";
+		const nameField =
+			modelParser?.nameField || modelParser?.descriptionField || "id";
 
 		// Get the models array from the response
 		let modelsArray: any[] = [];
@@ -354,7 +363,9 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 		}
 
 		if (!Array.isArray(modelsArray)) {
-			Logger.warn(`[${this.providerKey}] Invalid API response format: ${arrayPath} is not an array`);
+			Logger.warn(
+				`[${this.providerKey}] Invalid API response format: ${arrayPath} is not an array`,
+			);
 			return [];
 		}
 
@@ -422,7 +433,9 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	 * Update the provider's config file with new models
 	 * This allows automatic model list updates
 	 */
-	protected async updateConfigFileAsync(models: LanguageModelChatInformation[]): Promise<void> {
+	protected async updateConfigFileAsync(
+		models: LanguageModelChatInformation[],
+	): Promise<void> {
 		const configPath = this.getConfigFilePath();
 		if (!configPath) {
 			Logger.debug(`[${this.providerKey}] No config file found to update`);
@@ -436,7 +449,10 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	/**
 	 * Write config file in background (non-blocking)
 	 */
-	private writeConfigInBackground(configPath: string, models: LanguageModelChatInformation[]): void {
+	private writeConfigInBackground(
+		configPath: string,
+		models: LanguageModelChatInformation[],
+	): void {
 		// Use async fs operations to avoid blocking
 		(async () => {
 			try {
@@ -455,7 +471,9 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 				}
 
 				// Merge with existing static models, avoiding duplicates
-				const existingModelIds = new Set(existingConfig.models.map((m) => m.id));
+				const existingModelIds = new Set(
+					existingConfig.models.map((m) => m.id),
+				);
 				const newModels: ModelConfig[] = models.map((m) => ({
 					id: m.id,
 					name: m.name || m.id,
@@ -481,9 +499,14 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 					JSON.stringify(existingConfig, null, 4),
 					"utf8",
 				);
-				Logger.info(`[${this.providerKey}] Auto-updated config with ${newModels.length} new models`);
+				Logger.info(
+					`[${this.providerKey}] Auto-updated config with ${newModels.length} new models`,
+				);
 			} catch (err) {
-				Logger.warn(`[${this.providerKey}] Background config update failed:`, err instanceof Error ? err.message : String(err));
+				Logger.warn(
+					`[${this.providerKey}] Background config update failed:`,
+					err instanceof Error ? err.message : String(err),
+				);
 			}
 		})();
 	}
@@ -494,7 +517,10 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	 */
 	protected shouldFetchModelsFromApi(): boolean {
 		// Only fetch if we have a valid baseUrl
-		return !!this.providerConfig.baseUrl && this.providerConfig.baseUrl.startsWith("http");
+		return (
+			!!this.providerConfig.baseUrl &&
+			this.providerConfig.baseUrl.startsWith("http")
+		);
 	}
 
 	/**
@@ -512,14 +538,19 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 			try {
 				const apiModels = await this.fetchModelsFromApi(apiKey);
 				if (apiModels.length > 0) {
-					Logger.debug(`[${this.providerKey}] Updating with ${apiModels.length} models from API`);
+					Logger.debug(
+						`[${this.providerKey}] Updating with ${apiModels.length} models from API`,
+					);
 					// Update config file in background
 					await this.updateConfigFileAsync(apiModels);
 					// Fire event to notify VS Code that models are available
 					this._onDidChangeLanguageModelChatInformation.fire();
 				}
 			} catch (err) {
-				Logger.debug(`[${this.providerKey}] Background model fetch failed:`, err instanceof Error ? err.message : String(err));
+				Logger.debug(
+					`[${this.providerKey}] Background model fetch failed:`,
+					err instanceof Error ? err.message : String(err),
+				);
 			}
 		})();
 	}
@@ -562,7 +593,8 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 				// Also trigger background API fetch to update config files and cache if needed
 				if (this.shouldFetchModelsFromApi() && !options.silent) {
 					if (this.hasOpenModelEndpoint()) {
-						const defaultKey = KnownProviders[this.providerKey]?.defaultApiKey || "";
+						const defaultKey =
+							KnownProviders[this.providerKey]?.defaultApiKey || "";
 						this.fetchAndUpdateModelsAsync(defaultKey);
 					} else {
 						ApiKeyManager.getApiKey(this.providerKey).then((apiKey) => {
@@ -594,7 +626,8 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 			// Check if provider has open model endpoint (no API key required)
 			if (this.hasOpenModelEndpoint() && !options.silent) {
 				// Fetch models with default API key if available, otherwise without
-				const defaultKey = KnownProviders[this.providerKey]?.defaultApiKey || "";
+				const defaultKey =
+					KnownProviders[this.providerKey]?.defaultApiKey || "";
 				this.fetchAndUpdateModelsAsync(defaultKey);
 			} else {
 				// Try to get API key silently - won't prompt user
@@ -636,7 +669,10 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	 * @param apiKeyHash The API key hash for cache validation
 	 * @param models Optional models to cache (defaults to static config models)
 	 */
-	protected updateModelCacheAsync(apiKeyHash: string, models?: LanguageModelChatInformation[]): void {
+	protected updateModelCacheAsync(
+		apiKeyHash: string,
+		models?: LanguageModelChatInformation[],
+	): void {
 		// Use Promise to execute in background, do not wait for result
 		(async () => {
 			try {

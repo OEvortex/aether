@@ -1,32 +1,32 @@
 {
-    "displayName": "Qwen Code CLI",
-    "family": "Qwen CLI",
-    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "apiKeyTemplate": "OAuth via Qwen CLI",
-    "models": [
-        {
-            "id": "coder-model",
-            "name": "Qwen Coder (qwen3.5)",
-            "tooltip": "Qwen Coder via CLI",
-            "maxInputTokens": 1000000,
-            "maxOutputTokens": 32000,
-            "model": "coder-model",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "vision-model",
-            "name": "Qwen Vision",
-            "tooltip": "Qwen Vision model via CLI",
-            "maxInputTokens": 1000000,
-            "maxOutputTokens": 32000,
-            "model": "vision-model",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        }
-    ]
+	"displayName": "Qwen Code CLI",
+	"family": "Qwen CLI",
+	"baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+	"apiKeyTemplate": "OAuth via Qwen CLI",
+	"models": [
+		{
+			"id": "coder-model",
+			"name": "Qwen Coder (qwen3.5)",
+			"tooltip": "Qwen Coder via CLI",
+			"maxInputTokens": 1000000,
+			"maxOutputTokens": 32000,
+			"model": "coder-model",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "vision-model",
+			"name": "Qwen Vision",
+			"tooltip": "Qwen Vision model via CLI",
+			"maxInputTokens": 1000000,
+			"maxOutputTokens": 32000,
+			"model": "vision-model",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		}
+	]
 }

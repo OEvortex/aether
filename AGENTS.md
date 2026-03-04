@@ -2,7 +2,7 @@
 <project_knowledge_base>
     <title>PROJECT KNOWLEDGE BASE</title>
 
-    <description>Copilot ++ is a VS Code extension that enhances GitHub Copilot Chat with multiple AI providers including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Antigravity (Google Cloud Code), Codex (OpenAI), Chutes, OpenCode, and custom OpenAI/Anthropic compatible models.</description>
+    <description>Copilot ++ is a VS Code extension that enhances GitHub Copilot Chat with multiple AI providers including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Codex (OpenAI), Chutes, OpenCode, and custom OpenAI/Anthropic compatible models.</description>
 
     <section name="STRUCTURE">
         <file_tree>

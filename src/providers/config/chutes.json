@@ -1,584 +1,584 @@
 {
-    "displayName": "Chutes AI",
-    "baseUrl": "https://llm.chutes.ai/v1",
-    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": [
-        {
-            "id": "qwen-qwen3-32b",
-            "name": "Qwen/Qwen3-32B",
-            "tooltip": "Qwen/Qwen3-32B",
-            "maxInputTokens": 24576,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-32B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-0324-tee",
-            "name": "deepseek-ai/DeepSeek-V3-0324-TEE",
-            "tooltip": "deepseek-ai/DeepSeek-V3-0324-TEE",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3-0324-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-mistral-nemo-instruct-2407",
-            "name": "unsloth/Mistral-Nemo-Instruct-2407",
-            "tooltip": "unsloth/Mistral-Nemo-Instruct-2407",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/Mistral-Nemo-Instruct-2407",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "chutesai-mistral-small-3-1-24b-instruct-2503",
-            "name": "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
-            "tooltip": "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-oss-120b-tee",
-            "name": "openai/gpt-oss-120b-TEE",
-            "tooltip": "openai/gpt-oss-120b-TEE",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-oss-120b-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-gemma-3-27b-it",
-            "name": "unsloth/gemma-3-27b-it",
-            "tooltip": "unsloth/gemma-3-27b-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/gemma-3-27b-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-2-tee",
-            "name": "deepseek-ai/DeepSeek-V3.2-TEE",
-            "tooltip": "deepseek-ai/DeepSeek-V3.2-TEE",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.2-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-5-tee",
-            "name": "moonshotai/Kimi-K2.5-TEE",
-            "tooltip": "moonshotai/Kimi-K2.5-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/Kimi-K2.5-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "nousresearch-hermes-4-405b-fp8-tee",
-            "name": "NousResearch/Hermes-4-405B-FP8-TEE",
-            "tooltip": "NousResearch/Hermes-4-405B-FP8-TEE",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "NousResearch/Hermes-4-405B-FP8-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-7-tee",
-            "name": "zai-org/GLM-4.7-TEE",
-            "tooltip": "zai-org/GLM-4.7-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.7-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-0528-tee",
-            "name": "deepseek-ai/DeepSeek-R1-0528-TEE",
-            "tooltip": "deepseek-ai/DeepSeek-R1-0528-TEE",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-0528-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-1-tee",
-            "name": "deepseek-ai/DeepSeek-V3.1-TEE",
-            "tooltip": "deepseek-ai/DeepSeek-V3.1-TEE",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.1-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "tngtech-deepseek-tng-r1t2-chimera",
-            "name": "tngtech/DeepSeek-TNG-R1T2-Chimera",
-            "tooltip": "tngtech/DeepSeek-TNG-R1T2-Chimera",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "tngtech/DeepSeek-TNG-R1T2-Chimera",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "chutesai-mistral-small-3-2-24b-instruct-2506",
-            "name": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
-            "tooltip": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-5-tee",
-            "name": "zai-org/GLM-5-TEE",
-            "tooltip": "zai-org/GLM-5-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-5-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "xiaomimimo-mimo-v2-flash-tee",
-            "name": "XiaomiMiMo/MiMo-V2-Flash-TEE",
-            "tooltip": "XiaomiMiMo/MiMo-V2-Flash-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "XiaomiMiMo/MiMo-V2-Flash-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-instruct-2507-tee",
-            "name": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
-            "tooltip": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-gemma-3-4b-it",
-            "name": "unsloth/gemma-3-4b-it",
-            "tooltip": "unsloth/gemma-3-4b-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/gemma-3-4b-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimaxai-minimax-m2-5-tee",
-            "name": "MiniMaxAI/MiniMax-M2.5-TEE",
-            "tooltip": "MiniMaxAI/MiniMax-M2.5-TEE",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "MiniMaxAI/MiniMax-M2.5-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-oss-20b",
-            "name": "openai/gpt-oss-20b",
-            "tooltip": "openai/gpt-oss-20b",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-oss-20b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-next-tee",
-            "name": "Qwen/Qwen3-Coder-Next-TEE",
-            "tooltip": "Qwen/Qwen3-Coder-Next-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3-Coder-Next-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-mistral-small-24b-instruct-2501",
-            "name": "unsloth/Mistral-Small-24B-Instruct-2501",
-            "tooltip": "unsloth/Mistral-Small-24B-Instruct-2501",
-            "maxInputTokens": 16384,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/Mistral-Small-24B-Instruct-2501",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-1-terminus-tee",
-            "name": "deepseek-ai/DeepSeek-V3.1-Terminus-TEE",
-            "tooltip": "deepseek-ai/DeepSeek-V3.1-Terminus-TEE",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.1-Terminus-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-llama-3-2-3b-instruct",
-            "name": "unsloth/Llama-3.2-3B-Instruct",
-            "tooltip": "unsloth/Llama-3.2-3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/Llama-3.2-3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3",
-            "name": "deepseek-ai/DeepSeek-V3",
-            "tooltip": "deepseek-ai/DeepSeek-V3",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-7-fp8",
-            "name": "zai-org/GLM-4.7-FP8",
-            "tooltip": "zai-org/GLM-4.7-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.7-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-5-397b-a17b-tee",
-            "name": "Qwen/Qwen3.5-397B-A17B-TEE",
-            "tooltip": "Qwen/Qwen3.5-397B-A17B-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3.5-397B-A17B-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-vl-32b-instruct",
-            "name": "Qwen/Qwen2.5-VL-32B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-VL-32B-Instruct",
-            "maxInputTokens": 1024,
-            "maxOutputTokens": 15360,
-            "model": "Qwen/Qwen2.5-VL-32B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "nousresearch-deephermes-3-mistral-24b-preview",
-            "name": "NousResearch/DeepHermes-3-Mistral-24B-Preview",
-            "tooltip": "NousResearch/DeepHermes-3-Mistral-24B-Preview",
-            "maxInputTokens": 16384,
-            "maxOutputTokens": 16384,
-            "model": "NousResearch/DeepHermes-3-Mistral-24B-Preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6-tee",
-            "name": "zai-org/GLM-4.6-TEE",
-            "tooltip": "zai-org/GLM-4.6-TEE",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6v",
-            "name": "zai-org/GLM-4.6V",
-            "tooltip": "zai-org/GLM-4.6V",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6V",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-72b-instruct",
-            "name": "Qwen/Qwen2.5-72B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-72B-Instruct",
-            "maxInputTokens": 16384,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-72B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-thinking-2507",
-            "name": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-            "tooltip": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "tngtech-r1t2-chimera-speed",
-            "name": "tngtech/R1T2-Chimera-Speed",
-            "tooltip": "tngtech/R1T2-Chimera-Speed",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "tngtech/R1T2-Chimera-Speed",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6-fp8",
-            "name": "zai-org/GLM-4.6-FP8",
-            "tooltip": "zai-org/GLM-4.6-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-distill-llama-70b",
-            "name": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-            "tooltip": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-next-80b-a3b-instruct",
-            "name": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-235b-a22b-instruct",
-            "name": "Qwen/Qwen3-VL-235B-A22B-Instruct",
-            "tooltip": "Qwen/Qwen3-VL-235B-A22B-Instruct",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-30b-a3b",
-            "name": "Qwen/Qwen3-30B-A3B",
-            "tooltip": "Qwen/Qwen3-30B-A3B",
-            "maxInputTokens": 24576,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-30B-A3B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16",
-            "name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
-            "tooltip": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-14b",
-            "name": "Qwen/Qwen3-14B",
-            "tooltip": "Qwen/Qwen3-14B",
-            "maxInputTokens": 24576,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-14B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-coder-32b-instruct",
-            "name": "Qwen/Qwen2.5-Coder-32B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-Coder-32B-Instruct",
-            "maxInputTokens": 16384,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-Coder-32B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-gemma-3-12b-it",
-            "name": "unsloth/gemma-3-12b-it",
-            "tooltip": "unsloth/gemma-3-12b-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/gemma-3-12b-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16-tee",
-            "name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16-TEE",
-            "tooltip": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16-TEE",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16-TEE",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "nousresearch-hermes-4-14b",
-            "name": "NousResearch/Hermes-4-14B",
-            "tooltip": "NousResearch/Hermes-4-14B",
-            "maxInputTokens": 24576,
-            "maxOutputTokens": 16384,
-            "model": "NousResearch/Hermes-4-14B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "unsloth-llama-3-2-1b-instruct",
-            "name": "unsloth/Llama-3.2-1B-Instruct",
-            "tooltip": "unsloth/Llama-3.2-1B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "unsloth/Llama-3.2-1B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3guard-gen-0-6b",
-            "name": "Qwen/Qwen3Guard-Gen-0.6B",
-            "tooltip": "Qwen/Qwen3Guard-Gen-0.6B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3Guard-Gen-0.6B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "rednote-hilab-dots-ocr",
-            "name": "rednote-hilab/dots.ocr",
-            "tooltip": "rednote-hilab/dots.ocr",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "rednote-hilab/dots.ocr",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        }
-    ],
-    "family": "Chutes AI"
+	"displayName": "Chutes AI",
+	"baseUrl": "https://llm.chutes.ai/v1",
+	"apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+	"models": [
+		{
+			"id": "qwen-qwen3-32b",
+			"name": "Qwen/Qwen3-32B",
+			"tooltip": "Qwen/Qwen3-32B",
+			"maxInputTokens": 24576,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-32B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-0324-tee",
+			"name": "deepseek-ai/DeepSeek-V3-0324-TEE",
+			"tooltip": "deepseek-ai/DeepSeek-V3-0324-TEE",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3-0324-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-mistral-nemo-instruct-2407",
+			"name": "unsloth/Mistral-Nemo-Instruct-2407",
+			"tooltip": "unsloth/Mistral-Nemo-Instruct-2407",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/Mistral-Nemo-Instruct-2407",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "chutesai-mistral-small-3-1-24b-instruct-2503",
+			"name": "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
+			"tooltip": "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "chutesai/Mistral-Small-3.1-24B-Instruct-2503",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-oss-120b-tee",
+			"name": "openai/gpt-oss-120b-TEE",
+			"tooltip": "openai/gpt-oss-120b-TEE",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-oss-120b-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-gemma-3-27b-it",
+			"name": "unsloth/gemma-3-27b-it",
+			"tooltip": "unsloth/gemma-3-27b-it",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/gemma-3-27b-it",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-2-tee",
+			"name": "deepseek-ai/DeepSeek-V3.2-TEE",
+			"tooltip": "deepseek-ai/DeepSeek-V3.2-TEE",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.2-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-5-tee",
+			"name": "moonshotai/Kimi-K2.5-TEE",
+			"tooltip": "moonshotai/Kimi-K2.5-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/Kimi-K2.5-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "nousresearch-hermes-4-405b-fp8-tee",
+			"name": "NousResearch/Hermes-4-405B-FP8-TEE",
+			"tooltip": "NousResearch/Hermes-4-405B-FP8-TEE",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "NousResearch/Hermes-4-405B-FP8-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-7-tee",
+			"name": "zai-org/GLM-4.7-TEE",
+			"tooltip": "zai-org/GLM-4.7-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.7-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-0528-tee",
+			"name": "deepseek-ai/DeepSeek-R1-0528-TEE",
+			"tooltip": "deepseek-ai/DeepSeek-R1-0528-TEE",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-0528-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-1-tee",
+			"name": "deepseek-ai/DeepSeek-V3.1-TEE",
+			"tooltip": "deepseek-ai/DeepSeek-V3.1-TEE",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.1-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "tngtech-deepseek-tng-r1t2-chimera",
+			"name": "tngtech/DeepSeek-TNG-R1T2-Chimera",
+			"tooltip": "tngtech/DeepSeek-TNG-R1T2-Chimera",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "tngtech/DeepSeek-TNG-R1T2-Chimera",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "chutesai-mistral-small-3-2-24b-instruct-2506",
+			"name": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
+			"tooltip": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-5-tee",
+			"name": "zai-org/GLM-5-TEE",
+			"tooltip": "zai-org/GLM-5-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-5-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "xiaomimimo-mimo-v2-flash-tee",
+			"name": "XiaomiMiMo/MiMo-V2-Flash-TEE",
+			"tooltip": "XiaomiMiMo/MiMo-V2-Flash-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "XiaomiMiMo/MiMo-V2-Flash-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b-instruct-2507-tee",
+			"name": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
+			"tooltip": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-gemma-3-4b-it",
+			"name": "unsloth/gemma-3-4b-it",
+			"tooltip": "unsloth/gemma-3-4b-it",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/gemma-3-4b-it",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimaxai-minimax-m2-5-tee",
+			"name": "MiniMaxAI/MiniMax-M2.5-TEE",
+			"tooltip": "MiniMaxAI/MiniMax-M2.5-TEE",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "MiniMaxAI/MiniMax-M2.5-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-oss-20b",
+			"name": "openai/gpt-oss-20b",
+			"tooltip": "openai/gpt-oss-20b",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-oss-20b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-next-tee",
+			"name": "Qwen/Qwen3-Coder-Next-TEE",
+			"tooltip": "Qwen/Qwen3-Coder-Next-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3-Coder-Next-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-mistral-small-24b-instruct-2501",
+			"name": "unsloth/Mistral-Small-24B-Instruct-2501",
+			"tooltip": "unsloth/Mistral-Small-24B-Instruct-2501",
+			"maxInputTokens": 16384,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/Mistral-Small-24B-Instruct-2501",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-1-terminus-tee",
+			"name": "deepseek-ai/DeepSeek-V3.1-Terminus-TEE",
+			"tooltip": "deepseek-ai/DeepSeek-V3.1-Terminus-TEE",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.1-Terminus-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-llama-3-2-3b-instruct",
+			"name": "unsloth/Llama-3.2-3B-Instruct",
+			"tooltip": "unsloth/Llama-3.2-3B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/Llama-3.2-3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3",
+			"name": "deepseek-ai/DeepSeek-V3",
+			"tooltip": "deepseek-ai/DeepSeek-V3",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-7-fp8",
+			"name": "zai-org/GLM-4.7-FP8",
+			"tooltip": "zai-org/GLM-4.7-FP8",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.7-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-5-397b-a17b-tee",
+			"name": "Qwen/Qwen3.5-397B-A17B-TEE",
+			"tooltip": "Qwen/Qwen3.5-397B-A17B-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3.5-397B-A17B-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-vl-32b-instruct",
+			"name": "Qwen/Qwen2.5-VL-32B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-VL-32B-Instruct",
+			"maxInputTokens": 1024,
+			"maxOutputTokens": 15360,
+			"model": "Qwen/Qwen2.5-VL-32B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "nousresearch-deephermes-3-mistral-24b-preview",
+			"name": "NousResearch/DeepHermes-3-Mistral-24B-Preview",
+			"tooltip": "NousResearch/DeepHermes-3-Mistral-24B-Preview",
+			"maxInputTokens": 16384,
+			"maxOutputTokens": 16384,
+			"model": "NousResearch/DeepHermes-3-Mistral-24B-Preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6-tee",
+			"name": "zai-org/GLM-4.6-TEE",
+			"tooltip": "zai-org/GLM-4.6-TEE",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6v",
+			"name": "zai-org/GLM-4.6V",
+			"tooltip": "zai-org/GLM-4.6V",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6V",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-72b-instruct",
+			"name": "Qwen/Qwen2.5-72B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-72B-Instruct",
+			"maxInputTokens": 16384,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-72B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b-thinking-2507",
+			"name": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+			"tooltip": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "tngtech-r1t2-chimera-speed",
+			"name": "tngtech/R1T2-Chimera-Speed",
+			"tooltip": "tngtech/R1T2-Chimera-Speed",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "tngtech/R1T2-Chimera-Speed",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6-fp8",
+			"name": "zai-org/GLM-4.6-FP8",
+			"tooltip": "zai-org/GLM-4.6-FP8",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-distill-llama-70b",
+			"name": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+			"tooltip": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-next-80b-a3b-instruct",
+			"name": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+			"tooltip": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-235b-a22b-instruct",
+			"name": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+			"tooltip": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-30b-a3b",
+			"name": "Qwen/Qwen3-30B-A3B",
+			"tooltip": "Qwen/Qwen3-30B-A3B",
+			"maxInputTokens": 24576,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-30B-A3B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16",
+			"name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+			"tooltip": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-14b",
+			"name": "Qwen/Qwen3-14B",
+			"tooltip": "Qwen/Qwen3-14B",
+			"maxInputTokens": 24576,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-14B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-coder-32b-instruct",
+			"name": "Qwen/Qwen2.5-Coder-32B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-Coder-32B-Instruct",
+			"maxInputTokens": 16384,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-gemma-3-12b-it",
+			"name": "unsloth/gemma-3-12b-it",
+			"tooltip": "unsloth/gemma-3-12b-it",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/gemma-3-12b-it",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16-tee",
+			"name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16-TEE",
+			"tooltip": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16-TEE",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16-TEE",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "nousresearch-hermes-4-14b",
+			"name": "NousResearch/Hermes-4-14B",
+			"tooltip": "NousResearch/Hermes-4-14B",
+			"maxInputTokens": 24576,
+			"maxOutputTokens": 16384,
+			"model": "NousResearch/Hermes-4-14B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "unsloth-llama-3-2-1b-instruct",
+			"name": "unsloth/Llama-3.2-1B-Instruct",
+			"tooltip": "unsloth/Llama-3.2-1B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "unsloth/Llama-3.2-1B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3guard-gen-0-6b",
+			"name": "Qwen/Qwen3Guard-Gen-0.6B",
+			"tooltip": "Qwen/Qwen3Guard-Gen-0.6B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3Guard-Gen-0.6B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "rednote-hilab-dots-ocr",
+			"name": "rednote-hilab/dots.ocr",
+			"tooltip": "rednote-hilab/dots.ocr",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "rednote-hilab/dots.ocr",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		}
+	],
+	"family": "Chutes AI"
 }

@@ -27,7 +27,11 @@ export class RateLimiter {
 	 * @param maxRequests Maximum requests allowed in the window
 	 * @param windowMs Window duration in milliseconds
 	 */
-	static getInstance(key: string, maxRequests = 2, windowMs = 1000): RateLimiter {
+	static getInstance(
+		key: string,
+		maxRequests = 2,
+		windowMs = 1000,
+	): RateLimiter {
 		let instance = RateLimiter.instances.get(key);
 		if (!instance) {
 			instance = new RateLimiter(maxRequests, windowMs);

@@ -218,7 +218,7 @@ export class AnthropicHandler {
 					totalTokens,
 					maxInputTokens: model.maxInputTokens,
 					maxOutputTokens: model.maxOutputTokens,
-					estimatedPromptTokens
+					estimatedPromptTokens,
 				});
 			}
 

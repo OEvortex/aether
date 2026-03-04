@@ -65,67 +65,6 @@ export class AccountSyncAdapter {
 	}
 
 	/**
-	 * Sync Antigravity account from ApiKeyManager
-	 */
-	async syncAntigravityAccount(): Promise<void> {
-		try {
-			const stored = await ApiKeyManager.getApiKey(ProviderKey.Antigravity);
-			if (!stored) {
-				return;
-			}
-
-			const authData = JSON.parse(stored) as {
-				access_token: string;
-				refresh_token: string;
-				email?: string;
-				project_id?: string;
-				expires_at: string;
-			};
-
-			// Check whether this account already exists
-			const existingAccounts = this.accountManager.getAccountsByProvider(
-				ProviderKey.Antigravity,
-			);
-			const existingByEmail = existingAccounts.find(
-				(acc) => acc.email === authData.email,
-			);
-
-			if (existingByEmail) {
-				// Update credentials
-				const credentials: OAuthCredentials = {
-					accessToken: authData.access_token,
-					refreshToken: authData.refresh_token,
-					expiresAt: authData.expires_at,
-				};
-				await this.accountManager.updateCredentials(
-					existingByEmail.id,
-					credentials,
-				);
-				Logger.debug(`Updated Antigravity account: ${authData.email}`);
-			} else {
-				// Add a new account
-				const displayName = authData.email || "Antigravity Account";
-				const credentials: OAuthCredentials = {
-					accessToken: authData.access_token,
-					refreshToken: authData.refresh_token,
-					expiresAt: authData.expires_at,
-				};
-
-				await this.accountManager.addOAuthAccount(
-					ProviderKey.Antigravity,
-					displayName,
-					authData.email || "",
-					credentials,
-					{ projectId: authData.project_id },
-				);
-				Logger.info(`Synced Antigravity account: ${displayName}`);
-			}
-		} catch (error) {
-			Logger.error("Failed to sync Antigravity account:", error);
-		}
-	}
-
-	/**
 	 * Sync Codex account from ApiKeyManager
 	 */
 	async syncCodexAccount(): Promise<void> {
@@ -231,57 +170,20 @@ export class AccountSyncAdapter {
 	}
 
 	/**
-	 * Sync Gemini CLI account from local file
-	 */
-	async syncGeminiCliAccount(): Promise<void> {
-		try {
-			// Try to load from GeminiOAuthManager's logic
-			const { GeminiOAuthManager } = await import("../providers/geminicli/auth.js");
-			const oauthManager = GeminiOAuthManager.getInstance();
-			
-			// We can't access private methods, but we can try to use a similar logic
-			// or just check if the account exists in AccountManager
-			const existingAccounts = this.accountManager.getAccountsByProvider(ProviderKey.GeminiCli);
-			if (existingAccounts.length === 0) {
-				// Try to get credentials once to see if they exist
-				try {
-					const { accessToken, baseURL } = await oauthManager.ensureAuthenticated();
-					if (accessToken) {
-						await this.accountManager.addOAuthAccount(
-							ProviderKey.GeminiCli,
-							"Gemini CLI (Local)",
-							"",
-							{
-								accessToken,
-								refreshToken: "",
-								expiresAt: "",
-								tokenType: "",
-							},
-							{ source: "cli", baseURL }
-						);
-						Logger.info("Synced Gemini CLI account from local credentials");
-					}
-				} catch {
-					// Ignore if not logged in
-				}
-			}
-		} catch (error) {
-			Logger.debug("Failed to sync Gemini CLI account:", error);
-		}
-	}
-
-	/**
 	 * Sync Qwen CLI account from local file
 	 */
 	async syncQwenCliAccount(): Promise<void> {
 		try {
 			const { QwenOAuthManager } = await import("../providers/qwencli/auth.js");
 			const oauthManager = QwenOAuthManager.getInstance();
-			
-			const existingAccounts = this.accountManager.getAccountsByProvider(ProviderKey.QwenCli);
+
+			const existingAccounts = this.accountManager.getAccountsByProvider(
+				ProviderKey.QwenCli,
+			);
 			if (existingAccounts.length === 0) {
 				try {
-					const { accessToken, baseURL } = await oauthManager.ensureAuthenticated();
+					const { accessToken, baseURL } =
+						await oauthManager.ensureAuthenticated();
 					if (accessToken) {
 						await this.accountManager.addOAuthAccount(
 							ProviderKey.QwenCli,
@@ -293,7 +195,7 @@ export class AccountSyncAdapter {
 								expiresAt: "",
 								tokenType: "",
 							},
-							{ source: "cli", baseURL }
+							{ source: "cli", baseURL },
 						);
 						Logger.info("Synced Qwen CLI account from local credentials");
 					}
@@ -335,14 +237,8 @@ export class AccountSyncAdapter {
 			ProviderKey.Compatible,
 		];
 
-		// Sync Antigravity (OAuth)
-		await this.syncAntigravityAccount();
-
 		// Sync Codex (OAuth)
 		await this.syncCodexAccount();
-
-		// Sync Gemini CLI (OAuth via Local CLI)
-		await this.syncGeminiCliAccount();
 
 		// Sync Qwen CLI (OAuth via Local CLI)
 		await this.syncQwenCliAccount();
@@ -353,11 +249,7 @@ export class AccountSyncAdapter {
 		}
 
 		// Sync active accounts back to ApiKeyManager for compatibility
-		const allProviders = [
-			ProviderKey.Antigravity,
-			CODEX_PROVIDER,
-			...providers,
-		];
+		const allProviders = [CODEX_PROVIDER, ...providers];
 		for (const provider of allProviders) {
 			await this.syncToApiKeyManager(provider);
 		}
@@ -378,25 +270,6 @@ export class AccountSyncAdapter {
 			await ApiKeyManager.setApiKey(provider, activeCredentials.apiKey);
 		} else if (
 			"accessToken" in activeCredentials &&
-			provider === ProviderKey.Antigravity
-		) {
-			// Antigravity requires special format
-			const account = this.accountManager.getActiveAccount(provider);
-			const authData = {
-				type: ProviderKey.Antigravity,
-				access_token: activeCredentials.accessToken,
-				refresh_token: activeCredentials.refreshToken,
-				email: account?.email || "",
-				project_id: account?.metadata?.projectId || "",
-				expires_at: activeCredentials.expiresAt,
-				timestamp: Date.now(),
-			};
-			await ApiKeyManager.setApiKey(
-				ProviderKey.Antigravity,
-				JSON.stringify(authData),
-			);
-		} else if (
-			"accessToken" in activeCredentials &&
 			provider === CODEX_PROVIDER
 		) {
 			// Codex requires special format
@@ -414,7 +287,9 @@ export class AccountSyncAdapter {
 				typeof accountMetadata.projectId === "string"
 					? accountMetadata.projectId
 					: undefined;
-			const organizationsFromAccount = Array.isArray(accountMetadata.organizations)
+			const organizationsFromAccount = Array.isArray(
+				accountMetadata.organizations,
+			)
 				? (accountMetadata.organizations as unknown[])
 				: undefined;
 

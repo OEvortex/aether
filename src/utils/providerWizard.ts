@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import { ApiKeyManager } from './apiKeyManager';
-import { ConfigManager } from './configManager';
-import { Logger } from './logger';
+import * as vscode from "vscode";
+import { ApiKeyManager } from "./apiKeyManager";
+import { ConfigManager } from "./configManager";
+import { Logger } from "./logger";
 
 interface ProviderWizardOptions {
 	providerKey: string;
@@ -21,24 +21,26 @@ export class ProviderWizard {
 			label: string;
 			detail?: string;
 			description?: string;
-			action: 'apiKey' | 'baseUrl';
+			action: "apiKey" | "baseUrl";
 		}> = [];
 
 		if (supportsApiKey) {
 			actions.push({
 				label: `$(key) Configure ${options.displayName} API Key`,
 				detail: `Set or clear ${options.displayName} API key`,
-				action: 'apiKey'
+				action: "apiKey",
 			});
 		}
 
 		if (supportsBaseUrl) {
 			const currentBaseUrl = baseUrlInfo.override || baseUrlInfo.defaultBaseUrl;
 			actions.push({
-				label: '$(globe) Configure Base URL (Proxy)',
-				description: currentBaseUrl ? `Current: ${currentBaseUrl}` : 'Current: Default',
+				label: "$(globe) Configure Base URL (Proxy)",
+				description: currentBaseUrl
+					? `Current: ${currentBaseUrl}`
+					: "Current: Default",
 				detail: `Override ${options.displayName} endpoint (optional)`,
-				action: 'baseUrl'
+				action: "baseUrl",
 			});
 		}
 
@@ -48,20 +50,23 @@ export class ProviderWizard {
 
 		const choice = await vscode.window.showQuickPick(actions, {
 			title: `${options.displayName} Configuration`,
-			placeHolder: 'Select an option to configure'
+			placeHolder: "Select an option to configure",
 		});
 
 		if (!choice) {
 			return;
 		}
 
-		if (choice.action === 'apiKey') {
+		if (choice.action === "apiKey") {
 			await ProviderWizard.configureApiKey(options);
 			return;
 		}
 
-		if (choice.action === 'baseUrl') {
-			await ProviderWizard.configureBaseUrl(options.providerKey, options.displayName);
+		if (choice.action === "baseUrl") {
+			await ProviderWizard.configureBaseUrl(
+				options.providerKey,
+				options.displayName,
+			);
 		}
 	}
 
@@ -72,20 +77,20 @@ export class ProviderWizard {
 		await ApiKeyManager.promptAndSetApiKey(
 			options.providerKey,
 			options.displayName,
-			options.apiKeyTemplate
+			options.apiKeyTemplate,
 		);
 	}
 
 	static async configureBaseUrl(
 		providerKey: string,
-		displayName: string
+		displayName: string,
 	): Promise<void> {
 		const baseUrlInfo = ProviderWizard.getBaseUrlInfo(providerKey);
 		const result = await vscode.window.showInputBox({
 			prompt: `Enter ${displayName} base URL (leave empty to clear override)`,
 			title: `${displayName} Base URL`,
-			value: baseUrlInfo.override ?? '',
-			placeHolder: baseUrlInfo.defaultBaseUrl || 'https://example.com/v1'
+			value: baseUrlInfo.override ?? "",
+			placeHolder: baseUrlInfo.defaultBaseUrl || "https://example.com/v1",
 		});
 
 		if (result === undefined) {
@@ -93,18 +98,18 @@ export class ProviderWizard {
 		}
 
 		try {
-			const config = vscode.workspace.getConfiguration('chp');
+			const config = vscode.workspace.getConfiguration("chp");
 			await config.update(
 				`${providerKey}.baseUrl`,
 				result.trim(),
-				vscode.ConfigurationTarget.Global
+				vscode.ConfigurationTarget.Global,
 			);
 			const message = result.trim()
 				? `${displayName} base URL updated.`
 				: `${displayName} base URL override cleared.`;
 			vscode.window.showInformationMessage(message);
 		} catch (error) {
-			const message = `Failed to update ${displayName} base URL: ${error instanceof Error ? error.message : 'Unknown error'}`;
+			const message = `Failed to update ${displayName} base URL: ${error instanceof Error ? error.message : "Unknown error"}`;
 			Logger.error(message);
 			vscode.window.showErrorMessage(message);
 		}
@@ -118,7 +123,7 @@ export class ProviderWizard {
 		const overrides = ConfigManager.getProviderOverrides();
 		return {
 			defaultBaseUrl: providerConfigs[providerKey]?.baseUrl,
-			override: overrides[providerKey]?.baseUrl
+			override: overrides[providerKey]?.baseUrl,
 		};
 	}
 }

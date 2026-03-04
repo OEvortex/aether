@@ -34,7 +34,7 @@ function isDefined<T>(value: T | undefined): value is T {
  */
 function sanitizeToolCallId(id: string): string {
 	// Replace any characters that don't match [a-zA-Z0-9_-] with underscore
-	const sanitized = id.replace(/[^a-zA-Z0-9_-]/g, '_');
+	const sanitized = id.replace(/[^a-zA-Z0-9_-]/g, "_");
 	// Ensure the ID is not empty
 	return sanitized || `tool_${Date.now()}`;
 }
@@ -64,7 +64,7 @@ function apiContentToAnthropicContent(
 				| { signature?: string; data?: string; _completeThinking?: string }
 				| undefined;
 
-			// Some providers (e.g. Gemini/Antigravity) may attach provider-specific signature metadata.
+			// Some providers may attach provider-specific signature metadata.
 			// Never forward unknown signatures to Anthropic `thinking.signature`.
 			const providerHint = (
 				part.metadata as { _signatureProvider?: string } | undefined

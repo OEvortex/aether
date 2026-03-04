@@ -352,7 +352,7 @@ export class QwenCliProvider
 				}
 
 				let lastError: unknown;
-				let switchedAccount = false;
+				const switchedAccount = false;
 				for (const account of accountsToTry) {
 					const result = await tryAccountRequest(account);
 					if (result.success) {
@@ -362,7 +362,7 @@ export class QwenCliProvider
 								.setAccountForModel("qwencli", model.id, account.id)
 								.catch(() => {});
 						}
-    					// success — continue normally
+						// success — continue normally
 						return;
 					}
 
@@ -452,10 +452,14 @@ export class QwenCliProvider
 					if (!currentThinkingId) {
 						currentThinkingId = `qwen_thinking_${Date.now()}`;
 					}
-					progress.report(new vscode.LanguageModelThinkingPart(thinking, currentThinkingId));
+					progress.report(
+						new vscode.LanguageModelThinkingPart(thinking, currentThinkingId),
+					);
 				}
 				if (currentThinkingId) {
-					progress.report(new vscode.LanguageModelThinkingPart("", currentThinkingId));
+					progress.report(
+						new vscode.LanguageModelThinkingPart("", currentThinkingId),
+					);
 				}
 			} catch (e) {
 				Logger.trace(`[qwencli] Thinking flush failed: ${String(e)}`);
@@ -463,4 +467,3 @@ export class QwenCliProvider
 		}
 	}
 }
-

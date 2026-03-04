@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from "vscode";
-import { AntigravityAuth } from "../providers/antigravity/auth";
 import { ProviderKey } from "../types/providerKeys";
 import { Logger } from "../utils/logger";
 import { AccountManager } from "./accountManager";
@@ -68,20 +67,6 @@ export class AccountUI {
 				description: "Remove an existing account",
 				detail: "Delete account and its credentials",
 			},
-			{
-				label: "$(settings) Antigravity Model Routing",
-				description: "Assign Antigravity models to accounts",
-				detail: "Choose which account handles each model",
-			},
-			{
-				label: "$(pulse) Antigravity Load Balance",
-				description: this.accountManager.getLoadBalanceEnabled(
-					ProviderKey.Antigravity,
-				)
-					? "Enabled"
-					: "Disabled",
-				detail: "Auto switch accounts when quota is hit",
-			},
 		];
 
 		const selected = await vscode.window.showQuickPick(items, {
@@ -110,12 +95,6 @@ export class AccountUI {
 			case "$(trash) Remove Account":
 				await this.showRemoveAccountFlow();
 				break;
-			case "$(settings) Antigravity Model Routing":
-				await this.showAntigravityModelRouting();
-				break;
-			case "$(pulse) Antigravity Load Balance":
-				await this.showAntigravityLoadBalanceToggle();
-				break;
 		}
 	}
 
@@ -125,11 +104,6 @@ export class AccountUI {
 	async showAddAccountFlow(): Promise<void> {
 		// Choose provider
 		const providers = [
-			{
-				label: "Antigravity (Google)",
-				value: ProviderKey.Antigravity,
-				authType: "oauth" as const,
-			},
 			{
 				label: "Codex (OpenAI)",
 				value: ProviderKey.Codex,
@@ -241,11 +215,6 @@ export class AccountUI {
 				authType: "apiKey" as const,
 			},
 			{
-				label: "Gemini CLI",
-				value: ProviderKey.GeminiCli,
-				authType: "oauth" as const,
-			},
-			{
 				label: "Qwen CLI",
 				value: ProviderKey.QwenCli,
 				authType: "oauth" as const,
@@ -332,7 +301,7 @@ export class AccountUI {
 			placeHolder: "http://154.53.47.9:8000/v1 or https://proxy.example.com/v1",
 			validateInput: (value) => {
 				if (value && value.trim().length > 0) {
-					if (!value.startsWith('http://') && !value.startsWith('https://')) {
+					if (!value.startsWith("http://") && !value.startsWith("https://")) {
 						return "Base URL must start with http:// or https://";
 					}
 				}
@@ -363,18 +332,7 @@ export class AccountUI {
 	 * Add OAuth account
 	 */
 	async addOAuthAccount(provider: string): Promise<void> {
-		if (provider === ProviderKey.Antigravity) {
-			// Force add new account using the dedicated function
-			try {
-				const { doAntigravityLoginForNewAccount } = await import(
-					"../providers/antigravity/auth.js"
-				);
-				await doAntigravityLoginForNewAccount();
-			} catch (error) {
-				Logger.error("OAuth login failed:", error);
-				vscode.window.showErrorMessage("OAuth login failed. Please try again.");
-			}
-		} else if (provider === ProviderKey.Codex) {
+		if (provider === ProviderKey.Codex) {
 			// Codex OAuth login
 			try {
 				const { doCodexLoginForNewAccount } = await import(
@@ -614,132 +572,6 @@ export class AccountUI {
 	}
 
 	/**
-	 * Choose account per Antigravity model
-	 */
-	private async showAntigravityModelRouting(): Promise<void> {
-		const provider = ProviderKey.Antigravity;
-		const accounts = this.accountManager.getAccountsByProvider(provider);
-		if (accounts.length === 0) {
-			vscode.window.showInformationMessage(
-				"No Antigravity accounts configured. Add an account first.",
-			);
-			return;
-		}
-
-		let models = await AntigravityAuth.getCachedModels();
-		if (models.length === 0) {
-			models = await AntigravityAuth.getModels();
-		}
-		if (models.length === 0) {
-			vscode.window.showWarningMessage(
-				"No Antigravity models available. Please login and refresh models.",
-			);
-			return;
-		}
-
-		const assignments =
-			this.accountManager.getModelAccountAssignments(provider);
-
-		interface ModelPickItem extends vscode.QuickPickItem {
-			modelId: string;
-		}
-
-		const modelItems: ModelPickItem[] = models.map((model) => {
-			const assignedId = assignments[model.id];
-			const assignedAccount = accounts.find((acc) => acc.id === assignedId);
-			return {
-				label: model.displayName || model.name,
-				description: model.id,
-				detail: assignedAccount
-					? `Assigned to ${assignedAccount.displayName}`
-					: "Auto (use active account or load balance)",
-				modelId: model.id,
-			};
-		});
-
-		const selectedModel = await vscode.window.showQuickPick(modelItems, {
-			title: "Antigravity Model Routing",
-			placeHolder: "Select a model to assign",
-		});
-
-		if (!selectedModel) {
-			return;
-		}
-
-		interface AccountPickItem extends vscode.QuickPickItem {
-			accountId?: string;
-		}
-
-		const accountItems: AccountPickItem[] = [
-			{
-				label: "$(circle-outline) Auto",
-				description: "Use active account or load balance",
-				accountId: undefined,
-			},
-			...accounts.map((account) => ({
-				label: `${account.isDefault ? "$(check) " : ""}${account.displayName}`,
-				description: account.email || account.authType,
-				detail:
-					account.status === "active" ? undefined : `Status: ${account.status}`,
-				accountId: account.id,
-			})),
-		];
-
-		const selectedAccount = await vscode.window.showQuickPick(accountItems, {
-			title: `Assign Account for ${selectedModel.label}`,
-			placeHolder: "Select an account",
-		});
-
-		if (!selectedAccount) {
-			return;
-		}
-
-		await this.accountManager.setAccountForModel(
-			provider,
-			selectedModel.modelId,
-			selectedAccount.accountId,
-		);
-		const resultLabel = selectedAccount.accountId
-			? selectedAccount.label.replace(/^\$\(check\)\s*/, "")
-			: "Auto";
-		vscode.window.showInformationMessage(
-			`Updated routing for ${selectedModel.label}: ${resultLabel}`,
-		);
-	}
-
-	/**
-	 * Toggle load balance for Antigravity
-	 */
-	private async showAntigravityLoadBalanceToggle(): Promise<void> {
-		const provider = ProviderKey.Antigravity;
-		const enabled = this.accountManager.getLoadBalanceEnabled(provider);
-
-		const action = await vscode.window.showQuickPick(
-			[
-				{
-					label: enabled ? "Disable Load Balance" : "Enable Load Balance",
-					description: enabled
-						? "Keep current account selection"
-						: "Auto switch on quota limits",
-				},
-			],
-			{
-				title: "Antigravity Load Balance",
-				placeHolder: "Toggle load balance",
-			},
-		);
-
-		if (!action) {
-			return;
-		}
-
-		await this.accountManager.setLoadBalanceEnabled(provider, !enabled);
-		vscode.window.showInformationMessage(
-			`Antigravity load balance ${!enabled ? "enabled" : "disabled"}.`,
-		);
-	}
-
-	/**
 	 * Quick Switch - Fast account switch with one click
 	 * Show all accounts by provider, allow immediate switching
 	 */
@@ -852,7 +684,10 @@ export class AccountUI {
 				return;
 			}
 
-			if (selected.label === "$(settings-gear) Open Account Manager" || selected.label === "$(settings-gear) Settings") {
+			if (
+				selected.label === "$(settings-gear) Open Account Manager" ||
+				selected.label === "$(settings-gear) Settings"
+			) {
 				await vscode.commands.executeCommand("chp.openSettings");
 				return;
 			}
@@ -964,7 +799,6 @@ export class AccountUI {
 	 */
 	private getProviderDisplayName(provider: string): string {
 		const names: Record<string, string> = {
-			antigravity: "Antigravity (Google)",
 			codex: "Codex (OpenAI)",
 			zhipu: "ZhipuAI",
 			deepseek: "DeepSeek",
@@ -984,7 +818,6 @@ export class AccountUI {
 			lightningai: "Lightning AI",
 			ollama: "Ollama",
 			zenmux: "Zenmux",
-			geminicli: "Gemini CLI",
 			qwencli: "Qwen CLI",
 			compatible: "Compatible",
 		};

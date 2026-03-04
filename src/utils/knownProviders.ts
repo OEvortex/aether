@@ -1,6 +1,8 @@
 ﻿import * as vscode from "vscode";
 import { AccountManager } from "../accounts/accountManager";
 import { configProviders } from "../providers/config";
+import { MiniMaxWizard } from "../providers/minimax/minimaxWizard";
+import { MoonshotWizard } from "../providers/moonshot/moonshotWizard";
 import {
 	ProviderCategory,
 	ProviderKey,
@@ -14,8 +16,6 @@ import type {
 	ProviderOverride,
 } from "../types/sharedTypes";
 import { Logger } from "./logger";
-import { MiniMaxWizard } from "../providers/minimax/minimaxWizard";
-import { MoonshotWizard } from "../providers/moonshot/moonshotWizard";
 
 export interface KnownProviderConfig
 	extends Partial<ProviderConfig & ProviderOverride> {
@@ -105,11 +105,6 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 			cooldownMinutes: 10,
 		},
 	},
-	antigravity: {
-		displayName: "Antigravity",
-		family: "Antigravity",
-		description: "Google Cloud Code integration",
-	},
 	blackbox: {
 		displayName: "Blackbox AI",
 		family: "Blackbox AI",
@@ -188,11 +183,6 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 			descriptionField: "id",
 			cooldownMinutes: 10,
 		},
-	},
-	geminicli: {
-		displayName: "Gemini CLI",
-		family: "Gemini",
-		description: "Gemini CLI OAuth provider",
 	},
 	huggingface: {
 		displayName: "Hugging Face",
@@ -419,10 +409,6 @@ function createLazyFactory(
 }
 
 const specializedProviderFactories: Record<string, ProviderFactory> = {
-	geminicli: createLazyFactory(
-		() => import("../providers/geminicli/provider.js"),
-		"GeminiCliProvider",
-	),
 	qwencli: createLazyFactory(
 		() => import("../providers/qwencli/provider.js"),
 		"QwenCliProvider",
@@ -604,9 +590,7 @@ function toProviderKey(providerId: string): ProviderKey | undefined {
 	return undefined;
 }
 
-function getSdkMode(
-	providerId: string,
-): "openai" | "anthropic" | "gemini" | "mixed" {
+function getSdkMode(providerId: string): "openai" | "anthropic" | "mixed" {
 	if (providerId === ProviderKey.Compatible) {
 		return "mixed";
 	}
@@ -619,19 +603,13 @@ function getSdkMode(
 	);
 	const hasAnthropic = modes.has("anthropic");
 	const hasOpenAI = modes.has("openai");
-	const hasGemini = modes.has("gemini");
-	const concreteModesCount = [hasAnthropic, hasOpenAI, hasGemini].filter(
-		Boolean,
-	).length;
+	const concreteModesCount = [hasAnthropic, hasOpenAI].filter(Boolean).length;
 
 	if (concreteModesCount > 1) {
 		return "mixed";
 	}
 	if (hasAnthropic) {
 		return "anthropic";
-	}
-	if (hasGemini) {
-		return "gemini";
 	}
 	return "openai";
 }
@@ -641,10 +619,7 @@ function resolveCategory(
 	features: ProviderMetadata["features"],
 ): ProviderCategory {
 	const isOAuthProvider =
-		providerId === ProviderKey.Codex ||
-		providerId === ProviderKey.Antigravity ||
-		providerId === ProviderKey.QwenCli ||
-		providerId === ProviderKey.GeminiCli;
+		providerId === ProviderKey.Codex || providerId === ProviderKey.QwenCli;
 
 	if (features.supportsOAuth && !features.supportsApiKey) {
 		return ProviderCategory.OAuth;
@@ -666,25 +641,23 @@ function getDefaultFeatures(providerId: string): ProviderMetadata["features"] {
 	const accountConfig = AccountManager.getProviderConfig(providerId);
 	const isNoConfigProvider =
 		providerId === ProviderKey.QwenCli ||
-		providerId === ProviderKey.GeminiCli ||
 		providerId === ProviderKey.Blackbox ||
 		providerId === "chatjimmy";
 	const isCodex = providerId === ProviderKey.Codex;
-	const isAntigravity = providerId === ProviderKey.Antigravity;
 	const isCompatible = providerId === ProviderKey.Compatible;
 	return {
 		supportsApiKey:
 			(accountConfig.supportsApiKey && !isNoConfigProvider) ||
 			isCodex ||
 			isCompatible,
-		supportsOAuth: accountConfig.supportsOAuth || isCodex || isAntigravity,
+		supportsOAuth: accountConfig.supportsOAuth || isCodex,
 		supportsMultiAccount: accountConfig.supportsMultiAccount,
-		supportsBaseUrl: !isNoConfigProvider && !isCodex && !isAntigravity,
-		supportsConfigWizard: !isNoConfigProvider || isCodex || isAntigravity,
+		supportsBaseUrl: !isNoConfigProvider && !isCodex,
+		supportsConfigWizard: !isNoConfigProvider || isCodex,
 	};
 }
 
-let providerRegistryCache: ProviderMetadata[] | null = null;
+const providerRegistryCache: ProviderMetadata[] | null = null;
 
 export function getAllProviders(): ProviderMetadata[] {
 	const mergedConfig = buildConfigProvider(configProviders);

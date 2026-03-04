@@ -558,9 +558,7 @@ export class CodexHandler {
 		projectId?: string,
 	): Promise<void> {
 		// Apply rate limiting: 2 requests per 1 second
-		await RateLimiter.getInstance("codex", 2, 1000).throttle(
-			this.providerName,
-		);
+		await RateLimiter.getInstance("codex", 2, 1000).throttle(this.providerName);
 
 		// Store current model ID for instruction selection
 		this.currentModelId = config.model || model.id;
@@ -678,7 +676,11 @@ export class CodexHandler {
 
 		let lastError: unknown = null;
 
-		for (let modelIndex = 0; modelIndex < modelCandidates.length; modelIndex++) {
+		for (
+			let modelIndex = 0;
+			modelIndex < modelCandidates.length;
+			modelIndex++
+		) {
 			const candidateModel = modelCandidates[modelIndex];
 			const payloadStr = JSON.stringify({
 				...payload,
@@ -734,7 +736,9 @@ export class CodexHandler {
 		if (lastError) {
 			throw lastError;
 		}
-		throw new Error(`[codex] Failed to execute request for model: ${baseModel}`);
+		throw new Error(
+			`[codex] Failed to execute request for model: ${baseModel}`,
+		);
 	}
 
 	private async executeRequest(
@@ -1272,7 +1276,9 @@ export class CodexHandler {
 												currentFunctionCallId = "";
 											} else if (!hasTextResponse) {
 												const outputItemText =
-													this.extractTextFromResponsePayload(data.item || data);
+													this.extractTextFromResponsePayload(
+														data.item || data,
+													);
 												if (outputItemText.length > 0) {
 													_hasResponse = true;
 													hasTextResponse = true;
@@ -1615,7 +1621,9 @@ export class CodexHandler {
 												suffixParts.length > 0
 													? ` (${suffixParts.join(", ")})`
 													: "";
-											streamError = new Error(`${prefix}: ${errorMsg}${suffix}`);
+											streamError = new Error(
+												`${prefix}: ${errorMsg}${suffix}`,
+											);
 											Logger.error(`[codex] API Error: ${errorMsg}`);
 											Logger.error(
 												`[codex] Full error data: ${JSON.stringify(data)}`,
@@ -1828,12 +1836,14 @@ export class CodexHandler {
 			lowerMessage.includes("unknown model") ||
 			lowerMessage.includes("unsupported model") ||
 			lowerMessage.includes("model is not supported") ||
-			lowerMessage.includes("not supported when using codex with a chatgpt account") ||
+			lowerMessage.includes(
+				"not supported when using codex with a chatgpt account",
+			) ||
 			lowerMessage.includes("access to model") ||
 			lowerMessage.includes("not available for your account") ||
 			lowerMessage.includes("not supported for your account") ||
-			lowerMessage.includes("\"param\":\"model\"") ||
-			lowerMessage.includes("\"param\": \"model\"")
+			lowerMessage.includes('"param":"model"') ||
+			lowerMessage.includes('"param": "model"')
 		);
 	}
 
@@ -1851,7 +1861,10 @@ export class CodexHandler {
 		segments.push(value);
 	}
 
-	private collectTextFromContentParts(content: unknown, segments: string[]): void {
+	private collectTextFromContentParts(
+		content: unknown,
+		segments: string[],
+	): void {
 		if (!Array.isArray(content)) {
 			return;
 		}
@@ -1878,7 +1891,10 @@ export class CodexHandler {
 		}
 	}
 
-	private collectTextFromOutputItems(output: unknown, segments: string[]): void {
+	private collectTextFromOutputItems(
+		output: unknown,
+		segments: string[],
+	): void {
 		if (!Array.isArray(output)) {
 			return;
 		}
@@ -1909,7 +1925,10 @@ export class CodexHandler {
 		if (typeof data.delta === "string") {
 			this.addTextSegment(data.delta, segments);
 		} else if (data.delta && typeof data.delta === "object") {
-			this.addTextSegment((data.delta as Record<string, unknown>).text, segments);
+			this.addTextSegment(
+				(data.delta as Record<string, unknown>).text,
+				segments,
+			);
 		}
 
 		this.collectTextFromContentParts(data.content, segments);

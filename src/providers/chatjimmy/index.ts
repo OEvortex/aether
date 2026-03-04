@@ -4,9 +4,9 @@
 
 export { ChatJimmyFIMHandler } from "./chatjimmyFimHandler";
 export type {
-	ChatJimmyRequest,
-	ChatJimmyMessage,
 	ChatJimmyChatOptions,
+	ChatJimmyMessage,
+	ChatJimmyRequest,
 	ChatJimmyResponse,
 } from "./types";
 export { FIM_TOKENS } from "./types";

@@ -3,6 +3,8 @@
  *  Extends GenericModelProvider with auto-fetching model list from endpoint
  *--------------------------------------------------------------------------------------------*/
 
+import * as fs from "node:fs";
+import * as path from "node:path";
 import type {
 	CancellationToken,
 	LanguageModelChatInformation,
@@ -11,12 +13,11 @@ import type {
 } from "vscode";
 import * as vscode from "vscode";
 import type { ModelConfig, ProviderConfig } from "../../types/sharedTypes";
-import type { KnownProviderConfig } from "../../utils/knownProviders";
 import {
 	ApiKeyManager,
 	ConfigManager,
-	Logger,
 	getUserAgent,
+	Logger,
 } from "../../utils";
 import {
 	DEFAULT_CONTEXT_LENGTH,
@@ -24,10 +25,9 @@ import {
 	resolveGlobalCapabilities,
 	resolveGlobalTokenLimits,
 } from "../../utils/globalContextLengthManager";
+import type { KnownProviderConfig } from "../../utils/knownProviders";
 import { ProviderWizard } from "../../utils/providerWizard";
 import { GenericModelProvider } from "./genericModelProvider";
-import * as fs from "node:fs";
-import * as path from "node:path";
 
 interface FetchedModel {
 	id: string;

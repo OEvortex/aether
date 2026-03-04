@@ -303,9 +303,12 @@ export class CodexProvider
 				(expiresAtMs === 0 || expiresAtMs - Date.now() <= 5 * 60 * 1000);
 
 			if (shouldRefresh) {
-				const refreshed = await CodexAuth.refreshToken(credentials.refreshToken, {
-					persist: false,
-				});
+				const refreshed = await CodexAuth.refreshToken(
+					credentials.refreshToken,
+					{
+						persist: false,
+					},
+				);
 				if (refreshed?.accessToken) {
 					accessToken = refreshed.accessToken;
 					await this.accountManager.updateCredentials(account.id, {
@@ -334,7 +337,8 @@ export class CodexProvider
 		return {
 			accessToken,
 			managedAccountId: account.id,
-			chatgptAccountId: metadataAccountId || (await CodexAuth.getAccountId()) || "",
+			chatgptAccountId:
+				metadataAccountId || (await CodexAuth.getAccountId()) || "",
 			organizationId:
 				metadataOrgId || (await CodexAuth.getOrganizationId()) || "",
 			projectId: metadataProjectId || (await CodexAuth.getProjectId()) || "",

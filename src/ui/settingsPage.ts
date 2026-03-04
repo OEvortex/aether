@@ -6,9 +6,9 @@
 import * as vscode from "vscode";
 import { AccountManager } from "../accounts/accountManager";
 import type { ApiKeyCredentials } from "../accounts/types";
+import { codexLoginCommand, Logger } from "../utils";
 import { ProviderRegistry } from "../utils/knownProviders";
 import { ProviderWizard } from "../utils/providerWizard";
-import { antigravityLoginCommand, codexLoginCommand, Logger } from "../utils";
 import settingsPageCss from "./settingsPage.css?raw";
 import settingsPageJs from "./settingsPage.js?raw";
 
@@ -600,12 +600,6 @@ export class SettingsPage {
 			// Special case for Codex - use the codex login command
 			if (providerId === "codex") {
 				await codexLoginCommand();
-				return;
-			}
-
-			// Special case for Antigravity - use the antigravity login command
-			if (providerId === "antigravity") {
-				await antigravityLoginCommand();
 				return;
 			}
 

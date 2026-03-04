@@ -102,7 +102,7 @@ export class QwenOAuthManager {
 					headers: {
 						"Content-Type": "application/x-www-form-urlencoded",
 						Accept: "application/json",
-					"User-Agent": getUserAgent(),
+						"User-Agent": getUserAgent(),
 					},
 					body: bodyData.toString(),
 				});

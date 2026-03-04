@@ -134,7 +134,9 @@ async function copyBuildAssets() {
 			const destPath = path.join(distConfigDir, file);
 			try {
 				await fs.promises.copyFile(srcPath, destPath);
-				console.log(`Copied config: src/providers/config/${file} -> dist/providers/config/${file}`);
+				console.log(
+					`Copied config: src/providers/config/${file} -> dist/providers/config/${file}`,
+				);
 			} catch {
 				console.warn(`Failed to copy config file: ${file}`);
 			}

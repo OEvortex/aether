@@ -1,1328 +1,1328 @@
 {
-    "displayName": "Zenmux",
-    "baseUrl": "https://zenmux.ai/api/v1",
-    "apiKeyTemplate": "zm-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": [
-        {
-            "id": "kuaishou-kat-coder-pro-v1-free",
-            "name": "kuaishou/kat-coder-pro-v1-free",
-            "tooltip": "kuaishou/kat-coder-pro-v1-free",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "kuaishou/kat-coder-pro-v1-free",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-6v-flash-free",
-            "name": "z-ai/glm-4.6v-flash-free",
-            "tooltip": "z-ai/glm-4.6v-flash-free",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.6v-flash-free",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "xiaomi-mimo-v2-flash-free",
-            "name": "xiaomi/mimo-v2-flash-free",
-            "tooltip": "xiaomi/mimo-v2-flash-free",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "xiaomi/mimo-v2-flash-free",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-4-1-mini",
-            "name": "openai/gpt-4.1-mini",
-            "tooltip": "openai/gpt-4.1-mini",
-            "maxInputTokens": 1014808,
-            "maxOutputTokens": 32768,
-            "model": "openai/gpt-4.1-mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-opus-4",
-            "name": "anthropic/claude-opus-4",
-            "tooltip": "anthropic/claude-opus-4",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-opus-4",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-4-1-nano",
-            "name": "openai/gpt-4.1-nano",
-            "tooltip": "openai/gpt-4.1-nano",
-            "maxInputTokens": 1014808,
-            "maxOutputTokens": 32768,
-            "model": "openai/gpt-4.1-nano",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-o4-mini",
-            "name": "openai/o4-mini",
-            "tooltip": "openai/o4-mini",
-            "maxInputTokens": 183616,
-            "maxOutputTokens": 16384,
-            "model": "openai/o4-mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5",
-            "name": "openai/gpt-5",
-            "tooltip": "openai/gpt-5",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-4o",
-            "name": "openai/gpt-4o",
-            "tooltip": "openai/gpt-4o",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-4o",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-nano",
-            "name": "openai/gpt-5-nano",
-            "tooltip": "openai/gpt-5-nano",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5-nano",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-4-1",
-            "name": "openai/gpt-4.1",
-            "tooltip": "openai/gpt-4.1",
-            "maxInputTokens": 1014808,
-            "maxOutputTokens": 32768,
-            "model": "openai/gpt-4.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-3-5-haiku",
-            "name": "anthropic/claude-3.5-haiku",
-            "tooltip": "anthropic/claude-3.5-haiku",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-3.5-haiku",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "google-gemini-2-5-flash-lite",
-            "name": "google/gemini-2.5-flash-lite",
-            "tooltip": "google/gemini-2.5-flash-lite",
-            "maxInputTokens": 967232,
-            "maxOutputTokens": 32768,
-            "model": "google/gemini-2.5-flash-lite",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-3-7-sonnet",
-            "name": "anthropic/claude-3.7-sonnet",
-            "tooltip": "anthropic/claude-3.7-sonnet",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-3.7-sonnet",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "deepseek-deepseek-r1-0528",
-            "name": "deepseek/deepseek-r1-0528",
-            "tooltip": "deepseek/deepseek-r1-0528",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek/deepseek-r1-0528",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "anthropic-claude-opus-4-1",
-            "name": "anthropic/claude-opus-4.1",
-            "tooltip": "anthropic/claude-opus-4.1",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-opus-4.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-sonnet-4",
-            "name": "anthropic/claude-sonnet-4",
-            "tooltip": "anthropic/claude-sonnet-4",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-sonnet-4",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-mini",
-            "name": "openai/gpt-5-mini",
-            "tooltip": "openai/gpt-5-mini",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5-mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-chat",
-            "name": "openai/gpt-5-chat",
-            "tooltip": "openai/gpt-5-chat",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5-chat",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "google-gemini-2-5-flash",
-            "name": "google/gemini-2.5-flash",
-            "tooltip": "google/gemini-2.5-flash",
-            "maxInputTokens": 967232,
-            "maxOutputTokens": 32768,
-            "model": "google/gemini-2.5-flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "deepseek-deepseek-chat-v3-1",
-            "name": "deepseek/deepseek-chat-v3.1",
-            "tooltip": "deepseek/deepseek-chat-v3.1",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek/deepseek-chat-v3.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "google-gemini-2-5-pro",
-            "name": "google/gemini-2.5-pro",
-            "tooltip": "google/gemini-2.5-pro",
-            "maxInputTokens": 967232,
-            "maxOutputTokens": 32768,
-            "model": "google/gemini-2.5-pro",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "google-gemini-2-0-flash",
-            "name": "google/gemini-2.0-flash",
-            "tooltip": "google/gemini-2.0-flash",
-            "maxInputTokens": 1015808,
-            "maxOutputTokens": 32768,
-            "model": "google/gemini-2.0-flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "x-ai-grok-4",
-            "name": "x-ai/grok-4",
-            "tooltip": "x-ai/grok-4",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "x-ai/grok-4",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-2507",
-            "name": "qwen/qwen3-235b-a22b-2507",
-            "tooltip": "qwen/qwen3-235b-a22b-2507",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-235b-a22b-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-4o-mini",
-            "name": "openai/gpt-4o-mini",
-            "tooltip": "openai/gpt-4o-mini",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-4o-mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-thinking-2507",
-            "name": "qwen/qwen3-235b-a22b-thinking-2507",
-            "tooltip": "qwen/qwen3-235b-a22b-thinking-2507",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-235b-a22b-thinking-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder",
-            "name": "qwen/qwen3-coder",
-            "tooltip": "qwen/qwen3-coder",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-coder",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "google-gemini-2-0-flash-lite-001",
-            "name": "google/gemini-2.0-flash-lite-001",
-            "tooltip": "google/gemini-2.0-flash-lite-001",
-            "maxInputTokens": 1015808,
-            "maxOutputTokens": 32768,
-            "model": "google/gemini-2.0-flash-lite-001",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "z-ai-glm-4-5-air",
-            "name": "z-ai/glm-4.5-air",
-            "tooltip": "z-ai/glm-4.5-air",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.5-air",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-plus",
-            "name": "qwen/qwen3-coder-plus",
-            "tooltip": "qwen/qwen3-coder-plus",
-            "maxInputTokens": 967232,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-coder-plus",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-deepseek-chat",
-            "name": "deepseek/deepseek-chat",
-            "tooltip": "deepseek/deepseek-chat",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek/deepseek-chat",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ring-mini-2-0",
-            "name": "inclusionai/ring-mini-2.0",
-            "tooltip": "inclusionai/ring-mini-2.0",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/ring-mini-2.0",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-0905",
-            "name": "moonshotai/kimi-k2-0905",
-            "tooltip": "moonshotai/kimi-k2-0905",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/kimi-k2-0905",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ling-mini-2-0",
-            "name": "inclusionai/ling-mini-2.0",
-            "tooltip": "inclusionai/ling-mini-2.0",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/ling-mini-2.0",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-5",
-            "name": "z-ai/glm-4.5",
-            "tooltip": "z-ai/glm-4.5",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-0711",
-            "name": "moonshotai/kimi-k2-0711",
-            "tooltip": "moonshotai/kimi-k2-0711",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/kimi-k2-0711",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ling-flash-2-0",
-            "name": "inclusionai/ling-flash-2.0",
-            "tooltip": "inclusionai/ling-flash-2.0",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/ling-flash-2.0",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ring-flash-2-0",
-            "name": "inclusionai/ring-flash-2.0",
-            "tooltip": "inclusionai/ring-flash-2.0",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/ring-flash-2.0",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "x-ai-grok-code-fast-1",
-            "name": "x-ai/grok-code-fast-1",
-            "tooltip": "x-ai/grok-code-fast-1",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "x-ai/grok-code-fast-1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "x-ai-grok-4-fast",
-            "name": "x-ai/grok-4-fast",
-            "tooltip": "x-ai/grok-4-fast",
-            "maxInputTokens": 1967232,
-            "maxOutputTokens": 32768,
-            "model": "x-ai/grok-4-fast",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "x-ai-grok-4-fast-non-reasoning",
-            "name": "x-ai/grok-4-fast-non-reasoning",
-            "tooltip": "x-ai/grok-4-fast-non-reasoning",
-            "maxInputTokens": 1967232,
-            "maxOutputTokens": 32768,
-            "model": "x-ai/grok-4-fast-non-reasoning",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-plus",
-            "name": "qwen/qwen3-vl-plus",
-            "tooltip": "qwen/qwen3-vl-plus",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-vl-plus",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-max",
-            "name": "qwen/qwen3-max",
-            "tooltip": "qwen/qwen3-max",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-max",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-6",
-            "name": "z-ai/glm-4.6",
-            "tooltip": "z-ai/glm-4.6",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.6",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ling-1t",
-            "name": "inclusionai/ling-1t",
-            "tooltip": "inclusionai/ling-1t",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/ling-1t",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ring-1t",
-            "name": "inclusionai/ring-1t",
-            "tooltip": "inclusionai/ring-1t",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/ring-1t",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "anthropic-claude-sonnet-4-5",
-            "name": "anthropic/claude-sonnet-4.5",
-            "tooltip": "anthropic/claude-sonnet-4.5",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-sonnet-4.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-haiku-4-5",
-            "name": "anthropic/claude-haiku-4.5",
-            "tooltip": "anthropic/claude-haiku-4.5",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-haiku-4.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-pro",
-            "name": "openai/gpt-5-pro",
-            "tooltip": "openai/gpt-5-pro",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5-pro",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-codex",
-            "name": "openai/gpt-5-codex",
-            "tooltip": "openai/gpt-5-codex",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5-codex",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "deepseek-deepseek-reasoner",
-            "name": "deepseek/deepseek-reasoner",
-            "tooltip": "deepseek/deepseek-reasoner",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek/deepseek-reasoner",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "kuaishou-kat-coder-pro-v1",
-            "name": "kuaishou/kat-coder-pro-v1",
-            "tooltip": "kuaishou/kat-coder-pro-v1",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "kuaishou/kat-coder-pro-v1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimax-minimax-m2",
-            "name": "minimax/minimax-m2",
-            "tooltip": "minimax/minimax-m2",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "minimax/minimax-m2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-thinking",
-            "name": "moonshotai/kimi-k2-thinking",
-            "tooltip": "moonshotai/kimi-k2-thinking",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/kimi-k2-thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-thinking-turbo",
-            "name": "moonshotai/kimi-k2-thinking-turbo",
-            "tooltip": "moonshotai/kimi-k2-thinking-turbo",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/kimi-k2-thinking-turbo",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-max-preview",
-            "name": "qwen/qwen3-max-preview",
-            "tooltip": "qwen/qwen3-max-preview",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3-max-preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-5-0-thinking-preview",
-            "name": "baidu/ernie-5.0-thinking-preview",
-            "tooltip": "baidu/ernie-5.0-thinking-preview",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ernie-5.0-thinking-preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5-1-codex",
-            "name": "openai/gpt-5.1-codex",
-            "tooltip": "openai/gpt-5.1-codex",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.1-codex",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-1-chat",
-            "name": "openai/gpt-5.1-chat",
-            "tooltip": "openai/gpt-5.1-chat",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.1-chat",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen3-14b",
-            "name": "qwen/qwen3-14b",
-            "tooltip": "qwen/qwen3-14b",
-            "maxInputTokens": 15616,
-            "maxOutputTokens": 16384,
-            "model": "qwen/qwen3-14b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5-1-codex-mini",
-            "name": "openai/gpt-5.1-codex-mini",
-            "tooltip": "openai/gpt-5.1-codex-mini",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.1-codex-mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-code",
-            "name": "volcengine/doubao-seed-code",
-            "tooltip": "volcengine/doubao-seed-code",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-code",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5-1",
-            "name": "openai/gpt-5.1",
-            "tooltip": "openai/gpt-5.1",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "x-ai-grok-4-1-fast",
-            "name": "x-ai/grok-4.1-fast",
-            "tooltip": "x-ai/grok-4.1-fast",
-            "maxInputTokens": 1967232,
-            "maxOutputTokens": 32768,
-            "model": "x-ai/grok-4.1-fast",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "x-ai-grok-4-1-fast-non-reasoning",
-            "name": "x-ai/grok-4.1-fast-non-reasoning",
-            "tooltip": "x-ai/grok-4.1-fast-non-reasoning",
-            "maxInputTokens": 1967232,
-            "maxOutputTokens": 32768,
-            "model": "x-ai/grok-4.1-fast-non-reasoning",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "google-gemini-3-pro-preview",
-            "name": "google/gemini-3-pro-preview",
-            "tooltip": "google/gemini-3-pro-preview",
-            "maxInputTokens": 934464,
-            "maxOutputTokens": 65536,
-            "model": "google/gemini-3-pro-preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-1-6-vision",
-            "name": "volcengine/doubao-seed-1-6-vision",
-            "tooltip": "volcengine/doubao-seed-1-6-vision",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-1-6-vision",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "google-gemma-3-12b-it",
-            "name": "google/gemma-3-12b-it",
-            "tooltip": "google/gemma-3-12b-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "google/gemma-3-12b-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "anthropic-claude-opus-4-5",
-            "name": "anthropic/claude-opus-4.5",
-            "tooltip": "anthropic/claude-opus-4.5",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-opus-4.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "deepseek-deepseek-v3-2-exp",
-            "name": "deepseek/deepseek-v3.2-exp",
-            "tooltip": "deepseek/deepseek-v3.2-exp",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek/deepseek-v3.2-exp",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-3-3-70b-instruct",
-            "name": "meta/llama-3.3-70b-instruct",
-            "tooltip": "meta/llama-3.3-70b-instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta/llama-3.3-70b-instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "mistralai-mistral-large-2512",
-            "name": "mistralai/mistral-large-2512",
-            "tooltip": "mistralai/mistral-large-2512",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "mistralai/mistral-large-2512",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-4-scout-17b-16e-instruct",
-            "name": "meta/llama-4-scout-17b-16e-instruct",
-            "tooltip": "meta/llama-4-scout-17b-16e-instruct",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "meta/llama-4-scout-17b-16e-instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-x1-1-preview",
-            "name": "baidu/ernie-x1.1-preview",
-            "tooltip": "baidu/ernie-x1.1-preview",
-            "maxInputTokens": 49152,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ernie-x1.1-preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-6v-flash",
-            "name": "z-ai/glm-4.6v-flash",
-            "tooltip": "z-ai/glm-4.6v-flash",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.6v-flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-6v",
-            "name": "z-ai/glm-4.6v",
-            "tooltip": "z-ai/glm-4.6v",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.6v",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-deepseek-v3-2",
-            "name": "deepseek/deepseek-v3.2",
-            "tooltip": "deepseek/deepseek-v3.2",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek/deepseek-v3.2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5-2-pro",
-            "name": "openai/gpt-5.2-pro",
-            "tooltip": "openai/gpt-5.2-pro",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.2-pro",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-2",
-            "name": "openai/gpt-5.2",
-            "tooltip": "openai/gpt-5.2",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "openai-gpt-5-2-chat",
-            "name": "openai/gpt-5.2-chat",
-            "tooltip": "openai/gpt-5.2-chat",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.2-chat",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "google-gemini-3-flash-preview",
-            "name": "google/gemini-3-flash-preview",
-            "tooltip": "google/gemini-3-flash-preview",
-            "maxInputTokens": 934464,
-            "maxOutputTokens": 65536,
-            "model": "google/gemini-3-flash-preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "stepfun-step-3",
-            "name": "stepfun/step-3",
-            "tooltip": "stepfun/step-3",
-            "maxInputTokens": 49152,
-            "maxOutputTokens": 16384,
-            "model": "stepfun/step-3",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-llada2-0-flash-cap",
-            "name": "inclusionai/llada2.0-flash-cap",
-            "tooltip": "inclusionai/llada2.0-flash-cap",
-            "maxInputTokens": 15616,
-            "maxOutputTokens": 16384,
-            "model": "inclusionai/llada2.0-flash-cap",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5-2-codex",
-            "name": "openai/gpt-5.2-codex",
-            "tooltip": "openai/gpt-5.2-codex",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.2-codex",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "xiaomi-mimo-v2-flash",
-            "name": "xiaomi/mimo-v2-flash",
-            "tooltip": "xiaomi/mimo-v2-flash",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "xiaomi/mimo-v2-flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-1-8",
-            "name": "volcengine/doubao-seed-1.8",
-            "tooltip": "volcengine/doubao-seed-1.8",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-1.8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimax-minimax-m2-1",
-            "name": "minimax/minimax-m2.1",
-            "tooltip": "minimax/minimax-m2.1",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "minimax/minimax-m2.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-7",
-            "name": "z-ai/glm-4.7",
-            "tooltip": "z-ai/glm-4.7",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.7",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-7-flash-free",
-            "name": "z-ai/glm-4.7-flash-free",
-            "tooltip": "z-ai/glm-4.7-flash-free",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.7-flash-free",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-4-7-flashx",
-            "name": "z-ai/glm-4.7-flashx",
-            "tooltip": "z-ai/glm-4.7-flashx",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-4.7-flashx",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimax-minimax-m2-her",
-            "name": "minimax/minimax-m2-her",
-            "tooltip": "minimax/minimax-m2-her",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "minimax/minimax-m2-her",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-5",
-            "name": "moonshotai/kimi-k2.5",
-            "tooltip": "moonshotai/kimi-k2.5",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/kimi-k2.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-opus-4-6",
-            "name": "anthropic/claude-opus-4.6",
-            "tooltip": "anthropic/claude-opus-4.6",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-opus-4.6",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "tencent-hunyuan-2-0-thinking",
-            "name": "tencent/hunyuan-2.0-thinking",
-            "tooltip": "tencent/hunyuan-2.0-thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "tencent/hunyuan-2.0-thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-5-3-codex",
-            "name": "openai/gpt-5.3-codex",
-            "tooltip": "openai/gpt-5.3-codex",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "model": "openai/gpt-5.3-codex",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "stepfun-step-3-5-flash-free",
-            "name": "stepfun/step-3.5-flash-free",
-            "tooltip": "stepfun/step-3.5-flash-free",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "stepfun/step-3.5-flash-free",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "stepfun-step-3-5-flash",
-            "name": "stepfun/step-3.5-flash",
-            "tooltip": "stepfun/step-3.5-flash",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "stepfun/step-3.5-flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "z-ai-glm-5",
-            "name": "z-ai/glm-5",
-            "tooltip": "z-ai/glm-5",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "z-ai/glm-5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "inclusionai-ming-flash-omni-2-0",
-            "name": "inclusionai/ming-flash-omni-2.0",
-            "tooltip": "inclusionai/ming-flash-omni-2.0",
-            "maxInputTokens": 57344,
-            "maxOutputTokens": 8192,
-            "model": "inclusionai/ming-flash-omni-2.0",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-2-0-mini",
-            "name": "volcengine/doubao-seed-2.0-mini",
-            "tooltip": "volcengine/doubao-seed-2.0-mini",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-2.0-mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimax-minimax-m2-5",
-            "name": "minimax/minimax-m2.5",
-            "tooltip": "minimax/minimax-m2.5",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "minimax/minimax-m2.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-2-0-code",
-            "name": "volcengine/doubao-seed-2.0-code",
-            "tooltip": "volcengine/doubao-seed-2.0-code",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-2.0-code",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimax-minimax-m2-5-lightning",
-            "name": "minimax/minimax-m2.5-lightning",
-            "tooltip": "minimax/minimax-m2.5-lightning",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "minimax/minimax-m2.5-lightning",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-2-0-pro",
-            "name": "volcengine/doubao-seed-2.0-pro",
-            "tooltip": "volcengine/doubao-seed-2.0-pro",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-2.0-pro",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "volcengine-doubao-seed-2-0-lite",
-            "name": "volcengine/doubao-seed-2.0-lite",
-            "tooltip": "volcengine/doubao-seed-2.0-lite",
-            "maxInputTokens": 223232,
-            "maxOutputTokens": 32768,
-            "model": "volcengine/doubao-seed-2.0-lite",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-5-plus",
-            "name": "qwen/qwen3.5-plus",
-            "tooltip": "qwen/qwen3.5-plus",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3.5-plus",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "google-gemini-3-1-pro-preview",
-            "name": "google/gemini-3.1-pro-preview",
-            "tooltip": "google/gemini-3.1-pro-preview",
-            "maxInputTokens": 934464,
-            "maxOutputTokens": 65536,
-            "model": "google/gemini-3.1-pro-preview",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "anthropic-claude-sonnet-4-6",
-            "name": "anthropic/claude-sonnet-4.6",
-            "tooltip": "anthropic/claude-sonnet-4.6",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "anthropic/claude-sonnet-4.6",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen3-5-flash",
-            "name": "qwen/qwen3.5-flash",
-            "tooltip": "qwen/qwen3.5-flash",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "qwen/qwen3.5-flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        }
-    ],
-    "family": "Zenmux"
+	"displayName": "Zenmux",
+	"baseUrl": "https://zenmux.ai/api/v1",
+	"apiKeyTemplate": "zm-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+	"models": [
+		{
+			"id": "kuaishou-kat-coder-pro-v1-free",
+			"name": "kuaishou/kat-coder-pro-v1-free",
+			"tooltip": "kuaishou/kat-coder-pro-v1-free",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "kuaishou/kat-coder-pro-v1-free",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-6v-flash-free",
+			"name": "z-ai/glm-4.6v-flash-free",
+			"tooltip": "z-ai/glm-4.6v-flash-free",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.6v-flash-free",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "xiaomi-mimo-v2-flash-free",
+			"name": "xiaomi/mimo-v2-flash-free",
+			"tooltip": "xiaomi/mimo-v2-flash-free",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "xiaomi/mimo-v2-flash-free",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-4-1-mini",
+			"name": "openai/gpt-4.1-mini",
+			"tooltip": "openai/gpt-4.1-mini",
+			"maxInputTokens": 1014808,
+			"maxOutputTokens": 32768,
+			"model": "openai/gpt-4.1-mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-opus-4",
+			"name": "anthropic/claude-opus-4",
+			"tooltip": "anthropic/claude-opus-4",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-opus-4",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-4-1-nano",
+			"name": "openai/gpt-4.1-nano",
+			"tooltip": "openai/gpt-4.1-nano",
+			"maxInputTokens": 1014808,
+			"maxOutputTokens": 32768,
+			"model": "openai/gpt-4.1-nano",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-o4-mini",
+			"name": "openai/o4-mini",
+			"tooltip": "openai/o4-mini",
+			"maxInputTokens": 183616,
+			"maxOutputTokens": 16384,
+			"model": "openai/o4-mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5",
+			"name": "openai/gpt-5",
+			"tooltip": "openai/gpt-5",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-4o",
+			"name": "openai/gpt-4o",
+			"tooltip": "openai/gpt-4o",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-4o",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-nano",
+			"name": "openai/gpt-5-nano",
+			"tooltip": "openai/gpt-5-nano",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5-nano",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-4-1",
+			"name": "openai/gpt-4.1",
+			"tooltip": "openai/gpt-4.1",
+			"maxInputTokens": 1014808,
+			"maxOutputTokens": 32768,
+			"model": "openai/gpt-4.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-3-5-haiku",
+			"name": "anthropic/claude-3.5-haiku",
+			"tooltip": "anthropic/claude-3.5-haiku",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-3.5-haiku",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "google-gemini-2-5-flash-lite",
+			"name": "google/gemini-2.5-flash-lite",
+			"tooltip": "google/gemini-2.5-flash-lite",
+			"maxInputTokens": 967232,
+			"maxOutputTokens": 32768,
+			"model": "google/gemini-2.5-flash-lite",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-3-7-sonnet",
+			"name": "anthropic/claude-3.7-sonnet",
+			"tooltip": "anthropic/claude-3.7-sonnet",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-3.7-sonnet",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "deepseek-deepseek-r1-0528",
+			"name": "deepseek/deepseek-r1-0528",
+			"tooltip": "deepseek/deepseek-r1-0528",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek/deepseek-r1-0528",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "anthropic-claude-opus-4-1",
+			"name": "anthropic/claude-opus-4.1",
+			"tooltip": "anthropic/claude-opus-4.1",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-opus-4.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-sonnet-4",
+			"name": "anthropic/claude-sonnet-4",
+			"tooltip": "anthropic/claude-sonnet-4",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-sonnet-4",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-mini",
+			"name": "openai/gpt-5-mini",
+			"tooltip": "openai/gpt-5-mini",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5-mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-chat",
+			"name": "openai/gpt-5-chat",
+			"tooltip": "openai/gpt-5-chat",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5-chat",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "google-gemini-2-5-flash",
+			"name": "google/gemini-2.5-flash",
+			"tooltip": "google/gemini-2.5-flash",
+			"maxInputTokens": 967232,
+			"maxOutputTokens": 32768,
+			"model": "google/gemini-2.5-flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "deepseek-deepseek-chat-v3-1",
+			"name": "deepseek/deepseek-chat-v3.1",
+			"tooltip": "deepseek/deepseek-chat-v3.1",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek/deepseek-chat-v3.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "google-gemini-2-5-pro",
+			"name": "google/gemini-2.5-pro",
+			"tooltip": "google/gemini-2.5-pro",
+			"maxInputTokens": 967232,
+			"maxOutputTokens": 32768,
+			"model": "google/gemini-2.5-pro",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "google-gemini-2-0-flash",
+			"name": "google/gemini-2.0-flash",
+			"tooltip": "google/gemini-2.0-flash",
+			"maxInputTokens": 1015808,
+			"maxOutputTokens": 32768,
+			"model": "google/gemini-2.0-flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "x-ai-grok-4",
+			"name": "x-ai/grok-4",
+			"tooltip": "x-ai/grok-4",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "x-ai/grok-4",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b-2507",
+			"name": "qwen/qwen3-235b-a22b-2507",
+			"tooltip": "qwen/qwen3-235b-a22b-2507",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-235b-a22b-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-4o-mini",
+			"name": "openai/gpt-4o-mini",
+			"tooltip": "openai/gpt-4o-mini",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-4o-mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b-thinking-2507",
+			"name": "qwen/qwen3-235b-a22b-thinking-2507",
+			"tooltip": "qwen/qwen3-235b-a22b-thinking-2507",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-235b-a22b-thinking-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder",
+			"name": "qwen/qwen3-coder",
+			"tooltip": "qwen/qwen3-coder",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-coder",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "google-gemini-2-0-flash-lite-001",
+			"name": "google/gemini-2.0-flash-lite-001",
+			"tooltip": "google/gemini-2.0-flash-lite-001",
+			"maxInputTokens": 1015808,
+			"maxOutputTokens": 32768,
+			"model": "google/gemini-2.0-flash-lite-001",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "z-ai-glm-4-5-air",
+			"name": "z-ai/glm-4.5-air",
+			"tooltip": "z-ai/glm-4.5-air",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.5-air",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-plus",
+			"name": "qwen/qwen3-coder-plus",
+			"tooltip": "qwen/qwen3-coder-plus",
+			"maxInputTokens": 967232,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-coder-plus",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-deepseek-chat",
+			"name": "deepseek/deepseek-chat",
+			"tooltip": "deepseek/deepseek-chat",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek/deepseek-chat",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ring-mini-2-0",
+			"name": "inclusionai/ring-mini-2.0",
+			"tooltip": "inclusionai/ring-mini-2.0",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/ring-mini-2.0",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-0905",
+			"name": "moonshotai/kimi-k2-0905",
+			"tooltip": "moonshotai/kimi-k2-0905",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/kimi-k2-0905",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ling-mini-2-0",
+			"name": "inclusionai/ling-mini-2.0",
+			"tooltip": "inclusionai/ling-mini-2.0",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/ling-mini-2.0",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-5",
+			"name": "z-ai/glm-4.5",
+			"tooltip": "z-ai/glm-4.5",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-0711",
+			"name": "moonshotai/kimi-k2-0711",
+			"tooltip": "moonshotai/kimi-k2-0711",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/kimi-k2-0711",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ling-flash-2-0",
+			"name": "inclusionai/ling-flash-2.0",
+			"tooltip": "inclusionai/ling-flash-2.0",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/ling-flash-2.0",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ring-flash-2-0",
+			"name": "inclusionai/ring-flash-2.0",
+			"tooltip": "inclusionai/ring-flash-2.0",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/ring-flash-2.0",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "x-ai-grok-code-fast-1",
+			"name": "x-ai/grok-code-fast-1",
+			"tooltip": "x-ai/grok-code-fast-1",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "x-ai/grok-code-fast-1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "x-ai-grok-4-fast",
+			"name": "x-ai/grok-4-fast",
+			"tooltip": "x-ai/grok-4-fast",
+			"maxInputTokens": 1967232,
+			"maxOutputTokens": 32768,
+			"model": "x-ai/grok-4-fast",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "x-ai-grok-4-fast-non-reasoning",
+			"name": "x-ai/grok-4-fast-non-reasoning",
+			"tooltip": "x-ai/grok-4-fast-non-reasoning",
+			"maxInputTokens": 1967232,
+			"maxOutputTokens": 32768,
+			"model": "x-ai/grok-4-fast-non-reasoning",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-plus",
+			"name": "qwen/qwen3-vl-plus",
+			"tooltip": "qwen/qwen3-vl-plus",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-vl-plus",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-max",
+			"name": "qwen/qwen3-max",
+			"tooltip": "qwen/qwen3-max",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-max",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-6",
+			"name": "z-ai/glm-4.6",
+			"tooltip": "z-ai/glm-4.6",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.6",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ling-1t",
+			"name": "inclusionai/ling-1t",
+			"tooltip": "inclusionai/ling-1t",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/ling-1t",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ring-1t",
+			"name": "inclusionai/ring-1t",
+			"tooltip": "inclusionai/ring-1t",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/ring-1t",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "anthropic-claude-sonnet-4-5",
+			"name": "anthropic/claude-sonnet-4.5",
+			"tooltip": "anthropic/claude-sonnet-4.5",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-sonnet-4.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-haiku-4-5",
+			"name": "anthropic/claude-haiku-4.5",
+			"tooltip": "anthropic/claude-haiku-4.5",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-haiku-4.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-pro",
+			"name": "openai/gpt-5-pro",
+			"tooltip": "openai/gpt-5-pro",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5-pro",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-codex",
+			"name": "openai/gpt-5-codex",
+			"tooltip": "openai/gpt-5-codex",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5-codex",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "deepseek-deepseek-reasoner",
+			"name": "deepseek/deepseek-reasoner",
+			"tooltip": "deepseek/deepseek-reasoner",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek/deepseek-reasoner",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "kuaishou-kat-coder-pro-v1",
+			"name": "kuaishou/kat-coder-pro-v1",
+			"tooltip": "kuaishou/kat-coder-pro-v1",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "kuaishou/kat-coder-pro-v1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimax-minimax-m2",
+			"name": "minimax/minimax-m2",
+			"tooltip": "minimax/minimax-m2",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "minimax/minimax-m2",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-thinking",
+			"name": "moonshotai/kimi-k2-thinking",
+			"tooltip": "moonshotai/kimi-k2-thinking",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/kimi-k2-thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-thinking-turbo",
+			"name": "moonshotai/kimi-k2-thinking-turbo",
+			"tooltip": "moonshotai/kimi-k2-thinking-turbo",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/kimi-k2-thinking-turbo",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-max-preview",
+			"name": "qwen/qwen3-max-preview",
+			"tooltip": "qwen/qwen3-max-preview",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3-max-preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "baidu-ernie-5-0-thinking-preview",
+			"name": "baidu/ernie-5.0-thinking-preview",
+			"tooltip": "baidu/ernie-5.0-thinking-preview",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "baidu/ernie-5.0-thinking-preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5-1-codex",
+			"name": "openai/gpt-5.1-codex",
+			"tooltip": "openai/gpt-5.1-codex",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.1-codex",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-1-chat",
+			"name": "openai/gpt-5.1-chat",
+			"tooltip": "openai/gpt-5.1-chat",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.1-chat",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen3-14b",
+			"name": "qwen/qwen3-14b",
+			"tooltip": "qwen/qwen3-14b",
+			"maxInputTokens": 15616,
+			"maxOutputTokens": 16384,
+			"model": "qwen/qwen3-14b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5-1-codex-mini",
+			"name": "openai/gpt-5.1-codex-mini",
+			"tooltip": "openai/gpt-5.1-codex-mini",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.1-codex-mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-code",
+			"name": "volcengine/doubao-seed-code",
+			"tooltip": "volcengine/doubao-seed-code",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-code",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5-1",
+			"name": "openai/gpt-5.1",
+			"tooltip": "openai/gpt-5.1",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "x-ai-grok-4-1-fast",
+			"name": "x-ai/grok-4.1-fast",
+			"tooltip": "x-ai/grok-4.1-fast",
+			"maxInputTokens": 1967232,
+			"maxOutputTokens": 32768,
+			"model": "x-ai/grok-4.1-fast",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "x-ai-grok-4-1-fast-non-reasoning",
+			"name": "x-ai/grok-4.1-fast-non-reasoning",
+			"tooltip": "x-ai/grok-4.1-fast-non-reasoning",
+			"maxInputTokens": 1967232,
+			"maxOutputTokens": 32768,
+			"model": "x-ai/grok-4.1-fast-non-reasoning",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "google-gemini-3-pro-preview",
+			"name": "google/gemini-3-pro-preview",
+			"tooltip": "google/gemini-3-pro-preview",
+			"maxInputTokens": 934464,
+			"maxOutputTokens": 65536,
+			"model": "google/gemini-3-pro-preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-1-6-vision",
+			"name": "volcengine/doubao-seed-1-6-vision",
+			"tooltip": "volcengine/doubao-seed-1-6-vision",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-1-6-vision",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "google-gemma-3-12b-it",
+			"name": "google/gemma-3-12b-it",
+			"tooltip": "google/gemma-3-12b-it",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "google/gemma-3-12b-it",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "anthropic-claude-opus-4-5",
+			"name": "anthropic/claude-opus-4.5",
+			"tooltip": "anthropic/claude-opus-4.5",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-opus-4.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "deepseek-deepseek-v3-2-exp",
+			"name": "deepseek/deepseek-v3.2-exp",
+			"tooltip": "deepseek/deepseek-v3.2-exp",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek/deepseek-v3.2-exp",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-3-3-70b-instruct",
+			"name": "meta/llama-3.3-70b-instruct",
+			"tooltip": "meta/llama-3.3-70b-instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta/llama-3.3-70b-instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "mistralai-mistral-large-2512",
+			"name": "mistralai/mistral-large-2512",
+			"tooltip": "mistralai/mistral-large-2512",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "mistralai/mistral-large-2512",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-4-scout-17b-16e-instruct",
+			"name": "meta/llama-4-scout-17b-16e-instruct",
+			"tooltip": "meta/llama-4-scout-17b-16e-instruct",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "meta/llama-4-scout-17b-16e-instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "baidu-ernie-x1-1-preview",
+			"name": "baidu/ernie-x1.1-preview",
+			"tooltip": "baidu/ernie-x1.1-preview",
+			"maxInputTokens": 49152,
+			"maxOutputTokens": 16384,
+			"model": "baidu/ernie-x1.1-preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-6v-flash",
+			"name": "z-ai/glm-4.6v-flash",
+			"tooltip": "z-ai/glm-4.6v-flash",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.6v-flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-6v",
+			"name": "z-ai/glm-4.6v",
+			"tooltip": "z-ai/glm-4.6v",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.6v",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-deepseek-v3-2",
+			"name": "deepseek/deepseek-v3.2",
+			"tooltip": "deepseek/deepseek-v3.2",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek/deepseek-v3.2",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5-2-pro",
+			"name": "openai/gpt-5.2-pro",
+			"tooltip": "openai/gpt-5.2-pro",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.2-pro",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-2",
+			"name": "openai/gpt-5.2",
+			"tooltip": "openai/gpt-5.2",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.2",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "openai-gpt-5-2-chat",
+			"name": "openai/gpt-5.2-chat",
+			"tooltip": "openai/gpt-5.2-chat",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.2-chat",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "google-gemini-3-flash-preview",
+			"name": "google/gemini-3-flash-preview",
+			"tooltip": "google/gemini-3-flash-preview",
+			"maxInputTokens": 934464,
+			"maxOutputTokens": 65536,
+			"model": "google/gemini-3-flash-preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "stepfun-step-3",
+			"name": "stepfun/step-3",
+			"tooltip": "stepfun/step-3",
+			"maxInputTokens": 49152,
+			"maxOutputTokens": 16384,
+			"model": "stepfun/step-3",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-llada2-0-flash-cap",
+			"name": "inclusionai/llada2.0-flash-cap",
+			"tooltip": "inclusionai/llada2.0-flash-cap",
+			"maxInputTokens": 15616,
+			"maxOutputTokens": 16384,
+			"model": "inclusionai/llada2.0-flash-cap",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5-2-codex",
+			"name": "openai/gpt-5.2-codex",
+			"tooltip": "openai/gpt-5.2-codex",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.2-codex",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "xiaomi-mimo-v2-flash",
+			"name": "xiaomi/mimo-v2-flash",
+			"tooltip": "xiaomi/mimo-v2-flash",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "xiaomi/mimo-v2-flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-1-8",
+			"name": "volcengine/doubao-seed-1.8",
+			"tooltip": "volcengine/doubao-seed-1.8",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-1.8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimax-minimax-m2-1",
+			"name": "minimax/minimax-m2.1",
+			"tooltip": "minimax/minimax-m2.1",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "minimax/minimax-m2.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-7",
+			"name": "z-ai/glm-4.7",
+			"tooltip": "z-ai/glm-4.7",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.7",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-7-flash-free",
+			"name": "z-ai/glm-4.7-flash-free",
+			"tooltip": "z-ai/glm-4.7-flash-free",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.7-flash-free",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-4-7-flashx",
+			"name": "z-ai/glm-4.7-flashx",
+			"tooltip": "z-ai/glm-4.7-flashx",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-4.7-flashx",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimax-minimax-m2-her",
+			"name": "minimax/minimax-m2-her",
+			"tooltip": "minimax/minimax-m2-her",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "minimax/minimax-m2-her",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-5",
+			"name": "moonshotai/kimi-k2.5",
+			"tooltip": "moonshotai/kimi-k2.5",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/kimi-k2.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-opus-4-6",
+			"name": "anthropic/claude-opus-4.6",
+			"tooltip": "anthropic/claude-opus-4.6",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-opus-4.6",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "tencent-hunyuan-2-0-thinking",
+			"name": "tencent/hunyuan-2.0-thinking",
+			"tooltip": "tencent/hunyuan-2.0-thinking",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "tencent/hunyuan-2.0-thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-5-3-codex",
+			"name": "openai/gpt-5.3-codex",
+			"tooltip": "openai/gpt-5.3-codex",
+			"maxInputTokens": 344064,
+			"maxOutputTokens": 65536,
+			"model": "openai/gpt-5.3-codex",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "stepfun-step-3-5-flash-free",
+			"name": "stepfun/step-3.5-flash-free",
+			"tooltip": "stepfun/step-3.5-flash-free",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "stepfun/step-3.5-flash-free",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "stepfun-step-3-5-flash",
+			"name": "stepfun/step-3.5-flash",
+			"tooltip": "stepfun/step-3.5-flash",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "stepfun/step-3.5-flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "z-ai-glm-5",
+			"name": "z-ai/glm-5",
+			"tooltip": "z-ai/glm-5",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "z-ai/glm-5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "inclusionai-ming-flash-omni-2-0",
+			"name": "inclusionai/ming-flash-omni-2.0",
+			"tooltip": "inclusionai/ming-flash-omni-2.0",
+			"maxInputTokens": 57344,
+			"maxOutputTokens": 8192,
+			"model": "inclusionai/ming-flash-omni-2.0",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-2-0-mini",
+			"name": "volcengine/doubao-seed-2.0-mini",
+			"tooltip": "volcengine/doubao-seed-2.0-mini",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-2.0-mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimax-minimax-m2-5",
+			"name": "minimax/minimax-m2.5",
+			"tooltip": "minimax/minimax-m2.5",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "minimax/minimax-m2.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-2-0-code",
+			"name": "volcengine/doubao-seed-2.0-code",
+			"tooltip": "volcengine/doubao-seed-2.0-code",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-2.0-code",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimax-minimax-m2-5-lightning",
+			"name": "minimax/minimax-m2.5-lightning",
+			"tooltip": "minimax/minimax-m2.5-lightning",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "minimax/minimax-m2.5-lightning",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-2-0-pro",
+			"name": "volcengine/doubao-seed-2.0-pro",
+			"tooltip": "volcengine/doubao-seed-2.0-pro",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-2.0-pro",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "volcengine-doubao-seed-2-0-lite",
+			"name": "volcengine/doubao-seed-2.0-lite",
+			"tooltip": "volcengine/doubao-seed-2.0-lite",
+			"maxInputTokens": 223232,
+			"maxOutputTokens": 32768,
+			"model": "volcengine/doubao-seed-2.0-lite",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-5-plus",
+			"name": "qwen/qwen3.5-plus",
+			"tooltip": "qwen/qwen3.5-plus",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3.5-plus",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "google-gemini-3-1-pro-preview",
+			"name": "google/gemini-3.1-pro-preview",
+			"tooltip": "google/gemini-3.1-pro-preview",
+			"maxInputTokens": 934464,
+			"maxOutputTokens": 65536,
+			"model": "google/gemini-3.1-pro-preview",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "anthropic-claude-sonnet-4-6",
+			"name": "anthropic/claude-sonnet-4.6",
+			"tooltip": "anthropic/claude-sonnet-4.6",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "anthropic/claude-sonnet-4.6",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen3-5-flash",
+			"name": "qwen/qwen3.5-flash",
+			"tooltip": "qwen/qwen3.5-flash",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "qwen/qwen3.5-flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		}
+	],
+	"family": "Zenmux"
 }

@@ -5,17 +5,6 @@
 
 export { AnthropicHandler } from "../providers/anthropic/anthropicHandler";
 export {
-	AntigravityAuth,
-	antigravityLoginCommand,
-	doAntigravityLoginForNewAccount,
-} from "../providers/antigravity/auth";
-export {
-	AntigravityHandler,
-	extractToolCallFromGeminiResponse,
-	storeThoughtSignature,
-} from "../providers/antigravity/handler";
-export type { AntigravityModel } from "../providers/antigravity/types";
-export {
 	CodexAuth,
 	codexLoginCommand,
 	doCodexLoginForNewAccount,
@@ -30,16 +19,6 @@ export { ApiKeyManager } from "./apiKeyManager";
 export { CompatibleModelManager } from "./compatibleModelManager";
 export { CompletionLogger } from "./completionLogger";
 export { ConfigManager } from "./configManager";
-export {
-	balanceGeminiFunctionCallResponses,
-	convertMessagesToGemini,
-	sanitizeGeminiToolSchema,
-	validateGeminiPartsBalance,
-} from "./geminiSdkCommon";
-export {
-	GeminiStreamProcessor,
-	type GeminiStreamHandler,
-} from "./geminiStreamProcessor";
 export {
 	getDefaultMaxOutputTokensForContext,
 	isDeepSeekModel,
@@ -64,12 +43,12 @@ export {
 } from "./globalContextLengthManager";
 export { JsonSchemaProvider } from "./jsonSchemaProvider";
 export {
-	type RegisteredProvider,
+	getAllProviders,
+	getProvider,
 	KnownProviderConfig,
 	KnownProviders,
 	ProviderRegistry,
-	getAllProviders,
-	getProvider,
+	type RegisteredProvider,
 	registerProvidersFromConfig,
 } from "./knownProviders";
 export { Logger } from "./logger";

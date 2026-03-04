@@ -18,7 +18,7 @@ export interface AccountQuotaState {
 	accountId: string;
 	/** Account display name (for UI) */
 	accountName?: string;
-	/** Provider (antigravity, codex, etc.) */
+	/** Provider (codex, deepseek, etc.) */
 	provider: string;
 	/** Quota exceeded flag */
 	quotaExceeded: boolean;

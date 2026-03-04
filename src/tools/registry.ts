@@ -5,14 +5,12 @@
 
 import * as vscode from "vscode";
 import { Logger } from "../utils";
-import { GeminiSearchTool } from "./geminiSearch";
 import { MiniMaxSearchTool } from "./minimaxSearch";
 import { ZhipuSearchTool } from "./zhipuSearch";
 
 // Global tool instance management
 let zhipuSearchTool: ZhipuSearchTool | undefined;
 let minimaxSearchTool: MiniMaxSearchTool | undefined;
-let geminiSearchTool: GeminiSearchTool | undefined;
 
 /**
  * Register all tools
@@ -36,16 +34,6 @@ export function registerAllTools(context: vscode.ExtensionContext): void {
 		);
 		context.subscriptions.push(minimaxToolDisposable);
 
-		// Register Gemini CLI web search tool
-		geminiSearchTool = new GeminiSearchTool();
-		const geminiToolDisposable = vscode.lm.registerTool(
-			"chp_google_web_search",
-			{
-				invoke: geminiSearchTool.invoke.bind(geminiSearchTool),
-			},
-		);
-		context.subscriptions.push(geminiToolDisposable);
-
 		// Add cleanup logic to context
 		context.subscriptions.push({
 			dispose: async () => {
@@ -55,7 +43,6 @@ export function registerAllTools(context: vscode.ExtensionContext): void {
 
 		Logger.info("Zhipu AI web search tool registered: chp_zhipuWebSearch");
 		Logger.info("MiniMax web search tool registered: chp_minimaxWebSearch");
-		Logger.info("Gemini CLI web search tool registered: chp_google_web_search");
 	} catch (error) {
 		Logger.error(
 			"Tool registration failed",
@@ -80,12 +67,6 @@ export async function cleanupAllTools(): Promise<void> {
 			await minimaxSearchTool.cleanup();
 			minimaxSearchTool = undefined;
 			Logger.info("MiniMax web search tool resources cleaned up");
-		}
-
-		if (geminiSearchTool) {
-			await geminiSearchTool.cleanup();
-			geminiSearchTool = undefined;
-			Logger.info("Gemini CLI web search tool resources cleaned up");
 		}
 	} catch (error) {
 		Logger.error(

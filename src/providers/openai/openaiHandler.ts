@@ -778,7 +778,9 @@ export class OpenAIHandler {
 						// Process token usage statistics: only save to finalUsage, output uniformly at the end
 						if (chunk.usage) {
 							finalUsage = chunk.usage;
-							Logger.debug(`[${this.displayName}] Native usage from API: ${JSON.stringify(chunk.usage)}`);
+							Logger.debug(
+								`[${this.displayName}] Native usage from API: ${JSON.stringify(chunk.usage)}`,
+							);
 						}
 
 						// Process reasoning and tool call IDs from delta
@@ -798,10 +800,7 @@ export class OpenAIHandler {
 									for (const toolCall of delta.tool_calls) {
 										// Capturing the original ID from the provider is CRITICAL
 										// Some models require the exact ID to be sent back in the tool result
-										if (
-											toolCall.id &&
-											toolCall.index !== undefined
-										) {
+										if (toolCall.id && toolCall.index !== undefined) {
 											toolCallIds.set(toolCall.index, toolCall.id);
 											Logger.trace(
 												`${model.name} captured tool call ID: ${toolCall.id} at index ${toolCall.index}`,
@@ -1001,7 +1000,7 @@ export class OpenAIHandler {
 						totalTokens,
 						maxInputTokens: model.maxInputTokens,
 						maxOutputTokens: model.maxOutputTokens,
-						estimatedPromptTokens
+						estimatedPromptTokens,
 					});
 				}
 

@@ -1,7 +1,7 @@
 /**
  * ChatJimmy FIM Handler
  * Specialized handler for Fill-In-the-Middle completions using ChatJimmy API
- * 
+ *
  * ChatJimmy API endpoint: https://chatjimmy.ai/api/chat
  * Input format: {messages, chatOptions}
  * Output format: Streaming text responses with stats

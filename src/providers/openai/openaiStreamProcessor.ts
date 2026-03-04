@@ -1,17 +1,14 @@
 /*---------------------------------------------------------------------------------------------
  *  OpenAI Stream Processor
- *  Handles both OpenAI format and Antigravity (Gemini) format SSE stream processing.
- *  Based on gcli2api's convert_antigravity_stream_to_openai implementation.
+ *  Handles OpenAI format SSE stream processing.
  *
  *  This processor can handle:
  *  1. OpenAI format SSE (from OpenAI-compatible APIs)
- *  2. Antigravity/Gemini format SSE (from Antigravity API, converted to VS Code format)
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from "vscode";
 import type { ModelConfig } from "../../types/sharedTypes";
 import type {
-	GeminiResponse,
 	OpenAIStreamChunk,
 	OpenAIToolCallDelta,
 	ProcessStreamOptions,
@@ -49,7 +46,7 @@ export class OpenAIStreamProcessor {
 	private toolCallProgressReported = new Set<number>();
 	private lastToolCallProgressTime = 0;
 	private static readonly TOOL_CALL_PROGRESS_INTERVAL_MS = 300; // Report tool call progress frequently
-	// Stop reading the stream after reporting a Gemini tool call to avoid deadlocks
+	// Stop reading the stream after reporting a tool call to avoid deadlocks
 	private shouldStopAfterToolCall = false;
 
 	/**
@@ -95,7 +92,7 @@ export class OpenAIStreamProcessor {
 				// Process complete SSE lines
 				buffer = this.processSSELines(buffer, modelConfig, progress);
 
-				// If a Gemini tool call was reported, stop the stream to allow tool execution
+				// If a tool call was reported, stop the stream to allow tool execution
 				if (this.shouldStopAfterToolCall) {
 					await reader.cancel();
 					break;
@@ -165,7 +162,7 @@ export class OpenAIStreamProcessor {
 	}
 
 	/**
-	 * Process a single chunk - auto-detects OpenAI or Gemini format
+	 * Process a single chunk
 	 */
 	private processOpenAIChunk(
 		data: string,
@@ -177,20 +174,10 @@ export class OpenAIStreamProcessor {
 
 			// Detect format: OpenAI has 'choices', Gemini/Antigravity has 'response' or 'candidates'
 			// CRITICAL: Ensure choices is an array before processing to avoid "chunk.choices is not iterable" error
-			if (
-				Array.isArray(parsed.choices) &&
-				parsed.choices.length > 0
-			) {
+			if (Array.isArray(parsed.choices) && parsed.choices.length > 0) {
 				// OpenAI format
 				this.processOpenAIFormat(
 					parsed as OpenAIStreamChunk,
-					modelConfig,
-					progress,
-				);
-			} else if (parsed.response || parsed.candidates) {
-				// Gemini/Antigravity format
-				this.processGeminiFormat(
-					parsed as GeminiResponse,
 					modelConfig,
 					progress,
 				);
@@ -239,147 +226,6 @@ export class OpenAIStreamProcessor {
 
 				this.finalizeToolCalls(progress);
 			}
-		}
-	}
-
-	/**
-	 * Process Gemini/Antigravity format chunk (like gcli2api's convert_antigravity_stream_to_openai)
-	 */
-	private processGeminiFormat(
-		data: GeminiResponse,
-		modelConfig: ModelConfig,
-		progress: vscode.Progress<vscode.LanguageModelResponsePart2>,
-	): void {
-		// Extract candidates from response or directly
-		const response = data.response || data;
-		const candidates = response.candidates || [];
-
-		for (const candidate of candidates) {
-			const parts = candidate.content?.parts || [];
-
-			// Log what parts we received for debugging
-			const _partTypes = parts.map((p) => {
-				if (p.thought) {
-					return "thought";
-				}
-				if (p.text !== undefined) {
-					return "text";
-				}
-				if (p.functionCall) {
-					return "functionCall";
-				}
-				if (p.inlineData) {
-					return "inlineData";
-				}
-				return "unknown";
-			});
-
-			for (const part of parts) {
-				// Handle Gemini native thought flag
-				if (part.thought === true) {
-					if (modelConfig.outputThinking !== false && part.text) {
-						if (!this.currentThinkingId) {
-							this.currentThinkingId = this.generateThinkingId();
-						}
-						this.thinkingBuffer += part.text;
-						this.flushThinkingBuffer(progress);
-					}
-					continue;
-				}
-
-				// Handle text content - IMMEDIATELY flush to UI for realtime streaming
-				if (part.text !== undefined) {
-					this.processTextWithThinkingTags(part.text, modelConfig, progress);
-
-					// Force immediate flush - no buffering for realtime feel
-					this.flushTextBuffer(progress);
-					this.flushThinkingBuffer(progress);
-				}
-
-				// Handle function calls (tool calls)
-				if (part.functionCall) {
-					// CRITICAL: Flush all buffers before handling tool calls
-					// This ensures no text is held back in thinkingTagBuffer
-					this.flushThinkingTagBufferForToolCall();
-					this.flushTextBuffer(progress);
-					this.flushThinkingBuffer(progress);
-
-					this.handleGeminiFunctionCall(part.functionCall, progress);
-				}
-
-				// Handle inline data (images)
-				if (part.inlineData) {
-					const mimeType = part.inlineData.mimeType || "image/png";
-					const base64Data = part.inlineData.data || "";
-					const imageMarkdown = `\n\n![Generated Image](data:${mimeType};base64,${base64Data})\n\n`;
-					this.textBuffer += imageMarkdown;
-					this.flushTextBuffer(progress);
-				}
-			}
-
-			// Check finish reason
-			if (candidate.finishReason) {
-				// CRITICAL: Flush all buffers before finalizing
-				if (this.thinkingTagBuffer.length > 0) {
-					this.textBuffer += this.thinkingTagBuffer;
-					this.thinkingTagBuffer = "";
-				}
-				this.flushTextBuffer(progress);
-				this.flushThinkingBuffer(progress);
-
-				this.finalizeToolCalls(progress);
-			}
-		}
-	}
-
-	/**
-	 * Handle Gemini function call (convert to VS Code tool call)
-	 */
-	private handleGeminiFunctionCall(
-		functionCall: {
-			id?: string;
-			name?: string;
-			args?: Record<string, unknown>;
-		},
-		progress: vscode.Progress<vscode.LanguageModelResponsePart2>,
-	): void {
-		const callId =
-			functionCall.id || `tool_call_${this.toolCallCounter++}_${Date.now()}`;
-		const name = functionCall.name || "";
-
-		if (!name) {
-			return;
-		}
-
-		const dedupeKey = `${callId}:${name}`;
-		if (this.seenToolCalls.has(dedupeKey)) {
-			return;
-		}
-		this.seenToolCalls.add(dedupeKey);
-
-		// CRITICAL: Flush any pending thinkingTagBuffer before tool calls
-		this.flushThinkingTagBufferForToolCall();
-
-		// Flush buffers before reporting tool call to ensure UI stays responsive
-		this.flushTextBuffer(progress);
-		this.flushThinkingBuffer(progress);
-
-		// Remove null values from args
-		const args = this.removeNullsFromArgs(functionCall.args || {});
-
-		try {
-			const toolCallPart = new vscode.LanguageModelToolCallPart(
-				callId,
-				name,
-				args,
-			);
-			progress.report(toolCallPart);
-
-			// Report activity after tool call to keep UI responsive
-			this.lastActivityReportTime = Date.now();
-			this.shouldStopAfterToolCall = true;
-		} catch (_error) {
-			// Ignore error
 		}
 	}
 

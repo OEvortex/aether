@@ -21,7 +21,7 @@ export interface Account {
 	id: string;
 	/** Account display name */
 	displayName: string;
-	/** Linked provider (zhipu, moonshot, minimax, compatible, antigravity, codex, etc.) */
+	/** Linked provider (zhipu, moonshot, minimax, compatible, codex, etc.) */
 	provider: string;
 	/** Authentication type */
 	authType: AuthType;

@@ -51,19 +51,11 @@ export class AccountManager {
 			},
 		],
 		[
-			ProviderKey.Antigravity,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: true,
-				supportsApiKey: false,
-			},
-		],
-		[
 			ProviderKey.Blackbox,
 			{
 				supportsMultiAccount: true,
 				supportsOAuth: false,
-				supportsApiKey: false,
+				supportsApiKey: true,
 			},
 		],
 		[
@@ -112,14 +104,6 @@ export class AccountManager {
 				supportsMultiAccount: true,
 				supportsOAuth: false,
 				supportsApiKey: true,
-			},
-		],
-		[
-			ProviderKey.GeminiCli,
-			{
-				supportsMultiAccount: true,
-				supportsOAuth: true,
-				supportsApiKey: false,
 			},
 		],
 		[
@@ -818,9 +802,7 @@ export class AccountManager {
 	 * Default load balance state for provider
 	 */
 	private getDefaultLoadBalanceEnabled(provider: string): boolean {
-		return !!(
-			provider === ProviderKey.Antigravity || provider === ProviderKey.Codex
-		);
+		return !!(provider === ProviderKey.Codex);
 	}
 
 	/**

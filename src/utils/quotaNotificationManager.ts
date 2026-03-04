@@ -41,7 +41,7 @@ export class QuotaNotificationManager {
 
 		const modelLabel = modelName ? ` (${modelName})` : "";
 		const accountLabel = accountName ? ` [${accountName}]` : "";
-		const _message = `Copilot ++ Antigravity quota limit reached${modelLabel}${accountLabel}. Retry in ${this.formatCountdown(delayMs)}.`;
+		const _message = `Copilot ++ quota limit reached${modelLabel}${accountLabel}. Retry in ${this.formatCountdown(delayMs)}.`;
 		// void vscode.window.showWarningMessage(message); // Disabled notification
 	}
 
@@ -60,7 +60,7 @@ export class QuotaNotificationManager {
 
 		const modelLabel = modelName ? ` (${modelName})` : "";
 		const accountLabel = accountName ? ` [${accountName}]` : "";
-		const message = `Antigravity quota exceeded${modelLabel}${accountLabel}. Retry in ${this.formatCountdown(delayMs)}.`;
+		const message = `Quota exceeded${modelLabel}${accountLabel}. Retry in ${this.formatCountdown(delayMs)}.`;
 
 		const selection = await vscode.window.showWarningMessage(
 			message,
@@ -70,7 +70,7 @@ export class QuotaNotificationManager {
 		);
 
 		if (selection === "Add Account") {
-			await vscode.commands.executeCommand("chp.antigravity.login");
+			await vscode.commands.executeCommand("chp.accounts.add");
 		} else if (selection === "Open Settings") {
 			await vscode.commands.executeCommand("chp.openSettings");
 		}
@@ -118,7 +118,7 @@ export class QuotaNotificationManager {
 		const accountLabel = this.quotaCountdownAccountName
 			? ` [${this.quotaCountdownAccountName}]`
 			: "";
-		const _message = `Copilot ++ Antigravity limited${modelLabel}${accountLabel}: ${this.formatCountdown(remaining)}`;
+		const _message = `Copilot ++ limited${modelLabel}${accountLabel}: ${this.formatCountdown(remaining)}`;
 
 		const nextDelay = this.getCountdownUpdateInterval(remaining);
 		this.quotaCountdownTimer = setTimeout(
@@ -144,8 +144,6 @@ export class QuotaNotificationManager {
 		this.quotaCountdownAccountId = undefined;
 		this.quotaCountdownAccountName = undefined;
 	}
-
-
 
 	/**
 	 * Format countdown in milliseconds to human-readable string

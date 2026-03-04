@@ -34,9 +34,10 @@ export class ZhipuWizard {
 
 			// Get current plan
 			const currentPlan = ConfigManager.getZhipuPlan();
-			const planLabel = currentPlan === "coding"
-				? "Coding Plan (/api/coding/paas/v4)"
-				: "Normal (/api/paas/v4)";
+			const planLabel =
+				currentPlan === "coding"
+					? "Coding Plan (/api/coding/paas/v4)"
+					: "Normal (/api/paas/v4)";
 
 			const choice = await vscode.window.showQuickPick(
 				[
@@ -62,7 +63,8 @@ export class ZhipuWizard {
 					{
 						label: "$(code) Set Plan Type",
 						description: `Current: ${planLabel}`,
-						detail: "Coding Plan: /api/coding/paas/v4 (GLM Coding Plan), Normal: /api/paas/v4 (standard billing)",
+						detail:
+							"Coding Plan: /api/coding/paas/v4 (GLM Coding Plan), Normal: /api/paas/v4 (standard billing)",
 						action: "plan",
 					},
 					{
@@ -308,20 +310,20 @@ export class ZhipuWizard {
 	 */
 	static async setPlan(displayName: string): Promise<void> {
 		const currentPlan = ConfigManager.getZhipuPlan();
-		const planLabel = currentPlan === "coding"
-			? "Coding Plan"
-			: "Normal";
+		const planLabel = currentPlan === "coding" ? "Coding Plan" : "Normal";
 
 		const choice = await vscode.window.showQuickPick(
 			[
 				{
 					label: "$(code) Coding Plan",
-					detail: "Use /api/coding/paas/v4 endpoint - for GLM Coding Plan subscribers",
+					detail:
+						"Use /api/coding/paas/v4 endpoint - for GLM Coding Plan subscribers",
 					value: "coding",
 				},
 				{
 					label: "$(globe) Normal",
-					detail: "Use /api/paas/v4 endpoint - for standard billing (pay-per-use)",
+					detail:
+						"Use /api/paas/v4 endpoint - for standard billing (pay-per-use)",
 					value: "normal",
 				},
 			],
@@ -408,12 +410,14 @@ export class ZhipuWizard {
 				[
 					{
 						label: "$(sparkle) Clear previous reasoning blocks",
-						detail: "clear_thinking=true (recommended). Prior reasoning_content is removed from next-turn context.",
+						detail:
+							"clear_thinking=true (recommended). Prior reasoning_content is removed from next-turn context.",
 						value: true,
 					},
 					{
 						label: "$(history) Preserve previous reasoning blocks",
-						detail: "clear_thinking=false. Keep prior reasoning_content in context (requires full ordered history).",
+						detail:
+							"clear_thinking=false. Keep prior reasoning_content in context (requires full ordered history).",
 						value: false,
 					},
 				],
@@ -431,7 +435,9 @@ export class ZhipuWizard {
 				);
 			}
 
-			Logger.info(`ZhipuAI thinking set to ${choice.value}, clearThinking: ${clearChoice?.value ?? currentClearThinking}`);
+			Logger.info(
+				`ZhipuAI thinking set to ${choice.value}, clearThinking: ${clearChoice?.value ?? currentClearThinking}`,
+			);
 			vscode.window.showInformationMessage(
 				`ZhipuAI thinking mode: ${choice.value}`,
 			);

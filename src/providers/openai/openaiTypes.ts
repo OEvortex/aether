@@ -39,42 +39,6 @@ export interface OpenAIStreamChunk {
 	choices: OpenAIStreamChoice[];
 }
 
-// Antigravity/Gemini format types
-export interface GeminiPart {
-	text?: string;
-	thought?: boolean;
-	thoughtSignature?: string;
-	functionCall?: {
-		id?: string;
-		name?: string;
-		args?: Record<string, unknown>;
-	};
-	inlineData?: {
-		mimeType?: string;
-		data?: string;
-	};
-}
-
-export interface GeminiCandidate {
-	content?: {
-		parts?: GeminiPart[];
-		role?: string;
-	};
-	finishReason?: string;
-}
-
-export interface GeminiResponse {
-	response?: {
-		candidates?: GeminiCandidate[];
-		usageMetadata?: {
-			promptTokenCount?: number;
-			candidatesTokenCount?: number;
-			totalTokenCount?: number;
-		};
-	};
-	candidates?: GeminiCandidate[];
-}
-
 /**
  * Extend Delta type to support reasoning and reasoning_content fields
  * Note: Some providers use 'reasoning', others use 'reasoning_content'

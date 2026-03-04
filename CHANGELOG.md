@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.8] - 2026-03-04
+
+### Removed
+
+- **Gemini CLI and Antigravity Providers**: Removed both providers as they were leading to account banning.
+- **Gemini SDK Utilities**: Completely removed Gemini SDK-related code, including `GeminiStreamProcessor`, `GeminiSdkCommon`, and `GeminiSearchTool`.
+
 ## [0.2.7] - 2026-03-03
 
 ### Added

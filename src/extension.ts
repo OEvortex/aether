@@ -1,22 +1,17 @@
 import * as vscode from "vscode";
-import { AccountManager,
+import {
+	AccountManager,
 	AccountQuotaCache,
 	AccountSyncAdapter,
 	registerAccountCommands,
 } from "./accounts";
 import { InlineCompletionShim } from "./copilot/inlineCompletionShim";
-import { AntigravityProvider } from "./providers/antigravity/provider";
 import { CodexProvider } from "./providers/codex/codexProvider";
 import { CompatibleProvider } from "./providers/compatible/compatibleProvider";
+import { LeaderElectionService, StatusBarManager } from "./status";
 import { registerAllTools } from "./tools";
 import { ProviderKey } from "./types/providerKeys";
-import {
-	registerSettingsPageCommand,
-} from "./ui";
-import {
-	registerProvidersFromConfig,
-	type RegisteredProvider,
-} from "./utils/knownProviders";
+import { registerSettingsPageCommand } from "./ui";
 import {
 	ApiKeyManager,
 	CompletionLogger,
@@ -27,7 +22,10 @@ import {
 	TokenCounter,
 } from "./utils";
 import { CompatibleModelManager } from "./utils/compatibleModelManager";
-import { StatusBarManager, LeaderElectionService } from "./status";
+import {
+	type RegisteredProvider,
+	registerProvidersFromConfig,
+} from "./utils/knownProviders";
 
 /**
  * Global variables - Store registered provider instances for cleanup on extension uninstall
@@ -56,11 +54,11 @@ async function activateProviders(
 	// Set extension path (for tokenizer initialization)
 	TokenCounter.setExtensionPath(context.extensionPath);
 
-	// Register all providers using the registry (excludes Codex and Antigravity which are registered separately)
+	// Register all providers using the registry (excludes Codex which is registered separately)
 	const result = await registerProvidersFromConfig(
 		context,
 		configProvider,
-		[ProviderKey.Codex, ProviderKey.Antigravity], // Exclude Codex and Antigravity - registered separately with specialized provider
+		[ProviderKey.Codex], // Exclude Codex - registered separately with specialized provider
 	);
 
 	// Store registered providers and disposables
@@ -94,7 +92,6 @@ async function activateCompatibleProvider(
 	} catch (error) {
 		Logger.error("Failed to register compatible provider:", error);
 	}
-
 }
 
 /**
@@ -175,58 +172,6 @@ export async function activate(context: vscode.ExtensionContext) {
 			.syncAllAccounts()
 			.catch((err) => Logger.warn("Account sync failed:", err));
 
-		// Listen to account changes and update AntigravityQuotaWatcher config
-		const accountManager = AccountManager.getInstance();
-
-		const updateAntigravityConfig = async () => {
-			const activeAccount = accountManager.getActiveAccount(
-				ProviderKey.Antigravity,
-			);
-			if (!activeAccount) {
-				return;
-			}
-
-			const credentials = await accountManager.getCredentials(activeAccount.id);
-			if (!credentials) {
-				return;
-			}
-
-			// Extract token from credentials (supports both accessToken and apiKey formats)
-			const token =
-				(credentials as { accessToken?: string; apiKey?: string })
-					.accessToken ??
-				(credentials as { accessToken?: string; apiKey?: string }).apiKey;
-
-			if (token) {
-				const config = vscode.workspace.getConfiguration(
-					"antigravityQuotaWatcher",
-				);
-				if (config.get("apiKey") !== token) {
-					await config.update(
-						"apiKey",
-						token,
-						vscode.ConfigurationTarget.Global,
-					);
-				}
-			}
-		};
-
-		// Initial update
-		updateAntigravityConfig();
-
-		context.subscriptions.push(
-			accountManager.onAccountChange(async (event) => {
-				if (
-					event.provider === ProviderKey.Antigravity &&
-					(event.type === "switched" ||
-						event.type === "updated" ||
-						event.type === "added")
-				) {
-					await updateAntigravityConfig();
-				}
-			}),
-		);
-
 		Logger.trace(
 			`⏱️ Multi-account manager initialization complete (time: ${Date.now() - stepStartTime}ms)`,
 		);
@@ -277,15 +222,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		stepStartTime = Date.now();
 		registerAllTools(context);
 		Logger.trace(`⏱️ Tools registered (time: ${Date.now() - stepStartTime}ms)`);
-
-		// Step 4.1: Activate Antigravity Provider
-		stepStartTime = Date.now();
-		const antigravityResult = AntigravityProvider.createAndActivate(context);
-		registeredProviders[ProviderKey.Antigravity] = antigravityResult.provider;
-		registeredDisposables.push(...antigravityResult.disposables);
-		Logger.trace(
-			`⏱️ Antigravity Provider registered (time: ${Date.now() - stepStartTime}ms)`,
-		);
 
 		// Step 4.2: Activate Codex Provider (OpenAI GPT-5)
 		stepStartTime = Date.now();

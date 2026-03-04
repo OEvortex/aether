@@ -45,7 +45,7 @@ export interface CompatibleModelConfig {
 	/** Maximum output tokens */
 	maxOutputTokens: number;
 	/** SDK mode */
-	sdkMode?: "anthropic" | "openai" | "gemini";
+	sdkMode?: "anthropic" | "openai";
 	/** Model capabilities */
 	capabilities: {
 		/** Tool calling */
@@ -427,7 +427,8 @@ export class CompatibleModelManager {
 			const { configProviders } = await import("../providers/config/index.js");
 			const builtinProviderKeys = Object.keys(configProviders);
 			const knownProviderKeys = Object.keys(KnownProviders);
-			const modelProviderKeys = await CompatibleModelManager.getUniqueProviders();
+			const modelProviderKeys =
+				await CompatibleModelManager.getUniqueProviders();
 
 			const allProviderKeys = [
 				...new Set([
@@ -438,9 +439,7 @@ export class CompatibleModelManager {
 			].sort();
 
 			if (allProviderKeys.length === 0) {
-				vscode.window.showWarningMessage(
-					"No providers available",
-				);
+				vscode.window.showWarningMessage("No providers available");
 				return;
 			}
 
@@ -571,7 +570,7 @@ export class CompatibleModelManager {
 			for (const model of CompatibleModelManager.models) {
 				const details: string[] = [
 					`$(arrow-up) ${model.maxInputTokens} $(arrow-down) ${model.maxOutputTokens}`,
-					`$(chip) ${model.sdkMode === "openai" ? "OpenAI" : model.sdkMode === "gemini" ? "Gemini" : "Anthropic"}`,
+					`$(chip) ${model.sdkMode === "openai" ? "OpenAI" : "Anthropic"}`,
 				];
 				if (model.capabilities.toolCalling) {
 					details.push("$(plug) Tool calling");
@@ -692,7 +691,7 @@ export class CompatibleModelManager {
 			(model) => ({
 				label: model.name,
 				description: model.id,
-				detail: `$(chip) ${model.sdkMode === "openai" ? "OpenAI" : model.sdkMode === "gemini" ? "Gemini" : "Anthropic"} | Provider: ${model.provider || "compatible"}`,
+				detail: `$(chip) ${model.sdkMode === "openai" ? "OpenAI" : "Anthropic"} | Provider: ${model.provider || "compatible"}`,
 				modelId: model.id,
 			}),
 		);

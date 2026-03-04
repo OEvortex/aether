@@ -421,16 +421,21 @@ export class ConfigManager {
 			{},
 		);
 		const settingsOverrides: UserConfigOverrides = {};
-		const mergedProviderKeys = Object.keys(buildConfigProvider(configProviders));
+		const mergedProviderKeys = Object.keys(
+			buildConfigProvider(configProviders),
+		);
 
 		for (const providerKey of mergedProviderKeys) {
 			const baseUrl = config.get<string>(`${providerKey}.baseUrl`, "").trim();
 			const sdkMode = config.get<string>(`${providerKey}.sdkMode`, "").trim();
-			
+
 			if (baseUrl || sdkMode) {
 				settingsOverrides[providerKey] = {};
 				if (baseUrl) settingsOverrides[providerKey].baseUrl = baseUrl;
-				if (sdkMode) settingsOverrides[providerKey].sdkMode = sdkMode as "openai" | "anthropic";
+				if (sdkMode)
+					settingsOverrides[providerKey].sdkMode = sdkMode as
+						| "openai"
+						| "anthropic";
 			}
 		}
 

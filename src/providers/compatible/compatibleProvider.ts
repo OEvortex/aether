@@ -244,11 +244,7 @@ export class CompatibleProvider extends GenericModelProvider {
 			let modelInfos = currentConfig.models.map((model) => {
 				const info = this.modelConfigToInfo(model);
 				const sdkModeDisplay =
-					model.sdkMode === "anthropic"
-						? "Anthropic"
-						: model.sdkMode === "gemini"
-							? "Gemini"
-							: "OpenAI";
+					model.sdkMode === "anthropic" ? "Anthropic" : "OpenAI";
 
 				if (model.provider) {
 					const knownProvider = KnownProviders[model.provider];
@@ -321,11 +317,7 @@ export class CompatibleProvider extends GenericModelProvider {
 				const models = currentConfig.models.map((model) => {
 					const info = this.modelConfigToInfo(model);
 					const sdkModeDisplay =
-						model.sdkMode === "anthropic"
-							? "Anthropic"
-							: model.sdkMode === "gemini"
-								? "Gemini"
-								: "OpenAI";
+						model.sdkMode === "anthropic" ? "Anthropic" : "OpenAI";
 
 					if (model.provider) {
 						const knownProvider = KnownProviders[model.provider];
@@ -415,12 +407,7 @@ export class CompatibleProvider extends GenericModelProvider {
 
 			// Select handler based on model's sdkMode
 			const sdkMode = modelConfig.sdkMode || "openai";
-			let sdkName = "OpenAI SDK";
-			if (sdkMode === "anthropic") {
-				sdkName = "Anthropic SDK";
-			} else if (sdkMode === "gemini") {
-				sdkName = "Gemini SDK";
-			}
+			const sdkName = sdkMode === "anthropic" ? "Anthropic SDK" : "OpenAI SDK";
 
 			Logger.info(
 				`Compatible Provider starts processing request (${sdkName}): ${modelConfig.name}`,

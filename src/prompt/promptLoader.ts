@@ -4,10 +4,10 @@
  *  Uses raw imports to bundle prompts directly into the extension.
  *--------------------------------------------------------------------------------------------*/
 
-import gpt52Prompt from "./gpt_5_2_prompt.txt?raw";
-import codexInstructions from "./gpt_5_codex_instructions.txt?raw";
 import codexDefaultInstructions from "./codex_default_instructions.txt?raw";
 import codexVscodeToolsInstructions from "./codex_vscode_tools_instructions.txt?raw";
+import gpt52Prompt from "./gpt_5_2_prompt.txt?raw";
+import codexInstructions from "./gpt_5_codex_instructions.txt?raw";
 
 /**
  * Load GPT 5.2 instructions

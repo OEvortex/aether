@@ -63,7 +63,6 @@ import {
 	resolveGlobalTokenLimits,
 } from "../../utils";
 
-
 /**
  * Zhipu AI Dedicated Model Provider Class
  * Dynamically fetches models from Zhipu API
@@ -200,10 +199,14 @@ export class ZhipuProvider
 		const normalizedCapabilities = resolveGlobalCapabilities(modelId);
 
 		// Use resolveGlobalTokenLimits which handles all GLM models correctly
-		const tokens = resolveGlobalTokenLimits(modelId, ZHIPU_DEFAULT_CONTEXT_LENGTH, {
-			defaultContextLength: ZHIPU_DEFAULT_CONTEXT_LENGTH,
-			defaultMaxOutputTokens: ZHIPU_DEFAULT_MAX_OUTPUT_TOKENS,
-		});
+		const tokens = resolveGlobalTokenLimits(
+			modelId,
+			ZHIPU_DEFAULT_CONTEXT_LENGTH,
+			{
+				defaultContextLength: ZHIPU_DEFAULT_CONTEXT_LENGTH,
+				defaultMaxOutputTokens: ZHIPU_DEFAULT_MAX_OUTPUT_TOKENS,
+			},
+		);
 
 		// Build display name based on model
 		let displayName = modelId;
@@ -439,7 +442,9 @@ export class ZhipuProvider
 			this.providerConfig.displayName,
 		);
 
-		const modelConfig = this.providerConfig.models.find((m) => m.id === model.id);
+		const modelConfig = this.providerConfig.models.find(
+			(m) => m.id === model.id,
+		);
 		if (modelConfig) {
 			modelConfig.sdkMode = "openai";
 			modelConfig.baseUrl = modelConfig.baseUrl || this.getBaseUrl();

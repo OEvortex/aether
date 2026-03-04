@@ -190,7 +190,11 @@ export class TokenCounter {
 			return this.getTextTokenLength(this.stringifyUnknown(part.value));
 		}
 
-		if (typeof part === "string" || typeof part === "number" || typeof part === "boolean") {
+		if (
+			typeof part === "string" ||
+			typeof part === "number" ||
+			typeof part === "boolean"
+		) {
 			return this.getTextTokenLength(String(part));
 		}
 
@@ -219,7 +223,9 @@ export class TokenCounter {
 			return numTokens;
 		}
 
-		numTokens += this.getTextTokenLength(this.stringifyUnknown(message.content));
+		numTokens += this.getTextTokenLength(
+			this.stringifyUnknown(message.content),
+		);
 		return numTokens;
 	}
 
@@ -353,8 +359,8 @@ export class TokenCounter {
 
 		const sdkMode = modelConfig?.sdkMode || "openai";
 
-		if (sdkMode === "anthropic" || sdkMode === "gemini") {
-			// Add system message and tool token costs for Anthropic/Gemini SDK modes
+		if (sdkMode === "anthropic") {
+			// Add system message and tool token costs for Anthropic SDK mode
 			// Calculate system message token cost
 			const systemMessageTokens = this.countSystemMessageTokens(messages);
 			if (systemMessageTokens > 0) {

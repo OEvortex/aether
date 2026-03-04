@@ -1,5 +1,4 @@
 import type { ProviderConfig } from "../../types/sharedTypes";
-import antigravity from "./antigravity.json";
 import aihubmix from "./aihubmix.json";
 import blackbox from "./blackbox.json";
 import chatjimmy from "./chatjimmy.json";
@@ -7,7 +6,6 @@ import chutes from "./chutes.json";
 import codex from "./codex.json";
 import deepinfra from "./deepinfra.json";
 import deepseek from "./deepseek.json";
-import geminicli from "./geminicli.json";
 import huggingface from "./huggingface.json";
 import kilo from "./kilo.json";
 import lightningai from "./lightningai.json";
@@ -17,8 +15,8 @@ import modelscope from "./modelscope.json";
 import moonshot from "./moonshot.json";
 import nanogpt from "./nanogpt.json";
 import nvidia from "./nvidia.json";
-import opencode from "./opencode.json";
 import ollama from "./ollama.json";
+import opencode from "./opencode.json";
 import qwencli from "./qwencli.json";
 import zenmux from "./zenmux.json";
 // Export all model configurations uniformly for easy import
@@ -32,14 +30,12 @@ const providers = {
 	deepseek,
 	codex,
 	nvidia,
-	antigravity,
 	aihubmix,
 	chatjimmy,
 	chutes,
 	opencode,
 	ollama,
 	qwencli,
-	geminicli,
 	huggingface,
 	kilo,
 	lightningai,

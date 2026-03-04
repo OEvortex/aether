@@ -177,7 +177,7 @@ export class Fetcher implements IFetcher {
 					...(options.headers || {}),
 					"Content-Type": "application/json",
 					"User-Agent": getUserAgent(),
-					"Authorization": `Bearer ${apiKey}`,
+					Authorization: `Bearer ${apiKey}`,
 				};
 			} else {
 				// ChatJimmy public API - no authentication required
@@ -195,8 +195,8 @@ export class Fetcher implements IFetcher {
 				// Convert FIM request format to ChatJimmy format
 				// FIM request has: {prompt: "<prefix><suffix>"}
 				// ChatJimmy expects: {messages: [{role, content}], chatOptions: {selectedModel, systemPrompt, topK}}
-				const fimContent = requestBody.prompt as string || "";
-				
+				const fimContent = (requestBody.prompt as string) || "";
+
 				finalRequestBody = {
 					messages: [
 						{
@@ -313,7 +313,10 @@ export class Fetcher implements IFetcher {
 					bodyConsumed = true;
 					cachedText = await response.text();
 					const cleanedText = this.stripChatJimmyStats(cachedText);
-					const ssePayload = this.buildChatJimmyCompletionSse(cleanedText, model);
+					const ssePayload = this.buildChatJimmyCompletionSse(
+						cleanedText,
+						model,
+					);
 					return Readable.from([ssePayload]);
 				}
 

@@ -1,1508 +1,1508 @@
 {
-    "displayName": "Hugging Face",
-    "baseUrl": "https://router.huggingface.co/v1",
-    "apiKeyTemplate": "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": [
-        {
-            "id": "qwen-qwen3-5-35b-a3b",
-            "name": "Qwen/Qwen3.5-35B-A3B",
-            "tooltip": "Qwen/Qwen3.5-35B-A3B",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3.5-35B-A3B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen3-5-27b",
-            "name": "Qwen/Qwen3.5-27B",
-            "tooltip": "Qwen/Qwen3.5-27B",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3.5-27B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen3-5-122b-a10b",
-            "name": "Qwen/Qwen3.5-122B-A10B",
-            "tooltip": "Qwen/Qwen3.5-122B-A10B",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3.5-122B-A10B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "qwen-qwen3-5-397b-a17b",
-            "name": "Qwen/Qwen3.5-397B-A17B",
-            "tooltip": "Qwen/Qwen3.5-397B-A17B",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "Qwen/Qwen3.5-397B-A17B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "zai-org-glm-5",
-            "name": "zai-org/GLM-5",
-            "tooltip": "zai-org/GLM-5",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimaxai-minimax-m2-5",
-            "name": "MiniMaxAI/MiniMax-M2.5",
-            "tooltip": "MiniMaxAI/MiniMax-M2.5",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "MiniMaxAI/MiniMax-M2.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-5",
-            "name": "moonshotai/Kimi-K2.5",
-            "tooltip": "moonshotai/Kimi-K2.5",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/Kimi-K2.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1",
-            "name": "deepseek-ai/DeepSeek-R1",
-            "tooltip": "deepseek-ai/DeepSeek-R1",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-next",
-            "name": "Qwen/Qwen3-Coder-Next",
-            "tooltip": "Qwen/Qwen3-Coder-Next",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Coder-Next",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-tiny-aya-global",
-            "name": "CohereLabs/tiny-aya-global",
-            "tooltip": "CohereLabs/tiny-aya-global",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/tiny-aya-global",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-3-1-8b-instruct",
-            "name": "meta-llama/Llama-3.1-8B-Instruct",
-            "tooltip": "meta-llama/Llama-3.1-8B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-3.1-8B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-oss-20b",
-            "name": "openai/gpt-oss-20b",
-            "tooltip": "openai/gpt-oss-20b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-oss-20b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-8b-instruct",
-            "name": "Qwen/Qwen3-VL-8B-Instruct",
-            "tooltip": "Qwen/Qwen3-VL-8B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-VL-8B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-oss-120b",
-            "name": "openai/gpt-oss-120b",
-            "tooltip": "openai/gpt-oss-120b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-oss-120b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-7-flash",
-            "name": "zai-org/GLM-4.7-Flash",
-            "tooltip": "zai-org/GLM-4.7-Flash",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.7-Flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-2",
-            "name": "deepseek-ai/DeepSeek-V3.2",
-            "tooltip": "deepseek-ai/DeepSeek-V3.2",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-3-2-3b-instruct",
-            "name": "meta-llama/Llama-3.2-3B-Instruct",
-            "tooltip": "meta-llama/Llama-3.2-3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-3.2-3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-7b-instruct",
-            "name": "Qwen/Qwen2.5-7B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-7B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-7B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-4b-instruct-2507",
-            "name": "Qwen/Qwen3-4B-Instruct-2507",
-            "tooltip": "Qwen/Qwen3-4B-Instruct-2507",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-4B-Instruct-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-8b",
-            "name": "Qwen/Qwen3-8B",
-            "tooltip": "Qwen/Qwen3-8B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-8B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-30b-a3b-instruct",
-            "name": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
-            "tooltip": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-next-fp8",
-            "name": "Qwen/Qwen3-Coder-Next-FP8",
-            "tooltip": "Qwen/Qwen3-Coder-Next-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Coder-Next-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-3-2-1b-instruct",
-            "name": "meta-llama/Llama-3.2-1B-Instruct",
-            "tooltip": "meta-llama/Llama-3.2-1B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-3.2-1B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-7",
-            "name": "zai-org/GLM-4.7",
-            "tooltip": "zai-org/GLM-4.7",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.7",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-30b-a3b-instruct",
-            "name": "Qwen/Qwen3-VL-30B-A3B-Instruct",
-            "tooltip": "Qwen/Qwen3-VL-30B-A3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-VL-30B-A3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "google-gemma-3-27b-it",
-            "name": "google/gemma-3-27b-it",
-            "tooltip": "google/gemma-3-27b-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "google/gemma-3-27b-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-distill-qwen-7b",
-            "name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-            "tooltip": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-3-3-70b-instruct",
-            "name": "meta-llama/Llama-3.3-70B-Instruct",
-            "tooltip": "meta-llama/Llama-3.3-70B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-3.3-70B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-thinking",
-            "name": "moonshotai/Kimi-K2-Thinking",
-            "tooltip": "moonshotai/Kimi-K2-Thinking",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/Kimi-K2-Thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-14b",
-            "name": "Qwen/Qwen3-14B",
-            "tooltip": "Qwen/Qwen3-14B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-14B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-instruct-0905",
-            "name": "moonshotai/Kimi-K2-Instruct-0905",
-            "tooltip": "moonshotai/Kimi-K2-Instruct-0905",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/Kimi-K2-Instruct-0905",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "xiaomimimo-mimo-v2-flash",
-            "name": "XiaomiMiMo/MiMo-V2-Flash",
-            "tooltip": "XiaomiMiMo/MiMo-V2-Flash",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "XiaomiMiMo/MiMo-V2-Flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-next-80b-a3b-instruct",
-            "name": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimaxai-minimax-m2-1",
-            "name": "MiniMaxAI/MiniMax-M2.1",
-            "tooltip": "MiniMaxAI/MiniMax-M2.1",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "MiniMaxAI/MiniMax-M2.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-distill-llama-70b",
-            "name": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-            "tooltip": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-distill-qwen-32b",
-            "name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-            "tooltip": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-meta-llama-3-8b-instruct",
-            "name": "meta-llama/Meta-Llama-3-8B-Instruct",
-            "tooltip": "meta-llama/Meta-Llama-3-8B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Meta-Llama-3-8B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-vl-7b-instruct",
-            "name": "Qwen/Qwen2.5-VL-7B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-VL-7B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-VL-7B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-4b-thinking-2507",
-            "name": "Qwen/Qwen3-4B-Thinking-2507",
-            "tooltip": "Qwen/Qwen3-4B-Thinking-2507",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-4B-Thinking-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "google-gemma-3n-e4b-it",
-            "name": "google/gemma-3n-E4B-it",
-            "tooltip": "google/gemma-3n-E4B-it",
-            "maxInputTokens": 114688,
-            "maxOutputTokens": 16384,
-            "model": "google/gemma-3n-E4B-it",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-4-scout-17b-16e-instruct",
-            "name": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-            "tooltip": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-tiny-aya-earth",
-            "name": "CohereLabs/tiny-aya-earth",
-            "tooltip": "CohereLabs/tiny-aya-earth",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/tiny-aya-earth",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-coder-7b-instruct",
-            "name": "Qwen/Qwen2.5-Coder-7B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-Coder-7B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "servicenow-ai-apriel-1-6-15b-thinker",
-            "name": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
-            "tooltip": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-guard-4-12b",
-            "name": "meta-llama/Llama-Guard-4-12B",
-            "tooltip": "meta-llama/Llama-Guard-4-12B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-Guard-4-12B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-32b",
-            "name": "Qwen/Qwen3-32B",
-            "tooltip": "Qwen/Qwen3-32B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-32B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-72b-instruct",
-            "name": "Qwen/Qwen2.5-72B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-72B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-72B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-480b-a35b-instruct",
-            "name": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-            "tooltip": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-tiny-aya-fire",
-            "name": "CohereLabs/tiny-aya-fire",
-            "tooltip": "CohereLabs/tiny-aya-fire",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/tiny-aya-fire",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-distill-qwen-1-5b",
-            "name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-            "tooltip": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6v-flash",
-            "name": "zai-org/GLM-4.6V-Flash",
-            "tooltip": "zai-org/GLM-4.6V-Flash",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6V-Flash",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-30b-a3b",
-            "name": "Qwen/Qwen3-30B-A3B",
-            "tooltip": "Qwen/Qwen3-30B-A3B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-30B-A3B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-distill-llama-8b",
-            "name": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-            "tooltip": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-2-exp",
-            "name": "deepseek-ai/DeepSeek-V3.2-Exp",
-            "tooltip": "deepseek-ai/DeepSeek-V3.2-Exp",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.2-Exp",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwq-32b",
-            "name": "Qwen/QwQ-32B",
-            "tooltip": "Qwen/QwQ-32B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/QwQ-32B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimaxai-minimax-m2",
-            "name": "MiniMaxAI/MiniMax-M2",
-            "tooltip": "MiniMaxAI/MiniMax-M2",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "MiniMaxAI/MiniMax-M2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "katanemo-arch-router-1-5b",
-            "name": "katanemo/Arch-Router-1.5B",
-            "tooltip": "katanemo/Arch-Router-1.5B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "katanemo/Arch-Router-1.5B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-next-80b-a3b-thinking",
-            "name": "Qwen/Qwen3-Next-80B-A3B-Thinking",
-            "tooltip": "Qwen/Qwen3-Next-80B-A3B-Thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Next-80B-A3B-Thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "swiss-ai-apertus-8b-instruct-2509",
-            "name": "swiss-ai/Apertus-8B-Instruct-2509",
-            "tooltip": "swiss-ai/Apertus-8B-Instruct-2509",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "swiss-ai/Apertus-8B-Instruct-2509",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-coder-32b-instruct",
-            "name": "Qwen/Qwen2.5-Coder-32B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-Coder-32B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-Coder-32B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-4-maverick-17b-128e-instruct",
-            "name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
-            "tooltip": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-vl-72b-instruct",
-            "name": "Qwen/Qwen2.5-VL-72B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-VL-72B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-VL-72B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5-air",
-            "name": "zai-org/GLM-4.5-Air",
-            "tooltip": "zai-org/GLM-4.5-Air",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5-Air",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-tiny-aya-water",
-            "name": "CohereLabs/tiny-aya-water",
-            "tooltip": "CohereLabs/tiny-aya-water",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/tiny-aya-water",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3",
-            "name": "deepseek-ai/DeepSeek-V3",
-            "tooltip": "deepseek-ai/DeepSeek-V3",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "openai-gpt-oss-safeguard-20b",
-            "name": "openai/gpt-oss-safeguard-20b",
-            "tooltip": "openai/gpt-oss-safeguard-20b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "openai/gpt-oss-safeguard-20b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-3-1-70b-instruct",
-            "name": "meta-llama/Llama-3.1-70B-Instruct",
-            "tooltip": "meta-llama/Llama-3.1-70B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-3.1-70B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-235b-a22b-instruct",
-            "name": "Qwen/Qwen3-VL-235B-A22B-Instruct",
-            "tooltip": "Qwen/Qwen3-VL-235B-A22B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "allenai-molmo2-8b",
-            "name": "allenai/Molmo2-8B",
-            "tooltip": "allenai/Molmo2-8B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "allenai/Molmo2-8B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-235b-a22b-thinking",
-            "name": "Qwen/Qwen3-VL-235B-A22B-Thinking",
-            "tooltip": "Qwen/Qwen3-VL-235B-A22B-Thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-VL-235B-A22B-Thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "sao10k-l3-8b-stheno-v3-2",
-            "name": "Sao10K/L3-8B-Stheno-v3.2",
-            "tooltip": "Sao10K/L3-8B-Stheno-v3.2",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Sao10K/L3-8B-Stheno-v3.2",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-r1-0528",
-            "name": "deepseek-ai/DeepSeek-R1-0528",
-            "tooltip": "deepseek-ai/DeepSeek-R1-0528",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-R1-0528",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-instruct-2507",
-            "name": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-            "tooltip": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-4-5-vl-424b-a47b-base-pt",
-            "name": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
-            "tooltip": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-prover-v2-671b",
-            "name": "deepseek-ai/DeepSeek-Prover-V2-671B",
-            "tooltip": "deepseek-ai/DeepSeek-Prover-V2-671B",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-Prover-V2-671B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "aisingapore-qwen-sea-lion-v4-32b-it",
-            "name": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
-            "tooltip": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-llama-4-maverick-17b-128e-instruct-fp8",
-            "name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "tooltip": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-autoglm-phone-9b-multilingual",
-            "name": "zai-org/AutoGLM-Phone-9B-Multilingual",
-            "tooltip": "zai-org/AutoGLM-Phone-9B-Multilingual",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "zai-org/AutoGLM-Phone-9B-Multilingual",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-1-terminus",
-            "name": "deepseek-ai/DeepSeek-V3.1-Terminus",
-            "tooltip": "deepseek-ai/DeepSeek-V3.1-Terminus",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.1-Terminus",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "allenai-olmo-3-1-32b-think",
-            "name": "allenai/Olmo-3.1-32B-Think",
-            "tooltip": "allenai/Olmo-3.1-32B-Think",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "allenai/Olmo-3.1-32B-Think",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5v",
-            "name": "zai-org/GLM-4.5V",
-            "tooltip": "zai-org/GLM-4.5V",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5V",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-7-fp8",
-            "name": "zai-org/GLM-4.7-FP8",
-            "tooltip": "zai-org/GLM-4.7-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.7-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-aya-vision-32b",
-            "name": "CohereLabs/aya-vision-32b",
-            "tooltip": "CohereLabs/aya-vision-32b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/aya-vision-32b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "allenai-olmo-3-1-32b-instruct",
-            "name": "allenai/Olmo-3.1-32B-Instruct",
-            "tooltip": "allenai/Olmo-3.1-32B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "allenai/Olmo-3.1-32B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6v",
-            "name": "zai-org/GLM-4.6V",
-            "tooltip": "zai-org/GLM-4.6V",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6V",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-command-a-reasoning-08-2025",
-            "name": "CohereLabs/command-a-reasoning-08-2025",
-            "tooltip": "CohereLabs/command-a-reasoning-08-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/command-a-reasoning-08-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-0324",
-            "name": "deepseek-ai/DeepSeek-V3-0324",
-            "tooltip": "deepseek-ai/DeepSeek-V3-0324",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3-0324",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6v-fp8",
-            "name": "zai-org/GLM-4.6V-FP8",
-            "tooltip": "zai-org/GLM-4.6V-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6V-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-command-a-translate-08-2025",
-            "name": "CohereLabs/command-a-translate-08-2025",
-            "tooltip": "CohereLabs/command-a-translate-08-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/command-a-translate-08-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "arcee-ai-trinity-mini",
-            "name": "arcee-ai/Trinity-Mini",
-            "tooltip": "arcee-ai/Trinity-Mini",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "arcee-ai/Trinity-Mini",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "essentialai-rnj-1-instruct",
-            "name": "EssentialAI/rnj-1-instruct",
-            "tooltip": "EssentialAI/rnj-1-instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "EssentialAI/rnj-1-instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-4-5-vl-28b-a3b-pt",
-            "name": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
-            "tooltip": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-c4ai-command-r-08-2024",
-            "name": "CohereLabs/c4ai-command-r-08-2024",
-            "tooltip": "CohereLabs/c4ai-command-r-08-2024",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/c4ai-command-r-08-2024",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6-fp8",
-            "name": "zai-org/GLM-4.6-FP8",
-            "tooltip": "zai-org/GLM-4.6-FP8",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "moonshotai-kimi-k2-instruct",
-            "name": "moonshotai/Kimi-K2-Instruct",
-            "tooltip": "moonshotai/Kimi-K2-Instruct",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "moonshotai/Kimi-K2-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-vl-30b-a3b-thinking",
-            "name": "Qwen/Qwen3-VL-30B-A3B-Thinking",
-            "tooltip": "Qwen/Qwen3-VL-30B-A3B-Thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-VL-30B-A3B-Thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-aya-expanse-32b",
-            "name": "CohereLabs/aya-expanse-32b",
-            "tooltip": "CohereLabs/aya-expanse-32b",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/aya-expanse-32b",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-6",
-            "name": "zai-org/GLM-4.6",
-            "tooltip": "zai-org/GLM-4.6",
-            "maxInputTokens": 229376,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.6",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5-air-fp8",
-            "name": "zai-org/GLM-4.5-Air-FP8",
-            "tooltip": "zai-org/GLM-4.5-Air-FP8",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5-Air-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5v-fp8",
-            "name": "zai-org/GLM-4.5V-FP8",
-            "tooltip": "zai-org/GLM-4.5V-FP8",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5V-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-c4ai-command-r7b-12-2024",
-            "name": "CohereLabs/c4ai-command-r7b-12-2024",
-            "tooltip": "CohereLabs/c4ai-command-r7b-12-2024",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/c4ai-command-r7b-12-2024",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "tokyotech-llm-llama-3-3-swallow-70b-instruct-v0-4",
-            "name": "tokyotech-llm/Llama-3.3-Swallow-70B-Instruct-v0.4",
-            "tooltip": "tokyotech-llm/Llama-3.3-Swallow-70B-Instruct-v0.4",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "tokyotech-llm/Llama-3.3-Swallow-70B-Instruct-v0.4",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-coder-480b-a35b-instruct-fp8",
-            "name": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-            "tooltip": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "aisingapore-gemma-sea-lion-v4-27b-it",
-            "name": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
-            "tooltip": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepseek-ai-deepseek-v3-1",
-            "name": "deepseek-ai/DeepSeek-V3.1",
-            "tooltip": "deepseek-ai/DeepSeek-V3.1",
-            "maxInputTokens": 147456,
-            "maxOutputTokens": 16384,
-            "model": "deepseek-ai/DeepSeek-V3.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-c4ai-command-r7b-arabic-02-2025",
-            "name": "CohereLabs/c4ai-command-r7b-arabic-02-2025",
-            "tooltip": "CohereLabs/c4ai-command-r7b-arabic-02-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/c4ai-command-r7b-arabic-02-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepcogito-cogito-671b-v2-1",
-            "name": "deepcogito/cogito-671b-v2.1",
-            "tooltip": "deepcogito/cogito-671b-v2.1",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "deepcogito/cogito-671b-v2.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "swiss-ai-apertus-70b-instruct-2509",
-            "name": "swiss-ai/Apertus-70B-Instruct-2509",
-            "tooltip": "swiss-ai/Apertus-70B-Instruct-2509",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "swiss-ai/Apertus-70B-Instruct-2509",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-c4ai-command-a-03-2025",
-            "name": "CohereLabs/c4ai-command-a-03-2025",
-            "tooltip": "CohereLabs/c4ai-command-a-03-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/c4ai-command-a-03-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "deepcogito-cogito-671b-v2-1-fp8",
-            "name": "deepcogito/cogito-671b-v2.1-FP8",
-            "tooltip": "deepcogito/cogito-671b-v2.1-FP8",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "deepcogito/cogito-671b-v2.1-FP8",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "dicta-il-dictalm-3-0-24b-thinking",
-            "name": "dicta-il/DictaLM-3.0-24B-Thinking",
-            "tooltip": "dicta-il/DictaLM-3.0-24B-Thinking",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "dicta-il/DictaLM-3.0-24B-Thinking",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "alpindale-wizardlm-2-8x22b",
-            "name": "alpindale/WizardLM-2-8x22B",
-            "tooltip": "alpindale/WizardLM-2-8x22B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "alpindale/WizardLM-2-8x22B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen2-5-coder-3b-instruct",
-            "name": "Qwen/Qwen2.5-Coder-3B-Instruct",
-            "tooltip": "Qwen/Qwen2.5-Coder-3B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen2.5-Coder-3B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "coherelabs-command-a-vision-07-2025",
-            "name": "CohereLabs/command-a-vision-07-2025",
-            "tooltip": "CohereLabs/command-a-vision-07-2025",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "CohereLabs/command-a-vision-07-2025",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "meta-llama-meta-llama-3-70b-instruct",
-            "name": "meta-llama/Meta-Llama-3-70B-Instruct",
-            "tooltip": "meta-llama/Meta-Llama-3-70B-Instruct",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "meta-llama/Meta-Llama-3-70B-Instruct",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b",
-            "name": "Qwen/Qwen3-235B-A22B",
-            "tooltip": "Qwen/Qwen3-235B-A22B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-235B-A22B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "nousresearch-hermes-2-pro-llama-3-8b",
-            "name": "NousResearch/Hermes-2-Pro-Llama-3-8B",
-            "tooltip": "NousResearch/Hermes-2-Pro-Llama-3-8B",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "NousResearch/Hermes-2-Pro-Llama-3-8B",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "sao10k-l3-70b-euryale-v2-1",
-            "name": "Sao10K/L3-70B-Euryale-v2.1",
-            "tooltip": "Sao10K/L3-70B-Euryale-v2.1",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Sao10K/L3-70B-Euryale-v2.1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "sao10k-l3-8b-lunaris-v1",
-            "name": "Sao10K/L3-8B-Lunaris-v1",
-            "tooltip": "Sao10K/L3-8B-Lunaris-v1",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Sao10K/L3-8B-Lunaris-v1",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-32b-0414",
-            "name": "zai-org/GLM-4-32B-0414",
-            "tooltip": "zai-org/GLM-4-32B-0414",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "zai-org/GLM-4-32B-0414",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "minimaxai-minimax-m1-80k",
-            "name": "MiniMaxAI/MiniMax-M1-80k",
-            "tooltip": "MiniMaxAI/MiniMax-M1-80k",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "MiniMaxAI/MiniMax-M1-80k",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-4-5-300b-a47b-base-pt",
-            "name": "baidu/ERNIE-4.5-300B-A47B-Base-PT",
-            "tooltip": "baidu/ERNIE-4.5-300B-A47B-Base-PT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ERNIE-4.5-300B-A47B-Base-PT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "baidu-ernie-4-5-21b-a3b-pt",
-            "name": "baidu/ERNIE-4.5-21B-A3B-PT",
-            "tooltip": "baidu/ERNIE-4.5-21B-A3B-PT",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "baidu/ERNIE-4.5-21B-A3B-PT",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "zai-org-glm-4-5",
-            "name": "zai-org/GLM-4.5",
-            "tooltip": "zai-org/GLM-4.5",
-            "maxInputTokens": 98304,
-            "maxOutputTokens": 32768,
-            "model": "zai-org/GLM-4.5",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        },
-        {
-            "id": "qwen-qwen3-235b-a22b-thinking-2507",
-            "name": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-            "tooltip": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-            "maxInputTokens": 111616,
-            "maxOutputTokens": 16384,
-            "model": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            }
-        }
-    ],
-    "family": "Hugging Face"
+	"displayName": "Hugging Face",
+	"baseUrl": "https://router.huggingface.co/v1",
+	"apiKeyTemplate": "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+	"models": [
+		{
+			"id": "qwen-qwen3-5-35b-a3b",
+			"name": "Qwen/Qwen3.5-35B-A3B",
+			"tooltip": "Qwen/Qwen3.5-35B-A3B",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3.5-35B-A3B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen3-5-27b",
+			"name": "Qwen/Qwen3.5-27B",
+			"tooltip": "Qwen/Qwen3.5-27B",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3.5-27B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen3-5-122b-a10b",
+			"name": "Qwen/Qwen3.5-122B-A10B",
+			"tooltip": "Qwen/Qwen3.5-122B-A10B",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3.5-122B-A10B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "qwen-qwen3-5-397b-a17b",
+			"name": "Qwen/Qwen3.5-397B-A17B",
+			"tooltip": "Qwen/Qwen3.5-397B-A17B",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "Qwen/Qwen3.5-397B-A17B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "zai-org-glm-5",
+			"name": "zai-org/GLM-5",
+			"tooltip": "zai-org/GLM-5",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimaxai-minimax-m2-5",
+			"name": "MiniMaxAI/MiniMax-M2.5",
+			"tooltip": "MiniMaxAI/MiniMax-M2.5",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "MiniMaxAI/MiniMax-M2.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-5",
+			"name": "moonshotai/Kimi-K2.5",
+			"tooltip": "moonshotai/Kimi-K2.5",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/Kimi-K2.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": true
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1",
+			"name": "deepseek-ai/DeepSeek-R1",
+			"tooltip": "deepseek-ai/DeepSeek-R1",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-next",
+			"name": "Qwen/Qwen3-Coder-Next",
+			"tooltip": "Qwen/Qwen3-Coder-Next",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Coder-Next",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-tiny-aya-global",
+			"name": "CohereLabs/tiny-aya-global",
+			"tooltip": "CohereLabs/tiny-aya-global",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/tiny-aya-global",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-3-1-8b-instruct",
+			"name": "meta-llama/Llama-3.1-8B-Instruct",
+			"tooltip": "meta-llama/Llama-3.1-8B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-3.1-8B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-oss-20b",
+			"name": "openai/gpt-oss-20b",
+			"tooltip": "openai/gpt-oss-20b",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-oss-20b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-8b-instruct",
+			"name": "Qwen/Qwen3-VL-8B-Instruct",
+			"tooltip": "Qwen/Qwen3-VL-8B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-VL-8B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-oss-120b",
+			"name": "openai/gpt-oss-120b",
+			"tooltip": "openai/gpt-oss-120b",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-oss-120b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-7-flash",
+			"name": "zai-org/GLM-4.7-Flash",
+			"tooltip": "zai-org/GLM-4.7-Flash",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.7-Flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-2",
+			"name": "deepseek-ai/DeepSeek-V3.2",
+			"tooltip": "deepseek-ai/DeepSeek-V3.2",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.2",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-3-2-3b-instruct",
+			"name": "meta-llama/Llama-3.2-3B-Instruct",
+			"tooltip": "meta-llama/Llama-3.2-3B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-3.2-3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-7b-instruct",
+			"name": "Qwen/Qwen2.5-7B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-7B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-7B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-4b-instruct-2507",
+			"name": "Qwen/Qwen3-4B-Instruct-2507",
+			"tooltip": "Qwen/Qwen3-4B-Instruct-2507",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-4B-Instruct-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-8b",
+			"name": "Qwen/Qwen3-8B",
+			"tooltip": "Qwen/Qwen3-8B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-8B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-30b-a3b-instruct",
+			"name": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+			"tooltip": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-next-fp8",
+			"name": "Qwen/Qwen3-Coder-Next-FP8",
+			"tooltip": "Qwen/Qwen3-Coder-Next-FP8",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Coder-Next-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-3-2-1b-instruct",
+			"name": "meta-llama/Llama-3.2-1B-Instruct",
+			"tooltip": "meta-llama/Llama-3.2-1B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-3.2-1B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-7",
+			"name": "zai-org/GLM-4.7",
+			"tooltip": "zai-org/GLM-4.7",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.7",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-30b-a3b-instruct",
+			"name": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+			"tooltip": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "google-gemma-3-27b-it",
+			"name": "google/gemma-3-27b-it",
+			"tooltip": "google/gemma-3-27b-it",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "google/gemma-3-27b-it",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-distill-qwen-7b",
+			"name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+			"tooltip": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-3-3-70b-instruct",
+			"name": "meta-llama/Llama-3.3-70B-Instruct",
+			"tooltip": "meta-llama/Llama-3.3-70B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-3.3-70B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-thinking",
+			"name": "moonshotai/Kimi-K2-Thinking",
+			"tooltip": "moonshotai/Kimi-K2-Thinking",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/Kimi-K2-Thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-14b",
+			"name": "Qwen/Qwen3-14B",
+			"tooltip": "Qwen/Qwen3-14B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-14B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-instruct-0905",
+			"name": "moonshotai/Kimi-K2-Instruct-0905",
+			"tooltip": "moonshotai/Kimi-K2-Instruct-0905",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/Kimi-K2-Instruct-0905",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "xiaomimimo-mimo-v2-flash",
+			"name": "XiaomiMiMo/MiMo-V2-Flash",
+			"tooltip": "XiaomiMiMo/MiMo-V2-Flash",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "XiaomiMiMo/MiMo-V2-Flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-next-80b-a3b-instruct",
+			"name": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+			"tooltip": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimaxai-minimax-m2-1",
+			"name": "MiniMaxAI/MiniMax-M2.1",
+			"tooltip": "MiniMaxAI/MiniMax-M2.1",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "MiniMaxAI/MiniMax-M2.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-distill-llama-70b",
+			"name": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+			"tooltip": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-distill-qwen-32b",
+			"name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+			"tooltip": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-meta-llama-3-8b-instruct",
+			"name": "meta-llama/Meta-Llama-3-8B-Instruct",
+			"tooltip": "meta-llama/Meta-Llama-3-8B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Meta-Llama-3-8B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-vl-7b-instruct",
+			"name": "Qwen/Qwen2.5-VL-7B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-VL-7B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-VL-7B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-4b-thinking-2507",
+			"name": "Qwen/Qwen3-4B-Thinking-2507",
+			"tooltip": "Qwen/Qwen3-4B-Thinking-2507",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-4B-Thinking-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "google-gemma-3n-e4b-it",
+			"name": "google/gemma-3n-E4B-it",
+			"tooltip": "google/gemma-3n-E4B-it",
+			"maxInputTokens": 114688,
+			"maxOutputTokens": 16384,
+			"model": "google/gemma-3n-E4B-it",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-4-scout-17b-16e-instruct",
+			"name": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+			"tooltip": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-tiny-aya-earth",
+			"name": "CohereLabs/tiny-aya-earth",
+			"tooltip": "CohereLabs/tiny-aya-earth",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/tiny-aya-earth",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-coder-7b-instruct",
+			"name": "Qwen/Qwen2.5-Coder-7B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-Coder-7B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "servicenow-ai-apriel-1-6-15b-thinker",
+			"name": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+			"tooltip": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "ServiceNow-AI/Apriel-1.6-15b-Thinker",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-guard-4-12b",
+			"name": "meta-llama/Llama-Guard-4-12B",
+			"tooltip": "meta-llama/Llama-Guard-4-12B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-Guard-4-12B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-32b",
+			"name": "Qwen/Qwen3-32B",
+			"tooltip": "Qwen/Qwen3-32B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-32B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-72b-instruct",
+			"name": "Qwen/Qwen2.5-72B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-72B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-72B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-480b-a35b-instruct",
+			"name": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+			"tooltip": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-tiny-aya-fire",
+			"name": "CohereLabs/tiny-aya-fire",
+			"tooltip": "CohereLabs/tiny-aya-fire",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/tiny-aya-fire",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-distill-qwen-1-5b",
+			"name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+			"tooltip": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6v-flash",
+			"name": "zai-org/GLM-4.6V-Flash",
+			"tooltip": "zai-org/GLM-4.6V-Flash",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6V-Flash",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-30b-a3b",
+			"name": "Qwen/Qwen3-30B-A3B",
+			"tooltip": "Qwen/Qwen3-30B-A3B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-30B-A3B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-distill-llama-8b",
+			"name": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+			"tooltip": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-2-exp",
+			"name": "deepseek-ai/DeepSeek-V3.2-Exp",
+			"tooltip": "deepseek-ai/DeepSeek-V3.2-Exp",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.2-Exp",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwq-32b",
+			"name": "Qwen/QwQ-32B",
+			"tooltip": "Qwen/QwQ-32B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/QwQ-32B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimaxai-minimax-m2",
+			"name": "MiniMaxAI/MiniMax-M2",
+			"tooltip": "MiniMaxAI/MiniMax-M2",
+			"maxInputTokens": 172032,
+			"maxOutputTokens": 32768,
+			"model": "MiniMaxAI/MiniMax-M2",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "katanemo-arch-router-1-5b",
+			"name": "katanemo/Arch-Router-1.5B",
+			"tooltip": "katanemo/Arch-Router-1.5B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "katanemo/Arch-Router-1.5B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-next-80b-a3b-thinking",
+			"name": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+			"tooltip": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "swiss-ai-apertus-8b-instruct-2509",
+			"name": "swiss-ai/Apertus-8B-Instruct-2509",
+			"tooltip": "swiss-ai/Apertus-8B-Instruct-2509",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "swiss-ai/Apertus-8B-Instruct-2509",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-coder-32b-instruct",
+			"name": "Qwen/Qwen2.5-Coder-32B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-Coder-32B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-Coder-32B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-4-maverick-17b-128e-instruct",
+			"name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
+			"tooltip": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-vl-72b-instruct",
+			"name": "Qwen/Qwen2.5-VL-72B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-VL-72B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-VL-72B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-5-air",
+			"name": "zai-org/GLM-4.5-Air",
+			"tooltip": "zai-org/GLM-4.5-Air",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.5-Air",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-tiny-aya-water",
+			"name": "CohereLabs/tiny-aya-water",
+			"tooltip": "CohereLabs/tiny-aya-water",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/tiny-aya-water",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3",
+			"name": "deepseek-ai/DeepSeek-V3",
+			"tooltip": "deepseek-ai/DeepSeek-V3",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "openai-gpt-oss-safeguard-20b",
+			"name": "openai/gpt-oss-safeguard-20b",
+			"tooltip": "openai/gpt-oss-safeguard-20b",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "openai/gpt-oss-safeguard-20b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-3-1-70b-instruct",
+			"name": "meta-llama/Llama-3.1-70B-Instruct",
+			"tooltip": "meta-llama/Llama-3.1-70B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-3.1-70B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-235b-a22b-instruct",
+			"name": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+			"tooltip": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "allenai-molmo2-8b",
+			"name": "allenai/Molmo2-8B",
+			"tooltip": "allenai/Molmo2-8B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "allenai/Molmo2-8B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-235b-a22b-thinking",
+			"name": "Qwen/Qwen3-VL-235B-A22B-Thinking",
+			"tooltip": "Qwen/Qwen3-VL-235B-A22B-Thinking",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-VL-235B-A22B-Thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "sao10k-l3-8b-stheno-v3-2",
+			"name": "Sao10K/L3-8B-Stheno-v3.2",
+			"tooltip": "Sao10K/L3-8B-Stheno-v3.2",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Sao10K/L3-8B-Stheno-v3.2",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-r1-0528",
+			"name": "deepseek-ai/DeepSeek-R1-0528",
+			"tooltip": "deepseek-ai/DeepSeek-R1-0528",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-R1-0528",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b-instruct-2507",
+			"name": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+			"tooltip": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "baidu-ernie-4-5-vl-424b-a47b-base-pt",
+			"name": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
+			"tooltip": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "baidu/ERNIE-4.5-VL-424B-A47B-Base-PT",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-prover-v2-671b",
+			"name": "deepseek-ai/DeepSeek-Prover-V2-671B",
+			"tooltip": "deepseek-ai/DeepSeek-Prover-V2-671B",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-Prover-V2-671B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "aisingapore-qwen-sea-lion-v4-32b-it",
+			"name": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
+			"tooltip": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "aisingapore/Qwen-SEA-LION-v4-32B-IT",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-llama-4-maverick-17b-128e-instruct-fp8",
+			"name": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+			"tooltip": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-autoglm-phone-9b-multilingual",
+			"name": "zai-org/AutoGLM-Phone-9B-Multilingual",
+			"tooltip": "zai-org/AutoGLM-Phone-9B-Multilingual",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "zai-org/AutoGLM-Phone-9B-Multilingual",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-1-terminus",
+			"name": "deepseek-ai/DeepSeek-V3.1-Terminus",
+			"tooltip": "deepseek-ai/DeepSeek-V3.1-Terminus",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.1-Terminus",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "allenai-olmo-3-1-32b-think",
+			"name": "allenai/Olmo-3.1-32B-Think",
+			"tooltip": "allenai/Olmo-3.1-32B-Think",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "allenai/Olmo-3.1-32B-Think",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-5v",
+			"name": "zai-org/GLM-4.5V",
+			"tooltip": "zai-org/GLM-4.5V",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.5V",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-7-fp8",
+			"name": "zai-org/GLM-4.7-FP8",
+			"tooltip": "zai-org/GLM-4.7-FP8",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.7-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-aya-vision-32b",
+			"name": "CohereLabs/aya-vision-32b",
+			"tooltip": "CohereLabs/aya-vision-32b",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/aya-vision-32b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "allenai-olmo-3-1-32b-instruct",
+			"name": "allenai/Olmo-3.1-32B-Instruct",
+			"tooltip": "allenai/Olmo-3.1-32B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "allenai/Olmo-3.1-32B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6v",
+			"name": "zai-org/GLM-4.6V",
+			"tooltip": "zai-org/GLM-4.6V",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6V",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-command-a-reasoning-08-2025",
+			"name": "CohereLabs/command-a-reasoning-08-2025",
+			"tooltip": "CohereLabs/command-a-reasoning-08-2025",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/command-a-reasoning-08-2025",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-0324",
+			"name": "deepseek-ai/DeepSeek-V3-0324",
+			"tooltip": "deepseek-ai/DeepSeek-V3-0324",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3-0324",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6v-fp8",
+			"name": "zai-org/GLM-4.6V-FP8",
+			"tooltip": "zai-org/GLM-4.6V-FP8",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6V-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-command-a-translate-08-2025",
+			"name": "CohereLabs/command-a-translate-08-2025",
+			"tooltip": "CohereLabs/command-a-translate-08-2025",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/command-a-translate-08-2025",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "arcee-ai-trinity-mini",
+			"name": "arcee-ai/Trinity-Mini",
+			"tooltip": "arcee-ai/Trinity-Mini",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "arcee-ai/Trinity-Mini",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "essentialai-rnj-1-instruct",
+			"name": "EssentialAI/rnj-1-instruct",
+			"tooltip": "EssentialAI/rnj-1-instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "EssentialAI/rnj-1-instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "baidu-ernie-4-5-vl-28b-a3b-pt",
+			"name": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
+			"tooltip": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "baidu/ERNIE-4.5-VL-28B-A3B-PT",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-c4ai-command-r-08-2024",
+			"name": "CohereLabs/c4ai-command-r-08-2024",
+			"tooltip": "CohereLabs/c4ai-command-r-08-2024",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/c4ai-command-r-08-2024",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6-fp8",
+			"name": "zai-org/GLM-4.6-FP8",
+			"tooltip": "zai-org/GLM-4.6-FP8",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "moonshotai-kimi-k2-instruct",
+			"name": "moonshotai/Kimi-K2-Instruct",
+			"tooltip": "moonshotai/Kimi-K2-Instruct",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "moonshotai/Kimi-K2-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-vl-30b-a3b-thinking",
+			"name": "Qwen/Qwen3-VL-30B-A3B-Thinking",
+			"tooltip": "Qwen/Qwen3-VL-30B-A3B-Thinking",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-VL-30B-A3B-Thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-aya-expanse-32b",
+			"name": "CohereLabs/aya-expanse-32b",
+			"tooltip": "CohereLabs/aya-expanse-32b",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/aya-expanse-32b",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-6",
+			"name": "zai-org/GLM-4.6",
+			"tooltip": "zai-org/GLM-4.6",
+			"maxInputTokens": 229376,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.6",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-5-air-fp8",
+			"name": "zai-org/GLM-4.5-Air-FP8",
+			"tooltip": "zai-org/GLM-4.5-Air-FP8",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.5-Air-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-5v-fp8",
+			"name": "zai-org/GLM-4.5V-FP8",
+			"tooltip": "zai-org/GLM-4.5V-FP8",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.5V-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-c4ai-command-r7b-12-2024",
+			"name": "CohereLabs/c4ai-command-r7b-12-2024",
+			"tooltip": "CohereLabs/c4ai-command-r7b-12-2024",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/c4ai-command-r7b-12-2024",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "tokyotech-llm-llama-3-3-swallow-70b-instruct-v0-4",
+			"name": "tokyotech-llm/Llama-3.3-Swallow-70B-Instruct-v0.4",
+			"tooltip": "tokyotech-llm/Llama-3.3-Swallow-70B-Instruct-v0.4",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "tokyotech-llm/Llama-3.3-Swallow-70B-Instruct-v0.4",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-coder-480b-a35b-instruct-fp8",
+			"name": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+			"tooltip": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "aisingapore-gemma-sea-lion-v4-27b-it",
+			"name": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+			"tooltip": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepseek-ai-deepseek-v3-1",
+			"name": "deepseek-ai/DeepSeek-V3.1",
+			"tooltip": "deepseek-ai/DeepSeek-V3.1",
+			"maxInputTokens": 147456,
+			"maxOutputTokens": 16384,
+			"model": "deepseek-ai/DeepSeek-V3.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-c4ai-command-r7b-arabic-02-2025",
+			"name": "CohereLabs/c4ai-command-r7b-arabic-02-2025",
+			"tooltip": "CohereLabs/c4ai-command-r7b-arabic-02-2025",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/c4ai-command-r7b-arabic-02-2025",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepcogito-cogito-671b-v2-1",
+			"name": "deepcogito/cogito-671b-v2.1",
+			"tooltip": "deepcogito/cogito-671b-v2.1",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "deepcogito/cogito-671b-v2.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "swiss-ai-apertus-70b-instruct-2509",
+			"name": "swiss-ai/Apertus-70B-Instruct-2509",
+			"tooltip": "swiss-ai/Apertus-70B-Instruct-2509",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "swiss-ai/Apertus-70B-Instruct-2509",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-c4ai-command-a-03-2025",
+			"name": "CohereLabs/c4ai-command-a-03-2025",
+			"tooltip": "CohereLabs/c4ai-command-a-03-2025",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/c4ai-command-a-03-2025",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "deepcogito-cogito-671b-v2-1-fp8",
+			"name": "deepcogito/cogito-671b-v2.1-FP8",
+			"tooltip": "deepcogito/cogito-671b-v2.1-FP8",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "deepcogito/cogito-671b-v2.1-FP8",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "dicta-il-dictalm-3-0-24b-thinking",
+			"name": "dicta-il/DictaLM-3.0-24B-Thinking",
+			"tooltip": "dicta-il/DictaLM-3.0-24B-Thinking",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "dicta-il/DictaLM-3.0-24B-Thinking",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "alpindale-wizardlm-2-8x22b",
+			"name": "alpindale/WizardLM-2-8x22B",
+			"tooltip": "alpindale/WizardLM-2-8x22B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "alpindale/WizardLM-2-8x22B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen2-5-coder-3b-instruct",
+			"name": "Qwen/Qwen2.5-Coder-3B-Instruct",
+			"tooltip": "Qwen/Qwen2.5-Coder-3B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen2.5-Coder-3B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "coherelabs-command-a-vision-07-2025",
+			"name": "CohereLabs/command-a-vision-07-2025",
+			"tooltip": "CohereLabs/command-a-vision-07-2025",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "CohereLabs/command-a-vision-07-2025",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "meta-llama-meta-llama-3-70b-instruct",
+			"name": "meta-llama/Meta-Llama-3-70B-Instruct",
+			"tooltip": "meta-llama/Meta-Llama-3-70B-Instruct",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "meta-llama/Meta-Llama-3-70B-Instruct",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b",
+			"name": "Qwen/Qwen3-235B-A22B",
+			"tooltip": "Qwen/Qwen3-235B-A22B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-235B-A22B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "nousresearch-hermes-2-pro-llama-3-8b",
+			"name": "NousResearch/Hermes-2-Pro-Llama-3-8B",
+			"tooltip": "NousResearch/Hermes-2-Pro-Llama-3-8B",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "NousResearch/Hermes-2-Pro-Llama-3-8B",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "sao10k-l3-70b-euryale-v2-1",
+			"name": "Sao10K/L3-70B-Euryale-v2.1",
+			"tooltip": "Sao10K/L3-70B-Euryale-v2.1",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Sao10K/L3-70B-Euryale-v2.1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "sao10k-l3-8b-lunaris-v1",
+			"name": "Sao10K/L3-8B-Lunaris-v1",
+			"tooltip": "Sao10K/L3-8B-Lunaris-v1",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Sao10K/L3-8B-Lunaris-v1",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-32b-0414",
+			"name": "zai-org/GLM-4-32B-0414",
+			"tooltip": "zai-org/GLM-4-32B-0414",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "zai-org/GLM-4-32B-0414",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "minimaxai-minimax-m1-80k",
+			"name": "MiniMaxAI/MiniMax-M1-80k",
+			"tooltip": "MiniMaxAI/MiniMax-M1-80k",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "MiniMaxAI/MiniMax-M1-80k",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "baidu-ernie-4-5-300b-a47b-base-pt",
+			"name": "baidu/ERNIE-4.5-300B-A47B-Base-PT",
+			"tooltip": "baidu/ERNIE-4.5-300B-A47B-Base-PT",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "baidu/ERNIE-4.5-300B-A47B-Base-PT",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "baidu-ernie-4-5-21b-a3b-pt",
+			"name": "baidu/ERNIE-4.5-21B-A3B-PT",
+			"tooltip": "baidu/ERNIE-4.5-21B-A3B-PT",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "baidu/ERNIE-4.5-21B-A3B-PT",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "zai-org-glm-4-5",
+			"name": "zai-org/GLM-4.5",
+			"tooltip": "zai-org/GLM-4.5",
+			"maxInputTokens": 98304,
+			"maxOutputTokens": 32768,
+			"model": "zai-org/GLM-4.5",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		},
+		{
+			"id": "qwen-qwen3-235b-a22b-thinking-2507",
+			"name": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+			"tooltip": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+			"maxInputTokens": 111616,
+			"maxOutputTokens": 16384,
+			"model": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+			"capabilities": {
+				"toolCalling": true,
+				"imageInput": false
+			}
+		}
+	],
+	"family": "Hugging Face"
 }
