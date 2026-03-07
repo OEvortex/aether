@@ -3,7 +3,7 @@
  *  Sync between AccountManager and existing auth systems
  *--------------------------------------------------------------------------------------------*/
 
-import type * as vscode from "vscode";
+import * as vscode from "vscode";
 import { ProviderKey } from "../types/providerKeys";
 import { ApiKeyManager } from "../utils/apiKeyManager";
 import { Logger } from "../utils/logger";
@@ -327,6 +327,16 @@ export class AccountSyncAdapter {
 			Logger.info("[accountSync] Syncing Codex account/org/project metadata");
 			await ApiKeyManager.setApiKey(CODEX_PROVIDER, JSON.stringify(authData));
 		}
+
+		await this.refreshProviderModels(provider);
+	}
+
+	private async refreshProviderModels(provider: string): Promise<void> {
+		try {
+			await vscode.commands.executeCommand(`chp.${provider}.refreshModels`);
+		} catch {
+			// Ignore: not all providers expose a refreshModels command
+		}
 	}
 
 	/**
@@ -337,6 +347,7 @@ export class AccountSyncAdapter {
 			this.accountManager.getAccountsByProvider(provider);
 		if (remainingAccounts.length === 0) {
 			await ApiKeyManager.deleteApiKey(provider);
+			await this.refreshProviderModels(provider);
 			return;
 		}
 

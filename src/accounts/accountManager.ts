@@ -724,6 +724,11 @@ export class AccountManager {
 			}
 
 			await this.saveToStorage();
+			this._onAccountChange.fire({
+				type: "updated",
+				account,
+				provider: account.provider,
+			});
 			return true;
 		} catch (error) {
 			Logger.error("Failed to update credentials:", error);
