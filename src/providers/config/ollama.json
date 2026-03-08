@@ -1,392 +1,392 @@
 {
-	"displayName": "Ollama",
-	"baseUrl": "https://ollama.com",
-	"apiKeyTemplate": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	"models": [
-		{
-			"id": "nemotron-3-nano-30b",
-			"name": "nemotron-3-nano:30b",
-			"tooltip": "nemotron-3-nano:30b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "nemotron-3-nano:30b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "mistral-large-3-675b",
-			"name": "mistral-large-3:675b",
-			"tooltip": "mistral-large-3:675b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "mistral-large-3:675b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "minimax-m2-1",
-			"name": "minimax-m2.1",
-			"tooltip": "minimax-m2.1",
-			"maxInputTokens": 172032,
-			"maxOutputTokens": 32768,
-			"model": "minimax-m2.1",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "rnj-1-8b",
-			"name": "rnj-1:8b",
-			"tooltip": "rnj-1:8b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "rnj-1:8b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "qwen3-5-397b",
-			"name": "qwen3.5:397b",
-			"tooltip": "qwen3.5:397b",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "qwen3.5:397b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": true
-			}
-		},
-		{
-			"id": "gpt-oss-120b",
-			"name": "gpt-oss:120b",
-			"tooltip": "gpt-oss:120b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "gpt-oss:120b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "qwen3-coder-next",
-			"name": "qwen3-coder-next",
-			"tooltip": "qwen3-coder-next",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "qwen3-coder-next",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "qwen3-vl-235b-instruct",
-			"name": "qwen3-vl:235b-instruct",
-			"tooltip": "qwen3-vl:235b-instruct",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "qwen3-vl:235b-instruct",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "minimax-m2",
-			"name": "minimax-m2",
-			"tooltip": "minimax-m2",
-			"maxInputTokens": 172032,
-			"maxOutputTokens": 32768,
-			"model": "minimax-m2",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "gemma3-4b",
-			"name": "gemma3:4b",
-			"tooltip": "gemma3:4b",
-			"maxInputTokens": 114688,
-			"maxOutputTokens": 16384,
-			"model": "gemma3:4b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "gemma3-12b",
-			"name": "gemma3:12b",
-			"tooltip": "gemma3:12b",
-			"maxInputTokens": 114688,
-			"maxOutputTokens": 16384,
-			"model": "gemma3:12b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "glm-4-6",
-			"name": "glm-4.6",
-			"tooltip": "glm-4.6",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "glm-4.6",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "qwen3-next-80b",
-			"name": "qwen3-next:80b",
-			"tooltip": "qwen3-next:80b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "qwen3-next:80b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "deepseek-v3-2",
-			"name": "deepseek-v3.2",
-			"tooltip": "deepseek-v3.2",
-			"maxInputTokens": 147456,
-			"maxOutputTokens": 16384,
-			"model": "deepseek-v3.2",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "deepseek-v3-1-671b",
-			"name": "deepseek-v3.1:671b",
-			"tooltip": "deepseek-v3.1:671b",
-			"maxInputTokens": 147456,
-			"maxOutputTokens": 16384,
-			"model": "deepseek-v3.1:671b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "devstral-2-123b",
-			"name": "devstral-2:123b",
-			"tooltip": "devstral-2:123b",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "devstral-2:123b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "cogito-2-1-671b",
-			"name": "cogito-2.1:671b",
-			"tooltip": "cogito-2.1:671b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "cogito-2.1:671b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "kimi-k2-1t",
-			"name": "kimi-k2:1t",
-			"tooltip": "kimi-k2:1t",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "kimi-k2:1t",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "ministral-3-3b",
-			"name": "ministral-3:3b",
-			"tooltip": "ministral-3:3b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "ministral-3:3b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "gemma3-27b",
-			"name": "gemma3:27b",
-			"tooltip": "gemma3:27b",
-			"maxInputTokens": 114688,
-			"maxOutputTokens": 16384,
-			"model": "gemma3:27b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "glm-4-7",
-			"name": "glm-4.7",
-			"tooltip": "glm-4.7",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "glm-4.7",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "qwen3-coder-480b",
-			"name": "qwen3-coder:480b",
-			"tooltip": "qwen3-coder:480b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "qwen3-coder:480b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "gpt-oss-20b",
-			"name": "gpt-oss:20b",
-			"tooltip": "gpt-oss:20b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "gpt-oss:20b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "minimax-m2-5",
-			"name": "minimax-m2.5",
-			"tooltip": "minimax-m2.5",
-			"maxInputTokens": 172032,
-			"maxOutputTokens": 32768,
-			"model": "minimax-m2.5",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "ministral-3-8b",
-			"name": "ministral-3:8b",
-			"tooltip": "ministral-3:8b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "ministral-3:8b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "devstral-small-2-24b",
-			"name": "devstral-small-2:24b",
-			"tooltip": "devstral-small-2:24b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "devstral-small-2:24b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "gemini-3-flash-preview",
-			"name": "gemini-3-flash-preview",
-			"tooltip": "gemini-3-flash-preview",
-			"maxInputTokens": 934464,
-			"maxOutputTokens": 65536,
-			"model": "gemini-3-flash-preview",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": true
-			}
-		},
-		{
-			"id": "glm-5",
-			"name": "glm-5",
-			"tooltip": "glm-5",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "glm-5",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "kimi-k2-5",
-			"name": "kimi-k2.5",
-			"tooltip": "kimi-k2.5",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "kimi-k2.5",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": true
-			}
-		},
-		{
-			"id": "kimi-k2-thinking",
-			"name": "kimi-k2-thinking",
-			"tooltip": "kimi-k2-thinking",
-			"maxInputTokens": 229376,
-			"maxOutputTokens": 32768,
-			"model": "kimi-k2-thinking",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "qwen3-vl-235b",
-			"name": "qwen3-vl:235b",
-			"tooltip": "qwen3-vl:235b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "qwen3-vl:235b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		},
-		{
-			"id": "ministral-3-14b",
-			"name": "ministral-3:14b",
-			"tooltip": "ministral-3:14b",
-			"maxInputTokens": 111616,
-			"maxOutputTokens": 16384,
-			"model": "ministral-3:14b",
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		}
-	],
-	"family": "Ollama"
+    "displayName": "Ollama",
+    "baseUrl": "https://ollama.com",
+    "apiKeyTemplate": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "nemotron-3-nano-30b",
+            "name": "nemotron-3-nano:30b",
+            "tooltip": "nemotron-3-nano:30b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "nemotron-3-nano:30b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-large-3-675b",
+            "name": "mistral-large-3:675b",
+            "tooltip": "mistral-large-3:675b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "mistral-large-3:675b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "minimax-m2-1",
+            "name": "minimax-m2.1",
+            "tooltip": "minimax-m2.1",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "model": "minimax-m2.1",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "rnj-1-8b",
+            "name": "rnj-1:8b",
+            "tooltip": "rnj-1:8b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "rnj-1:8b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-5-397b",
+            "name": "qwen3.5:397b",
+            "tooltip": "qwen3.5:397b",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "qwen3.5:397b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-oss-120b",
+            "name": "gpt-oss:120b",
+            "tooltip": "gpt-oss:120b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "gpt-oss:120b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-coder-next",
+            "name": "qwen3-coder-next",
+            "tooltip": "qwen3-coder-next",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "qwen3-coder-next",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-vl-235b-instruct",
+            "name": "qwen3-vl:235b-instruct",
+            "tooltip": "qwen3-vl:235b-instruct",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "qwen3-vl:235b-instruct",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "minimax-m2",
+            "name": "minimax-m2",
+            "tooltip": "minimax-m2",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "model": "minimax-m2",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma3-4b",
+            "name": "gemma3:4b",
+            "tooltip": "gemma3:4b",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "model": "gemma3:4b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma3-12b",
+            "name": "gemma3:12b",
+            "tooltip": "gemma3:12b",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "model": "gemma3:12b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm-4-6",
+            "name": "glm-4.6",
+            "tooltip": "glm-4.6",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "glm-4.6",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-next-80b",
+            "name": "qwen3-next:80b",
+            "tooltip": "qwen3-next:80b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "qwen3-next:80b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3-2",
+            "name": "deepseek-v3.2",
+            "tooltip": "deepseek-v3.2",
+            "maxInputTokens": 147456,
+            "maxOutputTokens": 16384,
+            "model": "deepseek-v3.2",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3-1-671b",
+            "name": "deepseek-v3.1:671b",
+            "tooltip": "deepseek-v3.1:671b",
+            "maxInputTokens": 147456,
+            "maxOutputTokens": 16384,
+            "model": "deepseek-v3.1:671b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "devstral-2-123b",
+            "name": "devstral-2:123b",
+            "tooltip": "devstral-2:123b",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "devstral-2:123b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cogito-2-1-671b",
+            "name": "cogito-2.1:671b",
+            "tooltip": "cogito-2.1:671b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "cogito-2.1:671b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "kimi-k2-1t",
+            "name": "kimi-k2:1t",
+            "tooltip": "kimi-k2:1t",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "kimi-k2:1t",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ministral-3-3b",
+            "name": "ministral-3:3b",
+            "tooltip": "ministral-3:3b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "ministral-3:3b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma3-27b",
+            "name": "gemma3:27b",
+            "tooltip": "gemma3:27b",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "model": "gemma3:27b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm-4-7",
+            "name": "glm-4.7",
+            "tooltip": "glm-4.7",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "glm-4.7",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-coder-480b",
+            "name": "qwen3-coder:480b",
+            "tooltip": "qwen3-coder:480b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "qwen3-coder:480b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-oss-20b",
+            "name": "gpt-oss:20b",
+            "tooltip": "gpt-oss:20b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "gpt-oss:20b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "minimax-m2-5",
+            "name": "minimax-m2.5",
+            "tooltip": "minimax-m2.5",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "model": "minimax-m2.5",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ministral-3-8b",
+            "name": "ministral-3:8b",
+            "tooltip": "ministral-3:8b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "ministral-3:8b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "devstral-small-2-24b",
+            "name": "devstral-small-2:24b",
+            "tooltip": "devstral-small-2:24b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "devstral-small-2:24b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-3-flash-preview",
+            "name": "gemini-3-flash-preview",
+            "tooltip": "gemini-3-flash-preview",
+            "maxInputTokens": 983040,
+            "maxOutputTokens": 65536,
+            "model": "gemini-3-flash-preview",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "glm-5",
+            "name": "glm-5",
+            "tooltip": "glm-5",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "glm-5",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "kimi-k2-5",
+            "name": "kimi-k2.5",
+            "tooltip": "kimi-k2.5",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "kimi-k2.5",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "kimi-k2-thinking",
+            "name": "kimi-k2-thinking",
+            "tooltip": "kimi-k2-thinking",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "kimi-k2-thinking",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-vl-235b",
+            "name": "qwen3-vl:235b",
+            "tooltip": "qwen3-vl:235b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "qwen3-vl:235b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ministral-3-14b",
+            "name": "ministral-3:14b",
+            "tooltip": "ministral-3:14b",
+            "maxInputTokens": 111616,
+            "maxOutputTokens": 16384,
+            "model": "ministral-3:14b",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ],
+    "family": "Ollama"
 }

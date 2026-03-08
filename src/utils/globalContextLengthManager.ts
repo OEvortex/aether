@@ -4,6 +4,9 @@ export interface ResolveTokenLimitsOptions {
 	minReservedInputTokens?: number;
 }
 
+const TOKENS_PER_KIBI = 1024;
+const TOKENS_PER_MEBI = TOKENS_PER_KIBI * TOKENS_PER_KIBI;
+
 /**
  * Default context length for providers (128K tokens)
  */
@@ -25,68 +28,69 @@ export const ZHIPU_DEFAULT_CONTEXT_LENGTH = 192 * 1024; // 196608
 export const ZHIPU_DEFAULT_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
 
 const DEFAULT_MIN_RESERVED_INPUT_TOKENS = 1024;
-// Claude models: 200K total context (1k=1024), 32K output / 168K input
-const CLAUDE_TOTAL_TOKENS = 200 * 1024; // 204800
-const CLAUDE_MAX_INPUT_TOKENS = CLAUDE_TOTAL_TOKENS - 32 * 1024; // 172032
-const CLAUDE_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
-// Devstral models: 256K total context (1k=1024), 32K output
-const DEVSTRAL_MAX_INPUT_TOKENS = 256 * 1024 - 32 * 1024; // 229376
-const DEVSTRAL_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
-// DeepSeek models: 160K total context (1k=1024), 16K output / 144K input
-const DEEPSEEK_TOTAL_TOKENS = 160 * 1024; // 163840
-const DEEPSEEK_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
+// All token units in this file use binary sizing: 1K = 1024 tokens.
+// Claude models: 200K total context, 32K output / 168K input
+const CLAUDE_TOTAL_TOKENS = 200 * TOKENS_PER_KIBI; // 204800
+const CLAUDE_MAX_INPUT_TOKENS = CLAUDE_TOTAL_TOKENS - 32 * TOKENS_PER_KIBI; // 172032
+const CLAUDE_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// Devstral models: 256K total context, 32K output
+const DEVSTRAL_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
+const DEVSTRAL_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// DeepSeek models: 160K total context, 16K output / 144K input
+const DEEPSEEK_TOTAL_TOKENS = 160 * TOKENS_PER_KIBI; // 163840
+const DEEPSEEK_MAX_OUTPUT_TOKENS = 16 * TOKENS_PER_KIBI; // 16384
 const DEEPSEEK_MAX_INPUT_TOKENS =
 	DEEPSEEK_TOTAL_TOKENS - DEEPSEEK_MAX_OUTPUT_TOKENS; // 147456
-// Fixed 128K family (1k=1024): 16K output / 112K input
-export const FIXED_128K_MAX_INPUT_TOKENS = 128 * 1024 - 16 * 1024; // 114688
-export const FIXED_128K_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
+// Fixed 128K family: 16K output / 112K input
+export const FIXED_128K_MAX_INPUT_TOKENS = 128 * TOKENS_PER_KIBI - 16 * TOKENS_PER_KIBI; // 114688
+export const FIXED_128K_MAX_OUTPUT_TOKENS = 16 * TOKENS_PER_KIBI; // 16384
 // GLM-4.5 special case: 128K total but 32K output
-export const GLM45_MAX_INPUT_TOKENS = 128 * 1024 - 32 * 1024; // 98304
-export const GLM45_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
-// Fixed 256K family (1k=1024): 32K output / 224K input
-const FIXED_256K_MAX_INPUT_TOKENS = 256 * 1024 - 32 * 1024; // 229376
-const FIXED_256K_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
-// MiniMax M2 series: 204.8K total context (1k=1024), 32K output / 172K input
-const MINIMAX_TOTAL_TOKENS = 200 * 1024; // 204800
-const MINIMAX_MAX_INPUT_TOKENS = MINIMAX_TOTAL_TOKENS - 32 * 1024; // 172032
-const MINIMAX_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
-// Fixed 64K family (1k=1024): some vendors expose smaller "64k" models where output is 8k
-const FIXED_64K_TOTAL_TOKENS = 64 * 1024; // 65536
-const FIXED_64K_MAX_OUTPUT_TOKENS = 8 * 1024; // 8192
+export const GLM45_MAX_INPUT_TOKENS = 128 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 98304
+export const GLM45_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// Fixed 256K family: 32K output / 224K input
+const FIXED_256K_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
+const FIXED_256K_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// MiniMax M2 series: 200K total context, 32K output / 168K input
+const MINIMAX_TOTAL_TOKENS = 200 * TOKENS_PER_KIBI; // 204800
+const MINIMAX_MAX_INPUT_TOKENS = MINIMAX_TOTAL_TOKENS - 32 * TOKENS_PER_KIBI; // 172032
+const MINIMAX_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// Fixed 64K family: some vendors expose smaller 64K models where output is 8K
+const FIXED_64K_TOTAL_TOKENS = 64 * TOKENS_PER_KIBI; // 65536
+const FIXED_64K_MAX_OUTPUT_TOKENS = 8 * TOKENS_PER_KIBI; // 8192
 const FIXED_64K_MAX_INPUT_TOKENS =
 	FIXED_64K_TOTAL_TOKENS - FIXED_64K_MAX_OUTPUT_TOKENS; // 57344
-// Gemma 3 models: 128K total context (1k=1024), 16K output / 112K input
-const GEMA3_TOTAL_TOKENS = 128 * 1024; // 131072
-const GEMA3_MAX_OUTPUT_TOKENS = 16 * 1024; // 16384
+// Gemma 3 models: 128K total context, 16K output / 112K input
+const GEMA3_TOTAL_TOKENS = 128 * TOKENS_PER_KIBI; // 131072
+const GEMA3_MAX_OUTPUT_TOKENS = 16 * TOKENS_PER_KIBI; // 16384
 const GEMA3_MAX_INPUT_TOKENS = GEMA3_TOTAL_TOKENS - GEMA3_MAX_OUTPUT_TOKENS; // 114688
-// Qwen3.5 models: 256K total context (1k=1024), 32K output / 224K input
-const QWEN35_MAX_INPUT_TOKENS = 256 * 1024 - 32 * 1024; // 229376
-const QWEN35_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
-// Qwen3.5 Flash / Plus models: 1,000,000 total context, 32K output
-const QWEN35_1M_TOTAL_TOKENS = 1000000;
-const QWEN35_1M_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
+// Qwen3.5 models: 256K total context, 32K output / 224K input
+const QWEN35_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
+const QWEN35_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// Qwen3.5 Flash / Plus models: 1M total context, 32K output
+const QWEN35_1M_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const QWEN35_1M_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
 const QWEN35_1M_MAX_INPUT_TOKENS =
 	QWEN35_1M_TOTAL_TOKENS - QWEN35_1M_MAX_OUTPUT_TOKENS;
-// Gemini large-context families (1,000,000 total)
-const GEMINI_1M_TOTAL_TOKENS = 1000000;
-const GEMINI25_MAX_OUTPUT_TOKENS = 32 * 1024; // Gemini 2.5 -> 32K output (32768)
+// Gemini large-context families (1M total)
+const GEMINI_1M_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const GEMINI25_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // Gemini 2.5 -> 32K output (32768)
 const GEMINI25_MAX_INPUT_TOKENS =
 	GEMINI_1M_TOTAL_TOKENS - GEMINI25_MAX_OUTPUT_TOKENS;
-const GEMINI2_MAX_OUTPUT_TOKENS = 32 * 1024; // Gemini 2 -> 32K output (32768)
+const GEMINI2_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // Gemini 2 -> 32K output (32768)
 const GEMINI2_MAX_INPUT_TOKENS =
 	GEMINI_1M_TOTAL_TOKENS - GEMINI2_MAX_OUTPUT_TOKENS;
-const GEMINI3_MAX_OUTPUT_TOKENS = 64 * 1024; // Gemini 3 / 3.1 -> 64K output (65536)
+const GEMINI3_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI; // Gemini 3 / 3.1 -> 64K output (65536)
 const GEMINI3_MAX_INPUT_TOKENS =
 	GEMINI_1M_TOTAL_TOKENS - GEMINI3_MAX_OUTPUT_TOKENS;
-// GPT-5 (400K total -> 1k=1024, 64K output / 336K input)
-const GPT5_MAX_INPUT_TOKENS = 400 * 1024 - 64 * 1024; // 344064
-const GPT5_MAX_OUTPUT_TOKENS = 64 * 1024; // 65536
-// GPT-4-1 family: 1,000,000 total context, 32K output
-const GPT4_1_TOTAL_TOKENS = 1000000;
-const GPT4_1_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
+// GPT-5: 400K total context, 64K output / 336K input
+const GPT5_MAX_INPUT_TOKENS = 400 * TOKENS_PER_KIBI - 64 * TOKENS_PER_KIBI; // 344064
+const GPT5_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI; // 65536
+// GPT-4-1 family: 1M total context, 32K output
+const GPT4_1_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const GPT4_1_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
 const GPT4_1_MAX_INPUT_TOKENS = GPT4_1_TOTAL_TOKENS - GPT4_1_MAX_OUTPUT_TOKENS;
-const HIGH_CONTEXT_THRESHOLD = 200 * 1024; // 204800 (using 1k=1024)
-const HIGH_CONTEXT_MAX_OUTPUT_TOKENS = 32 * 1024; // 32768
+const HIGH_CONTEXT_THRESHOLD = 200 * TOKENS_PER_KIBI; // 204800
+const HIGH_CONTEXT_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
 
 export function isDevstralModel(modelId: string): boolean {
 	// Matches devstral-2 and devstral-small-2 (256K context, 32K output)
@@ -369,11 +373,11 @@ export function resolveGlobalTokenLimits(
 		};
 	}
 
-	// Claude Opus 4.6 (special case: 1M context / 64K output)
+		// Claude Opus 4.6 (special case: 1M context / 64K output)
 	if (isClaudeOpus46Model(modelId)) {
 		return {
-			maxInputTokens: 936000,
-			maxOutputTokens: 64000,
+				maxInputTokens: TOKENS_PER_MEBI - 64 * TOKENS_PER_KIBI,
+				maxOutputTokens: 64 * TOKENS_PER_KIBI,
 		};
 	}
 
