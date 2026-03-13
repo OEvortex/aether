@@ -8,20 +8,20 @@
             "id": "coder-model",
             "name": "Qwen Coder (qwen3.5)",
             "tooltip": "Qwen Coder via CLI",
-            "maxInputTokens": 999232,
-            "maxOutputTokens": 32768,
+            "maxInputTokens": 1048576,
+            "maxOutputTokens": 65536,
             "model": "coder-model",
             "capabilities": {
                 "toolCalling": true,
-                "imageInput": true
+                "imageInput": false
             }
         },
         {
             "id": "vision-model",
             "name": "Qwen Vision",
             "tooltip": "Qwen Vision model via CLI",
-            "maxInputTokens": 999232,
-            "maxOutputTokens": 32768,
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 8192,
             "model": "vision-model",
             "capabilities": {
                 "toolCalling": true,

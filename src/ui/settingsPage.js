@@ -1,4 +1,4 @@
-/* GCMP Settings Page - JavaScript */
+/* Copilot ++ Settings Page - JavaScript */
 
 // VS Code API
 const vscode = acquireVsCodeApi();
@@ -66,15 +66,53 @@ function renderPage() {
  * Render header section
  */
 function renderHeader() {
+	const providers = settingsState.providers || [];
+	const configuredProviders = providers.filter(isProviderConfigured).length;
+	const activeLoadBalanceCount = Object.values(
+		settingsState.loadBalanceSettings || {},
+	).filter(Boolean).length;
+
 	return `
         <div class="settings-header">
-            <h1>
-                <span class="icon"></span>
-                GCMP Settings
-            </h1>
-            <p>Configure load balancing and advanced settings for AI Chat Models</p>
+				<div class="settings-header-main">
+					<div>
+			            <h1>
+		                	<span class="icon">✨</span>
+		                	Copilot ++ Settings
+		            </h1>
+		            <p>Manage provider setup, accounts, and load balancing from one smoother settings page.</p>
+					</div>
+					<div class="header-stats">
+						${renderHeaderStat("Providers", providers.length)}
+						${renderHeaderStat("Configured", configuredProviders)}
+						${renderHeaderStat("Load Balance", activeLoadBalanceCount)}
+					</div>
+				</div>
         </div>
     `;
+}
+
+function renderHeaderStat(label, value) {
+	return `
+		<div class="header-stat">
+			<span class="header-stat-value">${escapeHtml(String(value))}</span>
+			<span class="header-stat-label">${escapeHtml(label)}</span>
+		</div>
+	`;
+}
+
+function isProviderConfigured(provider) {
+	if ((provider.accountCount || 0) > 0) {
+		return true;
+	}
+
+	return (provider.settingsFields || []).some((field) => {
+		if (field.type === "boolean") {
+			return field.value === true;
+		}
+
+		return String(field.value ?? "").trim().length > 0;
+	});
 }
 
 /**
@@ -134,6 +172,10 @@ function renderProviderCatalogSection() {
 
 	const grouped = groupProvidersByCategory(filteredProviders);
 	const hasResults = filteredProviders.length > 0;
+	const resultSummary =
+		filteredProviders.length === providers.length
+			? `${providers.length} providers`
+			: `${filteredProviders.length} of ${providers.length} providers`;
 
 	return `
         <div class="settings-section">
@@ -142,12 +184,16 @@ function renderProviderCatalogSection() {
                 <span class="badge">Unified</span>
             </h2>
             <div class="provider-catalog-toolbar">
-                <input
-                    class="provider-search-input"
-                    id="provider-search-input"
-                    type="text"
-                    placeholder="Search provider by name, id, or description"
-                    value="${escapeHtml(settingsState.providerSearchQuery || "")}" />
+				<div class="search-shell">
+					<span class="search-icon">⌕</span>
+	                <input
+	                    class="provider-search-input"
+	                    id="provider-search-input"
+	                    type="text"
+	                    placeholder="Search provider by name, id, or description"
+	                    value="${escapeHtml(settingsState.providerSearchQuery || "")}" />
+				</div>
+				<div class="toolbar-meta">${escapeHtml(resultSummary)}</div>
             </div>
             ${
 							hasResults
@@ -174,11 +220,14 @@ function renderProviderCatalogItem(provider) {
 	const capabilityBadges = [
 		provider.supportsApiKey ? "API Key" : null,
 		provider.supportsOAuth ? "OAuth" : null,
-		provider.supportsBaseUrl ? "Base URL" : null,
+		(provider.settingsFields || []).length ? "Settings" : null,
 	]
 		.filter(Boolean)
 		.map((badge) => `<span class="account-badge">${badge}</span>`)
 		.join("");
+	const setupBadge = isProviderConfigured(provider)
+		? '<span class="account-badge success">Configured</span>'
+		: '<span class="account-badge warning">Setup needed</span>';
 
 	return `
         <div class="provider-catalog-item" data-provider-item="${provider.id}">
@@ -190,7 +239,10 @@ function renderProviderCatalogItem(provider) {
 						<p>${escapeHtml(provider.description || "AI model provider")}</p>
                     </div>
                 </div>
-                <span class="account-badge">👤 ${accountCount}</span>
+				<div class="provider-head-badges">
+	                	<span class="account-badge">👤 ${accountCount}</span>
+					${setupBadge}
+				</div>
             </div>
             <div class="provider-capabilities">${capabilityBadges}</div>
 			${renderProviderEditor(provider)}
@@ -225,7 +277,7 @@ function renderProviderEditor(provider) {
 			? `
 			<div class="provider-editor-actions">
 				<button class="action-button compact" onclick="saveProviderSettings('${provider.id}')">
-					Save
+						Save changes
 				</button>
 			</div>
 		`

@@ -20,8 +20,25 @@ import {
 } from "../../accounts";
 import type { ModelConfig, ProviderConfig } from "../../types/sharedTypes";
 import { Logger } from "../../utils/logger";
+import { getUserAgent } from "../../utils/userAgent";
 import { GenericModelProvider } from "../common/genericModelProvider";
 import { QwenOAuthManager } from "./auth";
+
+const QWEN_MODEL_OUTPUT_LIMITS: Record<string, number> = {
+	"coder-model": 65536,
+	"vision-model": 8192,
+};
+
+const QWEN_REASONING_CONTROL_FIELDS = new Set([
+	"reasoning",
+	"reasoningEffort",
+	"reasoning_effort",
+]);
+
+const QWEN_DASHSCOPE_HEADERS = {
+	"X-DashScope-AuthType": "qwen-oauth",
+	"X-DashScope-CacheControl": "enable",
+};
 
 class ThinkingBlockParser {
 	private inThinkingBlock = false;
@@ -65,6 +82,65 @@ export class QwenCliProvider
 	extends GenericModelProvider
 	implements LanguageModelChatProvider
 {
+	private buildQwenModelConfig(
+		modelConfig: ModelConfig,
+		accessToken: string,
+		baseUrl?: string,
+	): ModelConfig {
+		const normalizedModelId = (modelConfig.model || modelConfig.id).toLowerCase();
+		const outputCap = QWEN_MODEL_OUTPUT_LIMITS[normalizedModelId];
+		const sanitizedExtraBody = modelConfig.extraBody
+			? Object.fromEntries(
+					Object.entries(modelConfig.extraBody).filter(
+						([key]) => !QWEN_REASONING_CONTROL_FIELDS.has(key),
+					),
+				)
+			: undefined;
+
+		const userAgent = getUserAgent();
+		return {
+			...modelConfig,
+			baseUrl: baseUrl || modelConfig.baseUrl || undefined,
+			maxOutputTokens:
+				typeof outputCap === "number"
+					? Math.min(modelConfig.maxOutputTokens, outputCap)
+					: modelConfig.maxOutputTokens,
+			extraBody: sanitizedExtraBody,
+			customHeader: {
+				...(modelConfig.customHeader || {}),
+				...QWEN_DASHSCOPE_HEADERS,
+				"X-DashScope-UserAgent": userAgent,
+				"User-Agent": userAgent,
+				Authorization: `Bearer ${accessToken}`,
+			},
+		};
+	}
+
+	private isUnauthorizedError(error: unknown): boolean {
+		if (!(error instanceof Error)) {
+			return false;
+		}
+		const message = error.message.toLowerCase();
+		return (
+			message.includes(" 401") ||
+			message.includes("status:401") ||
+			message.includes("\"code\":401") ||
+			message.includes("unauthorized")
+		);
+	}
+
+	private isInsufficientQuotaError(error: unknown): boolean {
+		if (!(error instanceof Error)) {
+			return false;
+		}
+		const message = error.message.toLowerCase();
+		return (
+			message.includes("insufficient_quota") ||
+			(message.includes("429") && message.includes("quota")) ||
+			message.includes("account quota exhausted")
+		);
+	}
+
 	static override createAndActivate(
 		context: vscode.ExtensionContext,
 		providerKey: string,
@@ -81,10 +157,10 @@ export class QwenCliProvider
 			`chp.${providerKey}.login`,
 			async () => {
 				try {
-					const { accessToken, baseURL } =
+					const { accessToken, baseURL, totalAccountCount } =
 						await QwenOAuthManager.getInstance().ensureAuthenticated(true);
 					vscode.window.showInformationMessage(
-						`${providerConfig.displayName} login successful!`,
+						`${providerConfig.displayName} login successful! (${totalAccountCount} account${totalAccountCount === 1 ? "" : "s"})`,
 					);
 					// Register CLI-managed account in AccountManager if not present
 					try {
@@ -294,14 +370,11 @@ export class QwenCliProvider
 					}
 				}
 
-				const configWithAuth: ModelConfig = {
-					...modelConfig,
-					baseUrl: modelConfig.baseUrl || undefined,
-					customHeader: {
-						...(modelConfig.customHeader || {}),
-						Authorization: `Bearer ${accountAccessToken}`,
-					},
-				};
+				const configWithAuth = this.buildQwenModelConfig(
+					modelConfig,
+					accountAccessToken,
+					modelConfig.baseUrl || undefined,
+				);
 
 				try {
 					await this.openaiHandler.handleRequest(
@@ -352,7 +425,7 @@ export class QwenCliProvider
 				}
 
 				let lastError: unknown;
-				const switchedAccount = false;
+				let switchedAccount = false;
 				for (const account of accountsToTry) {
 					const result = await tryAccountRequest(account);
 					if (result.success) {
@@ -369,11 +442,14 @@ export class QwenCliProvider
 					lastError = result.error ?? result.reason;
 
 					// If 401, mark account expired and continue
-					if (
-						result.error instanceof Error &&
-						result.error.message.includes("401")
-					) {
+					if (this.isUnauthorizedError(result.error)) {
 						await accountManager.markAccountExpired(account.id);
+						switchedAccount = true;
+						continue;
+					}
+
+					if (loadBalanceEnabled && this.isInsufficientQuotaError(result.error)) {
+						switchedAccount = true;
 						continue;
 					}
 
@@ -398,12 +474,11 @@ export class QwenCliProvider
 
 			// Update handler with latest credentials (CLI)
 			// Pass accessToken as apiKey so OpenAIHandler uses it for Authorization header
-			const configWithAuth: ModelConfig = {
-				...modelConfig,
-				baseUrl: baseURL,
-				apiKey: accessToken,
-				customHeader: modelConfig.customHeader,
-			};
+			const configWithAuth = this.buildQwenModelConfig(
+				modelConfig,
+				accessToken,
+				baseURL,
+			);
 
 			await this.openaiHandler.handleRequest(
 				model,
@@ -416,19 +491,56 @@ export class QwenCliProvider
 
 			// success — continue normally
 		} catch (error) {
+			if (this.isInsufficientQuotaError(error)) {
+				try {
+					const oauthManager = QwenOAuthManager.getInstance();
+					const active = await oauthManager.getActiveOAuthAccount({
+						allowExhausted: true,
+					});
+					if (active?.accountId) {
+						await oauthManager.markOAuthAccountQuotaExhausted(
+							active.accountId,
+							"insufficient_quota",
+						);
+					}
+
+					const switched = await oauthManager.switchToNextHealthyOAuthAccount(
+						active?.accountId ? [active.accountId] : [],
+					);
+					if (switched?.accessToken) {
+						const switchedConfig = this.buildQwenModelConfig(
+							modelConfig,
+							switched.accessToken,
+							switched.baseURL,
+						);
+						await this.openaiHandler.handleRequest(
+							model,
+							switchedConfig,
+							messages,
+							options,
+							wrappedProgress,
+							token,
+						);
+						return;
+					}
+				} catch (switchError) {
+					Logger.warn(
+						"[qwencli] Failed to switch OAuth account after insufficient_quota",
+						switchError,
+					);
+				}
+			}
+
 			// If we got a 401, invalidate cached credentials and retry once with fresh token
-			if (error instanceof Error && error.message.includes("401")) {
+			if (this.isUnauthorizedError(error)) {
 				QwenOAuthManager.getInstance().invalidateCredentials();
 				const { accessToken, baseURL } =
 					await QwenOAuthManager.getInstance().ensureAuthenticated(true);
-				const configWithAuth: ModelConfig = {
-					...modelConfig,
-					baseUrl: baseURL,
-					customHeader: {
-						...modelConfig.customHeader,
-						Authorization: `Bearer ${accessToken}`,
-					},
-				};
+				const configWithAuth = this.buildQwenModelConfig(
+					modelConfig,
+					accessToken,
+					baseURL,
+				);
 				await this.openaiHandler.handleRequest(
 					model,
 					configWithAuth,

@@ -400,8 +400,7 @@ export class DynamicModelProvider extends GenericModelProvider {
 					providerKey,
 					displayName: providerConfig.displayName,
 					apiKeyTemplate: providerConfig.apiKeyTemplate,
-					supportsApiKey: knownConfig.supportsApiKey !== false,
-					supportsBaseUrl: true,
+						supportsApiKey: knownConfig.supportsApiKey !== false,
 				});
 				await provider.modelInfoCache?.invalidateCache(providerKey);
 				provider.scheduleModelRefresh(true, true);

@@ -95,7 +95,6 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 			if (
 				providerKey !== "compatible" &&
 				(e.affectsConfiguration("chp.providerOverrides") ||
-						e.affectsConfiguration(`chp.${providerKey}.baseUrl`) ||
 						e.affectsConfiguration(`chp.${providerKey}.sdkMode`))
 			) {
 				// Recalculate configuration
@@ -136,7 +135,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 	}
 
 	/**
-	 * Refresh SDK handlers to apply baseUrl overrides
+	 * Refresh SDK handlers to apply runtime configuration updates
 	 * Subclasses can override to add additional cleanup
 	 */
 	protected refreshHandlers(): void {
@@ -235,8 +234,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 						providerKey,
 						displayName: providerConfig.displayName,
 						apiKeyTemplate: providerConfig.apiKeyTemplate,
-						supportsApiKey: true,
-						supportsBaseUrl: true,
+							supportsApiKey: true,
 					});
 				}
 				// Clear cache after configuration change

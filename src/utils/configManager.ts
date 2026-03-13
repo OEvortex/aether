@@ -411,7 +411,7 @@ export class ConfigManager {
 	}
 
 	/**
-	 * Build provider overrides by merging baseUrl settings and providerOverrides config
+	 * Build provider overrides by merging supported runtime settings and providerOverrides config
 	 */
 	private static buildProviderOverrides(
 		config: vscode.WorkspaceConfiguration,
@@ -426,12 +426,10 @@ export class ConfigManager {
 		);
 
 		for (const providerKey of mergedProviderKeys) {
-			const baseUrl = config.get<string>(`${providerKey}.baseUrl`, "").trim();
 			const sdkMode = config.get<string>(`${providerKey}.sdkMode`, "").trim();
 
-			if (baseUrl || sdkMode) {
+			if (sdkMode) {
 				settingsOverrides[providerKey] = {};
-				if (baseUrl) settingsOverrides[providerKey].baseUrl = baseUrl;
 				if (sdkMode)
 					settingsOverrides[providerKey].sdkMode = sdkMode as
 						| "openai"
@@ -443,14 +441,12 @@ export class ConfigManager {
 		const merged: UserConfigOverrides = { ...settingsOverrides };
 		for (const [key, override] of Object.entries(configuredOverrides)) {
 			const current = merged[key] ? { ...merged[key] } : {};
-			const normalizedBaseUrl = override.baseUrl?.trim();
+			const { baseUrl: _ignoredBaseUrl, ...supportedOverride } = override as
+				ProviderOverride & { baseUrl?: string };
 			const nextOverride: ProviderOverride = {
 				...current,
-				...override,
+				...supportedOverride,
 			};
-			if (!normalizedBaseUrl && current.baseUrl) {
-				nextOverride.baseUrl = current.baseUrl;
-			}
 			if (!override.sdkMode && current.sdkMode) {
 				nextOverride.sdkMode = current.sdkMode;
 			}
@@ -480,14 +476,8 @@ export class ConfigManager {
 		const config: ProviderConfig = JSON.parse(JSON.stringify(originalConfig));
 
 		// Apply provider-level override
-		if (override.baseUrl) {
-			config.baseUrl = override.baseUrl;
-			Logger.debug(`  Override baseUrl: ${override.baseUrl}`);
-			for (const model of config.models) {
-				model.baseUrl = override.baseUrl;
-			}
-		} else if (override.sdkMode) {
-			// If sdkMode is overridden but baseUrl is not, try to find the correct baseUrl from KnownProviders
+		if (override.sdkMode) {
+			// If sdkMode is overridden, align the provider endpoint with the selected SDK family
 			const knownConfig = KnownProviders[providerKey];
 			if (knownConfig) {
 				const sdkBaseUrl =
@@ -618,10 +608,6 @@ export class ConfigManager {
 						...(modelOverride.model && { model: modelOverride.model }),
 						...(modelOverride.sdkMode && { sdkMode: modelOverride.sdkMode }),
 						...(modelOverride.baseUrl && { baseUrl: modelOverride.baseUrl }),
-						...(override.baseUrl &&
-							!modelOverride.baseUrl && {
-								baseUrl: override.baseUrl,
-							}),
 						...(modelOverride.customHeader && {
 							customHeader: modelOverride.customHeader,
 						}),

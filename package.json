@@ -531,151 +531,13 @@
                 "chp.providerOverrides": {
                     "type": "object",
                     "default": {},
-                    "description": "Provider configuration override. Allows overriding provider baseUrl and model configuration, supports adding new models or overriding existing model parameters.",
+                    "description": "Provider configuration overrides. Supports SDK mode, custom headers, and model-level overrides including custom models.",
                     "scope": "application"
                 },
                 "chp.compatibleModels": {
                     "type": "array",
                     "default": [],
                     "description": "Custom model configuration for Compatible Provider. Completely user-configured OpenAI/Anthropic compatible model list.",
-                    "scope": "application"
-                },
-                "chp.aihubmix.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "AIHubMix base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.blackbox.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Blackbox AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.chatjimmy.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "ChatJimmy base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.chutes.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Chutes AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.cline.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Cline base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.codex.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "OpenAI Codex base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.deepinfra.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "DeepInfra base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.deepseek.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "DeepSeek base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.huggingface.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Hugging Face base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.kilo.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Kilo AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.lightningai.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "LightningAI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.minimax.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "MiniMax base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.mistral.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Mistral AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.modelscope.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "ModelScope base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.moonshot.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "MoonshotAI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.nanogpt.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "NanoGPT base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.nvidia.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "NVIDIA NIM base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.ollama.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Ollama base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.opencode.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "OpenCode base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.qwencli.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Qwen CLI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.vercelai.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Vercel AI base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.zenmux.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Zenmux base URL or proxy endpoint (optional).",
-                    "scope": "application"
-                },
-                "chp.zhipu.baseUrl": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Zhipu AI base URL or proxy endpoint (optional).",
                     "scope": "application"
                 },
                 "chp.aihubmix.sdkMode": {
@@ -777,11 +639,6 @@
                             "type": "string",
                             "description": "AIHubMix API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -791,11 +648,6 @@
                 "displayName": "⦿ Blackbox AI (Blackbox AI)",
                 "configuration": {
                     "properties": {
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
-                        },
                         "apiKey": {
                             "type": "string",
                             "description": "Blackbox AI API key.",
@@ -808,13 +660,7 @@
                 "vendor": "chp.chatjimmy",
                 "displayName": "⦿ ChatJimmy (ChatJimmy)",
                 "configuration": {
-                    "properties": {
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
-                        }
-                    }
+                    "properties": {}
                 }
             },
             {
@@ -826,11 +672,6 @@
                             "type": "string",
                             "description": "Chutes AI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -844,11 +685,6 @@
                             "type": "string",
                             "description": "Cline API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -875,11 +711,6 @@
                             "type": "string",
                             "description": "DeepInfra API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -893,11 +724,6 @@
                             "type": "string",
                             "description": "DeepSeek API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -911,11 +737,6 @@
                             "type": "string",
                             "description": "Hugging Face API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -929,11 +750,6 @@
                             "type": "string",
                             "description": "Kilo AI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -947,11 +763,6 @@
                             "type": "string",
                             "description": "LightningAI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -965,11 +776,6 @@
                             "type": "string",
                             "description": "MiniMax API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -983,11 +789,6 @@
                             "type": "string",
                             "description": "Mistral AI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1001,11 +802,6 @@
                             "type": "string",
                             "description": "ModelScope API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1019,11 +815,6 @@
                             "type": "string",
                             "description": "MoonshotAI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1037,11 +828,6 @@
                             "type": "string",
                             "description": "NanoGPT API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1055,11 +841,6 @@
                             "type": "string",
                             "description": "NVIDIA NIM API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1073,11 +854,6 @@
                             "type": "string",
                             "description": "Ollama API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1091,11 +867,6 @@
                             "type": "string",
                             "description": "OpenCode API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1122,11 +893,6 @@
                             "type": "string",
                             "description": "Vercel AI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1140,11 +906,6 @@
                             "type": "string",
                             "description": "Zenmux API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }
@@ -1158,11 +919,6 @@
                             "type": "string",
                             "description": "Zhipu AI API key.",
                             "secret": true
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-                            "default": ""
                         }
                     }
                 }

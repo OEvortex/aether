@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 ## [0.3.0] - Unreleased
 
+### Changed
+
+- **Settings Page UI Refresh**: Refined the unified settings page to feel smoother and easier to scan.
+  - Added a cleaner header with quick provider/setup summary stats.
+  - Improved provider search, result summary text, and provider status badges.
+  - Polished card spacing, hover transitions, editor sections, and save actions for a more modern settings experience.
+
+### Removed
+
+- **Provider Base URL Override**: Removed provider-level `baseUrl` override support from the settings experience and runtime config merge path.
+  - Removed the base URL option from the generic provider wizard.
+  - Removed generated `chp.<provider>.baseUrl` settings and related provider metadata flags.
+  - Kept explicit model-level `baseUrl` support where model configuration already supports it.
+
 ### Fixed
 
 - **Copilot Chat Context Window Token Counting**: Improved token counting for VS Code Copilot Chat so the Context Window panel can render usage more accurately for custom models.

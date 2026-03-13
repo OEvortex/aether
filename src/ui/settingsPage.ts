@@ -63,10 +63,8 @@ interface ProviderInfo {
 	supportsLoadBalance: boolean;
 	supportsApiKey: boolean;
 	supportsOAuth: boolean;
-	supportsBaseUrl: boolean;
 	supportsConfigWizard: boolean;
 	hasApiKey: boolean;
-	baseUrl: string;
 	endpoint: string;
 	apiKeys: ApiKeyInfo[];
 	activeApiKeyId: string | null;
@@ -363,13 +361,8 @@ export class SettingsPage {
 					supportsLoadBalance: supportsMultiAccount,
 					supportsApiKey: config.features.supportsApiKey,
 					supportsOAuth: config.features.supportsOAuth,
-					supportsBaseUrl: config.features.supportsBaseUrl,
 					supportsConfigWizard: config.features.supportsConfigWizard,
 					hasApiKey: !!activeApiKey,
-					baseUrl:
-						configSection.get<string>(`${config.id}.baseUrl`, "").trim() ||
-						config.baseUrl ||
-						"",
 					endpoint: SettingsPage.getEndpointSetting(config.id, configSection),
 					apiKeys,
 					activeApiKeyId: activeAccount?.id || null,
@@ -508,7 +501,7 @@ export class SettingsPage {
 	}
 
 	private static async getProviderSettingFields(
-		provider: { id: string; baseUrl?: string },
+		provider: { id: string },
 		configSection: vscode.WorkspaceConfiguration,
 	): Promise<ProviderSettingField[]> {
 		const properties = await SettingsPage.getConfigurationProperties();
@@ -544,10 +537,6 @@ export class SettingsPage {
 					type,
 					value,
 					description: property.description,
-					placeholder:
-						key === "baseUrl" && provider.baseUrl
-							? `Leave empty to use default (${provider.baseUrl})`
-							: undefined,
 					options: property.enum?.map((option) => ({
 						value: option,
 						label: SettingsPage.formatSettingOptionLabel(key, option),
@@ -620,7 +609,6 @@ export class SettingsPage {
 		providerId: string,
 		payload: {
 			apiKey?: string;
-			baseUrl?: string;
 			endpoint?: string;
 			sdkMode?: string;
 			settings?: Record<string, string | number | boolean>;
@@ -640,14 +628,6 @@ export class SettingsPage {
 					providerId,
 					provider.displayName,
 					payload.apiKey,
-				);
-			}
-
-			if (provider.features.supportsBaseUrl && payload.baseUrl !== undefined) {
-				await config.update(
-					`${providerId}.baseUrl`,
-					payload.baseUrl.trim(),
-					vscode.ConfigurationTarget.Global,
 				);
 			}
 
@@ -898,7 +878,6 @@ export class SettingsPage {
 				providerKey: providerId,
 				displayName: config.displayName,
 				supportsApiKey: config.features.supportsApiKey,
-				supportsBaseUrl: config.features.supportsBaseUrl,
 			});
 		} catch {
 			// Fallback to opening VS Code settings if wizard fails

@@ -367,8 +367,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 	qwencli: {
 		displayName: "Qwen CLI",
 		family: "Qwen",
-		description: "Qwen CLI OAuth provider",
-		openai: { baseUrl: "https://api.qwen.ai/v1" },
+		description: "Qwen OAuth via local qwen-code CLI credentials",
+		openai: { baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1" },
 	},
 	vercelai: {
 		displayName: "Vercel AI",
@@ -742,7 +742,6 @@ function getDefaultFeatures(providerId: string): ProviderMetadata["features"] {
 			isCompatible,
 		supportsOAuth: accountConfig.supportsOAuth || isCodex,
 		supportsMultiAccount: accountConfig.supportsMultiAccount,
-		supportsBaseUrl: !isNoConfigProvider && !isCodex,
 		supportsConfigWizard: !isNoConfigProvider || isCodex,
 	};
 }

@@ -1,4 +1,4 @@
-/* GCMP Settings Page - Modern & Simple UI */
+/* Copilot ++ Settings Page - Modern & Smooth UI */
 
 :root {
 	--card-bg: var(--vscode-editor-background);
@@ -25,17 +25,33 @@ body {
 	line-height: 1.5;
 }
 
+html {
+	scroll-behavior: smooth;
+}
+
 .settings-container {
-	max-width: 800px;
+	max-width: 960px;
 	margin: 0 auto;
-	padding: 24px;
+	padding: 28px 24px 40px;
 }
 
 /* Header */
 .settings-header {
 	margin-bottom: 32px;
-	padding-bottom: 16px;
-	border-bottom: 1px solid var(--card-border);
+	padding: 20px 22px;
+	border: 1px solid var(--card-border);
+	border-radius: 16px;
+	background:
+		linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 92%, var(--accent-color) 8%), var(--card-bg));
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.settings-header-main {
+	display: flex;
+	justify-content: space-between;
+	gap: 18px;
+	align-items: flex-start;
+	flex-wrap: wrap;
 }
 
 .settings-header h1 {
@@ -58,23 +74,81 @@ body {
 	font-size: 1em;
 }
 
+.header-stats {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.header-stat {
+	min-width: 92px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 1px solid var(--card-border);
+	background-color: color-mix(in srgb, var(--card-bg) 94%, var(--accent-color) 6%);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.header-stat-value {
+	font-size: 1.1em;
+	font-weight: 700;
+	color: var(--vscode-foreground);
+}
+
+.header-stat-label {
+	font-size: 0.78em;
+	color: var(--vscode-descriptionForeground);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
 /* Section */
 .settings-section {
 	margin-bottom: 28px;
+	animation: fadeUp 0.28s ease;
 }
 
 .provider-catalog-toolbar {
 	margin-bottom: 14px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.search-shell {
+	position: relative;
+	flex: 1;
+	min-width: 260px;
+}
+
+.search-icon {
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--vscode-descriptionForeground);
+	pointer-events: none;
+}
+
+.toolbar-meta {
+	font-size: 0.85em;
+	color: var(--vscode-descriptionForeground);
 }
 
 .provider-search-input {
 	width: 100%;
-	padding: 8px 10px;
+	padding: 10px 12px 10px 34px;
 	border-radius: 6px;
 	border: 1px solid var(--vscode-input-border);
 	background-color: var(--vscode-input-background);
 	color: var(--vscode-input-foreground);
 	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease,
+		background-color 0.2s ease;
 }
 
 .provider-search-input:focus {
@@ -104,12 +178,17 @@ body {
 .provider-catalog-item {
 	background-color: var(--card-bg);
 	border: 1px solid var(--card-border);
-	border-radius: 8px;
-	padding: 12px;
+	border-radius: 14px;
+	padding: 14px;
+	transition: transform 0.18s ease, border-color 0.18s ease,
+		box-shadow 0.18s ease;
+	animation: fadeUp 0.24s ease;
 }
 
 .provider-catalog-item:hover {
 	border-color: var(--accent-color);
+	transform: translateY(-1px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .provider-catalog-head {
@@ -145,6 +224,13 @@ body {
 	margin-bottom: 10px;
 }
 
+.provider-head-badges {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
 .provider-actions {
 	display: flex;
 	gap: 8px;
@@ -158,7 +244,8 @@ body {
 	margin-bottom: 10px;
 	padding: 12px;
 	border: 1px dashed var(--card-border);
-	border-radius: 6px;
+	border-radius: 10px;
+	background-color: color-mix(in srgb, var(--card-bg) 94%, var(--accent-color) 6%);
 }
 
 .provider-editor-field {
@@ -176,12 +263,14 @@ body {
 
 .provider-editor-field input,
 .provider-editor-field select {
-	padding: 6px 8px;
+	padding: 8px 10px;
 	border-radius: 6px;
 	border: 1px solid var(--vscode-input-border);
 	background: var(--vscode-input-background);
 	color: var(--vscode-input-foreground);
 	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease,
+		background-color 0.2s ease;
 }
 
 .provider-editor-field input:focus,
@@ -190,11 +279,26 @@ body {
 	box-shadow: 0 0 0 1px var(--vscode-focusBorder);
 }
 
+.provider-editor-field input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	accent-color: var(--accent-color);
+}
+
+.provider-field-description {
+	font-size: 0.8em;
+	line-height: 1.45;
+	color: var(--vscode-descriptionForeground);
+}
+
 .provider-editor-actions {
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-end;
-	margin-top: 4px;
+	margin-top: 6px;
+	padding-top: 6px;
+	border-top: 1px solid color-mix(in srgb, var(--card-border) 80%, transparent 20%);
 }
 
 .section-title {
@@ -227,14 +331,17 @@ body {
 .settings-card {
 	background-color: var(--card-bg);
 	border: 1px solid var(--card-border);
-	border-radius: 8px;
+	border-radius: 14px;
 	padding: 16px;
-	transition: all 0.2s ease;
+	transition: transform 0.18s ease, border-color 0.18s ease,
+		box-shadow 0.18s ease;
+	animation: fadeUp 0.24s ease;
 }
 
 .settings-card:hover {
 	border-color: var(--accent-color);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	transform: translateY(-1px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .card-header {
@@ -566,6 +673,11 @@ body {
 	background-color: var(--vscode-button-hoverBackground);
 }
 
+.action-button:focus-visible {
+	outline: 2px solid var(--vscode-focusBorder);
+	outline-offset: 2px;
+}
+
 .action-button.secondary {
 	background-color: var(--vscode-button-secondaryBackground);
 	color: var(--vscode-button-secondaryForeground);
@@ -805,6 +917,18 @@ body {
 	}
 }
 
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 /* Toast Notification */
 .toast {
 	position: fixed;
@@ -848,12 +972,20 @@ body {
 		padding: 16px;
 	}
 
+	.settings-header {
+		padding: 18px;
+	}
+
 	.card-grid {
 		grid-template-columns: 1fr;
 	}
 
 	.settings-header h1 {
 		font-size: 1.5em;
+	}
+
+	.header-stat {
+		min-width: 84px;
 	}
 
 	.api-key-add-form {
@@ -873,6 +1005,14 @@ body {
 @media (max-width: 480px) {
 	.provider-list-grid {
 		grid-template-columns: 1fr;
+	}
+
+	.provider-catalog-toolbar {
+		align-items: stretch;
+	}
+
+	.search-shell {
+		min-width: 0;
 	}
 }
 

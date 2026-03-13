@@ -93,11 +93,6 @@ export class ZhipuProvider
 	 */
 	private getBaseUrl(): string {
 		const plan = ConfigManager.getZhipuPlan();
-		// Check for custom base URL first
-		const customBaseUrl = this.cachedProviderConfig.baseUrl;
-		if (customBaseUrl) {
-			return customBaseUrl;
-		}
 		return plan === "coding" ? CODING_PLAN_BASE_URL : NORMAL_PLAN_BASE_URL;
 	}
 
@@ -334,7 +329,7 @@ export class ZhipuProvider
 				try {
 					const configContent = fs.readFileSync(this.configFilePath, "utf8");
 					existingConfig = JSON.parse(configContent);
-				} catch (err) {
+				} catch (_err) {
 					existingConfig = {
 						displayName: "ZhipuAI",
 						baseUrl: this.getBaseUrl(),

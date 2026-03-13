@@ -155,7 +155,7 @@ export class JsonSchemaProvider {
 				"chp.providerOverrides": {
 					type: "object",
 					description:
-						"Provider configuration overrides. Allows overriding provider baseUrl and model configuration, supports adding new models or overriding existing model parameters.",
+						"Provider configuration overrides. Supports SDK mode, custom headers, and model-level overrides including custom models.",
 					patternProperties,
 					propertyNames,
 				},
@@ -355,11 +355,6 @@ export class JsonSchemaProvider {
 			type: "object",
 			description: `${config.displayName || providerKey} configuration overrides`,
 			properties: {
-				baseUrl: {
-					type: "string",
-					description: "Override provider-level API base URL",
-					format: "uri",
-				},
 				customHeader: {
 					type: "object",
 					description:

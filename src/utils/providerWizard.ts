@@ -1,27 +1,22 @@
 import * as vscode from "vscode";
 import { ApiKeyManager } from "./apiKeyManager";
-import { ConfigManager } from "./configManager";
-import { Logger } from "./logger";
 
 interface ProviderWizardOptions {
 	providerKey: string;
 	displayName: string;
 	apiKeyTemplate?: string;
 	supportsApiKey?: boolean;
-	supportsBaseUrl?: boolean;
 }
 
 export class ProviderWizard {
 	static async startWizard(options: ProviderWizardOptions): Promise<void> {
 		const supportsApiKey = options.supportsApiKey !== false;
-		const supportsBaseUrl = options.supportsBaseUrl !== false;
-		const baseUrlInfo = ProviderWizard.getBaseUrlInfo(options.providerKey);
 
 		const actions: Array<{
 			label: string;
 			detail?: string;
 			description?: string;
-			action: "apiKey" | "baseUrl";
+			action: "apiKey";
 		}> = [];
 
 		if (supportsApiKey) {
@@ -29,18 +24,6 @@ export class ProviderWizard {
 				label: `$(key) Configure ${options.displayName} API Key`,
 				detail: `Set or clear ${options.displayName} API key`,
 				action: "apiKey",
-			});
-		}
-
-		if (supportsBaseUrl) {
-			const currentBaseUrl = baseUrlInfo.override || baseUrlInfo.defaultBaseUrl;
-			actions.push({
-				label: "$(globe) Configure Base URL (Proxy)",
-				description: currentBaseUrl
-					? `Current: ${currentBaseUrl}`
-					: "Current: Default",
-				detail: `Override ${options.displayName} endpoint (optional)`,
-				action: "baseUrl",
 			});
 		}
 
@@ -59,14 +42,6 @@ export class ProviderWizard {
 
 		if (choice.action === "apiKey") {
 			await ProviderWizard.configureApiKey(options);
-			return;
-		}
-
-		if (choice.action === "baseUrl") {
-			await ProviderWizard.configureBaseUrl(
-				options.providerKey,
-				options.displayName,
-			);
 		}
 	}
 
@@ -79,51 +54,5 @@ export class ProviderWizard {
 			options.displayName,
 			options.apiKeyTemplate,
 		);
-	}
-
-	static async configureBaseUrl(
-		providerKey: string,
-		displayName: string,
-	): Promise<void> {
-		const baseUrlInfo = ProviderWizard.getBaseUrlInfo(providerKey);
-		const result = await vscode.window.showInputBox({
-			prompt: `Enter ${displayName} base URL (leave empty to clear override)`,
-			title: `${displayName} Base URL`,
-			value: baseUrlInfo.override ?? "",
-			placeHolder: baseUrlInfo.defaultBaseUrl || "https://example.com/v1",
-		});
-
-		if (result === undefined) {
-			return;
-		}
-
-		try {
-			const config = vscode.workspace.getConfiguration("chp");
-			await config.update(
-				`${providerKey}.baseUrl`,
-				result.trim(),
-				vscode.ConfigurationTarget.Global,
-			);
-			const message = result.trim()
-				? `${displayName} base URL updated.`
-				: `${displayName} base URL override cleared.`;
-			vscode.window.showInformationMessage(message);
-		} catch (error) {
-			const message = `Failed to update ${displayName} base URL: ${error instanceof Error ? error.message : "Unknown error"}`;
-			Logger.error(message);
-			vscode.window.showErrorMessage(message);
-		}
-	}
-
-	private static getBaseUrlInfo(providerKey: string): {
-		defaultBaseUrl?: string;
-		override?: string;
-	} {
-		const providerConfigs = ConfigManager.getConfigProvider();
-		const overrides = ConfigManager.getProviderOverrides();
-		return {
-			defaultBaseUrl: providerConfigs[providerKey]?.baseUrl,
-			override: overrides[providerKey]?.baseUrl,
-		};
 	}
 }

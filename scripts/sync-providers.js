@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const ts = require("typescript");
 
 const ROOT = path.join(__dirname, "..");
@@ -33,8 +33,6 @@ const NO_SET_API_KEY_COMMAND_PROVIDERS = new Set([
 	"compatible",
 	"qwencli",
 ]);
-const NO_BASE_URL_CHAT_PROVIDER_CONFIG = new Set(["codex", "qwencli"]);
-
 const EXTRA_PROVIDER_IDS = ["kimi", "minimax-coding", "openai"];
 
 const EXTRA_PROVIDER_METADATA = {
@@ -281,7 +279,7 @@ function syncProviderKeysFile(providerKeyItems) {
 		.map((item) => `\t${item.enumName} = '${item.id}',`)
 		.join("\n");
 
-	const content = `export enum ProviderKey {\n${enumEntries}\n}\n\n/**\n * Provider category for unified settings organization\n */\nexport enum ProviderCategory {\n\tOpenAI = 'openai',\n\tAnthropic = 'anthropic',\n\tOAuth = 'oauth',\n}\n\n/**\n * Provider feature flags used by unified settings UI\n */\nexport interface ProviderFeatureFlags {\n\tsupportsApiKey: boolean;\n\tsupportsOAuth: boolean;\n\tsupportsMultiAccount: boolean;\n\tsupportsBaseUrl: boolean;\n\tsupportsConfigWizard: boolean;\n}\n\n/**\n * Provider metadata for unified settings and configuration wizard\n */\nexport interface ProviderMetadata {\n\tid: string;\n\tkey?: ProviderKey;\n\tdisplayName: string;\n\tcategory: ProviderCategory;\n\tsdkMode?: 'openai' | 'anthropic' | 'oai-response' | 'mixed';\n\tdescription?: string;\n\ticon?: string;\n\tsettingsPrefix?: string;\n\tbaseUrl?: string;\n\tfeatures: ProviderFeatureFlags;\n\torder: number;\n}\n`;
+	const content = `export enum ProviderKey {\n${enumEntries}\n}\n\n/**\n * Provider category for unified settings organization\n */\nexport enum ProviderCategory {\n\tOpenAI = 'openai',\n\tAnthropic = 'anthropic',\n\tOAuth = 'oauth',\n}\n\n/**\n * Provider feature flags used by unified settings UI\n */\nexport interface ProviderFeatureFlags {\n\tsupportsApiKey: boolean;\n\tsupportsOAuth: boolean;\n\tsupportsMultiAccount: boolean;\n\tsupportsConfigWizard: boolean;\n}\n\n/**\n * Provider metadata for unified settings and configuration wizard\n */\nexport interface ProviderMetadata {\n\tid: string;\n\tkey?: ProviderKey;\n\tdisplayName: string;\n\tcategory: ProviderCategory;\n\tsdkMode?: 'openai' | 'anthropic' | 'oai-response' | 'mixed';\n\tdescription?: string;\n\ticon?: string;\n\tsettingsPrefix?: string;\n\tbaseUrl?: string;\n\tfeatures: ProviderFeatureFlags;\n\torder: number;\n}\n`;
 
 	writeUtf8(PROVIDER_KEYS_FILE, content);
 }
@@ -460,15 +458,6 @@ function createSetApiKeyCommand(provider) {
 	};
 }
 
-function createBaseUrlProperty(provider) {
-	return {
-		type: "string",
-		default: "",
-		description: `${provider.displayName} base URL or proxy endpoint (optional).`,
-		scope: "application",
-	};
-}
-
 function createSdkModeProperty(provider) {
 	const supportedModes = [];
 	if (provider.hasOpenAI) {
@@ -507,27 +496,11 @@ function ensureApiKeyProperty(providerProperties, provider) {
 	};
 }
 
-function ensureBaseUrlProperty(providerProperties) {
-	if (providerProperties.baseUrl) {
-		return;
-	}
-	providerProperties.baseUrl = {
-		type: "string",
-		description:
-			"Custom base URL or proxy endpoint (optional). Overrides the default API endpoint.",
-		default: "",
-	};
-}
-
 function createLanguageModelProviderEntry(provider) {
 	const properties = {};
 
 	if (provider.supportsApiKey !== false || OAUTH_PROVIDERS.has(provider.id)) {
 		ensureApiKeyProperty(properties, provider);
-	}
-
-	if (!NO_BASE_URL_CHAT_PROVIDER_CONFIG.has(provider.id)) {
-		ensureBaseUrlProperty(properties);
 	}
 
 	return {
@@ -606,14 +579,6 @@ function syncPackageJson(knownProviders) {
 	);
 
 	const syncedProperties = Object.fromEntries(preservedPropertyEntries);
-	for (const providerId of providerIds) {
-		const provider = providerById.get(providerId);
-		if (!provider) {
-			continue;
-		}
-		syncedProperties[`chp.${providerId}.baseUrl`] =
-			createBaseUrlProperty(provider);
-	}
 
 	for (const providerId of providerIds) {
 		const provider = providerById.get(providerId);
@@ -664,8 +629,11 @@ function syncPackageJson(knownProviders) {
 				configuration: {
 					...(existing.configuration || {}),
 					properties: {
-						...((existing.configuration && existing.configuration.properties) ||
-							{}),
+							...Object.fromEntries(
+								Object.entries(
+									(existing.configuration?.properties) || {},
+								).filter(([propertyKey]) => propertyKey !== "baseUrl"),
+							),
 					},
 				},
 			};
@@ -675,10 +643,6 @@ function syncPackageJson(knownProviders) {
 				OAUTH_PROVIDERS.has(provider.id)
 			) {
 				ensureApiKeyProperty(next.configuration.properties, provider);
-			}
-
-			if (!NO_BASE_URL_CHAT_PROVIDER_CONFIG.has(provider.id)) {
-				ensureBaseUrlProperty(next.configuration.properties);
 			}
 
 			return next;

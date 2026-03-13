@@ -44,7 +44,6 @@ export interface ProviderFeatureFlags {
 	supportsApiKey: boolean;
 	supportsOAuth: boolean;
 	supportsMultiAccount: boolean;
-	supportsBaseUrl: boolean;
 	supportsConfigWizard: boolean;
 }
 
