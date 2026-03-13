@@ -227,6 +227,14 @@ export class AccountManager {
 			},
 		],
 		[
+			ProviderKey.Pollinations,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
 			ProviderKey.QwenCli,
 			{
 				supportsMultiAccount: true,

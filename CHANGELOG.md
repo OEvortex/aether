@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [0.3.0] - Unreleased
 
+### Added
+
+- **Pollinations AI Provider**: Added a new Pollinations AI provider with OpenAI-compatible API and diverse model selection.
+  - Added `pollinations.json` provider configuration with multiple models including GPT-5 Mini, GPT-5 Nano, GPT-5.2, DeepSeek V3.2, and more.
+  - Added provider support in account management, account UI, and status bar components.
+  - Enabled dynamic model fetching from Pollinations API endpoint (`/models`).
+  - Added `chp.pollinations.setApiKey` command for API key configuration.
+
 ### Changed
 
 - **Qwen CLI Provider OAuth Flow**: Updated the qwencli provider to use a proper OAuth device flow with PKCE support.

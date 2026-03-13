@@ -22,6 +22,7 @@ export enum ProviderKey {
 	Ollama = 'ollama',
 	OpenAI = 'openai',
 	OpenCode = 'opencode',
+	Pollinations = 'pollinations',
 	QwenCli = 'qwencli',
 	Vercelai = 'vercelai',
 	Zenmux = 'zenmux',

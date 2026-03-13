@@ -71,6 +71,7 @@
         "onLanguageModelProvider:chp.nvidia",
         "onLanguageModelProvider:chp.ollama",
         "onLanguageModelProvider:chp.opencode",
+        "onLanguageModelProvider:chp.pollinations",
         "onLanguageModelProvider:chp.qwencli",
         "onLanguageModelProvider:chp.vercelai",
         "onLanguageModelProvider:chp.zenmux",
@@ -295,6 +296,11 @@
             {
                 "command": "chp.cline.setApiKey",
                 "title": "Configure Cline",
+                "category": "Copilot ++"
+            },
+            {
+                "command": "chp.pollinations.setApiKey",
+                "title": "Configure Pollinations AI",
                 "category": "Copilot ++"
             }
         ],
@@ -876,6 +882,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "OpenCode API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "chp.pollinations",
+                "displayName": "⦿ Pollinations AI (Pollinations AI - OpenAI-compatible API with diverse model selection)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Pollinations AI API key.",
                             "secret": true
                         }
                     }

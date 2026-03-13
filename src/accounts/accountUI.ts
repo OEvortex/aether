@@ -215,6 +215,11 @@ export class AccountUI {
 				authType: "apiKey" as const,
 			},
 			{
+				label: "Pollinations AI",
+				value: ProviderKey.Pollinations,
+				authType: "apiKey" as const,
+			},
+			{
 				label: "Vercel AI",
 				value: ProviderKey.Vercelai,
 				authType: "apiKey" as const,
@@ -831,6 +836,7 @@ export class AccountUI {
 			ollama: "Ollama",
 			openai: "OpenAI",
 			opencode: "OpenCode",
+			pollinations: "Pollinations AI",
 			vercelai: "Vercel AI",
 			zenmux: "Zenmux",
 			zhipu: "ZhipuAI",

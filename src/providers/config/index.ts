@@ -17,33 +17,34 @@ import nanogpt from "./nanogpt.json";
 import nvidia from "./nvidia.json";
 import ollama from "./ollama.json";
 import opencode from "./opencode.json";
+import pollinations from "./pollinations.json";
 import qwencli from "./qwencli.json";
 import zenmux from "./zenmux.json";
-// Export all model configurations uniformly for easy import
 import zhipu from "./zhipu.json";
 
 const providers = {
-	blackbox,
-	zhipu,
-	minimax,
-	moonshot,
-	deepseek,
-	codex,
-	nvidia,
 	aihubmix,
+	blackbox,
 	chatjimmy,
 	chutes,
-	opencode,
-	ollama,
-	qwencli,
+	codex,
+	deepinfra,
+	deepseek,
 	huggingface,
 	kilo,
 	lightningai,
-	deepinfra,
+	minimax,
 	mistral,
 	modelscope,
+	moonshot,
 	nanogpt,
+	nvidia,
+	ollama,
+	opencode,
+	pollinations,
+	qwencli,
 	zenmux,
+	zhipu,
 };
 
 export type ProviderName = keyof typeof providers;

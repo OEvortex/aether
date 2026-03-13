@@ -364,6 +364,16 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
 				cooldownMinutes: 10,
 			},
 		},
+	pollinations: {
+		displayName: "Pollinations AI",
+		family: "Pollinations",
+		description: "Pollinations AI",
+		supportsApiKey: true,
+		apiKeyTemplate: "sk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+		openai: { baseUrl: "https://gen.pollinations.ai/v1" },
+		openModelEndpoint: true,
+		fetchModels: false,
+	},
 	qwencli: {
 		displayName: "Qwen CLI",
 		family: "Qwen",

@@ -1,0 +1,321 @@
+{
+    "displayName": "Pollinations AI",
+    "baseUrl": "https://gen.pollinations.ai/v1",
+    "apiKeyTemplate": "sk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "openai",
+            "name": "OpenAI GPT-5 Mini",
+            "tooltip": "OpenAI GPT-5 Mini - Fast & Balanced. Input/Output modalities: text, image. Tools: true. Context: 400K",
+            "maxInputTokens": 400000,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "openai-fast",
+            "name": "OpenAI GPT-5 Nano",
+            "tooltip": "OpenAI GPT-5 Nano - Ultra Fast & Affordable. Context: 400K",
+            "maxInputTokens": 400000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "openai-large",
+            "name": "OpenAI GPT-5.2",
+            "tooltip": "OpenAI GPT-5.2 - Most Powerful & Intelligent. Reasoning: true. Context: 400K (Paid only)",
+            "maxInputTokens": 400000,
+            "maxOutputTokens": 32768,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "qwen-coder",
+            "name": "Qwen3 Coder 30B",
+            "tooltip": "Qwen3 Coder 30B - Code optimization specialist. Context: 200K",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral",
+            "name": "Mistral Small 3.2 24B",
+            "tooltip": "Mistral Small 3.2 24B - Efficient & Balanced. Context: 131K",
+            "maxInputTokens": 131000,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "openai-audio",
+            "name": "OpenAI GPT-4o Mini Audio",
+            "tooltip": "OpenAI GPT-4o Mini Audio - Audio input/output support. Context: 128K",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini",
+            "name": "Google Gemini 3 Flash",
+            "tooltip": "Google Gemini 3 Flash - Multimodal & Fast. Context: 200K (Paid only)",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini-fast",
+            "name": "Google Gemini 2.5 Flash Lite",
+            "tooltip": "Google Gemini 2.5 Flash Lite - Fast & Affordable. Context: 1M",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini-search",
+            "name": "Google Gemini 2.5 Flash Lite",
+            "tooltip": "Google Gemini 2.5 Flash Lite - Search optimized. Context: 1M",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "deepseek",
+            "name": "DeepSeek V3.2",
+            "tooltip": "DeepSeek V3.2 - Efficient Reasoning & Agentic AI. Reasoning: true. Context: 163K",
+            "maxInputTokens": 163840,
+            "maxOutputTokens": 16384,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok",
+            "name": "xAI Grok 4 Fast",
+            "tooltip": "xAI Grok 4 Fast - Fast & Creative (Paid only). Context: 131K",
+            "maxInputTokens": 131000,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-fast",
+            "name": "Anthropic Claude Haiku 4.5",
+            "tooltip": "Anthropic Claude Haiku 4.5 - Fast & Efficient. Context: 200K",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude",
+            "name": "Anthropic Claude Sonnet 4.6",
+            "tooltip": "Anthropic Claude Sonnet 4.6 - Balanced & Powerful (Paid only). Context: 200K",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-large",
+            "name": "Anthropic Claude Opus 4.6",
+            "tooltip": "Anthropic Claude Opus 4.6 - Most Powerful (Paid only). Context: 200K",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "perplexity-fast",
+            "name": "Perplexity Sonar",
+            "tooltip": "Perplexity Sonar - Search-focused. Context: 127K",
+            "maxInputTokens": 127000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "perplexity-reasoning",
+            "name": "Perplexity Sonar Reasoning",
+            "tooltip": "Perplexity Sonar Reasoning - Reasoning-focused. Context: 127K",
+            "maxInputTokens": 127000,
+            "maxOutputTokens": 4096,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "kimi",
+            "name": "Moonshot Kimi K2.5",
+            "tooltip": "Moonshot Kimi K2.5 - Long context & Reasoning. Context: 1M",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini-large",
+            "name": "Google Gemini 3.1 Pro",
+            "tooltip": "Google Gemini 3.1 Pro - Advanced multimodal (Paid only). Context: 2M",
+            "maxInputTokens": 2000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "nova-fast",
+            "name": "Amazon Nova Micro",
+            "tooltip": "Amazon Nova Micro - Ultra fast & affordable. Context: 1M",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm",
+            "name": "Z.ai GLM-5",
+            "tooltip": "Z.ai GLM-5 - Chinese language optimized. Context: 1M",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "minimax",
+            "name": "MiniMax M2.5",
+            "tooltip": "MiniMax M2.5 - Reasoning & Long context. Context: 1M",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 16384,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "nomnom",
+            "name": "NomNom by @Itachi-1824",
+            "tooltip": "NomNom - Alpha model. Context: 128K",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "polly",
+            "name": "Polly by @Itachi-1824",
+            "tooltip": "Polly - Alpha model. Context: 128K",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-safety",
+            "name": "Qwen3Guard 8B",
+            "tooltip": "Qwen3Guard 8B - Safety focused. Context: 200K",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "step-3.5-flash",
+            "name": "Step 3.5 Flash (api.airforce)",
+            "tooltip": "Step 3.5 Flash - Alpha model. Context: 32K",
+            "maxInputTokens": 32000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen-character",
+            "name": "Qwen Character (api.airforce)",
+            "tooltip": "Qwen Character - Alpha model. Context: 32K",
+            "maxInputTokens": 32000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "claude-airforce",
+            "name": "Claude Sonnet 4.6 (api.airforce)",
+            "tooltip": "Claude Sonnet 4.6 - Alpha model. Context: 66.7K",
+            "maxInputTokens": 66700,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "midijourney",
+            "name": "MIDIjourney",
+            "tooltip": "MIDIjourney - Image generation focused.",
+            "maxInputTokens": 16000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        }
+    ]
+}
