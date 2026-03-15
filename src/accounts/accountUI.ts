@@ -160,6 +160,11 @@ export class AccountUI {
 				authType: "apiKey" as const,
 			},
 			{
+				label: "Knox",
+				value: ProviderKey.Knox,
+				authType: "apiKey" as const,
+			},
+			{
 				label: "Lightning AI",
 				value: ProviderKey.LightningAI,
 				authType: "apiKey" as const,
@@ -830,6 +835,7 @@ export class AccountUI {
 			huggingface: "Hugging Face",
 			kilo: "Kilo AI",
 			kimi: "Kimi",
+			knox: "Knox",
 			lightningai: "Lightning AI",
 			minimax: "MiniMax",
 			"minimax-coding": "MiniMax Coding",

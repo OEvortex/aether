@@ -63,6 +63,7 @@
         "onLanguageModelProvider:chp.deepseek",
         "onLanguageModelProvider:chp.huggingface",
         "onLanguageModelProvider:chp.kilo",
+        "onLanguageModelProvider:chp.knox",
         "onLanguageModelProvider:chp.lightningai",
         "onLanguageModelProvider:chp.minimax",
         "onLanguageModelProvider:chp.mistral",
@@ -313,6 +314,11 @@
             {
                 "command": "chp.ava-supernova.setApiKey",
                 "title": "Configure AVA Supernova",
+                "category": "Copilot ++"
+            },
+            {
+                "command": "chp.knox.setApiKey",
+                "title": "Configure Knox",
                 "category": "Copilot ++"
             }
         ],
@@ -800,6 +806,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Kilo AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "chp.knox",
+                "displayName": "⦿ Knox (Knox Chat - OpenAI SDK compatible endpoint)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Knox API key.",
                             "secret": true
                         }
                     }

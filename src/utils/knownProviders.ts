@@ -437,6 +437,24 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    knox: {
+        displayName: 'Knox',
+        family: 'Knox',
+        description: 'Knox Chat - OpenAI SDK compatible endpoint',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxx',
+        openai: {
+            baseUrl: 'https://api.knox.chat/v1'
+        },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     zhipu: {
         displayName: 'Zhipu AI',
         family: 'Zhipu AI',

@@ -21,6 +21,7 @@ import opencode from './opencode.json';
 import opencodego from './opencodego.json';
 import pollinations from './pollinations.json';
 import qwencli from './qwencli.json';
+import knox from './knox.json';
 import zenmux from './zenmux.json';
 import zhipu from './zhipu.json';
 
@@ -35,6 +36,7 @@ const providers = {
 	deepseek: deepseek,
 	huggingface: huggingface,
 	kilo: kilo,
+	knox: knox,
 	lightningai: lightningai,
 	minimax: minimax,
 	mistral: mistral,

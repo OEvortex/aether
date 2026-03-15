@@ -223,6 +223,7 @@ export class AccountSyncAdapter {
 			ProviderKey.Huggingface,
 			ProviderKey.Kilo,
 			ProviderKey.Kimi,
+			ProviderKey.Knox,
 			ProviderKey.LightningAI,
 			ProviderKey.MiniMax,
 			ProviderKey.MiniMaxCoding,

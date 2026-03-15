@@ -149,8 +149,16 @@ export async function activate(context: vscode.ExtensionContext) {
 
         Logger.info('⏱️ Starting Copilot ++extension activation...');
 
-        // Step 1: Initialize API key manager
+        // Register settings page command early so it is available even if later initialization errors occur
         let stepStartTime = Date.now();
+        const settingsPageDisposable = registerSettingsPageCommand(context);
+        context.subscriptions.push(settingsPageDisposable);
+        Logger.trace(
+            `⏱️ Settings page command registered (time: ${Date.now() - stepStartTime}ms)`
+        );
+
+        // Step 1: Initialize API key manager
+        stepStartTime = Date.now();
         ApiKeyManager.initialize(context);
         Logger.trace(
             `⏱️ API key manager initialization complete (time: ${Date.now() - stepStartTime}ms)`
@@ -177,14 +185,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
         Logger.trace(
             `⏱️ Multi-account manager initialization complete (time: ${Date.now() - stepStartTime}ms)`
-        );
-
-        // Step 1.2: Register settings page command
-        stepStartTime = Date.now();
-        const settingsPageDisposable = registerSettingsPageCommand(context);
-        context.subscriptions.push(settingsPageDisposable);
-        Logger.trace(
-            `⏱️ Settings page command registered (time: ${Date.now() - stepStartTime}ms)`
         );
 
         // Step 2: Initialize configuration manager

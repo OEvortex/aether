@@ -147,6 +147,14 @@ export class AccountManager {
 			},
 		],
 		[
+			ProviderKey.Knox,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
 			ProviderKey.LightningAI,
 			{
 				supportsMultiAccount: true,
