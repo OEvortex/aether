@@ -234,6 +234,7 @@ export class AccountSyncAdapter {
 			ProviderKey.Ollama,
 			ProviderKey.OpenAI,
 			ProviderKey.OpenCode,
+			ProviderKey.Opencodego,
 			ProviderKey.Pollinations,
 			ProviderKey.Vercelai,
 			ProviderKey.Zenmux,

@@ -215,6 +215,11 @@ export class AccountUI {
 				authType: "apiKey" as const,
 			},
 			{
+				label: "OpenCode Zen Go",
+				value: ProviderKey.Opencodego,
+				authType: "apiKey" as const,
+			},
+			{
 				label: "Pollinations AI",
 				value: ProviderKey.Pollinations,
 				authType: "apiKey" as const,
@@ -836,6 +841,7 @@ export class AccountUI {
 			ollama: "Ollama",
 			openai: "OpenAI",
 			opencode: "OpenCode",
+			opencodego: "OpenCode Zen Go",
 			pollinations: "Pollinations AI",
 			vercelai: "Vercel AI",
 			zenmux: "Zenmux",

@@ -71,6 +71,7 @@
         "onLanguageModelProvider:chp.nvidia",
         "onLanguageModelProvider:chp.ollama",
         "onLanguageModelProvider:chp.opencode",
+        "onLanguageModelProvider:chp.opencodego",
         "onLanguageModelProvider:chp.pollinations",
         "onLanguageModelProvider:chp.qwencli",
         "onLanguageModelProvider:chp.vercelai",
@@ -301,6 +302,11 @@
             {
                 "command": "chp.pollinations.setApiKey",
                 "title": "Configure Pollinations AI",
+                "category": "Copilot ++"
+            },
+            {
+                "command": "chp.opencodego.setApiKey",
+                "title": "Configure OpenCode Zen Go",
                 "category": "Copilot ++"
             }
         ],
@@ -636,6 +642,16 @@
                     "default": "anthropic",
                     "description": "Select SDK compatibility mode for OpenCode.",
                     "scope": "application"
+                },
+                "chp.opencodego.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "anthropic",
+                    "description": "Select SDK compatibility mode for OpenCode Zen Go.",
+                    "scope": "application"
                 }
             }
         },
@@ -882,6 +898,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "OpenCode API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "chp.opencodego",
+                "displayName": "⦿ OpenCode Zen Go (OpenCode Zen Go endpoint integration)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "OpenCode Zen Go API key.",
                             "secret": true
                         }
                     }

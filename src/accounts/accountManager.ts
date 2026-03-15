@@ -227,6 +227,14 @@ export class AccountManager {
 			},
 		],
 		[
+			ProviderKey.Opencodego,
+			{
+				supportsMultiAccount: true,
+				supportsOAuth: false,
+				supportsApiKey: true,
+			},
+		],
+		[
 			ProviderKey.Pollinations,
 			{
 				supportsMultiAccount: true,
