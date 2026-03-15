@@ -485,6 +485,18 @@ export class ConfigManager {
 		// Create deep copy of configuration
 		const config: ProviderConfig = JSON.parse(JSON.stringify(originalConfig));
 
+		// Apply provider-level baseUrl override (only for Ollama provider)
+		if (providerKey === "ollama" && override.baseUrl) {
+			config.baseUrl = override.baseUrl;
+			Logger.debug(`  Override provider baseUrl: ${override.baseUrl}`);
+			for (const model of config.models) {
+				// Only override model's baseUrl if not already set at model level
+				if (!model.baseUrl) {
+					model.baseUrl = override.baseUrl;
+				}
+			}
+		}
+
 		// Apply provider-level override
 		if (override.sdkMode) {
 			// If sdkMode is overridden, align the provider endpoint with the selected SDK family

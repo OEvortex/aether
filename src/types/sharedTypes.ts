@@ -121,6 +121,8 @@ export interface ModelOverride {
  * Provider Override Configuration Interface - Used for user configuration override
  */
 export interface ProviderOverride {
+    /** Provider-level API base URL override (optional) */
+    baseUrl?: string;
     /** Provider-level custom HTTP headers (optional) */
     customHeader?: Record<string, string>;
     /** Provider-level SDK mode (optional) */

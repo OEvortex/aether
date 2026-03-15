@@ -355,6 +355,15 @@ export class JsonSchemaProvider {
 			type: "object",
 			description: `${config.displayName || providerKey} configuration overrides`,
 			properties: {
+				...(providerKey === "ollama"
+					? {
+							baseUrl: {
+								type: "string",
+								description: "Override provider-level API base URL",
+								format: "uri",
+							},
+						}
+					: {}),
 				customHeader: {
 					type: "object",
 					description:

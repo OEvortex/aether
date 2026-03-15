@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Ollama Provider Base URL Override**: Added provider-level `baseUrl` override capability specifically for the Ollama provider.
+    - Users can now configure a custom base URL in `chp.providerOverrides.ollama.baseUrl` settings.
+    - This allows connecting to local Ollama instances (e.g., `http://localhost:11434`) or custom Ollama endpoints.
+    - The base URL field appears in VS Code settings intellisense only for Ollama provider.
+    - When configured, all Ollama models will use the custom base URL.
+
 - **OpenCode Zen Go Provider**: Added a new OpenCode Zen Go provider with dedicated endpoints for GLM-5, Kimi K2.5, and MiniMax M2.5 models.
     - OpenAI SDK endpoint: `https://opencode.ai/zen/go/v1/chat/completions`
     - Anthropic SDK endpoint: `https://opencode.ai/zen/go/v1/messages`
