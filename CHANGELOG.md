@@ -23,9 +23,17 @@ All notable changes to this project will be documented in this file.
 
 - **AVA Supernova Provider**: Added a new free AVA Supernova provider with OpenAI SDK compatibility via proxying requests to `https://ava-supernova.com/api/v1/free/chat`.
     - Added `ava-supernova.json` provider config and `KnownProviders` entry.
-    - Updated model token limits to match AVA docs (128K context, 4K output; input max = 126,976). 
+    - Updated model token limits to match AVA docs (128K context, 4K output; input max = 126,976).
+
+- **Knox Provider**: Added a new OpenAI SDK-compatible Knox provider (`https://api.knox.chat/v1`) with model discovery support.
+    - Added `knox.json` provider config and `KnownProviders` entry.
+    - Added `chp.knox.setApiKey` command registration.
 
 - **Hide thinking/reasoning UI option**: Added global setting `chp.hideThinkingInUI` and a toggle in the Settings page to completely suppress thinking/reasoning output blocks across all providers.
+
+### Fixed
+
+- **Knox token limit calculation**: Fixed token-limit logic for Knox models so `maxInputTokens = context_length - max_completion_tokens` (when reported by Knox) rather than relying on `max_tokens`.
 
 ## [0.3.0] - 2026-03-13
 

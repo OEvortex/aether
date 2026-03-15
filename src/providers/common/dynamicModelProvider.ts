@@ -35,8 +35,20 @@ interface FetchedModel {
 	context_length?: number;
 	context_window?: number;
 	max_tokens?: number;
+	top_provider?: {
+		max_completion_tokens?: number;
+		[other: string]: unknown;
+	};
 	tags?: unknown;
 	[maxOutputTokens: string]: unknown;
+}
+
+function getKnoxMaxCompletionTokens(model: FetchedModel): number | undefined {
+	const top = model.top_provider as { max_completion_tokens?: unknown } | undefined;
+	if (!top) {
+		return undefined;
+	}
+	return getPositiveNumber(top.max_completion_tokens);
 }
 
 function normalizeTags(value: unknown): string[] {
@@ -255,23 +267,26 @@ export class DynamicModelProvider extends GenericModelProvider {
 			for (const m of models) {
 				const modelId = String(m[idField] || m.id);
 				const tags = normalizeTags(m[tagsField]);
-					const contextLen =
-						getPositiveNumber(m[contextField]) ??
-						getPositiveNumber(m.context_window) ??
-						getPositiveNumber(m.context_length);
-					const advertisedMaxOutputTokens = getPositiveNumber(m.max_tokens);
+				const contextLen =
+					getPositiveNumber(m[contextField]) ??
+					getPositiveNumber(m.context_window) ??
+					getPositiveNumber(m.context_length);
+				const advertisedMaxOutputTokens =
+					this.providerKey === "knox"
+						? getKnoxMaxCompletionTokens(m)
+						: getPositiveNumber(m.max_tokens);
 				const { maxInputTokens, maxOutputTokens } =
 					this.providerKey === "vercelai"
 						? resolveVercelAiTokenLimits(modelId, m, {
-									defaultContextLength:
-										contextLen ?? DEFAULT_CONTEXT_LENGTH,
-									defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS,
-								})
-							: resolveAdvertisedTokenLimits(modelId, contextLen, {
-								defaultContextLength: DEFAULT_CONTEXT_LENGTH,
-								defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS,
-									advertisedMaxOutputTokens,
-							});
+							defaultContextLength:
+								contextLen ?? DEFAULT_CONTEXT_LENGTH,
+							defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS,
+						})
+						: resolveAdvertisedTokenLimits(modelId, contextLen, {
+							defaultContextLength: DEFAULT_CONTEXT_LENGTH,
+							defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS,
+							advertisedMaxOutputTokens,
+						});
 
 				// Clean ID for use in VS Code
 				const cleanId = modelId
