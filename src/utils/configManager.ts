@@ -99,12 +99,15 @@ export class ConfigManager {
 	private static readonly CONFIG_SECTION = "chp";
 	private static cache: CHPConfig | null = null;
 	private static configListener: vscode.Disposable | null = null;
+	private static context: vscode.ExtensionContext | null = null;
 
 	/**
 	 * Initialize configuration manager
 	 * Set up configuration change listener
 	 */
-	static initialize(): vscode.Disposable {
+	static initialize(context: vscode.ExtensionContext): vscode.Disposable {
+		ConfigManager.context = context;
+
 		// Clean up previous listener
 		if (ConfigManager.configListener) {
 			ConfigManager.configListener.dispose();
@@ -122,6 +125,13 @@ export class ConfigManager {
 
 		Logger.debug("Configuration manager initialized");
 		return ConfigManager.configListener;
+	}
+
+	/**
+	 * Clear cached configuration.
+	 */
+	static clearCache(): void {
+		ConfigManager.cache = null;
 	}
 
 	/**
@@ -148,7 +158,7 @@ export class ConfigManager {
 				config.get<number>("maxTokens", 256000),
 			),
 			rememberLastModel: config.get<boolean>("rememberLastModel", true),
-			hideThinkingInUI: config.get<boolean>("hideThinkingInUI", false),
+			hideThinkingInUI: ConfigManager.getHideThinkingInUIFromConfig(config),
 			zhipu: {
 				search: {
 					enableMCP: config.get<boolean>("zhipu.search.enableMCP", true), // Default enable MCP mode (Coding Plan exclusive)
@@ -250,6 +260,41 @@ export class ConfigManager {
 	 */
 	static getHideThinkingInUI(): boolean {
 		return ConfigManager.getConfig().hideThinkingInUI;
+	}
+
+	/**
+	 * Get whether thinking output should be hidden - using a configuration object.
+	 * This is used when the configuration key may not be registered (e.g., on older versions).
+	 */
+	private static getHideThinkingInUIFromConfig(
+		config: vscode.WorkspaceConfiguration,
+	): boolean {
+		const inspect = config.inspect<boolean>("hideThinkingInUI");
+		if (!inspect) {
+			return ConfigManager.getHideThinkingInUIFromStore();
+		}
+
+		const value = config.get<boolean>("hideThinkingInUI");
+		if (typeof value !== "undefined") {
+			return value;
+		}
+
+		return ConfigManager.getHideThinkingInUIFromStore();
+	}
+
+	/**
+	 * Get stored hideThinkingInUI preference from extension state.
+	 */
+	private static getHideThinkingInUIFromStore(): boolean {
+		if (!ConfigManager.context) {
+			return false;
+		}
+		return (
+			ConfigManager.context.globalState.get<boolean>(
+				"chp.hideThinkingInUI",
+				false,
+			) ?? false
+		);
 	}
 
 	/**

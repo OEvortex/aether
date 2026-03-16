@@ -7,6 +7,7 @@ import * as vscode from "vscode";
 import { AccountManager } from "../accounts/accountManager";
 import type { ApiKeyCredentials } from "../accounts/types";
 import { codexLoginCommand, Logger } from "../utils";
+import { ConfigManager } from "../utils/configManager";
 import { ProviderRegistry } from "../utils/knownProviders";
 import { ProviderWizard } from "../utils/providerWizard";
 import settingsPageCss from "./settingsPage.css?raw";
@@ -268,9 +269,8 @@ export class SettingsPage {
 		const providers = await SettingsPage.getProvidersInfo();
 		const loadBalanceSettings: Record<string, boolean> = {};
 		const loadBalanceStrategies: Record<string, string> = {};
-		const config = vscode.workspace.getConfiguration("chp");
 		const uiPreferences = {
-			hideThinkingInUI: config.get<boolean>("hideThinkingInUI", false),
+			hideThinkingInUI: ConfigManager.getHideThinkingInUI(),
 		};
 
 		for (const provider of providers) {
@@ -311,11 +311,30 @@ export class SettingsPage {
 	): Promise<void> {
 		try {
 			const config = vscode.workspace.getConfiguration("chp");
-			await config.update(
-				"hideThinkingInUI",
-				!!enabled,
-				vscode.ConfigurationTarget.Global,
-			);
+			const configInspect = config.inspect<boolean>("hideThinkingInUI");
+
+			if (!configInspect) {
+				// Configuration not registered in this VS Code build/extension version.
+				// Store preference in global state so it still persists.
+				await SettingsPage.context.globalState.update(
+					"chp.hideThinkingInUI",
+					!!enabled,
+				);
+			} else {
+				await config.update(
+					"hideThinkingInUI",
+					!!enabled,
+					vscode.ConfigurationTarget.Global,
+				);
+				// Ensure fallback store does not override the actual config value
+				await SettingsPage.context.globalState.update(
+					"chp.hideThinkingInUI",
+					undefined,
+				);
+			}
+
+			// Ensure cached configuration is refreshed for consumers
+			ConfigManager.clearCache();
 			await SettingsPage.sendStateUpdate(webview);
 			webview.postMessage({
 				command: "showToast",

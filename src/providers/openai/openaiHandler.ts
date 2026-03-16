@@ -15,11 +15,8 @@ import { RateLimiter } from '../../utils/rateLimiter';
 import { TokenCounter } from '../../utils/tokenCounter';
 import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { getUserAgent } from '../../utils/userAgent';
-import type {
-    ExtendedChoice,
-    ExtendedDelta
-} from './openaiTypes';
 import { tryNormalizePythonStyleCompletionChunk } from './openaiSseNormalizer';
+import type { ExtendedChoice, ExtendedDelta } from './openaiTypes';
 
 /**
  * OpenAI SDK Handler
@@ -178,7 +175,10 @@ export class OpenAIHandler {
             if (providerKey === 'ava-supernova') {
                 // AVA Supernova expects /api/v1/free/chat instead of /v1/chat/completions
                 try {
-                    const rewrittenUrl = this.rewriteAvaSupernovaUrl(url, baseURL);
+                    const rewrittenUrl = this.rewriteAvaSupernovaUrl(
+                        url,
+                        baseURL
+                    );
                     if (rewrittenUrl) {
                         url = rewrittenUrl;
                     }
@@ -211,7 +211,12 @@ export class OpenAIHandler {
         url: string | URL | Request,
         baseURL?: string
     ): string | undefined {
-        const rawUrl = typeof url === 'string' ? url : url instanceof URL ? url.toString() : url.url;
+        const rawUrl =
+            typeof url === 'string'
+                ? url
+                : url instanceof URL
+                  ? url.toString()
+                  : url.url;
         if (!rawUrl) {
             return undefined;
         }
@@ -220,7 +225,8 @@ export class OpenAIHandler {
         // If the request targets the OpenAI chat completions endpoint, redirect it to AVA Supernova's /free/chat endpoint.
         if (rawUrl.includes('/chat/completions')) {
             // Use provided baseURL if available, otherwise try to preserve original origin
-            const base = normalizedBase || rawUrl.replace(/\/chat\/completions.*$/, '');
+            const base =
+                normalizedBase || rawUrl.replace(/\/chat\/completions.*$/, '');
             return `${base.replace(/\/+$/, '')}/free/chat`;
         }
 
@@ -641,6 +647,8 @@ export class OpenAIHandler {
             let thinkingContentBuffer: string = '';
             let lastFallbackReasoningSnapshot = '';
             let lastFallbackMessageContent = '';
+            // Track last complete message for fallback (some providers return complete message in one chunk)
+            let lastCompleteMessage: string | null = null;
 
             // Dictionary to store tool call IDs by index
             const toolCallIds = new Map<number, string>();
@@ -704,7 +712,7 @@ export class OpenAIHandler {
             // Start activity interval
             startActivityInterval();
 
-            // Use OpenAI SDK event-driven streaming method, utilizing built-in tool call handling
+            // Use for await...of loop to iterate over streaming response
             // Convert vscode.CancellationToken to AbortSignal
             const abortController = new AbortController();
             const cancellationListener = token.onCancellationRequested(() =>
@@ -715,388 +723,391 @@ export class OpenAIHandler {
             let finalUsage: OpenAI.Completions.CompletionUsage | undefined;
 
             try {
-                const stream = client.chat.completions.stream(createParams, {
+                // Create streaming request directly using client.chat.completions.create() with stream: true
+                const stream = await client.chat.completions.create({
+                    ...createParams,
+                    stream: true
+                } as OpenAI.Chat.ChatCompletionCreateParamsStreaming, {
                     signal: abortController.signal
                 });
-                // Use SDK built-in event system to handle tool calls and content
-                stream
-                    .on('content', (delta: string, _snapshot: string) => {
-                        // Check cancellation request
-                        if (token.isCancellationRequested) {
-                            Logger.warn(`${model.name} user cancelled request`);
-                            throw new vscode.CancellationError();
-                        }
-                        // Mark activity
-                        markActivity();
-                        // Output trace log: record incremental length and fragment preview, to facilitate troubleshooting of occasional missing complete chunks
-                        try {
-                            Logger.trace(
-                                `${model.name} received content delta: ${delta ? delta.length : 0} characters, preview=${delta}`
-                            );
-                        } catch {
-                            // Logs should not interrupt stream processing
-                        }
-                        // Determine if delta contains visible characters (length > 0 after removing all whitespace and invisible spaces)
-                        const deltaVisible =
-                            typeof delta === 'string' &&
-                            delta.replace(/[\s\uFEFF\xA0]+/g, '').length > 0;
-                        if (delta && delta.length > 0) {
-                            hasSeenNativeContentEvent = true;
-                            lastFallbackMessageContent = '';
-                        }
-                        if (deltaVisible && currentThinkingId) {
-                            // Before outputting first visible content, if there is cached thinking content, report it first
-                            if (thinkingContentBuffer.length > 0) {
-                                try {
-                                    progress.report(
-                                        new vscode.LanguageModelThinkingPart(
-                                            thinkingContentBuffer,
+
+                // Track accumulated tool call arguments by index
+                const toolCallArguments = new Map<number, string>();
+                // Track completed tool calls to avoid duplicates
+                const completedToolCalls = new Set<number>();
+                // Track tool names by index (captured from first delta that contains the name)
+                const toolCallNames = new Map<number, string>();
+
+                // Process stream using for await...of loop
+                for await (const chunk of stream) {
+                    // Check cancellation request
+                    if (token.isCancellationRequested) {
+                        Logger.warn(`${model.name} user cancelled request`);
+                        throw new vscode.CancellationError();
+                    }
+
+                    // Mark activity whenever a chunk is received
+                    markActivity();
+
+                    // Process token usage statistics: only save to finalUsage, output uniformly at the end
+                    if (chunk.usage) {
+                        finalUsage = chunk.usage;
+                        Logger.debug(
+                            `[${this.displayName}] Native usage from API: ${JSON.stringify(chunk.usage)}`
+                        );
+                    }
+
+                    // Process choices from chunk
+                    if (chunk.choices && chunk.choices.length > 0) {
+                        // Traverse all choices, handle each choice's delta
+                        for (
+                            let choiceIndex = 0;
+                            choiceIndex < chunk.choices.length;
+                            choiceIndex++
+                        ) {
+                            const choice = chunk.choices[
+                                choiceIndex
+                            ] as ExtendedChoice;
+                            const delta = choice.delta as
+                                | ExtendedDelta
+                                | undefined;
+                            const message = choice.message;
+
+                            // Track last complete message for fallback (some providers return complete message in one chunk)
+                            if (message?.content && typeof message.content === 'string') {
+                                lastCompleteMessage = message.content;
+                            }
+
+                            // Handle tool calls
+                            if (
+                                delta?.tool_calls &&
+                                delta.tool_calls.length > 0
+                            ) {
+                                for (const toolCall of delta.tool_calls) {
+                                    // Capturing the original ID from the provider is CRITICAL
+                                    // Some models require the exact ID to be sent back in the tool result
+                                    if (
+                                        toolCall.id &&
+                                        toolCall.index !== undefined
+                                    ) {
+                                        toolCallIds.set(
+                                            toolCall.index,
+                                            toolCall.id
+                                        );
+                                        Logger.trace(
+                                            `${model.name} captured tool call ID: ${toolCall.id} at index ${toolCall.index}`
+                                        );
+                                    }
+
+                                    // Capture tool name from delta (CRITICAL - must get the actual tool name)
+                                    if (
+                                        toolCall.index !== undefined &&
+                                        toolCall.function?.name &&
+                                        !toolCallNames.has(toolCall.index)
+                                    ) {
+                                        toolCallNames.set(
+                                            toolCall.index,
+                                            toolCall.function.name
+                                        );
+                                        Logger.trace(
+                                            `${model.name} captured tool call name: ${toolCall.function.name} at index ${toolCall.index}`
+                                        );
+                                    }
+
+                                    // If there is a tool call but no arguments, it means tool call just started
+                                    if (
+                                        toolCall.index !== undefined &&
+                                        !toolCall.function?.arguments
+                                    ) {
+                                        // At tool call start, if there is cached thinking content, report it first
+                                        if (
+                                            thinkingContentBuffer.length >
+                                                0 &&
                                             currentThinkingId
-                                        )
-                                    );
-                                    thinkingContentBuffer = ''; // Clear cache
-                                    hasThinkingContent = true; // Mark thinking content was output
-                                } catch (e) {
-                                    Logger.trace(
-                                        `${model.name} failed to report thinking: ${String(e)}`
-                                    );
-                                }
-                            }
-
-                            // Then end current chain of thought
-                            progress.report(
-                                new vscode.LanguageModelThinkingPart(
-                                    '',
-                                    currentThinkingId
-                                )
-                            );
-                            currentThinkingId = null;
-                        }
-
-                        // Directly output regular content
-                        if (delta && delta.length > 0) {
-                            progress.report(
-                                new vscode.LanguageModelTextPart(delta)
-                            );
-                            // Only mark as received content if it's not just whitespace
-                            if (delta.trim().length > 0) {
-                                hasReceivedContent = true;
-                            }
-                        }
-                    })
-                    .on('tool_calls.function.arguments.done', (event) => {
-                        // Complete tool call event triggered after SDK auto-accumulation completion
-                        if (token.isCancellationRequested) {
-                            return;
-                        }
-
-                        // Mark activity
-                        markActivity();
-
-                        // Generate deduplication identifier based on event index and name
-                        const eventKey = `tool_call_${event.name}_${event.index}_${event.arguments.length}`;
-                        if (this.currentRequestProcessedEvents.has(eventKey)) {
-                            Logger.trace(
-                                `Skip duplicate tool call event: ${event.name} (index: ${event.index})`
-                            );
-                            return;
-                        }
-                        this.currentRequestProcessedEvents.add(eventKey);
-
-                        // Use parameters parsed by SDK (priority) or manually parse arguments string
-                        let parsedArgs: object = {};
-
-                        // If SDK already parsed successfully, use directly (trust SDK result)
-                        if (event.parsed_arguments) {
-                            const result = event.parsed_arguments;
-                            parsedArgs =
-                                typeof result === 'object' && result !== null
-                                    ? result
-                                    : {};
-                        } else {
-                            // SDK not parsed, try manual parsing
-                            try {
-                                parsedArgs = JSON.parse(
-                                    event.arguments || '{}'
-                                );
-                            } catch (firstError) {
-                                // First parsing failed, try deduplication fix then parse again
-                                Logger.trace(
-                                    `Tool call parameter first parsing failed: ${event.name} (index: ${event.index}), trying deduplication fix...`
-                                );
-
-                                let cleanedArgs = event.arguments || '{}';
-
-                                // Detect and fix common duplication patterns
-                                // 1. Detect if front part repeats in back, check first 50 characters one by one (Volcano's Coding package interface may have exceptions)
-                                try {
-                                    const maxCheckLength = Math.min(
-                                        50,
-                                        Math.floor(cleanedArgs.length / 2)
-                                    );
-                                    let duplicateFound = false;
-                                    let cutPosition = 0;
-
-                                    // Detect from longer substrings (prioritize detecting longer repetitions)
-                                    for (
-                                        let len = maxCheckLength;
-                                        len >= 5;
-                                        len--
-                                    ) {
-                                        const prefix = cleanedArgs.substring(
-                                            0,
-                                            len
-                                        );
-                                        // Find if this prefix repeats in the remaining part
-                                        const restContent =
-                                            cleanedArgs.substring(len);
-                                        const duplicateIndex =
-                                            restContent.indexOf(prefix);
-
-                                        if (duplicateIndex !== -1) {
-                                            // Duplicate found, calculate position to cut
-                                            cutPosition = len + duplicateIndex;
-                                            duplicateFound = true;
-                                            Logger.debug(
-                                                `Deduplication fix: detected first ${len} characters repeat at position ${cutPosition}, prefix="${prefix}"`
-                                            );
-                                            break;
-                                        }
-                                    }
-
-                                    if (duplicateFound && cutPosition > 0) {
-                                        const originalLength =
-                                            cleanedArgs.length;
-                                        cleanedArgs =
-                                            cleanedArgs.substring(cutPosition);
-                                        Logger.debug(
-                                            `Deduplication fix: remove duplicate prefix, truncate from ${originalLength} characters to ${cleanedArgs.length} characters`
-                                        );
-                                    }
-                                } catch {
-                                    // Prefix repetition detection failed, continue with other fix attempts
-                                }
-
-                                // 2. Detect {}{} pattern (duplicate empty or full objects)
-                                if (cleanedArgs.includes('}{')) {
-                                    let depth = 0;
-                                    let firstObjEnd = -1;
-                                    for (
-                                        let i = 0;
-                                        i < cleanedArgs.length;
-                                        i++
-                                    ) {
-                                        if (cleanedArgs[i] === '{') {
-                                            depth++;
-                                        } else if (cleanedArgs[i] === '}') {
-                                            depth--;
-                                            if (depth === 0) {
-                                                firstObjEnd = i;
-                                                break;
+                                        ) {
+                                            try {
+                                                progress.report(
+                                                    new vscode.LanguageModelThinkingPart(
+                                                        thinkingContentBuffer,
+                                                        currentThinkingId
+                                                    )
+                                                );
+                                                // End current chain of thought
+                                                progress.report(
+                                                    new vscode.LanguageModelThinkingPart(
+                                                        '',
+                                                        currentThinkingId
+                                                    )
+                                                );
+                                                thinkingContentBuffer = ''; // Clear cache
+                                                hasThinkingContent = true; // Mark thinking content was output
+                                            } catch (e) {
+                                                Logger.trace(
+                                                    `${model.name} failed to report thinking: ${String(e)}`
+                                                );
                                             }
                                         }
                                     }
+
+                                    // Accumulate tool call arguments
                                     if (
-                                        firstObjEnd !== -1 &&
-                                        firstObjEnd < cleanedArgs.length - 1
+                                        toolCall.index !== undefined &&
+                                        toolCall.function?.arguments
                                     ) {
-                                        const originalLength =
-                                            cleanedArgs.length;
-                                        cleanedArgs = cleanedArgs.substring(
-                                            0,
-                                            firstObjEnd + 1
+                                        const existingArgs =
+                                            toolCallArguments.get(
+                                                toolCall.index
+                                            ) || '';
+                                        const newArgs =
+                                            existingArgs +
+                                            toolCall.function.arguments;
+                                        toolCallArguments.set(
+                                            toolCall.index,
+                                            newArgs
                                         );
-                                        Logger.debug(
-                                            `Deduplication fix: remove duplicate object, truncate from ${originalLength} characters to ${cleanedArgs.length} characters`
-                                        );
+
+                                        // Check if tool call is complete (no more arguments in delta)
+                                        // We detect completion when the chunk doesn't have more arguments to add
+                                        // This is handled after the loop by checking finish_reason
                                     }
                                 }
-
-                                // Try to parse fixed parameters
-                                try {
-                                    parsedArgs = JSON.parse(cleanedArgs);
-                                    Logger.debug(
-                                        `Deduplication fix successful: ${event.name} (index: ${event.index}), parsed successfully after fix`
-                                    );
-                                } catch (secondError) {
-                                    // Still failed after fix, output detailed error info
-                                    Logger.error(
-                                        `Failed to parse tool call parameters: ${event.name} (index: ${event.index})`
-                                    );
-                                    Logger.error(
-                                        `Original parameter string (first 100 characters): ${event.arguments?.substring(0, 100)}`
-                                    );
-                                    Logger.error(
-                                        `First parsing error: ${firstError}`
-                                    );
-                                    Logger.error(
-                                        `Still failed after deduplication fix: ${secondError}`
-                                    );
-                                    // Throw original error
-                                    throw firstError;
-                                }
                             }
-                        }
 
-                        // Use captured original tool ID if available to ensure model compatibility
-                        const originalId = toolCallIds.get(event.index);
-                        const toolCallId =
-                            originalId ||
-                            `tool_call_${event.index}_${Date.now()}`;
+                            // Check for finish_reason to detect completed tool calls
+                            if (choice.finish_reason) {
+                                // Process any completed tool calls
+                                for (const [index, args] of toolCallArguments.entries()) {
+                                    if (!completedToolCalls.has(index)) {
+                                        completedToolCalls.add(index);
 
-                        if (!originalId) {
-                            Logger.warn(
-                                `${model.name} used generated ID for tool call (original ID not found in chunks)`
-                            );
-                        }
-
-                        progress.report(
-                            new vscode.LanguageModelToolCallPart(
-                                toolCallId,
-                                event.name,
-                                parsedArgs
-                            )
-                        );
-                        hasReceivedContent = true;
-                    })
-
-                    .on('tool_calls.function.arguments.delta', (_event) => {
-                        // Tool call parameter incremental event
-                        markActivity();
-                        reportActivity();
-                    })
-                    // Save usage information of the last chunk, some providers return usage in each chunk,
-                    // we only output once after stream successful completion to avoid duplicate logs
-                    .on('chunk', (chunk, _snapshot: unknown) => {
-                        // Mark activity whenever a chunk is received
-                        markActivity();
-                        // Process token usage statistics: only save to finalUsage, output uniformly at the end
-                        if (chunk.usage) {
-                            finalUsage = chunk.usage;
-                            Logger.debug(
-                                `[${this.displayName}] Native usage from API: ${JSON.stringify(chunk.usage)}`
-                            );
-                        }
-
-                        // Process reasoning and tool call IDs from delta
-                        if (chunk.choices && chunk.choices.length > 0) {
-                            // Traverse all choices, handle each choice's reasoning_content and message.content
-                            for (
-                                let choiceIndex = 0;
-                                choiceIndex < chunk.choices.length;
-                                choiceIndex++
-                            ) {
-                                const choice = chunk.choices[
-                                    choiceIndex
-                                ] as ExtendedChoice;
-                                const delta = choice.delta as
-                                    | ExtendedDelta
-                                    | undefined;
-                                const message = choice.message;
-
-                                // Check if there is a tool call start (tool_calls delta exists but no arguments yet)
-                                if (
-                                    delta?.tool_calls &&
-                                    delta.tool_calls.length > 0
-                                ) {
-                                    for (const toolCall of delta.tool_calls) {
-                                        // Capturing the original ID from the provider is CRITICAL
-                                        // Some models require the exact ID to be sent back in the tool result
-                                        if (
-                                            toolCall.id &&
-                                            toolCall.index !== undefined
-                                        ) {
-                                            toolCallIds.set(
-                                                toolCall.index,
-                                                toolCall.id
-                                            );
+                                        // Parse accumulated arguments
+                                        let parsedArgs: object = {};
+                                        try {
+                                            parsedArgs = JSON.parse(args || '{}');
+                                        } catch (parseError) {
+                                            // Try deduplication fix
                                             Logger.trace(
-                                                `${model.name} captured tool call ID: ${toolCall.id} at index ${toolCall.index}`
+                                                `Tool call parameter parsing failed for index ${index}, trying deduplication fix...`
                                             );
-                                        }
 
-                                        // If there is a tool call but no arguments, it means tool call just started
-                                        if (
-                                            toolCall.index !== undefined &&
-                                            !toolCall.function?.arguments
-                                        ) {
-                                            // At tool call start, if there is cached thinking content, report it first
-                                            if (
-                                                thinkingContentBuffer.length >
-                                                    0 &&
-                                                currentThinkingId
-                                            ) {
-                                                try {
-                                                    progress.report(
-                                                        new vscode.LanguageModelThinkingPart(
-                                                            thinkingContentBuffer,
-                                                            currentThinkingId
-                                                        )
+                                            let cleanedArgs = args || '{}';
+
+                                            // Detect and fix common duplication patterns
+                                            // 1. Detect if front part repeats in back
+                                            try {
+                                                const maxCheckLength = Math.min(
+                                                    50,
+                                                    Math.floor(cleanedArgs.length / 2)
+                                                );
+                                                let duplicateFound = false;
+                                                let cutPosition = 0;
+
+                                                for (
+                                                    let len = maxCheckLength;
+                                                    len >= 5;
+                                                    len--
+                                                ) {
+                                                    const prefix = cleanedArgs.substring(
+                                                        0,
+                                                        len
                                                     );
-                                                    // End current chain of thought
-                                                    progress.report(
-                                                        new vscode.LanguageModelThinkingPart(
-                                                            '',
-                                                            currentThinkingId
-                                                        )
+                                                    const restContent =
+                                                        cleanedArgs.substring(len);
+                                                    const duplicateIndex =
+                                                        restContent.indexOf(prefix);
+
+                                                    if (duplicateIndex !== -1) {
+                                                        cutPosition = len + duplicateIndex;
+                                                        duplicateFound = true;
+                                                        Logger.debug(
+                                                            `Deduplication fix: detected first ${len} characters repeat at position ${cutPosition}, prefix="${prefix}"`
+                                                        );
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (duplicateFound && cutPosition > 0) {
+                                                    const originalLength =
+                                                        cleanedArgs.length;
+                                                    cleanedArgs =
+                                                        cleanedArgs.substring(cutPosition);
+                                                    Logger.debug(
+                                                        `Deduplication fix: remove duplicate prefix, truncate from ${originalLength} characters to ${cleanedArgs.length} characters`
                                                     );
-                                                    thinkingContentBuffer = ''; // Clear cache
-                                                    hasThinkingContent = true; // Mark thinking content was output
-                                                } catch (e) {
-                                                    Logger.trace(
-                                                        `${model.name} failed to report thinking: ${String(e)}`
+                                                }
+                                            } catch {
+                                                // Prefix repetition detection failed
+                                            }
+
+                                            // 2. Detect {}{} pattern
+                                            if (cleanedArgs.includes('}{')) {
+                                                let depth = 0;
+                                                let firstObjEnd = -1;
+                                                for (
+                                                    let i = 0;
+                                                    i < cleanedArgs.length;
+                                                    i++
+                                                ) {
+                                                    if (cleanedArgs[i] === '{') {
+                                                        depth++;
+                                                    } else if (cleanedArgs[i] === '}') {
+                                                        depth--;
+                                                        if (depth === 0) {
+                                                            firstObjEnd = i;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if (
+                                                    firstObjEnd !== -1 &&
+                                                    firstObjEnd < cleanedArgs.length - 1
+                                                ) {
+                                                    const originalLength =
+                                                        cleanedArgs.length;
+                                                    cleanedArgs = cleanedArgs.substring(
+                                                        0,
+                                                        firstObjEnd + 1
+                                                    );
+                                                    Logger.debug(
+                                                        `Deduplication fix: remove duplicate object, truncate from ${originalLength} characters to ${cleanedArgs.length} characters`
                                                     );
                                                 }
                                             }
+
+                                            // Try to parse fixed parameters
+                                            try {
+                                                parsedArgs = JSON.parse(cleanedArgs);
+                                                Logger.debug(
+                                                    `Deduplication fix successful for tool call index ${index}`
+                                                );
+                                            } catch (secondError) {
+                                                Logger.error(
+                                                    `Failed to parse tool call parameters for index ${index}`
+                                                );
+                                                Logger.error(
+                                                    `Original parameter string (first 100 characters): ${args?.substring(0, 100)}`
+                                                );
+                                                Logger.error(
+                                                    `Parsing error: ${parseError}`
+                                                );
+                                                Logger.error(
+                                                    `Still failed after deduplication fix: ${secondError}`
+                                                );
+                                                throw parseError;
+                                            }
                                         }
+
+                                        // Use captured original tool ID if available
+                                        const originalId = toolCallIds.get(index);
+                                        const toolCallId =
+                                            originalId ||
+                                            `tool_call_${index}_${Date.now()}`;
+
+                                        if (!originalId) {
+                                            Logger.warn(
+                                                `${model.name} used generated ID for tool call (original ID not found in chunks)`
+                                            );
+                                        }
+
+                                        // Get tool name from captured names (CRITICAL - use actual tool name from provider)
+                                        const toolName = toolCallNames.get(index) || 'unknown_tool';
+                                        
+                                        if (toolName === 'unknown_tool') {
+                                            Logger.warn(
+                                                `${model.name} Tool name not captured for index ${index}, using 'unknown_tool'`
+                                            );
+                                        }
+
+                                        progress.report(
+                                            new vscode.LanguageModelToolCallPart(
+                                                toolCallId,
+                                                toolName,
+                                                parsedArgs
+                                            )
+                                        );
+                                        hasReceivedContent = true;
                                     }
                                 }
+                            }
 
-                                const nativeReasoningContent =
-                                    delta?.reasoning ??
-                                    delta?.reasoning_content;
-                                const fallbackReasoningSnapshot =
-                                    !nativeReasoningContent
-                                        ? (message?.reasoning ??
-                                          message?.reasoning_content)
-                                        : undefined;
-                                const reasoningContent = nativeReasoningContent
-                                    ? nativeReasoningContent
-                                    : !hasSeenNativeReasoningDelta &&
-                                        typeof fallbackReasoningSnapshot ===
-                                            'string' &&
-                                        fallbackReasoningSnapshot.length > 0
-                                      ? getIncrementalDeltaFromSnapshot(
-                                            fallbackReasoningSnapshot,
-                                            lastFallbackReasoningSnapshot
-                                        )
-                                      : undefined;
-
-                                if (nativeReasoningContent) {
-                                    hasSeenNativeReasoningDelta = true;
-                                    lastFallbackReasoningSnapshot = '';
-                                } else if (
+                            // Handle reasoning/thinking content
+                            const nativeReasoningContent =
+                                delta?.reasoning ??
+                                delta?.reasoning_content;
+                            const fallbackReasoningSnapshot =
+                                !nativeReasoningContent
+                                    ? (message?.reasoning ??
+                                      message?.reasoning_content)
+                                    : undefined;
+                            const reasoningContent = nativeReasoningContent
+                                ? nativeReasoningContent
+                                : !hasSeenNativeReasoningDelta &&
                                     typeof fallbackReasoningSnapshot ===
-                                    'string'
-                                ) {
-                                    lastFallbackReasoningSnapshot =
-                                        fallbackReasoningSnapshot;
+                                        'string' &&
+                                    fallbackReasoningSnapshot.length > 0
+                                  ? getIncrementalDeltaFromSnapshot(
+                                        fallbackReasoningSnapshot,
+                                        lastFallbackReasoningSnapshot
+                                    )
+                                  : undefined;
+
+                            if (nativeReasoningContent) {
+                                hasSeenNativeReasoningDelta = true;
+                                lastFallbackReasoningSnapshot = '';
+                            } else if (
+                                typeof fallbackReasoningSnapshot ===
+                                'string'
+                            ) {
+                                lastFallbackReasoningSnapshot =
+                                    fallbackReasoningSnapshot;
+                            }
+
+                            if (reasoningContent) {
+                                // Check outputThinking setting in model configuration
+                                const shouldOutputThinking =
+                                    modelConfig.outputThinking !== false; // default true
+                                if (shouldOutputThinking) {
+                                    try {
+                                        // If currently no active id, generate one for this chain of thought
+                                        if (!currentThinkingId) {
+                                            currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+                                        }
+
+                                        // Report thinking immediately for real-time streaming (no buffering)
+                                        thinkingContentBuffer +=
+                                            reasoningContent;
+                                        progress.report(
+                                            new vscode.LanguageModelThinkingPart(
+                                                thinkingContentBuffer,
+                                                currentThinkingId
+                                            )
+                                        );
+                                        thinkingContentBuffer = ''; // Clear cache
+
+                                        // Mark thinking content received
+                                        hasThinkingContent = true;
+                                    } catch (e) {
+                                        Logger.trace(
+                                            `${model.name} failed to report thinking: ${String(e)}`
+                                        );
+                                    }
                                 }
+                            }
 
-                                if (reasoningContent) {
-                                    // Check outputThinking setting in model configuration
-                                    const shouldOutputThinking =
-                                        modelConfig.outputThinking !== false; // default true
-                                    if (shouldOutputThinking) {
+                            // Handle content delta
+                            if (
+                                delta?.content &&
+                                typeof delta.content === 'string' &&
+                                delta.content.length > 0
+                            ) {
+                                // Determine if delta contains visible characters
+                                const deltaVisible =
+                                    delta.content.replace(/[\s\uFEFF\xA0]+/g, '').length > 0;
+
+                                if (deltaVisible && currentThinkingId) {
+                                    // Before outputting first visible content, if there is cached thinking content, report it first
+                                    if (thinkingContentBuffer.length > 0) {
                                         try {
-                                            // If currently no active id, generate one for this chain of thought
-                                            if (!currentThinkingId) {
-                                                currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-                                            }
-
-                                            // Report thinking immediately for real-time streaming (no buffering)
-                                            thinkingContentBuffer +=
-                                                reasoningContent;
                                             progress.report(
                                                 new vscode.LanguageModelThinkingPart(
                                                     thinkingContentBuffer,
@@ -1104,87 +1115,150 @@ export class OpenAIHandler {
                                                 )
                                             );
                                             thinkingContentBuffer = ''; // Clear cache
-
-                                            // Mark thinking content received
-                                            hasThinkingContent = true;
+                                            hasThinkingContent = true; // Mark thinking content was output
                                         } catch (e) {
                                             Logger.trace(
                                                 `${model.name} failed to report thinking: ${String(e)}`
                                             );
                                         }
                                     }
+
+                                    // Then end current chain of thought
+                                    progress.report(
+                                        new vscode.LanguageModelThinkingPart(
+                                            '',
+                                            currentThinkingId
+                                        )
+                                    );
+                                    currentThinkingId = null;
                                 }
 
-                                // Fallback only: if provider does not emit native SDK content events,
-                                // derive an incremental delta from message.content snapshot.
-                                const messageContent = message?.content;
-                                const messageContentDelta =
-                                    !hasSeenNativeContentEvent &&
-                                    typeof messageContent === 'string' &&
-                                    messageContent.replace(
-                                        /[\s\uFEFF\xA0]+/g,
-                                        ''
-                                    ).length > 0
-                                        ? getIncrementalDeltaFromSnapshot(
-                                              messageContent,
-                                              lastFallbackMessageContent
-                                          )
-                                        : '';
-
-                                if (
-                                    !hasSeenNativeContentEvent &&
-                                    typeof messageContent === 'string'
-                                ) {
-                                    lastFallbackMessageContent = messageContent;
+                                // Output regular content
+                                progress.report(
+                                    new vscode.LanguageModelTextPart(
+                                        delta.content
+                                    )
+                                );
+                                // Only mark as received content if it's not just whitespace
+                                if (delta.content.trim().length > 0) {
+                                    hasReceivedContent = true;
                                 }
+                                hasSeenNativeContentEvent = true;
+                                lastFallbackMessageContent = '';
+                            }
 
-                                if (
-                                    messageContentDelta &&
-                                    messageContentDelta.replace(
-                                        /[\s\uFEFF\xA0]+/g,
-                                        ''
-                                    ).length > 0
-                                ) {
-                                    // Before outputting visible content, if there is an unended chain of thought, end it first
-                                    if (currentThinkingId) {
-                                        try {
-                                            progress.report(
-                                                new vscode.LanguageModelThinkingPart(
-                                                    '',
-                                                    currentThinkingId
-                                                )
-                                            );
-                                        } catch (e) {
-                                            Logger.trace(
-                                                `${model.name} failed to end thinking: ${String(e)}`
-                                            );
-                                        }
-                                        currentThinkingId = null;
-                                    }
-                                    // Then report text content
+                            // Fallback only: if provider does not emit native SDK content events,
+                            // derive an incremental delta from message.content snapshot.
+                            const messageContent = message?.content;
+                            const messageContentDelta =
+                                !hasSeenNativeContentEvent &&
+                                typeof messageContent === 'string' &&
+                                messageContent.replace(
+                                    /[\s\uFEFF\xA0]+/g,
+                                    ''
+                                ).length > 0
+                                    ? getIncrementalDeltaFromSnapshot(
+                                          messageContent,
+                                          lastFallbackMessageContent
+                                      )
+                                    : '';
+
+                            if (
+                                !hasSeenNativeContentEvent &&
+                                typeof messageContent === 'string'
+                            ) {
+                                lastFallbackMessageContent = messageContent;
+                            }
+
+                            if (
+                                messageContentDelta &&
+                                messageContentDelta.replace(
+                                    /[\s\uFEFF\xA0]+/g,
+                                    ''
+                                ).length > 0
+                            ) {
+                                // Before outputting visible content, if there is an unended chain of thought, end it first
+                                if (currentThinkingId) {
                                     try {
                                         progress.report(
-                                            new vscode.LanguageModelTextPart(
-                                                messageContentDelta
+                                            new vscode.LanguageModelThinkingPart(
+                                                '',
+                                                currentThinkingId
                                             )
                                         );
-                                        hasReceivedContent = true;
                                     } catch (e) {
                                         Logger.trace(
-                                            `${model.name} failed to report message content (choice ${choiceIndex}): ${String(e)}`
+                                            `${model.name} failed to end thinking: ${String(e)}`
                                         );
                                     }
+                                    currentThinkingId = null;
+                                }
+                                // Then report text content
+                                try {
+                                    progress.report(
+                                        new vscode.LanguageModelTextPart(
+                                            messageContentDelta
+                                        )
+                                    );
+                                    hasReceivedContent = true;
+                                } catch (e) {
+                                    Logger.trace(
+                                        `${model.name} failed to report message content (choice ${choiceIndex}): ${String(e)}`
+                                    );
                                 }
                             }
                         }
-                    })
-                    .on('error', (error: Error) => {
-                        // Save error and abort request
-                        streamError = error;
-                        abortController.abort();
-                    });
-                // Wait for stream processing completion
-                await stream.done();
+                    }
+                }
+
+                // Stream completed successfully - check for any remaining tool calls that weren't completed
+                // (in case finish_reason wasn't set properly)
+                for (const [index, args] of toolCallArguments.entries()) {
+                    if (!completedToolCalls.has(index)) {
+                        completedToolCalls.add(index);
+
+                        // Parse accumulated arguments
+                        let parsedArgs: object = {};
+                        try {
+                            parsedArgs = JSON.parse(args || '{}');
+                        } catch (parseError) {
+                            Logger.error(
+                                `Failed to parse tool call parameters for index ${index} at stream end`
+                            );
+                            continue;
+                        }
+
+                        // Use captured original tool ID if available
+                        const originalId = toolCallIds.get(index);
+                        const toolCallId =
+                            originalId ||
+                            `tool_call_${index}_${Date.now()}`;
+
+                        if (!originalId) {
+                            Logger.warn(
+                                `${model.name} used generated ID for tool call (original ID not found in chunks)`
+                            );
+                        }
+
+                        // Get tool name from captured names (CRITICAL - use actual tool name from provider)
+                        const toolName = toolCallNames.get(index) || 'unknown_tool';
+                        
+                        if (toolName === 'unknown_tool') {
+                            Logger.warn(
+                                `${model.name} Tool name not captured for index ${index} at stream end`
+                            );
+                        }
+
+                        progress.report(
+                            new vscode.LanguageModelToolCallPart(
+                                toolCallId,
+                                toolName,
+                                parsedArgs
+                            )
+                        );
+                        hasReceivedContent = true;
+                    }
+                }
 
                 // Check for unreported thinking content cache when stream ends
                 if (thinkingContentBuffer.length > 0 && currentThinkingId) {
@@ -1204,9 +1278,36 @@ export class OpenAIHandler {
                     }
                 }
 
-                // Check for stream error
-                if (streamError) {
-                    throw streamError;
+                // Fallback: if no content was received at all, try to get a complete response
+                // This handles cases where the provider returns a single complete chunk instead of streaming
+                if (!hasReceivedContent && !hasThinkingContent && completedToolCalls.size === 0) {
+                    Logger.debug(
+                        `${model.name} No content received during streaming, using fallback mechanism`
+                    );
+                    
+                    // Try to use last complete message as fallback
+                    if (lastCompleteMessage && lastCompleteMessage.trim().length > 0) {
+                        try {
+                            progress.report(
+                                new vscode.LanguageModelTextPart(lastCompleteMessage)
+                            );
+                            hasReceivedContent = true;
+                            Logger.debug(
+                                `${model.name} Fallback: reported complete message (${lastCompleteMessage.length} characters)`
+                            );
+                        } catch (e) {
+                            Logger.trace(
+                                `${model.name} Failed to report fallback message: ${String(e)}`
+                            );
+                        }
+                    }
+                    
+                    // If still no content, report a generic message to avoid empty response
+                    if (!hasReceivedContent && !hasThinkingContent && completedToolCalls.size === 0) {
+                        Logger.warn(
+                            `${model.name} No response content received from API at all`
+                        );
+                    }
                 }
                 // Only output usage info once after stream successful completion to avoid multiple duplicate prints
                 if (finalUsage) {

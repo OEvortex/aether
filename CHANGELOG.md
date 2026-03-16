@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - Unreleased
+
+### Fixed
+- **OpenCode Zen Go Provider Registration**: Fixed provider not being registered properly in VS Code.
+    - Added `fetchModels` property to `ProviderConfig` interface.
+    - Added merge logic for `fetchModels` in `buildConfigProvider` function.
+    - Disabled dynamic model fetching for `opencodego` to use static models from JSON config instead.
+- **Hide thinking/reasoning UI setting**: Prevented failures when `chp.hideThinkingInUI` isn't registered in the active VS Code configuration schema by falling back to storing the preference in extension global state.
+
+- Fixed reasoning content appearing interspersed with regular content in the UI by adding direct processing of delta.content in the SSE handler for normalized Python-style completion chunks.
+
+- **Token Counter Initialization**: Fixed `Failed to load from BPE encoder file stream: ENOENT` error by updating the token counter to use `createByEncoderName()` from `@microsoft/tiktokenizer`, which automatically downloads and caches the required BPE encoder file instead of requiring it to be bundled.
+    - Removed dependency on external `.tiktoken` files in the `dist` folder.
+    - Tokenizer now downloads `o200k_base.tiktoken` on first use and caches it in `node_modules/@microsoft/tiktokenizer/model/`.
+    - Removed `TokenCounter.setExtensionPath()` method (no longer needed).
+    - Updated all token counting methods to properly handle async tokenizer initialization.
+
+- **OpenAI SDK Version Conflict**: Fixed `client.chat.completions.stream is not a function` error by updating the OpenAI SDK dependency from v4.52.7 to v6.7.0.
+    - The `.stream()` method is only available in OpenAI SDK v5+.
+    - Updated dependency to match the version required by `@vscode/chat-lib`.
+
+- **OpenAI Handler Streaming Logic**: Replaced broken event-based streaming with reliable `for await...of` loop approach.
+    - Changed from `client.chat.completions.stream()` with `.on()` events to `client.chat.completions.create()` with direct chunk iteration.
+    - Improved compatibility with OpenAI-compatible providers that don't fully support the event-based API.
+    - Manual tool call argument accumulation instead of relying on SDK auto-accumulation.
+    - Tool call completion detected via `choice.finish_reason` instead of events.
+    - Preserved all existing features: thinking/reasoning content, tool calls, cancellation, activity reporting, usage stats, error handling.
+    - More consistent with Anthropic handler implementation.
+
+- **Empty Response Fallback**: Added fallback mechanism to handle cases where no content is received during streaming.
+    - Tracks last complete message from API chunks for fallback usage.
+    - Reports complete message if streaming fails to produce incremental content.
+    - Handles providers that return single complete response instead of streaming chunks.
+    - Logs warning when no response content is received at all.
+
+- **Tool Calling Fix**: Fixed tool name capture in streaming handler.
+    - Added `toolCallNames` map to track tool names from delta chunks.
+    - Tool names are now captured from the first delta that contains `function.name`.
+    - Fixed issue where tools were reported as "unknown_tool" instead of actual names like "read_file".
+    - Tool name capture happens before argument accumulation to ensure correct ordering.
+
 ## [0.3.1] - 2026-03-16
 
 ### Added

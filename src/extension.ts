@@ -52,9 +52,6 @@ async function activateProviders(
         return;
     }
 
-    // Set extension path (for tokenizer initialization)
-    TokenCounter.setExtensionPath(context.extensionPath);
-
     // Register all providers using the registry (excludes Codex which is registered separately)
     const result = await registerProvidersFromConfig(
         context,
@@ -189,7 +186,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Step 2: Initialize configuration manager
         stepStartTime = Date.now();
-        const configDisposable = ConfigManager.initialize();
+        const configDisposable = ConfigManager.initialize(context);
         context.subscriptions.push(configDisposable);
         Logger.trace(
             `⏱️ Configuration manager initialized (time: ${Date.now() - stepStartTime}ms)`

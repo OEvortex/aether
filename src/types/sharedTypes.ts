@@ -153,6 +153,8 @@ export interface ProviderConfig {
     family?: string;
     /** Endpoint to fetch model list from (e.g., "/models" or full URL) */
     modelsEndpoint?: string;
+    /** Enable auto-fetching models from endpoint with cooldown */
+    fetchModels?: boolean;
     /** Response parser configuration for model fetching */
 	modelParser?: {
 		/** JSON path to array of models (e.g., "data", "models") */

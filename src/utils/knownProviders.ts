@@ -381,13 +381,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openai: { baseUrl: 'https://opencode.ai/zen/go/v1' },
         anthropic: { baseUrl: 'https://opencode.ai/zen/go' },
         openModelEndpoint: true,
-        fetchModels: true,
-        modelsEndpoint: '/models',
-        modelParser: {
-            arrayPath: 'data',
-            descriptionField: 'id',
-            cooldownMinutes: 10
-        }
+        fetchModels: false
     },
     pollinations: {
         displayName: 'Pollinations AI',
@@ -917,6 +911,9 @@ export function buildConfigProvider(
             }
             if (knownConfig.modelParser) {
                 existingConfig.modelParser = knownConfig.modelParser;
+            }
+            if (knownConfig.fetchModels !== undefined) {
+                existingConfig.fetchModels = knownConfig.fetchModels;
             }
 
             // Apply openai/anthropic baseUrl overrides if present
