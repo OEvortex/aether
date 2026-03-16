@@ -49,6 +49,12 @@ All notable changes to this project will be documented in this file.
     - Handles providers that put regular content in `message` instead of `delta` after reasoning blocks.
     - Ensures content is only extracted when delta is present, with message.content as fallback.
 
+- **Thinking Content Display Fix**: Fixed broken thinking/reasoning output display.
+    - Changed from immediate reporting to buffer accumulation for thinking content.
+    - Thinking content is now reported as a single block when thinking ends.
+    - Prevents VS Code from treating each thinking delta as a separate bullet point.
+    - Thinking buffer is flushed when regular content starts or stream ends.
+
 ## [0.3.1] - 2026-03-16
 
 ### Added

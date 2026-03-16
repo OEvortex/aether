@@ -1067,29 +1067,13 @@ export class OpenAIHandler {
                                 const shouldOutputThinking =
                                     modelConfig.outputThinking !== false; // default true
                                 if (shouldOutputThinking) {
-                                    try {
-                                        // If currently no active id, generate one for this chain of thought
-                                        if (!currentThinkingId) {
-                                            currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-                                        }
-
-                                        // Report thinking immediately for real-time streaming (no buffering)
-                                        thinkingContentBuffer +=
-                                            reasoningContent;
-                                        progress.report(
-                                            new vscode.LanguageModelThinkingPart(
-                                                thinkingContentBuffer,
-                                                currentThinkingId
-                                            )
-                                        );
-                                        thinkingContentBuffer = ''; // Clear cache
-
-                                        // Mark thinking content received
-                                        hasThinkingContent = true;
-                                    } catch (e) {
-                                        Logger.trace(
-                                            `${model.name} failed to report thinking: ${String(e)}`
-                                        );
+                                    // Accumulate thinking content in buffer (don't report yet)
+                                    thinkingContentBuffer += reasoningContent;
+                                    hasThinkingContent = true;
+                                    
+                                    // If currently no active id, generate one for this chain of thought
+                                    if (!currentThinkingId) {
+                                        currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
                                     }
                                 }
                             }
