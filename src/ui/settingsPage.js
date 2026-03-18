@@ -6,8 +6,6 @@ const vscode = acquireVsCodeApi();
 // State management
 let settingsState = {
     providers: [],
-    loadBalanceSettings: {},
-    loadBalanceStrategies: {},
     uiPreferences: {
         hideThinkingInUI: false,
     },
@@ -56,8 +54,7 @@ function renderPage() {
 
     app.innerHTML = `
         ${renderHeader()}
-        ${renderLoadBalanceSection()}
-	${renderProviderCatalogSection()}
+        ${renderProviderManagementSection()}
         ${renderAdvancedSection()}
         ${renderUiPreferencesSection()}
         ${renderInfoSection()}
@@ -66,15 +63,32 @@ function renderPage() {
     attachEventListeners();
 }
 
+function renderProviderManagementSection() {
+    const providerCatalogSection = renderProviderCatalogSection();
+
+    return `
+        <div class="settings-section">
+            <h2 class="section-title">
+                🧩 Provider Configuration
+                <span class="badge">Unified</span>
+            </h2>
+            <p class="section-summary">
+                Configure provider settings, API keys, and load balancing directly in each provider card.
+            </p>
+            ${providerCatalogSection}
+        </div>
+    `;
+}
+
 /**
  * Render header section
  */
 function renderHeader() {
     const providers = settingsState.providers || [];
     const configuredProviders = providers.filter(isProviderConfigured).length;
-    const activeLoadBalanceCount = Object.values(
-        settingsState.loadBalanceSettings || {},
-    ).filter(Boolean).length;
+    const activeLoadBalanceCount = providers.filter((provider) =>
+        Boolean(provider.loadBalanceEnabled),
+    ).length;
 
     return `
         <div class="settings-header">
@@ -119,47 +133,6 @@ function isProviderConfigured(provider) {
     });
 }
 
-/**
- * Render load balance section
- */
-function renderLoadBalanceSection() {
-    const providers = settingsState.providers || [];
-
-    // Filter providers that have accounts
-    const providersWithAccounts = providers.filter((p) => p.accountCount > 0);
-
-    if (providersWithAccounts.length === 0) {
-        return `
-            <div class="settings-section">
-                <h2 class="section-title">
-                    ⚖️ Load Balance Settings
-                    <span class="badge">Multi-Account</span>
-                </h2>
-                <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <h3>No Accounts Configured</h3>
-                    <p>Add accounts to providers to enable load balancing features</p>
-                    <button class="action-button" onclick="openAccountManager()">
-                        👤 Manage Accounts
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    return `
-        <div class="settings-section">
-            <h2 class="section-title">
-                ⚖️ Load Balance Settings
-                <span class="badge">Multi-Account</span>
-            </h2>
-            <div class="card-grid">
-                ${providersWithAccounts.map((provider) => renderProviderCard(provider)).join("")}
-            </div>
-        </div>
-    `;
-}
-
 function renderProviderCatalogSection() {
     const providers = settingsState.providers || [];
     const query = (settingsState.providerSearchQuery || "").trim().toLowerCase();
@@ -182,11 +155,7 @@ function renderProviderCatalogSection() {
             : `${filteredProviders.length} of ${providers.length} providers`;
 
     return `
-        <div class="settings-section">
-            <h2 class="section-title">
-                🧩 Provider Configuration
-                <span class="badge">Unified</span>
-            </h2>
+        <div class="provider-subsection">
             <div class="provider-catalog-toolbar">
 				<div class="search-shell">
 					<span class="search-icon">⌕</span>
@@ -224,6 +193,7 @@ function renderProviderCatalogItem(provider) {
         provider.supportsApiKey ? "API Key" : null,
         provider.supportsOAuth ? "OAuth" : null,
         (provider.settingsFields || []).length ? "Settings" : null,
+        provider.supportsLoadBalance ? "Load Balance" : null,
     ]
         .filter(Boolean)
         .map((badge) => `<span class="account-badge">${badge}</span>`)
@@ -231,6 +201,10 @@ function renderProviderCatalogItem(provider) {
     const setupBadge = isProviderConfigured(provider)
         ? '<span class="account-badge success">Configured</span>'
         : '<span class="account-badge warning">Setup needed</span>';
+    const compatiblePanel =
+        provider.id === "compatible"
+            ? renderCompatibleProviderPanel(provider)
+            : "";
 
     return `
         <div class="provider-catalog-item" data-provider-item="${provider.id}">
@@ -243,10 +217,11 @@ function renderProviderCatalogItem(provider) {
                     </div>
                 </div>
 				<div class="provider-head-badges">
-	                	<span class="account-badge">👤 ${accountCount}</span>
+					<span class="account-badge">👤 ${accountCount}</span>
 					${setupBadge}
 				</div>
             </div>
+            ${compatiblePanel}
             <div class="provider-capabilities">${capabilityBadges}</div>
 			${renderProviderEditor(provider)}
             <div class="provider-actions">
@@ -262,12 +237,46 @@ function renderProviderCatalogItem(provider) {
     `;
 }
 
+function renderCompatibleProviderPanel(provider) {
+    const customModelCount = provider.customModelCount || 0;
+    const countLabel =
+        customModelCount > 0
+            ? `${customModelCount} custom model${customModelCount === 1 ? "" : "s"}`
+            : "No custom models yet";
+
+    return `
+        <div class="compatible-hero-panel">
+            <div class="compatible-hero-copy">
+                <span class="section-kicker">Featured provider</span>
+                <h4>OpenAI / Anthropic Compatible</h4>
+                <p>
+                    Add your own OpenAI-style or Anthropic-style endpoints, then create models with a direct quick-add flow.
+                </p>
+                <div class="compatible-hero-meta">
+                    <span class="account-badge success">${escapeHtml(countLabel)}</span>
+                    <span class="account-badge">Fast setup</span>
+                </div>
+            </div>
+            <div class="compatible-hero-actions">
+                <button class="action-button" onclick="createCompatibleModel()">
+                    + Add custom model
+                </button>
+                <button class="action-button secondary" onclick="manageCompatibleModels()">
+                    Manage models
+                </button>
+            </div>
+        </div>
+    `;
+}
+
 function renderProviderEditor(provider) {
     const settingsFields = Array.isArray(provider.settingsFields)
         ? provider.settingsFields
             .map((field) => renderProviderSettingField(provider.id, field))
             .join("")
         : "";
+
+    const loadBalanceSection = renderProviderLoadBalanceSection(provider);
 
     // Render multiple API keys section
     const apiKeysSection = provider.supportsApiKey
@@ -287,11 +296,55 @@ function renderProviderEditor(provider) {
 
     return `
 		<div class="provider-editor-grid" data-provider-editor="${provider.id}">
+			${loadBalanceSection}
 			${apiKeysSection}
 				${settingsFields}
 			${saveButton}
 		</div>
 	`;
+}
+
+function renderProviderLoadBalanceSection(provider) {
+    if (!provider.supportsLoadBalance) {
+        return "";
+    }
+
+    const accountCount = provider.accountCount || 0;
+    const canEnable = accountCount >= 2;
+    const isEnabled = Boolean(provider.loadBalanceEnabled) && canEnable;
+    const currentStrategy = provider.loadBalanceStrategy || "round-robin";
+
+    return `
+        <div class="provider-lb-section ${isEnabled ? "enabled" : "disabled"}">
+            <div class="provider-lb-header">
+                <div>
+                    <span class="section-kicker">Load balancing</span>
+                    <h4>Distribute traffic across accounts</h4>
+                </div>
+                <label class="toggle-switch small">
+                    <input type="checkbox"
+                           id="toggle-lb-${provider.id}"
+                           ${isEnabled ? "checked" : ""}
+                           ${!canEnable ? "disabled" : ""}
+                           onchange="handleToggleChange('${provider.id}', this.checked)">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="provider-lb-meta">
+                <span class="account-badge ${canEnable ? "success" : "warning"}">
+                    ${canEnable ? "Ready" : "Need 2+ accounts"}
+                </span>
+                <span class="provider-lb-hint">
+                    ${canEnable
+            ? "Turn this on to spread requests across active API key accounts."
+            : "Add at least two API key accounts to unlock load balancing."}
+                </span>
+            </div>
+            ${isEnabled
+            ? renderStrategySelector(provider.id, currentStrategy)
+            : ""}
+        </div>
+    `;
 }
 
 function getProviderSettingInputId(providerId, settingKey) {
@@ -355,31 +408,6 @@ function renderProviderSettingField(providerId, field) {
 function renderApiKeysSection(provider) {
     const apiKeys = provider.apiKeys || [];
     const hasApiKeys = apiKeys.length > 0;
-    const supportsLoadBalance =
-        provider.supportsLoadBalance && apiKeys.length >= 2;
-    const loadBalanceEnabled = provider.loadBalanceEnabled || false;
-
-    // Render load balancing toggle if supported
-    const loadBalanceSection = supportsLoadBalance
-        ? `
-        <div class="api-key-lb-section">
-            <div class="api-key-lb-toggle">
-                <span class="api-key-lb-label">
-                    <span class="lb-icon">⚖️</span>
-                    Load Balancing
-                </span>
-                <label class="toggle-switch small">
-                    <input type="checkbox"
-                           id="toggle-lb-${provider.id}"
-                           ${loadBalanceEnabled ? "checked" : ""}
-                           onchange="handleToggleChange('${provider.id}', this.checked)">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            ${loadBalanceEnabled ? renderStrategySelector(provider.id, provider.loadBalanceStrategy) : ""}
-        </div>
-    `
-        : "";
 
     // Render list of existing API keys
     const apiKeyList = apiKeys
@@ -422,7 +450,6 @@ function renderApiKeysSection(provider) {
     return `
         <div class="provider-editor-field api-keys-section">
             <label>API Keys</label>
-            ${loadBalanceSection}
             ${hasApiKeys ? `<div class="api-key-list">${apiKeyList}</div>` : '<p class="no-api-keys">No API keys configured</p>'}
             ${addApiKeyForm}
         </div>
@@ -460,65 +487,14 @@ function getCategoryLabel(category) {
 }
 
 /**
- * Render a provider card
- */
-function renderProviderCard(provider) {
-    const isEnabled = settingsState.loadBalanceSettings[provider.id] || false;
-    const currentStrategy =
-        settingsState.loadBalanceStrategies[provider.id] || "round-robin";
-    const accountCount = provider.accountCount || 0;
-    const statusClass = isEnabled ? "enabled" : "disabled";
-    const statusText = isEnabled ? "Enabled" : "Disabled";
-    const canEnable = accountCount >= 2;
-
-    return `
-        <div class="settings-card" data-provider="${provider.id}">
-            <div class="card-header">
-                <div class="card-title">
-					<div class="provider-icon">${escapeHtml(provider.icon || "🤖")}</div>
-                    <h3>${escapeHtml(provider.displayName)}</h3>
-                </div>
-                <span class="status-indicator ${statusClass}">
-                    <span class="status-dot"></span>
-                    ${statusText}
-                </span>
-            </div>
-            <div class="card-description">
-				${escapeHtml(provider.description || "AI model provider")}
-            </div>
-            <div class="account-info">
-                <span class="account-badge">
-                    👤 ${accountCount} account${accountCount !== 1 ? "s" : ""}
-                </span>
-                ${accountCount >= 2 ? '<span class="account-badge success">Ready for LB</span>' : '<span class="account-badge warning">Need 2+ accounts</span>'}
-            </div>
-            <div class="toggle-container">
-                <div class="toggle-label">
-                    <span class="label-text">Enable Load Balancing</span>
-                    <span class="label-hint">${canEnable ? "Distribute requests across accounts" : "Requires 2+ accounts"}</span>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" 
-                           id="toggle-${provider.id}" 
-                           ${isEnabled ? "checked" : ""} 
-                           ${!canEnable ? "disabled" : ""}
-                           onchange="handleToggleChange('${provider.id}', this.checked)">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            ${isEnabled && canEnable ? renderStrategySelector(provider.id, currentStrategy) : ""}
-        </div>
-    `;
-}
-
-/**
  * Render strategy selector
  */
 function renderStrategySelector(providerId, currentStrategy) {
     return `
         <div class="strategy-container">
             <div class="strategy-label">
-                <span class="label-text">Load Balance Strategy</span>
+                <span class="label-text">Strategy</span>
+                <span class="label-hint">How requests should rotate across accounts.</span>
             </div>
             <div class="strategy-options">
                 ${LOAD_BALANCE_STRATEGIES.map(
@@ -742,12 +718,29 @@ function _runProviderWizard(providerId) {
     });
 }
 
+function _manageCompatibleModels() {
+    vscode.postMessage({
+        command: "manageCompatibleModels",
+    });
+}
+
+function _createCompatibleModel() {
+    vscode.postMessage({
+        command: "createCompatibleModel",
+    });
+}
+
 /**
  * Handle toggle change
  */
 function _handleToggleChange(providerId, enabled) {
     // Update local state
-    settingsState.loadBalanceSettings[providerId] = enabled;
+    const provider = (settingsState.providers || []).find(
+        (p) => p.id === providerId,
+    );
+    if (provider) {
+        provider.loadBalanceEnabled = enabled;
+    }
 
     // Send message to extension
     vscode.postMessage({
@@ -756,8 +749,9 @@ function _handleToggleChange(providerId, enabled) {
         enabled: enabled,
     });
 
-    // Re-render to show/hide strategy selector
-    renderPage();
+    // Update only the affected card and header stats to avoid full-page blinking
+    syncProviderCard(providerId);
+    syncHeaderStats();
     showToast(
         enabled ? "Load balancing enabled" : "Load balancing disabled",
         "success",
@@ -769,7 +763,12 @@ function _handleToggleChange(providerId, enabled) {
  */
 function _handleStrategyChange(providerId, strategy) {
     // Update local state
-    settingsState.loadBalanceStrategies[providerId] = strategy;
+    const provider = (settingsState.providers || []).find(
+        (p) => p.id === providerId,
+    );
+    if (provider) {
+        provider.loadBalanceStrategy = strategy;
+    }
 
     // Send message to extension
     vscode.postMessage({
@@ -778,8 +777,8 @@ function _handleStrategyChange(providerId, strategy) {
         strategy: strategy,
     });
 
-    // Update UI
-    renderPage();
+    // Update only the affected card to avoid full-page blinking
+    syncProviderCard(providerId);
     showToast(`Strategy changed to ${strategy}`, "success");
 }
 
@@ -815,6 +814,41 @@ function _setHideThinkingInUI(enabled) {
     });
 
     renderPage();
+}
+
+function syncProviderCard(providerId) {
+    const provider = (settingsState.providers || []).find(
+        (p) => p.id === providerId,
+    );
+    if (!provider) {
+        return;
+    }
+
+    const safeProviderId = String(providerId).replace(/"/g, "\\\"");
+    const card = document.querySelector(`[data-provider-item="${safeProviderId}"]`);
+    if (!card) {
+        return;
+    }
+
+    card.outerHTML = renderProviderCatalogItem(provider);
+}
+
+function syncHeaderStats() {
+    const providers = settingsState.providers || [];
+    const stats = {
+        Providers: providers.length,
+        Configured: providers.filter(isProviderConfigured).length,
+        "Load Balance": providers.filter((provider) => Boolean(provider.loadBalanceEnabled)).length,
+    };
+
+    document.querySelectorAll(".header-stat").forEach((stat) => {
+        const labelEl = stat.querySelector(".header-stat-label");
+        const valueEl = stat.querySelector(".header-stat-value");
+        const label = labelEl?.textContent?.trim();
+        if (label && valueEl && Object.prototype.hasOwnProperty.call(stats, label)) {
+            valueEl.textContent = String(stats[label]);
+        }
+    });
 }
 
 /**
@@ -906,6 +940,8 @@ window.openAccountManager = _openAccountManager;
 window.openProviderSettings = _openProviderSettings;
 window.refreshSettings = _refreshSettings;
 window.runProviderWizard = _runProviderWizard;
+window.manageCompatibleModels = _manageCompatibleModels;
+window.createCompatibleModel = _createCompatibleModel;
 window.saveProviderSettings = _saveProviderSettings;
 window.addApiKey = _addApiKey;
 window.removeApiKey = _removeApiKey;

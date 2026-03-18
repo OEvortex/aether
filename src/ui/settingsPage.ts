@@ -7,6 +7,7 @@ import * as vscode from "vscode";
 import { AccountManager } from "../accounts/accountManager";
 import type { ApiKeyCredentials } from "../accounts/types";
 import { codexLoginCommand, Logger } from "../utils";
+import { CompatibleModelManager } from "../utils/compatibleModelManager";
 import { ConfigManager } from "../utils/configManager";
 import { ProviderRegistry } from "../utils/knownProviders";
 import { ProviderWizard } from "../utils/providerWizard";
@@ -71,6 +72,7 @@ interface ProviderInfo {
 	activeApiKeyId: string | null;
 	loadBalanceEnabled: boolean;
 	loadBalanceStrategy: LoadBalanceStrategy;
+	customModelCount?: number;
 	settingsFields: ProviderSettingField[];
 }
 
@@ -172,6 +174,12 @@ export class SettingsPage {
 					case "openProviderSettings":
 						await SettingsPage.handleOpenProviderSettings(message.providerId);
 						break;
+					case "manageCompatibleModels":
+						await SettingsPage.handleManageCompatibleModels();
+						break;
+					case "createCompatibleModel":
+						await SettingsPage.handleCreateCompatibleModel();
+						break;
 					case "runProviderWizard":
 						await SettingsPage.handleRunProviderWizard(
 							message.providerId,
@@ -267,42 +275,18 @@ export class SettingsPage {
 	 */
 	private static async sendStateUpdate(webview: vscode.Webview): Promise<void> {
 		const providers = await SettingsPage.getProvidersInfo();
-		const loadBalanceSettings: Record<string, boolean> = {};
-		const loadBalanceStrategies: Record<string, string> = {};
 		const uiPreferences = {
 			hideThinkingInUI: ConfigManager.getHideThinkingInUI(),
 		};
-
-		for (const provider of providers) {
-			loadBalanceSettings[provider.id] =
-				SettingsPage.accountManager.getLoadBalanceEnabled(provider.id);
-			loadBalanceStrategies[provider.id] =
-				SettingsPage.loadBalanceStrategies[provider.id] || "round-robin";
-		}
 
 		// Send initial data
 		webview.postMessage({
 			command: "updateState",
 			data: {
 				providers,
-				loadBalanceSettings,
-				loadBalanceStrategies,
 				uiPreferences,
 			},
 		});
-
-		// Post a second message to handle webview scripts that initialize a bit later
-		setTimeout(() => {
-			webview.postMessage({
-				command: "updateState",
-				data: {
-					providers,
-					loadBalanceSettings,
-					loadBalanceStrategies,
-					uiPreferences,
-				},
-			});
-		}, 100);
 	}
 
 	private static async handleSetHideThinkingInUI(
@@ -427,6 +411,10 @@ export class SettingsPage {
 					activeApiKeyId: activeAccount?.id || null,
 					loadBalanceEnabled,
 					loadBalanceStrategy,
+					customModelCount:
+						config.id === "compatible"
+							? CompatibleModelManager.getModels().length
+							: undefined,
 					settingsFields,
 				};
 			}),
@@ -806,6 +794,14 @@ export class SettingsPage {
 		);
 	}
 
+	private static async handleManageCompatibleModels(): Promise<void> {
+		await CompatibleModelManager.configureModelOrUpdateAPIKey();
+	}
+
+	private static async handleCreateCompatibleModel(): Promise<void> {
+		await CompatibleModelManager.startCreateModelFlow();
+	}
+
 	/**
 	 * Handle add new API key request
 	 */
@@ -962,7 +958,6 @@ export class SettingsPage {
 				providerId,
 				enabled,
 			);
-			await SettingsPage.sendStateUpdate(webview);
 
 			webview.postMessage({
 				command: "showToast",
@@ -993,7 +988,6 @@ export class SettingsPage {
 
 			SettingsPage.loadBalanceStrategies[providerId] = strategy;
 			await SettingsPage.saveStrategiesToStorage();
-			await SettingsPage.sendStateUpdate(webview);
 
 			// TODO: Implement actual strategy change in AccountManager if needed
 			// await SettingsPage.accountManager.setLoadBalanceStrategy(providerId, strategy);

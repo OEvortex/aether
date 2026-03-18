@@ -51,7 +51,7 @@ let isCreateMode = false;
  * @param {boolean} createMode - Whether it is in creation mode
  * @returns {void}
  */
-function _initializeEditor(data, createMode) {
+function initializeEditor(data, createMode) {
 	modelData = data;
 	isCreateMode = createMode;
 
@@ -809,6 +809,9 @@ function bindEvents() {
 		}
 	});
 }
+
+// Backward-compatible alias in case any older HTML still references the old name.
+const _initializeEditor = initializeEditor;
 
 /**
  * Validate JSON string format

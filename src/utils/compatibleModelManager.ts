@@ -445,6 +445,17 @@ export class CompatibleModelManager {
 	}
 
 	/**
+	 * Start a direct "add custom model" flow.
+	 * Opens the visual editor immediately and saves the model if the user completes it.
+	 */
+	static async startCreateModelFlow(): Promise<void> {
+		const newModel = await CompatibleModelManager.showVisualModelEditorForCreate();
+		if (newModel) {
+			await CompatibleModelManager.addModel(newModel);
+		}
+	}
+
+	/**
 	 * Prompt and set API key - set by provider unit
 	 */
 	private static async promptAndSetApiKey(): Promise<void> {
