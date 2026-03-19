@@ -653,11 +653,14 @@ export class OpenAIHandler {
             let hasThinkingContent = false; // Mark whether thinking content was output
             let hasSeenNativeContentEvent = false;
             let hasSeenNativeReasoningDelta = false;
-            // ID of the chain of thought currently being output (can be restarted/ended)
-            // When not null, indicates an unended chain of thought, encounter first visible content delta need to first send an empty value with same id to end said chain of thought
+            // ID of the chain of thought currently being output.
+            // Keep this alive for the whole stream so reasoning chunks stay in one block.
             let currentThinkingId: string | null = null;
             // Thinking content cache, used to accumulate thinking content
             let thinkingContentBuffer: string = '';
+            // Buffer visible content until reasoning finishes so we do not interleave
+            // content with late reasoning deltas from OpenAI chat-completions streams.
+            let pendingVisibleContentBuffer: string = '';
             let lastFallbackReasoningSnapshot = '';
             let lastFallbackMessageContent = '';
             // Track last complete message for fallback (some providers return complete message in one chunk)
@@ -855,13 +858,6 @@ export class OpenAIHandler {
                                                 progress.report(
                                                     new vscode.LanguageModelThinkingPart(
                                                         thinkingContentBuffer,
-                                                        currentThinkingId
-                                                    )
-                                                );
-                                                // End current chain of thought
-                                                progress.report(
-                                                    new vscode.LanguageModelThinkingPart(
-                                                        '',
                                                         currentThinkingId
                                                     )
                                                 );
@@ -1120,13 +1116,14 @@ export class OpenAIHandler {
                                 const shouldOutputThinking =
                                     modelConfig.outputThinking !== false; // default true
                                 if (shouldOutputThinking) {
-                                    // Accumulate thinking content in buffer (don't report yet)
-                                    thinkingContentBuffer += reasoningContent;
-                                    hasThinkingContent = true;
-
-                                    // If currently no active id, generate one for this chain of thought
                                     if (!currentThinkingId) {
                                         currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+                                    }
+
+                                    if (currentThinkingId) {
+                                        // Accumulate thinking content in buffer (don't report yet)
+                                        thinkingContentBuffer += reasoningContent;
+                                        hasThinkingContent = true;
                                     }
                                 }
                             }
@@ -1144,43 +1141,9 @@ export class OpenAIHandler {
                                         ''
                                     ).length > 0;
 
-                                if (deltaVisible && currentThinkingId) {
-                                    // Before outputting first visible content, if there is cached thinking content, report it first
-                                    if (thinkingContentBuffer.length > 0) {
-                                        try {
-                                            progress.report(
-                                                new vscode.LanguageModelThinkingPart(
-                                                    thinkingContentBuffer,
-                                                    currentThinkingId
-                                                )
-                                            );
-                                            thinkingContentBuffer = ''; // Clear cache
-                                            hasThinkingContent = true; // Mark thinking content was output
-                                        } catch (e) {
-                                            Logger.trace(
-                                                `${model.name} failed to report thinking: ${String(e)}`
-                                            );
-                                        }
-                                    }
-
-                                    // Then end current chain of thought
-                                    progress.report(
-                                        new vscode.LanguageModelThinkingPart(
-                                            '',
-                                            currentThinkingId
-                                        )
-                                    );
-                                    currentThinkingId = null;
-                                }
-
-                                // Output regular content
-                                progress.report(
-                                    new vscode.LanguageModelTextPart(
-                                        delta.content
-                                    )
-                                );
-                                // Only mark as received content if it's not just whitespace
-                                if (delta.content.trim().length > 0) {
+                                // Buffer visible content until reasoning completes.
+                                pendingVisibleContentBuffer += delta.content;
+                                if (deltaVisible) {
                                     hasReceivedContent = true;
                                 }
                                 hasSeenNativeContentEvent = true;
@@ -1209,37 +1172,10 @@ export class OpenAIHandler {
                                         ''
                                     ).length > 0
                                 ) {
-                                    // Before outputting visible content, if there is an unended chain of thought, end it first
-                                    if (currentThinkingId) {
-                                        try {
-                                            progress.report(
-                                                new vscode.LanguageModelThinkingPart(
-                                                    '',
-                                                    currentThinkingId
-                                                )
-                                            );
-                                        } catch (e) {
-                                            Logger.trace(
-                                                `${model.name} failed to end thinking: ${String(e)}`
-                                            );
-                                        }
-                                        currentThinkingId = null;
-                                    }
-
-                                    // Report text content
-                                    try {
-                                        progress.report(
-                                            new vscode.LanguageModelTextPart(
-                                                messageContentDelta
-                                            )
-                                        );
-                                        hasReceivedContent = true;
-                                        hasSeenNativeContentEvent = true;
-                                    } catch (e) {
-                                        Logger.trace(
-                                            `${model.name} failed to report fallback message content: ${String(e)}`
-                                        );
-                                    }
+                                    pendingVisibleContentBuffer +=
+                                        messageContentDelta;
+                                    hasReceivedContent = true;
+                                    hasSeenNativeContentEvent = true;
                                 }
 
                                 // Update last fallback snapshot
@@ -1312,6 +1248,38 @@ export class OpenAIHandler {
                     } catch (e) {
                         Logger.trace(
                             `${model.name} failed to report thinking at end: ${String(e)}`
+                        );
+                    }
+                }
+
+                // Close the current thinking sequence only once the stream is fully done.
+                if (currentThinkingId) {
+                    try {
+                        progress.report(
+                            new vscode.LanguageModelThinkingPart(
+                                '',
+                                currentThinkingId
+                            )
+                        );
+                    } catch (e) {
+                        Logger.trace(
+                            `${model.name} failed to end thinking at stream end: ${String(e)}`
+                        );
+                    }
+                    currentThinkingId = null;
+                }
+
+                // Now that thinking is fully done, flush any buffered visible content.
+                if (pendingVisibleContentBuffer.length > 0) {
+                    try {
+                        progress.report(
+                            new vscode.LanguageModelTextPart(
+                                pendingVisibleContentBuffer
+                            )
+                        );
+                    } catch (e) {
+                        Logger.trace(
+                            `${model.name} failed to flush buffered visible content: ${String(e)}`
                         );
                     }
                 }
