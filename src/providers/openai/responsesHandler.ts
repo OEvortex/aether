@@ -3,6 +3,10 @@ import * as vscode from 'vscode';
 import type { ModelConfig } from '../../types/sharedTypes';
 import { ApiKeyManager } from '../../utils/apiKeyManager';
 import { ConfigManager } from '../../utils/configManager';
+import {
+    getProviderRateLimit,
+    recordProviderRateLimitFromHeaders
+} from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
 import { TokenCounter } from '../../utils/tokenCounter';
@@ -53,9 +57,18 @@ export class ResponsesHandler {
         token: vscode.CancellationToken,
         _accountId?: string
     ): Promise<void> {
-        await RateLimiter.getInstance(this.provider, 2, 1000).throttle(
-            this.displayName
+        const rateLimit = getProviderRateLimit(
+            this.provider,
+            modelConfig.sdkMode
         );
+        const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
+        const windowMs = rateLimit?.windowMs ?? 1000;
+
+        await RateLimiter.getInstance(
+            `${this.provider}:${modelConfig.sdkMode || 'openai'}:${requestsPerSecond}:${windowMs}`,
+            requestsPerSecond,
+            windowMs
+        ).throttle(this.displayName);
 
         Logger.debug(
             `${model.name} starting to process ${this.displayName} Responses request`
@@ -123,9 +136,17 @@ export class ResponsesHandler {
             let finalResponse: OpenAI.Responses.Response | undefined;
 
             try {
-                const stream = client.responses.stream(createParams, {
-                    signal: abortController.signal
-                });
+                const { data: stream, response } = await client.responses
+                    .create(createParams, {
+                        signal: abortController.signal
+                    })
+                    .withResponse();
+
+                recordProviderRateLimitFromHeaders(
+                    this.provider,
+                    response.headers,
+                    modelConfig.sdkMode
+                );
 
                 stream
                     .on('response.output_text.delta', (event) => {
@@ -265,12 +286,13 @@ export class ResponsesHandler {
 
             if (promptTokens === 0) {
                 try {
-                    promptTokens = await TokenCounter.getInstance().countMessagesTokens(
-                        model,
-                        [...messages],
-                        { sdkMode: modelConfig.sdkMode },
-                        options
-                    );
+                    promptTokens =
+                        await TokenCounter.getInstance().countMessagesTokens(
+                            model,
+                            [...messages],
+                            { sdkMode: modelConfig.sdkMode },
+                            options
+                        );
                     completionTokens = totalCompletionTokens || 0;
                     totalTokens = promptTokens + completionTokens;
                     estimatedPromptTokens = true;
@@ -431,9 +453,7 @@ export class ResponsesHandler {
                 part instanceof vscode.LanguageModelThinkingPart
             ) {
                 textParts.push(
-                    Array.isArray(part.value)
-                        ? part.value.join('')
-                        : part.value
+                    Array.isArray(part.value) ? part.value.join('') : part.value
                 );
             }
         }

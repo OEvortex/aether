@@ -3,8 +3,8 @@
  *  Export all components of the accounts module
  *--------------------------------------------------------------------------------------------*/
 
-export * from "./accountManager";
-export * from "./accountQuotaCache";
-export * from "./accountSyncAdapter";
-export * from "./accountUI";
-export * from "./types";
+export * from './accountManager';
+export * from './accountQuotaCache';
+export * from './accountSyncAdapter';
+export * from './accountUI';
+export * from './types';

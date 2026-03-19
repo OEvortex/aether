@@ -9,7 +9,11 @@ import { AccountQuotaCache } from '../../accounts/accountQuotaCache';
 import type { ModelConfig } from '../../types/sharedTypes';
 import { ApiKeyManager } from '../../utils/apiKeyManager';
 import { ConfigManager } from '../../utils/configManager';
-import { KnownProviders } from '../../utils/knownProviders';
+import {
+    getProviderRateLimit,
+    KnownProviders,
+    recordProviderRateLimitFromHeaders
+} from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
 import { TokenCounter } from '../../utils/tokenCounter';
@@ -186,7 +190,7 @@ export class OpenAIHandler {
                     // Add the stream_options payload (many callers want usage info)
                     if (init?.body && typeof init.body === 'string') {
                         const data = JSON.parse(init.body);
-                        if (data && data.stream && !data.stream_options) {
+                        if (data?.stream && !data.stream_options) {
                             data.stream_options = { include_usage: true };
                             init = { ...init, body: JSON.stringify(data) };
                         }
@@ -527,10 +531,19 @@ export class OpenAIHandler {
         token: vscode.CancellationToken,
         accountId?: string
     ): Promise<void> {
-        // Apply rate limiting: 2 requests per 1 second
-        await RateLimiter.getInstance(this.provider, 2, 1000).throttle(
-            this.displayName
+        const rateLimit = getProviderRateLimit(
+            this.provider,
+            modelConfig.sdkMode
         );
+        const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
+        const windowMs = rateLimit?.windowMs ?? 1000;
+
+        // Apply provider-configurable rate limiting
+        await RateLimiter.getInstance(
+            `${this.provider}:${modelConfig.sdkMode || 'openai'}:${requestsPerSecond}:${windowMs}`,
+            requestsPerSecond,
+            windowMs
+        ).throttle(this.displayName);
 
         Logger.debug(
             `${model.name} starting to process ${this.displayName} request${accountId ? ` (Account ID: ${accountId})` : ''}`
@@ -538,7 +551,7 @@ export class OpenAIHandler {
         // Clear event deduplication tracker for current request
         this.currentRequestProcessedEvents.clear();
         // Dictionary to store original tool call IDs by index
-        const toolCallIds = new Map<number, string>();
+        const _toolCallIds = new Map<number, string>();
 
         try {
             const client = await this.createOpenAIClient(
@@ -718,18 +731,29 @@ export class OpenAIHandler {
             const cancellationListener = token.onCancellationRequested(() =>
                 abortController.abort()
             );
-            let streamError: Error | null = null; // Used to capture stream error
+            const _streamError: Error | null = null; // Used to capture stream error
             // Save usage information of the last chunk (if any), some providers return usage in each chunk
             let finalUsage: OpenAI.Completions.CompletionUsage | undefined;
 
             try {
                 // Create streaming request directly using client.chat.completions.create() with stream: true
-                const stream = await client.chat.completions.create({
-                    ...createParams,
-                    stream: true
-                } as OpenAI.Chat.ChatCompletionCreateParamsStreaming, {
-                    signal: abortController.signal
-                });
+                const { data: stream, response } = await client.chat.completions
+                    .create(
+                        {
+                            ...createParams,
+                            stream: true
+                        } as OpenAI.Chat.ChatCompletionCreateParamsStreaming,
+                        {
+                            signal: abortController.signal
+                        }
+                    )
+                    .withResponse();
+
+                recordProviderRateLimitFromHeaders(
+                    this.provider,
+                    response.headers,
+                    modelConfig.sdkMode
+                );
 
                 // Track accumulated tool call arguments by index
                 const toolCallArguments = new Map<number, string>();
@@ -774,7 +798,10 @@ export class OpenAIHandler {
                             const message = choice.message;
 
                             // Track last complete message for fallback (some providers return complete message in one chunk)
-                            if (message?.content && typeof message.content === 'string') {
+                            if (
+                                message?.content &&
+                                typeof message.content === 'string'
+                            ) {
                                 lastCompleteMessage = message.content;
                             }
 
@@ -821,8 +848,7 @@ export class OpenAIHandler {
                                     ) {
                                         // At tool call start, if there is cached thinking content, report it first
                                         if (
-                                            thinkingContentBuffer.length >
-                                                0 &&
+                                            thinkingContentBuffer.length > 0 &&
                                             currentThinkingId
                                         ) {
                                             try {
@@ -876,14 +902,19 @@ export class OpenAIHandler {
                             // Check for finish_reason to detect completed tool calls
                             if (choice.finish_reason) {
                                 // Process any completed tool calls
-                                for (const [index, args] of toolCallArguments.entries()) {
+                                for (const [
+                                    index,
+                                    args
+                                ] of toolCallArguments.entries()) {
                                     if (!completedToolCalls.has(index)) {
                                         completedToolCalls.add(index);
 
                                         // Parse accumulated arguments
                                         let parsedArgs: object = {};
                                         try {
-                                            parsedArgs = JSON.parse(args || '{}');
+                                            parsedArgs = JSON.parse(
+                                                args || '{}'
+                                            );
                                         } catch (parseError) {
                                             // Try deduplication fix
                                             Logger.trace(
@@ -897,7 +928,9 @@ export class OpenAIHandler {
                                             try {
                                                 const maxCheckLength = Math.min(
                                                     50,
-                                                    Math.floor(cleanedArgs.length / 2)
+                                                    Math.floor(
+                                                        cleanedArgs.length / 2
+                                                    )
                                                 );
                                                 let duplicateFound = false;
                                                 let cutPosition = 0;
@@ -907,17 +940,24 @@ export class OpenAIHandler {
                                                     len >= 5;
                                                     len--
                                                 ) {
-                                                    const prefix = cleanedArgs.substring(
-                                                        0,
-                                                        len
-                                                    );
+                                                    const prefix =
+                                                        cleanedArgs.substring(
+                                                            0,
+                                                            len
+                                                        );
                                                     const restContent =
-                                                        cleanedArgs.substring(len);
+                                                        cleanedArgs.substring(
+                                                            len
+                                                        );
                                                     const duplicateIndex =
-                                                        restContent.indexOf(prefix);
+                                                        restContent.indexOf(
+                                                            prefix
+                                                        );
 
                                                     if (duplicateIndex !== -1) {
-                                                        cutPosition = len + duplicateIndex;
+                                                        cutPosition =
+                                                            len +
+                                                            duplicateIndex;
                                                         duplicateFound = true;
                                                         Logger.debug(
                                                             `Deduplication fix: detected first ${len} characters repeat at position ${cutPosition}, prefix="${prefix}"`
@@ -926,11 +966,16 @@ export class OpenAIHandler {
                                                     }
                                                 }
 
-                                                if (duplicateFound && cutPosition > 0) {
+                                                if (
+                                                    duplicateFound &&
+                                                    cutPosition > 0
+                                                ) {
                                                     const originalLength =
                                                         cleanedArgs.length;
                                                     cleanedArgs =
-                                                        cleanedArgs.substring(cutPosition);
+                                                        cleanedArgs.substring(
+                                                            cutPosition
+                                                        );
                                                     Logger.debug(
                                                         `Deduplication fix: remove duplicate prefix, truncate from ${originalLength} characters to ${cleanedArgs.length} characters`
                                                     );
@@ -948,9 +993,13 @@ export class OpenAIHandler {
                                                     i < cleanedArgs.length;
                                                     i++
                                                 ) {
-                                                    if (cleanedArgs[i] === '{') {
+                                                    if (
+                                                        cleanedArgs[i] === '{'
+                                                    ) {
                                                         depth++;
-                                                    } else if (cleanedArgs[i] === '}') {
+                                                    } else if (
+                                                        cleanedArgs[i] === '}'
+                                                    ) {
                                                         depth--;
                                                         if (depth === 0) {
                                                             firstObjEnd = i;
@@ -960,14 +1009,16 @@ export class OpenAIHandler {
                                                 }
                                                 if (
                                                     firstObjEnd !== -1 &&
-                                                    firstObjEnd < cleanedArgs.length - 1
+                                                    firstObjEnd <
+                                                        cleanedArgs.length - 1
                                                 ) {
                                                     const originalLength =
                                                         cleanedArgs.length;
-                                                    cleanedArgs = cleanedArgs.substring(
-                                                        0,
-                                                        firstObjEnd + 1
-                                                    );
+                                                    cleanedArgs =
+                                                        cleanedArgs.substring(
+                                                            0,
+                                                            firstObjEnd + 1
+                                                        );
                                                     Logger.debug(
                                                         `Deduplication fix: remove duplicate object, truncate from ${originalLength} characters to ${cleanedArgs.length} characters`
                                                     );
@@ -976,7 +1027,8 @@ export class OpenAIHandler {
 
                                             // Try to parse fixed parameters
                                             try {
-                                                parsedArgs = JSON.parse(cleanedArgs);
+                                                parsedArgs =
+                                                    JSON.parse(cleanedArgs);
                                                 Logger.debug(
                                                     `Deduplication fix successful for tool call index ${index}`
                                                 );
@@ -998,7 +1050,8 @@ export class OpenAIHandler {
                                         }
 
                                         // Use captured original tool ID if available
-                                        const originalId = toolCallIds.get(index);
+                                        const originalId =
+                                            toolCallIds.get(index);
                                         const toolCallId =
                                             originalId ||
                                             `tool_call_${index}_${Date.now()}`;
@@ -1010,8 +1063,10 @@ export class OpenAIHandler {
                                         }
 
                                         // Get tool name from captured names (CRITICAL - use actual tool name from provider)
-                                        const toolName = toolCallNames.get(index) || 'unknown_tool';
-                                        
+                                        const toolName =
+                                            toolCallNames.get(index) ||
+                                            'unknown_tool';
+
                                         if (toolName === 'unknown_tool') {
                                             Logger.warn(
                                                 `${model.name} Tool name not captured for index ${index}, using 'unknown_tool'`
@@ -1032,8 +1087,7 @@ export class OpenAIHandler {
 
                             // Handle reasoning/thinking content
                             const nativeReasoningContent =
-                                delta?.reasoning ??
-                                delta?.reasoning_content;
+                                delta?.reasoning ?? delta?.reasoning_content;
                             const fallbackReasoningSnapshot =
                                 !nativeReasoningContent
                                     ? (message?.reasoning ??
@@ -1055,8 +1109,7 @@ export class OpenAIHandler {
                                 hasSeenNativeReasoningDelta = true;
                                 lastFallbackReasoningSnapshot = '';
                             } else if (
-                                typeof fallbackReasoningSnapshot ===
-                                'string'
+                                typeof fallbackReasoningSnapshot === 'string'
                             ) {
                                 lastFallbackReasoningSnapshot =
                                     fallbackReasoningSnapshot;
@@ -1070,7 +1123,7 @@ export class OpenAIHandler {
                                     // Accumulate thinking content in buffer (don't report yet)
                                     thinkingContentBuffer += reasoningContent;
                                     hasThinkingContent = true;
-                                    
+
                                     // If currently no active id, generate one for this chain of thought
                                     if (!currentThinkingId) {
                                         currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -1086,7 +1139,10 @@ export class OpenAIHandler {
                             ) {
                                 // Determine if delta contains visible characters
                                 const deltaVisible =
-                                    delta.content.replace(/[\s\uFEFF\xA0]+/g, '').length > 0;
+                                    delta.content.replace(
+                                        /[\s\uFEFF\xA0]+/g,
+                                        ''
+                                    ).length > 0;
 
                                 if (deltaVisible && currentThinkingId) {
                                     // Before outputting first visible content, if there is cached thinking content, report it first
@@ -1136,15 +1192,23 @@ export class OpenAIHandler {
                                 !hasSeenNativeContentEvent &&
                                 message?.content &&
                                 typeof message.content === 'string' &&
-                                message.content.replace(/[\s\uFEFF\xA0]+/g, '').length > 0
+                                message.content.replace(/[\s\uFEFF\xA0]+/g, '')
+                                    .length > 0
                             ) {
                                 // Get incremental delta from snapshot
-                                const messageContentDelta = getIncrementalDeltaFromSnapshot(
-                                    message.content,
-                                    lastFallbackMessageContent
-                                );
-                                
-                                if (messageContentDelta && messageContentDelta.replace(/[\s\uFEFF\xA0]+/g, '').length > 0) {
+                                const messageContentDelta =
+                                    getIncrementalDeltaFromSnapshot(
+                                        message.content,
+                                        lastFallbackMessageContent
+                                    );
+
+                                if (
+                                    messageContentDelta &&
+                                    messageContentDelta.replace(
+                                        /[\s\uFEFF\xA0]+/g,
+                                        ''
+                                    ).length > 0
+                                ) {
                                     // Before outputting visible content, if there is an unended chain of thought, end it first
                                     if (currentThinkingId) {
                                         try {
@@ -1161,7 +1225,7 @@ export class OpenAIHandler {
                                         }
                                         currentThinkingId = null;
                                     }
-                                    
+
                                     // Report text content
                                     try {
                                         progress.report(
@@ -1177,7 +1241,7 @@ export class OpenAIHandler {
                                         );
                                     }
                                 }
-                                
+
                                 // Update last fallback snapshot
                                 lastFallbackMessageContent = message.content;
                             }
@@ -1195,7 +1259,7 @@ export class OpenAIHandler {
                         let parsedArgs: object = {};
                         try {
                             parsedArgs = JSON.parse(args || '{}');
-                        } catch (parseError) {
+                        } catch (_parseError) {
                             Logger.error(
                                 `Failed to parse tool call parameters for index ${index} at stream end`
                             );
@@ -1205,8 +1269,7 @@ export class OpenAIHandler {
                         // Use captured original tool ID if available
                         const originalId = toolCallIds.get(index);
                         const toolCallId =
-                            originalId ||
-                            `tool_call_${index}_${Date.now()}`;
+                            originalId || `tool_call_${index}_${Date.now()}`;
 
                         if (!originalId) {
                             Logger.warn(
@@ -1215,8 +1278,9 @@ export class OpenAIHandler {
                         }
 
                         // Get tool name from captured names (CRITICAL - use actual tool name from provider)
-                        const toolName = toolCallNames.get(index) || 'unknown_tool';
-                        
+                        const toolName =
+                            toolCallNames.get(index) || 'unknown_tool';
+
                         if (toolName === 'unknown_tool') {
                             Logger.warn(
                                 `${model.name} Tool name not captured for index ${index} at stream end`
@@ -1254,16 +1318,25 @@ export class OpenAIHandler {
 
                 // Fallback: if no content was received at all, try to get a complete response
                 // This handles cases where the provider returns a single complete chunk instead of streaming
-                if (!hasReceivedContent && !hasThinkingContent && completedToolCalls.size === 0) {
+                if (
+                    !hasReceivedContent &&
+                    !hasThinkingContent &&
+                    completedToolCalls.size === 0
+                ) {
                     Logger.debug(
                         `${model.name} No content received during streaming, using fallback mechanism`
                     );
-                    
+
                     // Try to use last complete message as fallback
-                    if (lastCompleteMessage && lastCompleteMessage.trim().length > 0) {
+                    if (
+                        lastCompleteMessage &&
+                        lastCompleteMessage.trim().length > 0
+                    ) {
                         try {
                             progress.report(
-                                new vscode.LanguageModelTextPart(lastCompleteMessage)
+                                new vscode.LanguageModelTextPart(
+                                    lastCompleteMessage
+                                )
                             );
                             hasReceivedContent = true;
                             Logger.debug(
@@ -1275,9 +1348,13 @@ export class OpenAIHandler {
                             );
                         }
                     }
-                    
+
                     // If still no content, report a generic message to avoid empty response
-                    if (!hasReceivedContent && !hasThinkingContent && completedToolCalls.size === 0) {
+                    if (
+                        !hasReceivedContent &&
+                        !hasThinkingContent &&
+                        completedToolCalls.size === 0
+                    ) {
                         Logger.warn(
                             `${model.name} No response content received from API at all`
                         );

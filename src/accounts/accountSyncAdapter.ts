@@ -3,367 +3,384 @@
  *  Sync between AccountManager and existing auth systems
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from "vscode";
-import { ProviderKey } from "../types/providerKeys";
-import { ApiKeyManager } from "../utils/apiKeyManager";
-import { Logger } from "../utils/logger";
-import { AccountManager } from "./accountManager";
-import type { OAuthCredentials } from "./types";
+import * as vscode from 'vscode';
+import { ProviderKey } from '../types/providerKeys';
+import { ApiKeyManager } from '../utils/apiKeyManager';
+import { Logger } from '../utils/logger';
+import { AccountManager } from './accountManager';
+import type { OAuthCredentials } from './types';
 
-const CODEX_PROVIDER = "codex";
+const CODEX_PROVIDER = 'codex';
 
 /**
  * Adapter to sync accounts from various sources
  */
 export class AccountSyncAdapter {
-	private static instance: AccountSyncAdapter;
-	private accountManager: AccountManager;
-	private disposables: vscode.Disposable[] = [];
+    private static instance: AccountSyncAdapter;
+    private accountManager: AccountManager;
+    private disposables: vscode.Disposable[] = [];
 
-	private constructor() {
-		this.accountManager = AccountManager.getInstance();
-		this.disposables.push(
-			this.accountManager.onAccountChange(async (event) => {
-				try {
-					if (
-						event.type === "added" ||
-						event.type === "switched" ||
-						event.type === "updated"
-					) {
-						await this.syncToApiKeyManager(event.provider);
-					} else if (event.type === "removed") {
-						await this.handleAccountRemoval(event.provider);
-					}
-				} catch (error) {
-					Logger.warn(
-						`Failed to sync ${event.provider} to ApiKeyManager:`,
-						error,
-					);
-				}
-			}),
-		);
-	}
+    private constructor() {
+        this.accountManager = AccountManager.getInstance();
+        this.disposables.push(
+            this.accountManager.onAccountChange(async (event) => {
+                try {
+                    if (
+                        event.type === 'added' ||
+                        event.type === 'switched' ||
+                        event.type === 'updated'
+                    ) {
+                        await this.syncToApiKeyManager(event.provider);
+                    } else if (event.type === 'removed') {
+                        await this.handleAccountRemoval(event.provider);
+                    }
+                } catch (error) {
+                    Logger.warn(
+                        `Failed to sync ${event.provider} to ApiKeyManager:`,
+                        error
+                    );
+                }
+            })
+        );
+    }
 
-	/**
-	 * Initialize adapter
-	 */
-	static initialize(): AccountSyncAdapter {
-		if (!AccountSyncAdapter.instance) {
-			AccountSyncAdapter.instance = new AccountSyncAdapter();
-		}
-		return AccountSyncAdapter.instance;
-	}
+    /**
+     * Initialize adapter
+     */
+    static initialize(): AccountSyncAdapter {
+        if (!AccountSyncAdapter.instance) {
+            AccountSyncAdapter.instance = new AccountSyncAdapter();
+        }
+        return AccountSyncAdapter.instance;
+    }
 
-	/**
-	 * Get instance
-	 */
-	static getInstance(): AccountSyncAdapter {
-		if (!AccountSyncAdapter.instance) {
-			throw new Error("AccountSyncAdapter not initialized");
-		}
-		return AccountSyncAdapter.instance;
-	}
+    /**
+     * Get instance
+     */
+    static getInstance(): AccountSyncAdapter {
+        if (!AccountSyncAdapter.instance) {
+            throw new Error('AccountSyncAdapter not initialized');
+        }
+        return AccountSyncAdapter.instance;
+    }
 
-	/**
-	 * Sync Codex account from ApiKeyManager
-	 */
-	async syncCodexAccount(): Promise<void> {
-		try {
-			const stored = await ApiKeyManager.getApiKey(CODEX_PROVIDER);
-			if (!stored) {
-				return;
-			}
+    /**
+     * Sync Codex account from ApiKeyManager
+     */
+    async syncCodexAccount(): Promise<void> {
+        try {
+            const stored = await ApiKeyManager.getApiKey(CODEX_PROVIDER);
+            if (!stored) {
+                return;
+            }
 
-			const authData = JSON.parse(stored) as {
-				access_token: string;
-				refresh_token: string;
-				email?: string;
-				expires_at: string;
-				account_id?: string;
-				organization_id?: string;
-				project_id?: string;
-				organizations?: unknown[];
-			};
+            const authData = JSON.parse(stored) as {
+                access_token: string;
+                refresh_token: string;
+                email?: string;
+                expires_at: string;
+                account_id?: string;
+                organization_id?: string;
+                project_id?: string;
+                organizations?: unknown[];
+            };
 
-			// Check whether this account already exists
-			const existingAccounts =
-				this.accountManager.getAccountsByProvider(CODEX_PROVIDER);
-			const existingByEmail = existingAccounts.find(
-				(acc) => acc.email === authData.email,
-			);
+            // Check whether this account already exists
+            const existingAccounts =
+                this.accountManager.getAccountsByProvider(CODEX_PROVIDER);
+            const existingByEmail = existingAccounts.find(
+                (acc) => acc.email === authData.email
+            );
 
-			if (existingByEmail) {
-				// Update credentials
-				const credentials: OAuthCredentials = {
-					accessToken: authData.access_token,
-					refreshToken: authData.refresh_token,
-					expiresAt: authData.expires_at,
-				};
-				await this.accountManager.updateCredentials(
-					existingByEmail.id,
-					credentials,
-				);
-				await this.accountManager.updateAccount(existingByEmail.id, {
-					metadata: {
-						...(existingByEmail.metadata || {}),
-						accountId: authData.account_id,
-						organizationId: authData.organization_id,
-						projectId: authData.project_id,
-						organizations: authData.organizations,
-					},
-				});
-				Logger.debug(`Updated Codex account: ${authData.email}`);
-			} else {
-				// Add a new account
-				const displayName = authData.email || "Codex Account";
-				const credentials: OAuthCredentials = {
-					accessToken: authData.access_token,
-					refreshToken: authData.refresh_token,
-					expiresAt: authData.expires_at,
-				};
+            if (existingByEmail) {
+                // Update credentials
+                const credentials: OAuthCredentials = {
+                    accessToken: authData.access_token,
+                    refreshToken: authData.refresh_token,
+                    expiresAt: authData.expires_at
+                };
+                await this.accountManager.updateCredentials(
+                    existingByEmail.id,
+                    credentials
+                );
+                await this.accountManager.updateAccount(existingByEmail.id, {
+                    metadata: {
+                        ...(existingByEmail.metadata || {}),
+                        accountId: authData.account_id,
+                        organizationId: authData.organization_id,
+                        projectId: authData.project_id,
+                        organizations: authData.organizations
+                    }
+                });
+                Logger.debug(`Updated Codex account: ${authData.email}`);
+            } else {
+                // Add a new account
+                const displayName = authData.email || 'Codex Account';
+                const credentials: OAuthCredentials = {
+                    accessToken: authData.access_token,
+                    refreshToken: authData.refresh_token,
+                    expiresAt: authData.expires_at
+                };
 
-				await this.accountManager.addOAuthAccount(
-					CODEX_PROVIDER,
-					displayName,
-					authData.email || "",
-					credentials,
-					{
-						accountId: authData.account_id,
-						organizationId: authData.organization_id,
-						projectId: authData.project_id,
-						organizations: authData.organizations,
-					},
-				);
-				Logger.info(`Synced Codex account: ${displayName}`);
-			}
-		} catch (error) {
-			Logger.error("Failed to sync Codex account:", error);
-		}
-	}
+                await this.accountManager.addOAuthAccount(
+                    CODEX_PROVIDER,
+                    displayName,
+                    authData.email || '',
+                    credentials,
+                    {
+                        accountId: authData.account_id,
+                        organizationId: authData.organization_id,
+                        projectId: authData.project_id,
+                        organizations: authData.organizations
+                    }
+                );
+                Logger.info(`Synced Codex account: ${displayName}`);
+            }
+        } catch (error) {
+            Logger.error('Failed to sync Codex account:', error);
+        }
+    }
 
-	/**
-	 * Sync API Key account from ApiKeyManager
-	 */
-	async syncApiKeyAccount(
-		provider: string,
-		displayName?: string,
-	): Promise<void> {
-		try {
-			const apiKey = await ApiKeyManager.getApiKey(provider);
-			if (!apiKey) {
-				return;
-			}
+    /**
+     * Sync API Key account from ApiKeyManager
+     */
+    async syncApiKeyAccount(
+        provider: string,
+        displayName?: string
+    ): Promise<void> {
+        try {
+            const apiKey = await ApiKeyManager.getApiKey(provider);
+            if (!apiKey) {
+                return;
+            }
 
-			// Check whether this account already exists
-			const existingAccounts =
-				this.accountManager.getAccountsByProvider(provider);
+            // Check whether this account already exists
+            const existingAccounts =
+                this.accountManager.getAccountsByProvider(provider);
 
-			if (existingAccounts.length === 0) {
-				// Add a new account
-				const name = displayName || `${provider} Account`;
-				await this.accountManager.addApiKeyAccount(provider, name, apiKey);
-				Logger.info(`Synced ${provider} account from ApiKeyManager`);
-			}
-		} catch (error) {
-			Logger.error(`Failed to sync ${provider} account:`, error);
-		}
-	}
+            if (existingAccounts.length === 0) {
+                // Add a new account
+                const name = displayName || `${provider} Account`;
+                await this.accountManager.addApiKeyAccount(
+                    provider,
+                    name,
+                    apiKey
+                );
+                Logger.info(`Synced ${provider} account from ApiKeyManager`);
+            }
+        } catch (error) {
+            Logger.error(`Failed to sync ${provider} account:`, error);
+        }
+    }
 
-	/**
-	 * Sync Qwen CLI account from local file
-	 */
-	async syncQwenCliAccount(): Promise<void> {
-		try {
-			const { QwenOAuthManager } = await import("../providers/qwencli/auth.js");
-			const oauthManager = QwenOAuthManager.getInstance();
+    /**
+     * Sync Qwen CLI account from local file
+     */
+    async syncQwenCliAccount(): Promise<void> {
+        try {
+            const { QwenOAuthManager } = await import(
+                '../providers/qwencli/auth.js'
+            );
+            const oauthManager = QwenOAuthManager.getInstance();
 
-			const existingAccounts = this.accountManager.getAccountsByProvider(
-				ProviderKey.QwenCli,
-			);
-			if (existingAccounts.length === 0) {
-				try {
-					const { accessToken, baseURL } =
-						await oauthManager.ensureAuthenticated();
-					if (accessToken) {
-						await this.accountManager.addOAuthAccount(
-							ProviderKey.QwenCli,
-							"Qwen CLI (Local)",
-							"",
-							{
-								accessToken,
-								refreshToken: "",
-								expiresAt: "",
-								tokenType: "",
-							},
-							{ source: "cli", baseURL },
-						);
-						Logger.info("Synced Qwen CLI account from local credentials");
-					}
-				} catch {
-					// Ignore
-				}
-			}
-		} catch (error) {
-			Logger.debug("Failed to sync Qwen CLI account:", error);
-		}
-	}
+            const existingAccounts = this.accountManager.getAccountsByProvider(
+                ProviderKey.QwenCli
+            );
+            if (existingAccounts.length === 0) {
+                try {
+                    const { accessToken, baseURL } =
+                        await oauthManager.ensureAuthenticated();
+                    if (accessToken) {
+                        await this.accountManager.addOAuthAccount(
+                            ProviderKey.QwenCli,
+                            'Qwen CLI (Local)',
+                            '',
+                            {
+                                accessToken,
+                                refreshToken: '',
+                                expiresAt: '',
+                                tokenType: ''
+                            },
+                            { source: 'cli', baseURL }
+                        );
+                        Logger.info(
+                            'Synced Qwen CLI account from local credentials'
+                        );
+                    }
+                } catch {
+                    // Ignore
+                }
+            }
+        } catch (error) {
+            Logger.debug('Failed to sync Qwen CLI account:', error);
+        }
+    }
 
-	/**
-	 * Sync all accounts from ApiKeyManager
-	 */
-	async syncAllAccounts(): Promise<void> {
-		const providers = [
-			ProviderKey.AIHubMix,
-			ProviderKey.Blackbox,
-			ProviderKey.Chutes,
-			ProviderKey.Cline,
-			ProviderKey.Compatible,
-			ProviderKey.DeepInfra,
-			ProviderKey.DeepSeek,
-			ProviderKey.Huggingface,
-			ProviderKey.Kilo,
-			ProviderKey.Kimi,
-			ProviderKey.Knox,
-			ProviderKey.LightningAI,
-			ProviderKey.MiniMax,
-			ProviderKey.MiniMaxCoding,
-			ProviderKey.Mistral,
-			ProviderKey.ModelScope,
-			ProviderKey.Moonshot,
-			ProviderKey.Nanogpt,
-			ProviderKey.Nvidia,
-			ProviderKey.Ollama,
-			ProviderKey.OpenAI,
-			ProviderKey.OpenCode,
-			ProviderKey.Opencodego,
-			ProviderKey.Pollinations,
-			ProviderKey.Vercelai,
-			ProviderKey.Zenmux,
-			ProviderKey.Zhipu,
-		];
+    /**
+     * Sync all accounts from ApiKeyManager
+     */
+    async syncAllAccounts(): Promise<void> {
+        const providers = [
+            ProviderKey.AIHubMix,
+            ProviderKey.Blackbox,
+            ProviderKey.Chutes,
+            ProviderKey.Cline,
+            ProviderKey.Compatible,
+            ProviderKey.DeepInfra,
+            ProviderKey.DeepSeek,
+            ProviderKey.Huggingface,
+            ProviderKey.Kilo,
+            ProviderKey.Kimi,
+            ProviderKey.Knox,
+            ProviderKey.LightningAI,
+            ProviderKey.MiniMax,
+            ProviderKey.MiniMaxCoding,
+            ProviderKey.Mistral,
+            ProviderKey.ModelScope,
+            ProviderKey.Moonshot,
+            ProviderKey.Nanogpt,
+            ProviderKey.Nvidia,
+            ProviderKey.Ollama,
+            ProviderKey.OpenAI,
+            ProviderKey.OpenCode,
+            ProviderKey.Opencodego,
+            ProviderKey.Pollinations,
+            ProviderKey.Vercelai,
+            ProviderKey.Zenmux,
+            ProviderKey.Zhipu
+        ];
 
-		// Sync Codex (OAuth)
-		await this.syncCodexAccount();
+        // Sync Codex (OAuth)
+        await this.syncCodexAccount();
 
-		// Sync Qwen CLI (OAuth via Local CLI)
-		await this.syncQwenCliAccount();
+        // Sync Qwen CLI (OAuth via Local CLI)
+        await this.syncQwenCliAccount();
 
-		// Sync API Key providers
-		for (const provider of providers) {
-			await this.syncApiKeyAccount(provider);
-		}
+        // Sync API Key providers
+        for (const provider of providers) {
+            await this.syncApiKeyAccount(provider);
+        }
 
-		// Sync active accounts back to ApiKeyManager for compatibility
-		const allProviders = [CODEX_PROVIDER, ...providers];
-		for (const provider of allProviders) {
-			await this.syncToApiKeyManager(provider);
-		}
-	}
+        // Sync active accounts back to ApiKeyManager for compatibility
+        const allProviders = [CODEX_PROVIDER, ...providers];
+        for (const provider of allProviders) {
+            await this.syncToApiKeyManager(provider);
+        }
+    }
 
-	/**
-	 * When a new account is added via AccountManager,
-	 * update ApiKeyManager for backward compatibility
-	 */
-	async syncToApiKeyManager(provider: string): Promise<void> {
-		const activeCredentials =
-			await this.accountManager.getActiveCredentials(provider);
-		if (!activeCredentials) {
-			return;
-		}
+    /**
+     * When a new account is added via AccountManager,
+     * update ApiKeyManager for backward compatibility
+     */
+    async syncToApiKeyManager(provider: string): Promise<void> {
+        const activeCredentials =
+            await this.accountManager.getActiveCredentials(provider);
+        if (!activeCredentials) {
+            return;
+        }
 
-		if ("apiKey" in activeCredentials) {
-			await ApiKeyManager.setApiKey(provider, activeCredentials.apiKey);
-		} else if (
-			"accessToken" in activeCredentials &&
-			provider === CODEX_PROVIDER
-		) {
-			// Codex requires special format
-			const account = this.accountManager.getActiveAccount(provider);
-			const accountMetadata = account?.metadata || {};
-			const accountIdFromAccount =
-				typeof accountMetadata.accountId === "string"
-					? accountMetadata.accountId
-					: undefined;
-			const organizationIdFromAccount =
-				typeof accountMetadata.organizationId === "string"
-					? accountMetadata.organizationId
-					: undefined;
-			const projectIdFromAccount =
-				typeof accountMetadata.projectId === "string"
-					? accountMetadata.projectId
-					: undefined;
-			const organizationsFromAccount = Array.isArray(
-				accountMetadata.organizations,
-			)
-				? (accountMetadata.organizations as unknown[])
-				: undefined;
+        if ('apiKey' in activeCredentials) {
+            await ApiKeyManager.setApiKey(provider, activeCredentials.apiKey);
+        } else if (
+            'accessToken' in activeCredentials &&
+            provider === CODEX_PROVIDER
+        ) {
+            // Codex requires special format
+            const account = this.accountManager.getActiveAccount(provider);
+            const accountMetadata = account?.metadata || {};
+            const accountIdFromAccount =
+                typeof accountMetadata.accountId === 'string'
+                    ? accountMetadata.accountId
+                    : undefined;
+            const organizationIdFromAccount =
+                typeof accountMetadata.organizationId === 'string'
+                    ? accountMetadata.organizationId
+                    : undefined;
+            const projectIdFromAccount =
+                typeof accountMetadata.projectId === 'string'
+                    ? accountMetadata.projectId
+                    : undefined;
+            const organizationsFromAccount = Array.isArray(
+                accountMetadata.organizations
+            )
+                ? (accountMetadata.organizations as unknown[])
+                : undefined;
 
-			// Get existing data to preserve account_id, organization_id, etc.
-			const existingData = await ApiKeyManager.getApiKey(CODEX_PROVIDER);
-			let existingParsed: Record<string, unknown> = {};
-			if (existingData) {
-				try {
-					existingParsed = JSON.parse(existingData);
-				} catch (_e) {
-					// Ignore parse errors
-				}
-			}
+            // Get existing data to preserve account_id, organization_id, etc.
+            const existingData = await ApiKeyManager.getApiKey(CODEX_PROVIDER);
+            let existingParsed: Record<string, unknown> = {};
+            if (existingData) {
+                try {
+                    existingParsed = JSON.parse(existingData);
+                } catch (_e) {
+                    // Ignore parse errors
+                }
+            }
 
-			const authData = {
-				type: "codex",
-				access_token: activeCredentials.accessToken,
-				refresh_token: activeCredentials.refreshToken,
-				email: account?.email || "",
-				account_id:
-					accountIdFromAccount || (existingParsed.account_id as string),
-				organization_id:
-					organizationIdFromAccount ||
-					(existingParsed.organization_id as string),
-				project_id:
-					projectIdFromAccount || (existingParsed.project_id as string),
-				organizations:
-					organizationsFromAccount ||
-					(existingParsed.organizations as unknown[]),
-				expires_at: activeCredentials.expiresAt,
-				timestamp: Date.now(),
-			};
-			Logger.info("[accountSync] Syncing Codex account/org/project metadata");
-			await ApiKeyManager.setApiKey(CODEX_PROVIDER, JSON.stringify(authData));
-		}
+            const authData = {
+                type: 'codex',
+                access_token: activeCredentials.accessToken,
+                refresh_token: activeCredentials.refreshToken,
+                email: account?.email || '',
+                account_id:
+                    accountIdFromAccount ||
+                    (existingParsed.account_id as string),
+                organization_id:
+                    organizationIdFromAccount ||
+                    (existingParsed.organization_id as string),
+                project_id:
+                    projectIdFromAccount ||
+                    (existingParsed.project_id as string),
+                organizations:
+                    organizationsFromAccount ||
+                    (existingParsed.organizations as unknown[]),
+                expires_at: activeCredentials.expiresAt,
+                timestamp: Date.now()
+            };
+            Logger.info(
+                '[accountSync] Syncing Codex account/org/project metadata'
+            );
+            await ApiKeyManager.setApiKey(
+                CODEX_PROVIDER,
+                JSON.stringify(authData)
+            );
+        }
 
-		await this.refreshProviderModels(provider);
-	}
+        await this.refreshProviderModels(provider);
+    }
 
-	private async refreshProviderModels(provider: string): Promise<void> {
-		try {
-			await vscode.commands.executeCommand(`chp.${provider}.refreshModels`);
-		} catch {
-			// Ignore: not all providers expose a refreshModels command
-		}
-	}
+    private async refreshProviderModels(provider: string): Promise<void> {
+        try {
+            await vscode.commands.executeCommand(
+                `chp.${provider}.refreshModels`
+            );
+        } catch {
+            // Ignore: not all providers expose a refreshModels command
+        }
+    }
 
-	/**
-	 * When an account is removed, update or delete ApiKeyManager to avoid reverse sync
-	 */
-	private async handleAccountRemoval(provider: string): Promise<void> {
-		const remainingAccounts =
-			this.accountManager.getAccountsByProvider(provider);
-		if (remainingAccounts.length === 0) {
-			await ApiKeyManager.deleteApiKey(provider);
-			await this.refreshProviderModels(provider);
-			return;
-		}
+    /**
+     * When an account is removed, update or delete ApiKeyManager to avoid reverse sync
+     */
+    private async handleAccountRemoval(provider: string): Promise<void> {
+        const remainingAccounts =
+            this.accountManager.getAccountsByProvider(provider);
+        if (remainingAccounts.length === 0) {
+            await ApiKeyManager.deleteApiKey(provider);
+            await this.refreshProviderModels(provider);
+            return;
+        }
 
-		// Other accounts exist -> re-sync active account for backward compatibility
-		await this.syncToApiKeyManager(provider);
-	}
+        // Other accounts exist -> re-sync active account for backward compatibility
+        await this.syncToApiKeyManager(provider);
+    }
 
-	/**
-	 * Dispose
-	 */
-	dispose(): void {
-		for (const disposable of this.disposables) {
-			disposable.dispose();
-		}
-	}
+    /**
+     * Dispose
+     */
+    dispose(): void {
+        for (const disposable of this.disposables) {
+            disposable.dispose();
+        }
+    }
 }

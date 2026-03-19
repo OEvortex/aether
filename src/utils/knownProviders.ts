@@ -11,7 +11,6 @@ import {
 import type {
     ConfigProvider,
     ModelConfig,
-    ModelOverride,
     ProviderConfig,
     ProviderOverride,
     SdkMode
@@ -75,6 +74,215 @@ export interface KnownProviderConfig
         extraBody?: Record<string, unknown>;
         customHeader?: Record<string, string>;
     };
+    /** Provider rate-limit tuning used by request throttling helpers */
+    rateLimit?: RateLimitSelection;
+}
+
+export interface RateLimitConfig {
+    /** Requests allowed within the configured window */
+    requestsPerSecond: number;
+    /** Window size in milliseconds (defaults to 1000) */
+    windowMs?: number;
+}
+
+export interface RateLimitSelection {
+    /** Fallback rate limit when no SDK-specific override matches */
+    default?: RateLimitConfig;
+    /** OpenAI SDK requests-per-second tuning */
+    openai?: RateLimitConfig;
+    /** Anthropic SDK requests-per-second tuning */
+    anthropic?: RateLimitConfig;
+    /** OpenAI Responses SDK requests-per-second tuning */
+    responses?: RateLimitConfig;
+}
+
+export const DEFAULT_PROVIDER_RATE_LIMIT: RateLimitConfig = {
+    requestsPerSecond: 1,
+    windowMs: 1000
+};
+
+type RateLimitHeaderSource =
+    | Headers
+    | Record<string, string | string[] | undefined>;
+
+const providerRateLimitCache = new Map<string, RateLimitConfig>();
+
+function getRateLimitCacheKey(providerId: string, sdkMode?: SdkMode): string {
+    return `${providerId}:${sdkMode || 'default'}`;
+}
+
+function normalizeRateLimitConfig(
+    config?: Partial<RateLimitConfig> | null
+): RateLimitConfig | undefined {
+    if (!config) {
+        return undefined;
+    }
+
+    const requestsPerSecond = Math.max(
+        1,
+        Math.floor(config.requestsPerSecond || 1)
+    );
+    const windowMs = Math.max(1000, Math.floor(config.windowMs || 1000));
+
+    return {
+        requestsPerSecond,
+        windowMs
+    };
+}
+
+function getHeaderValue(
+    headers: RateLimitHeaderSource,
+    name: string
+): string | undefined {
+    if (headers instanceof Headers) {
+        return (
+            headers.get(name) || headers.get(name.toLowerCase()) || undefined
+        );
+    }
+
+    const value = headers[name] || headers[name.toLowerCase()];
+    if (Array.isArray(value)) {
+        return value[0];
+    }
+
+    return value;
+}
+
+function parseHeaderNumber(
+    headers: RateLimitHeaderSource,
+    ...names: string[]
+): number | undefined {
+    for (const name of names) {
+        const raw = getHeaderValue(headers, name)?.trim();
+        if (!raw) {
+            continue;
+        }
+
+        const value = Number.parseFloat(raw);
+        if (!Number.isFinite(value) || Number.isNaN(value) || value <= 0) {
+            continue;
+        }
+
+        return value;
+    }
+
+    return undefined;
+}
+
+function parseDynamicRateLimitFromHeaders(
+    headers: RateLimitHeaderSource
+): RateLimitConfig | undefined {
+    const retryAfterSeconds = parseHeaderNumber(headers, 'retry-after');
+    if (retryAfterSeconds !== undefined) {
+        return {
+            requestsPerSecond: 1,
+            windowMs: Math.max(1000, Math.ceil(retryAfterSeconds * 1000))
+        };
+    }
+
+    const resetSeconds = parseHeaderNumber(
+        headers,
+        'x-ratelimit-reset-requests',
+        'x-ratelimit-reset',
+        'ratelimit-reset'
+    );
+    if (resetSeconds === undefined) {
+        return undefined;
+    }
+
+    const limit = parseHeaderNumber(
+        headers,
+        'x-ratelimit-limit-requests',
+        'x-ratelimit-limit',
+        'ratelimit-limit'
+    );
+
+    if (limit === undefined) {
+        return {
+            requestsPerSecond: 1,
+            windowMs: Math.max(1000, Math.ceil(resetSeconds * 1000))
+        };
+    }
+
+    return {
+        requestsPerSecond: Math.max(1, Math.floor(limit)),
+        windowMs: Math.max(1000, Math.ceil(resetSeconds * 1000))
+    };
+}
+
+export function setProviderRateLimit(
+    providerId: string,
+    rateLimit: RateLimitConfig,
+    sdkMode?: SdkMode
+): void {
+    providerRateLimitCache.set(
+        getRateLimitCacheKey(providerId, sdkMode),
+        normalizeRateLimitConfig(rateLimit) || DEFAULT_PROVIDER_RATE_LIMIT
+    );
+}
+
+export function recordProviderRateLimitFromHeaders(
+    providerId: string,
+    headers: RateLimitHeaderSource,
+    sdkMode?: SdkMode
+): RateLimitConfig | undefined {
+    const rateLimit = parseDynamicRateLimitFromHeaders(headers);
+    if (!rateLimit) {
+        return undefined;
+    }
+
+    setProviderRateLimit(providerId, rateLimit, sdkMode);
+    return rateLimit;
+}
+
+function getRateLimitModeKey(
+    sdkMode?: SdkMode
+): keyof RateLimitSelection | undefined {
+    if (sdkMode === 'anthropic') {
+        return 'anthropic';
+    }
+
+    if (sdkMode === 'oai-response') {
+        return 'responses';
+    }
+
+    if (sdkMode === 'openai') {
+        return 'openai';
+    }
+
+    return undefined;
+}
+
+export function getProviderRateLimit(
+    providerId: string,
+    sdkMode?: SdkMode
+): RateLimitConfig | undefined {
+    const cachedRateLimit = providerRateLimitCache.get(
+        getRateLimitCacheKey(providerId, sdkMode)
+    );
+    if (cachedRateLimit) {
+        return cachedRateLimit;
+    }
+
+    const knownConfig = KnownProviders[providerId];
+    const rateLimit = knownConfig?.rateLimit;
+    if (!rateLimit) {
+        return DEFAULT_PROVIDER_RATE_LIMIT;
+    }
+
+    const selectedMode =
+        getRateLimitModeKey(sdkMode || knownConfig?.sdkMode) ?? undefined;
+    if (selectedMode && rateLimit[selectedMode]) {
+        return rateLimit[selectedMode];
+    }
+
+    return (
+        rateLimit.default ||
+        rateLimit.openai ||
+        rateLimit.responses ||
+        rateLimit.anthropic ||
+        DEFAULT_PROVIDER_RATE_LIMIT
+    );
 }
 
 /**
@@ -361,9 +569,14 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         displayName: 'OpenCode',
         family: 'OpenCode',
         description: 'OpenCode endpoint integration',
-        sdkMode: 'anthropic',
+        sdkMode: 'openai',
         openai: { baseUrl: 'https://opencode.ai/zen/v1' },
         anthropic: { baseUrl: 'https://opencode.ai/zen' },
+        rateLimit: {
+            default: { requestsPerSecond: 1, windowMs: 1000 },
+            openai: { requestsPerSecond: 1, windowMs: 1000 },
+            anthropic: { requestsPerSecond: 1, windowMs: 1000 }
+        },
         openModelEndpoint: true,
         fetchModels: true,
         modelsEndpoint: '/models',
@@ -377,9 +590,14 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         displayName: 'OpenCode Zen Go',
         family: 'OpenCode',
         description: 'OpenCode Zen Go endpoint integration',
-        sdkMode: 'anthropic',
+        sdkMode: 'openai',
         openai: { baseUrl: 'https://opencode.ai/zen/go/v1' },
         anthropic: { baseUrl: 'https://opencode.ai/zen/go' },
+        rateLimit: {
+            default: { requestsPerSecond: 1, windowMs: 1000 },
+            openai: { requestsPerSecond: 1, windowMs: 1000 },
+            anthropic: { requestsPerSecond: 1, windowMs: 1000 }
+        },
         openModelEndpoint: true,
         fetchModels: false
     },
@@ -805,7 +1023,7 @@ function getDefaultFeatures(providerId: string): ProviderMetadata['features'] {
     };
 }
 
-const providerRegistryCache: ProviderMetadata[] | null = null;
+const _providerRegistryCache: ProviderMetadata[] | null = null;
 
 export function getAllProviders(): ProviderMetadata[] {
     const mergedConfig = buildConfigProvider(configProviders);

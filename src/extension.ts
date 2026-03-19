@@ -19,8 +19,7 @@ import {
     ConfigManager,
     JsonSchemaProvider,
     Logger,
-    StatusLogger,
-    TokenCounter
+    StatusLogger
 } from './utils';
 import { CompatibleModelManager } from './utils/compatibleModelManager';
 import {

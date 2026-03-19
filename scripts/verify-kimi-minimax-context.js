@@ -8,63 +8,66 @@ const FIXED_256K_MAX_OUTPUT_TOKENS = 32 * 1024;
 
 const isMinimax = (s = '') => /minimax/i.test(String(s));
 const isKimi = (s = '') => /kimi/i.test(String(s));
-const isKimiK25 = (s = "") => /kimi[-_/]?k2\.5|kimi-k2\.5/i.test(String(s));
+const isKimiK25 = (s = '') => /kimi[-_/]?k2\.5|kimi-k2\.5/i.test(String(s));
 
 const problems = [];
 for (const file of files) {
-	const p = path.join(CONFIG_DIR, file);
-	const json = JSON.parse(fs.readFileSync(p, 'utf8'));
-	if (!Array.isArray(json.models)) {
-		continue;
-	}
-	for (const model of json.models) {
-		const hay =
-			`${model.id || ''} ${model.model || ''} ${model.name || ''}`.toLowerCase();
-		if (isMinimax(hay)) {
-			if (
-				model.maxInputTokens !== FIXED_256K_MAX_INPUT_TOKENS ||
-				model.maxOutputTokens !== FIXED_256K_MAX_OUTPUT_TOKENS
-			) {
-				problems.push({
-					file,
-					id: model.id,
-					maxInputTokens: model.maxInputTokens,
-					maxOutputTokens: model.maxOutputTokens,
-				});
-			}
-		}
-		if (isKimi(hay)) {
-			const expectedImage = isKimiK25(hay);
-			if (
-				model.maxInputTokens !== FIXED_256K_MAX_INPUT_TOKENS ||
-				model.maxOutputTokens !== FIXED_256K_MAX_OUTPUT_TOKENS
-			) {
-				problems.push({
-					file,
-					id: model.id,
-					maxInputTokens: model.maxInputTokens,
-					maxOutputTokens: model.maxOutputTokens,
-				});
-			}
-			const imageActual = !!(
-				model.capabilities && model.capabilities.imageInput
-			);
-			if (imageActual !== expectedImage) {
-				problems.push({ file, id: model.id, imageActual, expectedImage });
-			}
-		}
-	}
+    const p = path.join(CONFIG_DIR, file);
+    const json = JSON.parse(fs.readFileSync(p, 'utf8'));
+    if (!Array.isArray(json.models)) {
+        continue;
+    }
+    for (const model of json.models) {
+        const hay =
+            `${model.id || ''} ${model.model || ''} ${model.name || ''}`.toLowerCase();
+        if (isMinimax(hay)) {
+            if (
+                model.maxInputTokens !== FIXED_256K_MAX_INPUT_TOKENS ||
+                model.maxOutputTokens !== FIXED_256K_MAX_OUTPUT_TOKENS
+            ) {
+                problems.push({
+                    file,
+                    id: model.id,
+                    maxInputTokens: model.maxInputTokens,
+                    maxOutputTokens: model.maxOutputTokens
+                });
+            }
+        }
+        if (isKimi(hay)) {
+            const expectedImage = isKimiK25(hay);
+            if (
+                model.maxInputTokens !== FIXED_256K_MAX_INPUT_TOKENS ||
+                model.maxOutputTokens !== FIXED_256K_MAX_OUTPUT_TOKENS
+            ) {
+                problems.push({
+                    file,
+                    id: model.id,
+                    maxInputTokens: model.maxInputTokens,
+                    maxOutputTokens: model.maxOutputTokens
+                });
+            }
+            const imageActual = !!model.capabilities?.imageInput;
+            if (imageActual !== expectedImage) {
+                problems.push({
+                    file,
+                    id: model.id,
+                    imageActual,
+                    expectedImage
+                });
+            }
+        }
+    }
 }
 
 if (problems.length === 0) {
-	console.log(
-		"All MiniMax and Kimi models comply with the requested settings.",
-	);
-	process.exit(0);
+    console.log(
+        'All MiniMax and Kimi models comply with the requested settings.'
+    );
+    process.exit(0);
 }
 
-console.log("Problems found:");
+console.log('Problems found:');
 for (const p of problems) {
-	console.log(JSON.stringify(p));
+    console.log(JSON.stringify(p));
 }
 process.exit(1);

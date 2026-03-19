@@ -103,9 +103,9 @@
                 },
                 "sdkMode": {
                     "type": "string",
-					"enum": ["openai", "anthropic"],
+                    "enum": ["openai", "anthropic"],
                     "default": "openai",
-					"description": "SDK mode selection: use OpenAI SDK or Anthropic SDK to handle requests."
+                    "description": "SDK mode selection: use OpenAI SDK or Anthropic SDK to handle requests."
                 },
                 "baseUrl": {
                     "type": "string",

@@ -9,52 +9,52 @@ const DEFAULT_MAX_OUTPUT_TOKENS = 16 * 1024;
 
 const RESULTS = [];
 for (const file of files) {
-	const p = path.join(CONFIG_DIR, file);
-	const raw = fs.readFileSync(p, 'utf8');
-	let json;
-	try {
-		json = JSON.parse(raw);
-	} catch (err) {
-		console.error(`Skipping ${file} - JSON parse error:`, err.message);
-		continue;
-	}
-	if (!Array.isArray(json.models)) {
-		continue;
-	}
-	let changed = false;
-	const changedModels = [];
-	for (const model of json.models) {
-		if (!Object.hasOwn(model, 'maxInputTokens')) {
-			continue;
-		}
-		const inTokens = Number(model.maxInputTokens) || 0;
-		const desired =
-			inTokens >= HIGH_CONTEXT_THRESHOLD
-				? HIGH_CONTEXT_MAX_OUTPUT_TOKENS
-				: DEFAULT_MAX_OUTPUT_TOKENS;
-		if (model.maxOutputTokens !== desired) {
-			changed = true;
-			changedModels.push({
-				id: model.id,
-				before: model.maxOutputTokens,
-				after: desired
-			});
-			model.maxOutputTokens = desired;
-		}
-	}
-	if (changed) {
-		fs.writeFileSync(p, `${JSON.stringify(json, null, 4)}\n`, 'utf8');
-		RESULTS.push({ file, changedModels });
-	}
+    const p = path.join(CONFIG_DIR, file);
+    const raw = fs.readFileSync(p, 'utf8');
+    let json;
+    try {
+        json = JSON.parse(raw);
+    } catch (err) {
+        console.error(`Skipping ${file} - JSON parse error:`, err.message);
+        continue;
+    }
+    if (!Array.isArray(json.models)) {
+        continue;
+    }
+    let changed = false;
+    const changedModels = [];
+    for (const model of json.models) {
+        if (!Object.hasOwn(model, 'maxInputTokens')) {
+            continue;
+        }
+        const inTokens = Number(model.maxInputTokens) || 0;
+        const desired =
+            inTokens >= HIGH_CONTEXT_THRESHOLD
+                ? HIGH_CONTEXT_MAX_OUTPUT_TOKENS
+                : DEFAULT_MAX_OUTPUT_TOKENS;
+        if (model.maxOutputTokens !== desired) {
+            changed = true;
+            changedModels.push({
+                id: model.id,
+                before: model.maxOutputTokens,
+                after: desired
+            });
+            model.maxOutputTokens = desired;
+        }
+    }
+    if (changed) {
+        fs.writeFileSync(p, `${JSON.stringify(json, null, 4)}\n`, 'utf8');
+        RESULTS.push({ file, changedModels });
+    }
 }
 
 if (RESULTS.length === 0) {
-	console.log('No changes necessary — all models already match the rule.');
+    console.log('No changes necessary — all models already match the rule.');
 } else {
-	for (const r of RESULTS) {
-		console.log(`Updated ${r.file}:`);
-		for (const m of r.changedModels) {
-			console.log(`  ${m.id}: ${m.before} -> ${m.after}`);
-		}
-	}
+    for (const r of RESULTS) {
+        console.log(`Updated ${r.file}:`);
+        for (const m of r.changedModels) {
+            console.log(`  ${m.id}: ${m.before} -> ${m.after}`);
+        }
+    }
 }

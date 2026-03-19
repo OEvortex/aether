@@ -1,18 +1,18 @@
 {
-	"displayName": "ModelScope",
-	"baseUrl": "https://api-inference.modelscope.ai/v1",
-	"apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-	"models": [
-		{
-			"id": "qwen-max",
-			"name": "Qwen Max",
-			"tooltip": "qwen-max",
-			"maxInputTokens": 32768,
-			"maxOutputTokens": 2048,
-			"capabilities": {
-				"toolCalling": true,
-				"imageInput": false
-			}
-		}
-	]
+    "displayName": "ModelScope",
+    "baseUrl": "https://api-inference.modelscope.ai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "qwen-max",
+            "name": "Qwen Max",
+            "tooltip": "qwen-max",
+            "maxInputTokens": 32768,
+            "maxOutputTokens": 2048,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
 }

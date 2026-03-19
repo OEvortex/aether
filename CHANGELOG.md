@@ -2,19 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.3] - 2026-03-18
+## [0.3.3] - 2026-03-19
+
+### Added
+
+- **Custom Model Management Panel**: Added a new featured panel in the Settings page for managing OpenAI/Anthropic Compatible custom models.
+    - Direct "Add custom model" action from the provider card.
+    - "Manage models" button to view and edit existing custom models.
+    - Surfaced custom model count in the provider card.
+
+- **Enhanced Load Balancing Toggle**: Improved load balancing toggle to update only affected provider cards and header stats instead of full-page rerenders.
 
 ### Changed
 
-- **Settings Page Provider Experience**: Made the OpenAI/Anthropic Compatible provider much easier to use from the Settings page.
-    - Added a featured compatible-provider panel with direct actions for **Add custom model** and **Manage models**.
-    - Surfaced the current custom model count in the provider card.
-    - Made custom model setup feel more guided and visible instead of hiding the flow behind deeper menus.
-    - Kept the provider card flow smoother by updating the visible card in place instead of rerendering the whole webview for every load-balance change.
+- **Settings Page UX Refinement**: Made the unified Settings page more streamlined for provider management.
+    - Removed deprecated load balance settings and strategies from state management.
+    - Unified provider management section for configuring provider settings and load balancing.
+    - Streamlined rendering for provider configurations and load balancing options.
+    - Enhanced toggle functionality with in-place card updates.
 
 ### Fixed
 
 - **Settings Page Blink / Flicker**: Reduced visible blinking in the unified Settings page by replacing full-page rerenders with in-place card/header updates for provider load-balance changes.
+
+### Code Quality
+
+- **Biome Linting**: Updated codebase to pass Biome linter checks with improved code style consistency.
 
 ## [0.3.2] - 2026-03-16
 

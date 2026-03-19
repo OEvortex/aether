@@ -14,11 +14,17 @@ vi.mock('vscode', () => {
     }
 
     class LanguageModelToolResultPart {
-        constructor(public callId: string, public content: unknown[]) {}
+        constructor(
+            public callId: string,
+            public content: unknown[]
+        ) {}
     }
 
     class LanguageModelToolResultPart2 {
-        constructor(public callId: string, public content: unknown[]) {}
+        constructor(
+            public callId: string,
+            public content: unknown[]
+        ) {}
     }
 
     class LanguageModelPromptTsxPart {
@@ -26,7 +32,10 @@ vi.mock('vscode', () => {
     }
 
     class LanguageModelDataPart {
-        constructor(public data: Uint8Array, public mimeType: string) {}
+        constructor(
+            public data: Uint8Array,
+            public mimeType: string
+        ) {}
     }
 
     class LanguageModelThinkingPart {
@@ -81,7 +90,10 @@ describe('TokenCounter', () => {
             ]
         };
 
-        const total = await counter.countTokens({ id: 'test-model' } as never, message);
+        const total = await counter.countTokens(
+            { id: 'test-model' } as never,
+            message
+        );
 
         expect(total).toBeGreaterThan(20);
     });
