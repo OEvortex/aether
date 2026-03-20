@@ -987,32 +987,6 @@ export class AccountManager {
             this.getAvailableAccountsForProvider(provider);
 
         if (availableAccounts.length === 0) {
-            // No available accounts, return account with the shortest cooldown
-            try {
-                const quotaCache = AccountQuotaCache.getInstance();
-                const shortestCooldownId =
-                    quotaCache.getAccountWithShortestCooldown(provider);
-                if (shortestCooldownId) {
-                    return this.accounts.get(shortestCooldownId);
-                }
-            } catch {
-                // Ignore
-            }
-            return undefined;
-        }
-
-        if (availableAccounts.length === 0) {
-            // No available accounts, return account with the shortest cooldown
-            try {
-                const quotaCache = AccountQuotaCache.getInstance();
-                const shortestCooldownId =
-                    quotaCache.getAccountWithShortestCooldown(provider);
-                if (shortestCooldownId) {
-                    return this.accounts.get(shortestCooldownId);
-                }
-            } catch {
-                // Ignore
-            }
             return undefined;
         }
 
@@ -1031,6 +1005,24 @@ export class AccountManager {
 
         // Return the first available account
         return availableAccounts[0];
+    }
+
+    /**
+     * Get the account with the shortest quota cooldown for a provider
+     */
+    getAccountWithShortestCooldown(provider: string): Account | undefined {
+        try {
+            const quotaCache = AccountQuotaCache.getInstance();
+            const shortestCooldownId =
+                quotaCache.getAccountWithShortestCooldown(provider);
+            if (shortestCooldownId) {
+                return this.accounts.get(shortestCooldownId);
+            }
+        } catch {
+            // Ignore
+        }
+
+        return undefined;
     }
 
     /**

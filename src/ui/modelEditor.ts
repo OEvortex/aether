@@ -203,9 +203,15 @@ export class ModelEditor {
             const initialIsCreateMode = ${isCreateMode};
 
             // Start editor
-            document.addEventListener('DOMContentLoaded', function() {
-                initializeEditor(initialModelData, initialIsCreateMode);
-            });
+            (function() {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        initializeEditor(initialModelData, initialIsCreateMode);
+                    });
+                } else {
+                    initializeEditor(initialModelData, initialIsCreateMode);
+                }
+            })();
         </script>
     </body>
 </html>`;

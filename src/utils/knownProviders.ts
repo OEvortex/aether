@@ -1065,7 +1065,10 @@ export function getAllProviders(): ProviderMetadata[] {
                 'OpenAI/Anthropic Compatible',
             category: ProviderCategory.OpenAI,
             sdkMode: 'mixed',
-            description: compatibleProvider?.description,
+            description:
+                compatibleProvider?.description ||
+                'Custom OpenAI/Anthropic compatible models',
+            icon: '$(symbol-misc)',
             settingsPrefix:
                 compatibleProvider?.settingsPrefix || 'chp.compatibleModels',
             baseUrl: '',

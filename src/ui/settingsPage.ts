@@ -354,84 +354,119 @@ export class SettingsPage {
 
         return Promise.all(
             providerConfigs.map(async (config) => {
-                const accounts =
-                    SettingsPage.accountManager.getAccountsByProvider(
-                        config.id
+                try {
+                    const accounts =
+                        SettingsPage.accountManager.getAccountsByProvider(
+                            config.id
+                        );
+                    const activeApiKey =
+                        await SettingsPage.accountManager.getActiveApiKey(
+                            config.id
+                        );
+
+                    // Filter API key accounts
+                    const apiKeyAccounts = accounts.filter(
+                        (a) => a.authType === 'apiKey'
                     );
-                const activeApiKey =
-                    await SettingsPage.accountManager.getActiveApiKey(
-                        config.id
-                    );
+                    const activeAccount =
+                        SettingsPage.accountManager.getActiveAccount(config.id);
 
-                // Filter API key accounts
-                const apiKeyAccounts = accounts.filter(
-                    (a) => a.authType === 'apiKey'
-                );
-                const activeAccount =
-                    SettingsPage.accountManager.getActiveAccount(config.id);
-
-                // Map to ApiKeyInfo
-                const apiKeys: ApiKeyInfo[] = apiKeyAccounts.map((account) => ({
-                    id: account.id,
-                    displayName: account.displayName,
-                    createdAt: account.createdAt,
-                    isActive: activeAccount?.id === account.id
-                }));
-
-                // Get load balance settings
-                const supportsMultiAccount =
-                    AccountManager.supportsMultiAccount(config.id);
-                const loadBalanceEnabled = supportsMultiAccount
-                    ? SettingsPage.accountManager.getLoadBalanceEnabled(
-                          config.id
-                      )
-                    : false;
-                const loadBalanceStrategy =
-                    SettingsPage.loadBalanceStrategies[config.id] ||
-                    'round-robin';
-                const settingsFields =
-                    await SettingsPage.getProviderSettingFields(
-                        config,
-                        configSection
+                    // Map to ApiKeyInfo
+                    const apiKeys: ApiKeyInfo[] = apiKeyAccounts.map(
+                        (account) => ({
+                            id: account.id,
+                            displayName: account.displayName,
+                            createdAt: account.createdAt,
+                            isActive: activeAccount?.id === account.id
+                        })
                     );
 
-                return {
-                    id: config.id,
-                    displayName: config.displayName,
-                    category: config.category,
-                    sdkMode: config.sdkMode,
-                    selectedSdkMode: SettingsPage.getSdkModeSetting(
-                        config.id,
-                        config.sdkMode,
-                        configSection
-                    ),
-                    supportedSdkModes: SettingsPage.getSupportedSdkModes(
-                        config.id,
-                        config.sdkMode
-                    ),
-                    icon: config.icon,
-                    description: config.description,
-                    settingsPrefix: config.settingsPrefix,
-                    accountCount: accounts.length,
-                    supportsLoadBalance: supportsMultiAccount,
-                    supportsApiKey: config.features.supportsApiKey,
-                    supportsOAuth: config.features.supportsOAuth,
-                    supportsConfigWizard: config.features.supportsConfigWizard,
-                    hasApiKey: !!activeApiKey,
-                    endpoint: SettingsPage.getEndpointSetting(
-                        config.id,
-                        configSection
-                    ),
-                    apiKeys,
-                    activeApiKeyId: activeAccount?.id || null,
-                    loadBalanceEnabled,
-                    loadBalanceStrategy,
-                    customModelCount:
-                        config.id === 'compatible'
-                            ? CompatibleModelManager.getModels().length
-                            : undefined,
-                    settingsFields
-                };
+                    // Get load balance settings
+                    const supportsMultiAccount =
+                        AccountManager.supportsMultiAccount(config.id);
+                    const loadBalanceEnabled = supportsMultiAccount
+                        ? SettingsPage.accountManager.getLoadBalanceEnabled(
+                              config.id
+                          )
+                        : false;
+                    const loadBalanceStrategy =
+                        SettingsPage.loadBalanceStrategies[config.id] ||
+                        'round-robin';
+                    const settingsFields =
+                        await SettingsPage.getProviderSettingFields(
+                            config,
+                            configSection
+                        );
+
+                    return {
+                        id: config.id,
+                        displayName: config.displayName,
+                        category: config.category,
+                        sdkMode: config.sdkMode,
+                        selectedSdkMode: SettingsPage.getSdkModeSetting(
+                            config.id,
+                            config.sdkMode,
+                            configSection
+                        ),
+                        supportedSdkModes: SettingsPage.getSupportedSdkModes(
+                            config.id,
+                            config.sdkMode
+                        ),
+                        icon: config.icon,
+                        description: config.description,
+                        settingsPrefix: config.settingsPrefix,
+                        accountCount: accounts.length,
+                        supportsLoadBalance: supportsMultiAccount,
+                        supportsApiKey: config.features.supportsApiKey,
+                        supportsOAuth: config.features.supportsOAuth,
+                        supportsConfigWizard:
+                            config.features.supportsConfigWizard,
+                        hasApiKey: !!activeApiKey,
+                        endpoint: SettingsPage.getEndpointSetting(
+                            config.id,
+                            configSection
+                        ),
+                        apiKeys,
+                        activeApiKeyId: activeAccount?.id || null,
+                        loadBalanceEnabled,
+                        loadBalanceStrategy,
+                        customModelCount:
+                            config.id === 'compatible'
+                                ? CompatibleModelManager.getModels().length
+                                : undefined,
+                        settingsFields
+                    };
+                } catch (error) {
+                    Logger.warn(
+                        `[SettingsPage] Failed to load provider info for "${config.id}"`,
+                        error
+                    );
+                    return {
+                        id: config.id,
+                        displayName: config.displayName,
+                        category: config.category,
+                        sdkMode: config.sdkMode,
+                        selectedSdkMode: config.sdkMode || 'standard',
+                        supportedSdkModes: [],
+                        icon: config.icon,
+                        description: config.description,
+                        settingsPrefix: config.settingsPrefix,
+                        accountCount: 0,
+                        supportsLoadBalance: false,
+                        supportsApiKey: config.features.supportsApiKey,
+                        supportsOAuth: config.features.supportsOAuth,
+                        supportsConfigWizard:
+                            config.features.supportsConfigWizard,
+                        hasApiKey: false,
+                        endpoint: '',
+                        apiKeys: [],
+                        activeApiKeyId: null,
+                        loadBalanceEnabled: false,
+                        loadBalanceStrategy:
+                            'round-robin' as LoadBalanceStrategy,
+                        settingsFields: []
+                    };
+                }
             })
         );
     }

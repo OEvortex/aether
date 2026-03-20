@@ -149,22 +149,60 @@ export class RetryManager {
      * @param error The error object to check
      * @returns True if the error is a 429 rate limit error
      */
-    static isRateLimitError(error: RetryableError): boolean {
-        if (error instanceof Error) {
-            // Check if error message contains '429'
-            if (error.message.includes('429')) {
-                return true;
-            }
-            // Check OpenAI error object format
-            if ('status' in error && error.status === 429) {
-                return true;
-            }
-            // Check for statusCode property
-            if ('statusCode' in error && error.statusCode === 429) {
-                return true;
-            }
+    static isRateLimitError(error: unknown): boolean {
+        if (!error) {
+            return false;
         }
-        return false;
+
+        const candidate = error as {
+            code?: unknown;
+            constructor?: { name?: unknown };
+            error?: {
+                code?: unknown;
+                status?: unknown;
+                statusCode?: unknown;
+            };
+            headers?: unknown;
+            message?: unknown;
+            name?: unknown;
+            response?: {
+                status?: unknown;
+                statusCode?: unknown;
+            };
+            status?: unknown;
+            statusCode?: unknown;
+        };
+
+        const statusCandidates = [
+            candidate.status,
+            candidate.statusCode,
+            candidate.response?.status,
+            candidate.response?.statusCode,
+            candidate.error?.status,
+            candidate.error?.statusCode,
+            candidate.code,
+            candidate.error?.code
+        ];
+
+        if (
+            statusCandidates.some((value) => value === 429 || value === '429')
+        ) {
+            return true;
+        }
+
+        const name = String(candidate.name || candidate.constructor?.name || '');
+        if (name.toLowerCase().includes('rate') && name.toLowerCase().includes('limit')) {
+            return true;
+        }
+
+        const message = String(candidate.message || (error as Error).message || '');
+        return (
+            message.includes('429') ||
+            /rate\s*limit/i.test(message) ||
+            /too many requests/i.test(message) ||
+            /RESOURCE_EXHAUSTED/i.test(message) ||
+            /Resource has been exhausted/i.test(message)
+        );
     }
 
     /**

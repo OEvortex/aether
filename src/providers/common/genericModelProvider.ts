@@ -31,7 +31,9 @@ import {
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
-    resolveAdvertisedTokenLimits
+    resolveAdvertisedTokenLimits,
+    resolveGlobalCapabilities,
+    resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
 import { KnownProviders } from '../../utils/knownProviders';
 import { ProviderWizard } from '../../utils/providerWizard';
@@ -268,6 +270,20 @@ export class GenericModelProvider implements LanguageModelChatProvider {
     protected modelConfigToInfo(
         model: ModelConfig
     ): LanguageModelChatInformation {
+        const contextLength = model.maxInputTokens + model.maxOutputTokens;
+        const { maxInputTokens, maxOutputTokens } = resolveGlobalTokenLimits(
+            model.id,
+            contextLength,
+            {
+                defaultContextLength: contextLength,
+                defaultMaxOutputTokens: model.maxOutputTokens
+            }
+        );
+        const capabilities = resolveGlobalCapabilities(model.id, {
+            detectedToolCalling: model.capabilities?.toolCalling,
+            detectedImageInput: model.capabilities?.imageInput
+        });
+
         const info: LanguageModelChatInformation = {
             id: model.id,
             name: model.name,
@@ -277,10 +293,10 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                 `${model.name} via ${this.providerConfig.displayName}`,
             family:
                 model.family || this.providerConfig.family || this.providerKey,
-            maxInputTokens: model.maxInputTokens,
-            maxOutputTokens: model.maxOutputTokens,
+            maxInputTokens,
+            maxOutputTokens,
             version: model.id,
-            capabilities: model.capabilities
+            capabilities
         };
 
         return info;
@@ -899,37 +915,50 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             const activeAccount =
                 this.accountManager.getActiveAccount(effectiveProviderKey);
 
-            const available = loadBalanceEnabled
-                ? candidates.filter(
-                      (a) => !this.accountManager.isAccountQuotaLimited(a.id)
-                  )
-                : candidates;
+            const available = candidates.filter(
+                (a) => !this.accountManager.isAccountQuotaLimited(a.id)
+            );
+
+            if (available.length === 0) {
+                const shortestCooldownAccount =
+                    this.accountManager.getAccountWithShortestCooldown(
+                        effectiveProviderKey
+                    );
+                const waitMs = shortestCooldownAccount
+                    ? this.accountManager.getAccountQuotaCooldown(
+                          shortestCooldownAccount.id
+                      )
+                    : 0;
+
+                if (waitMs > 0) {
+                    Logger.warn(
+                        `[${effectiveProviderKey}] All accounts are rate-limited. Waiting ${Math.ceil(waitMs / 1000)}s before retrying ${shortestCooldownAccount?.displayName || 'the next account'}.`
+                    );
+                    await new Promise((resolve) => setTimeout(resolve, waitMs));
+                }
+            }
+
+            const refreshedAvailable = candidates.filter(
+                (a) => !this.accountManager.isAccountQuotaLimited(a.id)
+            );
 
             let accountsToTry: Account[];
-            if (available.length > 0) {
+            if (refreshedAvailable.length > 0) {
                 if (
                     activeAccount &&
-                    available.some((a) => a.id === activeAccount.id)
+                    refreshedAvailable.some((a) => a.id === activeAccount.id)
                 ) {
                     accountsToTry = [
                         activeAccount,
-                        ...available.filter((a) => a.id !== activeAccount.id)
+                        ...refreshedAvailable.filter(
+                            (a) => a.id !== activeAccount.id
+                        )
                     ];
                 } else {
-                    accountsToTry = available;
+                    accountsToTry = refreshedAvailable;
                 }
             } else {
-                if (
-                    activeAccount &&
-                    candidates.some((a) => a.id === activeAccount.id)
-                ) {
-                    accountsToTry = [
-                        activeAccount,
-                        ...candidates.filter((a) => a.id !== activeAccount.id)
-                    ];
-                } else {
-                    accountsToTry = candidates;
-                }
+                accountsToTry = [];
             }
 
             Logger.debug(
@@ -938,6 +967,12 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 
             let lastError: unknown;
             let switchedAccount = false;
+
+            if (accountsToTry.length === 0) {
+                lastError = new Error(
+                    `All accounts for ${effectiveProviderKey} are currently rate-limited. Please wait and try again.`
+                );
+            }
 
             for (const account of accountsToTry) {
                 const credentials = await this.accountManager.getCredentials(

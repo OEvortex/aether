@@ -12,6 +12,7 @@ import { ConfigManager } from '../../utils/configManager';
 import { KnownProviders } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { getUserAgent } from '../../utils/userAgent';
+import { RetryManager } from '../../utils/retryManager';
 import { OpenAIHandler } from '../openai/openaiHandler';
 import {
     apiMessageToAnthropicMessage,
@@ -793,18 +794,12 @@ export class AnthropicHandler {
     }
 
     private isQuotaError(error: unknown): boolean {
-        if (!(error instanceof Error)) {
-            return false;
-        }
-        const msg = error.message;
         return (
-            msg.startsWith('Quota exceeded') ||
-            msg.startsWith('Rate limited') ||
-            msg.includes('HTTP 429') ||
-            msg.includes('"code": 429') ||
-            msg.includes('"code":429') ||
-            msg.includes('RESOURCE_EXHAUSTED') ||
-            (msg.includes('429') && msg.includes('Resource has been exhausted'))
+            RetryManager.isRateLimitError(error) ||
+            (error instanceof Error &&
+                (error.message.startsWith('Quota exceeded') ||
+                    error.message.startsWith('Rate limited') ||
+                    error.message.includes('RESOURCE_EXHAUSTED')))
         );
     }
 }

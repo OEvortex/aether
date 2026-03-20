@@ -204,21 +204,46 @@ export class CodexProvider
                   ]
                 : usableAccounts;
 
-            const availableAccounts = loadBalanceEnabled
-                ? orderedAccounts.filter(
-                      (a) => !this.accountManager.isAccountQuotaLimited(a.id)
-                  )
-                : orderedAccounts;
+            const availableAccounts = orderedAccounts.filter(
+                (a) => !this.accountManager.isAccountQuotaLimited(a.id)
+            );
+
+            if (availableAccounts.length === 0) {
+                const shortestCooldownAccount =
+                    this.accountManager.getAccountWithShortestCooldown(
+                        providerKey
+                    );
+                const waitMs = shortestCooldownAccount
+                    ? this.accountManager.getAccountQuotaCooldown(
+                          shortestCooldownAccount.id
+                      )
+                    : 0;
+
+                if (waitMs > 0) {
+                    Logger.warn(
+                        `[codex] All accounts are rate-limited. Waiting ${Math.ceil(waitMs / 1000)}s before retrying ${shortestCooldownAccount?.displayName || 'the next account'}.`
+                    );
+                    await new Promise((resolve) => setTimeout(resolve, waitMs));
+                }
+            }
+
+            const refreshedAvailableAccounts = orderedAccounts.filter(
+                (a) => !this.accountManager.isAccountQuotaLimited(a.id)
+            );
 
             const accountCandidates =
-                availableAccounts.length > 0
-                    ? availableAccounts
-                    : orderedAccounts.length > 0
-                      ? orderedAccounts
-                      : [undefined];
+                refreshedAvailableAccounts.length > 0
+                    ? refreshedAvailableAccounts
+                    : [];
 
             let lastError: unknown;
             let switchedAccount = false;
+
+            if (accountCandidates.length === 0) {
+                lastError = new Error(
+                    'All Codex accounts are currently rate-limited. Please wait and try again.'
+                );
+            }
 
             for (const account of accountCandidates) {
                 const authContext = await this.resolveAuthContext(account);

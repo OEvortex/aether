@@ -1,5 +1,52 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('vscode', () => {
+    class EventEmitter<T> {
+        public event = (): void => undefined;
+
+        fire(_value: T): void {
+            return;
+        }
+
+        dispose(): void {
+            return;
+        }
+    }
+
+    class LanguageModelThinkingPart {
+        constructor(
+            public value: string | string[],
+            public id?: string
+        ) {}
+    }
+
+    class LanguageModelTextPart {
+        constructor(public value: string) {}
+    }
+
+    class LanguageModelToolCallPart {
+        constructor(
+            public callId: string,
+            public name: string,
+            public input: Record<string, unknown>
+        ) {}
+    }
+
+    return {
+        EventEmitter,
+        LanguageModelChatMessageRole: {
+            Assistant: 'assistant',
+            System: 'system',
+            User: 'user'
+        },
+        LanguageModelThinkingPart,
+        LanguageModelTextPart,
+        LanguageModelToolCallPart
+    };
+});
+
+import * as vscode from 'vscode';
+import { OpenAIHandler } from './openaiHandler';
 import { tryNormalizePythonStyleCompletionChunk } from './openaiSseNormalizer';
 
 describe('tryNormalizePythonStyleCompletionChunk', () => {
@@ -26,6 +73,102 @@ describe('tryNormalizePythonStyleCompletionChunk', () => {
                 content: "Hello\nMaslow's ladder",
                 reasoning_content: 'plan first'
             }
+        });
+    });
+});
+
+describe('OpenAIHandler assistant message serialization', () => {
+    const modelConfig = {
+        id: 'kimi-k2-5',
+        name: 'Kimi K2.5',
+        tooltip: 'Kimi K2.5',
+        maxInputTokens: 229376,
+        maxOutputTokens: 32768,
+        capabilities: {
+            toolCalling: true,
+            imageInput: true
+        },
+        includeThinking: true
+    } as const;
+
+    let handler: OpenAIHandler;
+
+    beforeEach(() => {
+        handler = new OpenAIHandler('opencodego', 'OpenCode Zen Go');
+    });
+
+    afterEach(() => {
+        handler?.dispose();
+    });
+
+    it('preserves reasoning_content when assistant message contains thinking and tool calls', () => {
+        const message = {
+            role: vscode.LanguageModelChatMessageRole.Assistant,
+            content: [
+                new vscode.LanguageModelThinkingPart('plan first', 'thinking-1'),
+                new vscode.LanguageModelToolCallPart('call-1', 'read_file', {
+                    path: 'src/index.ts'
+                })
+            ]
+        } as unknown as vscode.LanguageModelChatMessage;
+
+        const result = (handler as any).convertAssistantMessage(
+            message,
+            modelConfig
+        );
+
+        expect(result).not.toBeNull();
+        expect(result).toMatchObject({
+            role: 'assistant',
+            content: null,
+            reasoning_content: 'plan first',
+            tool_calls: [
+                {
+                    id: 'call-1',
+                    type: 'function',
+                    function: {
+                        name: 'read_file',
+                        arguments: JSON.stringify({
+                            path: 'src/index.ts'
+                        })
+                    }
+                }
+            ]
+        });
+    });
+
+    it('adds empty reasoning_content placeholder for assistant tool calls when thinking is enabled', () => {
+        const message = {
+            role: vscode.LanguageModelChatMessageRole.Assistant,
+            content: [
+                new vscode.LanguageModelToolCallPart('call-2', 'read_file', {
+                    path: 'src/app.ts'
+                })
+            ]
+        } as unknown as vscode.LanguageModelChatMessage;
+
+        const result = (handler as any).convertAssistantMessage(
+            message,
+            modelConfig
+        );
+
+        expect(result).not.toBeNull();
+        expect(result).toMatchObject({
+            role: 'assistant',
+            content: null,
+            reasoning_content: '',
+            tool_calls: [
+                {
+                    id: 'call-2',
+                    type: 'function',
+                    function: {
+                        name: 'read_file',
+                        arguments: JSON.stringify({
+                            path: 'src/app.ts'
+                        })
+                    }
+                }
+            ]
         });
     });
 });

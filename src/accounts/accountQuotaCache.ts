@@ -428,7 +428,7 @@ export class AccountQuotaCache {
         prevLevel: number,
         serverDelayMs?: number
     ): { cooldown: number; newLevel: number } {
-        const QUOTA_BACKOFF_BASE_MS = 1000; // 1s
+        const QUOTA_BACKOFF_BASE_MS = 10 * 1000; // 10s
         const QUOTA_BACKOFF_MAX_MS = 30 * 60 * 1000; // 30 minutes
 
         if (prevLevel < 0) {

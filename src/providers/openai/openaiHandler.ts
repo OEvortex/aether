@@ -16,6 +16,7 @@ import {
 } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
+import { RetryManager } from '../../utils/retryManager';
 import { TokenCounter } from '../../utils/tokenCounter';
 import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { getUserAgent } from '../../utils/userAgent';
@@ -1511,18 +1512,12 @@ export class OpenAIHandler {
     }
 
     private isQuotaError(error: unknown): boolean {
-        if (!(error instanceof Error)) {
-            return false;
-        }
-        const msg = error.message;
         return (
-            msg.startsWith('Quota exceeded') ||
-            msg.startsWith('Rate limited') ||
-            msg.includes('HTTP 429') ||
-            msg.includes('"code": 429') ||
-            msg.includes('"code":429') ||
-            msg.includes('RESOURCE_EXHAUSTED') ||
-            (msg.includes('429') && msg.includes('Resource has been exhausted'))
+            RetryManager.isRateLimitError(error) ||
+            (error instanceof Error &&
+                (error.message.startsWith('Quota exceeded') ||
+                    error.message.startsWith('Rate limited') ||
+                    error.message.includes('RESOURCE_EXHAUSTED')))
         );
     }
 
@@ -1890,6 +1885,15 @@ export class OpenAIHandler {
             (assistantMessage as any).reasoning_content = thinkingContent;
             Logger.trace(
                 `Add reasoning_content: ${thinkingContent.length} characters`
+            );
+        } else if (modelConfig?.includeThinking === true && toolCalls.length > 0) {
+            // Some providers (e.g. OpenCode / Kimi) validate that assistant
+            // tool-call messages still contain reasoning_content whenever
+            // thinking is enabled. Emit an explicit empty placeholder so the
+            // field is present in the serialized payload.
+            (assistantMessage as any).reasoning_content = '';
+            Logger.trace(
+                'Add empty reasoning_content placeholder for assistant tool call message'
             );
         }
 

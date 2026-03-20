@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.3] - 2026-03-19
+## [0.3.3] - Unreleased
 
 ### Added
 
@@ -26,6 +26,11 @@ All notable changes to this project will be documented in this file.
     - Enhanced toggle functionality with in-place card updates.
 
 ### Fixed
+
+- **Add Custom Models UI Not Showing**: Fixed the Model Editor form failing to render and the compatible provider card potentially not appearing in the Settings page.
+    - The Model Editor webview used `document.addEventListener('DOMContentLoaded', ...)` which could fail to fire in VS Code webview contexts, leaving the form blank. Replaced with a `document.readyState` check that initializes immediately if the DOM is already loaded.
+    - The `compatible` provider fallback in `getAllProviders()` was missing the `icon` field and had no defensive `description` fallback, which could cause rendering issues in the settings page UI.
+    - The `getProvidersInfo` method used `Promise.all` where a single provider's error would cause ALL providers to fail silently. Added per-provider `try-catch` blocks with fallback entries so one failing provider no longer prevents others (including the custom models provider) from appearing.
 
 - **Settings Page Blink / Flicker**: Reduced visible blinking in the unified Settings page by replacing full-page rerenders with in-place card/header updates for provider load-balance changes.
 

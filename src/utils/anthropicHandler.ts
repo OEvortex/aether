@@ -17,6 +17,7 @@ import { ConfigManager } from './configManager';
 import { getProviderRateLimit, KnownProviders } from './knownProviders';
 import { Logger } from './logger';
 import { RateLimiter } from './rateLimiter';
+import { RetryManager } from './retryManager';
 import { TokenCounter } from './tokenCounter';
 import { TokenTelemetryTracker } from './tokenTelemetryTracker';
 import { getUserAgent } from './userAgent';
@@ -849,15 +850,12 @@ export class AnthropicHandler {
     }
 
     private isQuotaError(error: unknown): boolean {
-        if (!(error instanceof Error)) {
-            return false;
-        }
-        const msg = error.message;
         return (
-            msg.startsWith('Quota exceeded') ||
-            msg.startsWith('Rate limited') ||
-            msg.includes('429') ||
-            msg.includes('RESOURCE_EXHAUSTED')
+            RetryManager.isRateLimitError(error) ||
+            (error instanceof Error &&
+                (error.message.startsWith('Quota exceeded') ||
+                    error.message.startsWith('Rate limited') ||
+                    error.message.includes('RESOURCE_EXHAUSTED')))
         );
     }
 }
