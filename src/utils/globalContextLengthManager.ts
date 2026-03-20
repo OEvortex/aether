@@ -229,12 +229,12 @@ export function isMingFlashOmniModel(modelId: string): boolean {
 
 export function isMiMoV2ProModel(modelId: string): boolean {
     // Xiaomi MiMo v2 Pro: 1M context, 64K output
-    return /mimi[-_]?v2[-_]?pro/i.test(modelId);
+    return /mimo[-_]?v2[-_]?pro/i.test(modelId);
 }
 
 export function isMiMoV2OmniModel(modelId: string): boolean {
     // Xiaomi MiMo v2 Omni: 256K context, 32K output, image input
-    return /mimi[-_]?v2[-_]?omni/i.test(modelId);
+    return /mimo[-_]?v2[-_]?omni/i.test(modelId);
 }
 
 export function getDefaultMaxOutputTokensForContext(
