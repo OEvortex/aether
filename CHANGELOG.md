@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.4] - Unreleased
+
+### Added
+
+- **Seraphyn Provider**: Added new AI provider integration for Seraphyn AI.
+    - OpenAI SDK compatible endpoint at `https://seraphyn.ai/api/v1`.
+    - API key authentication support (`sk-xxxxxxxx` format).
+    - Dynamic model discovery via `/models` endpoint with 10-minute cooldown.
+    - Full integration with account management, settings UI, and provider configuration.
+
+### Changed
+
+- **Code Formatting**: Standardized code formatting across multiple files.
+    - Converted tabs to spaces for consistent indentation.
+    - Standardized string quotes from single quotes to double quotes.
+    - Improved code readability and maintainability in account management and provider configuration files.
+
+- **Default SDK Mode**: Changed default SDK compatibility mode for OpenCode and OpenCode Zen Go from `anthropic` to `openai`.
+
+### Fixed
+
+- **SSE Stream Parsing Robustness**: Fixed `Unexpected end of JSON input` error when providers (e.g., Seraphyn) send non-standard SSE data.
+    - Skip empty `data:` lines before JSON parsing.
+    - Skip SSE comment lines (e.g., `:cost:0.00084:7`) that some providers send as metadata.
+    - Skip truncated/incomplete JSON objects that occur when TCP chunking splits SSE events across reads.
+
 ## [0.3.3] - Unreleased
 
 ### Added

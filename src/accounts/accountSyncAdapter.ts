@@ -245,9 +245,10 @@ export class AccountSyncAdapter {
             ProviderKey.OpenCode,
             ProviderKey.Opencodego,
             ProviderKey.Pollinations,
+            ProviderKey.Seraphyn,
             ProviderKey.Vercelai,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu
+            ProviderKey.Zhipu,
         ];
 
         // Sync Codex (OAuth)

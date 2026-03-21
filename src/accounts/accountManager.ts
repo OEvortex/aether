@@ -267,6 +267,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Seraphyn,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Vercelai,
             {
                 supportsMultiAccount: true,
@@ -289,7 +297,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ]
+        ],
     ]);
 
     private constructor(context: vscode.ExtensionContext) {

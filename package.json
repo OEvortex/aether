@@ -76,6 +76,7 @@
         "onLanguageModelProvider:chp.opencodego",
         "onLanguageModelProvider:chp.pollinations",
         "onLanguageModelProvider:chp.qwencli",
+        "onLanguageModelProvider:chp.seraphyn",
         "onLanguageModelProvider:chp.vercelai",
         "onLanguageModelProvider:chp.zenmux",
         "onLanguageModelProvider:chp.zhipu"
@@ -319,6 +320,11 @@
             {
                 "command": "chp.knox.setApiKey",
                 "title": "Configure Knox",
+                "category": "Copilot ++"
+            },
+            {
+                "command": "chp.seraphyn.setApiKey",
+                "title": "Configure Seraphyn",
                 "category": "Copilot ++"
             }
         ],
@@ -657,7 +663,7 @@
                         "openai",
                         "anthropic"
                     ],
-                    "default": "anthropic",
+                    "default": "openai",
                     "description": "Select SDK compatibility mode for OpenCode.",
                     "scope": "application"
                 },
@@ -667,7 +673,7 @@
                         "openai",
                         "anthropic"
                     ],
-                    "default": "anthropic",
+                    "default": "openai",
                     "description": "Select SDK compatibility mode for OpenCode Zen Go.",
                     "scope": "application"
                 }
@@ -975,6 +981,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Qwen CLI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "chp.seraphyn",
+                "displayName": "⦿ Seraphyn (Seraphyn AI - OpenAI SDK compatible endpoint)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Seraphyn API key.",
                             "secret": true
                         }
                     }

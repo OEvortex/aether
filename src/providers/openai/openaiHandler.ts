@@ -302,6 +302,8 @@ export class OpenAIHandler {
                         // Fix SSE format: ensure there is a space after "data:"
                         // Handle "data:{json}" -> "data: {json}"
                         chunk = chunk.replace(/^data:([^\s])/gm, 'data: $1');
+                        // Remove SSE comment lines (e.g., ":cost:0.00084:7") that some providers send
+                        chunk = chunk.replace(/^:.*$/gm, '');
                         // Logger.trace(`Received SSE chunk: ${chunk.length} characters, chunk=${chunk}`);
                         // Determine and process all data: {json} objects in chunk, compatible with some models using old format to put content in choice.message
                         try {
@@ -312,8 +314,14 @@ export class OpenAIHandler {
                             );
                             for (const m of matches) {
                                 const jsonStr = m[1];
-                                // Skip SSE end marker [DONE]
-                                if (jsonStr === '[DONE]') {
+                                // Skip SSE end marker [DONE] and empty data lines
+                                if (jsonStr === '[DONE]' || jsonStr.trim() === '') {
+                                    continue;
+                                }
+                                // Skip truncated/incomplete JSON (must start with { and end with })
+                                const trimmedJson = jsonStr.trim();
+                                if (!trimmedJson.startsWith('{') || !trimmedJson.endsWith('}')) {
+                                    Logger.trace(`preprocessSSEResponse skipping incomplete JSON: ${trimmedJson.substring(0, 80)}...`);
                                     continue;
                                 }
                                 try {

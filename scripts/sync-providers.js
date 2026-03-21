@@ -317,8 +317,8 @@ function buildAccountProviderItems(knownProviders) {
             provider.id === 'codex'
                 ? true
                 : OAUTH_ONLY_PROVIDERS.has(provider.id)
-                  ? false
-                  : provider.supportsApiKey !== false;
+                    ? false
+                    : provider.supportsApiKey !== false;
 
         return {
             enumName: toEnumName(provider.id),
@@ -392,14 +392,14 @@ function buildAccountUiItems(knownProviders) {
                 left.id === 'compatible'
                     ? 2
                     : left.authType === 'oauth'
-                      ? 0
-                      : 1;
+                        ? 0
+                        : 1;
             const rightGroup =
                 right.id === 'compatible'
                     ? 2
                     : right.authType === 'oauth'
-                      ? 0
-                      : 1;
+                        ? 0
+                        : 1;
             if (leftGroup !== rightGroup) {
                 return leftGroup - rightGroup;
             }
@@ -423,14 +423,14 @@ function syncAccountManagerFile(accountProviderItems) {
     const generatedEntries = accountProviderItems
         .map(
             (provider) =>
-                `\t\t[\n\t\t\tProviderKey.${provider.enumName},\n\t\t\t{\n\t\t\t\tsupportsMultiAccount: ${provider.supportsMultiAccount},\n\t\t\t\tsupportsOAuth: ${provider.supportsOAuth},\n\t\t\t\tsupportsApiKey: ${provider.supportsApiKey},\n\t\t\t},\n\t\t],`
+                `        [\n            ProviderKey.${provider.enumName},\n            {\n                supportsMultiAccount: ${provider.supportsMultiAccount},\n                supportsOAuth: ${provider.supportsOAuth},\n                supportsApiKey: ${provider.supportsApiKey}\n            }\n        ],`
         )
         .join('\n');
 
-    const replacement = `private static providerConfigs = new Map<string, ProviderAccountConfig>([\n${generatedEntries}\n\t]);`;
+    const replacement = `private static providerConfigs = new Map<string, ProviderAccountConfig>([\n${generatedEntries}\n    ]);`;
 
     const pattern =
-        /private static providerConfigs = new Map<string, ProviderAccountConfig>\(\[[\s\S]*?\t\]\);/;
+        /private static providerConfigs = new Map<string, ProviderAccountConfig>\(\[[\s\S]*?\]\);/;
     if (!pattern.test(source)) {
         throw new Error(
             'Could not find providerConfigs map block in src/accounts/accountManager.ts'
@@ -446,27 +446,27 @@ function syncAccountUiFile(accountUiItems) {
     const providerEntries = accountUiItems
         .map(
             (provider) =>
-                `\t\t\t{\n\t\t\t\tlabel: ${formatTsString(provider.menuLabel)},\n\t\t\t\tvalue: ProviderKey.${provider.enumName},\n\t\t\t\tauthType: ${formatTsString(provider.authType)} as const,\n\t\t\t},`
+                `            {\n                label: ${formatTsString(provider.menuLabel)},\n                value: ProviderKey.${provider.enumName},\n                authType: ${formatTsString(provider.authType)} as const\n            },`
         )
         .join('\n');
     const namesEntries = accountUiItems
         .map(
             (provider) =>
-                `\t\t\t${formatTsObjectKey(provider.id)}: ${formatTsString(provider.displayLabel)},`
+                `            ${formatTsObjectKey(provider.id)}: ${formatTsString(provider.displayLabel)},`
         )
         .join('\n');
 
     let next = replaceOrThrow(
         source,
-        /\t\tconst providers = \[[\s\S]*?\n\t\t\];/,
-        `\t\tconst providers = [\n${providerEntries}\n\t\t];`,
+        /const providers = \[[\s\S]*?\n        \];/,
+        `const providers = [\n${providerEntries}\n        ];`,
         'Could not find providers array block in src/accounts/accountUI.ts'
     );
 
     next = replaceOrThrow(
         next,
-        /\t\tconst names: Record<string, string> = \{[\s\S]*?\n\t\t\};/,
-        `\t\tconst names: Record<string, string> = {\n${namesEntries}\n\t\t};`,
+        /const names: Record<string, string> = \{[\s\S]*?\n        \};/,
+        `const names: Record<string, string> = {\n${namesEntries}\n        };`,
         'Could not find provider names map block in src/accounts/accountUI.ts'
     );
 
@@ -476,12 +476,12 @@ function syncAccountUiFile(accountUiItems) {
 function syncAccountSyncAdapterFile(syncProviderItems) {
     const source = readUtf8(ACCOUNT_SYNC_ADAPTER_FILE);
     const providerEntries = syncProviderItems
-        .map((provider) => `\t\t\tProviderKey.${provider.enumName},`)
+        .map((provider) => `            ProviderKey.${provider.enumName},`)
         .join('\n');
-    const replacement = `\t\tconst providers = [\n${providerEntries}\n\t\t];`;
+    const replacement = `const providers = [\n${providerEntries}\n        ];`;
     const next = replaceOrThrow(
         source,
-        /\t\tconst providers = \[[\s\S]*?\n\t\t\];/,
+        /const providers = \[[\s\S]*?\n        \];/,
         replacement,
         'Could not find providers array block in src/accounts/accountSyncAdapter.ts'
     );
@@ -517,8 +517,8 @@ function createSdkModeProperty(provider) {
             (provider.hasResponses
                 ? 'oai-response'
                 : provider.hasAnthropic
-                  ? 'anthropic'
-                  : 'openai'),
+                    ? 'anthropic'
+                    : 'openai'),
         description: `Select SDK compatibility mode for ${provider.displayName}.`,
         scope: 'application'
     };

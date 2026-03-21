@@ -617,6 +617,24 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         description: 'Qwen OAuth via local qwen-code CLI credentials',
         openai: { baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1' }
     },
+    seraphyn: {
+        displayName: 'Seraphyn',
+        family: 'Seraphyn',
+        description: 'Seraphyn AI - OpenAI SDK compatible endpoint',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxx',
+        openai: {
+            baseUrl: 'https://seraphyn.ai/api/v1'
+        },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     vercelai: {
         displayName: 'Vercel AI',
         family: 'Vercel AI',
