@@ -13,27 +13,27 @@ import type {
 } from 'vscode';
 import * as vscode from 'vscode';
 import * as crypto from 'node:crypto';
-import { AccountManager } from '../../accounts/accountManager.js';
+import { AccountManager } from '../../accounts/accountManager';
 import type {
     AccountCredentials,
     ApiKeyCredentials
-} from '../../accounts/types.js';
-import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes.js';
+} from '../../accounts/types';
+import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
 import {
     ApiKeyManager,
     Logger,
     RateLimiter,
 } from '../../utils';
-import { ProviderWizard } from '../../utils/providerWizard.js';
-import { getProviderRateLimit } from '../../utils/knownProviders.js';
+import { ProviderWizard } from '../../utils/providerWizard';
+import { getProviderRateLimit } from '../../utils/knownProviders';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
-} from '../../utils/globalContextLengthManager.js';
-import { TokenCounter } from '../../utils/tokenCounter.js';
-import { SeraphynHandler } from './handler.js';
+} from '../../utils/globalContextLengthManager';
+import { TokenCounter } from '../../utils/tokenCounter';
+import { SeraphynHandler } from './handler';
 
 function hashValue(value: string): string {
     return crypto.createHash('sha256').update(value).digest('hex');
@@ -48,7 +48,6 @@ export class SeraphynProvider implements LanguageModelChatProvider {
         this._onDidChangeLanguageModelChatInformation.event;
 
     private cachedModels: ModelConfig[] = [];
-    private cachedModelInfos: LanguageModelChatInformation[] = [];
     private cachedSignature = '';
     private cachedAt = 0;
     private accountListener?: vscode.Disposable;
@@ -70,7 +69,6 @@ export class SeraphynProvider implements LanguageModelChatProvider {
         this.cachedSignature = '';
         this.cachedAt = 0;
         this.cachedModels = [];
-        this.cachedModelInfos = [];
     }
 
     dispose(): void {
@@ -214,9 +212,6 @@ export class SeraphynProvider implements LanguageModelChatProvider {
 
             const merged = this.mergeModelConfigs(staticModels, fetched);
             this.cachedModels = merged;
-            this.cachedModelInfos = merged.map((model) =>
-                this.modelConfigToInfo(model)
-            );
             this.cachedSignature = signature;
             this.cachedAt = Date.now();
 
@@ -301,13 +296,11 @@ export class SeraphynProvider implements LanguageModelChatProvider {
     ): Promise<LanguageModelChatInformation[]> {
         const modelConfigs = await this.getModelConfigs();
         if (modelConfigs.length === 0) {
-            this.cachedModelInfos = [];
             return [];
         }
 
         const infos = modelConfigs.map((model) => this.modelConfigToInfo(model));
         this.cachedModels = modelConfigs;
-        this.cachedModelInfos = infos;
         return infos;
     }
 

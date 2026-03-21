@@ -6,11 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- **Seraphyn Provider**: Added new AI provider integration for Seraphyn AI.
-    - OpenAI SDK compatible endpoint at `https://seraphyn.ai/api/v1`.
+- **Seraphyn Provider**: Added new standalone AI provider integration for Seraphyn AI.
+    - Custom fetch-based implementation with dedicated SSE parser.
+    - OpenAI-compatible endpoint at `https://seraphyn.ai/api/v1`.
     - API key authentication support (`sk-xxxxxxxx` format).
     - Dynamic model discovery via `/models` endpoint with 10-minute cooldown.
+    - Robust JSON recovery for malformed tool-call arguments (bare keys, invalid backslashes, code fences).
     - Full integration with account management, settings UI, and provider configuration.
+    - Multi-account support with load balancing.
 
 ### Changed
 
@@ -27,6 +30,12 @@ All notable changes to this project will be documented in this file.
     - Skip empty `data:` lines before JSON parsing.
     - Skip SSE comment lines (e.g., `:cost:0.00084:7`) that some providers send as metadata.
     - Skip truncated/incomplete JSON objects that occur when TCP chunking splits SSE events across reads.
+    - Buffer partial SSE lines across TCP chunks to prevent premature JSON parsing.
+
+- **Tool-Call Argument Recovery**: Fixed tool calls failing when providers emit malformed JSON arguments.
+    - Added aggressive JSON normalization: quote bare keys, quote bare string values, escape invalid backslashes, strip code fences.
+    - Falls back to `{ raw: "<original>" }` when recovery fails instead of dropping the tool call entirely.
+    - Fixed TypeScript type errors in the Seraphyn handler module.
 
 ## [0.3.3] - Unreleased
 

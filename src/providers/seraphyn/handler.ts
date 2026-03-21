@@ -1,16 +1,16 @@
 import * as vscode from 'vscode';
-import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes.js';
-import { ConfigManager } from '../../utils/configManager.js';
-import { Logger } from '../../utils/logger.js';
-import { getUserAgent } from '../../utils/userAgent.js';
-import { resolveGlobalTokenLimits } from '../../utils/globalContextLengthManager.js';
-import { SeraphynSseParser } from './sseParser.js';
+import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
+import { ConfigManager } from '../../utils/configManager';
+import { Logger } from '../../utils/logger';
+import { getUserAgent } from '../../utils/userAgent';
+import { resolveGlobalTokenLimits } from '../../utils/globalContextLengthManager';
+import { SeraphynSseParser } from './sseParser';
 import type {
     SeraphynContentPart,
     SeraphynModelResponseItem,
     SeraphynModelsResponse,
     SeraphynToolDefinition
-} from './types.js';
+} from './types';
 
 type SeraphynRequestContext = {
     providerKey: string;
