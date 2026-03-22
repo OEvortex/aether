@@ -14,7 +14,7 @@
                 "toolCalling": true,
                 "imageInput": false
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
+            "baseUrl": "https://opencode.ai/zen/go/v1"
         },
         {
             "id": "kimi-k2-5",
@@ -27,7 +27,7 @@
                 "toolCalling": true,
                 "imageInput": true
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
+            "baseUrl": "https://opencode.ai/zen/go/v1"
         },
         {
             "id": "minimax-m2-5",
@@ -41,7 +41,21 @@
                 "toolCalling": true,
                 "imageInput": false
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1/messages"
+            "baseUrl": "https://opencode.ai/zen/go"
+        },
+        {
+            "id": "minimax-m2-7",
+            "name": "MiniMax M2.7",
+            "tooltip": "MiniMax M2.7 - OpenCode Zen Go",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "model": "minimax-m2.7",
+            "sdkMode": "anthropic",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            },
+            "baseUrl": "https://opencode.ai/zen/go"
         }
     ],
     "family": "OpenCode"
