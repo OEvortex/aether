@@ -51,6 +51,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Apertis,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.AvaSupernova,
             {
                 supportsMultiAccount: true,

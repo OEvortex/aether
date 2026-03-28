@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.5] - 2026-03-28
+
+### Added
+
+- **Apertis AI Provider**: Added new Apertis AI provider integration with full multi-SDK support.
+    - OpenAI SDK compatibility via `https://api.apertis.ai/v1` (Chat Completions).
+    - Anthropic SDK compatibility via `https://api.apertis.ai` (Messages API).
+    - OpenAI Responses SDK compatibility via `https://api.apertis.ai/v1` (Responses API).
+    - API key authentication required (`sk-xxxxxxxx` format).
+    - Dynamic model discovery via `/models` endpoint with 10-minute cooldown.
+    - Auto-fetches model list when API key is configured.
+    - Full integration with account management, settings UI, and provider configuration.
+    - Multi-account support with load balancing.
+
+- **Nemotron-3 Model Support**: Added context window configuration for NVIDIA Nemotron-3 models.
+    - 256K total context (224K input / 32K output).
+    - Matches pattern: `nemotron-3`, `nemotron3`, `nemotron-3-8b`, etc.
+
+- **Nova-2 Model Support**: Added context window configuration for Nova-2 models.
+    - 1M total context (960K input / 64K output).
+    - Matches pattern: `nova-2`, `nova2`, `nova-2-pro`, `nova-2-lite`, etc.
+
 ## [0.3.4] - 2026-03-23
 
 ### Added

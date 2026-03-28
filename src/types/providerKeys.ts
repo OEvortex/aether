@@ -1,5 +1,6 @@
 export enum ProviderKey {
 	AIHubMix = 'aihubmix',
+	Apertis = 'apertis',
 	AvaSupernova = 'ava-supernova',
 	Blackbox = 'blackbox',
 	ChatJimmy = 'chatjimmy',
@@ -30,7 +31,7 @@ export enum ProviderKey {
 	Seraphyn = 'seraphyn',
 	Vercelai = 'vercelai',
 	Zenmux = 'zenmux',
-	Zhipu = 'zhipu', 
+	Zhipu = 'zhipu',
 }
 
 /**

@@ -120,6 +120,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Apertis AI",
+                value: ProviderKey.Apertis,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Blackbox",
                 value: ProviderKey.Blackbox,
                 authType: "apiKey" as const
@@ -867,6 +872,7 @@ export class AccountUI {
             codex: "Codex (OpenAI)",
             qwencli: "Qwen CLI",
             aihubmix: "AIHubMix",
+            apertis: "Apertis AI",
             blackbox: "Blackbox",
             chutes: "Chutes AI",
             cline: "Cline",

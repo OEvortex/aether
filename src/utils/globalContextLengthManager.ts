@@ -69,6 +69,9 @@ const GEMA3_MAX_INPUT_TOKENS = GEMA3_TOTAL_TOKENS - GEMA3_MAX_OUTPUT_TOKENS; // 
 // Qwen3.5 models: 256K total context, 32K output / 224K input
 const QWEN35_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
 const QWEN35_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
+// Nemotron-3 models: 256K total context, 32K output / 224K input
+const NEMOTRON3_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
+const NEMOTRON3_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
 // Qwen3.5 Flash / Plus models: 1M total context, 32K output
 const QWEN35_1M_TOTAL_TOKENS = TOKENS_PER_MEBI;
 const QWEN35_1M_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
@@ -85,6 +88,9 @@ const GEMINI2_MAX_INPUT_TOKENS =
 const GEMINI3_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI; // Gemini 3 / 3.1 -> 64K output (65536)
 const GEMINI3_MAX_INPUT_TOKENS =
     GEMINI_1M_TOTAL_TOKENS - GEMINI3_MAX_OUTPUT_TOKENS;
+// Nova-2 models: 1M total context, 64K output / 960K input
+const NOVA2_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI; // 65536
+const NOVA2_MAX_INPUT_TOKENS = TOKENS_PER_MEBI - NOVA2_MAX_OUTPUT_TOKENS; // 983040
 // GPT-5: 400K total context, 64K output / 336K input
 const GPT5_MAX_INPUT_TOKENS = 400 * TOKENS_PER_KIBI - 64 * TOKENS_PER_KIBI; // 344064
 const GPT5_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI; // 65536
@@ -180,6 +186,16 @@ export function isGptModel(modelId: string): boolean {
 export function isQwen35Model(modelId: string): boolean {
     // Matches qwen3.5 and variants (qwen3.5, qwen-3.5, qwen3.5:397b, etc.)
     return /qwen3\.5/i.test(modelId);
+}
+
+export function isNemotron3Model(modelId: string): boolean {
+    // Matches nemotron-3 and variants (nemotron-3, nemotron3, nemotron-3-8b, etc.)
+    return /nemotron[-_]?3/i.test(modelId);
+}
+
+export function isNova2Model(modelId: string): boolean {
+    // Matches nova-2 and variants (nova-2, nova2, nova-2-pro, nova-2-lite, etc.)
+    return /nova[-_]?2/i.test(modelId);
 }
 
 export function isQwen35OneMillionContextModel(modelId: string): boolean {
@@ -408,6 +424,22 @@ export function resolveGlobalTokenLimits(
         return {
             maxInputTokens: QWEN35_MAX_INPUT_TOKENS,
             maxOutputTokens: QWEN35_MAX_OUTPUT_TOKENS
+        };
+    }
+
+    // Nemotron-3 series: 256K total context, 32K output
+    if (isNemotron3Model(modelId)) {
+        return {
+            maxInputTokens: NEMOTRON3_MAX_INPUT_TOKENS,
+            maxOutputTokens: NEMOTRON3_MAX_OUTPUT_TOKENS
+        };
+    }
+
+    // Nova-2 series: 1M total context, 64K output
+    if (isNova2Model(modelId)) {
+        return {
+            maxInputTokens: NOVA2_MAX_INPUT_TOKENS,
+            maxOutputTokens: NOVA2_MAX_OUTPUT_TOKENS
         };
     }
 

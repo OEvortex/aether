@@ -222,6 +222,7 @@ export class AccountSyncAdapter {
     async syncAllAccounts(): Promise<void> {
         const providers = [
             ProviderKey.AIHubMix,
+            ProviderKey.Apertis,
             ProviderKey.Blackbox,
             ProviderKey.Chutes,
             ProviderKey.Cline,

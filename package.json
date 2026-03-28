@@ -3,7 +3,7 @@
     "publisher": "OEvortex",
     "displayName": "Copilot ++",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "license": "MIT",
     "keywords": [
         "ai",
@@ -53,6 +53,7 @@
         "onLanguageModelTool:chp_zhipuWebSearch",
         "onStartupFinished",
         "onLanguageModelProvider:chp.aihubmix",
+        "onLanguageModelProvider:chp.apertis",
         "onLanguageModelProvider:chp.ava-supernova",
         "onLanguageModelProvider:chp.blackbox",
         "onLanguageModelProvider:chp.chatjimmy",
@@ -326,6 +327,11 @@
                 "command": "chp.seraphyn.setApiKey",
                 "title": "Configure Seraphyn",
                 "category": "Copilot ++"
+            },
+            {
+                "command": "chp.apertis.setApiKey",
+                "title": "Configure Apertis AI",
+                "category": "Copilot ++"
             }
         ],
         "configuration": {
@@ -596,6 +602,17 @@
                     "description": "Select SDK compatibility mode for AIHubMix.",
                     "scope": "application"
                 },
+                "chp.apertis.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic",
+                        "oai-response"
+                    ],
+                    "default": "oai-response",
+                    "description": "Select SDK compatibility mode for Apertis AI.",
+                    "scope": "application"
+                },
                 "chp.blackbox.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -694,6 +711,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "AIHubMix API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "chp.apertis",
+                "displayName": "⦿ Apertis AI (Apertis AI endpoint integration)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Apertis AI API key.",
                             "secret": true
                         }
                     }

@@ -1,5 +1,6 @@
 import type { ProviderConfig } from '../../types/sharedTypes';
 import aihubmix from './aihubmix.json';
+import apertis from './apertis.json';
 import avaSupernova from './ava-supernova.json';
 import blackbox from './blackbox.json';
 import chatjimmy from './chatjimmy.json';
@@ -28,6 +29,7 @@ import zhipu from './zhipu.json';
 
 const providers = {
 	aihubmix: aihubmix,
+	apertis: apertis,
 	"ava-supernova": avaSupernova,
 	blackbox: blackbox,
 	chatjimmy: chatjimmy,
@@ -49,8 +51,8 @@ const providers = {
 	opencode: opencode,
 	opencodego: opencodego,
 	pollinations: pollinations,
-	seraphyn: seraphyn,
 	qwencli: qwencli,
+	seraphyn: seraphyn,
 	zenmux: zenmux,
 	zhipu: zhipu,
 };

@@ -325,6 +325,30 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    apertis: {
+        displayName: 'Apertis AI',
+        family: 'Apertis AI',
+        description: 'Apertis AI endpoint integration',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        openai: {
+            baseUrl: 'https://api.apertis.ai/v1'
+        },
+        anthropic: {
+            baseUrl: 'https://api.apertis.ai'
+        },
+        responses: {
+            baseUrl: 'https://api.apertis.ai/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     blackbox: {
         displayName: 'Blackbox AI',
         family: 'Blackbox AI',
@@ -335,10 +359,10 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         fetchModels: true,
         modelsEndpoint: '/models',
         openai: {
-            baseUrl: 'https://api.blackbox.ai'
+            baseUrl: 'https://api.blackbox.ai/v1'
         },
         anthropic: {
-            baseUrl: 'https://api.blackbox.ai/v1',
+            baseUrl: 'https://api.blackbox.ai/',
             customHeader: {
                 'anthropic-version': '2023-06-01'
             }
