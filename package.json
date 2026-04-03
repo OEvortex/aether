@@ -361,22 +361,6 @@
                     "description": "Controls the maximum number of tokens in AI model output. Larger values allow longer responses.",
                     "scope": "application"
                 },
-                "chp.editToolMode": {
-                    "type": "string",
-                    "enum": [
-                        "claude",
-                        "gpt-5",
-                        "none"
-                    ],
-                    "enumDescriptions": [
-                        "Use Claude-style editing tool (ReplaceString) - efficient and precise single replacement",
-                        "Use GPT-5-style editing tool (ApplyPatch) - batch difference application, supports complex refactoring",
-                        "Do not use specific optimization tools, direct file editing - lower efficiency, suitable for handling edit exceptions"
-                    ],
-                    "default": "claude",
-                    "description": "Select editing tool mode. Claude uses efficient ReplaceString, GPT-5 uses ApplyPatch for batch editing, None uses basic file editing directly.",
-                    "scope": "application"
-                },
                 "chp.rememberLastModel": {
                     "type": "boolean",
                     "default": true,

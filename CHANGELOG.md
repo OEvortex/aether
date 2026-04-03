@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.6] - 2026-04=03
+## [0.3.7] - 2026-04-03
+
+### Removed
+
+- **`chp.editToolMode` setting removed**: The editing tool mode configuration (`claude`, `gpt-5`, `none`) has been removed. The extension now handles editing operations internally without requiring a user-facing tool mode selection.
+
+## [0.3.6] - 2026-04-03
 
 ### Added
 
@@ -552,8 +558,8 @@ All notable changes to this project will be documented in this file.
 **Enhanced Model Organization:**
 
 - **Unified Model Families**: Implemented consistent model family identification across all 22 providers.
-    - Models are now grouped by their provider name (e.g., "minimax", "deepseek", "kilo") in the VS Code model selector when `editToolMode` is disabled.
-    - Dynamic family switching based on `editToolMode` configuration to ensure compatibility with advanced VS Code features like Copilot's "Edit" mode.
+    - Models are now grouped by their provider name (e.g., "minimax", "deepseek", "kilo") in the VS Code model selector.
+    - Dynamic family switching to ensure compatibility with advanced VS Code features like Copilot's "Edit" mode.
 - **Universal Provider Menu**: The `Manage API Keys` quick pick menu now displays all built-in providers, allowing you to configure providers (like Kilo or Zenmux) even before adding custom models for them.
 - **Improved Account Manager Page**: Updated the WebView interface to include all supported providers in the "Add Account" list.
 - **Standardized Display Names**: Consistent and clear provider naming across the `AccountUI` QuickPick menus and the main Account Manager page.

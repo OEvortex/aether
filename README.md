@@ -135,23 +135,6 @@ A powerful VS Code extension that provides model support for **GitHub Copilot Ch
 
 ---
 
-### 🛠️ Editing Tool Modes
-
-> **Optimized editing for different AI models**
-
-| Mode | Tool | Best For |
-| :--- | :--- | :------- |
-| `claude` | ReplaceString | Efficient single replacements (default) |
-| `gpt-5` | ApplyPatch | Batch editing, complex refactoring |
-| `none` | Direct file editing | Fallback for edge cases |
-
-**Configure:**
-```json
-{
-    "chp.editToolMode": "claude"
-}
-```
-
 ---
 
 ## Installation
@@ -319,7 +302,6 @@ Toggle the **"Load Balance"** switch to enable automatic account switching when 
 | `chp.temperature` | number | `0.1` | Controls output randomness (0-2) |
 | `chp.topP` | number | `1` | Controls output diversity (0-1) |
 | `chp.maxTokens` | number | `8192` | Maximum output tokens (32-256000) |
-| `chp.editToolMode` | string | `"claude"` | Editing tool mode (`claude`, `gpt-5`, `none`) |
 | `chp.rememberLastModel` | boolean | `true` | Remember last used model |
 
 ### Provider-Specific Settings

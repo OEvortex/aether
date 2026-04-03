@@ -43,19 +43,23 @@
     "debug.javascript.usePreview": true,
     "debug.openDebug": "openOnDebugBreak",
     // esbuild related optimizations
-    "eslint.validate": ["javascript", "typescript"],
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
     "typescript.preferences.includePackageJsonAutoImports": "auto",
     // Provide JSON Schema validation and hints for provider configuration
     "json.schemas": [
         {
-            "fileMatch": ["src/providers/config/*.json"],
+            "fileMatch": [
+                "src/providers/config/*.json"
+            ],
             "url": "./.vscode/providerConfig.schema.json"
         }
     ],
     "chp.temperature": 0.1, // 0.0-2.0
     "chp.topP": 1.0, // 0.0-1.0
     "chp.maxTokens": 256000, // 32-256000
-    "chp.editToolMode": "claude", // claude/gpt-5/none
     "chp.rememberLastModel": true, // Remember the last used model
     "chp.zhipu.search.enableMCP": true,
     "chatgpt.openOnStartup": false // Enable `Network Search MCP` (Coding Plan exclusive)

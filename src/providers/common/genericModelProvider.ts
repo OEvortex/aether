@@ -915,11 +915,15 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             const activeAccount =
                 this.accountManager.getActiveAccount(effectiveProviderKey);
 
-            const available = candidates.filter(
+            let refreshedAvailable = candidates.filter(
                 (a) => !this.accountManager.isAccountQuotaLimited(a.id)
             );
 
-            if (available.length === 0) {
+            while (refreshedAvailable.length === 0) {
+                if (token.isCancellationRequested) {
+                    throw new vscode.CancellationError();
+                }
+
                 const shortestCooldownAccount =
                     this.accountManager.getAccountWithShortestCooldown(
                         effectiveProviderKey
@@ -930,17 +934,19 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                       )
                     : 0;
 
-                if (waitMs > 0) {
-                    Logger.warn(
-                        `[${effectiveProviderKey}] All accounts are rate-limited. Waiting ${Math.ceil(waitMs / 1000)}s before retrying ${shortestCooldownAccount?.displayName || 'the next account'}.`
-                    );
-                    await new Promise((resolve) => setTimeout(resolve, waitMs));
+                if (waitMs <= 0) {
+                    break;
                 }
-            }
 
-            const refreshedAvailable = candidates.filter(
-                (a) => !this.accountManager.isAccountQuotaLimited(a.id)
-            );
+                Logger.warn(
+                    `[${effectiveProviderKey}] All accounts are rate-limited. Waiting ${Math.ceil(waitMs / 1000)}s before retrying ${shortestCooldownAccount?.displayName || 'the next account'}.`
+                );
+                await new Promise((resolve) => setTimeout(resolve, waitMs));
+
+                refreshedAvailable = candidates.filter(
+                    (a) => !this.accountManager.isAccountQuotaLimited(a.id)
+                );
+            }
 
             let accountsToTry: Account[];
             if (refreshedAvailable.length > 0) {
