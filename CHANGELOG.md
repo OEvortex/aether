@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.6] - 2026-04=03
+
+### Added
+
+- **Qwen3.6 1M Context Support**: Added context window and capability configuration for Qwen3.6 models.
+    - 1M total context window (≈1,017K input / 32K output), matching the Gemini 1M family.
+    - New detector function `isQwen36OneMillionContextModel` matches `qwen3.6`, `qwen-3.6`, `qwen3.6:397b`, and provider-prefixed variants.
+    - Vision (image input) support enabled for all Qwen3.6 models, consistent with the Qwen3.5 family.
+
+- **Qwen3.5 1M Vision Support**: Added `isQwen35OneMillionContextModel` to the vision-capable models list.
+    - Qwen3.5 Flash/Plus models (1M context) now correctly advertise image input capability alongside the standard Qwen3.5 series.
+
 ## [0.3.5] - 2026-03-28
 
 ### Added
