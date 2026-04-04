@@ -2,6 +2,9 @@
 node_modules/
 dist/
 
+# Ignore CLI dist
+src/cli/dist/
+
 # Ignore test folders
 test/
 
