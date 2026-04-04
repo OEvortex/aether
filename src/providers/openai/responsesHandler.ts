@@ -9,6 +9,7 @@ import {
 } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
+import { RetryManager } from '../../utils/retryManager';
 import { TokenCounter } from '../../utils/tokenCounter';
 import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { getUserAgent } from '../../utils/userAgent';
@@ -64,12 +65,41 @@ export class ResponsesHandler {
         const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
         const windowMs = rateLimit?.windowMs ?? 1000;
 
-        await RateLimiter.getInstance(
+        const rateLimiter = RateLimiter.getInstance(
             `${this.provider}:${modelConfig.sdkMode || 'openai'}:${requestsPerSecond}:${windowMs}`,
             requestsPerSecond,
             windowMs
-        ).throttle(this.displayName);
+        );
 
+        // Execute with automatic rate limiting and retry on 429 errors
+        await rateLimiter.executeWithRetry(
+            async () => {
+                await this.executeResponsesRequest(
+                    model,
+                    modelConfig,
+                    messages,
+                    options,
+                    progress,
+                    token,
+                    _accountId
+                );
+            },
+            this.displayName
+        );
+    }
+
+    /**
+     * Execute the actual Responses API request (extracted for retry support)
+     */
+    private async executeResponsesRequest(
+        model: vscode.LanguageModelChatInformation,
+        modelConfig: ModelConfig,
+        messages: readonly vscode.LanguageModelChatMessage[],
+        options: vscode.ProvideLanguageModelChatResponseOptions,
+        progress: vscode.Progress<vscode.LanguageModelResponsePart2>,
+        token: vscode.CancellationToken,
+        _accountId?: string
+    ): Promise<void> {
         Logger.debug(
             `${model.name} starting to process ${this.displayName} Responses request`
         );

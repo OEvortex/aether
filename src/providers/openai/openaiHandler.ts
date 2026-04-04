@@ -666,13 +666,42 @@ export class OpenAIHandler {
         const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
         const windowMs = rateLimit?.windowMs ?? 1000;
 
-        // Apply provider-configurable rate limiting
-        await RateLimiter.getInstance(
-            `${this.provider}:${modelConfig.sdkMode || 'openai'}:${requestsPerSecond}:${windowMs}`,
+        const rateLimiterKey = `${this.provider}:${modelConfig.sdkMode || 'openai'}:${requestsPerSecond}:${windowMs}`;
+        const rateLimiter = RateLimiter.getInstance(
+            rateLimiterKey,
             requestsPerSecond,
             windowMs
-        ).throttle(this.displayName);
+        );
 
+        // Execute with automatic rate limiting and retry on 429 errors
+        await rateLimiter.executeWithRetry(
+            async () => {
+                await this.executeOpenAIRequest(
+                    model,
+                    modelConfig,
+                    messages,
+                    options,
+                    progress,
+                    token,
+                    accountId
+                );
+            },
+            this.displayName
+        );
+    }
+
+    /**
+     * Execute the actual OpenAI API request (extracted for retry support)
+     */
+    private async executeOpenAIRequest(
+        model: vscode.LanguageModelChatInformation,
+        modelConfig: ModelConfig,
+        messages: readonly vscode.LanguageModelChatMessage[],
+        options: vscode.ProvideLanguageModelChatResponseOptions,
+        progress: vscode.Progress<vscode.LanguageModelResponsePart2>,
+        token: vscode.CancellationToken,
+        accountId?: string
+    ): Promise<void> {
         Logger.debug(
             `${model.name} starting to process ${this.displayName} request${accountId ? ` (Account ID: ${accountId})` : ''}`
         );

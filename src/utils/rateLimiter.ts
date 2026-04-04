@@ -1,13 +1,14 @@
 /*---------------------------------------------------------------------------------------------
  *  Rate Limiter
- *  Provides a simple rate limiting mechanism to control request frequency
+ *  Provides a simple rate limiting mechanism with automatic retry on 429 errors
  *--------------------------------------------------------------------------------------------*/
 
 import { Logger } from './logger';
+import { RetryManager } from './retryManager';
 
 /**
  * Rate Limiter class
- * Implements a simple token bucket or fixed window rate limiting
+ * Implements a simple token bucket or fixed window rate limiting with automatic retry
  */
 export class RateLimiter {
     private static instances = new Map<string, RateLimiter>();
@@ -15,10 +16,18 @@ export class RateLimiter {
     private requestCount = 0;
     private readonly maxRequests: number;
     private readonly windowMs: number;
+    private readonly retryManager: RetryManager;
 
     private constructor(maxRequests = 2, windowMs = 1000) {
         this.maxRequests = maxRequests;
         this.windowMs = windowMs;
+        this.retryManager = new RetryManager({
+            maxAttempts: 5,
+            initialDelayMs: 2000,
+            maxDelayMs: 60000,
+            backoffMultiplier: 2,
+            jitterEnabled: true
+        });
     }
 
     /**
@@ -70,5 +79,28 @@ export class RateLimiter {
 
         // Recurse to ensure we're still within limits after waiting
         return this.throttle(providerName);
+    }
+
+    /**
+     * Execute an operation with automatic rate limiting and retry on 429 errors
+     * This method wraps the operation with rate limiting and retries internally
+     * without raising rate limit errors to the caller
+     * @param operation The async operation to execute
+     * @param providerName Name of the provider for logging
+     * @returns The result of the successful operation
+     */
+    async executeWithRetry<T>(
+        operation: () => Promise<T>,
+        providerName: string
+    ): Promise<T> {
+        // First, apply rate limiting throttle
+        await this.throttle(providerName);
+
+        // Then execute with automatic retry on rate limit errors
+        return this.retryManager.executeWithRetry(
+            operation,
+            (error) => RetryManager.isRateLimitError(error),
+            providerName
+        );
     }
 }

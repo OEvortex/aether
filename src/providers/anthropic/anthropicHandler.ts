@@ -11,6 +11,7 @@ import { ApiKeyManager } from '../../utils/apiKeyManager';
 import { ConfigManager } from '../../utils/configManager';
 import { KnownProviders } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
+import { RateLimiter } from '../../utils/rateLimiter';
 import { getUserAgent } from '../../utils/userAgent';
 import { RetryManager } from '../../utils/retryManager';
 import { OpenAIHandler } from '../openai/openaiHandler';
@@ -106,6 +107,41 @@ export class AnthropicHandler {
      * Process Anthropic SDK request
      */
     async handleRequest(
+        model: vscode.LanguageModelChatInformation,
+        modelConfig: ModelConfig,
+        messages: readonly vscode.LanguageModelChatMessage[],
+        options: vscode.ProvideLanguageModelChatResponseOptions,
+        progress: vscode.Progress<vscode.LanguageModelResponsePart2>,
+        token: vscode.CancellationToken,
+        accountId?: string
+    ): Promise<void> {
+        const rateLimiter = RateLimiter.getInstance(
+            `anthropic:${this.provider}`,
+            2,
+            1000
+        );
+
+        // Execute with automatic rate limiting and retry on 429 errors
+        await rateLimiter.executeWithRetry(
+            async () => {
+                await this.executeAnthropicRequest(
+                    model,
+                    modelConfig,
+                    messages,
+                    options,
+                    progress,
+                    token,
+                    accountId
+                );
+            },
+            this.displayName
+        );
+    }
+
+    /**
+     * Execute the actual Anthropic API request (extracted for retry support)
+     */
+    private async executeAnthropicRequest(
         model: vscode.LanguageModelChatInformation,
         modelConfig: ModelConfig,
         messages: readonly vscode.LanguageModelChatMessage[],

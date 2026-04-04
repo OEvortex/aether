@@ -26,6 +26,7 @@ import {
     ModelInfoCache,
     OpenAIHandler,
     ResponsesHandler,
+    RetryManager,
     TokenCounter
 } from '../../utils';
 import {
@@ -1088,6 +1089,20 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                     return;
                 } catch (error) {
                     switchedAccount = true;
+                    // Check if it's a rate limit error that should be retried internally
+                    if (RetryManager.isRateLimitError(error)) {
+                        Logger.warn(
+                            `[${effectiveProviderKey}] Account ${account.displayName} rate limited, will retry automatically...`
+                        );
+                        lastError = error;
+                        // If load balancing is enabled, try next account
+                        if (loadBalanceEnabled) {
+                            continue;
+                        }
+                        // If only one account, retry the same account by continuing the loop
+                        // The outer retry logic in handlers will handle the actual delay
+                        continue;
+                    }
                     if (this.isLongTermQuotaExhausted(error)) {
                         if (loadBalanceEnabled) {
                             Logger.warn(

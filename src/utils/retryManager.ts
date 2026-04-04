@@ -40,6 +40,18 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
 };
 
 /**
+ * Default retry configuration for rate limit (429) errors
+ * More aggressive retries with longer delays for rate limiting
+ */
+const RATE_LIMIT_RETRY_CONFIG: RetryConfig = {
+    maxAttempts: 5,
+    initialDelayMs: 2000,
+    maxDelayMs: 120000,
+    backoffMultiplier: 2.5,
+    jitterEnabled: true
+};
+
+/**
  * Retry Manager class
  * Implements exponential backoff with optional jitter for resilient API calls
  */
@@ -63,9 +75,46 @@ export class RetryManager {
         isRetryable: (error: RetryableError) => boolean,
         providerName: string
     ): Promise<T> {
+        return this.executeWithRetryInternal(
+            operation,
+            isRetryable,
+            providerName,
+            this.config
+        );
+    }
+
+    /**
+     * Execute an operation with automatic retry logic specifically for rate limit (429) errors
+     * Uses more aggressive retry settings with longer delays
+     * @param operation The async operation to execute
+     * @param providerName Provider name for logging purposes
+     * @returns The result of the successful operation
+     * @throws The last error if all retry attempts fail
+     */
+    async executeWithRateLimitRetry<T>(
+        operation: () => Promise<T>,
+        providerName: string
+    ): Promise<T> {
+        return this.executeWithRetryInternal(
+            operation,
+            (error) => RetryManager.isRateLimitError(error),
+            providerName,
+            RATE_LIMIT_RETRY_CONFIG
+        );
+    }
+
+    /**
+     * Internal implementation for retry logic
+     */
+    private async executeWithRetryInternal<T>(
+        operation: () => Promise<T>,
+        isRetryable: (error: RetryableError) => boolean,
+        providerName: string,
+        config: RetryConfig
+    ): Promise<T> {
         let lastError: RetryableError | undefined;
         let attempt = 0;
-        let delayMs = this.config.initialDelayMs;
+        let delayMs = config.initialDelayMs;
 
         // Initial attempt
         Logger.trace(`[${providerName}] Starting initial request`);
@@ -87,17 +136,17 @@ export class RetryManager {
         }
 
         // Retry loop
-        while (attempt < this.config.maxAttempts) {
+        while (attempt < config.maxAttempts) {
             attempt++;
 
             // Calculate delay with optional jitter to prevent thundering herd
-            const jitter = this.config.jitterEnabled ? Math.random() * 0.1 : 0;
+            const jitter = config.jitterEnabled ? Math.random() * 0.1 : 0;
             const actualDelayMs = Math.min(
                 delayMs * (1 + jitter),
-                this.config.maxDelayMs
+                config.maxDelayMs
             );
             Logger.info(
-                `[${providerName}] Retrying in ${actualDelayMs / 1000} seconds...`
+                `[${providerName}] Rate limit retry in ${actualDelayMs / 1000} seconds...`
             );
 
             // Wait for the calculated delay
@@ -105,7 +154,7 @@ export class RetryManager {
 
             // Execute retry attempt
             Logger.info(
-                `[${providerName}] Retry attempt #${attempt}/${this.config.maxAttempts}`
+                `[${providerName}] Retry attempt #${attempt}/${config.maxAttempts}`
             );
             try {
                 const result = await operation();
@@ -129,7 +178,7 @@ export class RetryManager {
                 );
 
                 // Exponentially increase delay for next attempt
-                delayMs *= this.config.backoffMultiplier;
+                delayMs *= config.backoffMultiplier;
             }
         }
 

@@ -23,6 +23,7 @@ import {
     ApiKeyManager,
     Logger,
     RateLimiter,
+    RetryManager
 } from '../../utils';
 import { ProviderWizard } from '../../utils/providerWizard';
 import { getProviderRateLimit } from '../../utils/knownProviders';
@@ -348,12 +349,37 @@ export class SeraphynProvider implements LanguageModelChatProvider {
         const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
         const windowMs = rateLimit?.windowMs ?? 1000;
 
-        await RateLimiter.getInstance(
+        const rateLimiter = RateLimiter.getInstance(
             `${this.providerKey}:openai:${requestsPerSecond}:${windowMs}`,
             requestsPerSecond,
             windowMs
-        ).throttle(this.providerConfig.displayName);
+        );
 
+        // Execute with automatic rate limiting and retry on 429 errors
+        await rateLimiter.executeWithRetry(
+            async () => {
+                await this.executeSeraphynRequest(
+                    model,
+                    messages,
+                    options,
+                    progress,
+                    token
+                );
+            },
+            this.providerConfig.displayName
+        );
+    }
+
+    /**
+     * Execute the actual Seraphyn API request (extracted for retry support)
+     */
+    private async executeSeraphynRequest(
+        model: LanguageModelChatInformation,
+        messages: Array<LanguageModelChatMessage>,
+        options: ProvideLanguageModelChatResponseOptions,
+        progress: Progress<vscode.LanguageModelResponsePart2>,
+        token: CancellationToken
+    ): Promise<void> {
         const modelConfig =
             this.cachedModels.find((candidate) => candidate.id === model.id) ||
             this.providerConfig.models?.find(

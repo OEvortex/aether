@@ -20,6 +20,7 @@ import { ConfigManager } from '../../utils/configManager';
 import { getProviderRateLimit } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
+import { RetryManager } from '../../utils/retryManager';
 import {
     formatRateLimitSummary,
     parseRateLimitFromHeaders
@@ -578,13 +579,49 @@ export class CodexHandler {
         const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
         const windowMs = rateLimit?.windowMs ?? 1000;
 
-        // Apply provider-configurable rate limiting
-        await RateLimiter.getInstance(
+        const rateLimiter = RateLimiter.getInstance(
             `codex:openai:${requestsPerSecond}:${windowMs}`,
             requestsPerSecond,
             windowMs
-        ).throttle(this.providerName);
+        );
 
+        // Execute with automatic rate limiting and retry on 429 errors
+        await rateLimiter.executeWithRetry(
+            async () => {
+                await this.executeCodexRequest(
+                    model,
+                    config,
+                    messages,
+                    options,
+                    progress,
+                    token,
+                    accessToken,
+                    managedAccountId,
+                    chatgptAccountId,
+                    organizationId,
+                    projectId
+                );
+            },
+            this.providerName
+        );
+    }
+
+    /**
+     * Execute the actual Codex API request (extracted for retry support)
+     */
+    private async executeCodexRequest(
+        model: vscode.LanguageModelChatInformation,
+        config: ModelConfig,
+        messages: vscode.LanguageModelChatMessage[],
+        options: vscode.ProvideLanguageModelChatResponseOptions,
+        progress: vscode.Progress<vscode.LanguageModelResponsePart2>,
+        token: vscode.CancellationToken,
+        accessToken: string,
+        managedAccountId?: string,
+        chatgptAccountId?: string,
+        organizationId?: string,
+        projectId?: string
+    ): Promise<void> {
         // Store current model ID for instruction selection
         this.currentModelId = config.model || model.id;
 

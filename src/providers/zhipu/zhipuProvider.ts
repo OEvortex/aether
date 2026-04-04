@@ -19,6 +19,7 @@ import { ConfigManager } from '../../utils/configManager';
 import { getProviderRateLimit } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
+import { RetryManager } from '../../utils/retryManager';
 import {
     GenericModelProvider,
     ZHIPU_DEFAULT_CONTEXT_LENGTH,
@@ -451,13 +452,37 @@ export class ZhipuProvider
         const requestsPerSecond = rateLimit?.requestsPerSecond ?? 1;
         const windowMs = rateLimit?.windowMs ?? 1000;
 
-        // Apply provider-configurable rate limiting
-        await RateLimiter.getInstance(
+        const rateLimiter = RateLimiter.getInstance(
             `${this.providerKey}:openai:${requestsPerSecond}:${windowMs}`,
             requestsPerSecond,
             windowMs
-        ).throttle(this.providerConfig.displayName);
+        );
 
+        // Execute with automatic rate limiting and retry on 429 errors
+        await rateLimiter.executeWithRetry(
+            async () => {
+                await this.executeZhipuRequest(
+                    model,
+                    messages,
+                    options,
+                    progress,
+                    token
+                );
+            },
+            this.providerConfig.displayName
+        );
+    }
+
+    /**
+     * Execute the actual Zhipu API request (extracted for retry support)
+     */
+    private async executeZhipuRequest(
+        model: LanguageModelChatInformation,
+        messages: Array<LanguageModelChatMessage>,
+        options: ProvideLanguageModelChatResponseOptions,
+        progress: Progress<vscode.LanguageModelResponsePart>,
+        token: CancellationToken
+    ): Promise<void> {
         const modelConfig = this.providerConfig.models.find(
             (m) => m.id === model.id
         );

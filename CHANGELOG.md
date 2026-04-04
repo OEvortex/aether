@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.7] - 2026-04-03
+## [0.3.7] - Unreleased
+
+### Added
+
+- **Automatic Rate Limit Retry**: Enhanced rate limiter to automatically retry requests on 429 errors instead of raising errors to the user.
+    - All provider handlers (OpenAI, Anthropic, Responses, Codex, Zhipu, Seraphyn) now use `executeWithRetry()` for transparent retries.
+    - Configurable retry settings: 5 max attempts, 2s initial delay, 60s max delay, 2.5x exponential backoff with jitter.
+    - Rate limit errors are now handled internally - users see no error, requests just take longer while retries happen transparently.
+    - Improved `RetryManager` with specialized `RATE_LIMIT_RETRY_CONFIG` for better 429 handling.
+    - Enhanced `genericModelProvider` to detect rate limit errors and continue/retry automatically with account switching.
 
 ### Removed
 

@@ -172,4 +172,83 @@ describe('RateLimiter', () => {
             expect(Date.now()).toBe(600);
         });
     });
+
+    describe('executeWithRetry', () => {
+        it('executes operation successfully on first attempt', async () => {
+            const limiter = RateLimiter.getInstance('retry-test-1', 10, 1000);
+            const operation = vi.fn().mockResolvedValue('success');
+
+            const result = await limiter.executeWithRetry(operation, 'test-provider');
+
+            expect(result).toBe('success');
+            expect(operation).toHaveBeenCalledTimes(1);
+        });
+
+        it('retries on rate limit error and succeeds', async () => {
+            const limiter = RateLimiter.getInstance('retry-test-2', 10, 1000);
+            const error429 = new Error('Rate limit exceeded: 429');
+            (error429 as any).status = 429;
+
+            const operation = vi.fn()
+                .mockRejectedValueOnce(error429)
+                .mockRejectedValueOnce(error429)
+                .mockResolvedValue('success-after-retry');
+
+            // Mock the retry delay to complete immediately
+            const originalSetTimeout = global.setTimeout;
+            vi.spyOn(global, 'setTimeout').mockImplementation((cb: any, ms?: any) => {
+                if (ms && ms > 0) {
+                    // Execute callback immediately for test
+                    (cb as Function)();
+                    return originalSetTimeout(() => {}, 0);
+                }
+                return originalSetTimeout(cb, ms);
+            });
+
+            const result = await limiter.executeWithRetry(operation, 'test-provider');
+
+            expect(result).toBe('success-after-retry');
+            expect(operation).toHaveBeenCalledTimes(3);
+
+            vi.restoreAllMocks();
+        });
+
+        it('throws non-rate-limit errors immediately', async () => {
+            const limiter = RateLimiter.getInstance('retry-test-3', 10, 1000);
+            const nonRetryableError = new Error('Invalid API key: 401');
+
+            const operation = vi.fn().mockRejectedValue(nonRetryableError);
+
+            await expect(limiter.executeWithRetry(operation, 'test-provider'))
+                .rejects.toThrow('Invalid API key: 401');
+
+            expect(operation).toHaveBeenCalledTimes(1);
+        });
+
+        it('throws after exhausting all retry attempts for rate limit errors', async () => {
+            const limiter = RateLimiter.getInstance('retry-test-4', 10, 1000);
+            const error429 = new Error('Rate limit exceeded: 429');
+            (error429 as any).status = 429;
+
+            const operation = vi.fn().mockRejectedValue(error429);
+
+            // Mock the retry delay to complete immediately
+            const originalSetTimeout = global.setTimeout;
+            vi.spyOn(global, 'setTimeout').mockImplementation((cb: any, ms?: any) => {
+                if (ms && ms > 0) {
+                    (cb as Function)();
+                    return originalSetTimeout(() => {}, 0);
+                }
+                return originalSetTimeout(cb, ms);
+            });
+
+            await expect(limiter.executeWithRetry(operation, 'test-provider'))
+                .rejects.toThrow('Rate limit exceeded: 429');
+
+            // Should have tried maxAttempts (5) + 1 initial = 6 times
+            expect(operation).toHaveBeenCalledTimes(6);
+
+            vi.restoreAllMocks();
+        });
+    });
 });
