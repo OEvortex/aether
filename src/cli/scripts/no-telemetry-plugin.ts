@@ -18,7 +18,7 @@
  *   - Transcript / feedback sharing
  */
 
-import type { BunPlugin } from 'bun'
+import type { Plugin } from 'esbuild'
 
 // Module path (relative to src/, without extension) → stub source
 const stubs: Record<string, string> = {
@@ -212,7 +212,7 @@ function escapeForResolvedPathRegex(modulePath: string): string {
 		.replace(/\//g, '[/\\\\]')
 }
 
-export const noTelemetryPlugin: BunPlugin = {
+export const noTelemetryPlugin: Plugin = {
 	name: 'no-telemetry',
 	setup(build) {
 		for (const [modulePath, contents] of Object.entries(stubs)) {

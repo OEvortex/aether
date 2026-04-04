@@ -10,53 +10,77 @@
 
 // Re-export sandbox types for SDK consumers
 export type {
-  SandboxFilesystemConfig,
-  SandboxIgnoreViolations,
-  SandboxNetworkConfig,
-  SandboxSettings,
-} from '../sandboxTypes.js'
+    SandboxFilesystemConfig,
+    SandboxIgnoreViolations,
+    SandboxNetworkConfig,
+    SandboxSettings
+} from '../sandboxTypes.js';
 // Re-export all generated types
-export * from './coreTypes.generated.js'
+export * from './coreTypes.generated.js';
 
 // Re-export utility types that can't be expressed as Zod schemas
-export type { NonNullableUsage } from './sdkUtilityTypes.js'
+export type { NonNullableUsage } from './sdkUtilityTypes.js';
 
 // Const arrays for runtime usage
 export const HOOK_EVENTS = [
-  'PreToolUse',
-  'PostToolUse',
-  'PostToolUseFailure',
-  'Notification',
-  'UserPromptSubmit',
-  'SessionStart',
-  'SessionEnd',
-  'Stop',
-  'StopFailure',
-  'SubagentStart',
-  'SubagentStop',
-  'PreCompact',
-  'PostCompact',
-  'PermissionRequest',
-  'PermissionDenied',
-  'Setup',
-  'TeammateIdle',
-  'TaskCreated',
-  'TaskCompleted',
-  'Elicitation',
-  'ElicitationResult',
-  'ConfigChange',
-  'WorktreeCreate',
-  'WorktreeRemove',
-  'InstructionsLoaded',
-  'CwdChanged',
-  'FileChanged',
-] as const
+    'PreToolUse',
+    'PostToolUse',
+    'PostToolUseFailure',
+    'Notification',
+    'UserPromptSubmit',
+    'SessionStart',
+    'SessionEnd',
+    'Stop',
+    'StopFailure',
+    'SubagentStart',
+    'SubagentStop',
+    'PreCompact',
+    'PostCompact',
+    'PermissionRequest',
+    'PermissionDenied',
+    'Setup',
+    'TeammateIdle',
+    'TaskCreated',
+    'TaskCompleted',
+    'Elicitation',
+    'ElicitationResult',
+    'ConfigChange',
+    'WorktreeCreate',
+    'WorktreeRemove',
+    'InstructionsLoaded',
+    'CwdChanged',
+    'FileChanged'
+] as const;
 
 export const EXIT_REASONS = [
-  'clear',
-  'resume',
-  'logout',
-  'prompt_input_exit',
-  'other',
-  'bypass_permissions_disabled',
-] as const
+    'clear',
+    'resume',
+    'logout',
+    'prompt_input_exit',
+    'other',
+    'bypass_permissions_disabled'
+] as const;
+
+// Type versions of const arrays for use in type positions
+export type HookEvent = (typeof HOOK_EVENTS)[number];
+export type ExitReason = (typeof EXIT_REASONS)[number];
+
+// Import schema and export ModelUsage type
+export { ModelUsageSchema } from './coreSchemas.js';
+export type ModelUsage = {
+    inputTokens: number;
+    outputTokens: number;
+    cacheReadInputTokens: number;
+    cacheCreationInputTokens: number;
+    webSearchRequests: number;
+    costUSD: number;
+    contextWindow: number;
+    maxOutputTokens: number;
+};
+
+// Export SDKMessage type
+export { SDKMessageSchema } from './coreSchemas.js';
+export type SDKMessage = z.infer<typeof SDKMessageSchema>;
+
+// Export SDKStatus type (status indicator for tools)
+export type SDKStatus = 'off' | 'ongoing' | 'ongoing_using_fork' | 'error';
