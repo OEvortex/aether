@@ -1298,7 +1298,7 @@
         "package": "vsce package",
         "publish": "vsce publish --allow-proposed-apis chatProvider chatParticipantAdditions defaultChatParticipant",
         "pretest": "npm run compile:dev",
-        "release": "vsce package && "${VSCODE_BIN:-/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code}" --install-extension *.vsix --force",
+        "release": "vsce package && ${VSCODE_BIN:-code} --install-extension *.vsix --force",
         "test": "vitest"
     },
     "dependencies": {
