@@ -51,9 +51,7 @@
         "onFileSystem:chp-settings",
         "onLanguageModelTool:chp_minimaxWebSearch",
         "onLanguageModelTool:chp_zhipuWebSearch",
-        "onCommand:chp.openChat",
         "onStartupFinished",
-        "onView:copilotHelperChatView",
         "onLanguageModelProvider:chp.aihubmix",
         "onLanguageModelProvider:chp.apertis",
         "onLanguageModelProvider:chp.ava-supernova",
@@ -299,12 +297,6 @@
                 "icon": "$(settings-gear)"
             },
             {
-                "command": "chp.openChat",
-                "title": "Open Copilot ++ Chat",
-                "category": "Copilot ++",
-                "icon": "$(comment-discussion)"
-            },
-            {
                 "command": "chp.nanogpt.setApiKey",
                 "title": "Configure NanoGPT",
                 "category": "Copilot ++"
@@ -360,23 +352,7 @@
                 "category": "Copilot ++"
             }
         ],
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "copilotHelperChat",
-                    "title": "Copilot ++",
-                    "icon": "./logo_ai.png"
-                }
-            ]
-        },
-        "views": {
-            "copilotHelperChat": [
-                {
-                    "id": "copilotHelperChatView",
-                    "name": "Chat"
-                }
-            ]
-        },
+
         "configuration": {
             "title": "Copilot ++ - AI Chat Models",
             "properties": {
