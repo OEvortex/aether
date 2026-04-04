@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
     - OpenAI SDK compatibility via `https://api.llmgateway.io/v1` (Chat Completions).
     - Anthropic SDK compatibility via `https://api.llmgateway.io` (Messages API).
     - Dynamic model discovery via `/models` endpoint with 10-minute cooldown.
-    - Free models automatically detected and labeled with `(free)` suffix.
+    - **Free Models Mode**: New `chp.llmgateway.modeFree` setting — when enabled, sends `free_models_only: true` to route requests through free models only.
     - Model capabilities (tool calling, vision) inferred from provider metadata.
     - Full integration with account management, settings UI, and provider configuration.
     - Automatic model list fetching and config file updates.

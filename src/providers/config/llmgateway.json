@@ -3,5 +3,19 @@
     "family": "LLMGateway",
     "baseUrl": "https://api.llmgateway.io/v1",
     "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": []
+    "models": [
+        {
+            "id": "free",
+            "name": "Free (Auto-Routed Free Models)",
+            "tooltip": "Automatically routes to available free models only. Sends free_models_only: true to the API.",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 32768,
+            "sdkMode": "openai",
+            "baseUrl": "https://api.llmgateway.io/v1",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
 }

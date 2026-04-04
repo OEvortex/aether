@@ -58,8 +58,7 @@ interface LLGGatewayModelsResponse {
 }
 
 function formatLLGModelName(model: LLGGatewayAPIModel): string {
-    const baseName = model.name || model.id;
-    return model.free ? `${baseName} (free)` : baseName;
+    return model.name || model.id;
 }
 
 /**
@@ -360,6 +359,14 @@ export class LLGGatewayProvider
         if (modelConfig) {
             modelConfig.sdkMode = 'openai';
             modelConfig.baseUrl = this.getBaseUrl();
+
+            // Inject free_models_only for the hardcoded "Free" model
+            if (model.id === 'free') {
+                modelConfig.extraBody = {
+                    ...(modelConfig.extraBody || {}),
+                    free_models_only: true
+                };
+            }
         }
 
         await super.provideLanguageModelChatResponse(
