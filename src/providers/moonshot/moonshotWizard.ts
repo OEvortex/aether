@@ -1,43 +1,37 @@
 /*---------------------------------------------------------------------------------------------
  *  MoonshotAI Configuration Wizard
- *  Provides an interactive wizard to configure Moonshot API key and Kimi For Coding dedicated key
+ *  Provides an interactive wizard to configure Moonshot API key and coding/normal plan mode
  *--------------------------------------------------------------------------------------------*/
 
-// cSpell:ignore kimi
 import * as vscode from 'vscode';
 import { ApiKeyManager } from '../../utils/apiKeyManager';
+import { ConfigManager } from '../../utils/configManager';
 import { Logger } from '../../utils/logger';
 import { ProviderWizard } from '../../utils/providerWizard';
 
 export class MoonshotWizard {
     private static readonly PROVIDER_KEY = 'moonshot';
-    private static readonly KIMI_KEY = 'kimi';
 
-    /**
-     * Start the MoonshotAI configuration wizard
-     * Allows users to choose which key type to configure
-     */
     static async startWizard(
         displayName: string,
         apiKeyTemplate: string
     ): Promise<void> {
         try {
+            const currentPlan = ConfigManager.getMoonshotPlan();
+            const planLabel = currentPlan === 'coding' ? 'Coding Plan' : 'Normal';
+
             const choice = await vscode.window.showQuickPick(
                 [
                     {
                         label: '$(key) Configure Moonshot API Key',
-                        detail: 'API key for calling Kimi-K2 series and other models on Moonshot AI Open Platform',
+                        detail: 'API key for MoonshotAI normal plan and Kimi models',
                         value: 'moonshot'
                     },
                     {
-                        label: '$(key) Configure Kimi For Coding Dedicated Key',
-                        detail: 'Dedicated key for code development scenarios provided as a premium benefit in Kimi membership plan',
-                        value: 'kimi'
-                    },
-                    {
-                        label: '$(check-all) Configure Both Keys',
-                        detail: 'Configure Moonshot API key and Kimi For Coding dedicated key in sequence',
-                        value: 'both'
+                        label: '$(code) Set Plan Type',
+                        description: `Current: ${planLabel}`,
+                        detail: 'Coding Plan uses https://api.kimi.com/coding/v1, Normal uses https://api.moonshot.ai/v1',
+                        value: 'plan'
                     },
                     {
                         label: '$(globe) Configure Base URL (Proxy)',
@@ -46,27 +40,25 @@ export class MoonshotWizard {
                     }
                 ],
                 {
-                    title: `${displayName} Key Configuration`,
-                    placeHolder: 'Please select the item to configure'
+                    title: `${displayName} Configuration Menu`,
+                    placeHolder: 'Select action to perform'
                 }
             );
 
             if (!choice) {
-                Logger.debug(
-                    'User cancelled the MoonshotAI configuration wizard'
-                );
+                Logger.debug('User cancelled the MoonshotAI configuration wizard');
                 return;
             }
 
-            if (choice.value === 'moonshot' || choice.value === 'both') {
+            if (choice.value === 'moonshot') {
                 await MoonshotWizard.setMoonshotApiKey(
                     displayName,
                     apiKeyTemplate
                 );
             }
 
-            if (choice.value === 'kimi' || choice.value === 'both') {
-                await MoonshotWizard.setKimiApiKey(displayName);
+            if (choice.value === 'plan') {
+                await MoonshotWizard.setPlan(displayName);
             }
 
             if (choice.value === 'baseUrl') {
@@ -79,9 +71,6 @@ export class MoonshotWizard {
         }
     }
 
-    /**
-     * Set Moonshot API Key
-     */
     static async setMoonshotApiKey(
         displayName: string,
         apiKeyTemplate: string
@@ -90,23 +79,14 @@ export class MoonshotWizard {
             prompt: `Enter ${displayName} API Key (leave empty to clear)`,
             title: `Set ${displayName} API Key`,
             placeHolder: apiKeyTemplate,
-            password: true,
-            validateInput: (value: string) => {
-                // Allow empty value for clearing API Key
-                if (!value || value.trim() === '') {
-                    return null;
-                }
-                return null;
-            }
+            password: true
         });
 
-        // User cancelled the input
         if (result === undefined) {
             return;
         }
 
         try {
-            // Allow empty value for clearing API Key
             if (result.trim() === '') {
                 Logger.info(`${displayName} API Key cleared`);
                 await ApiKeyManager.deleteApiKey(MoonshotWizard.PROVIDER_KEY);
@@ -133,55 +113,48 @@ export class MoonshotWizard {
         }
     }
 
-    /**
-     * Set Kimi For Coding Dedicated Key
-     */
-    static async setKimiApiKey(_displayName: string): Promise<void> {
-        const result = await vscode.window.showInputBox({
-            prompt: 'Enter Kimi For Coding dedicated API Key (leave empty to clear)',
-            title: 'Set Kimi For Coding Dedicated API Key',
-            placeHolder:
-                'sk-kimi-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-            password: true,
-            validateInput: (value: string) => {
-                // Allow empty value for clearing API Key
-                if (!value || value.trim() === '') {
-                    return null;
-                }
-                return null;
-            }
-        });
+    static async setPlan(displayName: string): Promise<void> {
+        const currentPlan = ConfigManager.getMoonshotPlan();
+        const planLabel = currentPlan === 'coding' ? 'Coding Plan' : 'Normal';
 
-        // User cancelled the input
-        if (result === undefined) {
+        const choice = await vscode.window.showQuickPick(
+            [
+                {
+                    label: '$(code) Coding Plan',
+                    detail: 'Use https://api.kimi.com/coding/v1 for Kimi coding-plan access',
+                    value: 'coding'
+                },
+                {
+                    label: '$(globe) Normal',
+                    detail: 'Use https://api.moonshot.ai/v1 for standard MoonshotAI access',
+                    value: 'normal'
+                }
+            ],
+            {
+                title: `${displayName} Plan Type Selection`,
+                placeHolder: `Current: ${planLabel}`
+            }
+        );
+
+        if (!choice) {
             return;
         }
 
         try {
-            // Allow empty value for clearing API Key
-            if (result.trim() === '') {
-                Logger.info('Kimi For Coding dedicated API Key cleared');
-                await ApiKeyManager.deleteApiKey(MoonshotWizard.KIMI_KEY);
-                vscode.window.showInformationMessage(
-                    'Kimi For Coding dedicated API Key cleared'
-                );
-            } else {
-                await ApiKeyManager.setApiKey(
-                    MoonshotWizard.KIMI_KEY,
-                    result.trim()
-                );
-                Logger.info('Kimi For Coding dedicated API Key set');
-                vscode.window.showInformationMessage(
-                    'Kimi For Coding dedicated API Key set'
-                );
-            }
+            const config = vscode.workspace.getConfiguration('chp');
+            await config.update(
+                'moonshot.plan',
+                choice.value,
+                vscode.ConfigurationTarget.Global
+            );
+            Logger.info(`MoonshotAI plan set to ${choice.value}`);
+            vscode.window.showInformationMessage(
+                `MoonshotAI plan set to ${choice.value === 'coding' ? 'Coding Plan' : 'Normal'}`
+            );
         } catch (error) {
-            Logger.error(
-                `Kimi For Coding API Key operation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-            );
-            vscode.window.showErrorMessage(
-                `Setup failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-            );
+            const errorMessage = `Failed to set plan: ${error instanceof Error ? error.message : 'Unknown error'}`;
+            Logger.error(errorMessage);
+            vscode.window.showErrorMessage(errorMessage);
         }
     }
 }

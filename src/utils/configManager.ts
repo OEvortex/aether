@@ -48,6 +48,14 @@ export interface MiniMaxConfig {
 }
 
 /**
+ * Moonshot configuration
+ */
+export interface MoonshotConfig {
+    /** Plan type: coding (Kimi coding plan) or normal (standard billing) */
+    plan: 'coding' | 'normal';
+}
+
+/**
  * NES Completion Configuration
  */
 export interface NESCompletionConfig {
@@ -83,6 +91,8 @@ export interface CHPConfig {
     zhipu: ZhipuConfig;
     /** MiniMax configuration */
     minimax: MiniMaxConfig;
+    /** Moonshot configuration */
+    moonshot: MoonshotConfig;
     /** FIM completion configuration */
     fimCompletion: FIMCompletionConfig;
     /** NES completion configuration */
@@ -181,6 +191,12 @@ export class ConfigManager {
                 endpoint: config.get<MiniMaxConfig['endpoint']>(
                     'minimax.endpoint',
                     'minimaxi.com'
+                )
+            },
+            moonshot: {
+                plan: config.get<MoonshotConfig['plan']>(
+                    'moonshot.plan',
+                    'normal'
                 )
             },
             fimCompletion: {
@@ -376,6 +392,14 @@ export class ConfigManager {
      */
     static getMinimaxEndpoint(): 'minimaxi.com' | 'minimax.io' {
         return ConfigManager.getConfig().minimax.endpoint;
+    }
+
+    /**
+     * Get Moonshot plan type configuration
+     * @returns 'coding' or 'normal', default 'normal'
+     */
+    static getMoonshotPlan(): 'coding' | 'normal' {
+        return ConfigManager.getConfig().moonshot.plan;
     }
 
     /**

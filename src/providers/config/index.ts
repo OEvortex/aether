@@ -9,6 +9,7 @@ import codex from './codex.json';
 import deepinfra from './deepinfra.json';
 import deepseek from './deepseek.json';
 import huggingface from './huggingface.json';
+import llmgateway from './llmgateway.json';
 import kilo from './kilo.json';
 import knox from './knox.json';
 import lightningai from './lightningai.json';
@@ -38,6 +39,7 @@ const providers = {
 	deepinfra: deepinfra,
 	deepseek: deepseek,
 	huggingface: huggingface,
+	llmgateway: llmgateway,
 	kilo: kilo,
 	knox: knox,
 	lightningai: lightningai,

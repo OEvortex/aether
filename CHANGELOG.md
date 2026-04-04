@@ -13,6 +13,30 @@ All notable changes to this project will be documented in this file.
     - Improved `RetryManager` with specialized `RATE_LIMIT_RETRY_CONFIG` for better 429 handling.
     - Enhanced `genericModelProvider` to detect rate limit errors and continue/retry automatically with account switching.
 
+- **MoonshotAI Coding/Normal Plan Support**: Moonshot provider now mirrors Zhipu's dual-plan architecture with dedicated provider class.
+    - **Normal Plan**: `https://api.moonshot.ai/v1` — standard Moonshot AI Open Platform access.
+    - **Coding Plan**: `https://api.kimi.com/coding/v1` — Kimi coding-plan endpoint for professional programming scenarios.
+    - New `chp.moonshot.plan` setting with `coding` and `normal` options.
+    - Dedicated `MoonshotProvider` class with dynamic model fetching from `/models` endpoint.
+    - Simplified configuration wizard — single API key with plan selection, removed separate Kimi dedicated key flow.
+    - Automatic model discovery and config file updates.
+
+- **LLMGateway Provider**: Added new LLMGateway provider integration with unified access to multiple AI models.
+    - OpenAI SDK compatibility via `https://api.llmgateway.io/v1` (Chat Completions).
+    - Anthropic SDK compatibility via `https://api.llmgateway.io` (Messages API).
+    - Dynamic model discovery via `/models` endpoint with 10-minute cooldown.
+    - Free models automatically detected and labeled with `(free)` suffix.
+    - Model capabilities (tool calling, vision) inferred from provider metadata.
+    - Full integration with account management, settings UI, and provider configuration.
+    - Automatic model list fetching and config file updates.
+
+### Changed
+
+- **Moonshot provider architecture**: Converted from generic provider to dedicated provider class, matching Zhipu's pattern.
+    - Removed duplicate Kimi-specific endpoint logic from model config files.
+    - All Moonshot models now use OpenAI-compatible SDK mode with plan-aware base URLs.
+    - Removed `chp.moonshot.sdkMode` setting in favor of `chp.moonshot.plan`.
+
 ### Removed
 
 - **`chp.editToolMode` setting removed**: The editing tool mode configuration (`claude`, `gpt-5`, `none`) has been removed. The extension now handles editing operations internally without requiring a user-facing tool mode selection.

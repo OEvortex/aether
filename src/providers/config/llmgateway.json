@@ -1,0 +1,7 @@
+{
+    "displayName": "LLMGateway",
+    "family": "LLMGateway",
+    "baseUrl": "https://api.llmgateway.io/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

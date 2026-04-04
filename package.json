@@ -66,6 +66,7 @@
         "onLanguageModelProvider:chp.kilo",
         "onLanguageModelProvider:chp.knox",
         "onLanguageModelProvider:chp.lightningai",
+        "onLanguageModelProvider:chp.llmgateway",
         "onLanguageModelProvider:chp.minimax",
         "onLanguageModelProvider:chp.mistral",
         "onLanguageModelProvider:chp.modelscope",
@@ -107,6 +108,11 @@
             {
                 "command": "chp.minimax.setCodingPlanEndpoint",
                 "title": "Configure MiniMax Coding Plan Endpoint (Domestic/International)",
+                "category": "Copilot ++"
+            },
+            {
+                "command": "chp.llmgateway.setApiKey",
+                "title": "Configure LLMGateway",
                 "category": "Copilot ++"
             },
             {
@@ -638,14 +644,24 @@
                     "description": "Select SDK compatibility mode for ModelScope.",
                     "scope": "application"
                 },
-                "chp.moonshot.sdkMode": {
+                "chp.llmgateway.sdkMode": {
                     "type": "string",
                     "enum": [
                         "openai",
                         "anthropic"
                     ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for MoonshotAI.",
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for LLMGateway.",
+                    "scope": "application"
+                },
+                "chp.moonshot.plan": {
+                    "type": "string",
+                    "enum": [
+                        "coding",
+                        "normal"
+                    ],
+                    "default": "normal",
+                    "description": "MoonshotAI plan type. coding: use https://api.kimi.com/coding/v1, normal: use https://api.moonshot.ai/v1.",
                     "scope": "application"
                 },
                 "chp.ollama.sdkMode": {
@@ -891,6 +907,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "ModelScope API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "chp.llmgateway",
+                "displayName": "⦿ LLMGateway (Unified access to multiple AI models)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "LLMGateway API key.",
                             "secret": true
                         }
                     }

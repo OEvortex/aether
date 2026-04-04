@@ -9,6 +9,9 @@ interface ProviderWizardOptions {
 }
 
 export class ProviderWizard {
+    static configureBaseUrl(arg0: string, displayName: string) {
+        throw new Error('Method not implemented.');
+    }
     static async startWizard(options: ProviderWizardOptions): Promise<void> {
         const supportsApiKey = options.supportsApiKey !== false;
 

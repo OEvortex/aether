@@ -532,12 +532,25 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    llmgateway: {
+        displayName: 'LLMGateway',
+        family: 'LLMGateway',
+        description: 'LLMGateway - unified access to multiple AI models',
+        openai: { baseUrl: 'https://api.llmgateway.io/v1' },
+        anthropic: { baseUrl: 'https://api.llmgateway.io' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     moonshot: {
         displayName: 'MoonshotAI',
         family: 'Moonshot AI',
-        description: 'MoonshotAI Kimi model family',
-        openai: { baseUrl: 'https://api.moonshot.cn/v1' },
-        anthropic: { baseUrl: 'https://api.kimi.com/coding' },
+        description: 'MoonshotAI Kimi model family with normal and coding plans',
+        openai: { baseUrl: 'https://api.moonshot.ai/v1' },
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {
@@ -772,6 +785,14 @@ const specializedProviderFactories: Record<string, ProviderFactory> = {
     qwencli: createLazyFactory(
         () => import('../providers/qwencli/provider.js'),
         'QwenCliProvider'
+    ),
+    moonshot: createLazyFactory(
+        () => import('../providers/moonshot/moonshotProvider.js'),
+        'MoonshotProvider'
+    ),
+    llmgateway: createLazyFactory(
+        () => import('../providers/llmgateway/llmgatewayProvider.js'),
+        'LLGGatewayProvider'
     ),
     zhipu: createLazyFactory(
         () => import('../providers/zhipu/zhipuProvider.js'),
