@@ -21,7 +21,6 @@ import {
   getModelById,
   getProviderById,
 } from '../../utils/aetherConfig.js'
-import { configProviders } from '../../../../providers/config/index.js';
 function ModelPickerWrapper(t0) {
   const $ = _c(17);
   const {
@@ -285,55 +284,10 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
     return <ShowModelAndClose onDone={onDone} />;
   }
   if (COMMON_HELP_ARGS.includes(args)) {
-    onDone('Run /model to open the model selection menu, or /model [modelName] to set the model. Use /model list to see available models.', {
+      onDone('Run /model to open the model selection menu, or /model [modelName] to set the model.', {
       display: 'system'
     });
     return;
-  }
-
-  // Handle /model list - show available Aether models from dynamic configProviders
-  if (args.toLowerCase() === 'list') {
-    const lines: string[] = ['Available Aether Models (Dynamic):']
-
-    // Use configProviders for dynamic model list
-    for (const [providerId, providerConfig] of Object.entries(configProviders)) {
-      if (providerConfig.models && providerConfig.models.length > 0) {
-        lines.push(`\n${providerConfig.displayName} (${providerId}):`)
-        providerConfig.models.forEach(m => {
-          const modelName = m.model || m.id
-          lines.push(`  - ${modelName} (${m.name})`)
-        })
-      }
-    }
-
-    onDone(lines.join('\n'), { display: 'system' })
-    return null
-  }
-
-  // Handle /model [provider-name] - switch to provider (use configProviders)
-  const provider = configProviders[args.toLowerCase() as keyof typeof configProviders]
-  if (provider) {
-    // Switch to the provider's first model
-    const setAppState = useSetAppState()
-    const defaultModel = provider.models?.[0]?.model || provider.models?.[0]?.id || 'gpt-4o'
-    setAppState(prev => ({
-      ...prev,
-      mainLoopModel: defaultModel,
-      mainLoopModelForSession: null
-    }))
-    onDone(`Switched to provider ${provider.displayName} (model: ${defaultModel})`, { display: 'system' })
-    return null
-  }
-
-  // Handle /model providers - show available providers from configProviders
-  if (args.toLowerCase() === 'providers') {
-    const lines: string[] = ['Available Providers:']
-    for (const [providerId, providerConfig] of Object.entries(configProviders)) {
-      const modelCount = providerConfig.models?.length || 0
-      lines.push(`  - ${providerId}: ${providerConfig.displayName} (${modelCount} models)`)
-    }
-    onDone(lines.join('\n'), { display: 'system' })
-    return null
   }
 
   if (args) {

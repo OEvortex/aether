@@ -574,8 +574,51 @@ function getKnownModelOption(model: string): ModelOption | null {
   }
 }
 
-export function getModelOptions(fastMode = false): ModelOption[] {
+export function getModelOptions(fastMode = false, activeProvider?: string | null): ModelOption[] {
   const options = getModelOptionsBase(fastMode)
+
+  // If a specific provider is active, filter to only show that provider's models
+  if (activeProvider && configProviders[activeProvider as keyof typeof configProviders]) {
+    const providerConfig = configProviders[activeProvider as keyof typeof configProviders]
+    const providerModelOptions: ModelOption[] = []
+
+    if (providerConfig.models && providerConfig.models.length > 0) {
+      for (const m of providerConfig.models) {
+        const modelValue = (m.model || m.id) as ModelSetting
+        if (!providerModelOptions.some(existing => existing.value === modelValue)) {
+          providerModelOptions.push({
+            value: modelValue,
+            label: m.name || m.model || m.id,
+            description: m.tooltip || `${providerConfig.displayName} model`,
+          })
+        }
+      }
+    }
+
+    // Add custom model if it belongs to this provider
+    let customModel: ModelSetting = null
+    const currentMainLoopModel = getUserSpecifiedModelSetting()
+    const initialMainLoopModel = getInitialMainLoopModel()
+    if (currentMainLoopModel !== undefined && currentMainLoopModel !== null) {
+      customModel = currentMainLoopModel
+    } else if (initialMainLoopModel !== null) {
+      customModel = initialMainLoopModel
+    }
+    if (customModel && !providerModelOptions.some(opt => opt.value === customModel)) {
+      const knownOption = getKnownModelOption(customModel)
+      if (knownOption) {
+        providerModelOptions.push(knownOption)
+      } else {
+        providerModelOptions.push({
+          value: customModel,
+          label: customModel,
+          description: 'Custom model',
+        })
+      }
+    }
+
+    return filterModelOptionsByAllowlist(providerModelOptions)
+  }
 
   // Add the custom model from the ANTHROPIC_CUSTOM_MODEL_OPTION env var
   const envCustomModel = process.env.ANTHROPIC_CUSTOM_MODEL_OPTION

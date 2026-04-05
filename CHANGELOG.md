@@ -10,8 +10,20 @@ All notable changes to this project will be documented in this file.
     - Corrected `configProviders` import paths in 3 source files from `../../../providers/config/index.js` to `../../../../providers/config/index.js`.
     - Files fixed: `src/aether/src/commands/model/model.tsx`, `src/aether/src/utils/model/knownProviders.ts`, `src/aether/src/utils/model/modelOptions.ts`.
     - Fixed runtime path resolver in `src/aether/src/utils/model/providerConfigModels.ts` to correctly resolve to `src/providers/config` from the bundle location.
-    - `/model list` and `/model providers` commands now show dynamic models from all 28+ provider JSON configs instead of falling back to static hardcoded lists.
     - Model picker now includes all models from all configured providers.
+
+- **Provider-Filtered Model Picker**: `/model` now shows only models for the currently active provider instead of all providers.
+    - Added `activeProvider` field to AppState for tracking the selected provider.
+    - `getModelOptions()` accepts an optional `activeProvider` parameter to filter models by provider.
+    - When `activeProvider` is set, only that provider's models from `configProviders` JSON config are shown.
+    - When `activeProvider` is null, all provider models are shown (previous behavior).
+
+- **Fuzzy Search in Model Picker**: Added real-time fuzzy search filtering to the `/model` picker.
+    - Type any characters to filter models by name, label, description, or model ID.
+    - Backspace removes the last search character.
+    - Escape clears the search filter.
+    - Search hint shows current filter and active provider in the header.
+    - Uses simple subsequence matching for fast, intuitive model discovery across large model lists.
 
 ### Added
 

@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useExitOnCtrlCDWithKeybindings } from 'src/hooks/useExitOnCtrlCDWithKeybindings.js';
 import { type AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS, logEvent } from 'src/services/analytics/index.js';
 import { FAST_MODE_MODEL_DISPLAY, isFastModeAvailable, isFastModeCooldown, isFastModeEnabled } from 'src/utils/fastMode.js';
-import { Box, Text } from '../ink.js';
+import { Box, Text, useInput } from '../ink.js';
 import { useKeybindings } from '../keybindings/useKeybinding.js';
 import { useAppState, useSetAppState } from '../state/AppState.js';
 import { convertEffortValueToLevel, type EffortLevel, getDefaultEffortForModel, modelSupportsEffort, modelSupportsMaxEffort, resolvePickerEffortPersistence, toPersistableEffort } from '../utils/effort.js';
@@ -18,6 +18,21 @@ import { Byline } from './design-system/Byline.js';
 import { KeyboardShortcutHint } from './design-system/KeyboardShortcutHint.js';
 import { Pane } from './design-system/Pane.js';
 import { effortLevelToSymbol } from './EffortIndicator.js';
+import { getKnownProviders } from '../utils/model/knownProviders.js';
+
+/**
+ * Simple fuzzy match: checks if all characters of the query appear in order in the target.
+ */
+function fuzzyMatch(query: string, target: string): boolean {
+    if (!query) return true
+    const q = query.toLowerCase()
+    const t = target.toLowerCase()
+    let qi = 0
+    for (let ti = 0; ti < t.length && qi < q.length; ti++) {
+        if (t[ti] === q[qi]) qi++
+    }
+    return qi === q.length
+}
 export type Props = {
   initial: string | null;
   sessionModel?: ModelSetting;
@@ -37,7 +52,7 @@ export type Props = {
 };
 const NO_PREFERENCE = '__NO_PREFERENCE__';
 export function ModelPicker(t0) {
-  const $ = _c(82);
+    const $ = _c(220);
   const {
     initial,
     sessionModel,
@@ -52,7 +67,9 @@ export function ModelPicker(t0) {
   const exitState = useExitOnCtrlCDWithKeybindings();
   const initialValue = initial === null ? NO_PREFERENCE : initial;
   const [focusedValue, setFocusedValue] = useState(initialValue);
+    const [searchQuery, setSearchQuery] = useState('');
   const isFastMode = useAppState(_temp);
+    const activeProvider = useAppState(_tempActiveProvider);
   const [hasToggledEffort, setHasToggledEffort] = useState(false);
   const effortValue = useAppState(_temp2);
   let t1;
@@ -65,18 +82,38 @@ export function ModelPicker(t0) {
   }
   const [effort, setEffort] = useState(t1);
   const t2 = isFastMode ?? false;
+
+    // Filter model options by search query (fuzzy match)
   let t3;
-  if ($[2] !== t2) {
-    t3 = getModelOptions(t2);
+    if ($[2] !== t2 || $[200] !== activeProvider) {
+        t3 = getModelOptions(t2, activeProvider);
     $[2] = t2;
+      $[200] = activeProvider;
     $[3] = t3;
   } else {
     t3 = $[3];
   }
   const modelOptions = t3;
+
+    let t3b;
+    if ($[201] !== searchQuery || $[202] !== modelOptions) {
+        t3b = searchQuery
+            ? modelOptions.filter(opt => {
+                const labelText = typeof opt.label === 'string' ? opt.label : ''
+                const descText = typeof opt.description === 'string' ? opt.description : ''
+                return fuzzyMatch(searchQuery, labelText) || fuzzyMatch(searchQuery, descText) || fuzzyMatch(searchQuery, String(opt.value || ''))
+            })
+            : modelOptions
+        $[201] = searchQuery
+        $[202] = modelOptions
+        $[203] = t3b
+    } else {
+        t3b = $[203]
+    }
+    const filteredModelOptions = t3b
   let t4;
   bb0: {
-    if (initial !== null && !modelOptions.some(opt => opt.value === initial)) {
+      if (initial !== null && !filteredModelOptions.some(opt => opt.value === initial)) {
       let t5;
       if ($[4] !== initial) {
         t5 = modelDisplayString(initial);
@@ -99,9 +136,9 @@ export function ModelPicker(t0) {
         t6 = $[8];
       }
       let t7;
-      if ($[9] !== modelOptions || $[10] !== t6) {
-        t7 = [...modelOptions, t6];
-        $[9] = modelOptions;
+        if ($[9] !== filteredModelOptions || $[10] !== t6) {
+            t7 = [...filteredModelOptions, t6];
+            $[9] = filteredModelOptions;
         $[10] = t6;
         $[11] = t7;
       } else {
@@ -211,6 +248,25 @@ export function ModelPicker(t0) {
   } else {
     t12 = $[33];
   }
+
+    // Handle text input for fuzzy search via useInput
+    useInput((input, key) => {
+        // Backspace clears last search character
+        if (key.backspace || (key.ctrl && input === 'h')) {
+            setSearchQuery(prev => prev.slice(0, -1))
+            return
+        }
+        // Escape clears the search
+        if (key.escape) {
+            setSearchQuery('')
+            return
+        }
+        // Only capture printable characters (not control keys, not arrows)
+        if (input && input.length === 1 && input >= ' ' && input <= '~' && !key.ctrl && !key.meta) {
+            setSearchQuery(prev => prev + input)
+        }
+    })
+
   let t13;
   if ($[34] === Symbol.for("react.memo_cache_sentinel")) {
     t13 = {
@@ -274,6 +330,24 @@ export function ModelPicker(t0) {
   } else {
     t17 = $[43];
   }
+
+    // Provider indicator and search hint
+    let t17b;
+    if ($[204] !== activeProvider || $[205] !== searchQuery) {
+        const providerInfo = activeProvider ? (() => {
+            const providers = getKnownProviders()
+            const p = providers.find(pr => pr.id === activeProvider)
+            return p ? p.displayName : activeProvider
+        })() : null
+        const searchHint = searchQuery ? ` · filtering: "${searchQuery}"` : ''
+        const providerLabel = providerInfo ? ` [${providerInfo}]` : ''
+        t17b = <Text dimColor={true}>Type to search{providerLabel}{searchHint}</Text>
+        $[204] = activeProvider
+        $[205] = searchQuery
+        $[206] = t17b
+    } else {
+        t17b = $[206]
+    }
   let t18;
   if ($[44] !== sessionModel) {
     t18 = sessionModel && <Text dimColor={true}>Currently using {modelDisplayString(sessionModel)} for this session (set by plan mode). Selecting a model will undo this.</Text>;
@@ -397,6 +471,9 @@ function _temp2(s_0) {
 }
 function _temp(s) {
   return isFastModeEnabled() ? s.fastMode : false;
+}
+function _tempActiveProvider(s) {
+    return s.activeProvider
 }
 function resolveOptionModel(value?: string): string | undefined {
   if (!value) return undefined;

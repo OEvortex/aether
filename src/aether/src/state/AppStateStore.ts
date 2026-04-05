@@ -422,6 +422,8 @@ export type AppState = DeepImmutable<{
   activeOverlays: ReadonlySet<string>
   // Fast mode
   fastMode?: boolean
+  // Active provider for model filtering (null = all providers)
+  activeProvider?: string | null
   // Advisor model for server-side advisor tool (undefined = disabled).
   advisorModel?: string
   // Effort value
@@ -567,5 +569,6 @@ export function getDefaultAppState(): AppState {
     effortValue: undefined,
     activeOverlays: new Set<string>(),
     fastMode: false,
+    activeProvider: null,
   }
 }
