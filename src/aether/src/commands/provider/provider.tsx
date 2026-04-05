@@ -55,6 +55,12 @@ import {
   type RecommendationGoal,
 } from '../../utils/providerRecommendation.js'
 import { hasLocalOllama, listOllamaModels } from '../../utils/providerDiscovery.js'
+import {
+  DEFAULT_PROVIDERS,
+  getAllProviders,
+  getProviderById,
+  type ProviderConfig,
+} from '../../utils/aetherConfig.js'
 
 type ProviderChoice =
   | 'auto'
@@ -1591,8 +1597,52 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
     return null
   }
 
+  // Handle /provider list - show available Aether providers
+  if (normalizedArgs === 'list') {
+    const providers = getAllProviders()
+    const lines = ['Available Aether Providers:']
+    providers.forEach(p => {
+      const baseUrlDisplay = p.baseUrl === 'auto' ? '(auto)' : p.baseUrl
+      lines.push(`  - ${p.id} (${p.displayName}) - ${baseUrlDisplay}`)
+    })
+    onDone(lines.join('\n'), { display: 'system' })
+    return null
+  }
+
+  // Handle /provider status - show current provider info
+  if (normalizedArgs === 'status') {
+    const summary = buildCurrentProviderSummary()
+    const lines = [
+      `Current provider: ${summary.providerLabel}`,
+      `Current model: ${summary.modelLabel}`,
+      `Current endpoint: ${summary.endpointLabel}`,
+      `Saved profile: ${summary.savedProfileLabel}`,
+    ]
+    onDone(lines.join('\n'), { display: 'system' })
+    return null
+  }
+
+  // Handle /provider [provider-name] - quick select a provider
   if (normalizedArgs) {
-    onDone('Usage: /provider', { display: 'system' })
+    const provider = getProviderById(normalizedArgs)
+    if (provider) {
+      // Build a simple OpenAI-compatible profile for the selected provider
+      const isOpenAI = provider.sdkMode === 'openai'
+      const profile: ProviderProfile = isOpenAI ? 'openai' : provider.sdkMode === 'anthropic' ? 'anthropic' : 'openai'
+      const env: ProfileEnv = {}
+
+      if (provider.baseUrl !== 'auto') {
+        env.OPENAI_BASE_URL = provider.baseUrl
+      }
+      if (provider.defaultModel) {
+        env.OPENAI_MODEL = provider.defaultModel
+      }
+
+      finishProfileSave(onDone, profile, env)
+      return null
+    }
+
+    onDone(`Unknown provider: ${normalizedArgs}. Use /provider list to see available providers.`, { display: 'system' })
     return null
   }
 

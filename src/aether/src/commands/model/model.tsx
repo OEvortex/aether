@@ -15,6 +15,12 @@ import { checkOpus1mAccess, checkSonnet1mAccess } from '../../utils/model/check1
 import { getDefaultMainLoopModelSetting, isOpus1mMergeEnabled, renderDefaultModelSetting } from '../../utils/model/model.js';
 import { isModelAllowed } from '../../utils/model/modelAllowlist.js';
 import { validateModel } from '../../utils/model/validateModel.js';
+import {
+  DEFAULT_MODELS,
+  getAllModels,
+  getModelById,
+  getProviderById,
+} from '../../utils/aetherConfig.js';
 function ModelPickerWrapper(t0) {
   const $ = _c(17);
   const {
@@ -270,6 +276,7 @@ function _temp7(s) {
 }
 export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
   args = args?.trim() || '';
+
   if (COMMON_INFO_ARGS.includes(args)) {
     logEvent('tengu_model_command_inline_help', {
       args: args as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
@@ -277,11 +284,40 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
     return <ShowModelAndClose onDone={onDone} />;
   }
   if (COMMON_HELP_ARGS.includes(args)) {
-    onDone('Run /model to open the model selection menu, or /model [modelName] to set the model.', {
+    onDone('Run /model to open the model selection menu, or /model [modelName] to set the model. Use /model list to see available models.', {
       display: 'system'
     });
     return;
   }
+
+  // Handle /model list - show available Aether models
+  if (args.toLowerCase() === 'list') {
+    const models = getAllModels()
+    const lines = ['Available Aether Models:']
+    models.forEach(m => {
+      const provider = getProviderById(m.provider)
+      const providerName = provider?.displayName || m.provider
+      lines.push(`  - ${m.id} (${m.name}) via ${providerName}`)
+    })
+    onDone(lines.join('\n'), { display: 'system' })
+    return null
+  }
+
+  // Handle /model [provider-name] - switch to provider
+  const provider = getProviderById(args.toLowerCase())
+  if (provider) {
+    // Switch to the provider's default model
+    const setAppState = useSetAppState()
+    const defaultModel = provider.defaultModel || 'gpt-4o'
+    setAppState(prev => ({
+      ...prev,
+      mainLoopModel: defaultModel,
+      mainLoopModelForSession: null
+    }))
+    onDone(`Switched to provider ${provider.displayName} (model: ${defaultModel})`, { display: 'system' })
+    return null
+  }
+
   if (args) {
     logEvent('tengu_model_command_inline', {
       args: args as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
