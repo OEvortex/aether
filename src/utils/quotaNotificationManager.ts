@@ -12,8 +12,8 @@ const QUOTA_COUNTDOWN_SHORT_UPDATE_MS = 1000;
 export class QuotaNotificationManager {
     private quotaCountdownTimer: NodeJS.Timeout | undefined;
     private quotaCountdownEndAt = 0;
-    private quotaCountdownMessage: vscode.Disposable | undefined;
     private quotaCountdownModel: string | undefined;
+    private quotaCountdownAccountId: string | undefined;
     private quotaCountdownAccountName: string | undefined;
     private lastQuotaNoticeAt = 0;
 
@@ -133,10 +133,6 @@ export class QuotaNotificationManager {
         if (this.quotaCountdownTimer) {
             clearTimeout(this.quotaCountdownTimer);
             this.quotaCountdownTimer = undefined;
-        }
-        if (this.quotaCountdownMessage) {
-            this.quotaCountdownMessage.dispose();
-            this.quotaCountdownMessage = undefined;
         }
         this.quotaCountdownEndAt = 0;
         this.quotaCountdownModel = undefined;

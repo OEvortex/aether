@@ -160,14 +160,14 @@ export async function getAnthropicClient({
   // Strip auth-related headers to prevent leaking Anthropic credentials
   // to third-party endpoints (SSRF / credential forwarding mitigation).
   if (providerOverride) {
-    const { createOpenAIShimClient } = await import('./openaiShim.js')
+    const { createOpenAIProvider } = await import('./openaiClientAdapter.js')
     const safeHeaders: Record<string, string> = {}
     for (const [k, v] of Object.entries(defaultHeaders)) {
       const lower = k.toLowerCase()
       if (lower === 'authorization' || lower === 'x-api-key' || lower === 'api-key') continue
       safeHeaders[k] = v
     }
-    return createOpenAIShimClient({
+    return createOpenAIProvider({
       defaultHeaders: safeHeaders,
       maxRetries,
       timeout: parseInt(process.env.API_TIMEOUT_MS || String(600 * 1000), 10),
@@ -179,8 +179,8 @@ export async function getAnthropicClient({
     isEnvTruthy(process.env.CLAUDE_CODE_USE_GITHUB) ||
     isEnvTruthy(process.env.CLAUDE_CODE_USE_GEMINI)
   ) {
-    const { createOpenAIShimClient } = await import('./openaiShim.js')
-    return createOpenAIShimClient({
+    const { createOpenAIProvider } = await import('./openaiClientAdapter.js')
+    return createOpenAIProvider({
       defaultHeaders,
       maxRetries,
       timeout: parseInt(process.env.API_TIMEOUT_MS || String(600 * 1000), 10),

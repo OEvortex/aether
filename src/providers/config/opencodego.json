@@ -56,6 +56,32 @@
                 "imageInput": false
             },
             "baseUrl": "https://opencode.ai/zen/go"
+        },
+        {
+            "id": "mimo-v2-pro",
+            "name": "MiMo V2 Pro",
+            "tooltip": "MiMo V2 Pro - OpenCode Zen Go",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "model": "mimo-v2-pro",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1"
+        },
+        {
+            "id": "mimo-v2-omni",
+            "name": "MiMo V2 Omni",
+            "tooltip": "MiMo V2 Omni - OpenCode Zen Go",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "model": "mimo-v2-omni",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1"
         }
     ],
     "family": "OpenCode"

@@ -1,5 +1,5 @@
 /**
- * OpenClaude build script — bundles the TypeScript source into a single
+ * Aether build script — bundles the TypeScript source into a single
  * distributable JS file using Bun's bundler.
  *
  * Handles:
@@ -398,4 +398,4 @@ if (!result.success) {
   process.exit(1)
 }
 
-console.log(`✓ Built openclaude v${version} → dist/cli.mjs`)
+console.log(`✓ Built Aether v${version} → dist/cli.mjs`)

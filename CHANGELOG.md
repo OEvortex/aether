@@ -77,6 +77,13 @@ All notable changes to this project will be documented in this file.
     - Added support for provider-specific `extraBody` configuration in model configs.
     - Puter AI provider uses this to force `temperature: 1` for all models (required by Puter API).
 
+- **chpcli OpenAI SDK Migration**: Replaced `openaiShim.ts` (raw `fetch` + manual SSE parsing) with native `openai` SDK usage in `chpcli`.
+    - OpenAI-compatible providers (OpenAI, GitHub Models, Gemini, Ollama, OpenRouter, Groq, DeepSeek, Mistral, Azure, Codex) now use the official `openai` npm package natively.
+    - Eliminates 1,244 lines of hand-rolled HTTP/SSE shim code.
+    - Both Anthropic and OpenAI SDKs are now used natively — no format conversion at the transport layer.
+    - OpenAI streaming chunks are translated to Anthropic-compatible events at the adapter boundary, preserving full compatibility with the existing request pipeline.
+    - Added `openai` as a runtime dependency.
+
 ### Removed
 
 - **`chp.editToolMode` setting removed**: The editing tool mode configuration (`claude`, `gpt-5`, `none`) has been removed. The extension now handles editing operations internally without requiring a user-facing tool mode selection.
