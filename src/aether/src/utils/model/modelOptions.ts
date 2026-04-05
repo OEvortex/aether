@@ -34,6 +34,7 @@ import { has1mContext } from '../context.js'
 import { getGlobalConfig } from '../config.js'
 import { getCachedOllamaModelOptions, isOllamaProvider } from './ollamaModels.js'
 import { getConfiguredProviderModelOptions } from './providerConfigModels.js'
+import { configProviders } from '../../../providers/config/index.js'
 
 // @[MODEL LAUNCH]: Update all the available and default model option strings below.
 
@@ -429,21 +430,40 @@ function getModelOptionsBase(fastMode = false): ModelOption[] {
   // PAYG 3P: Default (Sonnet 4.5) + Sonnet (3P custom) or Sonnet 4.6/1M + Opus (3P custom) or Opus 4.1/Opus 4.6/Opus1M + Haiku + Opus 4.1
   const payg3pOptions = [getDefaultOptionForUser(fastMode)]
 
-  const configuredProviderModels = getConfiguredProviderModelOptions()
-  if (configuredProviderModels.length > 0) {
-    payg3pOptions.push(...configuredProviderModels)
-    return payg3pOptions
+  // Get ALL models from ALL configProviders (dynamic provider configs)
+  for (const [providerId, providerConfig] of Object.entries(configProviders)) {
+    if (providerConfig.models && providerConfig.models.length > 0) {
+      for (const model of providerConfig.models) {
+        const modelValue = model.model || model.id
+        const modelLabel = model.name || model.tooltip || modelValue
+        // Avoid duplicates
+        if (!payg3pOptions.some(opt => opt.value === modelValue)) {
+          payg3pOptions.push({
+            value: modelValue as ModelSetting,
+            label: `${modelLabel}`,
+            description: `${providerConfig.displayName} model`,
+          })
+        }
+      }
+    }
   }
 
-  // Add Codex models for openai and codex providers
+  // Keep Codex models for openai and codex providers
   if (getAPIProvider() === 'openai' || getAPIProvider() === 'codex') {
-    payg3pOptions.push(...getCodexModelOptions())
+    const codexOptions = getCodexModelOptions()
+    // Add codex options that aren't already in the list
+    for (const opt of codexOptions) {
+      if (!payg3pOptions.some(existing => existing.value === opt.value)) {
+        payg3pOptions.push(opt)
+      }
+    }
   }
 
+  // Add custom Sonnet, Opus, Haiku options if not already present
   const customSonnet = getCustomSonnetOption()
-  if (customSonnet !== undefined) {
+  if (customSonnet !== undefined && !payg3pOptions.some(opt => opt.value === customSonnet.value)) {
     payg3pOptions.push(customSonnet)
-  } else {
+  } else if (customSonnet === undefined) {
     // Add Sonnet 4.6 since Sonnet 4.5 is the default
     payg3pOptions.push(getSonnet46Option())
     if (checkSonnet1mAccess()) {
@@ -452,9 +472,9 @@ function getModelOptionsBase(fastMode = false): ModelOption[] {
   }
 
   const customOpus = getCustomOpusOption()
-  if (customOpus !== undefined) {
+  if (customOpus !== undefined && !payg3pOptions.some(opt => opt.value === customOpus.value)) {
     payg3pOptions.push(customOpus)
-  } else {
+  } else if (customOpus === undefined) {
     // Add Opus 4.1, Opus 4.6 and Opus 4.6 1M
     payg3pOptions.push(getOpus41Option()) // This is the default opus
     payg3pOptions.push(getOpus46Option(fastMode))
@@ -463,9 +483,9 @@ function getModelOptionsBase(fastMode = false): ModelOption[] {
     }
   }
   const customHaiku = getCustomHaikuOption()
-  if (customHaiku !== undefined) {
+  if (customHaiku !== undefined && !payg3pOptions.some(opt => opt.value === customHaiku.value)) {
     payg3pOptions.push(customHaiku)
-  } else {
+  } else if (customHaiku === undefined) {
     payg3pOptions.push(getHaikuOption())
   }
   return payg3pOptions
