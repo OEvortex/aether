@@ -265,7 +265,7 @@ export class MiniMaxWizard {
         site: MiniMaxConfig['endpoint']
     ): Promise<void> {
         try {
-            const config = vscode.workspace.getConfiguration('chp.minimax');
+            const config = vscode.workspace.getConfiguration('aether.minimax');
 
             // Save to chp.minimax.endpoint configuration
             await config.update(

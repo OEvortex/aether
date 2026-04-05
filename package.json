@@ -52,312 +52,312 @@
         "onLanguageModelTool:chp_minimaxWebSearch",
         "onLanguageModelTool:chp_zhipuWebSearch",
         "onStartupFinished",
-        "onLanguageModelProvider:chp.aihubmix",
-        "onLanguageModelProvider:chp.apertis",
-        "onLanguageModelProvider:chp.ava-supernova",
-        "onLanguageModelProvider:chp.blackbox",
-        "onLanguageModelProvider:chp.chatjimmy",
-        "onLanguageModelProvider:chp.chutes",
-        "onLanguageModelProvider:chp.cline",
-        "onLanguageModelProvider:chp.codex",
-        "onLanguageModelProvider:chp.deepinfra",
-        "onLanguageModelProvider:chp.deepseek",
-        "onLanguageModelProvider:chp.hicapai",
-        "onLanguageModelProvider:chp.huggingface",
-        "onLanguageModelProvider:chp.kilo",
-        "onLanguageModelProvider:chp.knox",
-        "onLanguageModelProvider:chp.lightningai",
-        "onLanguageModelProvider:chp.llmgateway",
-        "onLanguageModelProvider:chp.minimax",
-        "onLanguageModelProvider:chp.mistral",
-        "onLanguageModelProvider:chp.modelscope",
-        "onLanguageModelProvider:chp.moonshot",
-        "onLanguageModelProvider:chp.nanogpt",
-        "onLanguageModelProvider:chp.nvidia",
-        "onLanguageModelProvider:chp.ollama",
-        "onLanguageModelProvider:chp.opencode",
-        "onLanguageModelProvider:chp.opencodego",
-        "onLanguageModelProvider:chp.pollinations",
-        "onLanguageModelProvider:chp.puter",
-        "onLanguageModelProvider:chp.qwencli",
-        "onLanguageModelProvider:chp.seraphyn",
-        "onLanguageModelProvider:chp.vercelai",
-        "onLanguageModelProvider:chp.zenmux",
-        "onLanguageModelProvider:chp.zhipu"
+        "onLanguageModelProvider:aether.aihubmix",
+        "onLanguageModelProvider:aether.apertis",
+        "onLanguageModelProvider:aether.ava-supernova",
+        "onLanguageModelProvider:aether.blackbox",
+        "onLanguageModelProvider:aether.chatjimmy",
+        "onLanguageModelProvider:aether.chutes",
+        "onLanguageModelProvider:aether.cline",
+        "onLanguageModelProvider:aether.codex",
+        "onLanguageModelProvider:aether.deepinfra",
+        "onLanguageModelProvider:aether.deepseek",
+        "onLanguageModelProvider:aether.hicapai",
+        "onLanguageModelProvider:aether.huggingface",
+        "onLanguageModelProvider:aether.kilo",
+        "onLanguageModelProvider:aether.knox",
+        "onLanguageModelProvider:aether.lightningai",
+        "onLanguageModelProvider:aether.llmgateway",
+        "onLanguageModelProvider:aether.minimax",
+        "onLanguageModelProvider:aether.mistral",
+        "onLanguageModelProvider:aether.modelscope",
+        "onLanguageModelProvider:aether.moonshot",
+        "onLanguageModelProvider:aether.nanogpt",
+        "onLanguageModelProvider:aether.nvidia",
+        "onLanguageModelProvider:aether.ollama",
+        "onLanguageModelProvider:aether.opencode",
+        "onLanguageModelProvider:aether.opencodego",
+        "onLanguageModelProvider:aether.pollinations",
+        "onLanguageModelProvider:aether.puter",
+        "onLanguageModelProvider:aether.qwencli",
+        "onLanguageModelProvider:aether.seraphyn",
+        "onLanguageModelProvider:aether.vercelai",
+        "onLanguageModelProvider:aether.zenmux",
+        "onLanguageModelProvider:aether.zhipu"
     ],
     "contributes": {
         "commands": [
             {
-                "command": "chp.zhipu.setApiKey",
+                "command": "aether.zhipu.setApiKey",
                 "title": "Configure ZhipuAI",
                 "category": "Aether"
             },
             {
-                "command": "chp.zhipu.configWizard",
+                "command": "aether.zhipu.configWizard",
                 "title": "ZhipuAI Configuration Wizard (API Key & Search MCP Mode)",
                 "category": "Aether"
             },
             {
-                "command": "chp.minimax.setApiKey",
+                "command": "aether.minimax.setApiKey",
                 "title": "Configure MiniMax",
                 "category": "Aether"
             },
             {
-                "command": "chp.minimax.setCodingPlanApiKey",
+                "command": "aether.minimax.setCodingPlanApiKey",
                 "title": "Configure MiniMax Coding Plan Dedicated Key",
                 "category": "Aether"
             },
             {
-                "command": "chp.minimax.setCodingPlanEndpoint",
+                "command": "aether.minimax.setCodingPlanEndpoint",
                 "title": "Configure MiniMax Coding Plan Endpoint (Domestic/International)",
                 "category": "Aether"
             },
             {
-                "command": "chp.llmgateway.setApiKey",
+                "command": "aether.llmgateway.setApiKey",
                 "title": "Configure LLMGateway",
                 "category": "Aether"
             },
             {
-                "command": "chp.minimax.configWizard",
+                "command": "aether.minimax.configWizard",
                 "title": "MiniMax Configuration Wizard",
                 "category": "Aether"
             },
             {
-                "command": "chp.kimi.setApiKey",
+                "command": "aether.kimi.setApiKey",
                 "title": "Configure Kimi For Coding Key",
                 "category": "Aether"
             },
             {
-                "command": "chp.moonshot.setApiKey",
+                "command": "aether.moonshot.setApiKey",
                 "title": "Configure MoonshotAI",
                 "category": "Aether"
             },
             {
-                "command": "chp.moonshot.configWizard",
+                "command": "aether.moonshot.configWizard",
                 "title": "MoonshotAI Configuration Wizard",
                 "category": "Aether"
             },
             {
-                "command": "chp.deepseek.setApiKey",
+                "command": "aether.deepseek.setApiKey",
                 "title": "Configure DeepSeek",
                 "category": "Aether"
             },
             {
-                "command": "chp.aihubmix.setApiKey",
+                "command": "aether.aihubmix.setApiKey",
                 "title": "Configure AIHubMix",
                 "category": "Aether"
             },
             {
-                "command": "chp.chutes.setApiKey",
+                "command": "aether.chutes.setApiKey",
                 "title": "Configure Chutes",
                 "category": "Aether"
             },
             {
-                "command": "chp.zenmux.setApiKey",
+                "command": "aether.zenmux.setApiKey",
                 "title": "Configure Zenmux",
                 "category": "Aether"
             },
             {
-                "command": "chp.opencode.setApiKey",
+                "command": "aether.opencode.setApiKey",
                 "title": "Configure OpenCode",
                 "category": "Aether"
             },
             {
-                "command": "chp.blackbox.setApiKey",
+                "command": "aether.blackbox.setApiKey",
                 "title": "Configure Blackbox",
                 "category": "Aether"
             },
             {
-                "command": "chp.huggingface.setApiKey",
+                "command": "aether.huggingface.setApiKey",
                 "title": "Configure Hugging Face",
                 "category": "Aether"
             },
             {
-                "command": "chp.kilo.setApiKey",
+                "command": "aether.kilo.setApiKey",
                 "title": "Configure Kilo AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.lightningai.setApiKey",
+                "command": "aether.lightningai.setApiKey",
                 "title": "Configure Lightning AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.lightningai.configWizard",
+                "command": "aether.lightningai.configWizard",
                 "title": "Lightning AI Configuration Wizard",
                 "category": "Aether"
             },
             {
-                "command": "chp.deepinfra.setApiKey",
+                "command": "aether.deepinfra.setApiKey",
                 "title": "Configure DeepInfra",
                 "category": "Aether"
             },
             {
-                "command": "chp.nvidia.setApiKey",
+                "command": "aether.nvidia.setApiKey",
                 "title": "Configure NVIDIA NIM",
                 "category": "Aether"
             },
             {
-                "command": "chp.mistral.setApiKey",
+                "command": "aether.mistral.setApiKey",
                 "title": "Configure Mistral AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.modelscope.setApiKey",
+                "command": "aether.modelscope.setApiKey",
                 "title": "Configure ModelScope",
                 "category": "Aether"
             },
             {
-                "command": "chp.ollama.setApiKey",
+                "command": "aether.ollama.setApiKey",
                 "title": "Configure Ollama Cloud",
                 "category": "Aether"
             },
             {
-                "command": "chp.compatible.manageModels",
+                "command": "aether.compatible.manageModels",
                 "title": "Compatible Provider Settings",
                 "category": "Aether"
             },
             {
-                "command": "chp.codex.login",
+                "command": "aether.codex.login",
                 "title": "Codex Login (OpenAI OAuth)",
                 "category": "Aether"
             },
             {
-                "command": "chp.codex.logout",
+                "command": "aether.codex.logout",
                 "title": "Codex Logout",
                 "category": "Aether"
             },
             {
-                "command": "chp.qwencli.login",
+                "command": "aether.qwencli.login",
                 "title": "Qwen Code Login (OAuth)",
                 "category": "Aether"
             },
             {
-                "command": "chp.qwencli.addAccount",
+                "command": "aether.qwencli.addAccount",
                 "title": "Qwen Code Add Account",
                 "category": "Aether"
             },
             {
-                "command": "chp.nesCompletion.toggleManual",
+                "command": "aether.nesCompletion.toggleManual",
                 "title": "Toggle NES Manual Trigger Mode",
                 "category": "Aether"
             },
             {
-                "command": "chp.copilot.attachSelection",
+                "command": "aether.copilot.attachSelection",
                 "title": "Attach Selection to Copilot Chat",
                 "category": "Aether"
             },
             {
-                "command": "chp.copilot.insertHandle",
+                "command": "aether.copilot.insertHandle",
                 "title": "Insert Handle Reference (#handle:filename:L1-L100)",
                 "category": "Aether",
                 "icon": "$(symbol-reference)"
             },
             {
-                "command": "chp.copilot.insertHandleFullPath",
+                "command": "aether.copilot.insertHandleFullPath",
                 "title": "Insert Handle Reference with Full Path",
                 "category": "Aether",
                 "icon": "$(file-symlink-file)"
             },
             {
-                "command": "chp.accounts.add",
+                "command": "aether.accounts.add",
                 "title": "Add Account",
                 "category": "Aether"
             },
             {
-                "command": "chp.accounts.switch",
+                "command": "aether.accounts.switch",
                 "title": "Switch Account",
                 "category": "Aether"
             },
             {
-                "command": "chp.accounts.remove",
+                "command": "aether.accounts.remove",
                 "title": "Remove Account",
                 "category": "Aether"
             },
             {
-                "command": "chp.accounts.list",
+                "command": "aether.accounts.list",
                 "title": "View All Accounts",
                 "category": "Aether"
             },
             {
-                "command": "chp.accounts.quickSwitch",
+                "command": "aether.accounts.quickSwitch",
                 "title": "Quick Switch Account",
                 "category": "Aether",
                 "icon": "$(arrow-swap)"
             },
             {
-                "command": "chp.accounts.quickSwitchProvider",
+                "command": "aether.accounts.quickSwitchProvider",
                 "title": "Quick Switch Account for Provider",
                 "category": "Aether"
             },
             {
-                "command": "chp.openSettings",
+                "command": "aether.openSettings",
                 "title": "Open Aether Settings",
                 "category": "Aether",
                 "icon": "$(settings-gear)"
             },
             {
-                "command": "chp.chpcli.launch",
+                "command": "aether.chpcli.launch",
                 "title": "Launch CHPCLI",
                 "category": "Aether"
             },
             {
-                "command": "chp.nanogpt.setApiKey",
+                "command": "aether.nanogpt.setApiKey",
                 "title": "Configure NanoGPT",
                 "category": "Aether"
             },
             {
-                "command": "chp.vercelai.setApiKey",
+                "command": "aether.vercelai.setApiKey",
                 "title": "Configure Vercel AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.cline.setApiKey",
+                "command": "aether.cline.setApiKey",
                 "title": "Configure Cline",
                 "category": "Aether"
             },
             {
-                "command": "chp.pollinations.setApiKey",
+                "command": "aether.pollinations.setApiKey",
                 "title": "Configure Pollinations AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.opencodego.setApiKey",
+                "command": "aether.opencodego.setApiKey",
                 "title": "Configure OpenCode Zen Go",
                 "category": "Aether"
             },
             {
-                "command": "chp.ava-supernova.setApiKey",
+                "command": "aether.ava-supernova.setApiKey",
                 "title": "Configure AVA Supernova",
                 "category": "Aether"
             },
             {
-                "command": "chp.knox.setApiKey",
+                "command": "aether.knox.setApiKey",
                 "title": "Configure Knox",
                 "category": "Aether"
             },
             {
-                "command": "chp.seraphyn.setApiKey",
+                "command": "aether.seraphyn.setApiKey",
                 "title": "Configure Seraphyn",
                 "category": "Aether"
             },
             {
-                "command": "chp.apertis.setApiKey",
+                "command": "aether.apertis.setApiKey",
                 "title": "Configure Apertis AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.puter.setApiKey",
+                "command": "aether.puter.setApiKey",
                 "title": "Configure Puter AI",
                 "category": "Aether"
             },
             {
-                "command": "chp.hicapai.setApiKey",
+                "command": "aether.hicapai.setApiKey",
                 "title": "Configure HicapAI",
                 "category": "Aether"
             },
             {
-                "command": "chp.showAllApiKeys",
+                "command": "aether.showAllApiKeys",
                 "title": "Show All API Keys",
                 "category": "Aether"
             }
@@ -1228,29 +1228,29 @@
                 "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
             },
             {
-                "command": "chp.nesCompletion.toggleManual",
+                "command": "aether.nesCompletion.toggleManual",
                 "key": "shift+alt+/"
             },
             {
-                "command": "chp.copilot.attachSelection",
+                "command": "aether.copilot.attachSelection",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a",
                 "when": "editorTextFocus && editorHasSelection"
             },
             {
-                "command": "chp.copilot.insertHandle",
+                "command": "aether.copilot.insertHandle",
                 "key": "ctrl+shift+h",
                 "mac": "cmd+shift+h",
                 "when": "editorTextFocus"
             },
             {
-                "command": "chp.copilot.insertHandleFullPath",
+                "command": "aether.copilot.insertHandleFullPath",
                 "key": "ctrl+alt+shift+h",
                 "mac": "cmd+alt+shift+h",
                 "when": "editorTextFocus"
             },
             {
-                "command": "chp.accounts.quickSwitch",
+                "command": "aether.accounts.quickSwitch",
                 "key": "ctrl+shift+q",
                 "mac": "cmd+shift+q"
             }
@@ -1258,24 +1258,24 @@
         "menus": {
             "editor/context": [
                 {
-                    "submenu": "chp.copilot.submenu",
+                    "submenu": "aether.copilot.submenu",
                     "group": "1_copilot",
                     "when": "editorTextFocus"
                 }
             ],
-            "chp.copilot.submenu": [
+            "aether.copilot.submenu": [
                 {
-                    "command": "chp.copilot.insertHandle",
+                    "command": "aether.copilot.insertHandle",
                     "group": "1_handle@1",
                     "when": "editorTextFocus"
                 },
                 {
-                    "command": "chp.copilot.insertHandleFullPath",
+                    "command": "aether.copilot.insertHandleFullPath",
                     "group": "1_handle@2",
                     "when": "editorTextFocus"
                 },
                 {
-                    "command": "chp.copilot.attachSelection",
+                    "command": "aether.copilot.attachSelection",
                     "group": "2_attach@1",
                     "when": "editorTextFocus && editorHasSelection"
                 }
@@ -1283,7 +1283,7 @@
         },
         "submenus": [
             {
-                "id": "chp.copilot.submenu",
+                "id": "aether.copilot.submenu",
                 "label": "Aether",
                 "icon": "$(copilot)"
             }

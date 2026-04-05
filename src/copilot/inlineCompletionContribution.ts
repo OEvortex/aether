@@ -19,7 +19,7 @@ function registerInlineCompletionCommands(): vscode.Disposable[] {
         vscode.commands.registerCommand(TOGGLE_NES_MANUAL_COMMAND, async () => {
             const CompletionLogger = getCompletionLogger();
             const config =
-                vscode.workspace.getConfiguration('chp.nesCompletion');
+                vscode.workspace.getConfiguration('aether.nesCompletion');
             const currentState = config.get('manualOnly', false);
             const newState = !currentState;
 
@@ -30,7 +30,7 @@ function registerInlineCompletionCommands(): vscode.Disposable[] {
             );
 
             vscode.window.showInformationMessage(
-                'Aether: Next Edit Suggestion Trigger Mode: ${newState ? 'Manual Trigger' : 'Auto Trigger'}'
+                'Aether: Next Edit Suggestion Trigger Mode: ' + (newState ? 'Manual Trigger' : 'Auto Trigger')
             );
             CompletionLogger.info(
                 `[InlineCompletionContribution] NES manual trigger mode ${newState ? 'enabled' : 'disabled'}`

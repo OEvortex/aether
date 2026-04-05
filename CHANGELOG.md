@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **OpenCode Zen Go New Models**: Added MiMo V2 Pro and MiMo V2 Omni models to the OpenCode Zen Go provider.
+
 - **Automatic Rate Limit Retry**: Enhanced rate limiter to automatically retry requests on 429 errors instead of raising errors to the user.
     - All provider handlers (OpenAI, Anthropic, Responses, Codex, Zhipu, Seraphyn) now use `executeWithRetry()` for transparent retries.
     - Configurable retry settings: 5 max attempts, 2s initial delay, 60s max delay, 2.5x exponential backoff with jitter.
@@ -55,6 +57,14 @@ All notable changes to this project will be documented in this file.
     - Extension ID changed from `OEvortex.better-copilot-chat` to `OEvortex.aether`.
     - All documentation, comments, and user-facing messages updated.
     - Repository URLs updated to point to the new `OEvortex/aether` repository.
+
+- **Settings Prefix Migration**: Configuration settings have migrated from `chp.*` to `aether.*` prefix.
+    - VS Code settings like `chp.temperature` are now `aether.temperature`
+    - Provider settings like `chp.zhipu.plan` are now `aether.zhipu.plan`
+    - Activation events changed from `onLanguageModelProvider:chp.*` to `onLanguageModelProvider:aether.*`
+    - **Automatic migration**: On first launch, the extension automatically migrates all existing settings, API keys, and global state from `chp.*` to `aether.*`
+    - Users will see a notification confirming migration completed successfully
+    - Command IDs remain unchanged (e.g., `chp.zhipu.setApiKey`) for backward compatibility
 
 - **Provider registry cleanup**: Removed `description` field from all provider entries in `knownProviderOverrides`. Descriptions are redundant with `displayName` and not consumed by any runtime path.
 

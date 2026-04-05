@@ -491,7 +491,7 @@ function syncAccountSyncAdapterFile(syncProviderItems) {
 
 function createSetApiKeyCommand(provider) {
     return {
-        command: `chp.${provider.id}.setApiKey`,
+        command: `aether.${provider.id}.setApiKey`,
         title: `Configure ${provider.displayName}`,
         category: 'Aether'
     };

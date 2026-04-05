@@ -288,7 +288,7 @@ export class ZhipuWizard {
         }
 
         try {
-            const config = vscode.workspace.getConfiguration('chp.zhipu');
+            const config = vscode.workspace.getConfiguration('aether.zhipu');
             await config.update(
                 'endpoint',
                 choice.value,
@@ -336,7 +336,7 @@ export class ZhipuWizard {
         }
 
         try {
-            const config = vscode.workspace.getConfiguration('chp.zhipu');
+            const config = vscode.workspace.getConfiguration('aether.zhipu');
             await config.update(
                 'plan',
                 choice.value,
@@ -396,7 +396,7 @@ export class ZhipuWizard {
         }
 
         try {
-            const config = vscode.workspace.getConfiguration('chp.zhipu');
+            const config = vscode.workspace.getConfiguration('aether.zhipu');
             await config.update(
                 'thinking',
                 choice.value,

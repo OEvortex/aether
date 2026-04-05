@@ -20,6 +20,7 @@ import {
     JsonSchemaProvider,
     Logger,
     launchOpenClaudeFromExtension,
+    SettingsMigrator,
     StatusLogger
 } from './utils';
 import { CompatibleModelManager } from './utils/compatibleModelManager';
@@ -146,8 +147,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
         Logger.info('⏱️ Starting Aether extension activation...');
 
-        // Register settings page command early so it is available even if later initialization errors occur
+        // Run settings migration from old prefix (chp.*) to new prefix (aether.*)
         let stepStartTime = Date.now();
+        await SettingsMigrator.migrateIfNeeded(context);
+        Logger.trace(
+            `⏱️ Settings migration check completed (time: ${Date.now() - stepStartTime}ms)`
+        );
+
+        // Register settings page command early so it is available even if later initialization errors occur
+        stepStartTime = Date.now();
         const settingsPageDisposable = registerSettingsPageCommand(context);
         context.subscriptions.push(settingsPageDisposable);
         Logger.trace(
@@ -156,7 +164,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         stepStartTime = Date.now();
         const openClaudeCommand = vscode.commands.registerCommand(
-            'chp.chpcli.launch',
+            'aether.chpcli.launch',
             async () => {
                 try {
                     await launchOpenClaudeFromExtension(context);

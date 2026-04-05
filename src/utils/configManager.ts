@@ -106,7 +106,7 @@ export interface CHPConfig {
  * Responsible for reading and managing Aether in VS Code settings and provider configuration in package.json
  */
 export class ConfigManager {
-    private static readonly CONFIG_SECTION = 'chp';
+    private static readonly CONFIG_SECTION = 'aether';
     private static cache: CHPConfig | null = null;
     private static configListener: vscode.Disposable | null = null;
     private static context: vscode.ExtensionContext | null = null;

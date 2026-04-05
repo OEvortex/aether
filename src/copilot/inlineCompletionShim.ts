@@ -63,7 +63,7 @@ export class InlineCompletionShim
      * Check if FIM is enabled
      */
     private isFIMEnabled(): boolean {
-        const config = vscode.workspace.getConfiguration('chp.fimCompletion');
+        const config = vscode.workspace.getConfiguration('aether.fimCompletion');
         return config.get<boolean>('enabled', false);
     }
 
@@ -71,7 +71,7 @@ export class InlineCompletionShim
      * Check if NES is enabled
      */
     private isNESEnabled(): boolean {
-        const config = vscode.workspace.getConfiguration('chp.nesCompletion');
+        const config = vscode.workspace.getConfiguration('aether.nesCompletion');
         return config.get<boolean>('enabled', false);
     }
 

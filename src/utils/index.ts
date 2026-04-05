@@ -70,6 +70,7 @@ export {
     renderRateLimitProgressBar
 } from './rateLimitParser';
 export { RetryManager } from './retryManager';
+export { SettingsMigrator } from './settingsMigrator';
 export { StatusLogger } from './statusLogger';
 export { TokenCounter } from './tokenCounter';
 export {

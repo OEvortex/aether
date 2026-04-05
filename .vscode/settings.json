@@ -57,10 +57,10 @@
             "url": "./.vscode/providerConfig.schema.json"
         }
     ],
-    "chp.temperature": 0.1, // 0.0-2.0
-    "chp.topP": 1.0, // 0.0-1.0
-    "chp.maxTokens": 256000, // 32-256000
-    "chp.rememberLastModel": true, // Remember the last used model
-    "chp.zhipu.search.enableMCP": true,
+    "aether.temperature": 0.1, // 0.0-2.0
+    "aether.topP": 1.0, // 0.0-1.0
+    "aether.maxTokens": 256000, // 32-256000
+    "aether.rememberLastModel": true, // Remember the last used model
+    "aether.zhipu.search.enableMCP": true,
     "chatgpt.openOnStartup": false // Enable `Network Search MCP` (Coding Plan exclusive)
 }
