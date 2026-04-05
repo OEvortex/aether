@@ -111,6 +111,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **`.withResponse()` Error on Non-Anthropic Providers**: Fixed `withResponse is not a function` crash when using OpenAI-compatible providers (e.g. OpenCode Zen Go) that don't expose the Anthropic SDK's `APIPromise.withResponse()` method.
+    - The streaming code now checks for `.withResponse()` availability and falls back to awaiting the promise directly when absent.
+
 - **Command Registration Conflicts**: Fixed "command already exists" errors when registering commands that were already registered by a previous extension instance.
     - All command registrations now use `aether.*` prefix instead of `chp.*`
     - Provider vendor strings updated from `chp.codex` to `aether.codex`

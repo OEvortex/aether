@@ -1839,7 +1839,7 @@ async function* queryModel(
         // BetaMessageStream calls partialParse() on every input_json_delta, which we don't need
         // since we handle tool input accumulation ourselves
         // biome-ignore lint/plugin: main conversation loop handles attribution separately
-        const result = await anthropic.beta.messages
+        const createPromise = anthropic.beta.messages
           .create(
             { ...params, stream: true },
             {
@@ -1849,7 +1849,13 @@ async function* queryModel(
               }),
             },
           )
-          .withResponse()
+        // Some providers (e.g. OpenAI-compatible adapters like OpenCode Zen Go)
+        // don't expose the SDK's .withResponse() method on the create promise.
+        // Fall back to awaiting the promise directly if withResponse is absent.
+        const hasWithResponse = typeof (createPromise as any).withResponse === 'function'
+        const result = hasWithResponse
+          ? await (createPromise as any).withResponse()
+          : { data: await createPromise, response: undefined as unknown as Response, request_id: null as string | null | undefined }
         queryCheckpoint('query_response_headers_received')
         streamRequestId = result.request_id
         streamResponse = result.response
