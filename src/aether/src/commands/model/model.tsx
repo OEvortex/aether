@@ -15,6 +15,19 @@ import { checkOpus1mAccess, checkSonnet1mAccess } from '../../utils/model/check1
 import { getDefaultMainLoopModelSetting, isOpus1mMergeEnabled, renderDefaultModelSetting } from '../../utils/model/model.js';
 import { isModelAllowed } from '../../utils/model/modelAllowlist.js';
 import { validateModel } from '../../utils/model/validateModel.js';
+// Aether Config integration
+import {
+  getActiveModel as getAetherActiveModel,
+  getActiveModelAlias as getAetherActiveModelAlias,
+  getActiveProviderName as getAetherActiveProviderName,
+  getModels as getAetherModels,
+  getProviders as getAetherProviders,
+  setActiveModel as setAetherActiveModel,
+  setActiveProvider as setAetherActiveProvider,
+  getEffectiveToolFormat as getAetherToolFormat,
+  type ModelConfig,
+  type ProviderConfig,
+} from '../../utils/aetherConfig.js';
 function ModelPickerWrapper(t0) {
   const $ = _c(17);
   const {
@@ -270,24 +283,72 @@ function _temp7(s) {
 }
 export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
   args = args?.trim() || '';
+  
+  // Handle Aether Config model/provider switching
+  if (args) {
+    // Check if it's a provider switch (/model openai, /model anthropic, etc.)
+    const providers = getAetherProviders();
+    const isProvider = providers.some(p => p.name.toLowerCase() === args.toLowerCase());
+    
+    if (isProvider) {
+      const success = setAetherActiveProvider(args.toLowerCase());
+      if (success) {
+        const provider = providers.find(p => p.name.toLowerCase() === args.toLowerCase());
+        onDone(`Switched to ${chalk.bold(provider?.name || args)} provider via Aether Config`);
+        return;
+      }
+    }
+    
+    // Check if it's a model switch
+    const models = getAetherModels();
+    const matchedModel = models.find(m => 
+      m.alias.toLowerCase() === args.toLowerCase() || 
+      m.name.toLowerCase() === args.toLowerCase()
+    );
+    
+    if (matchedModel) {
+      const success = setAetherActiveModel(matchedModel.alias);
+      if (success) {
+        onDone(`Switched to ${chalk.bold(matchedModel.alias)} (${matchedModel.provider}) via Aether Config`);
+        return;
+      }
+    }
+  }
+  
+  // Show Aether model info in info mode
   if (COMMON_INFO_ARGS.includes(args)) {
+    const aetherModel = getAetherActiveModel();
+    const aetherProvider = getAetherActiveProviderName();
+    const toolFormat = getAetherToolFormat();
+    
     logEvent('tengu_model_command_inline_help', {
       args: args as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
     });
-    return <ShowModelAndClose onDone={onDone} />;
+    
+    if (aetherModel) {
+      return <ShowModelAndClose onDone={onDone} />;
+    }
   }
+  
   if (COMMON_HELP_ARGS.includes(args)) {
-    onDone('Run /model to open the model selection menu, or /model [modelName] to set the model.', {
-      display: 'system'
-    });
+    const aetherModels = getAetherModels();
+    const aetherProviders = getAetherProviders();
+    onDone(
+      `Run /model to open the model selection menu, or /model [modelName] to set the model.\n\n` +
+      `Aether Config: ${aetherModels.length} models, ${aetherProviders.length} providers available.\n` +
+      `Use /provider to manage provider configurations.`,
+      { display: 'system' }
+    );
     return;
   }
+  
   if (args) {
     logEvent('tengu_model_command_inline', {
       args: args as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
     });
     return <SetModelAndClose args={args} onDone={onDone} />;
   }
+  
   return <ModelPickerWrapper onDone={onDone} />;
 };
 function renderModelLabel(model: string | null): string {

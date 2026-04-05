@@ -47,6 +47,14 @@ import {
   readGeminiAccessToken,
   saveGeminiAccessToken,
 } from '../../utils/geminiCredentials.js'
+// Aether Config integration
+import {
+  getActiveProviderName as getAetherActiveProviderName,
+  getActiveModelAlias as getAetherActiveModelAlias,
+  getProviders as getAetherProviders,
+  setActiveProvider as setAetherActiveProvider,
+  getEffectiveToolFormat as getAetherToolFormat,
+} from '../../utils/aetherConfig.js'
 import {
   getGoalDefaultOpenAIModel,
   normalizeRecommendationGoal,
@@ -1580,20 +1588,59 @@ export function ProviderWizard({
 
 export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
   const normalizedArgs = args?.trim().toLowerCase() || ''
+  
+  // Handle Aether Config provider switching (e.g., /provider openai, /provider anthropic)
+  if (normalizedArgs) {
+    const aetherProviders = getAetherProviders();
+    const matchedProvider = aetherProviders.find(p => p.name.toLowerCase() === normalizedArgs);
+    
+    if (matchedProvider) {
+      const success = setAetherActiveProvider(matchedProvider.name);
+      if (success) {
+        onDone(`Switched to ${matchedProvider.name} provider via Aether Config (backend: ${matchedProvider.backend})`);
+        return null;
+      }
+    }
+    
+    // Check for special commands
+    if (normalizedArgs === 'info' || normalizedArgs === 'status') {
+      const activeProvider = getAetherActiveProviderName();
+      const activeModel = getAetherActiveModelAlias();
+      const toolFormat = getAetherToolFormat();
+      onDone(
+        `Aether Config Status:\n` +
+        `- Active Provider: ${activeProvider || 'none'}\n` +
+        `- Active Model: ${activeModel || 'none'}\n` +
+        `- Tool Format: ${toolFormat}\n` +
+        `- Available Providers: ${aetherProviders.length}`,
+        { display: 'system' }
+      );
+      return null;
+    }
+    
+    if (normalizedArgs === 'list') {
+      const lines = aetherProviders.map(p => 
+        `- ${p.name} (${p.backend}) - ${p.api_base || '(auto)'}`
+      ).join('\n');
+      onDone(`Available Aether Providers:\n${lines}`, { display: 'system' });
+      return null;
+    }
+  }
 
   if (COMMON_INFO_ARGS.includes(normalizedArgs)) {
-    onDone(buildUsageText(), { display: 'system' })
-    return null
+    const activeProvider = getAetherActiveProviderName();
+    const aetherProviders = getAetherProviders();
+    onDone(
+      buildUsageText() + 
+      `\n\nAether Config: ${aetherProviders.length} providers available, active: ${activeProvider || 'none'}`,
+      { display: 'system' }
+    );
+    return null;
   }
 
   if (COMMON_HELP_ARGS.includes(normalizedArgs)) {
-    onDone(buildUsageText(), { display: 'system' })
-    return null
-  }
-
-  if (normalizedArgs) {
-    onDone('Usage: /provider', { display: 'system' })
-    return null
+    onDone(buildUsageText() + '\n\nUse /provider [provider-name] to switch providers via Aether Config', { display: 'system' });
+    return null;
   }
 
   return <ProviderWizard onDone={onDone} />
