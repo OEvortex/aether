@@ -51,7 +51,7 @@ export class CodexProvider
         const provider = new CodexProvider(context);
 
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            'chp.codex',
+            'aether.codex',
             provider
         );
 
@@ -69,7 +69,7 @@ export class CodexProvider
         }, 100);
 
         const loginCommand = vscode.commands.registerCommand(
-            'chp.codex.login',
+            'aether.codex.login',
             async () => {
                 await codexLoginCommand();
                 await provider.modelInfoCache?.invalidateCache(
@@ -80,7 +80,7 @@ export class CodexProvider
         );
 
         const logoutCommand = vscode.commands.registerCommand(
-            'chp.codex.logout',
+            'aether.codex.logout',
             async () => {
                 await CodexAuth.logout();
                 await provider.modelInfoCache?.invalidateCache(
@@ -142,7 +142,7 @@ export class CodexProvider
                     return {
                         id: model.id,
                         name: model.name,
-                        vendor: 'chp.codex',
+                        vendor: 'aether.codex',
                         family: 'Codex',
                         version: '1.0',
                         maxInputTokens: model.maxInputTokens,

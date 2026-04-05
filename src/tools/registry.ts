@@ -20,7 +20,7 @@ export function registerAllTools(context: vscode.ExtensionContext): void {
         // Register ZhipuAI web search tool
         zhipuSearchTool = new ZhipuSearchTool();
         const zhipuToolDisposable = vscode.lm.registerTool(
-            'chp_zhipuWebSearch',
+            'aether_zhipuWebSearch',
             {
                 invoke: zhipuSearchTool.invoke.bind(zhipuSearchTool)
             }
@@ -30,7 +30,7 @@ export function registerAllTools(context: vscode.ExtensionContext): void {
         // Register MiniMax web search tool
         minimaxSearchTool = new MiniMaxSearchTool();
         const minimaxToolDisposable = vscode.lm.registerTool(
-            'chp_minimaxWebSearch',
+            'aether_minimaxWebSearch',
             {
                 invoke: minimaxSearchTool.invoke.bind(minimaxSearchTool)
             }
@@ -44,8 +44,8 @@ export function registerAllTools(context: vscode.ExtensionContext): void {
             }
         });
 
-        Logger.info('Zhipu AI web search tool registered: chp_zhipuWebSearch');
-        Logger.info('MiniMax web search tool registered: chp_minimaxWebSearch');
+        Logger.info('Zhipu AI web search tool registered: aether_zhipuWebSearch');
+        Logger.info('MiniMax web search tool registered: aether_minimaxWebSearch');
     } catch (error) {
         Logger.error(
             'Tool registration failed',

@@ -432,7 +432,7 @@ export class CodexHandler {
                     )
                     .then((selection) => {
                         if (selection === 'Manage Accounts') {
-                            vscode.commands.executeCommand('chp.openSettings');
+                            vscode.commands.executeCommand('aether.openSettings');
                         }
                     });
             } else if (otherAccounts.length > 0) {
@@ -446,7 +446,7 @@ export class CodexHandler {
                     )
                     .then(async (selection) => {
                         if (selection === 'Switch Account') {
-                            vscode.commands.executeCommand('chp.openSettings');
+                            vscode.commands.executeCommand('aether.openSettings');
                         } else if (selection === 'Enable Auto-Switch') {
                             await accountManager.setLoadBalanceEnabled(
                                 'codex',
@@ -467,7 +467,7 @@ export class CodexHandler {
                     )
                     .then((selection) => {
                         if (selection === 'Add Account') {
-                            vscode.commands.executeCommand('chp.codex.login');
+                            vscode.commands.executeCommand('aether.codex.login');
                         }
                     });
             }

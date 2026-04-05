@@ -69,9 +69,9 @@ export class QuotaNotificationManager {
         );
 
         if (selection === 'Add Account') {
-            await vscode.commands.executeCommand('chp.accounts.add');
+            await vscode.commands.executeCommand('aether.accounts.add');
         } else if (selection === 'Open Settings') {
-            await vscode.commands.executeCommand('chp.openSettings');
+            await vscode.commands.executeCommand('aether.openSettings');
         }
     }
 

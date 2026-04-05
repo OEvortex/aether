@@ -170,7 +170,7 @@ export class SettingsPage {
                         break;
                     case 'openAccountManager':
                         await vscode.commands.executeCommand(
-                            'chp.openSettings'
+                            'aether.openSettings'
                         );
                         break;
                     case 'openProviderSettings':
@@ -1143,7 +1143,7 @@ export class SettingsPage {
 export function registerSettingsPageCommand(
     context: vscode.ExtensionContext
 ): vscode.Disposable {
-    return vscode.commands.registerCommand('chp.openSettings', async () => {
+    return vscode.commands.registerCommand('aether.openSettings', async () => {
         await SettingsPage.show(context);
     });
 }

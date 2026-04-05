@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **chpcli Rebranded to Aether**: Updated the integrated chpcli branding from OpenClaude to Aether.
+    - Startup screen now displays the Aether ASCII logo with sunset gradient.
+    - Build output shows "Built Aether" instead of "Built openclaude".
+    - All references to OpenClaude in the CLI have been updated to Aether.
+
 - **OpenCode Zen Go New Models**: Added MiMo V2 Pro and MiMo V2 Omni models to the OpenCode Zen Go provider.
 
 - **Automatic Rate Limit Retry**: Enhanced rate limiter to automatically retry requests on 429 errors instead of raising errors to the user.
@@ -84,6 +89,18 @@ All notable changes to this project will be documented in this file.
     - OpenAI streaming chunks are translated to Anthropic-compatible events at the adapter boundary, preserving full compatibility with the existing request pipeline.
     - Added `openai` as a runtime dependency.
 
+- **Command Prefix Migration**: All registered commands migrated from `chp.*` to `aether.*` prefix to match new extension name.
+    - `chp.openSettings` → `aether.openSettings`
+    - `chp.accounts.*` → `aether.accounts.*`
+    - `chp.codex.*` → `aether.codex.*`
+    - `chp.copilot.*` → `aether.copilot.*`
+    - `chp.showAllApiKeys` → `aether.showAllApiKeys`
+    - Tool names: `chp_zhipuWebSearch` → `aether_zhipuWebSearch`, `chp_minimaxWebSearch` → `aether_minimaxWebSearch`
+
+- **Configuration Schema Update**: Updated package.json configuration schema from `chp.*` to `aether.*` prefix.
+    - All settings properties now use `aether.` prefix (e.g., `aether.temperature`, `aether.zhipu.plan`)
+    - Migration now successfully writes to registered configurations
+
 ### Removed
 
 - **`chp.editToolMode` setting removed**: The editing tool mode configuration (`claude`, `gpt-5`, `none`) has been removed. The extension now handles editing operations internally without requiring a user-facing tool mode selection.
@@ -91,6 +108,25 @@ All notable changes to this project will be documented in this file.
 - **chpcli Integration**: Introduced `chpcli` — a modified fork of OpenClaude, integrated into the extension as `src/chpcli`.
     - Provides standalone CLI access to 200+ models including OpenAI, Gemini, DeepSeek, Ollama, and more.
     - Cleaned up standalone-package artifacts (Python scripts, Python tests, nested `.git`, `.github`, docs) for bundled usage.
+
+### Fixed
+
+- **Command Registration Conflicts**: Fixed "command already exists" errors when registering commands that were already registered by a previous extension instance.
+    - All command registrations now use `aether.*` prefix instead of `chp.*`
+    - Provider vendor strings updated from `chp.codex` to `aether.codex`
+
+- **Configuration Not Registered Errors**: Fixed "aether.X is not a registered configuration" errors during settings migration.
+    - Added all `aether.*` configuration entries to package.json
+    - Settings migration now successfully writes to registered configurations
+
+- **Tool Registration Conflicts**: Fixed "Tool already registered" errors for MCP web search tools.
+    - Tool names changed from `chp_zhipuWebSearch` to `aether_zhipuWebSearch`
+    - Tool names changed from `chp_minimaxWebSearch` to `aether_minimaxWebSearch`
+
+- **OpenAI Provider withResponse() API**: Fixed `anthropic.beta.messages.create(...).withResponse is not a function` error when using non-Anthropic providers.
+    - Added `withResponse()` method to `OpenAIStream` class
+    - Added `withResponse()` to non-streaming response objects
+    - Now matches Anthropic SDK API for all provider types
 
 ## [0.3.6] - 2026-04-03
 

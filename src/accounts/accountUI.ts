@@ -81,7 +81,7 @@ export class AccountUI {
         switch (selected.label) {
             case '$(window) Open Account Manager':
             case '$(settings-gear) Settings':
-                await vscode.commands.executeCommand('chp.openSettings');
+                await vscode.commands.executeCommand('aether.openSettings');
                 break;
             case '$(add) Add New Account':
                 await this.showAddAccountFlow();
@@ -773,12 +773,12 @@ export class AccountUI {
                 selected.label === '$(settings-gear) Open Account Manager' ||
                 selected.label === '$(settings-gear) Settings'
             ) {
-                await vscode.commands.executeCommand('chp.openSettings');
+                await vscode.commands.executeCommand('aether.openSettings');
                 return;
             }
 
             if (selected.label === '$(gear) Open Settings') {
-                await vscode.commands.executeCommand('chp.openSettings');
+                await vscode.commands.executeCommand('aether.openSettings');
                 return;
             }
 
@@ -954,7 +954,7 @@ export function registerAccountCommands(
 
     // Command to open Account Manager
     disposables.push(
-        vscode.commands.registerCommand('chp.accounts.manage', async () => {
+        vscode.commands.registerCommand('aether.accounts.manage', async () => {
             const ui = AccountUI.getInstance();
             await ui.showAccountManager();
         })
@@ -962,7 +962,7 @@ export function registerAccountCommands(
 
     // Command to add account
     disposables.push(
-        vscode.commands.registerCommand('chp.accounts.add', async () => {
+        vscode.commands.registerCommand('aether.accounts.add', async () => {
             const ui = AccountUI.getInstance();
             await ui.showAddAccountFlow();
         })
@@ -970,7 +970,7 @@ export function registerAccountCommands(
 
     // Command to switch account
     disposables.push(
-        vscode.commands.registerCommand('chp.accounts.switch', async () => {
+        vscode.commands.registerCommand('aether.accounts.switch', async () => {
             const ui = AccountUI.getInstance();
             await ui.showSwitchAccountFlow();
         })
@@ -978,7 +978,7 @@ export function registerAccountCommands(
 
     // Command to remove account
     disposables.push(
-        vscode.commands.registerCommand('chp.accounts.remove', async () => {
+        vscode.commands.registerCommand('aether.accounts.remove', async () => {
             const ui = AccountUI.getInstance();
             await ui.showRemoveAccountFlow();
         })
@@ -986,7 +986,7 @@ export function registerAccountCommands(
 
     // Command to view all accounts
     disposables.push(
-        vscode.commands.registerCommand('chp.accounts.list', async () => {
+        vscode.commands.registerCommand('aether.accounts.list', async () => {
             const ui = AccountUI.getInstance();
             await ui.showAllAccounts();
         })
@@ -994,7 +994,7 @@ export function registerAccountCommands(
 
     // Command to open Account Manager Page (WebView) - Removed, use Settings instead
     // disposables.push(
-    // 	vscode.commands.registerCommand("chp.accounts.openManager", async () => {
+    // 	vscode.commands.registerCommand("aether.accounts.openManager", async () => {
     // 		const { AccountManagerPage } = await import("./accountManagerPage.js");
     // 		const page = AccountManagerPage.getInstance();
     // 		await page.show();
@@ -1004,7 +1004,7 @@ export function registerAccountCommands(
     // Command Quick Switch - Fast switch with one click
     disposables.push(
         vscode.commands.registerCommand(
-            'chp.accounts.quickSwitch',
+            'aether.accounts.quickSwitch',
             async () => {
                 const ui = AccountUI.getInstance();
                 await ui.showQuickSwitch();
@@ -1015,7 +1015,7 @@ export function registerAccountCommands(
     // Command Quick Switch for a specific provider
     disposables.push(
         vscode.commands.registerCommand(
-            'chp.accounts.quickSwitchProvider',
+            'aether.accounts.quickSwitchProvider',
             async (provider?: string) => {
                 const ui = AccountUI.getInstance();
                 if (provider) {

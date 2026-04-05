@@ -275,7 +275,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // Step 6: Register Copilot helper commands
         stepStartTime = Date.now();
         const copilotAttachSelectionCmd = vscode.commands.registerCommand(
-            'chp.copilot.attachSelection',
+            'aether.copilot.attachSelection',
             async () => {
                 try {
                     const editor = vscode.window.activeTextEditor;
@@ -322,7 +322,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Command: Insert file handle reference with line range (format: #handle:filename:L1-L100)
         const copilotInsertHandleCmd = vscode.commands.registerCommand(
-            'chp.copilot.insertHandle',
+            'aether.copilot.insertHandle',
             async () => {
                 try {
                     const editor = vscode.window.activeTextEditor;
@@ -375,7 +375,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Command: Insert file handle with full path reference (format: #handle:path/to/file.ts:L1-L100)
         const copilotInsertHandleFullPathCmd = vscode.commands.registerCommand(
-            'chp.copilot.insertHandleFullPath',
+            'aether.copilot.insertHandleFullPath',
             async () => {
                 try {
                     const editor = vscode.window.activeTextEditor;
@@ -440,7 +440,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // Command: Show all stored API keys
         const showAllApiKeysCmd = vscode.commands.registerCommand(
-            'chp.showAllApiKeys',
+            'aether.showAllApiKeys',
             async () => {
                 await ApiKeyManager.showAllApiKeys();
             }
