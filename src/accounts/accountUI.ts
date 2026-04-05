@@ -745,7 +745,7 @@ export class AccountUI {
         });
         items.push({
             label: '$(gear) Open Settings',
-            description: 'Configure Copilot ++ extension settings',
+            description: 'Configure Aether extension settings',
             account: null as unknown as Account,
             alwaysShow: true
         } as AccountQuickPickItem & {

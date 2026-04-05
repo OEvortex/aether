@@ -1,6 +1,6 @@
 ﻿/*---------------------------------------------------------------------------------------------
  *  JSON Schema Provider
- *  Dynamically generates JSON Schema for Copilot ++ configuration, providing intellisense for settings.json
+ *  Dynamically generates JSON Schema for Aether configuration, providing intellisense for settings.json
  *--------------------------------------------------------------------------------------------*/
 
 import type { JSONSchema7 } from 'json-schema';
@@ -23,7 +23,7 @@ declare module 'json-schema' {
 
 /**
  * JSON Schema Provider class
- * Dynamically generates JSON Schema for Copilot ++ configuration, providing intellisense for settings.json
+ * Dynamically generates JSON Schema for Aether configuration, providing intellisense for settings.json
  */
 export class JsonSchemaProvider {
     private static readonly SCHEMA_URI = 'chp-settings://root/schema.json';
@@ -151,9 +151,9 @@ export class JsonSchemaProvider {
         return {
             $schema: 'http://json-schema.org/draft-07/schema#',
             $id: JsonSchemaProvider.SCHEMA_URI,
-            title: 'Copilot ++ Configuration Schema',
+            title: 'Aether Configuration Schema',
             description:
-                'Schema for Copilot ++ configuration with dynamic model ID suggestions',
+                'Schema for Aether configuration with dynamic model ID suggestions',
             type: 'object',
             properties: {
                 'chp.providerOverrides': {

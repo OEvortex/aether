@@ -114,7 +114,7 @@ export class ZhipuSearchTool {
         const apiKey = await ApiKeyManager.getApiKey('zhipu');
         if (!apiKey) {
             throw new Error(
-                'ZhipuAI API key not set, please run command "Copilot ++: Set ZhipuAI API Key" first'
+                'ZhipuAI API key not set, please run command "Aether: Set ZhipuAI API Key" first'
             );
         }
 

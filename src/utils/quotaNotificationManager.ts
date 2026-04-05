@@ -40,7 +40,7 @@ export class QuotaNotificationManager {
 
         const modelLabel = modelName ? ` (${modelName})` : '';
         const accountLabel = accountName ? ` [${accountName}]` : '';
-        const _message = `Copilot ++ quota limit reached${modelLabel}${accountLabel}. Retry in ${this.formatCountdown(delayMs)}.`;
+        const _message = `Aether quota limit reached${modelLabel}${accountLabel}. Retry in ${this.formatCountdown(delayMs)}.`;
         // void vscode.window.showWarningMessage(message); // Disabled notification
     }
 
@@ -117,7 +117,7 @@ export class QuotaNotificationManager {
         const accountLabel = this.quotaCountdownAccountName
             ? ` [${this.quotaCountdownAccountName}]`
             : '';
-        const _message = `Copilot ++ limited${modelLabel}${accountLabel}: ${this.formatCountdown(remaining)}`;
+        const _message = `Aether limited${modelLabel}${accountLabel}: ${this.formatCountdown(remaining)}`;
 
         const nextDelay = this.getCountdownUpdateInterval(remaining);
         this.quotaCountdownTimer = setTimeout(

@@ -1,7 +1,7 @@
 {
-    "name": "better-copilot-chat",
+    "name": "aether",
     "publisher": "OEvortex",
-    "displayName": "Copilot ++",
+    "displayName": "Aether",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
     "version": "0.3.6",
     "license": "MIT",
@@ -28,7 +28,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/OEvortex/better-copilot-chat"
+        "url": "https://github.com/OEvortex/aether"
     },
     "engines": {
         "vscode": ">=1.104.0",
@@ -90,280 +90,280 @@
             {
                 "command": "chp.zhipu.setApiKey",
                 "title": "Configure ZhipuAI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.zhipu.configWizard",
                 "title": "ZhipuAI Configuration Wizard (API Key & Search MCP Mode)",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.minimax.setApiKey",
                 "title": "Configure MiniMax",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.minimax.setCodingPlanApiKey",
                 "title": "Configure MiniMax Coding Plan Dedicated Key",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.minimax.setCodingPlanEndpoint",
                 "title": "Configure MiniMax Coding Plan Endpoint (Domestic/International)",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.llmgateway.setApiKey",
                 "title": "Configure LLMGateway",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.minimax.configWizard",
                 "title": "MiniMax Configuration Wizard",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.kimi.setApiKey",
                 "title": "Configure Kimi For Coding Key",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.moonshot.setApiKey",
                 "title": "Configure MoonshotAI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.moonshot.configWizard",
                 "title": "MoonshotAI Configuration Wizard",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.deepseek.setApiKey",
                 "title": "Configure DeepSeek",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.aihubmix.setApiKey",
                 "title": "Configure AIHubMix",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.chutes.setApiKey",
                 "title": "Configure Chutes",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.zenmux.setApiKey",
                 "title": "Configure Zenmux",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.opencode.setApiKey",
                 "title": "Configure OpenCode",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.blackbox.setApiKey",
                 "title": "Configure Blackbox",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.huggingface.setApiKey",
                 "title": "Configure Hugging Face",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.kilo.setApiKey",
                 "title": "Configure Kilo AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.lightningai.setApiKey",
                 "title": "Configure Lightning AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.lightningai.configWizard",
                 "title": "Lightning AI Configuration Wizard",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.deepinfra.setApiKey",
                 "title": "Configure DeepInfra",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.nvidia.setApiKey",
                 "title": "Configure NVIDIA NIM",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.mistral.setApiKey",
                 "title": "Configure Mistral AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.modelscope.setApiKey",
                 "title": "Configure ModelScope",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.ollama.setApiKey",
                 "title": "Configure Ollama Cloud",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.compatible.manageModels",
                 "title": "Compatible Provider Settings",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.codex.login",
                 "title": "Codex Login (OpenAI OAuth)",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.codex.logout",
                 "title": "Codex Logout",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.qwencli.login",
                 "title": "Qwen Code Login (OAuth)",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.qwencli.addAccount",
                 "title": "Qwen Code Add Account",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.nesCompletion.toggleManual",
                 "title": "Toggle NES Manual Trigger Mode",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.copilot.attachSelection",
                 "title": "Attach Selection to Copilot Chat",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.copilot.insertHandle",
                 "title": "Insert Handle Reference (#handle:filename:L1-L100)",
-                "category": "Copilot ++",
+                "category": "Aether",
                 "icon": "$(symbol-reference)"
             },
             {
                 "command": "chp.copilot.insertHandleFullPath",
                 "title": "Insert Handle Reference with Full Path",
-                "category": "Copilot ++",
+                "category": "Aether",
                 "icon": "$(file-symlink-file)"
             },
             {
                 "command": "chp.accounts.add",
                 "title": "Add Account",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.accounts.switch",
                 "title": "Switch Account",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.accounts.remove",
                 "title": "Remove Account",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.accounts.list",
                 "title": "View All Accounts",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.accounts.quickSwitch",
                 "title": "Quick Switch Account",
-                "category": "Copilot ++",
+                "category": "Aether",
                 "icon": "$(arrow-swap)"
             },
             {
                 "command": "chp.accounts.quickSwitchProvider",
                 "title": "Quick Switch Account for Provider",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.openSettings",
-                "title": "Open Copilot ++ Settings",
-                "category": "Copilot ++",
+                "title": "Open Aether Settings",
+                "category": "Aether",
                 "icon": "$(settings-gear)"
             },
             {
                 "command": "chp.chpcli.launch",
                 "title": "Launch CHPCLI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.nanogpt.setApiKey",
                 "title": "Configure NanoGPT",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.vercelai.setApiKey",
                 "title": "Configure Vercel AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.cline.setApiKey",
                 "title": "Configure Cline",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.pollinations.setApiKey",
                 "title": "Configure Pollinations AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.opencodego.setApiKey",
                 "title": "Configure OpenCode Zen Go",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.ava-supernova.setApiKey",
                 "title": "Configure AVA Supernova",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.knox.setApiKey",
                 "title": "Configure Knox",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.seraphyn.setApiKey",
                 "title": "Configure Seraphyn",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.apertis.setApiKey",
                 "title": "Configure Apertis AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.puter.setApiKey",
                 "title": "Configure Puter AI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.hicapai.setApiKey",
                 "title": "Configure HicapAI",
-                "category": "Copilot ++"
+                "category": "Aether"
             },
             {
                 "command": "chp.showAllApiKeys",
                 "title": "Show All API Keys",
-                "category": "Copilot ++"
+                "category": "Aether"
             }
         ],
         "configuration": {
-            "title": "Copilot ++ - AI Chat Models",
+            "title": "Aether - AI Chat Models",
             "properties": {
                 "chp.temperature": {
                     "type": "number",
@@ -1284,7 +1284,7 @@
         "submenus": [
             {
                 "id": "chp.copilot.submenu",
-                "label": "Copilot ++",
+                "label": "Aether",
                 "icon": "$(copilot)"
             }
         ]

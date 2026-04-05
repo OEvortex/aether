@@ -493,7 +493,7 @@ function createSetApiKeyCommand(provider) {
     return {
         command: `chp.${provider.id}.setApiKey`,
         title: `Configure ${provider.displayName}`,
-        category: 'Copilot ++'
+        category: 'Aether'
     };
 }
 

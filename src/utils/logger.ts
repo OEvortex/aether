@@ -14,7 +14,7 @@ export class Logger {
     /**
      * Initialize logger manager
      */
-    static initialize(channelName = 'Copilot ++'): void {
+    static initialize(channelName = 'Aether'): void {
         // Use LogOutputChannel (VS Code 1.74+), supports native log levels and formatting
         Logger.outputChannel = vscode.window.createOutputChannel(channelName, {
             log: true
@@ -52,7 +52,7 @@ export class Logger {
             // Show notification
             vscode.window
                 .showInformationMessage(
-                    `Copilot ++: Current VS Code log level is ${vscode.LogLevel[channelLevel]}`,
+                    `Aether: Current VS Code log level is ${vscode.LogLevel[channelLevel]}`,
                     'Set Log Level',
                     'Ignore'
                 )

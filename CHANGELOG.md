@@ -47,6 +47,15 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- **Project Renamed to Aether**: The extension has been renamed from "better-copilot-chat" / "Copilot ++" to "Aether".
+    - Extension name changed from `better-copilot-chat` to `aether`.
+    - Display name changed from "Copilot ++" to "Aether".
+    - All command categories updated from "Copilot ++" to "Aether".
+    - Configuration title changed to "Aether - AI Chat Models".
+    - Extension ID changed from `OEvortex.better-copilot-chat` to `OEvortex.aether`.
+    - All documentation, comments, and user-facing messages updated.
+    - Repository URLs updated to point to the new `OEvortex/aether` repository.
+
 - **Provider registry cleanup**: Removed `description` field from all provider entries in `knownProviderOverrides`. Descriptions are redundant with `displayName` and not consumed by any runtime path.
 
 - **Moonshot provider architecture**: Converted from generic provider to dedicated provider class, matching Zhipu's pattern.

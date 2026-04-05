@@ -1,4 +1,4 @@
-/* Copilot ++ Settings Page - JavaScript */
+/* Aether Settings Page - JavaScript */
 
 // VS Code API
 const vscode = acquireVsCodeApi();
@@ -96,7 +96,7 @@ function renderHeader() {
 					<div>
 			            <h1>
 		                	<span class="icon">✨</span>
-		                	Copilot ++ Settings
+		                	Aether Settings
 		            </h1>
 		            <p>Manage provider setup, accounts, and load balancing from one smoother settings page.</p>
 					</div>

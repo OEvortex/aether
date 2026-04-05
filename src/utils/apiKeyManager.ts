@@ -288,7 +288,7 @@ export class ApiKeyManager {
 
         // Show all keys in output channel
         const output = vscode.window.createOutputChannel(
-            'Copilot ++ API Keys (FULL)'
+            'Aether API Keys (FULL)'
         );
         output.appendLine('Stored API Keys (FULL):');
         output.appendLine('='.repeat(40));

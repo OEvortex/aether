@@ -30,7 +30,7 @@ function registerInlineCompletionCommands(): vscode.Disposable[] {
             );
 
             vscode.window.showInformationMessage(
-                `Copilot ++: Next Edit Suggestion Trigger Mode: ${newState ? 'Manual Trigger' : 'Auto Trigger'}`
+                'Aether: Next Edit Suggestion Trigger Mode: ${newState ? 'Manual Trigger' : 'Auto Trigger'}'
             );
             CompletionLogger.info(
                 `[InlineCompletionContribution] NES manual trigger mode ${newState ? 'enabled' : 'disabled'}`

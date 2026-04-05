@@ -129,22 +129,22 @@ export async function activate(context: vscode.ExtensionContext) {
     const activationStartTime = Date.now();
 
     try {
-        Logger.initialize('Copilot ++'); // Initialize log manager
+        Logger.initialize('Aether'); // Initialize log manager
         StatusLogger.initialize('GitHub Copilot Models Provider Status'); // Initialize high-frequency status log manager
         LeaderElectionService.initialize(context); // Initialize leader election service for status bars
-        CompletionLogger.initialize('Copilot ++Inline Completion'); // Initialize high-frequency inline completion log manager
+        CompletionLogger.initialize('Aether Inline Completion'); // Initialize high-frequency inline completion log manager
 
         const isDevelopment =
             context.extensionMode === vscode.ExtensionMode.Development;
         Logger.info(
-            `Copilot ++Extension Mode: ${isDevelopment ? 'Development' : 'Production'}`
+            `Aether Extension Mode: ${isDevelopment ? 'Development' : 'Production'}`
         );
         // Check and prompt VS Code log level settings
         if (isDevelopment) {
             Logger.checkAndPromptLogLevel();
         }
 
-        Logger.info('⏱️ Starting Copilot ++extension activation...');
+        Logger.info('⏱️ Starting Aether extension activation...');
 
         // Register settings page command early so it is available even if later initialization errors occur
         let stepStartTime = Date.now();
@@ -445,15 +445,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
         const totalActivationTime = Date.now() - activationStartTime;
         Logger.info(
-            `Copilot ++extension activation completed (total time: ${totalActivationTime}ms)`
+            `Aether extension activation completed (total time: ${totalActivationTime}ms)`
         );
     } catch (error) {
-        const errorMessage = `Copilot ++extension activation failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+        const errorMessage = `Aether extension activation failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
         Logger.error(errorMessage, error instanceof Error ? error : undefined);
 
         // Try to display user-friendly error message
         vscode.window.showErrorMessage(
-            'Copilot ++extension startup failed. Please check the output window for details.'
+            'Aether extension startup failed. Please check the output window for details.'
         );
         // Re-throw error to let VS Code know extension startup failed
         throw error;
@@ -502,6 +502,6 @@ export function deactivate() {
         CompletionLogger.dispose(); // Clean up inline completion logger
         Logger.dispose(); // Dispose Logger only when extension is destroyed
     } catch (error) {
-        Logger.error('Error during Copilot ++extension deactivation:', error);
+        Logger.error('Error during Aether extension deactivation:', error);
     }
 }

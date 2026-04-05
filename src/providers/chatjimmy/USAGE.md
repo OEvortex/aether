@@ -294,7 +294,7 @@ The ChatJimmy models work best with:
 **A:** Yes! The ChatJimmy provider is part of the Copilot++ extension. Contributions welcome!
 
 ### Q: How do I report bugs?
-**A:** Report issues on the [GitHub repository](https://github.com/OEvortex/better-copilot-chat/issues)
+**A:** Report issues on the [GitHub repository](https://github.com/OEvortex/aether/issues)
 
 ## Architecture Details
 

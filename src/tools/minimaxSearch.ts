@@ -50,7 +50,7 @@ export class MiniMaxSearchTool {
         const apiKey = await ApiKeyManager.getApiKey('minimax-coding');
         if (!apiKey) {
             throw new Error(
-                'MiniMax Coding Plan API key not set, please run command "Copilot ++: Set MiniMax Coding Plan API Key" first'
+                'MiniMax Coding Plan API key not set, please run command "Aether: Set MiniMax Coding Plan API Key" first'
             );
         }
 

@@ -2,7 +2,7 @@
 <project_knowledge_base>
     <title>PROJECT KNOWLEDGE BASE</title>
 
-    <description>Copilot ++ is a VS Code extension that enhances GitHub Copilot Chat with multiple AI providers including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Codex (OpenAI), Chutes, OpenCode, and custom OpenAI/Anthropic compatible models.</description>
+    <description>Aether is a VS Code extension that enhances GitHub Copilot Chat with multiple AI providers including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Codex (OpenAI), Chutes, OpenCode, and custom OpenAI/Anthropic compatible models.</description>
 
     <section name="STRUCTURE">
         <file_tree>
@@ -130,7 +130,7 @@
 
     <section name="ADDING_NEW_PROVIDER">
         <title>How to Add a New AI Provider</title>
-        <description>The Copilot ++ extension uses a single-source-of-truth architecture. Provider metadata is defined in one place and automatically propagated to all dependent files.</description>
+        <description>The Aether extension uses a single-source-of-truth architecture. Provider metadata is defined in one place and automatically propagated to all dependent files.</description>
 
         <step_list>
             <step order="1">
@@ -232,7 +232,7 @@ const providers = {
                 <code_block language="bash">npm run compile:dev</code_block>
                 <description>The provider should now:</description>
                 <list>
-                    <item>Appear in Copilot ++ Settings page</item>
+                    <item>Appear in Aether Settings page</item>
                     <item>Support API key configuration via chp.{provider}.setApiKey command</item>
                     <item>Auto-fetch models from the configured endpoint when API key is set</item>
                 </list>

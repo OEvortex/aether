@@ -37,7 +37,7 @@ export class VersionManager {
      */
     static getClientInfo(): { name: string; version: string } {
         return {
-            name: 'Copilot ++',
+            name: 'Aether',
             version: VersionManager.getVersion()
         };
     }

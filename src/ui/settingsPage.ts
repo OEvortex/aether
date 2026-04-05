@@ -1,6 +1,6 @@
 /**
- * Copilot ++ Settings Page
- * Trang cài đặt riêng cho Copilot ++ với giao diện hiện đại
+ * Aether Settings Page
+ * Trang cài đặt riêng cho Aether với giao diện hiện đại
  */
 
 import * as vscode from 'vscode';
@@ -83,7 +83,7 @@ type LoadBalanceStrategy = 'round-robin' | 'quota-aware' | 'failover';
 
 /**
  * Settings Page class
- * Manage the Copilot ++ settings page via webview
+ * Manage the Aether settings page via webview
  */
 export class SettingsPage {
     private static readonly LOAD_BALANCE_STRATEGY_STORAGE_KEY =
@@ -128,7 +128,7 @@ export class SettingsPage {
         // Tạo webview panel mới
         const panel = vscode.window.createWebviewPanel(
             'chpSettings',
-            'Copilot ++ Settings',
+            'Aether Settings',
             vscode.ViewColumn.One,
             {
                 enableScripts: true,
@@ -246,7 +246,7 @@ export class SettingsPage {
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Copilot ++ Settings</title>
+        <title>Aether Settings</title>
         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${cspSource}; script-src 'unsafe-inline' ${cspSource};" />
         <style>
             ${settingsPageCss}
@@ -258,7 +258,7 @@ export class SettingsPage {
                 <div class="settings-header">
                     <h1>
                         <span class="icon"></span>
-                        Copilot ++ Settings
+                        Aether Settings
                     </h1>
                     <p>Loading settings...</p>
                 </div>

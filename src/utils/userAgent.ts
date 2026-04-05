@@ -5,7 +5,7 @@
 
 import * as vscode from 'vscode';
 
-const EXTENSION_ID = 'OEvortex.better-copilot-chat';
+const EXTENSION_ID = 'OEvortex.aether';
 
 // Pool of realistic User-Agent strings that rotate
 const USER_AGENT_POOL = [

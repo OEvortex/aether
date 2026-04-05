@@ -1,14 +1,14 @@
 <div align="center">
 
-# Copilot ++
+# Aether
 
-<img src="logo_ai.png" alt="Copilot ++" width="150" height="150">
+<img src="logo_ai.png" alt="Aether" width="150" height="150">
 
 ### **Supercharge your GitHub Copilot with 20+ AI providers**
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/OEvortex.better-copilot-chat?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Version&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=OEvortex.better-copilot-chat)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/OEvortex.better-copilot-chat?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Downloads&color=28A745)](https://marketplace.visualstudio.com/items?itemName=OEvortex.better-copilot-chat)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/OEvortex.better-copilot-chat?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Rating&color=FFC107)](https://marketplace.visualstudio.com/items?itemName=OEvortex.better-copilot-chat)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Version&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Downloads&color=28A745)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Rating&color=FFC107)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![VS Code](https://img.shields.io/badge/VS%20Code-1.104.0+-007ACC.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
@@ -89,7 +89,7 @@ A powerful VS Code extension that provides model support for **GitHub Copilot Ch
 
 | Provider | Auth Method | Command |
 | :------- | :---------- | :------ |
-| Codex | OpenAI OAuth | `Copilot ++: Codex Login` |
+| Codex | OpenAI OAuth | `Aether: Codex Login` |
 | Qwen CLI | Alibaba OAuth | `qwen auth login` (CLI) |
 
 ---
@@ -144,17 +144,17 @@ A powerful VS Code extension that provides model support for **GitHub Copilot Ch
 
 1. Open **VS Code**
 2. Go to Extensions (`Ctrl+Shift+X` / `Cmd+Shift+X`)
-3. Search for **"Copilot ++"**
+3. Search for **"Aether"**
 4. Click **Install**
 
-Or visit the Marketplace page directly: [Copilot ++ on Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=OEvortex.better-copilot-chat)
+Or visit the Marketplace page directly: [Aether on Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
 
 </details>
 
 <details>
 <summary><b>📁 From .vsix File</b></summary>
 
-1. Download the `.vsix` file from [Releases](https://github.com/OEvortex/better-copilot-chat/releases)
+1. Download the `.vsix` file from [Releases](https://github.com/OEvortex/aether/releases)
 2. In VS Code, press `Ctrl+Shift+P` / `Cmd+Shift+P`
 3. Type **"Extensions: Install from VSIX..."**
 4. Select the downloaded file
@@ -166,8 +166,8 @@ Or visit the Marketplace page directly: [Copilot ++ on Visual Studio Marketplace
 
 ```bash
 # Clone the repository
-git clone https://github.com/OEvortex/better-copilot-chat.git
-cd better-copilot-chat
+git clone https://github.com/OEvortex/aether.git
+cd aether
 
 # Install dependencies
 npm install
@@ -179,7 +179,7 @@ npm run compile
 npm run package
 
 # Install the packaged extension
-code --install-extension better-copilot-chat-*.vsix
+code --install-extension aether-*.vsix
 ```
 
 </details>
@@ -192,25 +192,25 @@ code --install-extension better-copilot-chat-*.vsix
 
 | Provider | Command |
 | :------- | :------ |
-| Codex (OpenAI) | `Cmd+Shift+P` → `Copilot ++: Codex Login` |
-| ZhipuAI | `Cmd+Shift+P` → `Copilot ++: ZhipuAI Configuration Wizard` |
-| MiniMax | `Cmd+Shift+P` → `Copilot ++: MiniMax Configuration Wizard` |
-| MoonshotAI | `Cmd+Shift+P` → `Copilot ++: MoonshotAI Configuration Wizard` |
-| DeepSeek | `Cmd+Shift+P` → `Copilot ++: Configure DeepSeek` |
-| Chutes | `Cmd+Shift+P` → `Copilot ++: Configure Chutes` |
-| Zenmux | `Cmd+Shift+P` → `Copilot ++: Configure Zenmux` |
-| OpenCode | `Cmd+Shift+P` → `Copilot ++: Configure OpenCode` |
-| Blackbox | `Cmd+Shift+P` → `Copilot ++: Configure Blackbox` |
-| Vercel AI | `Cmd+Shift+P` → `Copilot ++: Configure Vercel AI` |
-| Cline | `Cmd+Shift+P` → `Copilot ++: Configure Cline` |
-| Hugging Face | `Cmd+Shift+P` → `Copilot ++: Configure Hugging Face` |
-| Kilo AI | `Cmd+Shift+P` → `Copilot ++: Configure Kilo AI` |
-| Lightning AI | `Cmd+Shift+P` → `Copilot ++: Lightning AI Configuration Wizard` |
-| DeepInfra | `Cmd+Shift+P` → `Copilot ++: Configure DeepInfra` |
-| NVIDIA NIM | `Cmd+Shift+P` → `Copilot ++: Configure NVIDIA NIM` |
-| Mistral AI | `Cmd+Shift+P` → `Copilot ++: Configure Mistral AI` |
-| Ollama Cloud | `Cmd+Shift+P` → `Copilot ++: Configure Ollama Cloud` |
-| Custom Models | `Cmd+Shift+P` → `Copilot ++: Compatible Provider Settings` |
+| Codex (OpenAI) | `Cmd+Shift+P` → `Aether: Codex Login` |
+| ZhipuAI | `Cmd+Shift+P` → `Aether: ZhipuAI Configuration Wizard` |
+| MiniMax | `Cmd+Shift+P` → `Aether: MiniMax Configuration Wizard` |
+| MoonshotAI | `Cmd+Shift+P` → `Aether: MoonshotAI Configuration Wizard` |
+| DeepSeek | `Cmd+Shift+P` → `Aether: Configure DeepSeek` |
+| Chutes | `Cmd+Shift+P` → `Aether: Configure Chutes` |
+| Zenmux | `Cmd+Shift+P` → `Aether: Configure Zenmux` |
+| OpenCode | `Cmd+Shift+P` → `Aether: Configure OpenCode` |
+| Blackbox | `Cmd+Shift+P` → `Aether: Configure Blackbox` |
+| Vercel AI | `Cmd+Shift+P` → `Aether: Configure Vercel AI` |
+| Cline | `Cmd+Shift+P` → `Aether: Configure Cline` |
+| Hugging Face | `Cmd+Shift+P` → `Aether: Configure Hugging Face` |
+| Kilo AI | `Cmd+Shift+P` → `Aether: Configure Kilo AI` |
+| Lightning AI | `Cmd+Shift+P` → `Aether: Lightning AI Configuration Wizard` |
+| DeepInfra | `Cmd+Shift+P` → `Aether: Configure DeepInfra` |
+| NVIDIA NIM | `Cmd+Shift+P` → `Aether: Configure NVIDIA NIM` |
+| Mistral AI | `Cmd+Shift+P` → `Aether: Configure Mistral AI` |
+| Ollama Cloud | `Cmd+Shift+P` → `Aether: Configure Ollama Cloud` |
+| Custom Models | `Cmd+Shift+P` → `Aether: Compatible Provider Settings` |
 
 ### Step 2: Select Your Model
 
@@ -221,7 +221,7 @@ code --install-extension better-copilot-chat-*.vsix
 ### Step 3: Configure Multiple Accounts (Optional)
 
 ```
-Cmd+Shift+P → "Copilot ++: Settings"
+Cmd+Shift+P → "Aether: Settings"
 → Select a provider
 → Add accounts with API keys
 ```
@@ -229,7 +229,7 @@ Cmd+Shift+P → "Copilot ++: Settings"
 ### Step 4: Enable Load Balancing
 
 ```
-Cmd+Shift+P → "Copilot ++: Settings"
+Cmd+Shift+P → "Aether: Settings"
 → Select a provider
 → Toggle "Load Balance" for automatic account switching
 ```
@@ -247,7 +247,7 @@ Follow these simple steps to add and manage providers using the Settings page:
 Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux) and type:
 
 ```
-Copilot ++: Settings
+Aether: Settings
 ```
 
 <div align="center">
@@ -411,54 +411,54 @@ Toggle the **"Load Balance"** switch to enable automatic account switching when 
 
 | Command | Description |
 | :------ | :---------- |
-| `Copilot ++: Configure ZhipuAI` | Set ZhipuAI API key |
-| `Copilot ++: ZhipuAI Configuration Wizard` | Full ZhipuAI setup with MCP mode |
-| `Copilot ++: Configure MiniMax` | Set MiniMax API key |
-| `Copilot ++: MiniMax Configuration Wizard` | Full MiniMax setup |
-| `Copilot ++: Configure MoonshotAI` | Set MoonshotAI API key |
-| `Copilot ++: MoonshotAI Configuration Wizard` | Full MoonshotAI setup |
-| `Copilot ++: Configure DeepSeek` | Set DeepSeek API key |
-| `Copilot ++: Configure Chutes` | Set Chutes API key |
-| `Copilot ++: Configure Zenmux` | Set Zenmux API key |
-| `Copilot ++: Configure OpenCode` | Set OpenCode API key |
-| `Copilot ++: Configure Blackbox` | Set Blackbox API key |
-| `Copilot ++: Configure Vercel AI` | Set Vercel AI API key |
-| `Copilot ++: Configure Cline` | Set Cline API key |
-| `Copilot ++: Configure Hugging Face` | Set Hugging Face API key |
-| `Copilot ++: Configure Kilo AI` | Set Kilo AI API key |
-| `Copilot ++: Lightning AI Configuration Wizard` | Full Lightning AI setup |
-| `Copilot ++: Configure DeepInfra` | Set DeepInfra API key |
-| `Copilot ++: Configure NVIDIA NIM` | Set NVIDIA NIM API key |
-| `Copilot ++: Configure Mistral AI` | Set Mistral AI API key |
-| `Copilot ++: Configure Ollama Cloud` | Set Ollama Cloud API key |
-| `Copilot ++: Compatible Provider Settings` | Configure custom models |
+| `Aether: Configure ZhipuAI` | Set ZhipuAI API key |
+| `Aether: ZhipuAI Configuration Wizard` | Full ZhipuAI setup with MCP mode |
+| `Aether: Configure MiniMax` | Set MiniMax API key |
+| `Aether: MiniMax Configuration Wizard` | Full MiniMax setup |
+| `Aether: Configure MoonshotAI` | Set MoonshotAI API key |
+| `Aether: MoonshotAI Configuration Wizard` | Full MoonshotAI setup |
+| `Aether: Configure DeepSeek` | Set DeepSeek API key |
+| `Aether: Configure Chutes` | Set Chutes API key |
+| `Aether: Configure Zenmux` | Set Zenmux API key |
+| `Aether: Configure OpenCode` | Set OpenCode API key |
+| `Aether: Configure Blackbox` | Set Blackbox API key |
+| `Aether: Configure Vercel AI` | Set Vercel AI API key |
+| `Aether: Configure Cline` | Set Cline API key |
+| `Aether: Configure Hugging Face` | Set Hugging Face API key |
+| `Aether: Configure Kilo AI` | Set Kilo AI API key |
+| `Aether: Lightning AI Configuration Wizard` | Full Lightning AI setup |
+| `Aether: Configure DeepInfra` | Set DeepInfra API key |
+| `Aether: Configure NVIDIA NIM` | Set NVIDIA NIM API key |
+| `Aether: Configure Mistral AI` | Set Mistral AI API key |
+| `Aether: Configure Ollama Cloud` | Set Ollama Cloud API key |
+| `Aether: Compatible Provider Settings` | Configure custom models |
 
 ### OAuth Authentication
 
 | Command | Description |
 | :------ | :---------- |
-| `Copilot ++: Codex Login` | Login to OpenAI Codex |
-| `Copilot ++: Codex Logout` | Logout from Codex |
+| `Aether: Codex Login` | Login to OpenAI Codex |
+| `Aether: Codex Logout` | Logout from Codex |
 
 ### Account Management
 
 | Command | Description |
 | :------ | :---------- |
-| `Copilot ++: Add Account` | Add a new account |
-| `Copilot ++: Switch Account` | Switch to another account |
-| `Copilot ++: Quick Switch Account` | Quick switch with `Ctrl+Shift+Q` |
-| `Copilot ++: Remove Account` | Remove an account |
-| `Copilot ++: View All Accounts` | List all configured accounts |
+| `Aether: Add Account` | Add a new account |
+| `Aether: Switch Account` | Switch to another account |
+| `Aether: Quick Switch Account` | Quick switch with `Ctrl+Shift+Q` |
+| `Aether: Remove Account` | Remove an account |
+| `Aether: View All Accounts` | List all configured accounts |
 
 ### Utilities
 
 | Command | Description |
 | :------ | :---------- |
-| `Copilot ++: Toggle NES Manual Trigger Mode` | Toggle NES manual mode |
-| `Copilot ++: Attach Selection to Copilot Chat` | Attach selected code to chat |
-| `Copilot ++: Insert Handle Reference` | Insert `#file:filename:L1-L100` |
-| `Copilot ++: Insert Handle Reference with Full Path` | Insert `#handle:path/to/file:L1-L100` |
-| `Copilot ++: Open Copilot ++ Settings` | Open settings page |
+| `Aether: Toggle NES Manual Trigger Mode` | Toggle NES manual mode |
+| `Aether: Attach Selection to Copilot Chat` | Attach selected code to chat |
+| `Aether: Insert Handle Reference` | Insert `#file:filename:L1-L100` |
+| `Aether: Insert Handle Reference with Full Path` | Insert `#handle:path/to/file:L1-L100` |
+| `Aether: Open Aether Settings` | Open settings page |
 
 ---
 
@@ -466,7 +466,7 @@ Toggle the **"Load Balance"** switch to enable automatic account switching when 
 
 Add your own OpenAI or Anthropic compatible models:
 
-1. Run `Copilot ++: Compatible Provider Settings`
+1. Run `Aether: Compatible Provider Settings`
 2. Click "Add Model"
 3. Configure your model:
 
