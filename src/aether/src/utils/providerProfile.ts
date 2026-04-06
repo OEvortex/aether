@@ -77,8 +77,10 @@ export type ProfileEnv = {
   CODEX_ACCOUNT_ID?: string
   GEMINI_API_KEY?: string
   GEMINI_AUTH_MODE?: 'api-key' | 'access-token' | 'adc'
+  GEMINI_ACCESS_TOKEN?: string
   GEMINI_MODEL?: string
   GEMINI_BASE_URL?: string
+  GOOGLE_API_KEY?: string
 }
 
 export type ProfileFile = {

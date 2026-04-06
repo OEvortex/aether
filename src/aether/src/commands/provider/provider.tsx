@@ -18,13 +18,11 @@ import {
   resolveProviderRequest,
 } from '../../services/api/providerConfig.js'
 import {
-  applyProfileEnvToProcessEnv,
   buildCodexProfileEnv,
   buildAnthropicProfileEnv,
   buildGeminiProfileEnv,
   buildOllamaProfileEnv,
   buildOpenAIProfileEnv,
-  createProfileFile,
   DEFAULT_GEMINI_BASE_URL,
   DEFAULT_GEMINI_MODEL,
   deleteProfileFile,
@@ -33,9 +31,8 @@ import {
   redactSecretValueForDisplay,
   sanitizeApiKey,
   sanitizeProviderConfigValue,
-  saveProfileFile,
-  type ProfileEnv,
   type ProfileFile,
+  type ProfileEnv,
   type ProviderProfile,
 } from '../../utils/providerProfile.js'
 import {
@@ -43,6 +40,11 @@ import {
     getProvider,
     type RegistryProvider,
 } from '../../utils/providerRegistry.js'
+import {
+  getSettingsFilePathForSource,
+  updateSettingsForSource,
+} from '../../utils/settings/settings.js'
+import type { SettingsJson } from '../../utils/settings/types.js'
 import {
   getGeminiProjectIdHint,
   mayHaveGeminiAdcCredentials,
@@ -58,7 +60,7 @@ import {
   recommendOllamaModel,
   type RecommendationGoal,
 } from '../../utils/providerRecommendation.js'
-import { hasLocalOllama, listOllamaModels } from '../../utils/providerDiscovery.js'
+import { getOllamaChatBaseUrl, hasLocalOllama, listOllamaModels } from '../../utils/providerDiscovery.js'
 
 type ProviderChoice =
     | 'auto'
@@ -76,6 +78,7 @@ type Step =
       defaultModel: string
       profile: 'openai' | 'anthropic'
       providerLabel?: string
+      baseUrl?: string | null
     }
   | {
       name: 'openai-base'
@@ -83,6 +86,7 @@ type Step =
       defaultModel: string
       profile: 'openai' | 'anthropic'
       providerLabel?: string
+      baseUrl?: string | null
     }
   | {
       name: 'openai-model'
@@ -114,6 +118,157 @@ type SavedProfileSummary = {
   modelLabel: string
   endpointLabel: string
   credentialLabel?: string
+}
+
+const PROVIDER_SELECTION_ENV_KEYS = [
+  'CLAUDE_CODE_USE_OPENAI',
+  'CLAUDE_CODE_USE_GEMINI',
+  'CLAUDE_CODE_USE_GITHUB',
+  'CLAUDE_CODE_USE_BEDROCK',
+  'CLAUDE_CODE_USE_VERTEX',
+  'CLAUDE_CODE_USE_FOUNDRY',
+] as const
+
+function getSavedConfigLabel(processEnv: NodeJS.ProcessEnv, persisted?: ProfileFile | null): string {
+  if (persisted) {
+    return 'profile'
+  }
+
+  const hasSavedEnv =
+    processEnv.CLAUDE_CODE_USE_OPENAI !== undefined ||
+    processEnv.CLAUDE_CODE_USE_GEMINI !== undefined ||
+    processEnv.CLAUDE_CODE_USE_GITHUB !== undefined ||
+    processEnv.CLAUDE_CODE_USE_BEDROCK !== undefined ||
+    processEnv.CLAUDE_CODE_USE_VERTEX !== undefined ||
+    processEnv.CLAUDE_CODE_USE_FOUNDRY !== undefined ||
+    processEnv.OPENAI_BASE_URL !== undefined ||
+    processEnv.OPENAI_MODEL !== undefined ||
+    processEnv.OPENAI_API_KEY !== undefined ||
+    processEnv.ANTHROPIC_BASE_URL !== undefined ||
+    processEnv.ANTHROPIC_MODEL !== undefined ||
+    processEnv.ANTHROPIC_API_KEY !== undefined ||
+    processEnv.GEMINI_BASE_URL !== undefined ||
+    processEnv.GEMINI_MODEL !== undefined ||
+    processEnv.GEMINI_API_KEY !== undefined ||
+    processEnv.GEMINI_ACCESS_TOKEN !== undefined ||
+    processEnv.GEMINI_AUTH_MODE !== undefined ||
+    processEnv.CODEX_API_KEY !== undefined ||
+    processEnv.CHATGPT_ACCOUNT_ID !== undefined ||
+    processEnv.CODEX_ACCOUNT_ID !== undefined
+
+  return hasSavedEnv ? 'settings' : 'none'
+}
+
+function buildProviderSettingsEnv(profile: ProviderProfile, env: ProfileEnv): NodeJS.ProcessEnv {
+  const nextEnv: NodeJS.ProcessEnv = { ...env }
+
+  for (const key of PROVIDER_SELECTION_ENV_KEYS) {
+    nextEnv[key] = undefined
+  }
+
+  switch (profile) {
+    case 'gemini':
+      nextEnv.CLAUDE_CODE_USE_GEMINI = '1'
+      break
+    case 'openai':
+    case 'ollama':
+    case 'codex':
+    case 'atomic-chat':
+      nextEnv.CLAUDE_CODE_USE_OPENAI = '1'
+      break
+    case 'anthropic':
+      break
+  }
+
+  return nextEnv
+}
+
+function syncProviderEnvToProcessEnv(profile: ProviderProfile, env: ProfileEnv): void {
+  for (const key of PROVIDER_SELECTION_ENV_KEYS) {
+    delete process.env[key]
+  }
+
+  for (const [key, value] of Object.entries(env)) {
+    if (value !== undefined) {
+      process.env[key] = value
+    }
+  }
+
+  switch (profile) {
+    case 'gemini':
+      process.env.CLAUDE_CODE_USE_GEMINI = '1'
+      break
+    case 'openai':
+    case 'ollama':
+    case 'codex':
+    case 'atomic-chat':
+      process.env.CLAUDE_CODE_USE_OPENAI = '1'
+      break
+    case 'anthropic':
+      break
+  }
+}
+
+function persistProviderConfiguration(
+  profile: ProviderProfile,
+  env: ProfileEnv,
+): string {
+  const settingsEnv = buildProviderSettingsEnv(profile, env)
+  const result = updateSettingsForSource('userSettings', {
+    env: settingsEnv as unknown as SettingsJson['env'],
+  } as unknown as SettingsJson)
+  if (result.error) {
+    throw result.error
+  }
+
+  syncProviderEnvToProcessEnv(profile, env)
+  try {
+    deleteProfileFile()
+  } catch {
+    // Ignore legacy profile cleanup failures; settings are now the source of truth.
+  }
+  return getSettingsFilePathForSource('userSettings') ?? 'settings.json'
+}
+
+function clearSavedProviderConfiguration(): void {
+  const clearedEnv: Record<string, string | undefined> = {}
+  for (const key of [
+    ...PROVIDER_SELECTION_ENV_KEYS,
+    'OPENAI_BASE_URL',
+    'OPENAI_MODEL',
+    'OPENAI_API_KEY',
+    'ANTHROPIC_BASE_URL',
+    'ANTHROPIC_MODEL',
+    'ANTHROPIC_API_KEY',
+    'CODEX_API_KEY',
+    'CHATGPT_ACCOUNT_ID',
+    'CODEX_ACCOUNT_ID',
+    'GEMINI_API_KEY',
+    'GEMINI_AUTH_MODE',
+    'GEMINI_ACCESS_TOKEN',
+    'GEMINI_MODEL',
+    'GEMINI_BASE_URL',
+    'GOOGLE_API_KEY',
+  ] as const) {
+    clearedEnv[key] = undefined
+  }
+
+  const result = updateSettingsForSource('userSettings', {
+    env: clearedEnv as unknown as SettingsJson['env'],
+  } as unknown as SettingsJson)
+  if (result.error) {
+    throw result.error
+  }
+
+  for (const key of Object.keys(clearedEnv)) {
+    delete process.env[key]
+  }
+
+  try {
+    deleteProfileFile()
+  } catch {
+    // Legacy profile cleanup is best-effort only.
+  }
 }
 
 type TextEntryDialogProps = {
@@ -265,7 +420,7 @@ export function buildCurrentProviderSummary(options?: {
 }): CurrentProviderSummary {
   const processEnv = options?.processEnv ?? process.env
   const persisted = options?.persisted ?? loadProfileFile()
-  const savedProfileLabel = persisted?.profile ?? 'none'
+  const savedProfileLabel = getSavedConfigLabel(processEnv, persisted)
 
   if (isEnvTruthy(processEnv.CLAUDE_CODE_USE_GEMINI)) {
     return {
@@ -446,7 +601,7 @@ export function buildProfileSaveMessage(
 ): string {
   const summary = buildSavedProfileSummary(profile, env)
   const lines = [
-    `Saved ${summary.providerLabel} profile.`,
+    `Saved ${summary.providerLabel} configuration.`,
     `Model: ${summary.modelLabel}`,
     `Endpoint: ${summary.endpointLabel}`,
   ]
@@ -455,7 +610,7 @@ export function buildProfileSaveMessage(
     lines.push(`Credentials: ${summary.credentialLabel}`)
   }
 
-  lines.push(`Profile: ${filePath}`)
+  lines.push(`Settings: ${filePath}`)
   lines.push('Restart OpenClaude to use it.')
 
   return lines.join('\n')
@@ -466,40 +621,19 @@ function buildUsageText(): string {
   return [
     'Usage: /provider',
     '',
-    'Guided setup for saved provider profiles.',
+    'Guided setup for saved provider configurations.',
     '',
     `Current provider: ${summary.providerLabel}`,
     `Current model: ${summary.modelLabel}`,
     `Current endpoint: ${summary.endpointLabel}`,
-    `Saved profile: ${summary.savedProfileLabel}`,
+    `Saved config: ${summary.savedProfileLabel}`,
     '',
-    'Choose Auto, a registry-backed provider, or a direct provider flow, then save a profile for the next OpenClaude restart.',
+    'Choose Auto, a registry-backed provider, or a direct provider flow, then save settings for the next OpenClaude restart.',
   ].join('\n')
 }
 
 function syncProfileToProcessEnv(profile: ProviderProfile, env: ProfileEnv): void {
-  applyProfileEnvToProcessEnv(process.env, env as NodeJS.ProcessEnv)
-
-  switch (profile) {
-    case 'gemini':
-      process.env.CLAUDE_CODE_USE_GEMINI = '1'
-      delete process.env.CLAUDE_CODE_USE_OPENAI
-      delete process.env.CLAUDE_CODE_USE_GITHUB
-      break
-    case 'ollama':
-    case 'openai':
-    case 'codex':
-    case 'atomic-chat':
-      process.env.CLAUDE_CODE_USE_OPENAI = '1'
-      delete process.env.CLAUDE_CODE_USE_GEMINI
-      delete process.env.CLAUDE_CODE_USE_GITHUB
-      break
-    case 'anthropic':
-      delete process.env.CLAUDE_CODE_USE_OPENAI
-      delete process.env.CLAUDE_CODE_USE_GEMINI
-      delete process.env.CLAUDE_CODE_USE_GITHUB
-      break
-  }
+  syncProviderEnvToProcessEnv(profile, env)
 }
 
 function finishProfileSave(
@@ -509,14 +643,13 @@ function finishProfileSave(
 ): void {
   try {
     syncProfileToProcessEnv(profile, env)
-    const profileFile = createProfileFile(profile, env)
-    const filePath = saveProfileFile(profileFile)
+    const filePath = persistProviderConfiguration(profile, env)
     onDone(buildProfileSaveMessage(profile, env, filePath), {
       display: 'system',
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
-    onDone(`Failed to save provider profile: ${message}`, {
+    onDone(`Failed to save provider configuration: ${message}`, {
       display: 'system',
     })
   }
@@ -616,27 +749,27 @@ function ProviderChooser({
 
   if (summary.savedProfileLabel !== 'none') {
     options.push({
-      label: 'Clear saved profile',
+      label: 'Clear saved config',
       value: 'clear',
-      description: 'Remove .openclaude-profile.json and return to normal startup',
+      description: 'Remove saved provider settings and any legacy profile file',
     })
   }
 
   return (
     <Dialog
-      title="Set up a provider profile"
+      title="Set up a provider configuration"
       subtitle={`Current provider: ${summary.providerLabel}`}
       onCancel={onCancel}
     >
       <Box flexDirection="column" gap={1}>
         <Text>
-          Save a provider profile for the next OpenClaude restart without
+          Save a provider configuration for the next OpenClaude restart without
           editing environment variables first.
         </Text>
         <Box flexDirection="column">
           <Text dimColor>Current model: {summary.modelLabel}</Text>
           <Text dimColor>Current endpoint: {summary.endpointLabel}</Text>
-          <Text dimColor>Saved profile: {summary.savedProfileLabel}</Text>
+          <Text dimColor>Saved config: {summary.savedProfileLabel}</Text>
         </Box>
         <Select
           options={options}
@@ -784,7 +917,7 @@ function AutoRecommendationStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => (value === 'back' ? onBack() : onCancel())}
+            onChange={(value: string) => (value === 'back' ? onBack() : onCancel())}
             onCancel={onCancel}
           />
         </Box>
@@ -807,7 +940,7 @@ function AutoRecommendationStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => {
+            onChange={(value: string) => {
               if (value === 'continue') {
                 onNeedOpenAI(status.defaultModel)
               } else if (value === 'back') {
@@ -840,7 +973,7 @@ function AutoRecommendationStep({
             { label: 'Back', value: 'back' },
             { label: 'Cancel', value: 'cancel' },
           ]}
-          onChange={value => {
+          onChange={(value: string) => {
             if (value === 'save') {
               onSave(
                 'ollama',
@@ -942,7 +1075,7 @@ function OllamaModelStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => (value === 'back' ? onBack() : onCancel())}
+            onChange={(value: string) => (value === 'back' ? onBack() : onCancel())}
             onCancel={onCancel}
           />
         </Box>
@@ -963,7 +1096,7 @@ function OllamaModelStep({
           defaultFocusValue={status.defaultValue}
           inlineDescriptions
           visibleOptionCount={Math.min(8, status.options.length)}
-          onChange={value => {
+          onChange={(value: string) => {
             onSave(
               'ollama',
               buildOllamaProfileEnv(value, {
@@ -999,7 +1132,7 @@ function CodexCredentialStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => (value === 'back' ? onBack() : onCancel())}
+            onChange={(value: string) => (value === 'back' ? onBack() : onCancel())}
             onCancel={onCancel}
           />
         </Box>
@@ -1033,7 +1166,7 @@ function CodexCredentialStep({
           defaultFocusValue="codexplan"
           inlineDescriptions
           visibleOptionCount={options.length}
-          onChange={value => {
+          onChange={(value: string) => {
             const env = buildCodexProfileEnv({
               model: value,
               processEnv: process.env,
@@ -1120,7 +1253,7 @@ export function ProviderWizard({
                     : 'openai'
 
                 // Check if we have a saved snapshot profile for this provider
-              const snapshotProfile = getProvider(registryProviderId)?.profile
+              const snapshotProfile = registryProvider.profile ?? null
                 const snapshotEnv = snapshotProfile?.env ?? {}
 
               if (snapshotProfile && canUseRegistryProfile(snapshotProfile)) {
@@ -1166,7 +1299,7 @@ export function ProviderWizard({
           onBack={() => setStep({ name: 'auto-goal' })}
           onSave={(profile, env) => finishProfileSave(onDone, profile, env)}
           onNeedOpenAI={defaultModel =>
-            setStep({ name: 'openai-key', defaultModel })
+            setStep({ name: 'openai-key', defaultModel, profile: 'openai' })
           }
           onCancel={() => onDone()}
         />
@@ -1380,7 +1513,7 @@ export function ProviderWizard({
               options={options}
               inlineDescriptions
               visibleOptionCount={options.length}
-              onChange={value => {
+              onChange={(value: string) => {
                 if (value === 'api-key') {
                   setStep({ name: 'gemini-key' })
                 } else if (value === 'access-token') {
@@ -1571,7 +1704,7 @@ export const call: LocalJSXCommandCall = async (onDone, _context, args) => {
       `Current provider: ${summary.providerLabel}`,
       `Current model: ${summary.modelLabel}`,
       `Current endpoint: ${summary.endpointLabel}`,
-      `Saved profile: ${summary.savedProfileLabel}`,
+      `Saved config: ${summary.savedProfileLabel}`,
     ]
     onDone(lines.join('\n'), { display: 'system' })
     return null
