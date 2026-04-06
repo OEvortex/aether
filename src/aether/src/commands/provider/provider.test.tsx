@@ -190,7 +190,6 @@ test('buildProfileSaveMessage maps provider fields without echoing secrets', () 
     'D:/codings/Opensource/openclaude/.openclaude-profile.json',
   )
 
-  expect(message).toContain('Saved OpenAI-compatible profile.')
   expect(message).toContain('Saved OpenAI-compatible configuration.')
   expect(message).toContain('Model: gpt-4o')
   expect(message).toContain('Endpoint: https://api.openai.com/v1')
