@@ -394,12 +394,12 @@ export class ZhipuProvider
         );
         // Register language model chat provider
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
         // Register configuration command
         const setApiKeyCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.setApiKey`,
+            `aether.${providerKey}.setApiKey`,
             async () => {
                 await ZhipuWizard.startWizard(
                     providerConfig.displayName,
@@ -414,7 +414,7 @@ export class ZhipuProvider
 
         // Register configuration wizard command
         const configWizardCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.configWizard`,
+            `aether.${providerKey}.configWizard`,
             async () => {
                 Logger.info(
                     `Starting ${providerConfig.displayName} configuration wizard`

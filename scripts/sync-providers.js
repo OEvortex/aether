@@ -543,7 +543,7 @@ function createLanguageModelProviderEntry(provider) {
     }
 
     return {
-        vendor: `chp.${provider.id}`,
+        vendor: `aether.${provider.id}`,
         displayName: `⦿ ${provider.displayName}${provider.description ? ` (${provider.description})` : ''}`,
         configuration: {
             properties
@@ -562,10 +562,10 @@ function syncPackageJson(knownProviders) {
     );
 
     const providerActivationEvents = providerIds.map(
-        (providerId) => `onLanguageModelProvider:chp.${providerId}`
+        (providerId) => `onLanguageModelProvider:aether.${providerId}`
     );
     const staticActivationEvents = (packageJson.activationEvents || []).filter(
-        (event) => !event.startsWith('onLanguageModelProvider:chp.')
+        (event) => !event.startsWith('onLanguageModelProvider:aether.')
     );
     packageJson.activationEvents = [
         ...staticActivationEvents,
@@ -582,7 +582,7 @@ function syncPackageJson(knownProviders) {
     const setApiKeyProviderSet = new Set(setApiKeyProviders);
 
     const retainedCommands = commands.filter((command) => {
-        const match = /^chp\.([^.]+)\.setApiKey$/.exec(command.command || '');
+        const match = /^aether\.([^.]+)\.setApiKey$/.exec(command.command || '');
         if (!match) {
             return true;
         }
@@ -597,7 +597,7 @@ function syncPackageJson(knownProviders) {
         retainedCommands.map((command) => command.command)
     );
     for (const providerId of setApiKeyProviders) {
-        const commandId = `chp.${providerId}.setApiKey`;
+        const commandId = `aether.${providerId}.setApiKey`;
         if (existingCommandSet.has(commandId)) {
             continue;
         }
@@ -613,8 +613,8 @@ function syncPackageJson(knownProviders) {
         packageJson.contributes?.configuration?.properties || {};
     const preservedPropertyEntries = Object.entries(existingProperties).filter(
         ([propertyKey]) =>
-            !/^chp\.[^.]+\.baseUrl$/.test(propertyKey) &&
-            !/^chp\.[^.]+\.sdkMode$/.test(propertyKey)
+            !/^aether\.[^.]+\.baseUrl$/.test(propertyKey) &&
+            !/^aether\.[^.]+\.sdkMode$/.test(propertyKey)
     );
 
     const syncedProperties = Object.fromEntries(preservedPropertyEntries);
@@ -633,7 +633,7 @@ function syncPackageJson(knownProviders) {
         if (supportedModeCount < 2) {
             continue;
         }
-        syncedProperties[`chp.${providerId}.sdkMode`] =
+        syncedProperties[`aether.${providerId}.sdkMode`] =
             createSdkModeProperty(provider);
     }
 
@@ -656,7 +656,7 @@ function syncPackageJson(knownProviders) {
             if (!provider) {
                 return null;
             }
-            const vendor = `chp.${providerId}`;
+            const vendor = `aether.${providerId}`;
             const existing = existingByVendor.get(vendor);
             if (!existing) {
                 return createLanguageModelProviderEntry(provider);

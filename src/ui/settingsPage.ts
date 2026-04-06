@@ -87,7 +87,7 @@ type LoadBalanceStrategy = 'round-robin' | 'quota-aware' | 'failover';
  */
 export class SettingsPage {
     private static readonly LOAD_BALANCE_STRATEGY_STORAGE_KEY =
-        'chp.settings.loadBalanceStrategies';
+        'aether.settings.loadBalanceStrategies';
     private static readonly VALID_LOAD_BALANCE_STRATEGIES: LoadBalanceStrategy[] =
         ['round-robin', 'quota-aware', 'failover'];
     private static currentPanel: vscode.WebviewPanel | undefined;
@@ -307,7 +307,7 @@ export class SettingsPage {
                 // Configuration not registered in this VS Code build/extension version.
                 // Store preference in global state so it still persists.
                 await SettingsPage.context.globalState.update(
-                    'chp.hideThinkingInUI',
+                    'aether.hideThinkingInUI',
                     !!enabled
                 );
             } else {
@@ -318,7 +318,7 @@ export class SettingsPage {
                 );
                 // Ensure fallback store does not override the actual config value
                 await SettingsPage.context.globalState.update(
-                    'chp.hideThinkingInUI',
+                    'aether.hideThinkingInUI',
                     undefined
                 );
             }
@@ -614,7 +614,7 @@ export class SettingsPage {
         configSection: vscode.WorkspaceConfiguration
     ): Promise<ProviderSettingField[]> {
         const properties = await SettingsPage.getConfigurationProperties();
-        const prefix = `chp.${provider.id}.`;
+        const prefix = `aether.${provider.id}.`;
 
         return Object.entries(properties)
             .filter(([fullKey, property]) => {
@@ -861,7 +861,7 @@ export class SettingsPage {
     private static async handleOpenProviderSettings(
         providerId: string
     ): Promise<void> {
-        const query = `chp.${providerId}`;
+        const query = `aether.${providerId}`;
         await vscode.commands.executeCommand(
             'workbench.action.openSettings',
             query

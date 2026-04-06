@@ -9,14 +9,23 @@ export interface ModelConfig {
     tooltip?: string;
     maxInputTokens?: number;
     maxOutputTokens?: number;
+    version?: string;
     capabilities?: {
         toolCalling?: boolean;
         imageInput?: boolean;
     };
+    tags?: string[];
+    family?: string;
+    baseUrl?: string;
+    apiKey?: string;
+    customHeader?: Record<string, string>;
     extraBody?: Record<string, unknown>;
     sdkMode?: 'openai' | 'anthropic' | 'oai-response';
     provider?: string;
     model?: string;
+    outputThinking?: boolean;
+    includeThinking?: boolean;
+    thinkingBudget?: number;
 }
 
 export interface ProviderOverride {
@@ -76,7 +85,7 @@ export interface KnownProviderConfig extends Partial<ProviderOverride> {
         customHeader?: Record<string, string>;
     };
     rateLimit?: RateLimitSelection;
-    sdkMode?: string;
+    sdkMode?: 'openai' | 'anthropic' | 'oai-response';
     baseUrl?: string;
 }
 
@@ -193,7 +202,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
     compatible: {
         displayName: 'OpenAI/Anthropic Compatible',
         family: 'Custom',
-        settingsPrefix: 'chp.compatibleModels'
+        settingsPrefix: 'aether.compatibleModels'
     },
     deepinfra: {
         displayName: 'DeepInfra',

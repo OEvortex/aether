@@ -106,6 +106,7 @@ export class ResponsesHandler {
         let hasReceivedContent = false;
         let totalCompletionTokens = 0;
         let totalPromptTokens = 0;
+        const responseTextFragments: string[] = [];
         const activeThinkingIds = new Set<string>();
         const emittedToolCallIds = new Set<string>();
 
@@ -175,95 +176,123 @@ export class ResponsesHandler {
                     modelConfig.sdkMode
                 );
 
-                stream
-                    .on('response.output_text.delta', (event) => {
-                        if (!event.delta) {
-                            return;
-                        }
+                for await (const event of stream) {
+                    if (token.isCancellationRequested) {
+                        throw new vscode.CancellationError();
+                    }
 
-                        progress.report(
-                            new vscode.LanguageModelTextPart(event.delta)
-                        );
-                        hasReceivedContent = true;
-                    })
-                    .on(
-                        'event',
-                        (event: OpenAI.Responses.ResponseStreamEvent) => {
-                            switch (event.type) {
-                                case 'response.reasoning_summary_text.delta':
-                                case 'response.reasoning_text.delta': {
-                                    if (
-                                        modelConfig.outputThinking === false ||
-                                        !event.delta
-                                    ) {
-                                        return;
-                                    }
-
-                                    const thinkingId =
-                                        event.item_id || 'responses_reasoning';
-                                    activeThinkingIds.add(thinkingId);
-                                    progress.report(
-                                        new vscode.LanguageModelThinkingPart(
-                                            event.delta,
-                                            thinkingId
-                                        )
-                                    );
-                                    break;
-                                }
-                                case 'response.reasoning_summary_text.done':
-                                case 'response.reasoning_text.done': {
-                                    const thinkingId =
-                                        event.item_id || 'responses_reasoning';
-                                    if (activeThinkingIds.has(thinkingId)) {
-                                        progress.report(
-                                            new vscode.LanguageModelThinkingPart(
-                                                '',
-                                                thinkingId
-                                            )
-                                        );
-                                        activeThinkingIds.delete(thinkingId);
-                                    }
-                                    break;
-                                }
-                                case 'response.output_item.done': {
-                                    if (event.item.type !== 'function_call') {
-                                        return;
-                                    }
-
-                                    const toolCallId =
-                                        event.item.call_id || event.item.id;
-                                    if (
-                                        !toolCallId ||
-                                        emittedToolCallIds.has(toolCallId)
-                                    ) {
-                                        return;
-                                    }
-
-                                    emittedToolCallIds.add(toolCallId);
-                                    progress.report(
-                                        new vscode.LanguageModelToolCallPart(
-                                            toolCallId,
-                                            event.item.name,
-                                            ResponsesHandler.parseToolArguments(
-                                                event.item.arguments
-                                            )
-                                        )
-                                    );
-                                    hasReceivedContent = true;
-                                    break;
-                                }
+                    switch (event.type) {
+                        case 'response.output_text.delta': {
+                            if (!event.delta) {
+                                break;
                             }
-                        }
-                    )
-                    .on('error', (error) => {
-                        streamError =
-                            error instanceof Error
-                                ? error
-                                : new Error(String(error));
-                    });
 
-                await stream.done();
-                finalResponse = await stream.finalResponse();
+                            responseTextFragments.push(event.delta);
+                            progress.report(
+                                new vscode.LanguageModelTextPart(event.delta)
+                            );
+                            hasReceivedContent = true;
+                            break;
+                        }
+                        case 'response.output_text.done': {
+                            if (
+                                !hasReceivedContent &&
+                                event.text &&
+                                responseTextFragments.length === 0
+                            ) {
+                                responseTextFragments.push(event.text);
+                            }
+                            break;
+                        }
+                        case 'response.reasoning_summary_text.delta':
+                        case 'response.reasoning_text.delta': {
+                            if (
+                                modelConfig.outputThinking === false ||
+                                !event.delta
+                            ) {
+                                break;
+                            }
+
+                            const thinkingId =
+                                event.item_id || 'responses_reasoning';
+                            activeThinkingIds.add(thinkingId);
+                            progress.report(
+                                new vscode.LanguageModelThinkingPart(
+                                    event.delta,
+                                    thinkingId
+                                )
+                            );
+                            break;
+                        }
+                        case 'response.reasoning_summary_text.done':
+                        case 'response.reasoning_text.done': {
+                            const thinkingId =
+                                event.item_id || 'responses_reasoning';
+                            if (activeThinkingIds.has(thinkingId)) {
+                                progress.report(
+                                    new vscode.LanguageModelThinkingPart(
+                                        '',
+                                        thinkingId
+                                    )
+                                );
+                                activeThinkingIds.delete(thinkingId);
+                            }
+                            break;
+                        }
+                        case 'response.output_item.done': {
+                            if (event.item.type !== 'function_call') {
+                                break;
+                            }
+
+                            const toolCallId =
+                                event.item.call_id || event.item.id;
+                            if (
+                                !toolCallId ||
+                                emittedToolCallIds.has(toolCallId)
+                            ) {
+                                break;
+                            }
+
+                            emittedToolCallIds.add(toolCallId);
+                            progress.report(
+                                new vscode.LanguageModelToolCallPart(
+                                    toolCallId,
+                                    event.item.name,
+                                    ResponsesHandler.parseToolArguments(
+                                        event.item.arguments
+                                    )
+                                )
+                            );
+                            hasReceivedContent = true;
+                            break;
+                        }
+                        case 'response.completed': {
+                            finalResponse = event.response;
+                            break;
+                        }
+                        case 'response.failed': {
+                            finalResponse = event.response;
+                            streamError = new Error(
+                                'OpenAI Responses stream failed.'
+                            );
+                            break;
+                        }
+                        case 'response.incomplete': {
+                            finalResponse = event.response;
+                            streamError = new Error(
+                                'OpenAI Responses stream ended incomplete.'
+                            );
+                            break;
+                        }
+                        case 'error': {
+                            streamError = new Error(
+                                event.message ||
+                                    'OpenAI Responses stream returned an error.'
+                            );
+                            break;
+                        }
+                    }
+                }
             } finally {
                 cancellationListener.dispose();
                 if (activityInterval) {
@@ -288,7 +317,8 @@ export class ResponsesHandler {
 
                 if (!hasReceivedContent) {
                     const finalText =
-                        ResponsesHandler.extractOutputText(finalResponse);
+                        ResponsesHandler.extractOutputText(finalResponse) ||
+                        responseTextFragments.join('');
                     if (finalText) {
                         progress.report(
                             new vscode.LanguageModelTextPart(finalText)

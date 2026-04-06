@@ -100,8 +100,8 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             // Check if it is a change in provider overrides or provider runtime settings
             if (
                 providerKey !== 'compatible' &&
-                (e.affectsConfiguration('chp.providerOverrides') ||
-                    e.affectsConfiguration(`chp.${providerKey}.sdkMode`))
+                (e.affectsConfiguration('aether.providerOverrides') ||
+                    e.affectsConfiguration(`aether.${providerKey}.sdkMode`))
             ) {
                 // Recalculate configuration
                 this.cachedProviderConfig =
@@ -232,12 +232,12 @@ export class GenericModelProvider implements LanguageModelChatProvider {
         );
         // Register language model chat provider
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
         // Register command to configure provider
         const setApiKeyCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.setApiKey`,
+            `aether.${providerKey}.setApiKey`,
             async () => {
                 if (providerKey === 'moonshot') {
                     await MoonshotWizard.startWizard(

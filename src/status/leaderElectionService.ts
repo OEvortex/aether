@@ -14,7 +14,7 @@ interface LeaderInfo {
  * Ensure that only one master instance is responsible for executing periodic tasks
  */
 export class LeaderElectionService {
-    private static readonly LEADER_KEY = 'chp.leader.info';
+    private static readonly LEADER_KEY = 'aether.leader.info';
     private static readonly HEARTBEAT_INTERVAL = 5000;
     private static readonly LEADER_TIMEOUT = 15000;
     private static readonly TASK_INTERVAL = 60 * 1000;

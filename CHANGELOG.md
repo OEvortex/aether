@@ -32,11 +32,21 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **Aether CLI Model Filtering for Providers Without Config Files**: Fixed `/model` showing ALL models from ALL providers when a provider without a config JSON file is active (e.g., Cline with `fetchModels:true`). Now correctly shows only the current model and dynamically fetched models for the active provider.
+
 - **Aether CLI KnownProviders Import Path**: Fixed `knownProvidersData` import in Aether CLI provider picker that resolved to a stub module, causing an empty provider list. Import path corrected to include `src/` prefix.
 
 - **Aether CLI Provider Picker Rendering**: Fixed terminal rendering errors caused by incorrect component usage (`Byline` with string children replaced with `Text dimColor`, added `Pane color="permission"` for proper TUI styling).
 
 - **Provider Snapshot Loading**: Removed automatic fallback loading of default provider snapshot file (`~/.copilot-helper/aether-provider-snapshot.json`). Provider configuration now loads only from explicit environment variables (`AETHER_PROVIDER_SNAPSHOT_JSON` or `AETHER_PROVIDER_SNAPSHOT_FILE`), with fallback to built-in `KnownProviders` from `knownProvidersData.ts`.
+
+- **Aether Command Prefix Migration**: Fixed missing provider command registration by updating runtime and generated command IDs to `aether.*` consistently.
+    - Resolved missing commands such as `aether.kilo.setApiKey`.
+    - Updated provider vendor IDs, activation events, and schema URI wiring to match the new prefix.
+
+- **OpenAI Responses Stream Compatibility**: Fixed crashes in the Responses handler caused by treating the SDK stream like a Node event emitter.
+    - Switched to async iteration over the Responses stream events.
+    - Uses the `response.completed` event for the final payload instead of unsupported `.done()` / `.finalResponse()` calls.
 
 ## [0.3.7] - 2026-04-06
 

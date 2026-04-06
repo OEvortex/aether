@@ -334,7 +334,7 @@ async function registerProvider(
             // Register specialized commands for MiniMax and Moonshot
             if (providerKey === 'minimax') {
                 const setCodingKeyCommand = vscode.commands.registerCommand(
-                    `chp.${providerKey}.setCodingPlanApiKey`,
+                    `aether.${providerKey}.setCodingPlanApiKey`,
                     async () => {
                         await MiniMaxWizard.setCodingPlanApiKey(
                             providerConfig.displayName,
@@ -351,7 +351,7 @@ async function registerProvider(
 
                 const setCodingPlanEndpointCommand =
                     vscode.commands.registerCommand(
-                        `chp.${providerKey}.setCodingPlanEndpoint`,
+                        `aether.${providerKey}.setCodingPlanEndpoint`,
                         async () => {
                             await MiniMaxWizard.setCodingPlanEndpoint(
                                 providerConfig.displayName
@@ -360,7 +360,7 @@ async function registerProvider(
                     );
 
                 const configWizardCommand = vscode.commands.registerCommand(
-                    `chp.${providerKey}.configWizard`,
+                    `aether.${providerKey}.configWizard`,
                     async () => {
                         await MiniMaxWizard.startWizard(
                             providerConfig.displayName,
@@ -376,7 +376,7 @@ async function registerProvider(
                 );
             } else if (providerKey === 'moonshot') {
                 const configWizardCommand = vscode.commands.registerCommand(
-                    `chp.${providerKey}.configWizard`,
+                    `aether.${providerKey}.configWizard`,
                     async () => {
                         await MoonshotWizard.startWizard(
                             providerConfig.displayName,
@@ -598,7 +598,7 @@ export function getAllProviders(): ProviderMetadata[] {
                 sdkMode: getSdkMode(providerId),
                 description: knownProvider?.description,
                 settingsPrefix:
-                    knownProvider?.settingsPrefix || `chp.${providerId}`,
+                    knownProvider?.settingsPrefix || `aether.${providerId}`,
                 baseUrl:
                     providerConfig.baseUrl ||
                     knownProvider?.baseUrl ||
@@ -626,7 +626,7 @@ export function getAllProviders(): ProviderMetadata[] {
                 'Custom OpenAI/Anthropic compatible models',
             icon: '$(symbol-misc)',
             settingsPrefix:
-                compatibleProvider?.settingsPrefix || 'chp.compatibleModels',
+                compatibleProvider?.settingsPrefix || 'aether.compatibleModels',
             baseUrl: '',
             features: getDefaultFeatures(ProviderKey.Compatible),
             order: 0
@@ -788,6 +788,18 @@ export function buildConfigProvider(
 
                 return {
                     ...modelConfig,
+                    tooltip:
+                        modelConfig.tooltip ||
+                        modelConfig.name ||
+                        providerConfig.displayName,
+                    maxInputTokens: modelConfig.maxInputTokens ?? 0,
+                    maxOutputTokens: modelConfig.maxOutputTokens ?? 0,
+                    capabilities: {
+                        toolCalling:
+                            modelConfig.capabilities?.toolCalling ?? false,
+                        imageInput:
+                            modelConfig.capabilities?.imageInput ?? false
+                    },
                     sdkMode,
                     baseUrl:
                         modelConfig.baseUrl ||

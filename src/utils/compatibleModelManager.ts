@@ -113,7 +113,7 @@ export class CompatibleModelManager {
         // Listen to chp configuration changes
         CompatibleModelManager.configListener =
             vscode.workspace.onDidChangeConfiguration((event) => {
-                if (event.affectsConfiguration('chp.compatibleModels')) {
+                if (event.affectsConfiguration('aether.compatibleModels')) {
                     // If currently saving, ignore configuration changes (avoid reloading overriding in-memory data)
                     if (CompatibleModelManager.isSaving) {
                         Logger.debug('Saving configuration, skipping reload');

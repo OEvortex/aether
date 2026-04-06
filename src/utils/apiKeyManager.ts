@@ -127,7 +127,7 @@ export class ApiKeyManager {
         const builtinProviders = await ApiKeyManager.getBuiltinProviders();
         if (builtinProviders.has(vendor)) {
             // Built-in providers: trigger corresponding setup command, let Provider handle specific configuration
-            const commandId = `chp.${vendor}.setApiKey`;
+            const commandId = `aether.${vendor}.setApiKey`;
             await vscode.commands.executeCommand(commandId);
         } else {
             // Custom providers: directly prompt for API key input
@@ -198,7 +198,7 @@ export class ApiKeyManager {
             }
             try {
                 await vscode.commands.executeCommand(
-                    `chp.${vendor}.refreshModels`
+                    `aether.${vendor}.refreshModels`
                 );
             } catch {
                 // Ignore: not all providers expose a refresh command

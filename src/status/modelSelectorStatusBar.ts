@@ -26,7 +26,7 @@ export class ModelSelectorStatusBar implements vscode.Disposable {
         context.subscriptions.push(this);
         context.subscriptions.push(
             vscode.workspace.onDidChangeConfiguration((e) => {
-                if (e.affectsConfiguration('chp.selectedModel')) {
+                if (e.affectsConfiguration('aether.selectedModel')) {
                     this.delayedUpdate(300);
                 }
             })

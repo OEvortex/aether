@@ -35,6 +35,7 @@ import { getGlobalConfig } from '../config.js'
 import { getCachedOllamaModelOptions, isOllamaProvider } from './ollamaModels.js'
 import { getConfiguredProviderModelOptions } from './providerConfigModels.js'
 import { configProviders } from '../../../../providers/config/index.js'
+import { KnownProviders } from '../../../../utils/knownProvidersData.js'
 
 // @[MODEL LAUNCH]: Update all the available and default model option strings below.
 
@@ -578,11 +579,14 @@ export function getModelOptions(fastMode = false, activeProvider?: string | null
   const options = getModelOptionsBase(fastMode)
 
   // If a specific provider is active, filter to only show that provider's models
-  if (activeProvider && configProviders[activeProvider as keyof typeof configProviders]) {
-    const providerConfig = configProviders[activeProvider as keyof typeof configProviders]
-    const providerModelOptions: ModelOption[] = []
+  const providerConfig = activeProvider ? configProviders[activeProvider as keyof typeof configProviders] : undefined
 
-    if (providerConfig.models && providerConfig.models.length > 0) {
+  if (activeProvider) {
+    // Always filter when a provider is active, even if there's no config JSON file
+    // (providers like Cline with fetchModels:true don't have static configs)
+    if (providerConfig && providerConfig.models && providerConfig.models.length > 0) {
+      const providerModelOptions: ModelOption[] = []
+
       for (const m of providerConfig.models) {
         const modelValue = (m.model || m.id) as ModelSetting
         if (!providerModelOptions.some(existing => existing.value === modelValue)) {
@@ -593,9 +597,39 @@ export function getModelOptions(fastMode = false, activeProvider?: string | null
           })
         }
       }
+
+      // Add custom model if it belongs to this provider
+      let customModel: ModelSetting = null
+      const currentMainLoopModel = getUserSpecifiedModelSetting()
+      const initialMainLoopModel = getInitialMainLoopModel()
+      if (currentMainLoopModel !== undefined && currentMainLoopModel !== null) {
+        customModel = currentMainLoopModel
+      } else if (initialMainLoopModel !== null) {
+        customModel = initialMainLoopModel
+      }
+      if (customModel && !providerModelOptions.some(opt => opt.value === customModel)) {
+        const knownOption = getKnownModelOption(customModel)
+        if (knownOption) {
+          providerModelOptions.push(knownOption)
+        } else {
+          providerModelOptions.push({
+            value: customModel,
+            label: customModel,
+            description: 'Custom model',
+          })
+        }
+      }
+
+      return filterModelOptionsByAllowlist(providerModelOptions)
     }
 
-    // Add custom model if it belongs to this provider
+    // No config file for this provider (e.g., Cline with fetchModels:true)
+    // Show the current model as a fallback since there's no static model list
+    const providerModelOptions: ModelOption[] = []
+    const knownProviderMeta = KnownProviders?.[activeProvider] as { displayName?: string } | undefined
+    const providerDisplayName = knownProviderMeta?.displayName ?? activeProvider
+
+    // Add the current model if it belongs to this provider
     let customModel: ModelSetting = null
     const currentMainLoopModel = getUserSpecifiedModelSetting()
     const initialMainLoopModel = getInitialMainLoopModel()
@@ -604,16 +638,25 @@ export function getModelOptions(fastMode = false, activeProvider?: string | null
     } else if (initialMainLoopModel !== null) {
       customModel = initialMainLoopModel
     }
-    if (customModel && !providerModelOptions.some(opt => opt.value === customModel)) {
-      const knownOption = getKnownModelOption(customModel)
-      if (knownOption) {
-        providerModelOptions.push(knownOption)
-      } else {
-        providerModelOptions.push({
-          value: customModel,
-          label: customModel,
-          description: 'Custom model',
-        })
+    // Only add a valid, non-empty model (skip empty strings, provider-prefix-without-model)
+    if (
+      customModel &&
+      typeof customModel === 'string' &&
+      customModel.trim().length > 0 &&
+      !customModel.endsWith('::')
+    ) {
+      providerModelOptions.push({
+        value: customModel,
+        label: customModel,
+        description: 'Current model',
+      })
+    }
+
+    // Append dynamically fetched models from additionalModelOptionsCache
+    // (populated for first-party bootstrap, may include 3P models)
+    for (const m of getGlobalConfig().additionalModelOptionsCache ?? []) {
+      if (!providerModelOptions.some(existing => existing.value === m.value)) {
+        providerModelOptions.push(m)
       }
     }
 

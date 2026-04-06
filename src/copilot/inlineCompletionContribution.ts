@@ -10,7 +10,7 @@ import { InlineCompletionShim } from './inlineCompletionShim';
 import { getCompletionLogger } from './singletons';
 
 const INLINE_COMPLETION_SELECTOR: vscode.DocumentSelector = { pattern: '**/*' };
-const TOGGLE_NES_MANUAL_COMMAND = 'chp.nesCompletion.toggleManual';
+const TOGGLE_NES_MANUAL_COMMAND = 'aether.nesCompletion.toggleManual';
 
 function registerInlineCompletionCommands(): vscode.Disposable[] {
     const disposables: vscode.Disposable[] = [];

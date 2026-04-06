@@ -48,7 +48,7 @@
         "chatProvider"
     ],
     "activationEvents": [
-        "onFileSystem:chp-settings",
+        "onFileSystem:aether-settings",
         "onLanguageModelTool:aether_minimaxWebSearch",
         "onLanguageModelTool:aether_zhipuWebSearch",
         "onStartupFinished",
@@ -721,12 +721,12 @@
         "jsonValidation": [
             {
                 "fileMatch": "settings.json",
-                "url": "chp-settings://root/schema.json"
+                "url": "aether-settings://root/schema.json"
             }
         ],
         "languageModelChatProviders": [
             {
-                "vendor": "chp.aihubmix",
+                "vendor": "aether.aihubmix",
                 "displayName": "⦿ AIHubMix",
                 "configuration": {
                     "properties": {
@@ -739,7 +739,7 @@
                 }
             },
             {
-                "vendor": "chp.apertis",
+                "vendor": "aether.apertis",
                 "displayName": "⦿ Apertis AI (Apertis AI endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -752,14 +752,14 @@
                 }
             },
             {
-                "vendor": "chp.ava-supernova",
+                "vendor": "aether.ava-supernova",
                 "displayName": "⦿ AVA Supernova (AVA Supernova - free public API, no auth required)",
                 "configuration": {
                     "properties": {}
                 }
             },
             {
-                "vendor": "chp.blackbox",
+                "vendor": "aether.blackbox",
                 "displayName": "⦿ Blackbox AI (Blackbox AI)",
                 "configuration": {
                     "properties": {
@@ -772,14 +772,14 @@
                 }
             },
             {
-                "vendor": "chp.chatjimmy",
+                "vendor": "aether.chatjimmy",
                 "displayName": "⦿ ChatJimmy (ChatJimmy)",
                 "configuration": {
                     "properties": {}
                 }
             },
             {
-                "vendor": "chp.chutes",
+                "vendor": "aether.chutes",
                 "displayName": "⦿ Chutes AI (Chutes AI endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -792,7 +792,7 @@
                 }
             },
             {
-                "vendor": "chp.cline",
+                "vendor": "aether.cline",
                 "displayName": "⦿ Cline (Cline endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -805,7 +805,7 @@
                 }
             },
             {
-                "vendor": "chp.codex",
+                "vendor": "aether.codex",
                 "displayName": "⦿ OpenAI Codex (OpenAI Codex specialized coding provider)",
                 "configuration": {
                     "properties": {
@@ -818,7 +818,7 @@
                 }
             },
             {
-                "vendor": "chp.deepinfra",
+                "vendor": "aether.deepinfra",
                 "displayName": "⦿ DeepInfra (OpenAI-compatible endpoints from DeepInfra)",
                 "configuration": {
                     "properties": {
@@ -831,7 +831,7 @@
                 }
             },
             {
-                "vendor": "chp.deepseek",
+                "vendor": "aether.deepseek",
                 "displayName": "⦿ DeepSeek (DeepSeek model family)",
                 "configuration": {
                     "properties": {
@@ -844,7 +844,7 @@
                 }
             },
             {
-                "vendor": "chp.hicapai",
+                "vendor": "aether.hicapai",
                 "displayName": "⦿ HicapAI (HicapAI - OpenAI SDK compatible endpoint)",
                 "configuration": {
                     "properties": {
@@ -857,7 +857,7 @@
                 }
             },
             {
-                "vendor": "chp.huggingface",
+                "vendor": "aether.huggingface",
                 "displayName": "⦿ Hugging Face (Hugging Face Router endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -870,7 +870,7 @@
                 }
             },
             {
-                "vendor": "chp.kilo",
+                "vendor": "aether.kilo",
                 "displayName": "⦿ Kilo AI (Kilo AI endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -883,7 +883,7 @@
                 }
             },
             {
-                "vendor": "chp.knox",
+                "vendor": "aether.knox",
                 "displayName": "⦿ Knox (Knox Chat - OpenAI SDK compatible endpoint)",
                 "configuration": {
                     "properties": {
@@ -896,7 +896,7 @@
                 }
             },
             {
-                "vendor": "chp.lightningai",
+                "vendor": "aether.lightningai",
                 "displayName": "⦿ LightningAI (LightningAI endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -909,7 +909,7 @@
                 }
             },
             {
-                "vendor": "chp.llmgateway",
+                "vendor": "aether.llmgateway",
                 "displayName": "⦿ LLMGateway (Unified access to multiple AI models)",
                 "configuration": {
                     "properties": {
@@ -922,7 +922,7 @@
                 }
             },
             {
-                "vendor": "chp.minimax",
+                "vendor": "aether.minimax",
                 "displayName": "⦿ MiniMax (MiniMax family models with coding endpoint options)",
                 "configuration": {
                     "properties": {
@@ -935,7 +935,7 @@
                 }
             },
             {
-                "vendor": "chp.mistral",
+                "vendor": "aether.mistral",
                 "displayName": "⦿ Mistral AI (Mistral AI model endpoints)",
                 "configuration": {
                     "properties": {
@@ -948,7 +948,7 @@
                 }
             },
             {
-                "vendor": "chp.modelscope",
+                "vendor": "aether.modelscope",
                 "displayName": "⦿ ModelScope",
                 "configuration": {
                     "properties": {
@@ -961,7 +961,7 @@
                 }
             },
             {
-                "vendor": "chp.moonshot",
+                "vendor": "aether.moonshot",
                 "displayName": "⦿ MoonshotAI (MoonshotAI Kimi model family)",
                 "configuration": {
                     "properties": {
@@ -974,7 +974,7 @@
                 }
             },
             {
-                "vendor": "chp.nanogpt",
+                "vendor": "aether.nanogpt",
                 "displayName": "⦿ NanoGPT (NanoGPT endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -987,7 +987,7 @@
                 }
             },
             {
-                "vendor": "chp.nvidia",
+                "vendor": "aether.nvidia",
                 "displayName": "⦿ NVIDIA NIM (NVIDIA NIM hosted model endpoints)",
                 "configuration": {
                     "properties": {
@@ -1000,7 +1000,7 @@
                 }
             },
             {
-                "vendor": "chp.ollama",
+                "vendor": "aether.ollama",
                 "displayName": "⦿ Ollama (Ollama)",
                 "configuration": {
                     "properties": {
@@ -1013,7 +1013,7 @@
                 }
             },
             {
-                "vendor": "chp.opencode",
+                "vendor": "aether.opencode",
                 "displayName": "⦿ OpenCode (OpenCode endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -1026,7 +1026,7 @@
                 }
             },
             {
-                "vendor": "chp.opencodego",
+                "vendor": "aether.opencodego",
                 "displayName": "⦿ OpenCode Zen Go (OpenCode Zen Go endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -1039,7 +1039,7 @@
                 }
             },
             {
-                "vendor": "chp.pollinations",
+                "vendor": "aether.pollinations",
                 "displayName": "⦿ Pollinations AI (Pollinations AI - OpenAI-compatible API with diverse model selection)",
                 "configuration": {
                     "properties": {
@@ -1052,7 +1052,7 @@
                 }
             },
             {
-                "vendor": "chp.puter",
+                "vendor": "aether.puter",
                 "displayName": "⦿ Puter AI (Free AI API - access 500+ models including GPT, Claude, Gemini with Puter auth token)",
                 "configuration": {
                     "properties": {
@@ -1065,7 +1065,7 @@
                 }
             },
             {
-                "vendor": "chp.qwencli",
+                "vendor": "aether.qwencli",
                 "displayName": "⦿ Qwen CLI (Qwen CLI OAuth provider)",
                 "configuration": {
                     "properties": {
@@ -1078,7 +1078,7 @@
                 }
             },
             {
-                "vendor": "chp.seraphyn",
+                "vendor": "aether.seraphyn",
                 "displayName": "⦿ Seraphyn (Seraphyn AI - OpenAI SDK compatible endpoint)",
                 "configuration": {
                     "properties": {
@@ -1091,7 +1091,7 @@
                 }
             },
             {
-                "vendor": "chp.vercelai",
+                "vendor": "aether.vercelai",
                 "displayName": "⦿ Vercel AI (Vercel AI Gateway endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -1104,7 +1104,7 @@
                 }
             },
             {
-                "vendor": "chp.zenmux",
+                "vendor": "aether.zenmux",
                 "displayName": "⦿ Zenmux (Zenmux endpoint integration)",
                 "configuration": {
                     "properties": {
@@ -1117,7 +1117,7 @@
                 }
             },
             {
-                "vendor": "chp.zhipu",
+                "vendor": "aether.zhipu",
                 "displayName": "⦿ Zhipu AI (GLM family models and coding plan features)",
                 "configuration": {
                     "properties": {

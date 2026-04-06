@@ -7,7 +7,7 @@
 import * as vscode from 'vscode';
 import { Logger } from '../utils/logger';
 
-const STORAGE_KEY = 'chp.accountQuotaCache';
+const STORAGE_KEY = 'aether.accountQuotaCache';
 const STORAGE_VERSION = 1;
 
 /**
