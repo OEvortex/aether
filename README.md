@@ -6,9 +6,9 @@
 
 ### **Supercharge your GitHub Copilot with 20+ AI providers**
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Version&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Downloads&color=28A745)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Rating&color=FFC107)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Version&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether-ai)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Downloads&color=28A745)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether-ai)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/OEvortex.aether?style=for-the-badge&logo=visual-studio-code&logoColor=white&label=Rating&color=FFC107)](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether-ai)
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![VS Code](https://img.shields.io/badge/VS%20Code-1.104.0+-007ACC.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
@@ -147,7 +147,7 @@ A powerful VS Code extension that provides model support for **GitHub Copilot Ch
 3. Search for **"Aether"**
 4. Click **Install**
 
-Or visit the Marketplace page directly: [Aether on Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether)
+Or visit the Marketplace page directly: [Aether on Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=OEvortex.aether-ai)
 
 </details>
 

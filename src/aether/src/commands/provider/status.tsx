@@ -12,6 +12,7 @@ import { useExitOnCtrlCDWithKeybindings } from '../../hooks/useExitOnCtrlCDWithK
 import { Box, Text, useInput } from '../../ink.js'
 import { Select } from '../../components/CustomSelect/index.js'
 import { Pane } from '../../components/design-system/Pane.js'
+import { useSetAppState } from '../../state/AppState.js'
 
 /** Simple fuzzy match: checks if all characters of the query appear in order in the target. */
 function fuzzyMatch(query: string, target: string): boolean {
@@ -144,6 +145,7 @@ function ProviderList({ onDone }: { onDone: (message: string, options?: { displa
 }
 
 function ProviderSet({ args, onDone }: { args: string; onDone: (message: string, options?: { display?: CommandResultDisplay }) => void }): React.ReactNode {
+  const setAppState = useSetAppState()
   logEvent('tengu_provider_command_set', {
     args: args as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS,
   })
@@ -167,17 +169,20 @@ function ProviderSet({ args, onDone }: { args: string; onDone: (message: string,
     if (knownProvider.models && knownProvider.models.length > 0) {
       const firstModel = knownProvider.models[0]
       persistSelectedModel(providerId, firstModel.id)
+      setAppState(prev => ({ ...prev, activeProvider: providerId }))
       onDone(
         `Set provider to ${chalk.green(knownProvider.displayName)} with model ${chalk.green(firstModel.name)}`,
         { display: 'system' }
       )
     } else if (knownProvider.fetchModels) {
       persistSelectedModel(providerId, '')
+      setAppState(prev => ({ ...prev, activeProvider: providerId }))
       onDone(
         `Set provider to ${chalk.green(knownProvider.displayName)} ${chalk.dim('(models will be fetched dynamically)')}`,
         { display: 'system' }
       )
     } else {
+      setAppState(prev => ({ ...prev, activeProvider: providerId }))
       onDone(`Set provider to ${chalk.green(knownProvider.displayName)}`, { display: 'system' })
     }
     return null
@@ -190,6 +195,7 @@ function ProviderSet({ args, onDone }: { args: string; onDone: (message: string,
 function ProviderSetPicker({ onDone }: { onDone: (message: string, options?: { display?: CommandResultDisplay }) => void }): React.ReactNode {
   const currentSelection = getCurrentSelection()
   const exitState = useExitOnCtrlCDWithKeybindings()
+  const setAppState = useSetAppState()
   const [searchQuery, setSearchQuery] = useState('')
 
   // Build provider options from KnownProviders
@@ -261,20 +267,23 @@ function ProviderSetPicker({ onDone }: { onDone: (message: string, options?: { d
     if (knownProvider.models && knownProvider.models.length > 0) {
       const firstModel = knownProvider.models[0]
       persistSelectedModel(selectedProviderId, firstModel.id)
+      setAppState(prev => ({ ...prev, activeProvider: selectedProviderId }))
       onDone(
         `Set provider to ${chalk.green(knownProvider.displayName)} with model ${chalk.green(firstModel.name)}`,
         { display: 'system' }
       )
     } else if (knownProvider.fetchModels) {
       persistSelectedModel(selectedProviderId, '')
+      setAppState(prev => ({ ...prev, activeProvider: selectedProviderId }))
       onDone(
         `Set provider to ${chalk.green(knownProvider.displayName)} ${chalk.dim('(models will be fetched dynamically)')}`,
         { display: 'system' }
       )
     } else {
+      setAppState(prev => ({ ...prev, activeProvider: selectedProviderId }))
       onDone(`Set provider to ${chalk.green(knownProvider.displayName)}`, { display: 'system' })
     }
-  }, [onDone])
+  }, [onDone, setAppState])
 
   const handleCancel = useCallback(() => {
     logEvent('tengu_provider_command_set_cancel', {})
