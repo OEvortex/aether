@@ -32,6 +32,10 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **Aether CLI KnownProviders Import Path**: Fixed `knownProvidersData` import in Aether CLI provider picker that resolved to a stub module, causing an empty provider list. Import path corrected to include `src/` prefix.
+
+- **Aether CLI Provider Picker Rendering**: Fixed terminal rendering errors caused by incorrect component usage (`Byline` with string children replaced with `Text dimColor`, added `Pane color="permission"` for proper TUI styling).
+
 - **Provider Snapshot Loading**: Removed automatic fallback loading of default provider snapshot file (`~/.copilot-helper/aether-provider-snapshot.json`). Provider configuration now loads only from explicit environment variables (`AETHER_PROVIDER_SNAPSHOT_JSON` or `AETHER_PROVIDER_SNAPSHOT_FILE`), with fallback to built-in `KnownProviders` from `knownProvidersData.ts`.
 
 ## [0.3.7] - 2026-04-06
