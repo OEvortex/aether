@@ -6,6 +6,21 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Interactive Provider Picker for Aether CLI**: `/provider` now opens an interactive TUI picker (matching `/model` behavior) instead of showing static status text.
+    - Type to fuzzy-search providers by display name or ID.
+    - Arrow keys to navigate, Enter to select, Esc to cancel.
+    - Shows model count or "dynamic model fetching" indicator per provider.
+    - Current provider marked with "(current)".
+    - Footer shows exit hint with Ctrl+C key binding.
+
+- **`/provider set` Dual Mode**: `/provider set` now supports two interaction patterns.
+    - **Interactive picker** (no args): Same TUI as `/provider` for fuzzy provider selection.
+    - **Direct fuzzy matching** (with args): `/provider set Apertis AI` directly selects the provider by fuzzy-matching display name.
+
+- **New `/provider status` and `/provider list` Subcommands**: Static status view moved to `/provider status`, provider listing available via `/provider list`.
+
+- **Provider-Model Persistence**: Selecting a provider in Aether CLI now persists both provider ID and model together, enabling proper `provider::model` format tracking.
+
 - **Default Config Directory Changed to ~/.aether**: Changed default config directory from `~/.openclaude` to `~/.aether`.
     - Added migration compatibility to fall back to `~/.openclaude` or `~/.claude` if they exist but `~/.aether` doesn't.
     - Existing users will continue using their existing config directory.
