@@ -155,7 +155,7 @@ describe('AccountManager', () => {
 
             expect(context.secrets.store).toHaveBeenCalled();
             const call = vi.mocked(context.secrets.store).mock.calls[0];
-            expect(call[0]).toMatch(/^chp\.account\..+\.credentials$/);
+            expect(call[0]).toMatch(/^aether\.account\..+\.credentials$/);
             expect(call[1]).toContain('sk-secret');
         });
 

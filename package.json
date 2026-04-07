@@ -302,6 +302,11 @@
                 "category": "Aether"
             },
             {
+                "command": "aether.selectModel",
+                "title": "Select Model",
+                "category": "Aether"
+            },
+            {
                 "command": "aether.nanogpt.setApiKey",
                 "title": "Configure NanoGPT",
                 "category": "Aether"
@@ -365,6 +370,12 @@
         "configuration": {
             "title": "Aether - AI Chat Models",
             "properties": {
+                "aether.selectedModel": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Currently selected model in provider::model format (e.g. 'apertis::gpt-4o'). Set automatically when you pick a model via the status bar.",
+                    "scope": "application"
+                },
                 "aether.temperature": {
                     "type": "number",
                     "default": 0.1,

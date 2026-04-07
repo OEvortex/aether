@@ -4,16 +4,19 @@
  */
 
 import * as vscode from 'vscode';
-import { AccountManager } from '../accounts/accountManager';
-import { ModelInfoCache } from './modelInfoCache';
-import { ConfigManager } from './configManager';
-import { Logger } from './logger';
+import { ApiKeyManager } from './apiKeyManager';
 import { KnownProviders } from './knownProviders';
-import type { ProviderConfig } from '../types/sharedTypes';
-import { DynamicModelProvider } from '../providers/common/dynamicModelProvider';
-import { GenericModelProvider } from '../providers/common/genericModelProvider';
+import { Logger } from './logger';
+import { ModelInfoCache } from './modelInfoCache';
 
 const MODEL_SEPARATOR = '::';
+
+/**
+ * Extended QuickPickItem that carries model info
+ */
+interface ModelPickItem extends vscode.QuickPickItem {
+    modelInfo?: ModelInfo;
+}
 
 /**
  * Parsed model identifier in provider::model format
@@ -47,23 +50,24 @@ export interface ModelInfo {
  * Model Selector - manages current model/provider selection
  */
 export class ModelSelector {
-    private static modelInfoCache = new ModelInfoCache(
-        vscode.extensions.getExtension('aether.copilot-helper')?.extensionPath
-            ? {
-                  globalState: {
-                      get: () => undefined,
-                      update: () => Promise.resolve(),
-                      keys: () => []
-                  },
-                  secrets: {
-                      get: () => Promise.resolve(undefined),
-                      store: () => Promise.resolve(),
-                      delete: () => Promise.resolve()
-                  },
-                  subscriptions: []
-              } as any
-            : undefined as any
-    );
+    private static _modelInfoCache: ModelInfoCache | undefined;
+
+    /**
+     * Initialize ModelSelector with a real extension context.
+     * Must be called from `activate()` before any other ModelSelector API.
+     */
+    static initialize(context: vscode.ExtensionContext): void {
+        ModelSelector._modelInfoCache = new ModelInfoCache(context);
+    }
+
+    private static get modelInfoCache(): ModelInfoCache {
+        if (!ModelSelector._modelInfoCache) {
+            throw new Error(
+                '[ModelSelector] Not initialized. Call ModelSelector.initialize(context) from activate().'
+            );
+        }
+        return ModelSelector._modelInfoCache;
+    }
 
     /**
      * Parse provider::model string into components
@@ -88,8 +92,11 @@ export class ModelSelector {
         }
 
         const providerId = modelString.substring(0, separatorIndex);
-        const modelId = modelString.substring(separatorIndex + MODEL_SEPARATOR.length);
-        const providerName = KnownProviders[providerId]?.displayName || providerId;
+        const modelId = modelString.substring(
+            separatorIndex + MODEL_SEPARATOR.length
+        );
+        const providerName =
+            KnownProviders[providerId]?.displayName || providerId;
 
         return {
             providerId,
@@ -110,18 +117,18 @@ export class ModelSelector {
      * Get current selected model in provider::model format
      */
     static async getCurrentModel(): Promise<ParsedModelId | null> {
-        const config = vscode.workspace.getConfiguration('chp');
+        const config = vscode.workspace.getConfiguration('aether');
         const modelString = config.get<string>('selectedModel');
 
         if (modelString) {
-            const parsed = this.parseModelId(modelString);
+            const parsed = ModelSelector.parseModelId(modelString);
             if (parsed) {
                 return parsed;
             }
         }
 
         // Fallback: try to get from last used model
-        return this.getLastUsedModel();
+        return ModelSelector.getLastUsedModel();
     }
 
     /**
@@ -131,17 +138,28 @@ export class ModelSelector {
         providerId: string,
         modelId: string
     ): Promise<void> {
-        const modelString = this.formatModelId(providerId, modelId);
-        const config = vscode.workspace.getConfiguration('chp');
-        await config.update('selectedModel', modelString, vscode.ConfigurationTarget.Global);
+        const modelString = ModelSelector.formatModelId(providerId, modelId);
+        const config = vscode.workspace.getConfiguration('aether');
+        await config.update(
+            'selectedModel',
+            modelString,
+            vscode.ConfigurationTarget.Global
+        );
 
         // Also save to model info cache for quick access
-        await this.modelInfoCache.setLastSelectedModelForProvider(providerId, modelId);
+        await ModelSelector.modelInfoCache.setLastSelectedModelForProvider(
+            providerId,
+            modelId
+        );
 
         Logger.info(`[ModelSelector] Selected model: ${modelString}`);
 
         // Notify listeners of model change
-        this._onDidChangeModel.fire({ providerId, modelId, fullId: modelString });
+        ModelSelector._onDidChangeModel.fire({
+            providerId,
+            modelId,
+            fullId: modelString
+        });
     }
 
     /**
@@ -149,18 +167,24 @@ export class ModelSelector {
      */
     static async getAllModels(): Promise<ModelInfo[]> {
         const models: ModelInfo[] = [];
-        const accountManager = AccountManager.getInstance();
 
         // Get models from all registered providers
-        for (const [providerId, providerConfig] of Object.entries(KnownProviders)) {
+        for (const [providerId, providerConfig] of Object.entries(
+            KnownProviders
+        )) {
             try {
                 // Skip providers that don't support model fetching
-                if (!providerConfig.fetchModels && (!providerConfig.models || providerConfig.models.length === 0)) {
+                if (
+                    !providerConfig.fetchModels &&
+                    (!providerConfig.models ||
+                        providerConfig.models.length === 0)
+                ) {
                     continue;
                 }
 
                 // Try to get models from config or cache
-                const providerModels = await this.getProviderModels(providerId);
+                const providerModels =
+                    await ModelSelector.getProviderModels(providerId);
                 for (const model of providerModels) {
                     models.push({
                         id: model.id,
@@ -173,13 +197,18 @@ export class ModelSelector {
                     });
                 }
             } catch (err) {
-                Logger.warn(`[ModelSelector] Failed to get models for ${providerId}:`, err);
+                Logger.warn(
+                    `[ModelSelector] Failed to get models for ${providerId}:`,
+                    err
+                );
             }
         }
 
         return models.sort((a, b) => {
             // Sort by provider name, then model name
-            const providerCompare = a.providerName.localeCompare(b.providerName);
+            const providerCompare = a.providerName.localeCompare(
+                b.providerName
+            );
             if (providerCompare !== 0) {
                 return providerCompare;
             }
@@ -196,18 +225,33 @@ export class ModelSelector {
             return [];
         }
 
-        // Try to get from cached model info
-        const cachedModels = await this.modelInfoCache.getCachedModels(providerId);
-        if (cachedModels && cachedModels.length > 0) {
-            return cachedModels.map((m) => ({
-                id: m.id,
-                providerId,
-                providerName: providerConfig.displayName || providerId,
-                name: m.name || m.id,
-                maxInputTokens: m.maxInputTokens,
-                maxOutputTokens: m.maxOutputTokens,
-                capabilities: m.capabilities
-            }));
+        // Try to get from cached model info (compute API key hash for cache validation)
+        try {
+            const apiKey = await ApiKeyManager.getApiKey(providerId);
+            const apiKeyHash = apiKey
+                ? await ModelInfoCache.computeApiKeyHash(apiKey)
+                : '';
+            const cachedModels =
+                await ModelSelector.modelInfoCache.getCachedModels(
+                    providerId,
+                    apiKeyHash
+                );
+            if (cachedModels && cachedModels.length > 0) {
+                return cachedModels.map((m) => ({
+                    id: m.id,
+                    providerId,
+                    providerName: providerConfig.displayName || providerId,
+                    name: m.name || m.id,
+                    maxInputTokens: m.maxInputTokens,
+                    maxOutputTokens: m.maxOutputTokens,
+                    capabilities: m.capabilities
+                }));
+            }
+        } catch (err) {
+            Logger.warn(
+                `[ModelSelector] Cache lookup failed for ${providerId}:`,
+                err
+            );
         }
 
         // Fallback to configured models
@@ -232,12 +276,13 @@ export class ModelSelector {
     static async getLastUsedModel(): Promise<ParsedModelId | null> {
         // Try to get from model info cache
         for (const providerId of Object.keys(KnownProviders)) {
-            const lastModel = this.modelInfoCache.getLastSelectedModel(providerId);
+            const lastModel =
+                ModelSelector.modelInfoCache.getLastSelectedModel(providerId);
             if (lastModel) {
                 return {
                     providerId,
                     modelId: lastModel,
-                    fullId: this.formatModelId(providerId, lastModel),
+                    fullId: ModelSelector.formatModelId(providerId, lastModel),
                     displayName: `${KnownProviders[providerId]?.displayName || providerId} / ${lastModel}`
                 };
             }
@@ -249,7 +294,7 @@ export class ModelSelector {
      * Show quick pick to select model
      */
     static async showModelPicker(): Promise<ParsedModelId | undefined> {
-        const allModels = await this.getAllModels();
+        const allModels = await ModelSelector.getAllModels();
 
         if (allModels.length === 0) {
             vscode.window.showInformationMessage(
@@ -266,7 +311,7 @@ export class ModelSelector {
             providerGroups.set(model.providerId, existing);
         }
 
-        const items: vscode.QuickPickItem[] = [];
+        const items: ModelPickItem[] = [];
         for (const [providerId, models] of providerGroups) {
             // Add provider separator
             items.push({
@@ -276,7 +321,7 @@ export class ModelSelector {
 
             // Add models
             for (const model of models) {
-                const detail = `${model.maxInputTokens ? (model.maxInputTokens / 1000).toFixed(0) + 'K' : '?'} context`;
+                const detail = `${model.maxInputTokens ? `${(model.maxInputTokens / 1000).toFixed(0)}K` : '?'} context`;
                 items.push({
                     label: model.name,
                     description: model.id,
@@ -293,10 +338,17 @@ export class ModelSelector {
             matchOnDetail: true
         });
 
-        if (selected && (selected as any).modelInfo) {
-            const modelInfo = (selected as any).modelInfo as ModelInfo;
-            await this.setCurrentModel(modelInfo.providerId, modelInfo.id);
-            return this.parseModelId(this.formatModelId(modelInfo.providerId, modelInfo.id))!;
+        if (selected?.modelInfo) {
+            const modelInfo = selected.modelInfo;
+            const fullId = ModelSelector.formatModelId(
+                modelInfo.providerId,
+                modelInfo.id
+            );
+            await ModelSelector.setCurrentModel(
+                modelInfo.providerId,
+                modelInfo.id
+            );
+            return ModelSelector.parseModelId(fullId) ?? undefined;
         }
 
         return undefined;
@@ -307,7 +359,11 @@ export class ModelSelector {
      */
     static async showProviderPicker(): Promise<string | undefined> {
         const providers = Object.entries(KnownProviders)
-            .filter(([_, config]) => config.fetchModels || (config.models && config.models.length > 0))
+            .filter(
+                ([_, config]) =>
+                    config.fetchModels ||
+                    (config.models && config.models.length > 0)
+            )
             .map(([id, config]) => ({
                 label: `$(cloud) ${config.displayName || id}`,
                 description: id,
@@ -334,6 +390,6 @@ export class ModelSelector {
      * Dispose resources
      */
     static dispose(): void {
-        this._onDidChangeModel.dispose();
+        ModelSelector._onDidChangeModel.dispose();
     }
 }

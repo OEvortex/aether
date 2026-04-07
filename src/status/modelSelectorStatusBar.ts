@@ -4,8 +4,8 @@
  */
 
 import * as vscode from 'vscode';
-import { ModelSelector, type ParsedModelId } from '../utils/modelSelector';
 import { Logger } from '../utils/logger';
+import { ModelSelector, type ParsedModelId } from '../utils/modelSelector';
 
 export class ModelSelectorStatusBar implements vscode.Disposable {
     private statusBarItem: vscode.StatusBarItem;
@@ -61,13 +61,17 @@ export class ModelSelectorStatusBar implements vscode.Disposable {
                 this.statusBarItem.backgroundColor = undefined;
             } else {
                 this.statusBarItem.text = `$(warning) Select Model`;
-                this.statusBarItem.tooltip = 'No model selected. Click to select one.';
+                this.statusBarItem.tooltip =
+                    'No model selected. Click to select one.';
                 this.statusBarItem.backgroundColor = new vscode.ThemeColor(
                     'statusBarItem.warningBackground'
                 );
             }
         } catch (err) {
-            Logger.error('[ModelSelectorStatusBar] Failed to update status:', err);
+            Logger.error(
+                '[ModelSelectorStatusBar] Failed to update status:',
+                err
+            );
             this.statusBarItem.text = `$(error) Error`;
             this.statusBarItem.tooltip = 'Failed to load model information';
             this.statusBarItem.backgroundColor = new vscode.ThemeColor(

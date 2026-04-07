@@ -127,7 +127,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             baseUrl: 'https://api.apertis.ai/v1'
         },
         openModelEndpoint: false,
-        sdkMode: "openai",
+        sdkMode: 'openai',
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {
