@@ -75,6 +75,8 @@ type CodexSseEvent = {
 
 export type CodexEventSource = Response | AsyncIterable<Record<string, any>>
 
+type OpenAIResponsesCreateParams = Parameters<OpenAI['responses']['create']>[0]
+
 function makeUsage(usage?: {
   input_tokens?: number
   output_tokens?: number
@@ -89,6 +91,13 @@ function makeUsage(usage?: {
 
 function makeMessageId(): string {
   return `msg_${crypto.randomUUID().replace(/-/g, '')}`
+}
+
+function ensureCodexEventStream(value: unknown): AsyncIterable<Record<string, any>> {
+  if (!value || typeof (value as AsyncIterable<unknown>)[Symbol.asyncIterator] !== 'function') {
+    throw new Error('Expected OpenAI Responses API streaming data.')
+  }
+  return value as AsyncIterable<Record<string, any>>
 }
 
 function normalizeToolUseId(toolUseId: string | undefined): {
@@ -498,10 +507,11 @@ export async function performCodexRequest(options: {
             content: [{ type: 'input_text', text: '' }],
           },
         ],
-    store: typeof options.params.store === 'boolean'
-      ? options.params.store
-      : false,
+    store: false,
     stream: true,
+  }
+  if (typeof options.params.store === 'boolean') {
+    body.store = options.params.store
   }
 
   const instructions = convertSystemPrompt(options.params.system)
@@ -564,12 +574,12 @@ export async function performCodexRequest(options: {
     maxRetries: 0,
   })
   const { data, response } = await client.responses
-    .create(body as any, {
+    .create(body as OpenAIResponsesCreateParams, {
       signal: options.signal,
     })
     .withResponse()
   return {
-    events: data as AsyncIterable<Record<string, any>>,
+    events: ensureCodexEventStream(data),
     response,
   }
 }

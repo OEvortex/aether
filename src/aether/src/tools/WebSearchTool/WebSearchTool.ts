@@ -75,6 +75,8 @@ type OutputSchema = ReturnType<typeof outputSchema>
 
 export type Output = z.infer<OutputSchema>
 
+type OpenAIResponsesCreateParams = Parameters<OpenAI['responses']['create']>[0]
+
 // Re-export WebSearchProgress from centralized types to break import cycles
 export type { WebSearchProgress } from '../../types/tools.js'
 
@@ -436,10 +438,13 @@ async function runCodexWebSearch(
     maxRetries: 0,
   })
   const { data } = await client.responses
-    .create(body as any, {
+    .create(body as OpenAIResponsesCreateParams, {
       signal,
     })
     .withResponse()
+  if (typeof (data as AsyncIterable<unknown>)[Symbol.asyncIterator] !== 'function') {
+    throw new Error('Codex web search expected streaming data from OpenAI SDK.')
+  }
   const payload = await collectCodexCompletedResponse(
     data as AsyncIterable<Record<string, any>>,
   )
