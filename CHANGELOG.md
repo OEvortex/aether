@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 
 - **Provider error messages**: When a provider returns HTTP 200 with a JSON error body (e.g. `{"error":{"message":"upstream service error…"}}`), the readable `error.message` field is now extracted and shown to the user instead of the raw JSON string that was previously thrown by `preprocessSSEResponse`.
 
-## [0.3.8] - Unreleased
+## [0.3.8] - 2026-06-06
 
 ### Added
 
