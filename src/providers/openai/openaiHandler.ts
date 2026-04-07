@@ -342,7 +342,6 @@ export class OpenAIHandler {
                 const msg =
                     parsed?.error?.message ||
                     parsed?.message ||
-                    parsed?.error ||
                     parsed?.detail;
                 if (msg && typeof msg === 'string') {
                     errorMessage = msg;

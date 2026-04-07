@@ -122,7 +122,7 @@ export class ResponsesHandler {
                 {
                     model: requestModel,
                     input,
-                    instructions: instructions ?? null,
+                    instructions: instructions || null,
                     max_output_tokens: ConfigManager.getMaxTokensForModel(
                         model.maxOutputTokens
                     ),
@@ -282,7 +282,7 @@ export class ResponsesHandler {
                             ).error;
                             streamError = new Error(
                                 failErr?.message
-                                    ? `OpenAI Responses stream failed: ${failErr.message}`
+                                    ? `OpenAI Responses stream failed${failErr.code ? ` (${failErr.code})` : ''}: ${failErr.message}`
                                     : 'OpenAI Responses stream failed.'
                             );
                             break;
