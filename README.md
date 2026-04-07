@@ -26,6 +26,21 @@
 
 A powerful VS Code extension that provides model support for **GitHub Copilot Chat**, seamlessly integrating **20+ AI providers** including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Codex (OpenAI), Chutes, OpenCode, Blackbox, Vercel AI, Cline, and custom OpenAI/Anthropic compatible models.
 
+### 🖥️ Aether CLI
+
+In addition to the VS Code extension, Aether includes a standalone CLI (`@oevortex/aether`) that brings the same multi-provider AI coding assistant capabilities to your terminal:
+
+- **Installation**: `npm install -g @oevortex/aether`
+- **Usage**: Run `Aether` in your terminal to start the coding agent
+- **Features**: 
+  - Works with OpenAI-compatible APIs, Gemini, GitHub Models, Codex, Ollama, Atomic Chat, and more
+  - Save provider profiles inside the app with `/provider` command
+  - Run locally with Ollama or Atomic Chat
+  - Core coding-agent workflows: bash, file tools, grep, glob, agents, tasks, MCP, and web tools
+  - Agent routing capabilities for cost optimization and leveraging model strengths
+
+See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
+
 ---
 
 ## Supported Providers

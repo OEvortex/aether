@@ -297,11 +297,6 @@
                 "icon": "$(settings-gear)"
             },
             {
-                "command": "aether.cli.start",
-                "title": "Launch Aether CLI",
-                "category": "Aether"
-            },
-            {
                 "command": "aether.selectModel",
                 "title": "Select Model",
                 "category": "Aether"
@@ -1311,9 +1306,6 @@
         "format:check": "biome format --check",
         "watch": "node esbuild.config.js --watch --dev",
         "sync-providers": "node scripts/sync-providers.js",
-        "aether:build": "npm --prefix src/aether run build",
-        "aether:start": "node src/aether/dist/cli.mjs",
-        "aether:dev": "npm --prefix src/aether run build && node src/aether/dist/cli.mjs",
         "package": "vsce package",
         "publish": "vsce publish --allow-proposed-apis chatProvider chatParticipantAdditions defaultChatParticipant",
         "pretest": "npm run compile:dev",
