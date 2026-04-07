@@ -301,11 +301,11 @@ export class LLGGatewayProvider
             providerConfig
         );
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
         const setApiKeyCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.setApiKey`,
+            `aether.${providerKey}.setApiKey`,
             async () => {
                 await LLMGatewayWizard.startWizard(
                     providerConfig.displayName,
@@ -316,7 +316,7 @@ export class LLGGatewayProvider
             }
         );
         const configWizardCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.configWizard`,
+            `aether.${providerKey}.configWizard`,
             async () => {
                 Logger.info(
                     `Starting ${providerConfig.displayName} configuration wizard`

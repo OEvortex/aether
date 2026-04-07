@@ -2,9 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.9] - Unreleased
+
+### Fixed
+
+- **OpenAI Responses API (`oai-response` mode) — System Messages**: System-role messages are now correctly sent via the `instructions` parameter of the Responses API instead of being embedded as `role: "system"` items inside the `input` array. This matches the Responses API spec and improves compatibility with providers that implement it.
+
+- **OpenAI Responses API — `store: false`**: Requests through the Responses API now explicitly set `store: false` so that conversations are not stored server-side without user consent.
+
+- **OpenAI Responses API — Richer error messages**: `response.failed` and `response.incomplete` stream events now include the server's error message/reason in the thrown error, making failures easier to diagnose.
+
+- **OpenAI Responses API — SDK-level error extraction**: When the OpenAI SDK raises an `APIError` (e.g. 4xx / 5xx from the provider), the human-readable `error.message` field is now extracted and surfaced to the user instead of the raw SDK error wrapper.
+
+- **Settings page config namespace**: Fixed four calls to `vscode.workspace.getConfiguration('chp')` in `settingsPage.ts` that were reading/writing the old `chp.*` namespace instead of the migrated `aether.*` namespace. This caused settings like `sdkMode`, `hideThinkingInUI`, and API keys to be read from the wrong location on fresh installs.
+
+- **Provider error messages**: When a provider returns HTTP 200 with a JSON error body (e.g. `{"error":{"message":"upstream service error…"}}`), the readable `error.message` field is now extracted and shown to the user instead of the raw JSON string that was previously thrown by `preprocessSSEResponse`.
+
 ## [0.3.8] - Unreleased
 
 ### Added
+
+- **Interactive Provider Picker for Aether CLI**: `/provider` now opens an interactive TUI picker (matching `/model` behavior) instead of showing static status text.
+    - Type to fuzzy-search providers by display name or ID.
+    - Arrow keys to navigate, Enter to select, Esc to cancel.
+    - Shows model count or "dynamic model fetching" indicator per provider.
+    - Current provider marked with "(current)".
+    - Footer shows exit hint with Ctrl+C key binding.
+
+- **`/provider set` Dual Mode**: `/provider set` now supports two interaction patterns.
+    - **Interactive picker** (no args): Same TUI as `/provider` for fuzzy provider selection.
+    - **Direct fuzzy matching** (with args): `/provider set Apertis AI` directly selects the provider by fuzzy-matching display name.
+
+- **New `/provider status` and `/provider list` Subcommands**: Static status view moved to `/provider status`, provider listing available via `/provider list`.
+
+- **Provider-Model Persistence**: Selecting a provider in Aether CLI now persists both provider ID and model together, enabling proper `provider::model` format tracking.
 
 - **Default Config Directory Changed to ~/.aether**: Changed default config directory from `~/.openclaude` to `~/.aether`.
     - Added migration compatibility to fall back to `~/.openclaude` or `~/.claude` if they exist but `~/.aether` doesn't.
@@ -17,7 +48,21 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **Aether CLI Model Filtering for Providers Without Config Files**: Fixed `/model` showing ALL models from ALL providers when a provider without a config JSON file is active (e.g., Cline with `fetchModels:true`). Now correctly shows only the current model and dynamically fetched models for the active provider.
+
+- **Aether CLI KnownProviders Import Path**: Fixed `knownProvidersData` import in Aether CLI provider picker that resolved to a stub module, causing an empty provider list. Import path corrected to include `src/` prefix.
+
+- **Aether CLI Provider Picker Rendering**: Fixed terminal rendering errors caused by incorrect component usage (`Byline` with string children replaced with `Text dimColor`, added `Pane color="permission"` for proper TUI styling).
+
 - **Provider Snapshot Loading**: Removed automatic fallback loading of default provider snapshot file (`~/.copilot-helper/aether-provider-snapshot.json`). Provider configuration now loads only from explicit environment variables (`AETHER_PROVIDER_SNAPSHOT_JSON` or `AETHER_PROVIDER_SNAPSHOT_FILE`), with fallback to built-in `KnownProviders` from `knownProvidersData.ts`.
+
+- **Aether Command Prefix Migration**: Fixed missing provider command registration by updating runtime and generated command IDs to `aether.*` consistently.
+    - Resolved missing commands such as `aether.kilo.setApiKey`.
+    - Updated provider vendor IDs, activation events, and schema URI wiring to match the new prefix.
+
+- **OpenAI Responses Stream Compatibility**: Fixed crashes in the Responses handler caused by treating the SDK stream like a Node event emitter.
+    - Switched to async iteration over the Responses stream events.
+    - Uses the `response.completed` event for the final payload instead of unsupported `.done()` / `.finalResponse()` calls.
 
 ## [0.3.7] - 2026-04-06
 

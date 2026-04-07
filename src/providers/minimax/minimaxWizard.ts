@@ -267,7 +267,7 @@ export class MiniMaxWizard {
         try {
             const config = vscode.workspace.getConfiguration('aether.minimax');
 
-            // Save to chp.minimax.endpoint configuration
+            // Save to aether.minimax.endpoint configuration
             await config.update(
                 'endpoint',
                 site,

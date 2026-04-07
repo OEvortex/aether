@@ -22,7 +22,7 @@ import type {
     ProviderRoutingConfig
 } from './types';
 
-const STORAGE_KEY = 'chp.accounts';
+const STORAGE_KEY = 'aether.accounts';
 const STORAGE_VERSION = 1;
 
 /**
@@ -329,7 +329,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ]
+        ],
     ]);
 
     private constructor(context: vscode.ExtensionContext) {
@@ -443,7 +443,7 @@ export class AccountManager {
         accountId: string,
         credentials: AccountCredentials
     ): Promise<void> {
-        const key = `chp.account.${accountId}.credentials`;
+        const key = `aether.account.${accountId}.credentials`;
         await this.context.secrets.store(key, JSON.stringify(credentials));
     }
 
@@ -453,7 +453,7 @@ export class AccountManager {
     async getCredentials(
         accountId: string
     ): Promise<AccountCredentials | undefined> {
-        const key = `chp.account.${accountId}.credentials`;
+        const key = `aether.account.${accountId}.credentials`;
         const data = await this.context.secrets.get(key);
         if (data) {
             try {
@@ -469,7 +469,7 @@ export class AccountManager {
      * Delete credentials from SecretStorage
      */
     private async deleteCredentials(accountId: string): Promise<void> {
-        const key = `chp.account.${accountId}.credentials`;
+        const key = `aether.account.${accountId}.credentials`;
         await this.context.secrets.delete(key);
     }
 

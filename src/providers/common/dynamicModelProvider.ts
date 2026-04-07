@@ -412,12 +412,12 @@ export class DynamicModelProvider extends GenericModelProvider {
         );
 
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
 
         const setApiKeyCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.setApiKey`,
+            `aether.${providerKey}.setApiKey`,
             async () => {
                 await ProviderWizard.startWizard({
                     providerKey,
@@ -434,7 +434,7 @@ export class DynamicModelProvider extends GenericModelProvider {
         );
 
         const refreshModelsCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.refreshModels`,
+            `aether.${providerKey}.refreshModels`,
             async () => {
                 await provider.modelInfoCache?.invalidateCache(providerKey);
                 provider.scheduleModelRefresh(true, true);

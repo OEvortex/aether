@@ -25,11 +25,11 @@ export interface AccountQuotaStatusData {
 }
 
 const CONFIG: BaseStatusBarItemConfig = {
-    id: 'chp.statusBar.accountQuota',
+    id: 'aether.statusBar.accountQuota',
     name: 'Copilot Helper: Account Quota',
     alignment: vscode.StatusBarAlignment.Right,
     priority: 99,
-    refreshCommand: 'chp.accountQuota.refresh',
+    refreshCommand: 'aether.accountQuota.refresh',
     cacheKeyPrefix: 'accountQuota',
     logPrefix: 'AccountQuota状态栏',
     icon: '$(pulse)'

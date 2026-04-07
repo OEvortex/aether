@@ -495,7 +495,7 @@ export class CompatibleProvider extends GenericModelProvider {
         // Register manageModels command
         disposables.push(
             vscode.commands.registerCommand(
-                'chp.compatible.manageModels',
+                'aether.compatible.manageModels',
                 async () => {
                     try {
                         await CompatibleModelManager.configureModelOrUpdateAPIKey();
@@ -530,7 +530,7 @@ export class CompatibleProvider extends GenericModelProvider {
         const provider = new CompatibleProvider(context);
         // Register language model chat provider
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            'chp.compatible',
+            'aether.compatible',
             provider
         );
         // Register commands

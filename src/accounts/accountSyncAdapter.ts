@@ -252,7 +252,7 @@ export class AccountSyncAdapter {
             ProviderKey.Seraphyn,
             ProviderKey.Vercelai,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu
+            ProviderKey.Zhipu,
         ];
 
         // Sync Codex (OAuth)
@@ -357,7 +357,7 @@ export class AccountSyncAdapter {
     private async refreshProviderModels(provider: string): Promise<void> {
         try {
             await vscode.commands.executeCommand(
-                `chp.${provider}.refreshModels`
+                `aether.${provider}.refreshModels`
             );
         } catch {
             // Ignore: not all providers expose a refreshModels command

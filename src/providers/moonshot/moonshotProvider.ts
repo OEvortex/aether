@@ -324,12 +324,12 @@ export class MoonshotProvider
             providerConfig
         );
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
 
         const setApiKeyCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.setApiKey`,
+            `aether.${providerKey}.setApiKey`,
             async () => {
                 await MoonshotWizard.startWizard(
                     providerConfig.displayName,
@@ -341,7 +341,7 @@ export class MoonshotProvider
         );
 
         const configWizardCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.configWizard`,
+            `aether.${providerKey}.configWizard`,
             async () => {
                 Logger.info(
                     `Starting ${providerConfig.displayName} configuration wizard`

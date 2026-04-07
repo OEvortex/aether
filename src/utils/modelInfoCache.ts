@@ -327,4 +327,18 @@ export class ModelInfoCache {
             return null;
         }
     }
+
+    /**
+     * Save last selected model for a specific provider (used by ModelSelector)
+     * Supports provider::model format tracking
+     *
+     * @param providerKey Provider identifier
+     * @param modelId Model ID
+     */
+    async setLastSelectedModelForProvider(
+        providerKey: string,
+        modelId: string
+    ): Promise<void> {
+        return this.saveLastSelectedModel(providerKey, modelId);
+    }
 }

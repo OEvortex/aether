@@ -26,7 +26,7 @@ declare module 'json-schema' {
  * Dynamically generates JSON Schema for Aether configuration, providing intellisense for settings.json
  */
 export class JsonSchemaProvider {
-    private static readonly SCHEMA_URI = 'chp-settings://root/schema.json';
+    private static readonly SCHEMA_URI = 'aether-settings://root/schema.json';
     private static schemaProvider: vscode.Disposable | null = null;
     private static lastSchemaHash: string | null = null;
 
@@ -41,7 +41,7 @@ export class JsonSchemaProvider {
         // Register JSON Schema content provider, use correct scheme
         JsonSchemaProvider.schemaProvider =
             vscode.workspace.registerTextDocumentContentProvider(
-                'chp-settings',
+                'aether-settings',
                 {
                     provideTextDocumentContent: (uri: vscode.Uri): string => {
                         if (uri.toString() === JsonSchemaProvider.SCHEMA_URI) {
@@ -56,14 +56,14 @@ export class JsonSchemaProvider {
 
         // Listen for filesystem access, dynamically update schema
         vscode.workspace.onDidOpenTextDocument((document) => {
-            if (document.uri.scheme === 'chp-settings') {
+            if (document.uri.scheme === 'aether-settings') {
                 JsonSchemaProvider.updateSchema();
             }
         });
 
         // Listen for configuration changes, update schema promptly
         vscode.workspace.onDidChangeConfiguration((e) => {
-            if (e.affectsConfiguration('chp')) {
+            if (e.affectsConfiguration('aether')) {
                 JsonSchemaProvider.invalidateCache();
             }
         });
@@ -156,14 +156,14 @@ export class JsonSchemaProvider {
                 'Schema for Aether configuration with dynamic model ID suggestions',
             type: 'object',
             properties: {
-                'chp.providerOverrides': {
+                'aether.providerOverrides': {
                     type: 'object',
                     description:
                         'Provider configuration overrides. Supports SDK mode, custom headers, and model-level overrides including custom models.',
                     patternProperties,
                     propertyNames
                 },
-                'chp.fimCompletion.modelConfig': {
+                'aether.fimCompletion.modelConfig': {
                     type: 'object',
                     description:
                         'FIM (Fill-in-the-Middle) completion mode configuration',
@@ -177,7 +177,7 @@ export class JsonSchemaProvider {
                     },
                     additionalProperties: true
                 },
-                'chp.nesCompletion.modelConfig': {
+                'aether.nesCompletion.modelConfig': {
                     type: 'object',
                     description:
                         'NES (Next Edit Suggestion) completion mode configuration',
@@ -191,7 +191,7 @@ export class JsonSchemaProvider {
                     },
                     additionalProperties: true
                 },
-                'chp.compatibleModels': {
+                'aether.compatibleModels': {
                     type: 'array',
                     description:
                         'Custom model configuration for Compatible Provider.',

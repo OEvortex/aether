@@ -1,4 +1,5 @@
 import { APIError } from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
 import type {
   ResolvedCodexCredentials,
   ResolvedProviderRequest,
@@ -72,6 +73,10 @@ type CodexSseEvent = {
   data: Record<string, any>
 }
 
+export type CodexEventSource = Response | AsyncIterable<Record<string, any>>
+
+type OpenAIResponsesCreateParams = Parameters<OpenAI['responses']['create']>[0]
+
 function makeUsage(usage?: {
   input_tokens?: number
   output_tokens?: number
@@ -86,6 +91,13 @@ function makeUsage(usage?: {
 
 function makeMessageId(): string {
   return `msg_${crypto.randomUUID().replace(/-/g, '')}`
+}
+
+function ensureCodexEventStream(value: unknown): AsyncIterable<Record<string, any>> {
+  if (!value || typeof (value as AsyncIterable<unknown>)[Symbol.asyncIterator] !== 'function') {
+    throw new Error('Expected OpenAI Responses API streaming data.')
+  }
+  return value as AsyncIterable<Record<string, any>>
 }
 
 function normalizeToolUseId(toolUseId: string | undefined): {
@@ -473,7 +485,10 @@ export async function performCodexRequest(options: {
   params: ShimCreateParams
   defaultHeaders: Record<string, string>
   signal?: AbortSignal
-}): Promise<Response> {
+}): Promise<{
+  events: AsyncIterable<Record<string, any>>
+  response: Response
+}> {
   const input = convertAnthropicMessagesToResponsesInput(
     options.params.messages as Array<{
       role?: string
@@ -494,6 +509,9 @@ export async function performCodexRequest(options: {
         ],
     store: false,
     stream: true,
+  }
+  if (typeof options.params.store === 'boolean') {
+    body.store = options.params.store
   }
 
   const instructions = convertSystemPrompt(options.params.system)
@@ -549,29 +567,37 @@ export async function performCodexRequest(options: {
   }
   headers.originator ??= 'openclaude'
 
-  const response = await fetch(`${options.request.baseUrl}/responses`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
-    signal: options.signal,
+  const client = new OpenAI({
+    apiKey: options.credentials.apiKey,
+    baseURL: options.request.baseUrl,
+    defaultHeaders: headers,
+    maxRetries: 0,
   })
-
-  if (!response.ok) {
-    const errorBody = await response.text().catch(() => 'unknown error')
-    let errorResponse: object | undefined
-    try { errorResponse = JSON.parse(errorBody) } catch { /* raw text */ }
-    throw APIError.generate(
-      response.status, errorResponse,
-      `Codex API error ${response.status}: ${errorBody}`,
-      response.headers as unknown as Headers,
-    )
+  const { data, response } = await client.responses
+    .create(body as OpenAIResponsesCreateParams, {
+      signal: options.signal,
+    })
+    .withResponse()
+  return {
+    events: ensureCodexEventStream(data),
+    response,
   }
-
-  return response
 }
 
-async function* readSseEvents(response: Response): AsyncGenerator<CodexSseEvent> {
-  const reader = response.body?.getReader()
+async function* readSseEvents(source: CodexEventSource): AsyncGenerator<CodexSseEvent> {
+  if (!(source instanceof Response)) {
+    for await (const event of source) {
+      const eventType = event?.type
+      if (typeof eventType !== 'string') continue
+      yield {
+        event: eventType,
+        data: event,
+      }
+    }
+    return
+  }
+
+  const reader = source.body?.getReader()
   if (!reader) return
 
   const decoder = new TextDecoder()
@@ -638,11 +664,11 @@ function determineStopReason(
 }
 
 export async function collectCodexCompletedResponse(
-  response: Response,
+  source: CodexEventSource,
 ): Promise<Record<string, any>> {
   let completedResponse: Record<string, any> | undefined
 
-  for await (const event of readSseEvents(response)) {
+  for await (const event of readSseEvents(source)) {
     if (event.event === 'response.failed') {
       const msg = event.data?.response?.error?.message ??
         event.data?.error?.message ?? 'Codex response failed'
@@ -669,7 +695,7 @@ export async function collectCodexCompletedResponse(
 }
 
 export async function* codexStreamToAnthropic(
-  response: Response,
+  source: CodexEventSource,
   model: string,
 ): AsyncGenerator<AnthropicStreamEvent> {
   const messageId = makeMessageId()
@@ -715,7 +741,7 @@ export async function* codexStreamToAnthropic(
     },
   }
 
-  for await (const event of readSseEvents(response)) {
+  for await (const event of readSseEvents(source)) {
     const payload = event.data
 
     if (event.event === 'response.output_item.added') {

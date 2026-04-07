@@ -240,12 +240,12 @@ export class SeraphynProvider implements LanguageModelChatProvider {
         );
 
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
 
         const setApiKeyCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.setApiKey`,
+            `aether.${providerKey}.setApiKey`,
             async () => {
                 await ProviderWizard.startWizard({
                     providerKey,
@@ -259,7 +259,7 @@ export class SeraphynProvider implements LanguageModelChatProvider {
         );
 
         const refreshModelsCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.refreshModels`,
+            `aether.${providerKey}.refreshModels`,
             async () => {
                 provider.invalidateCache();
                 provider._onDidChangeLanguageModelChatInformation.fire();
@@ -267,7 +267,7 @@ export class SeraphynProvider implements LanguageModelChatProvider {
         );
 
         const configWizardCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.configWizard`,
+            `aether.${providerKey}.configWizard`,
             async () => {
                 await ProviderWizard.startWizard({
                     providerKey,

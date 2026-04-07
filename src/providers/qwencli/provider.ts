@@ -159,12 +159,12 @@ export class QwenCliProvider
             providerConfig
         );
         const providerDisposable = vscode.lm.registerLanguageModelChatProvider(
-            `chp.${providerKey}`,
+            `aether.${providerKey}`,
             provider
         );
 
         const loginCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.login`,
+            `aether.${providerKey}.login`,
             async () => {
                 const oauthManager = QwenOAuthManager.getInstance();
 
@@ -234,7 +234,7 @@ export class QwenCliProvider
 
         // Add command to add additional account
         const addAccountCommand = vscode.commands.registerCommand(
-            `chp.${providerKey}.addAccount`,
+            `aether.${providerKey}.addAccount`,
             async () => {
                 const oauthManager = QwenOAuthManager.getInstance();
                 try {

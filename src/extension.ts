@@ -28,6 +28,7 @@ import {
     type RegisteredProvider,
     registerProvidersFromConfig
 } from './utils/knownProviders';
+import { ModelSelector } from './utils/modelSelector';
 
 /**
  * Global variables - Store registered provider instances for cleanup on extension uninstall
@@ -189,6 +190,16 @@ export async function activate(context: vscode.ExtensionContext) {
         Logger.trace(
             `⏱️ API key manager initialization complete (time: ${Date.now() - stepStartTime}ms)`
         );
+
+        // Step 1.0: Initialize model selector and register aether.selectModel command
+        ModelSelector.initialize(context);
+        const selectModelCmd = vscode.commands.registerCommand(
+            'aether.selectModel',
+            async () => {
+                await ModelSelector.showModelPicker();
+            }
+        );
+        context.subscriptions.push(selectModelCmd);
 
         // Step 1.1: Initialize multi-account manager
         stepStartTime = Date.now();

@@ -106,25 +106,29 @@ export class ResponsesHandler {
         let hasReceivedContent = false;
         let totalCompletionTokens = 0;
         let totalPromptTokens = 0;
+        const responseTextFragments: string[] = [];
         const activeThinkingIds = new Set<string>();
         const emittedToolCallIds = new Set<string>();
 
         let activityInterval: NodeJS.Timeout | undefined;
         try {
             const client = await this.createOpenAIClient(modelConfig);
+            const { instructions, input } = this.convertMessagesToResponses(
+                messages,
+                model.capabilities || undefined,
+                modelConfig
+            );
             const createParams: OpenAI.Responses.ResponseCreateParamsStreaming =
                 {
                     model: requestModel,
-                    input: this.convertMessagesToResponses(
-                        messages,
-                        model.capabilities || undefined,
-                        modelConfig
-                    ),
+                    input,
+                    instructions: instructions || null,
                     max_output_tokens: ConfigManager.getMaxTokensForModel(
                         model.maxOutputTokens
                     ),
                     temperature: ConfigManager.getTemperature(),
                     top_p: ConfigManager.getTopP(),
+                    store: false,
                     stream: true
                 };
 
@@ -175,95 +179,137 @@ export class ResponsesHandler {
                     modelConfig.sdkMode
                 );
 
-                stream
-                    .on('response.output_text.delta', (event) => {
-                        if (!event.delta) {
-                            return;
-                        }
+                for await (const event of stream) {
+                    if (token.isCancellationRequested) {
+                        throw new vscode.CancellationError();
+                    }
 
-                        progress.report(
-                            new vscode.LanguageModelTextPart(event.delta)
-                        );
-                        hasReceivedContent = true;
-                    })
-                    .on(
-                        'event',
-                        (event: OpenAI.Responses.ResponseStreamEvent) => {
-                            switch (event.type) {
-                                case 'response.reasoning_summary_text.delta':
-                                case 'response.reasoning_text.delta': {
-                                    if (
-                                        modelConfig.outputThinking === false ||
-                                        !event.delta
-                                    ) {
-                                        return;
-                                    }
-
-                                    const thinkingId =
-                                        event.item_id || 'responses_reasoning';
-                                    activeThinkingIds.add(thinkingId);
-                                    progress.report(
-                                        new vscode.LanguageModelThinkingPart(
-                                            event.delta,
-                                            thinkingId
-                                        )
-                                    );
-                                    break;
-                                }
-                                case 'response.reasoning_summary_text.done':
-                                case 'response.reasoning_text.done': {
-                                    const thinkingId =
-                                        event.item_id || 'responses_reasoning';
-                                    if (activeThinkingIds.has(thinkingId)) {
-                                        progress.report(
-                                            new vscode.LanguageModelThinkingPart(
-                                                '',
-                                                thinkingId
-                                            )
-                                        );
-                                        activeThinkingIds.delete(thinkingId);
-                                    }
-                                    break;
-                                }
-                                case 'response.output_item.done': {
-                                    if (event.item.type !== 'function_call') {
-                                        return;
-                                    }
-
-                                    const toolCallId =
-                                        event.item.call_id || event.item.id;
-                                    if (
-                                        !toolCallId ||
-                                        emittedToolCallIds.has(toolCallId)
-                                    ) {
-                                        return;
-                                    }
-
-                                    emittedToolCallIds.add(toolCallId);
-                                    progress.report(
-                                        new vscode.LanguageModelToolCallPart(
-                                            toolCallId,
-                                            event.item.name,
-                                            ResponsesHandler.parseToolArguments(
-                                                event.item.arguments
-                                            )
-                                        )
-                                    );
-                                    hasReceivedContent = true;
-                                    break;
-                                }
+                    switch (event.type) {
+                        case 'response.output_text.delta': {
+                            if (!event.delta) {
+                                break;
                             }
-                        }
-                    )
-                    .on('error', (error) => {
-                        streamError =
-                            error instanceof Error
-                                ? error
-                                : new Error(String(error));
-                    });
 
-                await stream.done();
-                finalResponse = await stream.finalResponse();
+                            responseTextFragments.push(event.delta);
+                            progress.report(
+                                new vscode.LanguageModelTextPart(event.delta)
+                            );
+                            hasReceivedContent = true;
+                            break;
+                        }
+                        case 'response.output_text.done': {
+                            if (
+                                !hasReceivedContent &&
+                                event.text &&
+                                responseTextFragments.length === 0
+                            ) {
+                                responseTextFragments.push(event.text);
+                            }
+                            break;
+                        }
+                        case 'response.reasoning_summary_text.delta':
+                        case 'response.reasoning_text.delta': {
+                            if (
+                                modelConfig.outputThinking === false ||
+                                !event.delta
+                            ) {
+                                break;
+                            }
+
+                            const thinkingId =
+                                event.item_id || 'responses_reasoning';
+                            activeThinkingIds.add(thinkingId);
+                            progress.report(
+                                new vscode.LanguageModelThinkingPart(
+                                    event.delta,
+                                    thinkingId
+                                )
+                            );
+                            break;
+                        }
+                        case 'response.reasoning_summary_text.done':
+                        case 'response.reasoning_text.done': {
+                            const thinkingId =
+                                event.item_id || 'responses_reasoning';
+                            if (activeThinkingIds.has(thinkingId)) {
+                                progress.report(
+                                    new vscode.LanguageModelThinkingPart(
+                                        '',
+                                        thinkingId
+                                    )
+                                );
+                                activeThinkingIds.delete(thinkingId);
+                            }
+                            break;
+                        }
+                        case 'response.output_item.done': {
+                            if (event.item.type !== 'function_call') {
+                                break;
+                            }
+
+                            const toolCallId =
+                                event.item.call_id || event.item.id;
+                            if (
+                                !toolCallId ||
+                                emittedToolCallIds.has(toolCallId)
+                            ) {
+                                break;
+                            }
+
+                            emittedToolCallIds.add(toolCallId);
+                            progress.report(
+                                new vscode.LanguageModelToolCallPart(
+                                    toolCallId,
+                                    event.item.name,
+                                    ResponsesHandler.parseToolArguments(
+                                        event.item.arguments
+                                    )
+                                )
+                            );
+                            hasReceivedContent = true;
+                            break;
+                        }
+                        case 'response.completed': {
+                            finalResponse = event.response;
+                            break;
+                        }
+                        case 'response.failed': {
+                            finalResponse = event.response;
+                            const failErr = (
+                                event.response as {
+                                    error?: { message?: string; code?: string };
+                                }
+                            ).error;
+                            streamError = new Error(
+                                failErr?.message
+                                    ? `OpenAI Responses stream failed${failErr.code ? ` (${failErr.code})` : ''}: ${failErr.message}`
+                                    : 'OpenAI Responses stream failed.'
+                            );
+                            break;
+                        }
+                        case 'response.incomplete': {
+                            finalResponse = event.response;
+                            const reason = (
+                                event.response as {
+                                    incomplete_details?: { reason?: string };
+                                }
+                            ).incomplete_details?.reason;
+                            streamError = new Error(
+                                reason
+                                    ? `OpenAI Responses stream ended incomplete: ${reason}`
+                                    : 'OpenAI Responses stream ended incomplete.'
+                            );
+                            break;
+                        }
+                        case 'error': {
+                            streamError = new Error(
+                                event.message ||
+                                    'OpenAI Responses stream returned an error.'
+                            );
+                            break;
+                        }
+                    }
+                }
             } finally {
                 cancellationListener.dispose();
                 if (activityInterval) {
@@ -288,7 +334,8 @@ export class ResponsesHandler {
 
                 if (!hasReceivedContent) {
                     const finalText =
-                        ResponsesHandler.extractOutputText(finalResponse);
+                        ResponsesHandler.extractOutputText(finalResponse) ||
+                        responseTextFragments.join('');
                     if (finalText) {
                         progress.report(
                             new vscode.LanguageModelTextPart(finalText)
@@ -346,8 +393,27 @@ export class ResponsesHandler {
                 clearInterval(activityInterval);
             }
 
+            // Extract a human-readable message from OpenAI SDK API errors
+            let displayError = error;
+            if (
+                error instanceof Error &&
+                !(error instanceof vscode.CancellationError)
+            ) {
+                const apiErr = error as Error & {
+                    error?: { message?: string };
+                    status?: number;
+                };
+                if (apiErr.error?.message) {
+                    displayError = new Error(apiErr.error.message);
+                    (displayError as Error & { status?: number }).status =
+                        apiErr.status;
+                }
+            }
+
             const message =
-                error instanceof Error ? error.message : String(error);
+                displayError instanceof Error
+                    ? displayError.message
+                    : String(displayError);
             Logger.error(`${model.name} Responses request failed: ${message}`);
 
             if (error instanceof vscode.CancellationError) {
@@ -366,7 +432,7 @@ export class ResponsesHandler {
                     : message
             });
 
-            throw error;
+            throw displayError instanceof Error ? displayError : error;
         }
     }
 
@@ -374,18 +440,40 @@ export class ResponsesHandler {
         messages: readonly vscode.LanguageModelChatMessage[],
         capabilities?: vscode.LanguageModelChatCapabilities,
         modelConfig?: ModelConfig
-    ): OpenAI.Responses.ResponseInputItem[] {
+    ): {
+        instructions: string | undefined;
+        input: OpenAI.Responses.ResponseInputItem[];
+    } {
+        const systemParts: string[] = [];
         const items: OpenAI.Responses.ResponseInputItem[] = [];
+
         for (const message of messages) {
-            items.push(
-                ...this.convertSingleMessageToResponses(
-                    message,
-                    capabilities,
-                    modelConfig
-                )
-            );
+            if (message.role === vscode.LanguageModelChatMessageRole.System) {
+                // Collect all system message text for the instructions field
+                const text = message.content
+                    .filter((p) => p instanceof vscode.LanguageModelTextPart)
+                    .map((p) => (p as vscode.LanguageModelTextPart).value)
+                    .join('\n\n')
+                    .trim();
+                if (text) {
+                    systemParts.push(text);
+                }
+            } else {
+                items.push(
+                    ...this.convertSingleMessageToResponses(
+                        message,
+                        capabilities,
+                        modelConfig
+                    )
+                );
+            }
         }
-        return ResponsesHandler.balanceToolHistory(items);
+
+        return {
+            instructions:
+                systemParts.length > 0 ? systemParts.join('\n\n') : undefined,
+            input: ResponsesHandler.balanceToolHistory(items)
+        };
     }
 
     private convertSingleMessageToResponses(
@@ -397,18 +485,11 @@ export class ResponsesHandler {
             (part) => part instanceof vscode.LanguageModelToolResultPart
         );
 
-        if (
-            message.role === vscode.LanguageModelChatMessageRole.System ||
-            message.role === vscode.LanguageModelChatMessageRole.User
-        ) {
+        if (message.role === vscode.LanguageModelChatMessageRole.User) {
             if (hasToolResult) {
                 return this.convertToolResultMessages(message);
             }
 
-            const role =
-                message.role === vscode.LanguageModelChatMessageRole.System
-                    ? 'system'
-                    : 'user';
             const content = this.buildMessageContent(message, capabilities);
             if (!content) {
                 return [];
@@ -417,7 +498,7 @@ export class ResponsesHandler {
             return [
                 {
                     type: 'message',
-                    role,
+                    role: 'user',
                     content
                 }
             ];

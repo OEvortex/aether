@@ -44,7 +44,7 @@ export class TokenUsageStatusBar {
 
     async initialize(context: vscode.ExtensionContext): Promise<void> {
         this.statusBarItem = vscode.window.createStatusBarItem(
-            'chp.statusBar.tokenUsage',
+            'aether.statusBar.tokenUsage',
             vscode.StatusBarAlignment.Right,
             11
         );

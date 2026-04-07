@@ -334,7 +334,7 @@ export class ConfigManager {
         }
         return (
             ConfigManager.context.globalState.get<boolean>(
-                'chp.hideThinkingInUI',
+                'aether.hideThinkingInUI',
                 false
             ) ?? false
         );

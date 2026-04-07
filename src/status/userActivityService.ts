@@ -24,7 +24,7 @@ const ACTIVITY_THROTTLE_CONFIG: Record<ActivityType, number> = {
 };
 
 export class UserActivityService {
-    private static readonly USER_ACTIVITY_KEY = 'chp.user.activity';
+    private static readonly USER_ACTIVITY_KEY = 'aether.user.activity';
     private static readonly ACTIVITY_TIMEOUT = 30 * 60 * 1000;
     private static readonly ACTIVITY_COUNT_WINDOW = 5 * 60 * 1000;
     private static readonly CACHE_VALIDITY = 5000;
