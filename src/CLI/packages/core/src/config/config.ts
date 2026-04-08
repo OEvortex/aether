@@ -1063,6 +1063,8 @@ export class Config {
    * Refresh authentication and rebuild ContentGenerator.
    */
   async refreshAuth(authMethod: AuthType, isInitialAuth?: boolean) {
+    await this.modelsConfig.refreshRuntimeModelProviders(true);
+
     // Sync modelsConfig state for this auth refresh
     const modelId = this.modelsConfig.getModel();
     this.modelsConfig.syncAfterAuthRefresh(authMethod, modelId);

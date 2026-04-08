@@ -55,32 +55,17 @@ export class ModelRegistry {
     }
   }
 
-  constructor(modelProvidersConfig?: ModelProvidersConfig) {
+  constructor(
+    modelProvidersConfig?: ModelProvidersConfig,
+    runtimeModelProvidersConfig?: ModelProvidersConfig,
+  ) {
     this.modelsByAuthType = new Map();
 
     // Always register aether-oauth models (hard-coded, cannot be overridden)
     this.registerAuthTypeModels(AuthType.AETHER_OAUTH, AETHER_OAUTH_MODELS);
 
     // Register user-configured models for other authTypes
-    if (modelProvidersConfig) {
-      for (const [rawKey, models] of Object.entries(modelProvidersConfig)) {
-        const authType = validateAuthTypeKey(rawKey);
-
-        if (!authType) {
-          debugLogger.warn(
-            `Invalid authType key "${rawKey}" in modelProviders config. Expected one of: ${Object.values(AuthType).join(', ')}. Skipping.`,
-          );
-          continue;
-        }
-
-        // Skip aether-oauth as it uses hard-coded models
-        if (authType === AuthType.AETHER_OAUTH) {
-          continue;
-        }
-
-        this.registerAuthTypeModels(authType, models);
-      }
-    }
+    this.reloadModels(modelProvidersConfig, runtimeModelProvidersConfig);
   }
 
   /**
@@ -202,7 +187,10 @@ export class ModelRegistry {
    * Clears existing user-configured models and re-registers from new config.
    * Preserves hard-coded aether-oauth models.
    */
-  reloadModels(modelProvidersConfig?: ModelProvidersConfig): void {
+  reloadModels(
+    modelProvidersConfig?: ModelProvidersConfig,
+    runtimeModelProvidersConfig?: ModelProvidersConfig,
+  ): void {
     // Clear existing user-configured models (preserve aether-oauth)
     for (const authType of this.modelsByAuthType.keys()) {
       if (authType !== AuthType.AETHER_OAUTH) {
@@ -211,8 +199,14 @@ export class ModelRegistry {
     }
 
     // Re-register user-configured models for other authTypes
-    if (modelProvidersConfig) {
-      for (const [rawKey, models] of Object.entries(modelProvidersConfig)) {
+    const mergedConfigs = new Map<AuthType, ModelConfig[]>();
+
+    const appendConfig = (config: ModelProvidersConfig | undefined): void => {
+      if (!config) {
+        return;
+      }
+
+      for (const [rawKey, models] of Object.entries(config)) {
         const authType = validateAuthTypeKey(rawKey);
 
         if (!authType) {
@@ -222,13 +216,20 @@ export class ModelRegistry {
           continue;
         }
 
-        // Skip aether-oauth as it uses hard-coded models
         if (authType === AuthType.AETHER_OAUTH) {
           continue;
         }
 
-        this.registerAuthTypeModels(authType, models);
+        const existing = mergedConfigs.get(authType) || [];
+        mergedConfigs.set(authType, [...existing, ...models]);
       }
+    };
+
+    appendConfig(runtimeModelProvidersConfig);
+    appendConfig(modelProvidersConfig);
+
+    for (const [authType, models] of mergedConfigs.entries()) {
+      this.registerAuthTypeModels(authType, models);
     }
   }
 }

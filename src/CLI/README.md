@@ -178,10 +178,13 @@ Here is a complete example:
 
 | Field                        | What it does                                                                                                                          |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelProviders`             | Declares which models are available and how to connect to them. Keys like `openai`, `anthropic`, `gemini` represent the API protocol. |
+| `modelProviders`             | Declares which models are available and how to connect to them. Keys like `openai`, `anthropic`, `gemini` represent the API protocol. Entries can also enable live model discovery. |
 | `modelProviders[].id`        | The model ID sent to the API (e.g. `aether3.6-plus`, `gpt-4o`).                                                                         |
 | `modelProviders[].envKey`    | The name of the environment variable that holds your API key.                                                                         |
 | `modelProviders[].baseUrl`   | The API endpoint URL (required for non-default endpoints).                                                                            |
+| `modelProviders[].fetchModels` | When `true`, Qwen Code will fetch the model list from the provider at runtime.                                                          |
+| `modelProviders[].modelsEndpoint` | Override the discovery endpoint used for live model fetching (defaults to `/models`).                                               |
+| `modelProviders[].modelParser` | Controls how live model responses are parsed (array path, id/name fields, filters, and context length mapping).                         |
 | `env`                        | A fallback place to store API keys (lowest priority; prefer `.env` files or `export` for sensitive keys).                             |
 | `security.auth.selectedType` | The protocol to use on startup (`openai`, `anthropic`, `gemini`, `vertex-ai`).                                                        |
 | `model.name`                 | The default model to use when Qwen Code starts.                                                                                       |

@@ -14,6 +14,7 @@ import { tokenLimit } from '../core/tokenLimits.js';
 import { defaultModalities } from '../core/modalityDefaults.js';
 
 import { ModelRegistry } from './modelRegistry.js';
+import { discoverRuntimeModelProviders } from './runtimeModels.js';
 import {
   type ModelProvidersConfig,
   type ResolvedModelConfig,
@@ -56,6 +57,8 @@ export interface ModelsConfigOptions {
   generationConfigSources?: ContentGeneratorConfigSources;
   /** Callback when model changes require refresh */
   onModelChange?: OnModelChangeCallback;
+  /** Environment values used for runtime model discovery */
+  discoveryEnv?: Record<string, string | undefined>;
 }
 
 /**
@@ -71,6 +74,9 @@ export interface ModelsConfigOptions {
  */
 export class ModelsConfig {
   private readonly modelRegistry: ModelRegistry;
+  private modelProvidersConfig: ModelProvidersConfig | undefined;
+  private runtimeModelProvidersConfig: ModelProvidersConfig | undefined;
+  private runtimeModelsDirty: boolean = true;
 
   // Current selection state
   private currentAuthType: AuthType | undefined;
@@ -97,6 +103,7 @@ export class ModelsConfig {
 
   // Callback for notifying Config of model changes
   private onModelChange?: OnModelChangeCallback;
+  private readonly discoveryEnv: Record<string, string | undefined>;
 
   // Flag indicating whether authType was explicitly provided (not defaulted)
   private readonly authTypeWasExplicitlyProvided: boolean;
@@ -143,8 +150,11 @@ export class ModelsConfig {
   }
 
   constructor(options: ModelsConfigOptions = {}) {
+    this.modelProvidersConfig = options.modelProvidersConfig;
+    this.runtimeModelProvidersConfig = undefined;
     this.modelRegistry = new ModelRegistry(options.modelProvidersConfig);
     this.onModelChange = options.onModelChange;
+    this.discoveryEnv = options.discoveryEnv || (process.env as Record<string, string | undefined>);
 
     // Initialize generation config
     // Note: generationConfig.model should already be fully resolved by ModelConfigResolver
@@ -1207,6 +1217,34 @@ export class ModelsConfig {
   reloadModelProvidersConfig(
     modelProvidersConfig?: ModelProvidersConfig,
   ): void {
-    this.modelRegistry.reloadModels(modelProvidersConfig);
+    this.modelProvidersConfig = modelProvidersConfig;
+    this.runtimeModelProvidersConfig = undefined;
+    this.runtimeModelsDirty = true;
+    this.modelRegistry.reloadModels(
+      this.modelProvidersConfig,
+      this.runtimeModelProvidersConfig,
+    );
+  }
+
+  /**
+   * Refresh runtime-discovered models from provider templates.
+   */
+  async refreshRuntimeModelProviders(forceRefresh: boolean = false): Promise<void> {
+    if (!forceRefresh && !this.runtimeModelsDirty) {
+      return;
+    }
+
+    const discovered = await discoverRuntimeModelProviders(
+      this.modelProvidersConfig,
+      this.discoveryEnv,
+      this._generationConfig.apiKey,
+    );
+
+    this.runtimeModelProvidersConfig = discovered;
+    this.runtimeModelsDirty = false;
+    this.modelRegistry.reloadModels(
+      this.modelProvidersConfig,
+      this.runtimeModelProvidersConfig,
+    );
   }
 }

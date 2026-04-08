@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { ModelsConfig } from './modelsConfig.js';
 import { AuthType } from '../core/contentGenerator.js';
 import type { ContentGeneratorConfig } from '../core/contentGenerator.js';
@@ -1630,6 +1630,77 @@ describe('ModelsConfig', () => {
 
       gc = currentGenerationConfig(geminiConfig);
       expect(gc.samplingParams).toBeUndefined();
+    });
+  });
+
+  describe('Runtime model discovery', () => {
+    it('should merge fetched runtime models into the registry', async () => {
+      const fetchMock = vi
+        .spyOn(globalThis, 'fetch')
+        .mockResolvedValue({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: [
+              {
+                id: 'gpt-4o-mini',
+                name: 'GPT-4o Mini',
+                description: 'Compact runtime model',
+                context_length: 128000,
+              },
+              {
+                id: 'gpt-4o',
+                name: 'GPT-4o',
+                description: 'Flagship runtime model',
+                context_length: 256000,
+              },
+            ],
+          }),
+        } as Response);
+
+      const modelsConfig = new ModelsConfig({
+        initialAuthType: AuthType.USE_OPENAI,
+        modelProvidersConfig: {
+          openai: [
+            {
+              id: 'runtime-source',
+              name: 'Runtime Source',
+              baseUrl: 'https://api.example.com/v1',
+              envKey: 'OPENAI_API_KEY',
+              fetchModels: true,
+              modelsEndpoint: '/models',
+              modelParser: {
+                arrayPath: 'data',
+                descriptionField: 'description',
+                contextLengthField: 'context_length',
+              },
+            },
+          ],
+        },
+        generationConfig: {
+          apiKey: 'runtime-key',
+        },
+        discoveryEnv: {
+          OPENAI_API_KEY: 'runtime-key',
+        },
+      });
+
+      await modelsConfig.refreshRuntimeModelProviders();
+
+      const openaiModels = modelsConfig.getAvailableModelsForAuthType(
+        AuthType.USE_OPENAI,
+      );
+      expect(openaiModels.map((m) => m.id)).toContain('gpt-4o-mini');
+      expect(openaiModels.map((m) => m.id)).toContain('gpt-4o');
+
+      const resolved = modelsConfig.getResolvedModel(
+        AuthType.USE_OPENAI,
+        'gpt-4o',
+      );
+      expect(resolved?.baseUrl).toBe('https://api.example.com/v1');
+      expect(resolved?.generationConfig.contextWindowSize).toBe(256000);
+
+      fetchMock.mockRestore();
     });
   });
 });

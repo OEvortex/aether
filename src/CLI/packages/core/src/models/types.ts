@@ -54,6 +54,34 @@ export interface ModelConfig {
   envKey?: string;
   /** API endpoint override */
   baseUrl?: string;
+  /** Optional direct API key for the model/provider */
+  apiKey?: string;
+  /** Optional provider identifier used by live discovery and UI */
+  provider?: string;
+  /** Optional nested model identifier used by provider templates */
+  model?: string;
+  /** Optional SDK mode for provider compatibility */
+  sdkMode?: 'openai' | 'anthropic' | 'oai-response';
+  /** Optional custom headers for requests */
+  customHeader?: Record<string, string>;
+  /** Optional request body overrides */
+  extraBody?: Record<string, unknown>;
+  /** Enable runtime model discovery for this config */
+  fetchModels?: boolean;
+  /** Models endpoint used for runtime discovery */
+  modelsEndpoint?: string;
+  /** Parser configuration for runtime discovery responses */
+  modelParser?: {
+    arrayPath?: string;
+    cooldownMinutes?: number;
+    filterField?: string;
+    filterValue?: string;
+    idField?: string;
+    nameField?: string;
+    descriptionField?: string;
+    contextLengthField?: string;
+    tagsField?: string;
+  };
   /** Model capabilities, reserve for future use. Now we do not read this to determine multi-modal support or other capabilities. */
   capabilities?: ModelCapabilities;
   /** Generation configuration (sampling parameters) */

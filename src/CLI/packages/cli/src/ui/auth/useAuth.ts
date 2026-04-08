@@ -220,7 +220,6 @@ export const useAuthCommand = (
       }
 
       if (
-        authType === AuthType.USE_OPENAI &&
         credentials?.model &&
         isProviderManagedModel(authType, credentials.model)
       ) {
@@ -238,27 +237,22 @@ export const useAuthCommand = (
       setIsAuthDialogOpen(false);
       setIsAuthenticating(true);
 
-      if (authType === AuthType.USE_OPENAI) {
-        if (credentials) {
-          // Pass settings.model.generationConfig to updateCredentials so it can be merged
-          // after clearing provider-sourced config. This ensures settings.json generationConfig
-          // fields (e.g., samplingParams, timeout) are preserved.
-          const settingsGenerationConfig = settings.merged.model
-            ?.generationConfig as Partial<ContentGeneratorConfig> | undefined;
-          config.updateCredentials(
-            {
-              apiKey: credentials.apiKey,
-              baseUrl: credentials.baseUrl,
-              model: credentials.model,
-            },
-            settingsGenerationConfig,
-          );
-          await performAuth(authType, credentials);
-        }
-        return;
+      if (credentials) {
+        // Pass settings.model.generationConfig so provider-sourced config can be
+        // cleared without losing user-defined generation settings.
+        const settingsGenerationConfig = settings.merged.model
+          ?.generationConfig as Partial<ContentGeneratorConfig> | undefined;
+        config.updateCredentials(
+          {
+            apiKey: credentials.apiKey,
+            baseUrl: credentials.baseUrl,
+            model: credentials.model,
+          },
+          settingsGenerationConfig,
+        );
       }
 
-      await performAuth(authType);
+      await performAuth(authType, credentials);
     },
     [
       config,

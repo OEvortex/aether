@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
@@ -16,7 +16,6 @@ import type { UIState } from '../contexts/UIStateContext.js';
 import type { UIActions } from '../contexts/UIActionsContext.js';
 
 const createMockUIState = (overrides: Partial<UIState> = {}): UIState => {
-  // AuthDialog only uses authError and pendingAuthType
   const baseState = {
     authError: null,
     pendingAuthType: undefined,
@@ -29,7 +28,6 @@ const createMockUIState = (overrides: Partial<UIState> = {}): UIState => {
 };
 
 const createMockUIActions = (overrides: Partial<UIActions> = {}): UIActions => {
-  // AuthDialog only uses handleAuthSelect
   const baseActions = {
     handleAuthSelect: vi.fn(),
     handleCodingPlanSubmit: vi.fn(),
@@ -49,14 +47,12 @@ const renderAuthDialog = (
   uiStateOverrides: Partial<UIState> = {},
   uiActionsOverrides: Partial<UIActions> = {},
   configAuthType: AuthType | undefined = undefined,
-  configApiKey: string | undefined = undefined,
 ) => {
   const uiState = createMockUIState(uiStateOverrides);
   const uiActions = createMockUIActions(uiActionsOverrides);
 
   const mockConfig = {
     getAuthType: vi.fn(() => configAuthType),
-    getContentGeneratorConfig: vi.fn(() => ({ apiKey: configApiKey })),
   } as unknown as Config;
 
   return renderWithProviders(
@@ -76,8 +72,6 @@ describe('AuthDialog', () => {
 
   beforeEach(() => {
     originalEnv = { ...process.env };
-    process.env['GEMINI_API_KEY'] = '';
-    process.env['AETHER_DEFAULT_AUTH_TYPE'] = '';
     vi.clearAllMocks();
   });
 
@@ -85,9 +79,7 @@ describe('AuthDialog', () => {
     process.env = originalEnv;
   });
 
-  it('should show an error if the initial auth type is invalid', () => {
-    process.env['GEMINI_API_KEY'] = '';
-
+  it('shows the provider list', () => {
     const settings: LoadedSettings = new LoadedSettings(
       {
         settings: { ui: { customThemes: {} }, mcpServers: {} },
@@ -100,20 +92,8 @@ describe('AuthDialog', () => {
         path: '',
       },
       {
-        settings: {
-          security: {
-            auth: {
-              selectedType: AuthType.USE_GEMINI,
-            },
-          },
-        },
-        originalSettings: {
-          security: {
-            auth: {
-              selectedType: AuthType.USE_GEMINI,
-            },
-          },
-        },
+        settings: { ui: { customThemes: {} }, mcpServers: {} },
+        originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
         path: '',
       },
       {
@@ -125,279 +105,18 @@ describe('AuthDialog', () => {
       new Set(),
     );
 
-    const { lastFrame } = renderAuthDialog(settings, {
-      authError: 'GEMINI_API_KEY  environment variable not found',
-    });
+    const { lastFrame } = renderAuthDialog(settings);
 
-    expect(lastFrame()).toContain(
-      'GEMINI_API_KEY  environment variable not found',
-    );
+    const frame = lastFrame();
+    expect(frame).toContain('Choose Provider');
+    expect(frame).toContain('Aether OAuth');
+    expect(frame).toContain('OpenAI');
+    expect(frame).toContain('Anthropic');
+    expect(frame).toContain('Gemini');
+    expect(frame).toContain('Vertex AI');
   });
 
-  describe('GEMINI_API_KEY environment variable', () => {
-    it('should detect GEMINI_API_KEY environment variable', () => {
-      process.env['GEMINI_API_KEY'] = 'foobar';
-
-      const settings: LoadedSettings = new LoadedSettings(
-        {
-          settings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          originalSettings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          path: '',
-        },
-        {
-          settings: {},
-          originalSettings: {},
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        true,
-        new Set(),
-      );
-
-      const { lastFrame } = renderAuthDialog(settings);
-
-      // Since the auth dialog shows API Key option now,
-      // it won't show GEMINI_API_KEY messages
-      expect(lastFrame()).toContain('API Key');
-    });
-
-    it('should not show the GEMINI_API_KEY message if AETHER_DEFAULT_AUTH_TYPE is set to something else', () => {
-      process.env['GEMINI_API_KEY'] = 'foobar';
-      process.env['AETHER_DEFAULT_AUTH_TYPE'] = AuthType.USE_OPENAI;
-
-      const settings: LoadedSettings = new LoadedSettings(
-        {
-          settings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          originalSettings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          path: '',
-        },
-        {
-          settings: {},
-          originalSettings: {},
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        true,
-        new Set(),
-      );
-
-      const { lastFrame } = renderAuthDialog(settings);
-
-      expect(lastFrame()).not.toContain(
-        'Existing API key detected (GEMINI_API_KEY)',
-      );
-    });
-
-    it('should show the GEMINI_API_KEY message if AETHER_DEFAULT_AUTH_TYPE is set to use api key', () => {
-      process.env['GEMINI_API_KEY'] = 'foobar';
-      process.env['AETHER_DEFAULT_AUTH_TYPE'] = AuthType.USE_OPENAI;
-
-      const settings: LoadedSettings = new LoadedSettings(
-        {
-          settings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          originalSettings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          path: '',
-        },
-        {
-          settings: {},
-          originalSettings: {},
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        true,
-        new Set(),
-      );
-
-      const { lastFrame } = renderAuthDialog(settings);
-
-      // Since the auth dialog shows API Key option now,
-      // it won't show GEMINI_API_KEY messages
-      expect(lastFrame()).toContain('API Key');
-    });
-  });
-
-  describe('AETHER_DEFAULT_AUTH_TYPE environment variable', () => {
-    it('should select the auth type specified by AETHER_DEFAULT_AUTH_TYPE', () => {
-      // AETHER_OAUTH is the only valid AuthType that can be selected via env var
-      // API-KEY is not an AuthType enum value, so it cannot be selected this way
-      process.env['AETHER_DEFAULT_AUTH_TYPE'] = AuthType.AETHER_OAUTH;
-
-      const settings: LoadedSettings = new LoadedSettings(
-        {
-          settings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          originalSettings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          path: '',
-        },
-        {
-          settings: {},
-          originalSettings: {},
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        true,
-        new Set(),
-      );
-
-      const { lastFrame } = renderAuthDialog(settings);
-
-      // AETHER_OAUTH is the first option, so it should be selected
-      expect(lastFrame()).toContain('Aether OAuth');
-    });
-
-    it('should fall back to default if AETHER_DEFAULT_AUTH_TYPE is not set', () => {
-      const settings: LoadedSettings = new LoadedSettings(
-        {
-          settings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          originalSettings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          path: '',
-        },
-        {
-          settings: {},
-          originalSettings: {},
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        true,
-        new Set(),
-      );
-
-      const { lastFrame } = renderAuthDialog(settings);
-
-      // Default is Aether OAuth (first option)
-      expect(lastFrame()).toContain('Aether OAuth');
-    });
-
-    it('should show an error and fall back to default if AETHER_DEFAULT_AUTH_TYPE is invalid', () => {
-      process.env['AETHER_DEFAULT_AUTH_TYPE'] = 'invalid-auth-type';
-
-      const settings: LoadedSettings = new LoadedSettings(
-        {
-          settings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          originalSettings: {
-            security: { auth: { selectedType: undefined } },
-            ui: { customThemes: {} },
-            mcpServers: {},
-          },
-          path: '',
-        },
-        {
-          settings: {},
-          originalSettings: {},
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        {
-          settings: { ui: { customThemes: {} }, mcpServers: {} },
-          originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-          path: '',
-        },
-        true,
-        new Set(),
-      );
-
-      const { lastFrame } = renderAuthDialog(settings);
-
-      // Since the auth dialog doesn't show AETHER_DEFAULT_AUTH_TYPE errors anymore,
-      // it will just show the default Aether OAuth option
-      expect(lastFrame()).toContain('Aether OAuth');
-    });
-  });
-
-  it('should prevent exiting when no auth method is selected and show error message', async () => {
-    const handleAuthSelect = vi.fn();
+  it('shows an error if escape is pressed before selecting a provider', async () => {
     const settings: LoadedSettings = new LoadedSettings(
       {
         settings: { ui: { customThemes: {} }, mcpServers: {} },
@@ -410,16 +129,8 @@ describe('AuthDialog', () => {
         path: '',
       },
       {
-        settings: {
-          security: { auth: { selectedType: undefined } },
-          ui: { customThemes: {} },
-          mcpServers: {},
-        },
-        originalSettings: {
-          security: { auth: { selectedType: undefined } },
-          ui: { customThemes: {} },
-          mcpServers: {},
-        },
+        settings: { ui: { customThemes: {} }, mcpServers: {} },
+        originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
         path: '',
       },
       {
@@ -434,26 +145,23 @@ describe('AuthDialog', () => {
     const { lastFrame, stdin, unmount } = renderAuthDialog(
       settings,
       {},
-      { handleAuthSelect },
-      undefined, // config.getAuthType() returns undefined
+      {},
+      undefined,
     );
     await wait();
 
-    // Simulate pressing escape key
-    stdin.write('\u001b'); // ESC key
+    stdin.write('\u001b');
     await wait();
 
-    // Should show error message instead of calling handleAuthSelect
     await vi.waitFor(() => {
-      const frame = lastFrame();
-      expect(frame).toContain('You must select an auth method');
-      expect(frame).toContain('Press Ctrl+C again to exit');
+      expect(lastFrame()).toContain(
+        'You must select an auth method before exiting.',
+      );
     });
-    expect(handleAuthSelect).not.toHaveBeenCalled();
     unmount();
   });
 
-  it('should not exit if there is already an error message', async () => {
+  it('selects Aether OAuth directly', async () => {
     const handleAuthSelect = vi.fn();
     const settings: LoadedSettings = new LoadedSettings(
       {
@@ -467,70 +175,8 @@ describe('AuthDialog', () => {
         path: '',
       },
       {
-        settings: {
-          security: { auth: { selectedType: undefined } },
-          ui: { customThemes: {} },
-          mcpServers: {},
-        },
-        originalSettings: {
-          security: { auth: { selectedType: undefined } },
-          ui: { customThemes: {} },
-          mcpServers: {},
-        },
-        path: '',
-      },
-      {
         settings: { ui: { customThemes: {} }, mcpServers: {} },
         originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-        path: '',
-      },
-      true,
-      new Set(),
-    );
-
-    const { lastFrame, stdin, unmount } = renderAuthDialog(
-      settings,
-      { authError: 'Initial error' },
-      { handleAuthSelect },
-      undefined, // config.getAuthType() returns undefined
-    );
-    await wait();
-
-    expect(lastFrame()).toContain('Initial error');
-
-    // Simulate pressing escape key
-    stdin.write('\u001b'); // ESC key
-    await wait();
-
-    // Should not call handleAuthSelect
-    expect(handleAuthSelect).not.toHaveBeenCalled();
-    unmount();
-  });
-
-  it('should allow exiting when auth method is already selected', async () => {
-    const handleAuthSelect = vi.fn();
-    const settings: LoadedSettings = new LoadedSettings(
-      {
-        settings: { ui: { customThemes: {} }, mcpServers: {} },
-        originalSettings: { ui: { customThemes: {} }, mcpServers: {} },
-        path: '',
-      },
-      {
-        settings: {},
-        originalSettings: {},
-        path: '',
-      },
-      {
-        settings: {
-          security: { auth: { selectedType: AuthType.USE_OPENAI } },
-          ui: { customThemes: {} },
-          mcpServers: {},
-        },
-        originalSettings: {
-          security: { auth: { selectedType: AuthType.USE_OPENAI } },
-          ui: { customThemes: {} },
-          mcpServers: {},
-        },
         path: '',
       },
       {
@@ -546,16 +192,14 @@ describe('AuthDialog', () => {
       settings,
       {},
       { handleAuthSelect },
-      AuthType.USE_OPENAI, // config.getAuthType() returns USE_OPENAI
+      AuthType.USE_OPENAI,
     );
     await wait();
 
-    // Simulate pressing escape key
-    stdin.write('\u001b'); // ESC key
+    stdin.write('\r');
     await wait();
 
-    // Should call handleAuthSelect with undefined to exit
-    expect(handleAuthSelect).toHaveBeenCalledWith(undefined);
+    expect(handleAuthSelect).toHaveBeenCalledWith(AuthType.AETHER_OAUTH);
     unmount();
   });
 });
