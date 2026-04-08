@@ -66,6 +66,9 @@ const FIXED_64K_MAX_INPUT_TOKENS =
 const GEMA3_TOTAL_TOKENS = 128 * TOKENS_PER_KIBI; // 131072
 const GEMA3_MAX_OUTPUT_TOKENS = 16 * TOKENS_PER_KIBI; // 16384
 const GEMA3_MAX_INPUT_TOKENS = GEMA3_TOTAL_TOKENS - GEMA3_MAX_OUTPUT_TOKENS; // 114688
+// Gemma 4 models: 256K total context, 32K output / 224K input
+const GEMA4_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
+const GEMA4_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
 // Qwen3.5 models: 256K total context, 32K output / 224K input
 const QWEN35_MAX_INPUT_TOKENS = 256 * TOKENS_PER_KIBI - 32 * TOKENS_PER_KIBI; // 229376
 const QWEN35_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI; // 32768
@@ -127,7 +130,13 @@ export function isDeepSeekModel(modelId: string): boolean {
 
 export function isGemma3Model(modelId: string): boolean {
     // Matches gemma-3 and variants (gemma-3, gemma-3-pro, gemma-3-flash, etc.)
-    return /gemma[-_]?3/i.test(modelId);
+    return /gemma[-_]?3(?!\.|-)4/i.test(modelId);
+}
+
+export function isGemma4Model(modelId: string): boolean {
+    // Matches gemma-4 and variants (gemma-4, gemma-4-pro, gemma-4-flash, etc.)
+    // Uses negative lookahead (?!.|-)4 to exclude gemma-3.4 which would match gemma-3 otherwise
+    return /gemma[-_]?4/i.test(modelId);
 }
 
 export function isLlama32Model(modelId: string): boolean {
@@ -299,6 +308,14 @@ export function resolveGlobalTokenLimits(
         return {
             maxInputTokens: GEMA3_MAX_INPUT_TOKENS,
             maxOutputTokens: GEMA3_MAX_OUTPUT_TOKENS
+        };
+    }
+
+    // Gemma 4 models: 256K total context, 32K output
+    if (isGemma4Model(modelId)) {
+        return {
+            maxInputTokens: GEMA4_MAX_INPUT_TOKENS,
+            maxOutputTokens: GEMA4_MAX_OUTPUT_TOKENS
         };
     }
 
@@ -563,6 +580,7 @@ export function resolveGlobalCapabilities(
             isQwen35Model(modelId) ||
             isQwen35OneMillionContextModel(modelId) ||
             isQwen36OneMillionContextModel(modelId) ||
-            isMiMoV2OmniModel(modelId)
+            isMiMoV2OmniModel(modelId) ||
+            isGemma4Model(modelId)
     };
 }

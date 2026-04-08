@@ -6,7 +6,6 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import { AuthType } from '@aether/aether-core';
 import { Box, Text } from 'ink';
 import Link from 'ink-link';
 import { theme } from '../semantic-colors.js';
@@ -16,12 +15,8 @@ import { ApiKeyInput } from '../components/ApiKeyInput.js';
 import { TextInput } from '../components/shared/TextInput.js';
 import { useUIState } from '../contexts/UIStateContext.js';
 import { useUIActions } from '../contexts/UIActionsContext.js';
-import { useConfig } from '../contexts/ConfigContext.js';
 import { t } from '../../i18n/index.js';
-import {
-  CodingPlanRegion,
-  isCodingPlanConfig,
-} from '../../constants/codingPlan.js';
+import { CodingPlanRegion } from '../../constants/codingPlan.js';
 import {
   ALIBABA_STANDARD_API_KEY_ENDPOINTS,
   type AlibabaStandardRegion,
@@ -30,20 +25,7 @@ import {
 const MODEL_PROVIDERS_DOCUMENTATION_URL =
   'https://OEvortex.github.io/aether-docs/en/users/configuration/model-providers/';
 
-function parseDefaultAuthType(
-  defaultAuthType: string | undefined,
-): AuthType | null {
-  if (
-    defaultAuthType &&
-    Object.values(AuthType).includes(defaultAuthType as AuthType)
-  ) {
-    return defaultAuthType as AuthType;
-  }
-  return null;
-}
-
-// Main menu option type
-type MainOption = typeof AuthType.AETHER_OAUTH | 'CODING_PLAN' | 'API_KEY';
+// API Key option type
 type ApiKeyOption = 'ALIBABA_STANDARD_API_KEY' | 'CUSTOM_API_KEY';
 
 // View level for navigation
@@ -72,17 +54,16 @@ const ALIBABA_STANDARD_API_DOCUMENTATION_URLS: Record<
 };
 
 export function AuthDialog(): React.JSX.Element {
-  const { pendingAuthType, authError } = useUIState();
-  const {
-    handleAuthSelect: onAuthSelect,
+    const { authError } = useUIState();
+    const {
     handleCodingPlanSubmit,
     handleAlibabaStandardSubmit,
     onAuthError,
   } = useUIActions();
-  const config = useConfig();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [viewLevel, setViewLevel] = useState<ViewLevel>('main');
+    // Start directly at API key type selection since we only support API Key
+    const [viewLevel, setViewLevel] = useState<ViewLevel>('api-key-type-select');
   const [regionIndex, setRegionIndex] = useState<number>(0);
   const [region, setRegion] = useState<CodingPlanRegion>(
     CodingPlanRegion.CHINA,
@@ -99,35 +80,6 @@ export function AuthDialog(): React.JSX.Element {
   const [alibabaStandardModelId, setAlibabaStandardModelId] = useState('');
   const [alibabaStandardModelIdError, setAlibabaStandardModelIdError] =
     useState<string | null>(null);
-
-  // Main authentication entries (flat three-option layout)
-  const mainItems = [
-    {
-      key: AuthType.AETHER_OAUTH,
-      title: t('Aether OAuth'),
-      label: t('Aether OAuth'),
-      description: t(
-        'Free \u00B7 Up to 1,000 requests/day \u00B7 Aether latest models',
-      ),
-      value: AuthType.AETHER_OAUTH as MainOption,
-    },
-    {
-      key: 'CODING_PLAN',
-      title: t('Alibaba Cloud Coding Plan'),
-      label: t('Alibaba Cloud Coding Plan'),
-      description: t(
-        'Paid \u00B7 Up to 6,000 requests/5 hrs \u00B7 All Alibaba Cloud Coding Plan Models',
-      ),
-      value: 'CODING_PLAN' as MainOption,
-    },
-    {
-      key: 'API_KEY',
-      title: t('API Key'),
-      label: t('API Key'),
-      description: t('Bring your own API key'),
-      value: 'API_KEY' as MainOption,
-    },
-  ];
 
   // Region selection entries (shown after selecting Alibaba Cloud Coding Plan)
   const regionItems = [
@@ -231,70 +183,6 @@ export function AuthDialog(): React.JSX.Element {
     },
   ];
 
-  // Map an AuthType to the corresponding main menu option.
-  // AETHER_OAUTH maps directly; USE_OPENAI maps to:
-  // - CODING_PLAN when current config matches coding plan
-  // - API_KEY for other OpenAI / Anthropic / Gemini-compatible configs
-  const contentGenConfig = config.getContentGeneratorConfig();
-  const isCurrentlyCodingPlan =
-    isCodingPlanConfig(
-      contentGenConfig?.baseUrl,
-      contentGenConfig?.apiKeyEnvKey,
-    ) !== false;
-  const authTypeToMainOption = (authType: AuthType): MainOption => {
-    if (authType === AuthType.AETHER_OAUTH) return AuthType.AETHER_OAUTH;
-    if (authType === AuthType.USE_OPENAI && isCurrentlyCodingPlan) {
-      return 'CODING_PLAN';
-    }
-    return 'API_KEY';
-  };
-
-  const initialAuthIndex = Math.max(
-    0,
-    mainItems.findIndex((item) => {
-      // Priority 1: pendingAuthType
-      if (pendingAuthType) {
-        return item.value === authTypeToMainOption(pendingAuthType);
-      }
-
-      // Priority 2: config.getAuthType() - the source of truth
-      const currentAuthType = config.getAuthType();
-      if (currentAuthType) {
-        return item.value === authTypeToMainOption(currentAuthType);
-      }
-
-      // Priority 3: AETHER_DEFAULT_AUTH_TYPE env var
-      const defaultAuthType = parseDefaultAuthType(
-        process.env['AETHER_DEFAULT_AUTH_TYPE'],
-      );
-      if (defaultAuthType) {
-        return item.value === authTypeToMainOption(defaultAuthType);
-      }
-
-      // Priority 4: default to AETHER_OAUTH
-      return item.value === AuthType.AETHER_OAUTH;
-    }),
-  );
-
-  const handleMainSelect = async (value: MainOption) => {
-    setErrorMessage(null);
-    onAuthError(null);
-
-    if (value === 'CODING_PLAN') {
-      // Navigate to region selection
-      setViewLevel('region-select');
-      return;
-    }
-
-    if (value === 'API_KEY') {
-      setViewLevel('api-key-type-select');
-      return;
-    }
-
-    // For Aether OAuth, proceed directly
-    await onAuthSelect(value);
-  };
-
   const handleApiKeyTypeSelect = async (value: ApiKeyOption) => {
     setErrorMessage(null);
     onAuthError(null);
@@ -379,11 +267,13 @@ export function AuthDialog(): React.JSX.Element {
     onAuthError(null);
 
     if (viewLevel === 'region-select') {
-      setViewLevel('main');
+        // Go back to API key type selection
+        setViewLevel('api-key-type-select');
     } else if (viewLevel === 'api-key-input') {
       setViewLevel('region-select');
     } else if (viewLevel === 'api-key-type-select') {
-      setViewLevel('main');
+        // Exit - at root API key selection
+        process.exit(0);
     } else if (viewLevel === 'custom-info') {
       setViewLevel('api-key-type-select');
     } else if (viewLevel === 'alibaba-standard-region-select') {
@@ -397,60 +287,14 @@ export function AuthDialog(): React.JSX.Element {
 
   useKeypress(
     (key) => {
-      if (key.name === 'escape') {
-        // Handle Escape based on current view level
-        if (viewLevel === 'region-select') {
+          if (key.name === 'escape') {
           handleGoBack();
-          return;
-        }
-
-        if (viewLevel === 'api-key-input' || viewLevel === 'custom-info') {
-          handleGoBack();
-          return;
-        }
-        if (
-          viewLevel === 'api-key-type-select' ||
-          viewLevel === 'alibaba-standard-region-select' ||
-          viewLevel === 'alibaba-standard-api-key-input' ||
-          viewLevel === 'alibaba-standard-model-id-input'
-        ) {
-          handleGoBack();
-          return;
-        }
-
-        // For main view, use existing logic
-        if (errorMessage) {
-          return;
-        }
-        if (config.getAuthType() === undefined) {
-          setErrorMessage(
-            t(
-              'You must select an auth method to proceed. Press Ctrl+C again to exit.',
-            ),
-          );
-          return;
-        }
-        onAuthSelect(undefined);
       }
     },
     { isActive: true },
   );
 
-  // Render main auth selection
-  const renderMainView = () => (
-    <>
-      <Box marginTop={1}>
-        <DescriptiveRadioButtonSelect
-          items={mainItems}
-          initialIndex={initialAuthIndex}
-          onSelect={handleMainSelect}
-          itemGap={1}
-        />
-      </Box>
-    </>
-  );
-
-  // Render region selection for Alibaba Cloud Coding Plan
+    // Render API key type selection directly
   const renderRegionSelectView = () => (
     <>
       <Box marginTop={1}>
@@ -645,13 +489,12 @@ export function AuthDialog(): React.JSX.Element {
   const getViewTitle = () => {
     switch (viewLevel) {
       case 'main':
-        return t('Select Authentication Method');
+        case 'api-key-type-select':
+            return t('API Key');
       case 'region-select':
         return t('Select Region for Coding Plan');
       case 'api-key-input':
-        return t('Enter Coding Plan API Key');
-      case 'api-key-type-select':
-        return t('Select API Key Type');
+            return t('Enter Coding Plan API Key');
       case 'custom-info':
         return t('Custom Configuration');
       case 'alibaba-standard-region-select':
@@ -663,7 +506,7 @@ export function AuthDialog(): React.JSX.Element {
       case 'alibaba-standard-model-id-input':
         return t('Enter Model IDs');
       default:
-        return t('Select Authentication Method');
+            return t('API Key');
     }
   };
 
@@ -677,7 +520,6 @@ export function AuthDialog(): React.JSX.Element {
     >
       <Text bold>{getViewTitle()}</Text>
 
-      {viewLevel === 'main' && renderMainView()}
       {viewLevel === 'region-select' && renderRegionSelectView()}
       {viewLevel === 'api-key-input' && renderApiKeyInputView()}
       {viewLevel === 'api-key-type-select' && renderApiKeyTypeSelectView()}
@@ -693,35 +535,7 @@ export function AuthDialog(): React.JSX.Element {
         <Box marginTop={1}>
           <Text color={theme.status.error}>{authError || errorMessage}</Text>
         </Box>
-      )}
-
-      {viewLevel === 'main' && (
-        <>
-          {/* <Box marginTop={1}>
-            <Text color={theme.text.secondary}>
-              {t('Enter to select, \u2191\u2193 to navigate, Esc to close')}
-            </Text>
-          </Box> */}
-          <Box marginY={1}>
-            <Text color={theme.border.default}>{'\u2500'.repeat(80)}</Text>
-          </Box>
-          <Box>
-            <Text color={theme.text.primary}>
-              {t('Terms of Services and Privacy Notice')}:
-            </Text>
-          </Box>
-          <Box>
-            <Link
-              url="https://OEvortex.github.io/aether-docs/en/users/support/tos-privacy/"
-              fallback={false}
-            >
-              <Text color={theme.text.secondary} underline>
-                https://OEvortex.github.io/aether-docs/en/users/support/tos-privacy/
-              </Text>
-            </Link>
-          </Box>
-        </>
-      )}
+          )}
     </Box>
   );
 }
