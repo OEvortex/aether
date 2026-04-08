@@ -1,5 +1,5 @@
-import { ChannelBase } from '@aether/channel-base';
-import type { AcpBridge, ChannelBaseOptions, ChannelConfig, Envelope } from '@aether/channel-base';
+import { ChannelBase } from '../../base/src/index.js';
+import type { AcpBridge, ChannelBaseOptions, ChannelConfig, Envelope } from '../../base/src/index.js';
 
 export class TelegramChannel extends ChannelBase {
     public constructor(

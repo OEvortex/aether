@@ -1,5 +1,5 @@
-import { ChannelBase } from '@aether/channel-base';
-import type { AcpBridge, ChannelBaseOptions, ChannelConfig } from '@aether/channel-base';
+import { ChannelBase } from '../../base/src/index.js';
+import type { AcpBridge, ChannelBaseOptions, ChannelConfig } from '../../base/src/index.js';
 import { loadAccount } from './accounts.js';
 
 export class WeixinChannel extends ChannelBase {

@@ -1,5 +1,5 @@
 import { TelegramChannel } from './TelegramAdapter.js';
-import type { ChannelPlugin } from '@aether/channel-base';
+import type { ChannelPlugin } from '../../base/src/index.js';
 
 export { TelegramChannel } from './TelegramAdapter.js';
 

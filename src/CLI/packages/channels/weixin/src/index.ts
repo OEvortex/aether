@@ -1,5 +1,5 @@
 import { WeixinChannel } from './WeixinAdapter.js';
-import type { ChannelPlugin } from '@aether/channel-base';
+import type { ChannelPlugin } from '../../base/src/index.js';
 
 export { WeixinChannel } from './WeixinAdapter.js';
 

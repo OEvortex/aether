@@ -1,5 +1,5 @@
-import { ChannelBase } from '@aether/channel-base';
-import type { AcpBridge, ChannelBaseOptions, ChannelConfig, Envelope } from '@aether/channel-base';
+import { ChannelBase } from '../../base/src/index.js';
+import type { AcpBridge, ChannelBaseOptions, ChannelConfig, Envelope } from '../../base/src/index.js';
 import { extractTitle, normalizeDingTalkMarkdown } from './markdown.js';
 import { downloadMedia } from './media.js';
 

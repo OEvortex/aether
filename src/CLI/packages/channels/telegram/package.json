@@ -1,0 +1,10 @@
+{
+  "name": "@aether/channel-telegram",
+  "version": "0.14.1",
+  "type": "module",
+  "main": "dist/packages/channels/telegram/src/index.js",
+  "types": "dist/packages/channels/telegram/src/index.d.ts",
+  "scripts": {
+    "build": "node ../../../scripts/build_package.js"
+  }
+}

@@ -11,6 +11,10 @@ execSync('npm run generate', {
 });
 
 for (const workspace of [
+    'packages/channels/base',
+    'packages/channels/telegram',
+    'packages/channels/weixin',
+    'packages/channels/dingtalk',
     'packages/core',
     'packages/cli',
 ]) {

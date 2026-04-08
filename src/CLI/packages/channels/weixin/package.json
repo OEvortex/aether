@@ -1,0 +1,10 @@
+{
+  "name": "@aether/channel-weixin",
+  "version": "0.14.1",
+  "type": "module",
+  "main": "dist/packages/channels/weixin/src/index.js",
+  "types": "dist/packages/channels/weixin/src/index.d.ts",
+  "scripts": {
+    "build": "node ../../../scripts/build_package.js"
+  }
+}

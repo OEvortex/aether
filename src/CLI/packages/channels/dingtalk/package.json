@@ -1,0 +1,10 @@
+{
+  "name": "@aether/channel-dingtalk",
+  "version": "0.14.1",
+  "type": "module",
+  "main": "dist/packages/channels/dingtalk/src/index.js",
+  "types": "dist/packages/channels/dingtalk/src/index.d.ts",
+  "scripts": {
+    "build": "node ../../../scripts/build_package.js"
+  }
+}
