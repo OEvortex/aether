@@ -109,7 +109,7 @@ describe('AuthDialog', () => {
 
     const frame = lastFrame();
     expect(frame).toContain('Choose Provider');
-    expect(frame).toContain('Aether OAuth');
+    expect(frame).not.toContain('Aether OAuth');
     expect(frame).toContain('AIHubMix');
     expect(frame).toContain('Apertis AI');
     expect(frame).toContain('DeepSeek');
@@ -164,8 +164,7 @@ describe('AuthDialog', () => {
     unmount();
   });
 
-  it('selects Aether OAuth directly', async () => {
-    const handleAuthSelect = vi.fn();
+  it('does not list Aether OAuth anywhere in the picker', () => {
     const settings: LoadedSettings = new LoadedSettings(
       {
         settings: { ui: { customThemes: {} }, mcpServers: {} },
@@ -191,18 +190,7 @@ describe('AuthDialog', () => {
       new Set(),
     );
 
-    const { stdin, unmount } = renderAuthDialog(
-      settings,
-      {},
-      { handleAuthSelect },
-      AuthType.USE_OPENAI,
-    );
-    await wait();
-
-    stdin.write('\r');
-    await wait();
-
-    expect(handleAuthSelect).toHaveBeenCalledWith(AuthType.AETHER_OAUTH);
-    unmount();
+    const { lastFrame } = renderAuthDialog(settings);
+    expect(lastFrame()).not.toContain('Aether OAuth');
   });
 });

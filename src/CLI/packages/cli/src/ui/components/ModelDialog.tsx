@@ -11,8 +11,6 @@ import {
   AuthType,
   ModelSlashCommandEvent,
   logModelSlashCommand,
-  MAINLINE_CODER_MODEL,
-  type AvailableModel as CoreAvailableModel,
   type ContentGeneratorConfig,
   type InputModalities,
 } from '@aether/aether-core';
@@ -143,107 +141,49 @@ export function ModelDialog({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [highlightedValue, setHighlightedValue] = useState<string | null>(null);
 
-  const authType = config?.getAuthType();
+  const authType = config?.getContentGeneratorConfig()?.authType ?? config?.getAuthType();
 
   const availableModelEntries = useMemo(() => {
-    const allModels = config ? config.getAllConfiguredModels() : [];
-
-    // Separate runtime models from registry models
-    const runtimeModels = allModels.filter((m) => m.isRuntimeModel);
-    const registryModels = allModels.filter((m) => !m.isRuntimeModel);
-
-    // Group registry models by authType
-    const modelsByAuthTypeMap = new Map<AuthType, CoreAvailableModel[]>();
-    for (const model of registryModels) {
-      const authType = model.authType;
-      if (!modelsByAuthTypeMap.has(authType)) {
-        modelsByAuthTypeMap.set(authType, []);
-      }
-      modelsByAuthTypeMap.get(authType)!.push(model);
+    if (!config || !authType) {
+      return [];
     }
 
-    // Fixed order: aether-oauth first, then others in a stable order
-    const authTypeOrder: AuthType[] = [
-      AuthType.AETHER_OAUTH,
-      AuthType.USE_OPENAI,
-      AuthType.USE_ANTHROPIC,
-      AuthType.USE_GEMINI,
-      AuthType.USE_VERTEX_AI,
-    ];
-
-    // Filter to only include authTypes that have registry models and maintain order
-    const availableAuthTypes = new Set(modelsByAuthTypeMap.keys());
-    const orderedAuthTypes = authTypeOrder.filter((t) =>
-      availableAuthTypes.has(t),
-    );
-
-    // Build ordered list: runtime models first, then registry models grouped by authType
-    const result: Array<{
-      authType: AuthType;
-      model: CoreAvailableModel;
-      isRuntime?: boolean;
-      snapshotId?: string;
-    }> = [];
-
-    // Add all runtime models first
-    for (const runtimeModel of runtimeModels) {
-      result.push({
-        authType: runtimeModel.authType,
-        model: runtimeModel,
-        isRuntime: true,
-        snapshotId: runtimeModel.runtimeSnapshotId,
-      });
-    }
-
-    // Add registry models grouped by authType
-    for (const t of orderedAuthTypes) {
-      for (const model of modelsByAuthTypeMap.get(t) ?? []) {
-        result.push({ authType: t, model, isRuntime: false });
-      }
-    }
-
-    return result;
-  }, [config]);
+    return config.getAvailableModelsForAuthType(authType);
+  }, [authType, config]);
 
   const MODEL_OPTIONS = useMemo(
     () =>
-      availableModelEntries.map(
-        ({ authType: t2, model, isRuntime, snapshotId }) => {
-          // Runtime models use snapshotId directly (format: $runtime|${authType}|${modelId})
-          const value =
-            isRuntime && snapshotId ? snapshotId : `${t2}::${model.id}`;
-
-          const title = (
-            <Text>
-              <Text
-                bold
-                color={isRuntime ? theme.status.warning : theme.text.accent}
-              >
-                [{t2}]
-              </Text>
-              <Text>{` ${model.label}`}</Text>
-              {isRuntime && (
-                <Text color={theme.status.warning}> (Runtime)</Text>
-              )}
+      availableModelEntries.map((model) => {
+        const value = model.runtimeSnapshotId ?? model.id;
+        const title = (
+          <Text>
+            <Text
+              bold
+              color={
+                model.isRuntimeModel ? theme.status.warning : theme.text.accent
+              }
+            >
+              {model.label}
             </Text>
-          );
+            {model.isRuntimeModel && (
+              <Text color={theme.status.warning}> (Runtime)</Text>
+            )}
+          </Text>
+        );
 
-          // Include runtime indicator in description
-          let description = model.description || '';
-          if (isRuntime) {
-            description = description
-              ? `${description} (Runtime)`
-              : 'Runtime model';
-          }
+        const description = model.isRuntimeModel
+          ? model.description
+            ? `${model.description} (Runtime)`
+            : 'Runtime model'
+          : model.description || '';
 
-          return {
-            value,
-            title,
-            description,
-            key: value,
-          };
-        },
-      ),
+        return {
+          value,
+          title,
+          description,
+          key: value,
+        };
+      }),
     [availableModelEntries],
   );
 
@@ -252,7 +192,7 @@ export function ModelDialog({
   const preferredModelId =
     isFastModelMode && fastModelSetting
       ? fastModelSetting
-      : config?.getModel() || MAINLINE_CODER_MODEL;
+      : config?.getModel() || '';
   // Check if current model is a runtime model
   // Runtime snapshot ID is already in $runtime|${authType}|${modelId} format
   const activeRuntimeSnapshot = isFastModelMode
@@ -260,9 +200,7 @@ export function ModelDialog({
     : config?.getActiveRuntimeModelSnapshot?.();
   const preferredKey = activeRuntimeSnapshot
     ? activeRuntimeSnapshot.id
-    : authType
-      ? `${authType}::${preferredModelId}`
-      : '';
+    : preferredModelId;
 
   useKeypress(
     (key) => {
@@ -286,12 +224,10 @@ export function ModelDialog({
 
   const highlightedEntry = useMemo(() => {
     const key = highlightedValue ?? preferredKey;
-    return availableModelEntries.find(
-      ({ authType: t2, model, isRuntime, snapshotId }) => {
-        const v = isRuntime && snapshotId ? snapshotId : `${t2}::${model.id}`;
-        return v === key;
-      },
-    );
+    return availableModelEntries.find((model) => {
+      const value = model.runtimeSnapshotId ?? model.id;
+      return value === key;
+    });
   }, [highlightedValue, preferredKey, availableModelEntries]);
 
   const handleSelect = useCallback(
@@ -300,16 +236,7 @@ export function ModelDialog({
 
       // Fast model mode: just save the model ID and close
       if (isFastModelMode) {
-        // Extract model ID from selection key (format: "authType::modelId" or "$runtime|authType|modelId")
-        let modelId: string;
-        if (selected.includes('::')) {
-          modelId = selected.split('::').slice(1).join('::');
-        } else if (selected.startsWith('$runtime|')) {
-          const parts = selected.split('|');
-          modelId = parts[2] ?? selected;
-        } else {
-          modelId = selected;
-        }
+        const modelId = selected;
         const scope = getPersistScopeForModelSelection(settings);
         settings.setValue(scope, 'fastModel', modelId);
         uiState?.historyManager.addItem(
@@ -334,39 +261,14 @@ export function ModelDialog({
       }
 
       try {
-        // Determine if this is a runtime model selection
-        // Runtime model format: $runtime|${authType}|${modelId}
         isRuntime = selected.startsWith('$runtime|');
-
-        let selectedAuthType: AuthType;
-        let modelId: string;
-
-        if (isRuntime) {
-          // For runtime models, extract authType from the snapshot ID
-          // Format: $runtime|${authType}|${modelId}
-          const parts = selected.split('|');
-          if (parts.length >= 2 && parts[0] === '$runtime') {
-            selectedAuthType = parts[1] as AuthType;
-          } else {
-            selectedAuthType = authType as AuthType;
-          }
-          modelId = selected; // Pass the full snapshot ID to switchModel
-        } else {
-          const sep = '::';
-          const idx = selected.indexOf(sep);
-          selectedAuthType = (
-            idx >= 0 ? selected.slice(0, idx) : authType
-          ) as AuthType;
-          modelId = idx >= 0 ? selected.slice(idx + sep.length) : selected;
-        }
+        const selectedAuthType = authType ?? AuthType.USE_OPENAI;
+        const modelId = selected;
 
         await config.switchModel(
           selectedAuthType,
           modelId,
-          selectedAuthType !== authType &&
-            selectedAuthType === AuthType.AETHER_OAUTH
-            ? { requireCachedCredentials: true }
-            : undefined,
+          undefined,
         );
 
         if (!isRuntime) {
@@ -425,7 +327,7 @@ export function ModelDialog({
         <Box marginTop={1} flexDirection="column">
           <Text color={theme.status.warning}>
             {t(
-              'No models available for the current authentication type ({{authType}}).',
+              'No models available for the current provider ({{authType}}).',
               {
                 authType: authType ? String(authType) : t('(none)'),
               },
@@ -463,26 +365,20 @@ export function ModelDialog({
           />
           <DetailRow
             label={t('Modality')}
-            value={formatModalities(highlightedEntry.model.modalities)}
+            value={formatModalities(highlightedEntry.modalities)}
           />
           <DetailRow
             label={t('Context Window')}
-            value={formatContextWindow(
-              highlightedEntry.model.contextWindowSize,
-            )}
+            value={formatContextWindow(highlightedEntry.contextWindowSize)}
           />
-          {highlightedEntry.authType !== AuthType.AETHER_OAUTH && (
-            <>
-              <DetailRow
-                label="Base URL"
-                value={highlightedEntry.model.baseUrl ?? t('(default)')}
-              />
-              <DetailRow
-                label="API Key"
-                value={highlightedEntry.model.envKey ?? t('(not set)')}
-              />
-            </>
-          )}
+          <DetailRow
+            label="Base URL"
+            value={highlightedEntry.baseUrl ?? t('(default)')}
+          />
+          <DetailRow
+            label="API Key"
+            value={highlightedEntry.envKey ?? t('(not set)')}
+          />
         </Box>
       )}
 

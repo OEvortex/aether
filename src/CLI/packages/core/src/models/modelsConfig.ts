@@ -401,7 +401,7 @@ export class ModelsConfig {
       this.currentAuthType = authType;
 
       const model = this.modelRegistry.getModel(authType, modelId);
-      if (!model) {
+      if (!model || model.fetchModels) {
         throw new Error(
           `Model '${modelId}' not found for authType '${authType}'`,
         );
@@ -886,7 +886,7 @@ export class ModelsConfig {
     // This handles provider switching even within the same authType.
     if (modelId && this.modelRegistry.hasModel(authType, modelId)) {
       const resolved = this.modelRegistry.getModel(authType, modelId);
-      if (resolved) {
+      if (resolved && !resolved.fetchModels) {
         this.applyResolvedModelDefaults(resolved);
         this.strictModelProviderSelection = true;
         // Clear active runtime model snapshot since we're now using a registry model

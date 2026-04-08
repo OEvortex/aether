@@ -93,6 +93,10 @@ export class ModelRegistry {
     this.modelsByAuthType.set(authType, modelMap);
   }
 
+  private isSelectableModel(model: ResolvedModelConfig): boolean {
+    return !model.fetchModels;
+  }
+
   /**
    * Get all models for a specific authType.
    * This is used by /model command to show only relevant models.
@@ -101,20 +105,22 @@ export class ModelRegistry {
     const models = this.modelsByAuthType.get(authType);
     if (!models) return [];
 
-    return Array.from(models.values()).map((model) => ({
-      id: model.id,
-      label: model.name,
-      description: model.description,
-      capabilities: model.capabilities,
-      authType: model.authType,
-      isVision: model.capabilities?.vision ?? false,
-      contextWindowSize:
-        model.generationConfig.contextWindowSize ?? tokenLimit(model.id),
-      modalities:
-        model.generationConfig.modalities ?? defaultModalities(model.id),
-      baseUrl: model.baseUrl,
-      envKey: model.envKey,
-    }));
+    return Array.from(models.values())
+      .filter((model) => this.isSelectableModel(model))
+      .map((model) => ({
+        id: model.id,
+        label: model.name,
+        description: model.description,
+        capabilities: model.capabilities,
+        authType: model.authType,
+        isVision: model.capabilities?.vision ?? false,
+        contextWindowSize:
+          model.generationConfig.contextWindowSize ?? tokenLimit(model.id),
+        modalities:
+          model.generationConfig.modalities ?? defaultModalities(model.id),
+        baseUrl: model.baseUrl,
+        envKey: model.envKey,
+      }));
   }
 
   /**
@@ -149,7 +155,9 @@ export class ModelRegistry {
     }
     const models = this.modelsByAuthType.get(authType);
     if (!models || models.size === 0) return undefined;
-    return Array.from(models.values())[0];
+    return Array.from(models.values()).find((model) =>
+      this.isSelectableModel(model),
+    );
   }
 
   /**

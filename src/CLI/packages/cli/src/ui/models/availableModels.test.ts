@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright 2025 Qwen Team
  * SPDX-License-Identifier: Apache-2.0
@@ -7,35 +7,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   getAvailableModelsForAuthType,
-  getFilteredAetherModels,
   getOpenAIAvailableModelFromEnv,
 } from './availableModels.js';
 import { AuthType, type Config } from '@aether/aether-core';
 
 describe('availableModels', () => {
-  describe('Qwen models', () => {
-    const aetherModels = getFilteredAetherModels();
-
-    it('should include only coder-model', () => {
-      expect(aetherModels.length).toBe(1);
-      expect(aetherModels[0].id).toBe('coder-model');
-    });
-
-    it('should have coder-model with vision capability', () => {
-      const coderModel = aetherModels[0];
-      expect(coderModel.isVision).toBe(true);
-    });
-  });
-
-  describe('getFilteredAetherModels', () => {
-    it('should return coder-model with vision capability', () => {
-      const models = getFilteredAetherModels();
-      expect(models.length).toBe(1);
-      expect(models[0].id).toBe('coder-model');
-      expect(models[0].isVision).toBe(true);
-    });
-  });
-
   describe('getOpenAIAvailableModelFromEnv', () => {
     const originalEnv = process.env;
 
@@ -77,110 +53,42 @@ describe('availableModels', () => {
       process.env = originalEnv;
     });
 
-    it('should return hard-coded qwen models for aether-oauth', () => {
-      const models = getAvailableModelsForAuthType(AuthType.AETHER_OAUTH);
-      expect(models.length).toBe(1);
-      expect(models[0].id).toBe('coder-model');
-      expect(models[0].isVision).toBe(true);
-    });
-
-    it('should use config models for aether-oauth when config is provided', () => {
+    it('returns config models for openai when a config is provided', () => {
       const mockConfig = {
         getAvailableModelsForAuthType: vi.fn().mockReturnValue([
           {
-            id: 'custom',
-            label: 'Custom',
-            description: 'Custom model',
-            authType: AuthType.AETHER_OAUTH,
+            id: 'gpt-4',
+            label: 'GPT-4',
+            description: 'Test',
+            authType: AuthType.USE_OPENAI,
             isVision: false,
           },
         ]),
       } as unknown as Config;
 
       const models = getAvailableModelsForAuthType(
-        AuthType.AETHER_OAUTH,
+        AuthType.USE_OPENAI,
         mockConfig,
       );
+
       expect(models).toEqual([
         {
-          id: 'custom',
-          label: 'Custom',
-          description: 'Custom model',
+          id: 'gpt-4',
+          label: 'GPT-4',
+          description: 'Test',
           isVision: false,
         },
       ]);
     });
 
-    it('should use config.getAvailableModels for openai authType when available', () => {
-      const mockModels = [
-        {
-          id: 'gpt-4',
-          label: 'GPT-4',
-          description: 'Test',
-          authType: AuthType.USE_OPENAI,
-          isVision: false,
-        },
-      ];
-      const getAvailableModelsForAuthType = vi.fn().mockReturnValue(mockModels);
-      const mockConfigWithMethod = {
-        // Prefer the newer API when available.
-        getAvailableModelsForAuthType,
-      };
-
-      const models = getAvailableModelsForAuthType(
-        AuthType.USE_OPENAI,
-        mockConfigWithMethod as unknown as Config,
-      );
-
-      expect(getAvailableModelsForAuthType).toHaveBeenCalled();
-      expect(models[0].id).toBe('gpt-4');
-    });
-
-    it('should fallback to env var for openai when config returns empty', () => {
-      process.env['OPENAI_MODEL'] = 'fallback-model';
-      const mockConfig = {
-        getAvailableModelsForAuthType: vi.fn().mockReturnValue([]),
-      } as unknown as Config;
-
-      const models = getAvailableModelsForAuthType(
-        AuthType.USE_OPENAI,
-        mockConfig,
-      );
-
-      expect(models).toEqual([]);
-    });
-
-    it('should fallback to env var for openai when config throws', () => {
-      process.env['OPENAI_MODEL'] = 'fallback-model';
-      const mockConfig = {
-        getAvailableModelsForAuthType: vi.fn().mockImplementation(() => {
-          throw new Error('Registry not initialized');
-        }),
-      } as unknown as Config;
-
-      const models = getAvailableModelsForAuthType(
-        AuthType.USE_OPENAI,
-        mockConfig,
-      );
-
-      expect(models).toEqual([]);
-    });
-
-    it('should return env model for openai without config', () => {
+    it('returns env model for openai without config', () => {
       process.env['OPENAI_MODEL'] = 'gpt-4-turbo';
       const models = getAvailableModelsForAuthType(AuthType.USE_OPENAI);
       expect(models[0].id).toBe('gpt-4-turbo');
     });
 
-    it('should return empty array for openai without config or env', () => {
-      delete process.env['OPENAI_MODEL'];
-      const models = getAvailableModelsForAuthType(AuthType.USE_OPENAI);
-      expect(models).toEqual([]);
-    });
-
-    it('should return empty array for other auth types', () => {
-      const models = getAvailableModelsForAuthType(AuthType.USE_GEMINI);
-      expect(models).toEqual([]);
+    it('returns empty array for unsupported auth types without config', () => {
+      expect(getAvailableModelsForAuthType(AuthType.USE_GEMINI)).toEqual([]);
     });
   });
 });

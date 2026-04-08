@@ -110,6 +110,13 @@ vi.mock('../ui/commands/modelCommand.js', () => ({
     kind: 'BUILT_IN',
   },
 }));
+vi.mock('../ui/commands/providerCommand.js', () => ({
+  providerCommand: {
+    name: 'provider',
+    description: 'Provider command',
+    kind: 'BUILT_IN',
+  },
+}));
 
 describe('BuiltinCommandLoader', () => {
   let mockConfig: Config;
@@ -205,6 +212,10 @@ describe('BuiltinCommandLoader', () => {
     const modelCmd = commands.find((c) => c.name === 'model');
     expect(modelCmd).toBeDefined();
     expect(modelCmd?.name).toBe('model');
+
+    const providerCmd = commands.find((c) => c.name === 'provider');
+    expect(providerCmd).toBeDefined();
+    expect(providerCmd?.name).toBe('provider');
   });
 
   it('should still load all other commands when ideCommand() throws', async () => {

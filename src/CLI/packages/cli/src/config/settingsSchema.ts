@@ -1228,6 +1228,15 @@ const SETTINGS_SCHEMA = {
             description: 'The currently selected authentication type.',
             showInDialog: false,
           },
+          selectedProvider: {
+            type: 'string',
+            label: 'Selected Provider',
+            category: 'Security',
+            requiresRestart: false,
+            default: undefined as string | undefined,
+            description: 'The currently selected provider id.',
+            showInDialog: false,
+          },
           enforcedType: {
             type: 'string',
             label: 'Enforced Auth Type',

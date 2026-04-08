@@ -19,11 +19,16 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import type { LoadedSettings } from '../../config/settings.js';
 import { getPersistScopeForModelSelection } from '../../config/modelProvidersScope.js';
+import {
+  buildProviderModelProvidersConfig,
+  getProviderAuthType,
+} from './providerSelection.js';
 // OpenAICredentials type (previously imported from OpenAIKeyPrompt)
 export interface OpenAICredentials {
-  apiKey: string;
+  apiKey?: string;
   baseUrl?: string;
   model?: string;
+  providerId?: string;
 }
 import { useAetherAuth } from '../hooks/useAetherAuth.js';
 import { AuthState, MessageType } from '../types.js';
@@ -113,6 +118,24 @@ export const useAuthCommand = (
           'security.auth.selectedType',
           authType,
         );
+
+        if (credentials?.providerId) {
+          settings.setValue(
+            authTypeScope,
+            'security.auth.selectedProvider',
+            credentials.providerId,
+          );
+
+          const providerModelProviders =
+            buildProviderModelProvidersConfig(credentials.providerId);
+          if (providerModelProviders) {
+            settings.setValue(
+              authTypeScope,
+              `modelProviders.${getProviderAuthType(credentials.providerId)}`,
+              providerModelProviders[getProviderAuthType(credentials.providerId)],
+            );
+          }
+        }
 
         // Persist model from ContentGenerator config (handles fallback cases)
         // This ensures that when syncAfterAuthRefresh falls back to default model,
@@ -217,6 +240,30 @@ export const useAuthCommand = (
         setIsAuthDialogOpen(false);
         setAuthError(null);
         return;
+      }
+
+      if (credentials?.providerId) {
+        const authTypeScope = getPersistScopeForModelSelection(settings);
+        const providerModelProviders =
+          buildProviderModelProvidersConfig(credentials.providerId);
+        const updatedModelProviders: ModelProvidersConfig = {
+          ...(settings.merged.modelProviders as ModelProvidersConfig | undefined),
+        };
+        settings.setValue(
+          authTypeScope,
+          'security.auth.selectedProvider',
+          credentials.providerId,
+        );
+        if (providerModelProviders) {
+          updatedModelProviders[authType] =
+            providerModelProviders[authType] ?? [];
+          settings.setValue(
+            authTypeScope,
+            `modelProviders.${authType}`,
+            updatedModelProviders[authType],
+          );
+        }
+        config.reloadModelProvidersConfig(updatedModelProviders);
       }
 
       if (

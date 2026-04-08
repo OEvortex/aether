@@ -7,7 +7,6 @@
 import type React from 'react';
 import { useState } from 'react';
 import { Box, Text } from 'ink';
-import { AuthType } from '@aether/aether-core';
 import { DescriptiveRadioButtonSelect } from '../components/shared/DescriptiveRadioButtonSelect.js';
 import { TextInput } from '../components/shared/TextInput.js';
 import { useKeypress } from '../hooks/useKeypress.js';
@@ -15,8 +14,15 @@ import { theme } from '../semantic-colors.js';
 import { useUIState } from '../contexts/UIStateContext.js';
 import { useUIActions } from '../contexts/UIActionsContext.js';
 import { useConfig } from '../contexts/ConfigContext.js';
+import { useSettings } from '../contexts/SettingsContext.js';
+import { getPersistScopeForModelSelection } from '../../config/modelProvidersScope.js';
 import { t } from '../../i18n/index.js';
 import { KnownProviders } from '../../../../../../utils/knownProvidersData.js';
+import {
+  buildProviderModelProvidersConfig,
+  getProviderAuthType,
+  getProviderBaseUrl,
+} from './providerSelection.js';
 
 type ViewLevel = 'provider-select' | 'api-key-input';
 
@@ -29,13 +35,6 @@ type ProviderChoice = {
 };
 
 const PROVIDER_ITEMS: ProviderChoice[] = [
-  {
-    key: 'aether-oauth',
-    title: t('Aether OAuth'),
-    label: t('Aether OAuth'),
-    description: t('Sign in with your Aether account'),
-    value: 'aether-oauth',
-  },
   ...Object.entries(KnownProviders).map(([providerId, provider]) => ({
     key: providerId,
     title: provider.displayName,
@@ -51,32 +50,24 @@ const PROVIDER_ITEMS: ProviderChoice[] = [
   })),
 ];
 
-function getProviderAuthType(providerId: string): AuthType {
-  const provider = KnownProviders[providerId];
-  if (provider?.sdkMode === 'anthropic') {
-    return AuthType.USE_ANTHROPIC;
-  }
-  return AuthType.USE_OPENAI;
-}
-
-function getProviderBaseUrl(providerId: string): string | undefined {
-  const provider = KnownProviders[providerId];
-  return (
-    provider?.baseUrl ||
-    provider?.openai?.baseUrl ||
-    provider?.anthropic?.baseUrl ||
-    provider?.responses?.baseUrl
-  );
-}
-
 export function AuthDialog(): React.JSX.Element {
   const { authError } = useUIState();
   const { handleAuthSelect, onAuthError } = useUIActions();
   const config = useConfig();
+  const settings = useSettings();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [viewLevel, setViewLevel] = useState<ViewLevel>('provider-select');
-  const [providerIndex, setProviderIndex] = useState<number>(0);
+  const [providerIndex, setProviderIndex] = useState<number>(() => {
+    const selectedProvider = settings.merged.security?.auth?.selectedProvider;
+    if (!selectedProvider) {
+      return 0;
+    }
+    const index = PROVIDER_ITEMS.findIndex(
+      (item) => item.value === selectedProvider,
+    );
+    return index === -1 ? 0 : index;
+  });
   const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
     null,
   );
@@ -87,11 +78,6 @@ export function AuthDialog(): React.JSX.Element {
     setErrorMessage(null);
     onAuthError(null);
 
-    if (value === 'aether-oauth') {
-      await handleAuthSelect(AuthType.AETHER_OAUTH);
-      return;
-    }
-
     const provider = KnownProviders[value];
     if (!provider) {
       setErrorMessage(t('Unknown provider selected.'));
@@ -99,13 +85,24 @@ export function AuthDialog(): React.JSX.Element {
     }
 
     const authType = getProviderAuthType(value);
-    const baseUrl = getProviderBaseUrl(value);
+    const providerModelProviders = buildProviderModelProvidersConfig(value);
+    const scope = getPersistScopeForModelSelection(settings);
+    const currentProvider = settings.merged.security?.auth?.selectedProvider;
+    const currentConfig = config.getContentGeneratorConfig();
+    const currentApiKey = currentConfig?.apiKey?.trim();
 
-    if (provider.supportsApiKey === false) {
+    settings.setValue(scope, 'security.auth.selectedProvider', value);
+    if (providerModelProviders) {
+      settings.setValue(scope, `modelProviders.${authType}`, providerModelProviders[authType]);
+    }
+
+    if (
+      provider.supportsApiKey === false ||
+      (currentProvider === value && !!currentApiKey)
+    ) {
       await handleAuthSelect(authType, {
-        apiKey: '',
-        baseUrl,
-        model: provider.models?.[0]?.id,
+        providerId: value,
+        apiKey: currentApiKey,
       });
       return;
     }
@@ -128,11 +125,10 @@ export function AuthDialog(): React.JSX.Element {
       return;
     }
 
-    const provider = KnownProviders[selectedProviderId];
     await handleAuthSelect(getProviderAuthType(selectedProviderId), {
       apiKey: trimmedKey,
       baseUrl: getProviderBaseUrl(selectedProviderId),
-      model: provider?.models?.[0]?.id,
+      providerId: selectedProviderId,
     });
   };
 

@@ -8,7 +8,6 @@ import {
   AuthType,
   type Config,
   type AvailableModel as CoreAvailableModel,
-  AETHER_OAUTH_MODELS,
 } from '@aether/aether-core';
 import { t } from '../../i18n/index.js';
 
@@ -18,27 +17,6 @@ export type AvailableModel = {
   description?: string;
   isVision?: boolean;
 };
-
-const CACHED_AETHER_OAUTH_MODELS: AvailableModel[] = AETHER_OAUTH_MODELS.map(
-  (model) => ({
-    id: model.id,
-    label: model.name ?? model.id,
-    description: model.description,
-    isVision: model.capabilities?.vision ?? false,
-  }),
-);
-
-function getaetherOAuthModels(): readonly AvailableModel[] {
-  return CACHED_AETHER_OAUTH_MODELS;
-}
-
-/**
- * Get available Aether models
- * coder-model now has vision capabilities by default.
- */
-export function getFilteredAetherModels(): AvailableModel[] {
-  return [...getaetherOAuthModels()];
-}
 
 /**
  * Currently we use the single model of `OPENAI_MODEL` in the env.
@@ -112,9 +90,6 @@ export function getAvailableModelsForAuthType(
 
   // Fall back to environment variables for specific auth types (no config provided)
   switch (authType) {
-    case AuthType.AETHER_OAUTH: {
-      return [...getaetherOAuthModels()];
-    }
     case AuthType.USE_OPENAI: {
       const openAIModel = getOpenAIAvailableModelFromEnv();
       return openAIModel ? [openAIModel] : [];

@@ -10,9 +10,10 @@ import type { AuthType, ApprovalMode } from '@aether/aether-core';
 import type { ArenaDialogType } from './useArenaCommand.js';
 // OpenAICredentials type (previously imported from OpenAIKeyPrompt)
 interface OpenAICredentials {
-  apiKey: string;
+  apiKey?: string;
   baseUrl?: string;
   model?: string;
+  providerId?: string;
 }
 
 export interface DialogCloseOptions {
