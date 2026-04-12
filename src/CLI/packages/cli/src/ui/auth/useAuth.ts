@@ -21,7 +21,9 @@ import type { LoadedSettings } from '../../config/settings.js';
 import { getPersistScopeForModelSelection } from '../../config/modelProvidersScope.js';
 import {
   buildProviderModelProvidersConfig,
+  buildStoredProviderConfig,
   getProviderAuthType,
+  shouldPromptForProviderApiKey,
 } from './providerSelection.js';
 // OpenAICredentials type (previously imported from OpenAIKeyPrompt)
 export interface OpenAICredentials {
@@ -135,6 +137,19 @@ export const useAuthCommand = (
               providerModelProviders[getProviderAuthType(credentials.providerId)],
             );
           }
+
+          const storedProvider = buildStoredProviderConfig(
+            credentials.providerId,
+            credentials.apiKey,
+            credentials.baseUrl,
+          );
+          if (storedProvider) {
+            settings.setValue(
+              authTypeScope,
+              `providers.${credentials.providerId}`,
+              storedProvider,
+            );
+          }
         }
 
         // Persist model from ContentGenerator config (handles fallback cases)
@@ -243,9 +258,26 @@ export const useAuthCommand = (
       }
 
       if (credentials?.providerId) {
+        if (
+          shouldPromptForProviderApiKey(credentials.providerId, settings) &&
+          !credentials.apiKey?.trim()
+        ) {
+          onAuthError(
+            t('API key required for the selected provider. Please choose the provider again and enter its API key.'),
+          );
+          setIsAuthDialogOpen(true);
+          setIsAuthenticating(false);
+          return;
+        }
+
         const authTypeScope = getPersistScopeForModelSelection(settings);
         const providerModelProviders =
           buildProviderModelProvidersConfig(credentials.providerId);
+        const storedProvider = buildStoredProviderConfig(
+          credentials.providerId,
+          credentials.apiKey,
+          credentials.baseUrl,
+        );
         const updatedModelProviders: ModelProvidersConfig = {
           ...(settings.merged.modelProviders as ModelProvidersConfig | undefined),
         };
@@ -261,6 +293,13 @@ export const useAuthCommand = (
             authTypeScope,
             `modelProviders.${authType}`,
             updatedModelProviders[authType],
+          );
+        }
+        if (storedProvider) {
+          settings.setValue(
+            authTypeScope,
+            `providers.${credentials.providerId}`,
+            storedProvider,
           );
         }
         config.reloadModelProvidersConfig(updatedModelProviders);

@@ -2408,8 +2408,8 @@ describe('Settings Loading and Merging', () => {
 
       const writtenContent = JSON.parse(String(writeCall?.[1]));
       expect(writtenContent.model.name).toBe('manually-added-model');
-      expect(writtenContent.modelProviders.openai).toEqual(
-        externallyModifiedUserSettingsContent.modelProviders.openai,
+      expect(writtenContent.providers.openai).toEqual(
+        externallyModifiedUserSettingsContent.providers.openai,
       );
     });
   });

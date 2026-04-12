@@ -4,24 +4,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type React from 'react';
-import { useState } from 'react';
 import { Box, Text } from 'ink';
-import { DescriptiveRadioButtonSelect } from '../components/shared/DescriptiveRadioButtonSelect.js';
-import { TextInput } from '../components/shared/TextInput.js';
-import { useKeypress } from '../hooks/useKeypress.js';
-import { theme } from '../semantic-colors.js';
+import { useConfig } from '../contexts/ConfigContext.js';
 import { useUIState } from '../contexts/UIStateContext.js';
 import { useUIActions } from '../contexts/UIActionsContext.js';
-import { useConfig } from '../contexts/ConfigContext.js';
-import { useSettings } from '../contexts/SettingsContext.js';
+import { useKeypress } from '../hooks/useKeypress.js';
 import { getPersistScopeForModelSelection } from '../../config/modelProvidersScope.js';
+import { theme } from '../semantic-colors.js';
 import { t } from '../../i18n/index.js';
 import { KnownProviders } from '../../../../../../utils/knownProvidersData.js';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { DescriptiveRadioButtonSelect } from '../components/shared/DescriptiveRadioButtonSelect.js';
+import { TextInput } from '../components/shared/TextInput.js';
+import { useSettings } from '../contexts/SettingsContext.js';
 import {
   buildProviderModelProvidersConfig,
   getProviderAuthType,
   getProviderBaseUrl,
+    getStoredProviderApiKey,
+    shouldPromptForProviderApiKey,
 } from './providerSelection.js';
 
 type ViewLevel = 'provider-select' | 'api-key-input';
@@ -47,7 +49,7 @@ const PROVIDER_ITEMS: ProviderChoice[] = [
           ? t('API key and live models')
           : t('API key required')),
     value: providerId,
-  })),
+  }))
 ];
 
 export function AuthDialog(): React.JSX.Element {
@@ -58,21 +60,30 @@ export function AuthDialog(): React.JSX.Element {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [viewLevel, setViewLevel] = useState<ViewLevel>('provider-select');
+    const [providerSelectReady, setProviderSelectReady] = useState(false);
   const [providerIndex, setProviderIndex] = useState<number>(() => {
     const selectedProvider = settings.merged.security?.auth?.selectedProvider;
     if (!selectedProvider) {
       return 0;
     }
     const index = PROVIDER_ITEMS.findIndex(
-      (item) => item.value === selectedProvider,
+        (item) => item.value === selectedProvider
     );
     return index === -1 ? 0 : index;
   });
-  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
-    null,
-  );
+    const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
   const [apiKey, setApiKey] = useState('');
   const [apiKeyError, setApiKeyError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setProviderSelectReady(true);
+        }, 0);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, []);
 
   const handleProviderSelect = async (value: string) => {
     setErrorMessage(null);
@@ -86,23 +97,23 @@ export function AuthDialog(): React.JSX.Element {
 
     const authType = getProviderAuthType(value);
     const providerModelProviders = buildProviderModelProvidersConfig(value);
-    const scope = getPersistScopeForModelSelection(settings);
-    const currentProvider = settings.merged.security?.auth?.selectedProvider;
-    const currentConfig = config.getContentGeneratorConfig();
-    const currentApiKey = currentConfig?.apiKey?.trim();
+      const shouldPromptForApiKey = shouldPromptForProviderApiKey(value, settings);
+      const storedApiKey = getStoredProviderApiKey(value, settings);
 
-    settings.setValue(scope, 'security.auth.selectedProvider', value);
-    if (providerModelProviders) {
-      settings.setValue(scope, `modelProviders.${authType}`, providerModelProviders[authType]);
-    }
+      if (!shouldPromptForApiKey) {
+        const scope = getPersistScopeForModelSelection(settings);
+        settings.setValue(scope, 'security.auth.selectedProvider', value);
+        if (providerModelProviders) {
+          settings.setValue(
+              scope,
+              `modelProviders.${authType}`,
+              providerModelProviders[authType]
+          );
+      }
 
-    if (
-      provider.supportsApiKey === false ||
-      (currentProvider === value && !!currentApiKey)
-    ) {
       await handleAuthSelect(authType, {
         providerId: value,
-        apiKey: currentApiKey,
+          apiKey: storedApiKey
       });
       return;
     }
@@ -128,7 +139,7 @@ export function AuthDialog(): React.JSX.Element {
     await handleAuthSelect(getProviderAuthType(selectedProviderId), {
       apiKey: trimmedKey,
       baseUrl: getProviderBaseUrl(selectedProviderId),
-      providerId: selectedProviderId,
+        providerId: selectedProviderId
     });
   };
 
@@ -166,6 +177,7 @@ export function AuthDialog(): React.JSX.Element {
         <DescriptiveRadioButtonSelect
           items={PROVIDER_ITEMS}
           initialIndex={providerIndex}
+                  isFocused={providerSelectReady}
           onSelect={handleProviderSelect}
           onHighlight={(value) => {
             const index = PROVIDER_ITEMS.findIndex((item) => item.value === value);

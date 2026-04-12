@@ -9,7 +9,20 @@ import {
   type ProviderModelConfig,
   type ModelProvidersConfig,
 } from '@aether/aether-core';
-import { KnownProviders } from '../../../../../../utils/knownProvidersData.js';
+import {
+  KnownProviders,
+  type KnownProviderConfig,
+} from '../../../../../../utils/knownProvidersData.js';
+
+export interface StoredProviderConfig extends KnownProviderConfig {
+  apiKey?: string;
+}
+
+export type ProviderStorageSettings = {
+  merged: {
+    providers?: Record<string, StoredProviderConfig> | undefined;
+  };
+};
 
 export function getProviderAuthType(providerId: string): AuthType {
   const provider = KnownProviders[providerId];
@@ -101,6 +114,44 @@ function buildDiscoveryTemplate(providerId: string): ProviderModelConfig | undef
     modelsEndpoint: provider.modelsEndpoint,
     modelParser: provider.modelParser,
   };
+}
+
+export function buildStoredProviderConfig(
+  providerId: string,
+  apiKey?: string,
+  baseUrl?: string,
+): StoredProviderConfig | undefined {
+  const provider = KnownProviders[providerId];
+  if (!provider) {
+    return undefined;
+  }
+
+  return {
+    ...provider,
+    ...(baseUrl !== undefined ? { baseUrl } : {}),
+    apiKey: apiKey ?? '',
+  };
+}
+
+export function getStoredProviderApiKey(
+  providerId: string,
+  settings: ProviderStorageSettings,
+): string | undefined {
+  const storedProvider = settings.merged.providers?.[providerId];
+  const apiKey = storedProvider?.apiKey?.trim();
+  return apiKey ? apiKey : undefined;
+}
+
+export function shouldPromptForProviderApiKey(
+  providerId: string,
+  settings: ProviderStorageSettings,
+): boolean {
+  const provider = KnownProviders[providerId];
+  if (!provider || provider.supportsApiKey === false) {
+    return false;
+  }
+
+  return getStoredProviderApiKey(providerId, settings) === undefined;
 }
 
 export function buildProviderModelProvidersConfig(

@@ -202,6 +202,20 @@ const SETTINGS_SCHEMA = {
   },
 
   // Model providers configuration grouped by authType
+  providers: {
+    type: 'object',
+    label: 'Providers',
+    category: 'Model',
+    requiresRestart: false,
+    default: {},
+    description:
+      'Provider registry keyed by provider id. Each entry stores the provider definition shape: displayName, family, sdkMode, openai, anthropic, responses, fetchModels, modelsEndpoint, modelParser, supportsApiKey, and apiKey.',
+    showInDialog: false,
+    mergeStrategy: MergeStrategy.SHALLOW_MERGE,
+  },
+
+  // Legacy runtime model provider configuration grouped by authType.
+  // Kept for compatibility with existing auth/model resolution code.
   modelProviders: {
     type: 'object',
     label: 'Model Providers',
@@ -209,9 +223,8 @@ const SETTINGS_SCHEMA = {
     requiresRestart: false,
     default: {} as ModelProvidersConfig,
     description:
-      'Model providers configuration grouped by authType. Each authType contains an array of model configurations.',
+      'Legacy runtime model-provider registry keyed by auth type. Each entry stores the model config array used by auth and model resolution.',
     showInDialog: false,
-    mergeStrategy: MergeStrategy.REPLACE,
   },
 
   // Coding Plan configuration
