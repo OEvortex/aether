@@ -105,19 +105,20 @@ export class ModelRegistry {
     const models = this.modelsByAuthType.get(authType);
     if (!models) return [];
 
-    return Array.from(models.values())
-      .filter((model) => this.isSelectableModel(model))
-      .map((model) => ({
-        id: model.id,
-        label: model.name,
-        description: model.description,
-        capabilities: model.capabilities,
-        authType: model.authType,
-        isVision: model.capabilities?.vision ?? false,
-        contextWindowSize:
-          model.generationConfig.contextWindowSize ?? tokenLimit(model.id),
-        modalities:
-          model.generationConfig.modalities ?? defaultModalities(model.id),
+      return Array.from(models.values())
+        .filter((model) => this.isSelectableModel(model))
+        .map((model) => ({
+          id: model.id,
+          label: model.name,
+          description: model.description,
+          capabilities: model.capabilities,
+          authType: model.authType,
+          provider: model.provider,
+          isVision: model.capabilities?.vision ?? false,
+          contextWindowSize:
+            model.generationConfig.contextWindowSize ?? tokenLimit(model.id),
+          modalities:
+            model.generationConfig.modalities ?? defaultModalities(model.id),
         baseUrl: model.baseUrl,
         envKey: model.envKey,
       }));

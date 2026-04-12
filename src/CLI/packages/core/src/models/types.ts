@@ -122,6 +122,7 @@ export interface AvailableModel {
   description?: string;
   capabilities?: ModelCapabilities;
   authType: AuthType;
+  provider?: string;
   isVision?: boolean;
   contextWindowSize?: number;
   modalities?: InputModalities;

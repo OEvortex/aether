@@ -75,6 +75,7 @@ describe('ModelRegistry', () => {
             name: 'GPT-4 Turbo',
             description: 'Most capable GPT-4',
             baseUrl: 'https://api.openai.com/v1',
+            provider: 'openai-1',
             capabilities: { vision: true },
           },
           {
@@ -106,6 +107,7 @@ describe('ModelRegistry', () => {
       expect(gpt4?.description).toBe('Most capable GPT-4');
       expect(gpt4?.isVision).toBe(true);
       expect(gpt4?.authType).toBe(AuthType.USE_OPENAI);
+      expect(gpt4?.provider).toBe('openai-1');
     });
   });
 

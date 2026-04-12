@@ -142,14 +142,22 @@ export function ModelDialog({
   const [highlightedValue, setHighlightedValue] = useState<string | null>(null);
 
   const authType = config?.getContentGeneratorConfig()?.authType ?? config?.getAuthType();
+  const selectedProvider = settings.merged.security?.auth?.selectedProvider;
 
   const availableModelEntries = useMemo(() => {
     if (!config || !authType) {
       return [];
     }
 
-    return config.getAvailableModelsForAuthType(authType);
-  }, [authType, config]);
+    const models = config.getAvailableModelsForAuthType(authType);
+    if (!selectedProvider) {
+      return models;
+    }
+
+    return models.filter(
+      (model) => model.provider === selectedProvider || model.isRuntimeModel,
+    );
+  }, [authType, config, selectedProvider]);
 
   const MODEL_OPTIONS = useMemo(
     () =>
