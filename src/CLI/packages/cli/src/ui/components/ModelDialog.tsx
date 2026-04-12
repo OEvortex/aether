@@ -112,6 +112,24 @@ function formatContextWindow(size?: number): string {
     return `${size.toLocaleString('en-US')} tokens`;
 }
 
+function fuzzyMatch(query: string, text: string): boolean {
+    if (!query) return true;
+    const lowerQuery = query.toLowerCase();
+    const lowerText = text.toLowerCase();
+
+    let queryIndex = 0;
+    let textIndex = 0;
+
+    while (queryIndex < lowerQuery.length && textIndex < lowerText.length) {
+        if (lowerQuery[queryIndex] === lowerText[textIndex]) {
+            queryIndex++;
+        }
+        textIndex++;
+    }
+
+    return queryIndex === lowerQuery.length;
+}
+
 function DetailRow({
     label,
     value,
@@ -142,6 +160,7 @@ export function ModelDialog({
     // Local error state for displaying errors within the dialog
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [highlightedValue, setHighlightedValue] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     const authType = config?.getContentGeneratorConfig()?.authType ?? config?.getAuthType();
     const selectedProvider = settings.merged.security?.auth?.selectedProvider;
@@ -170,37 +189,43 @@ export function ModelDialog({
 
     const MODEL_OPTIONS = useMemo(
         () =>
-            availableModelEntries.map((model) => {
-                const value = model.runtimeSnapshotId ?? model.id;
-                const title = (
-                    <Text>
-                        <Text
-                            bold
-                            color={
-                                model.isRuntimeModel ? theme.status.warning : theme.text.accent
-                            }
-                        >
-                            {model.label}
+            availableModelEntries
+                .filter((model) => {
+                    if (!searchQuery) return true;
+                    const searchText = `${model.label} ${model.description || ''}`;
+                    return fuzzyMatch(searchQuery, searchText);
+                })
+                .map((model) => {
+                    const value = model.runtimeSnapshotId ?? model.id;
+                    const title = (
+                        <Text>
+                            <Text
+                                bold
+                                color={
+                                    model.isRuntimeModel ? theme.status.warning : theme.text.accent
+                                }
+                            >
+                                {model.label}
+                            </Text>
+                            {model.isRuntimeModel && (
+                                <Text color={theme.status.warning}> (Runtime)</Text>
+                            )}
                         </Text>
-                        {model.isRuntimeModel && (
-                            <Text color={theme.status.warning}> (Runtime)</Text>
-                        )}
-                    </Text>
-                );
+                    );
 
-                const description = model.isRuntimeModel
-                    ? model.description
-                        ? `${model.description} (Runtime)`
-                        : 'Runtime model'
-                    : model.description || '';
+                    const description = model.isRuntimeModel
+                        ? model.description
+                            ? `${model.description} (Runtime)`
+                            : 'Runtime model'
+                        : model.description || '';
 
-                return {
-                    value,
-                    title,
-                    description,
-                    key: value,
-                };
-            }),
+                    return {
+                        value,
+                        title,
+                        description,
+                        key: value,
+                    };
+                }),
         [availableModelEntries],
     );
 
@@ -223,6 +248,11 @@ export function ModelDialog({
         (key) => {
             if (key.name === 'escape') {
                 onClose();
+            } else if (key.name === 'backspace') {
+                setSearchQuery((prev) => prev.slice(0, -1));
+            } else if (key.sequence && key.sequence.length === 1) {
+                // Handle regular character input
+                setSearchQuery((prev) => prev + key.sequence);
             }
         },
         { isActive: true },
@@ -349,6 +379,12 @@ export function ModelDialog({
         >
             <Text bold>{t('Select Model')}</Text>
 
+            <Box marginTop={1}>
+                <Text color={theme.text.secondary}>Search: </Text>
+                <Text color={theme.text.accent}>{searchQuery || t('Type to filter models...')}</Text>
+                <Text color={theme.text.secondary}>_</Text>
+            </Box>
+
             {!hasModels ? (
                 <Box marginTop={1} flexDirection="column">
                     <Text color={theme.status.warning}>
@@ -403,7 +439,7 @@ export function ModelDialog({
                     />
                     <DetailRow
                         label="API Key"
-                        value={highlightedEntry.envKey ?? t('(not set)')}
+                        value={highlightedEntry.provider && (settings.merged.providers as Record<string, any>)?.[highlightedEntry.provider]?.apiKey ? t('configured') : t('(not set)')}
                     />
                 </Box>
             )}
@@ -418,7 +454,7 @@ export function ModelDialog({
 
             <Box marginTop={1} flexDirection="column">
                 <Text color={theme.text.secondary}>
-                    {t('Enter to select, ↑↓ to navigate, Esc to close')}
+                    {t('Enter to select, ↑↓ to navigate, Esc to close, Type to search')}
                 </Text>
             </Box>
         </Box>
