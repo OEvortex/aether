@@ -1,0 +1,19 @@
+{
+    "displayName": "Sherlock (CloudFerro)",
+    "baseUrl": "https://api-sherlock.cloudferro.com/openai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "modelsEndpoint": "/models",
+    "models": [
+        {
+            "id": "gpt-4o",
+            "name": "GPT-4o (placeholder)",
+            "tooltip": "Placeholder model entry; real models are fetched from the provider's /models endpoint",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

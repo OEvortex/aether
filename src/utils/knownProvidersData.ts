@@ -343,6 +343,19 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    modal: {
+        displayName: 'Modal (Research)',
+        family: 'Modal',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.us-west-2.modal.direct/v1'
+        },
+        // This provider exposes a single fixed model for research: zai-org/GLM-5.1-FP8
+        fetchModels: false,
+        openModelEndpoint: false
+    },
     nvidia: {
         displayName: 'NVIDIA NIM',
         family: 'NVIDIA',
@@ -508,6 +521,62 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             baseUrl: 'https://inference.baseten.co/v1'
         },
         openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    berget: {
+        displayName: 'Berget',
+        family: 'Berget AI',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.berget.ai/v1'
+        },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    sherlock: {
+        displayName: 'Sherlock (CloudFerro)',
+        family: 'CloudFerro',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api-sherlock.cloudferro.com/openai/v1'
+        },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    clarifai: {
+        displayName: 'Clarifai',
+        family: 'Clarifai',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // Clarifai exposes an OpenAI-compatible bridge for both the OpenAI SDK and the Responses API
+        openai: {
+            baseUrl: 'https://api.clarifai.com/v2/ext/openai/v1'
+        },
+        responses: {
+            baseUrl: 'https://api.clarifai.com/v2/ext/openai/v1'
+        },
+        // prefer explicit sdkMode selection when using this provider
+        sdkMode: 'openai',
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {

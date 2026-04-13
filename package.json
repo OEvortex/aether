@@ -56,9 +56,11 @@
         "onLanguageModelProvider:aether.apertis",
         "onLanguageModelProvider:aether.ava-supernova",
         "onLanguageModelProvider:aether.baseten",
+        "onLanguageModelProvider:aether.berget",
         "onLanguageModelProvider:aether.blackbox",
         "onLanguageModelProvider:aether.chatjimmy",
         "onLanguageModelProvider:aether.chutes",
+        "onLanguageModelProvider:aether.clarifai",
         "onLanguageModelProvider:aether.cline",
         "onLanguageModelProvider:aether.codex",
         "onLanguageModelProvider:aether.deepinfra",
@@ -71,6 +73,7 @@
         "onLanguageModelProvider:aether.llmgateway",
         "onLanguageModelProvider:aether.minimax",
         "onLanguageModelProvider:aether.mistral",
+        "onLanguageModelProvider:aether.modal",
         "onLanguageModelProvider:aether.modelscope",
         "onLanguageModelProvider:aether.moonshot",
         "onLanguageModelProvider:aether.nanogpt",
@@ -82,6 +85,7 @@
         "onLanguageModelProvider:aether.puter",
         "onLanguageModelProvider:aether.qwencli",
         "onLanguageModelProvider:aether.seraphyn",
+        "onLanguageModelProvider:aether.sherlock",
         "onLanguageModelProvider:aether.vercelai",
         "onLanguageModelProvider:aether.zenmux",
         "onLanguageModelProvider:aether.zhipu"
@@ -365,6 +369,26 @@
             {
                 "command": "aether.baseten.setApiKey",
                 "title": "Configure Baseten",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.berget.setApiKey",
+                "title": "Configure Berget",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.clarifai.setApiKey",
+                "title": "Configure Clarifai",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.modal.setApiKey",
+                "title": "Configure Modal (Research)",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.sherlock.setApiKey",
+                "title": "Configure Sherlock (CloudFerro)",
                 "category": "Aether"
             }
         ],
@@ -658,6 +682,16 @@
                     "description": "Select SDK compatibility mode for Blackbox AI.",
                     "scope": "application"
                 },
+                "aether.clarifai.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "oai-response"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for Clarifai.",
+                    "scope": "application"
+                },
                 "aether.deepseek.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -784,6 +818,19 @@
                 }
             },
             {
+                "vendor": "aether.berget",
+                "displayName": "⦿ Berget",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Berget API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.blackbox",
                 "displayName": "⦿ Blackbox AI (Blackbox AI)",
                 "configuration": {
@@ -811,6 +858,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Chutes AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.clarifai",
+                "displayName": "⦿ Clarifai",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Clarifai API key.",
                             "secret": true
                         }
                     }
@@ -973,6 +1033,19 @@
                 }
             },
             {
+                "vendor": "aether.modal",
+                "displayName": "⦿ Modal (Research)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Modal (Research) API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.modelscope",
                 "displayName": "⦿ ModelScope",
                 "configuration": {
@@ -1110,6 +1183,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Seraphyn API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.sherlock",
+                "displayName": "⦿ Sherlock (CloudFerro)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Sherlock (CloudFerro) API key.",
                             "secret": true
                         }
                     }

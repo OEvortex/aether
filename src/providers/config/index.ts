@@ -18,6 +18,11 @@ import mistral from './mistral.json';
 import modelscope from './modelscope.json';
 import moonshot from './moonshot.json';
 import nanogpt from './nanogpt.json';
+import modal from './modal.json';
+import baseten from './baseten.json';
+import berget from './berget.json';
+import clarifai from './clarifai.json';
+import sherlock from './sherlock.json';
 import nvidia from './nvidia.json';
 import ollama from './ollama.json';
 import opencode from './opencode.json';
@@ -33,9 +38,12 @@ const providers = {
 	aihubmix: aihubmix,
 	apertis: apertis,
 	"ava-supernova": avaSupernova,
+	baseten: baseten,
+	berget: berget,
 	blackbox: blackbox,
 	chatjimmy: chatjimmy,
 	chutes: chutes,
+	clarifai: clarifai,
 	codex: codex,
 	deepinfra: deepinfra,
 	deepseek: deepseek,
@@ -46,6 +54,7 @@ const providers = {
 	llmgateway: llmgateway,
 	minimax: minimax,
 	mistral: mistral,
+	modal: modal,
 	modelscope: modelscope,
 	moonshot: moonshot,
 	nanogpt: nanogpt,
@@ -57,6 +66,7 @@ const providers = {
 	puter: puter,
 	qwencli: qwencli,
 	seraphyn: seraphyn,
+	sherlock: sherlock,
 	zenmux: zenmux,
 	zhipu: zhipu,
 };

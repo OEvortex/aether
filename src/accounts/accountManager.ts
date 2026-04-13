@@ -75,6 +75,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Berget,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Blackbox,
             {
                 supportsMultiAccount: true,
@@ -92,6 +100,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Chutes,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Clarifai,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -219,6 +235,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Modal,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.ModelScope,
             {
                 supportsMultiAccount: true,
@@ -308,6 +332,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Seraphyn,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Sherlock,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,

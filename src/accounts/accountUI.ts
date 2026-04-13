@@ -130,6 +130,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Berget",
+                value: ProviderKey.Berget,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Blackbox",
                 value: ProviderKey.Blackbox,
                 authType: "apiKey" as const
@@ -137,6 +142,11 @@ export class AccountUI {
             {
                 label: "Chutes AI",
                 value: ProviderKey.Chutes,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Clarifai",
+                value: ProviderKey.Clarifai,
                 authType: "apiKey" as const
             },
             {
@@ -205,6 +215,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Modal (Research)",
+                value: ProviderKey.Modal,
+                authType: "apiKey" as const
+            },
+            {
                 label: "ModelScope",
                 value: ProviderKey.ModelScope,
                 authType: "apiKey" as const
@@ -257,6 +272,11 @@ export class AccountUI {
             {
                 label: "Seraphyn",
                 value: ProviderKey.Seraphyn,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Sherlock (CloudFerro)",
+                value: ProviderKey.Sherlock,
                 authType: "apiKey" as const
             },
             {
@@ -894,8 +914,10 @@ export class AccountUI {
             aihubmix: "AIHubMix",
             apertis: "Apertis AI",
             baseten: "Baseten",
+            berget: "Berget",
             blackbox: "Blackbox",
             chutes: "Chutes AI",
+            clarifai: "Clarifai",
             cline: "Cline",
             deepinfra: "DeepInfra",
             deepseek: "DeepSeek",
@@ -909,6 +931,7 @@ export class AccountUI {
             minimax: "MiniMax",
             "minimax-coding": "MiniMax Coding",
             mistral: "Mistral",
+            modal: "Modal (Research)",
             modelscope: "ModelScope",
             moonshot: "Moonshot",
             nanogpt: "NanoGPT",
@@ -920,6 +943,7 @@ export class AccountUI {
             pollinations: "Pollinations AI",
             puter: "Puter AI",
             seraphyn: "Seraphyn",
+            sherlock: "Sherlock (CloudFerro)",
             vercelai: "Vercel AI",
             zenmux: "Zenmux",
             zhipu: "ZhipuAI",

@@ -1,0 +1,18 @@
+{
+    "displayName": "Berget",
+    "baseUrl": "https://api.berget.ai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-4o",
+            "name": "GPT-4o",
+            "tooltip": "Placeholder model for Berget",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

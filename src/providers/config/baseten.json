@@ -1,0 +1,18 @@
+{
+    "displayName": "Baseten",
+    "baseUrl": "https://inference.baseten.co/v1",
+    "apiKeyTemplate": "pt-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-4o",
+            "name": "GPT-4o",
+            "tooltip": "GPT-4o - example placeholder",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
+}
