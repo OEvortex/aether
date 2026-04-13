@@ -22,6 +22,7 @@ All notable changes to the Aether CLI will be documented in this file.
 - Updated error messages to reference "provider" instead of "modelProviders"
 - Replaced "authType" with "sdkMode" in CLI model display
 - **BREAKING**: Migrated from `tokenLimits.ts` to `globalContextLengthManager.ts` for model context length management
+- **BREAKING**: Moved `globalContextLengthManager` to aether-core package and exported it for shared use
 - Changed default output token limit from 32K to 16K for better input quota preservation
 - Changed token compression threshold from 70% to 65% of context window
 - Updated model credential resolution to use settings as sole source of truth

@@ -21,10 +21,10 @@ import {
   DiscoveredMCPTool,
   uiTelemetryService,
   getCoreSystemPrompt,
-  DEFAULT_TOKEN_LIMIT,
   ToolNames,
   SkillTool,
   buildSkillLlmContent,
+  DEFAULT_CONTEXT_LENGTH,
 } from '@aether/aether-core';
 import { t } from '../../i18n/index.js';
 
@@ -116,7 +116,7 @@ export const contextCommand: SlashCommand = {
     const modelName = config.getModel() || 'unknown';
     const contentGeneratorConfig = config.getContentGeneratorConfig();
     const contextWindowSize =
-      contentGeneratorConfig.contextWindowSize ?? DEFAULT_TOKEN_LIMIT;
+      contentGeneratorConfig.contextWindowSize ?? DEFAULT_CONTEXT_LENGTH;
 
     // Total prompt token count from API (most accurate)
     const apiTotalTokens = uiTelemetryService.getLastPromptTokenCount();

@@ -10,7 +10,7 @@ import {
   DEFAULT_CONTEXT_LENGTH,
   DEFAULT_MAX_OUTPUT_TOKENS,
   hasExplicitOutputLimit,
-} from '../../../utils/globalContextLengthManager.js';
+} from '../../index.js';
 
 /**
  * Default provider for standard OpenAI-compatible APIs

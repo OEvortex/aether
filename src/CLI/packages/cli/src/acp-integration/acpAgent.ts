@@ -14,10 +14,12 @@ import {
   aetherOAuth2Events,
   MCPServerConfig,
   SessionService,
-  tokenLimit,
   type Config,
   type ConversationRecord,
   type DeviceAuthorizationData,
+  resolveGlobalTokenLimits,
+  DEFAULT_CONTEXT_LENGTH,
+  DEFAULT_MAX_OUTPUT_TOKENS,
 } from '@aether/aether-core';
 import {
   AgentSideConnection,
@@ -545,7 +547,7 @@ class QwenAgent implements Agent {
         name: model.label,
         description: model.description ?? null,
         _meta: {
-          contextLimit: model.contextWindowSize ?? tokenLimit(model.id),
+          contextLimit: model.contextWindowSize ?? resolveGlobalTokenLimits(model.id, DEFAULT_CONTEXT_LENGTH, { defaultContextLength: DEFAULT_CONTEXT_LENGTH, defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS }).maxInputTokens,
         },
       };
     });

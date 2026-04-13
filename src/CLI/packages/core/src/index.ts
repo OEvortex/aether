@@ -68,6 +68,9 @@ export * from './core/turn.js';
 // Tools
 // ============================================================================
 
+// Utilities
+export * from './utils/globalContextLengthManager.js';
+
 // Tool names and registry
 export * from './tools/tool-names.js';
 export * from './tools/tool-error.js';
