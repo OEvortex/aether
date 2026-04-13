@@ -353,6 +353,33 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    jiekou: {
+        displayName: 'Jiekou AI',
+        family: 'Jiekou AI',
+        openai: { baseUrl: 'https://api.jiekou.ai/openai/' },
+        anthropic: { baseUrl: 'https://api.jiekou.ai/anthropic' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        openModelEndpoint: false,
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    meganova: {
+        displayName: 'MegaNova',
+        family: 'MegaNova',
+        openai: { baseUrl: 'https://inference.meganova.ai/v1' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        openModelEndpoint: false,
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     kilo: {
         displayName: 'Kilo AI',
         family: 'Kilo AI',
@@ -398,6 +425,19 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openai: { baseUrl: 'https://api.mistral.ai/v1' },
         apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         fetchModels: false
+    },
+    moark: {
+        displayName: 'Moark',
+        family: 'Moark',
+        openai: { baseUrl: 'https://api.moark.ai/v1' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        openModelEndpoint: false,
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
     },
     modelscope: {
         displayName: 'ModelScope',

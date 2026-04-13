@@ -72,12 +72,15 @@
         "onLanguageModelProvider:aether.friendli",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
+        "onLanguageModelProvider:aether.jiekou",
         "onLanguageModelProvider:aether.kilo",
         "onLanguageModelProvider:aether.knox",
         "onLanguageModelProvider:aether.lightningai",
         "onLanguageModelProvider:aether.llmgateway",
+        "onLanguageModelProvider:aether.meganova",
         "onLanguageModelProvider:aether.minimax",
         "onLanguageModelProvider:aether.mistral",
+        "onLanguageModelProvider:aether.moark",
         "onLanguageModelProvider:aether.modal",
         "onLanguageModelProvider:aether.modelscope",
         "onLanguageModelProvider:aether.moonshot",
@@ -420,6 +423,21 @@
                 "command": "aether.friendli.setApiKey",
                 "title": "Configure Friendli",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.jiekou.setApiKey",
+                "title": "Configure Jiekou AI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.meganova.setApiKey",
+                "title": "Configure MegaNova",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.moark.setApiKey",
+                "title": "Configure Moark",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -754,6 +772,16 @@
                     "description": "Select SDK compatibility mode for Fireworks AI.",
                     "scope": "application"
                 },
+                "aether.jiekou.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "anthropic",
+                    "description": "Select SDK compatibility mode for Jiekou AI.",
+                    "scope": "application"
+                },
                 "aether.llmgateway.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -1072,6 +1100,19 @@
                 }
             },
             {
+                "vendor": "aether.jiekou",
+                "displayName": "⦿ Jiekou AI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Jiekou AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.kilo",
                 "displayName": "⦿ Kilo AI (Kilo AI endpoint integration)",
                 "configuration": {
@@ -1124,6 +1165,19 @@
                 }
             },
             {
+                "vendor": "aether.meganova",
+                "displayName": "⦿ MegaNova",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "MegaNova API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.minimax",
                 "displayName": "⦿ MiniMax (MiniMax family models with coding endpoint options)",
                 "configuration": {
@@ -1144,6 +1198,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Mistral AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.moark",
+                "displayName": "⦿ Moark",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Moark API key.",
                             "secret": true
                         }
                     }

@@ -200,6 +200,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Jiekou AI",
+                value: ProviderKey.Jiekou,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Kilo AI",
                 value: ProviderKey.Kilo,
                 authType: "apiKey" as const
@@ -225,6 +230,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "MegaNova",
+                value: ProviderKey.Meganova,
+                authType: "apiKey" as const
+            },
+            {
                 label: "MiniMax",
                 value: ProviderKey.MiniMax,
                 authType: "apiKey" as const
@@ -237,6 +247,11 @@ export class AccountUI {
             {
                 label: "Mistral",
                 value: ProviderKey.Mistral,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Moark",
+                value: ProviderKey.Moark,
                 authType: "apiKey" as const
             },
             {
@@ -953,14 +968,17 @@ export class AccountUI {
             friendli: "Friendli",
             hicapai: "HicapAI",
             huggingface: "Hugging Face",
+            jiekou: "Jiekou AI",
             kilo: "Kilo AI",
             kimi: "Kimi",
             knox: "Knox",
             lightningai: "Lightning AI",
             llmgateway: "LLMGateway",
+            meganova: "MegaNova",
             minimax: "MiniMax",
             "minimax-coding": "MiniMax Coding",
             mistral: "Mistral",
+            moark: "Moark",
             modal: "Modal (Research)",
             modelscope: "ModelScope",
             moonshot: "Moonshot",

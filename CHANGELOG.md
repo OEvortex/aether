@@ -16,6 +16,9 @@ All notable changes to this project will be documented in this file.
  - **FastRouter Provider**: Added FastRouter (https://api.fastrouter.ai/api/v1) supporting OpenAI SDK, Responses SDK (`/responses`) and Anthropic (`/messages`) bridges. Model fetching requires an API key (`/models`).
  - **Fireworks Provider**: Added Fireworks AI (https://api.fireworks.ai/inference/v1) with OpenAI-compatible inference, Responses (`/responses`) and Anthropic (`/messages`) bridges. Model listing via `/models` requires an API key.
  - **Friendli Provider**: Added Friendli (https://api.friendli.ai/serverless/v1) with OpenAI SDK compatibility and an open `/models` endpoint for model discovery.
+- **Jiekou Provider**: Added Jiekou AI with OpenAI-compatible endpoint at https://api.jiekou.ai/openai/ and Anthropic-compatible endpoint at https://api.jiekou.ai/anthropic. Supports API key authentication and automatic model fetching.
+- **MegaNova Provider**: Added MegaNova AI via OpenAI-compatible endpoint at https://inference.meganova.ai/v1. Supports API key configuration and automatic model fetching.
+- **Moark Provider**: Added Moark AI via OpenAI-compatible endpoint at https://api.moark.ai/v1. Supports API key configuration and automatic model fetching.
 
 ### Fixed
 

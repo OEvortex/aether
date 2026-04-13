@@ -211,6 +211,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Jiekou,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Kilo,
             {
                 supportsMultiAccount: true,
@@ -251,6 +259,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Meganova,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.MiniMax,
             {
                 supportsMultiAccount: true,
@@ -268,6 +284,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Mistral,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Moark,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
