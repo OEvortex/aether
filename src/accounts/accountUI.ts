@@ -180,6 +180,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Fireworks AI",
+                value: ProviderKey.Fireworks,
+                authType: "apiKey" as const
+            },
+            {
                 label: "HicapAI",
                 value: ProviderKey.Hicapai,
                 authType: "apiKey" as const
@@ -939,6 +944,7 @@ export class AccountUI {
             deepseek: "DeepSeek",
             dinference: "Dinference",
             fastrouter: "FastRouter",
+            fireworks: "Fireworks AI",
             hicapai: "HicapAI",
             huggingface: "Hugging Face",
             kilo: "Kilo AI",

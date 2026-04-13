@@ -237,6 +237,32 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    fireworks: {
+        displayName: 'Fireworks AI',
+        family: 'Fireworks',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // Fireworks exposes OpenAI-compatible, Responses, and Anthropic-compatible bridges
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.fireworks.ai/inference/v1'
+        },
+        responses: {
+            baseUrl: 'https://api.fireworks.ai/inference/v1'
+        },
+        anthropic: {
+            baseUrl: 'https://api.fireworks.ai/inference/v1'
+        },
+        // Requires API key to fetch models; do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     fastrouter: {
         displayName: 'FastRouter',
         family: 'FastRouter',

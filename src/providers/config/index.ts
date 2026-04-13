@@ -27,6 +27,7 @@ import sherlock from './sherlock.json';
 import cortecs from './cortecs.json';
 import dinference from './dinference.json';
 import nvidia from './nvidia.json';
+import fireworks from './fireworks.json';
 import ollama from './ollama.json';
 import opencode from './opencode.json';
 import opencodego from './opencodego.json';
@@ -53,6 +54,7 @@ const providers = {
 	deepseek: deepseek,
 	dinference: dinference,
 	fastrouter: fastrouter,
+	fireworks: fireworks,
 	huggingface: huggingface,
 	kilo: kilo,
 	knox: knox,

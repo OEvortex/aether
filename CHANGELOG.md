@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
  - **Modal (Research) Provider**: Added Modal research provider pointing to https://api.us-west-2.modal.direct/v1 with a fixed research model `zai-org/GLM-5.1-FP8` (GLM family token limits applied).
  - **Sherlock (CloudFerro) Provider**: Added Sherlock provider (https://api-sherlock.cloudferro.com/openai/v1) with OpenAI SDK compatibility and dynamic model fetching enabled; supports open model endpoint usage.
  - **Cortecs Provider**: Added Cortecs (https://api.cortecs.ai/v1) as an OpenAI-compatible provider that exposes an open `/models` endpoint (no API key required for model listing).
+ - **Dinference Provider**: Added Dinference (https://api.dinference.com/v1) with OpenAI SDK compatibility. Model listing requires an API key and is enabled via the `/models` endpoint.
+ - **FastRouter Provider**: Added FastRouter (https://api.fastrouter.ai/api/v1) supporting OpenAI SDK, Responses SDK (`/responses`) and Anthropic (`/messages`) bridges. Model fetching requires an API key (`/models`).
+ - **Fireworks Provider**: Added Fireworks AI (https://api.fireworks.ai/inference/v1) with OpenAI-compatible inference, Responses (`/responses`) and Anthropic (`/messages`) bridges. Model listing via `/models` requires an API key.
 
 ### Fixed
 

@@ -179,6 +179,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Fireworks,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Hicapai,
             {
                 supportsMultiAccount: true,
