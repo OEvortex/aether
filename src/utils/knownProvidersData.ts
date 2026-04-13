@@ -157,6 +157,24 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             baseUrl: 'https://api.blackbox.ai/v1'
         }
     },
+    cortecs: {
+        displayName: 'Cortecs',
+        family: 'Cortecs AI',
+        supportsApiKey: true,
+        // Exposes an OpenAI-compatible endpoint and allows open model listing without an API key
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.cortecs.ai/v1'
+        },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     chatjimmy: {
         displayName: 'ChatJimmy',
         family: 'ChatJimmy',
@@ -538,6 +556,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openai: {
             baseUrl: 'https://api.berget.ai/v1'
         },
+        openModelEndpoint: true,
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {
@@ -555,6 +574,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openai: {
             baseUrl: 'https://api-sherlock.cloudferro.com/openai/v1'
         },
+        openModelEndpoint: false,
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {

@@ -139,6 +139,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Cortecs,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.DeepInfra,
             {
                 supportsMultiAccount: true,

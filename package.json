@@ -63,6 +63,7 @@
         "onLanguageModelProvider:aether.clarifai",
         "onLanguageModelProvider:aether.cline",
         "onLanguageModelProvider:aether.codex",
+        "onLanguageModelProvider:aether.cortecs",
         "onLanguageModelProvider:aether.deepinfra",
         "onLanguageModelProvider:aether.deepseek",
         "onLanguageModelProvider:aether.hicapai",
@@ -389,6 +390,11 @@
             {
                 "command": "aether.sherlock.setApiKey",
                 "title": "Configure Sherlock (CloudFerro)",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.cortecs.setApiKey",
+                "title": "Configure Cortecs",
                 "category": "Aether"
             }
         ],
@@ -897,6 +903,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "OpenAI Codex API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.cortecs",
+                "displayName": "⦿ Cortecs",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Cortecs API key.",
                             "secret": true
                         }
                     }

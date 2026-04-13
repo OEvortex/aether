@@ -155,6 +155,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Cortecs",
+                value: ProviderKey.Cortecs,
+                authType: "apiKey" as const
+            },
+            {
                 label: "DeepInfra",
                 value: ProviderKey.DeepInfra,
                 authType: "apiKey" as const
@@ -919,6 +924,7 @@ export class AccountUI {
             chutes: "Chutes AI",
             clarifai: "Clarifai",
             cline: "Cline",
+            cortecs: "Cortecs",
             deepinfra: "DeepInfra",
             deepseek: "DeepSeek",
             hicapai: "HicapAI",

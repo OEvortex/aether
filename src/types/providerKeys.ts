@@ -11,6 +11,7 @@ export enum ProviderKey {
 	Cline = 'cline',
 	Codex = 'codex',
 	Compatible = 'compatible',
+	Cortecs = 'cortecs',
 	DeepInfra = 'deepinfra',
 	DeepSeek = 'deepseek',
 	Hicapai = 'hicapai',

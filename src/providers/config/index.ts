@@ -23,6 +23,7 @@ import baseten from './baseten.json';
 import berget from './berget.json';
 import clarifai from './clarifai.json';
 import sherlock from './sherlock.json';
+import cortecs from './cortecs.json';
 import nvidia from './nvidia.json';
 import ollama from './ollama.json';
 import opencode from './opencode.json';
@@ -45,6 +46,7 @@ const providers = {
 	chutes: chutes,
 	clarifai: clarifai,
 	codex: codex,
+	cortecs: cortecs,
 	deepinfra: deepinfra,
 	deepseek: deepseek,
 	huggingface: huggingface,

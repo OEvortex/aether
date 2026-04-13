@@ -230,6 +230,7 @@ export class AccountSyncAdapter {
             ProviderKey.Clarifai,
             ProviderKey.Cline,
             ProviderKey.Compatible,
+            ProviderKey.Cortecs,
             ProviderKey.DeepInfra,
             ProviderKey.DeepSeek,
             ProviderKey.Hicapai,
