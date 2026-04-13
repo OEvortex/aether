@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [0.3.9] - Unreleased
 
+### Added
+
+- **Baseten Provider**: Added support for Baseten AI inference platform with OpenAI-compatible API endpoint at https://inference.baseten.co/v1. Supports API key authentication and automatic model fetching.
+
 ### Fixed
 
 - **OpenAI Responses API (`oai-response` mode) — System Messages**: System-role messages are now correctly sent via the `instructions` parameter of the Responses API instead of being embedded as `role: "system"` items inside the `input` array. This matches the Responses API spec and improves compatibility with providers that implement it.

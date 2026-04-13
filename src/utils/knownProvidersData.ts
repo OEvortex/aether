@@ -499,6 +499,23 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    baseten: {
+        displayName: 'Baseten',
+        family: 'Baseten',
+        supportsApiKey: true,
+        apiKeyTemplate: 'pt-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        openai: {
+            baseUrl: 'https://inference.baseten.co/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     zhipu: {
         displayName: 'Zhipu AI',
         family: 'Zhipu AI',

@@ -67,6 +67,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Baseten,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Blackbox,
             {
                 supportsMultiAccount: true,

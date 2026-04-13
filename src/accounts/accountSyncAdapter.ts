@@ -223,6 +223,7 @@ export class AccountSyncAdapter {
         const providers = [
             ProviderKey.AIHubMix,
             ProviderKey.Apertis,
+            ProviderKey.Baseten,
             ProviderKey.Blackbox,
             ProviderKey.Chutes,
             ProviderKey.Cline,

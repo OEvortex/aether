@@ -55,6 +55,7 @@
         "onLanguageModelProvider:aether.aihubmix",
         "onLanguageModelProvider:aether.apertis",
         "onLanguageModelProvider:aether.ava-supernova",
+        "onLanguageModelProvider:aether.baseten",
         "onLanguageModelProvider:aether.blackbox",
         "onLanguageModelProvider:aether.chatjimmy",
         "onLanguageModelProvider:aether.chutes",
@@ -360,6 +361,11 @@
                 "command": "aether.showAllApiKeys",
                 "title": "Show All API Keys",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.baseten.setApiKey",
+                "title": "Configure Baseten",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -637,7 +643,7 @@
                         "anthropic",
                         "oai-response"
                     ],
-                    "default": "oai-response",
+                    "default": "openai",
                     "description": "Select SDK compatibility mode for Apertis AI.",
                     "scope": "application"
                 },
@@ -762,6 +768,19 @@
                 "displayName": "⦿ AVA Supernova (AVA Supernova - free public API, no auth required)",
                 "configuration": {
                     "properties": {}
+                }
+            },
+            {
+                "vendor": "aether.baseten",
+                "displayName": "⦿ Baseten",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Baseten API key.",
+                            "secret": true
+                        }
+                    }
                 }
             },
             {
