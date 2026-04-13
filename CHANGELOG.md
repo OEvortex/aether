@@ -7,6 +7,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - **Baseten Provider**: Added support for Baseten AI inference platform with OpenAI-compatible API endpoint at https://inference.baseten.co/v1. Supports API key authentication and automatic model fetching.
+ - **Berget Provider**: Added support for Berget AI via OpenAI-compatible endpoint at https://api.berget.ai/v1. Supports API key configuration and automatic model fetching; marked as an open model endpoint where available.
+ - **Clarifai Provider**: Added Clarifai OpenAI-compatible bridge at https://api.clarifai.com/v2/ext/openai/v1. Configured to support both OpenAI SDK and OpenAI Responses SDK modes and automatic model fetching.
+ - **Modal (Research) Provider**: Added Modal research provider pointing to https://api.us-west-2.modal.direct/v1 with a fixed research model `zai-org/GLM-5.1-FP8` (GLM family token limits applied).
+ - **Sherlock (CloudFerro) Provider**: Added Sherlock provider (https://api-sherlock.cloudferro.com/openai/v1) with OpenAI SDK compatibility and dynamic model fetching enabled; supports open model endpoint usage.
+ - **Cortecs Provider**: Added Cortecs (https://api.cortecs.ai/v1) as an OpenAI-compatible provider that exposes an open `/models` endpoint (no API key required for model listing).
 
 ### Fixed
 
