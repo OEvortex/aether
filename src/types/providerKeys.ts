@@ -14,6 +14,7 @@ export enum ProviderKey {
 	Cortecs = 'cortecs',
 	DeepInfra = 'deepinfra',
 	DeepSeek = 'deepseek',
+	Dinference = 'dinference',
 	Hicapai = 'hicapai',
 	Huggingface = 'huggingface',
 	Kilo = 'kilo',

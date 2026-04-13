@@ -66,6 +66,7 @@
         "onLanguageModelProvider:aether.cortecs",
         "onLanguageModelProvider:aether.deepinfra",
         "onLanguageModelProvider:aether.deepseek",
+        "onLanguageModelProvider:aether.dinference",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
         "onLanguageModelProvider:aether.kilo",
@@ -395,6 +396,11 @@
             {
                 "command": "aether.cortecs.setApiKey",
                 "title": "Configure Cortecs",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.dinference.setApiKey",
+                "title": "Configure Dinference",
                 "category": "Aether"
             }
         ],
@@ -942,6 +948,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "DeepSeek API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.dinference",
+                "displayName": "⦿ Dinference",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Dinference API key.",
                             "secret": true
                         }
                     }

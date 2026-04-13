@@ -218,6 +218,25 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         displayName: 'OpenAI Codex',
         family: 'OpenAI Codex'
     },
+    dinference: {
+        displayName: 'Dinference',
+        family: 'Dinference',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.dinference.com/v1'
+        },
+        // Model listing requires an API key, so openModelEndpoint must be false
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     compatible: {
         displayName: 'OpenAI/Anthropic Compatible',
         family: 'Custom',

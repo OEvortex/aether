@@ -1,0 +1,6 @@
+{
+    "displayName": "Dinference",
+    "baseUrl": "https://api.dinference.com/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

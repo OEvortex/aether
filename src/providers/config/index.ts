@@ -24,6 +24,7 @@ import berget from './berget.json';
 import clarifai from './clarifai.json';
 import sherlock from './sherlock.json';
 import cortecs from './cortecs.json';
+import dinference from './dinference.json';
 import nvidia from './nvidia.json';
 import ollama from './ollama.json';
 import opencode from './opencode.json';
@@ -49,6 +50,7 @@ const providers = {
 	cortecs: cortecs,
 	deepinfra: deepinfra,
 	deepseek: deepseek,
+	dinference: dinference,
 	huggingface: huggingface,
 	kilo: kilo,
 	knox: knox,

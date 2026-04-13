@@ -233,6 +233,7 @@ export class AccountSyncAdapter {
             ProviderKey.Cortecs,
             ProviderKey.DeepInfra,
             ProviderKey.DeepSeek,
+            ProviderKey.Dinference,
             ProviderKey.Hicapai,
             ProviderKey.Huggingface,
             ProviderKey.Kilo,

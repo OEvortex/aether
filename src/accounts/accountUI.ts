@@ -170,6 +170,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Dinference",
+                value: ProviderKey.Dinference,
+                authType: "apiKey" as const
+            },
+            {
                 label: "HicapAI",
                 value: ProviderKey.Hicapai,
                 authType: "apiKey" as const
@@ -927,6 +932,7 @@ export class AccountUI {
             cortecs: "Cortecs",
             deepinfra: "DeepInfra",
             deepseek: "DeepSeek",
+            dinference: "Dinference",
             hicapai: "HicapAI",
             huggingface: "Hugging Face",
             kilo: "Kilo AI",

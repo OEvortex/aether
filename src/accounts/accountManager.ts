@@ -163,6 +163,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Dinference,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Hicapai,
             {
                 supportsMultiAccount: true,
