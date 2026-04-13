@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
  - **Dinference Provider**: Added Dinference (https://api.dinference.com/v1) with OpenAI SDK compatibility. Model listing requires an API key and is enabled via the `/models` endpoint.
  - **FastRouter Provider**: Added FastRouter (https://api.fastrouter.ai/api/v1) supporting OpenAI SDK, Responses SDK (`/responses`) and Anthropic (`/messages`) bridges. Model fetching requires an API key (`/models`).
  - **Fireworks Provider**: Added Fireworks AI (https://api.fireworks.ai/inference/v1) with OpenAI-compatible inference, Responses (`/responses`) and Anthropic (`/messages`) bridges. Model listing via `/models` requires an API key.
+ - **Friendli Provider**: Added Friendli (https://api.friendli.ai/serverless/v1) with OpenAI SDK compatibility and an open `/models` endpoint for model discovery.
 
 ### Fixed
 
