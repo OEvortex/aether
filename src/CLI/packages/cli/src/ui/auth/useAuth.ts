@@ -55,7 +55,6 @@ export const useAuthCommand = (
   settings: LoadedSettings,
   config: Config,
   addItem: (item: Omit<HistoryItem, 'id'>, timestamp: number) => void,
-  onAuthChange?: () => void,
 ) => {
   const unAuthenticated = config.getAuthType() === undefined;
 
@@ -183,9 +182,6 @@ export const useAuthCommand = (
       setIsAuthDialogOpen(false);
       setIsAuthenticating(false);
 
-      // Trigger UI refresh to update header information
-      onAuthChange?.();
-
       // Add success message to history
       addItem(
         {
@@ -201,7 +197,7 @@ export const useAuthCommand = (
       const authEvent = new AuthEvent(authType, 'manual', 'success');
       logAuth(config, authEvent);
     },
-    [settings, handleAuthFailure, config, addItem, onAuthChange],
+    [settings, handleAuthFailure, config, addItem],
   );
 
   const performAuth = useCallback(
@@ -446,9 +442,6 @@ export const useAuthCommand = (
         setIsAuthDialogOpen(false);
         setIsAuthenticating(false);
 
-        // Trigger UI refresh
-        onAuthChange?.();
-
         // Add success message
         addItem(
           {
@@ -483,7 +476,7 @@ export const useAuthCommand = (
         handleAuthFailure(error);
       }
     },
-    [settings, config, handleAuthFailure, addItem, onAuthChange],
+    [settings, config, handleAuthFailure, addItem],
   );
 
   /**
@@ -579,7 +572,6 @@ export const useAuthCommand = (
         setPendingAuthType(undefined);
         setIsAuthDialogOpen(false);
         setIsAuthenticating(false);
-        onAuthChange?.();
 
         addItem(
           {
@@ -612,7 +604,7 @@ export const useAuthCommand = (
         handleAuthFailure(error);
       }
     },
-    [settings, config, handleAuthFailure, addItem, onAuthChange],
+    [settings, config, handleAuthFailure, addItem],
   );
 
   /**
