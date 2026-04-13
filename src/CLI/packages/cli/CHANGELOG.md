@@ -2,7 +2,7 @@
 
 All notable changes to the Aether CLI will be documented in this file.
 
-## [0.0.2] - unreleased
+## [0.0.2] - 2025-04-13
 
 ### Fixed
 - Fixed banner re-appearing after slash commands (e.g., /provider, /model) by removing unnecessary refreshStatic calls

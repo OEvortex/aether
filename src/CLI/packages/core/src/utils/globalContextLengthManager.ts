@@ -584,3 +584,80 @@ export function resolveGlobalCapabilities(
             isGemma4Model(modelId)
     };
 }
+
+/** Robust normalizer: strips provider prefixes, pipes/colons, date/version suffixes, etc. */
+export function normalize(model: string): string {
+    let s = (model ?? '').toLowerCase().trim();
+
+    // keep final path segment (strip provider prefixes), handle pipe/colon
+    s = s.replace(/^.*\//, '');
+    s = s.split('|').pop() ?? s;
+    s = s.split(':').pop() ?? s;
+
+    // collapse whitespace to single hyphen
+    s = s.replace(/\s+/g, '-');
+
+    // remove trailing build / date / revision suffixes:
+    // - dates (e.g., -20250219), -v1, version numbers, 'latest', 'preview' etc.
+    s = s.replace(/-preview/g, '');
+    // Special handling for model names that include date/version as part of the model identifier
+    // - Aether models: qwen-plus-latest, qwen-flash-latest, qwen-vl-max-latest
+    // - Kimi models: kimi-k2-0905, kimi-k2-0711, etc. (keep date for version distinction)
+    if (
+        !s.match(/^qwen-(?:plus|flash|vl-max)-latest$/) &&
+        !s.match(/^kimi-k2-\d{4}$/)
+    ) {
+        // Regex breakdown:
+        // -(?:...)$ - Non-capturing group for suffixes at the end of the string
+        // The following patterns are matched within the group:
+        //   \d{4,} - Match 4 or more digits (dates) like -20250219 -0528 (4+ digit dates)
+        //   \d+x\d+b - Match patterns like 4x8b, -7b, -70b
+        //   v\d+(?:\.\d+)* - Match version patterns starting with 'v' like -v1, -v1.2, -v2.1.3
+        //   (?<=-[^-]+-)\d+(?:\.\d+)+ - Match version numbers with dots that are preceded by another dash,
+        //     like -1.1, -2.0.1 but only when they are preceded by another dash, Example: model-test-1.1 → model-test;
+        //     Note: this does NOT match 4.1 in gpt-4.1 because there's no dash before -4.1 in that context.
+        //   latest|exp - Match the literal string "latest" or "exp"
+        s = s.replace(
+            /-(?:\d{4,}|\d+x\d+b|v\d+(?:\.\d+)*|(?<=-[^-]+-)\d+(?:\.\d+)+|latest|exp)$/g,
+            '',
+        );
+    }
+
+    // remove quantization / numeric / precision suffixes common in local/community models
+    s = s.replace(/-(?:\d?bit|int[48]|bf16|fp16|q[45]|quantized)$/g, '');
+
+    return s;
+}
+
+/**
+ * Check if a model has an explicitly defined output token limit.
+ * This distinguishes between models with known limits and unknown models that would fallback to default.
+ */
+export function hasExplicitOutputLimit(modelId: string): boolean {
+    const norm = normalize(modelId);
+    // Check against model families that have specific output limits defined
+    return (
+        isGemini3Model(norm) ||
+        isGemini2Model(norm) ||
+        isGemini25Model(norm) ||
+        isGpt5Model(norm) ||
+        isGpt4oModel(norm) ||
+        isGpt41Model(norm) ||
+        isClaudeOpus46Model(norm) ||
+        isClaudeModel(norm) ||
+        isGlm45Model(norm) ||
+        isGlmModel(norm) ||
+        isDeepSeekModel(norm) ||
+        isQwen35Model(norm) ||
+        isQwen35OneMillionContextModel(norm) ||
+        isQwen36OneMillionContextModel(norm) ||
+        isNova2Model(norm) ||
+        isMinimaxModel(norm) ||
+        isMiMoV2ProModel(norm) ||
+        isMiMoV2OmniModel(norm) ||
+        isMingFlashOmniModel(norm) ||
+        isNemotron3Model(norm) ||
+        isGemma3Model(norm) ||
+        isGemma4Model(norm)
+    );
+}

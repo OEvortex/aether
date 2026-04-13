@@ -36,7 +36,7 @@ import {
   DEFAULT_CONTEXT_LENGTH,
   DEFAULT_MAX_OUTPUT_TOKENS,
   hasExplicitOutputLimit,
-} from '../../index.js';
+} from '../../utils/globalContextLengthManager.js';
 
 const debugLogger = createDebugLogger('ANTHROPIC');
 
