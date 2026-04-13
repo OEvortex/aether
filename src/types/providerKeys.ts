@@ -17,6 +17,7 @@ export enum ProviderKey {
 	Dinference = 'dinference',
 	Fastrouter = 'fastrouter',
 	Fireworks = 'fireworks',
+	Friendli = 'friendli',
 	Hicapai = 'hicapai',
 	Huggingface = 'huggingface',
 	Kilo = 'kilo',

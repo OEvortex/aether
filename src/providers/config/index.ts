@@ -28,6 +28,7 @@ import cortecs from './cortecs.json';
 import dinference from './dinference.json';
 import nvidia from './nvidia.json';
 import fireworks from './fireworks.json';
+import friendli from './friendli.json';
 import ollama from './ollama.json';
 import opencode from './opencode.json';
 import opencodego from './opencodego.json';
@@ -55,6 +56,7 @@ const providers = {
 	dinference: dinference,
 	fastrouter: fastrouter,
 	fireworks: fireworks,
+	friendli: friendli,
 	huggingface: huggingface,
 	kilo: kilo,
 	knox: knox,

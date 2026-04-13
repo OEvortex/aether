@@ -69,6 +69,7 @@
         "onLanguageModelProvider:aether.dinference",
         "onLanguageModelProvider:aether.fastrouter",
         "onLanguageModelProvider:aether.fireworks",
+        "onLanguageModelProvider:aether.friendli",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
         "onLanguageModelProvider:aether.kilo",
@@ -413,6 +414,11 @@
             {
                 "command": "aether.fireworks.setApiKey",
                 "title": "Configure Fireworks AI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.friendli.setApiKey",
+                "title": "Configure Friendli",
                 "category": "Aether"
             }
         ],
@@ -1021,6 +1027,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Fireworks AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.friendli",
+                "displayName": "⦿ Friendli",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Friendli API key.",
                             "secret": true
                         }
                     }

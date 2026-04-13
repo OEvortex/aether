@@ -236,6 +236,7 @@ export class AccountSyncAdapter {
             ProviderKey.Dinference,
             ProviderKey.Fastrouter,
             ProviderKey.Fireworks,
+            ProviderKey.Friendli,
             ProviderKey.Hicapai,
             ProviderKey.Huggingface,
             ProviderKey.Kilo,

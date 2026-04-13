@@ -185,6 +185,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Friendli",
+                value: ProviderKey.Friendli,
+                authType: "apiKey" as const
+            },
+            {
                 label: "HicapAI",
                 value: ProviderKey.Hicapai,
                 authType: "apiKey" as const
@@ -945,6 +950,7 @@ export class AccountUI {
             dinference: "Dinference",
             fastrouter: "FastRouter",
             fireworks: "Fireworks AI",
+            friendli: "Friendli",
             hicapai: "HicapAI",
             huggingface: "Hugging Face",
             kilo: "Kilo AI",

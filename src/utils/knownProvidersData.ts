@@ -289,6 +289,25 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    friendli: {
+        displayName: 'Friendli',
+        family: 'Friendli',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.friendli.ai/serverless/v1'
+        },
+        // Open model endpoint allows listing models without API key
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     compatible: {
         displayName: 'OpenAI/Anthropic Compatible',
         family: 'Custom',

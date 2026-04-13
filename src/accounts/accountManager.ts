@@ -187,6 +187,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Friendli,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Hicapai,
             {
                 supportsMultiAccount: true,
