@@ -32,10 +32,11 @@ import { buildRuntimeFetchOptions } from '../../utils/runtimeFetchOptions.js';
 import { DEFAULT_TIMEOUT } from '../openaiContentGenerator/constants.js';
 import { createDebugLogger } from '../../utils/debugLogger.js';
 import {
-  tokenLimit,
-  DEFAULT_OUTPUT_TOKEN_LIMIT,
+  resolveGlobalTokenLimits,
+  DEFAULT_CONTEXT_LENGTH,
+  DEFAULT_MAX_OUTPUT_TOKENS,
   hasExplicitOutputLimit,
-} from '../tokenLimits.js';
+} from '../../utils/globalContextLengthManager.js';
 
 const debugLogger = createDebugLogger('ANTHROPIC');
 
@@ -231,7 +232,10 @@ export class AnthropicContentGenerator implements ContentGenerator {
     // Apply output token limit logic consistent with OpenAI providers
     const userMaxTokens = getParam<number>('max_tokens', 'maxOutputTokens');
     const modelId = this.contentGeneratorConfig.model;
-    const modelLimit = tokenLimit(modelId, 'output');
+    const { maxOutputTokens: modelLimit } = resolveGlobalTokenLimits(modelId, DEFAULT_CONTEXT_LENGTH, {
+      defaultContextLength: DEFAULT_CONTEXT_LENGTH,
+      defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS
+    });
     const isKnownModel = hasExplicitOutputLimit(modelId);
 
     const maxTokens =
@@ -239,7 +243,7 @@ export class AnthropicContentGenerator implements ContentGenerator {
         ? isKnownModel
           ? Math.min(userMaxTokens, modelLimit)
           : userMaxTokens
-        : Math.min(modelLimit, DEFAULT_OUTPUT_TOKEN_LIMIT);
+        : Math.min(modelLimit, DEFAULT_MAX_OUTPUT_TOKENS);
 
     return {
       max_tokens: maxTokens,

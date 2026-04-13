@@ -9,7 +9,7 @@ import type { Config } from '../config/config.js';
 import type { GeminiChat } from '../core/geminiChat.js';
 import { type ChatCompressionInfo, CompressionStatus } from '../core/turn.js';
 import { uiTelemetryService } from '../telemetry/uiTelemetry.js';
-import { DEFAULT_TOKEN_LIMIT } from '../core/tokenLimits.js';
+import { DEFAULT_CONTEXT_LENGTH } from '../utils/globalContextLengthManager.js';
 import { getCompressionPrompt } from '../core/prompts.js';
 import { getResponseText } from '../utils/partUtils.js';
 import { logChatCompression } from '../telemetry/loggers.js';
@@ -21,7 +21,7 @@ import { SessionStartSource, PreCompactTrigger } from '../hooks/types.js';
  * Threshold for compression token count as a fraction of the model's token limit.
  * If the chat history exceeds this threshold, it will be compressed.
  */
-export const COMPRESSION_TOKEN_THRESHOLD = 0.7;
+export const COMPRESSION_TOKEN_THRESHOLD = 0.65;
 
 /**
  * The fraction of the latest chat history to keep. A value of 0.3
@@ -128,7 +128,7 @@ export class ChatCompressionService {
     if (!force) {
       const contextLimit =
         config.getContentGeneratorConfig()?.contextWindowSize ??
-        DEFAULT_TOKEN_LIMIT;
+        DEFAULT_CONTEXT_LENGTH;
       if (originalTokenCount < threshold * contextLimit) {
         return {
           newHistory: null,

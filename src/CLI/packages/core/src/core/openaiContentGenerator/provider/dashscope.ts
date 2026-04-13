@@ -110,7 +110,7 @@ export class DashScopeOpenAICompatibleProvider extends DefaultOpenAICompatiblePr
     }
 
     // Apply output token limits using parent class logic
-    // Uses conservative default (min of model limit and DEFAULT_OUTPUT_TOKEN_LIMIT)
+    // Uses conservative default (min of model limit and DEFAULT_MAX_OUTPUT_TOKENS)
     // to preserve input quota when user hasn't explicitly configured max_tokens
     const requestWithTokenLimits = this.applyOutputTokenLimit(request);
 

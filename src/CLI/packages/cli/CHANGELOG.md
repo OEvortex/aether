@@ -2,21 +2,18 @@
 
 All notable changes to the Aether CLI will be documented in this file.
 
-## [0.0.4] - 2026-04-13
+## [0.0.2] - unreleased
 
 ### Fixed
 - Fixed banner re-appearing after slash commands (e.g., /provider, /model) by removing unnecessary refreshStatic calls
-
-## [0.0.3] - 2026-04-12
+- Fixed TypeScript compilation errors related to modelProviders removal
+- Fixed credential resolution for runtime-discovered models
+- Fixed credential resolution for static models from provider catalogs
 
 ### Changed
 - Updated copyright headers to 2026 OEvortex
 - Added fuzzy matching search to model dialog
 - Fixed API key display in model dialog to show provider API key status
-
-## [0.0.2] - 2025-04-12
-
-### Changed
 - **BREAKING**: Refactored CLI to exclusively use `providers` key for model configuration
 - **BREAKING**: Removed legacy `modelProviders` key from settings schema
 - **BREAKING**: Removed environment variable fallbacks for API keys and base URLs
@@ -24,11 +21,9 @@ All notable changes to the Aether CLI will be documented in this file.
 - Models now inherit provider API keys when they don't have their own
 - Updated error messages to reference "provider" instead of "modelProviders"
 - Replaced "authType" with "sdkMode" in CLI model display
+- **BREAKING**: Migrated from `tokenLimits.ts` to `globalContextLengthManager.ts` for model context length management
+- Changed default output token limit from 32K to 16K for better input quota preservation
+- Changed token compression threshold from 70% to 65% of context window
 - Updated model credential resolution to use settings as sole source of truth
-
-### Fixed
-- Fixed TypeScript compilation errors related to modelProviders removal
-- Fixed credential resolution for runtime-discovered models
-- Fixed credential resolution for static models from provider catalogs
 
 ## [0.0.1] - Initial Release

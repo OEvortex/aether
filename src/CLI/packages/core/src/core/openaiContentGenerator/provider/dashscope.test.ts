@@ -786,9 +786,9 @@ describe('DashScopeOpenAICompatibleProvider', () => {
 
       const result = provider.buildRequest(request, 'test-prompt-id');
 
-      // Should set conservative default (min of model limit and DEFAULT_OUTPUT_TOKEN_LIMIT)
-      // aether3-max has 32K output limit, so min(32K, 32K) = 32K
-      expect(result.max_tokens).toBe(32000);
+      // Should set conservative default (min of model limit and DEFAULT_MAX_OUTPUT_TOKENS)
+      // aether3-max has 32K output limit, so min(32K, 16K) = 16K
+      expect(result.max_tokens).toBe(16384);
     });
 
     it('should set conservative max_tokens when null is provided', () => {

@@ -12,14 +12,12 @@ import {
 import type { Content, GenerateContentResponse } from '@google/genai';
 import { CompressionStatus } from '../core/turn.js';
 import { uiTelemetryService } from '../telemetry/uiTelemetry.js';
-import { tokenLimit } from '../core/tokenLimits.js';
 import type { GeminiChat } from '../core/geminiChat.js';
 import type { Config } from '../config/config.js';
 import type { ContentGenerator } from '../core/contentGenerator.js';
 import { SessionStartSource, PreCompactTrigger } from '../hooks/types.js';
 
 vi.mock('../telemetry/uiTelemetry.js');
-vi.mock('../core/tokenLimits.js');
 vi.mock('../telemetry/loggers.js');
 
 describe('findCompressSplitPoint', () => {
@@ -299,7 +297,6 @@ describe('ChatCompressionService', () => {
       }),
     } as unknown as Config;
 
-    vi.mocked(tokenLimit).mockReturnValue(1000);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(500);
   });
 
@@ -342,7 +339,6 @@ describe('ChatCompressionService', () => {
       { role: 'user', parts: [{ text: 'hi' }] },
     ]);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(600);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
     // Threshold is 0.7 * 1000 = 700. 600 < 700, so NOOP.
 
     const result = await service.compress(
@@ -388,7 +384,6 @@ describe('ChatCompressionService', () => {
       newTokenCount: 0,
     });
     expect(mockGenerateContent).not.toHaveBeenCalled();
-    expect(tokenLimit).not.toHaveBeenCalled();
 
     const forcedResult = await service.compress(
       mockChat,
@@ -404,7 +399,6 @@ describe('ChatCompressionService', () => {
       newTokenCount: 0,
     });
     expect(mockGenerateContent).not.toHaveBeenCalled();
-    expect(tokenLimit).not.toHaveBeenCalled();
   });
 
   it('should return NOOP when historyToCompress is below MIN_COMPRESSION_FRACTION of total', async () => {
@@ -426,7 +420,6 @@ describe('ChatCompressionService', () => {
     ];
     vi.mocked(mockChat.getHistory).mockReturnValue(history);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(100);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
 
     const mockGenerateContent = vi.fn();
     vi.mocked(mockConfig.getContentGenerator).mockReturnValue({
@@ -514,7 +507,6 @@ describe('ChatCompressionService', () => {
     ];
     vi.mocked(mockChat.getHistory).mockReturnValue(history);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(100);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
 
     // newTokenCount = 100 - (1100 - 1000) + 50 = 100 - 100 + 50 = 50 <= 100 (success)
     const mockGenerateContent = vi.fn().mockResolvedValue({
@@ -562,7 +554,6 @@ describe('ChatCompressionService', () => {
     ];
     vi.mocked(mockChat.getHistory).mockReturnValue(history);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(10);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
 
     const mockGenerateContent = vi.fn().mockResolvedValue({
       candidates: [
@@ -649,7 +640,6 @@ describe('ChatCompressionService', () => {
     ];
     vi.mocked(mockChat.getHistory).mockReturnValue(history);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(100);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
 
     const mockGenerateContent = vi.fn().mockResolvedValue({
       candidates: [
@@ -688,7 +678,6 @@ describe('ChatCompressionService', () => {
     ];
     vi.mocked(mockChat.getHistory).mockReturnValue(history);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(100);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
 
     const mockGenerateContent = vi.fn().mockResolvedValue({
       candidates: [
@@ -725,7 +714,6 @@ describe('ChatCompressionService', () => {
     ];
     vi.mocked(mockChat.getHistory).mockReturnValue(history);
     vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(10);
-    vi.mocked(tokenLimit).mockReturnValue(1000);
 
     const mockGenerateContent = vi.fn().mockResolvedValue({
       candidates: [
@@ -833,8 +821,7 @@ describe('ChatCompressionService', () => {
       vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(
         100,
       );
-      vi.mocked(tokenLimit).mockReturnValue(1000);
-
+  
       const mockGenerateContent = vi.fn().mockResolvedValue({
         candidates: [
           {
@@ -967,8 +954,7 @@ describe('ChatCompressionService', () => {
       vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(
         600,
       );
-      vi.mocked(tokenLimit).mockReturnValue(1000);
-
+  
       const result = await service.compress(
         mockChat,
         mockPromptId,
@@ -1191,8 +1177,7 @@ describe('ChatCompressionService', () => {
       vi.mocked(uiTelemetryService.getLastPromptTokenCount).mockReturnValue(
         100,
       );
-      vi.mocked(tokenLimit).mockReturnValue(1000);
-
+  
       const mockGenerateContent = vi.fn().mockResolvedValue({
         candidates: [
           { content: { parts: [{ text: 'Summary of all work done' }] } },

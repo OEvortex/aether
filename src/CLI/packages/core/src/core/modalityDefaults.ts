@@ -5,7 +5,7 @@
  */
 
 import type { InputModalities } from './contentGenerator.js';
-import { normalize } from './tokenLimits.js';
+import { normalize } from '../utils/globalContextLengthManager.js';
 
 const FULL_MULTIMODAL: InputModalities = {
   image: true,

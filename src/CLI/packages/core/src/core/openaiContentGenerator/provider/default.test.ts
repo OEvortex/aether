@@ -204,8 +204,8 @@ describe('DefaultOpenAICompatibleProvider', () => {
         'prompt-id',
       );
 
-      // Should set conservative default (min of model limit and DEFAULT_OUTPUT_TOKEN_LIMIT)
-      // GPT-4 has 16K output limit, so min(16K, 32K) = 16K
+      // Should set conservative default (min of model limit and DEFAULT_MAX_OUTPUT_TOKENS)
+      // GPT-4 has 16K output limit, so min(16K, 16K) = 16K
       expect(result.max_tokens).toBe(16384);
     });
 

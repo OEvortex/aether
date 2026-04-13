@@ -6,10 +6,11 @@ import { DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES } from '../constants.js';
 import type { OpenAICompatibleProvider } from './types.js';
 import { buildRuntimeFetchOptions } from '../../../utils/runtimeFetchOptions.js';
 import {
-  tokenLimit,
-  DEFAULT_OUTPUT_TOKEN_LIMIT,
+  resolveGlobalTokenLimits,
+  DEFAULT_CONTEXT_LENGTH,
+  DEFAULT_MAX_OUTPUT_TOKENS,
   hasExplicitOutputLimit,
-} from '../../tokenLimits.js';
+} from '../../../utils/globalContextLengthManager.js';
 
 /**
  * Default provider for standard OpenAI-compatible APIs
@@ -123,7 +124,10 @@ export class DefaultOpenAICompatibleProvider
     const userMaxTokens = request.max_tokens;
 
     // Get model-specific output limit and check if model is known
-    const modelLimit = tokenLimit(request.model, 'output');
+    const { maxOutputTokens: modelLimit } = resolveGlobalTokenLimits(request.model, DEFAULT_CONTEXT_LENGTH, {
+      defaultContextLength: DEFAULT_CONTEXT_LENGTH,
+      defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS
+    });
     const isKnownModel = hasExplicitOutputLimit(request.model);
 
     // Determine the effective max_tokens
@@ -141,8 +145,8 @@ export class DefaultOpenAICompatibleProvider
       }
     } else {
       // User didn't configure, use conservative default:
-      // min(model-specific limit, DEFAULT_OUTPUT_TOKEN_LIMIT)
-      effectiveMaxTokens = Math.min(modelLimit, DEFAULT_OUTPUT_TOKEN_LIMIT);
+      // min(model-specific limit, DEFAULT_MAX_OUTPUT_TOKENS)
+      effectiveMaxTokens = Math.min(modelLimit, DEFAULT_MAX_OUTPUT_TOKENS);
     }
 
     return {

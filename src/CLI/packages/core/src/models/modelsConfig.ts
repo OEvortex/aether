@@ -8,7 +8,7 @@ import { AuthType } from '../core/contentGenerator.js';
 import type { ContentGeneratorConfig } from '../core/contentGenerator.js';
 import type { ContentGeneratorConfigSources } from '../core/contentGenerator.js';
 import { DEFAULT_AETHER_MODEL } from '../config/models.js';
-import { tokenLimit } from '../core/tokenLimits.js';
+import { resolveGlobalTokenLimits, DEFAULT_CONTEXT_LENGTH, DEFAULT_MAX_OUTPUT_TOKENS } from '../utils/globalContextLengthManager.js';
 import { defaultModalities } from '../core/modalityDefaults.js';
 
 import { ModelRegistry } from './modelRegistry.js';
@@ -782,7 +782,11 @@ export class ModelsConfig {
 
     // contextWindowSize fallback: auto-detect from model when not set by provider
     if (gc.contextWindowSize === undefined) {
-      this._generationConfig.contextWindowSize = tokenLimit(model.id, 'input');
+      const { maxInputTokens } = resolveGlobalTokenLimits(model.id, DEFAULT_CONTEXT_LENGTH, {
+        defaultContextLength: DEFAULT_CONTEXT_LENGTH,
+        defaultMaxOutputTokens: DEFAULT_MAX_OUTPUT_TOKENS
+      });
+      this._generationConfig.contextWindowSize = maxInputTokens;
       this.generationConfigSources['contextWindowSize'] = {
         kind: 'computed',
         detail: 'auto-detected from model',
