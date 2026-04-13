@@ -175,6 +175,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "FastRouter",
+                value: ProviderKey.Fastrouter,
+                authType: "apiKey" as const
+            },
+            {
                 label: "HicapAI",
                 value: ProviderKey.Hicapai,
                 authType: "apiKey" as const
@@ -933,6 +938,7 @@ export class AccountUI {
             deepinfra: "DeepInfra",
             deepseek: "DeepSeek",
             dinference: "Dinference",
+            fastrouter: "FastRouter",
             hicapai: "HicapAI",
             huggingface: "Hugging Face",
             kilo: "Kilo AI",

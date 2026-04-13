@@ -3,6 +3,7 @@ import aihubmix from './aihubmix.json';
 import apertis from './apertis.json';
 import avaSupernova from './ava-supernova.json';
 import blackbox from './blackbox.json';
+import fastrouter from './fastrouter.json';
 import chatjimmy from './chatjimmy.json';
 import chutes from './chutes.json';
 import codex from './codex.json';
@@ -51,6 +52,7 @@ const providers = {
 	deepinfra: deepinfra,
 	deepseek: deepseek,
 	dinference: dinference,
+	fastrouter: fastrouter,
 	huggingface: huggingface,
 	kilo: kilo,
 	knox: knox,

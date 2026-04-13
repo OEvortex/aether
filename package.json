@@ -67,6 +67,7 @@
         "onLanguageModelProvider:aether.deepinfra",
         "onLanguageModelProvider:aether.deepseek",
         "onLanguageModelProvider:aether.dinference",
+        "onLanguageModelProvider:aether.fastrouter",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
         "onLanguageModelProvider:aether.kilo",
@@ -402,6 +403,11 @@
                 "command": "aether.dinference.setApiKey",
                 "title": "Configure Dinference",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.fastrouter.setApiKey",
+                "title": "Configure FastRouter",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -714,6 +720,17 @@
                     "description": "Select SDK compatibility mode for DeepSeek.",
                     "scope": "application"
                 },
+                "aether.fastrouter.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic",
+                        "oai-response"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for FastRouter.",
+                    "scope": "application"
+                },
                 "aether.llmgateway.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -961,6 +978,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Dinference API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.fastrouter",
+                "displayName": "⦿ FastRouter",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "FastRouter API key.",
                             "secret": true
                         }
                     }

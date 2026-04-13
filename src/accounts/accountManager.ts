@@ -171,6 +171,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Fastrouter,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Hicapai,
             {
                 supportsMultiAccount: true,

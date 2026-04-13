@@ -15,6 +15,7 @@ export enum ProviderKey {
 	DeepInfra = 'deepinfra',
 	DeepSeek = 'deepseek',
 	Dinference = 'dinference',
+	Fastrouter = 'fastrouter',
 	Hicapai = 'hicapai',
 	Huggingface = 'huggingface',
 	Kilo = 'kilo',

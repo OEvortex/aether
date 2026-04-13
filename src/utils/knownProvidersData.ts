@@ -237,6 +237,32 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    fastrouter: {
+        displayName: 'FastRouter',
+        family: 'FastRouter',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // FastRouter exposes OpenAI-compatible Chat Completions, Responses, and Anthropic Messages bridges
+        sdkMode: 'anthropic',
+        openai: {
+            baseUrl: 'https://api.fastrouter.ai/api/v1'
+        },
+        responses: {
+            baseUrl: 'https://api.fastrouter.ai/api/v1'
+        },
+        anthropic: {
+            baseUrl: 'https://api.fastrouter.ai/api/v1'
+        },
+        // Model listing requires API key, so do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     compatible: {
         displayName: 'OpenAI/Anthropic Compatible',
         family: 'Custom',

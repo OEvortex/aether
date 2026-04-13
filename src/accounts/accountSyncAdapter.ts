@@ -234,6 +234,7 @@ export class AccountSyncAdapter {
             ProviderKey.DeepInfra,
             ProviderKey.DeepSeek,
             ProviderKey.Dinference,
+            ProviderKey.Fastrouter,
             ProviderKey.Hicapai,
             ProviderKey.Huggingface,
             ProviderKey.Kilo,
