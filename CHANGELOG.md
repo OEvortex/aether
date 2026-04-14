@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.6] - 2026-04-14
+
+### Fixed
+
+- **Aether CLI Global Installation**: Fixed global installation of the Aether CLI by configuring esbuild to externalize problematic packages (undici, native clipboard modules) that cause dynamic require() errors in ESM bundles. The CLI now supports both standalone installation from npm and workspace development usage.
+- **Build Configuration**: Updated esbuild.config.cjs with proper externalization of native modules and problematic dependencies, enabling successful bundling for npm publication.
+- **Package Dependencies**: Added yoga-layout to dependencies to ensure proper resolution when the CLI is installed globally from npm.
+
 ## [0.3.9] - 2026-04-14
 
 ### Added

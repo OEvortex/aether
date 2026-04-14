@@ -9,21 +9,33 @@ const REPO_ROOT = path.join(__dirname, '.');
 
 const commonOptions = {
     bundle: true,
-    external: ['vscode'],
-    format: 'cjs',
+    external: [
+        'vscode',
+        '@teddyzhu/clipboard',
+        '@teddyzhu/clipboard-darwin-arm64',
+        '@teddyzhu/clipboard-darwin-x64',
+        '@teddyzhu/clipboard-linux-arm64-gnu',
+        '@teddyzhu/clipboard-linux-x64-gnu',
+        '@teddyzhu/clipboard-win32-arm64-msvc',
+        '@teddyzhu/clipboard-win32-x64-msvc',
+        'undici',
+    ],
+    format: 'esm',
     platform: 'node',
     sourcemap: isDev,
     minify: !isDev,
     mainFields: ['module', 'main'],
     resolveExtensions: ['.ts', '.js', '.mjs', '.json'],
     logLevel: 'info',
-    banner: { js: '#!/usr/bin/env node' }
+    keepNames: true,
+    mangleProps: /^_/,
+    reserveProps: /^AuthType/,
 };
 
 const cliBuildOptions = {
     ...commonOptions,
     entryPoints: ['./packages/cli/index.ts'],
-    outfile: 'dist/cli.js',
+    outfile: 'dist/cli.mjs',
 };
 
 async function build() {
@@ -47,9 +59,9 @@ async function build() {
             console.log(`Build completed in ${buildTime}ms`);
 
             // Make the output executable on Unix
-            const outFile = path.join(REPO_ROOT, 'dist', 'cli.js');
+            const outFile = path.join(REPO_ROOT, 'dist', 'cli.mjs');
             await fs.promises.chmod(outFile, 0o755);
-            console.log('Made cli.js executable');
+            console.log('Made cli.mjs executable');
         }
     } catch (error) {
         console.error('Build failed:', error);
