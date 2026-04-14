@@ -7,6 +7,7 @@ src/cli/dist/
 
 # Ignore test folders
 test/
+src/CLI/packages/cli/junit.xml
 
 # Ignore VSCode test folders
 .vscode-test/

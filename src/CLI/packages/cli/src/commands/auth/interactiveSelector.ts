@@ -22,6 +22,7 @@ interface Option<T> {
 export class InteractiveSelector<T> {
   private selectedIndex = 0;
   private isListening = false;
+  private hasRendered = false;
 
   constructor(
     private options: Array<Option<T>>,
@@ -109,7 +110,7 @@ export class InteractiveSelector<T> {
     const totalLines = this.calculateTotalLines();
 
     // Clear the screen area we'll be using
-    if (totalLines > 0) {
+    if (this.hasRendered && totalLines > 0) {
       stdout.write(`\x1B[${totalLines}A\x1B[J`); // Move up and clear from cursor down
     }
 
@@ -137,6 +138,8 @@ export class InteractiveSelector<T> {
     stdout.write(
       `\n${t('(Use ↑ ↓ arrows to navigate, Enter to select, Ctrl+C to exit)\n')}`,
     );
+
+    this.hasRendered = true;
   }
 
   /**
