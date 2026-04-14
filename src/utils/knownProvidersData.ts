@@ -157,6 +157,24 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             baseUrl: 'https://api.blackbox.ai/v1'
         }
     },
+    cortecs: {
+        displayName: 'Cortecs',
+        family: 'Cortecs AI',
+        supportsApiKey: true,
+        // Exposes an OpenAI-compatible endpoint and allows open model listing without an API key
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.cortecs.ai/v1'
+        },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     chatjimmy: {
         displayName: 'ChatJimmy',
         family: 'ChatJimmy',
@@ -200,6 +218,96 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         displayName: 'OpenAI Codex',
         family: 'OpenAI Codex'
     },
+    dinference: {
+        displayName: 'Dinference',
+        family: 'Dinference',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.dinference.com/v1'
+        },
+        // Model listing requires an API key, so openModelEndpoint must be false
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    fireworks: {
+        displayName: 'Fireworks AI',
+        family: 'Fireworks',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // Fireworks exposes OpenAI-compatible, Responses, and Anthropic-compatible bridges
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.fireworks.ai/inference/v1'
+        },
+        responses: {
+            baseUrl: 'https://api.fireworks.ai/inference/v1'
+        },
+        anthropic: {
+            baseUrl: 'https://api.fireworks.ai/inference/v1'
+        },
+        // Requires API key to fetch models; do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    fastrouter: {
+        displayName: 'FastRouter',
+        family: 'FastRouter',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // FastRouter exposes OpenAI-compatible Chat Completions, Responses, and Anthropic Messages bridges
+        sdkMode: 'anthropic',
+        openai: {
+            baseUrl: 'https://api.fastrouter.ai/api/v1'
+        },
+        responses: {
+            baseUrl: 'https://api.fastrouter.ai/api/v1'
+        },
+        anthropic: {
+            baseUrl: 'https://api.fastrouter.ai/api/v1'
+        },
+        // Model listing requires API key, so do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    friendli: {
+        displayName: 'Friendli',
+        family: 'Friendli',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.friendli.ai/serverless/v1'
+        },
+        // Open model endpoint allows listing models without API key
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     compatible: {
         displayName: 'OpenAI/Anthropic Compatible',
         family: 'Custom',
@@ -239,6 +347,33 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openModelEndpoint: true,
         fetchModels: true,
         modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    jiekou: {
+        displayName: 'Jiekou AI',
+        family: 'Jiekou AI',
+        openai: { baseUrl: 'https://api.jiekou.ai/openai/' },
+        anthropic: { baseUrl: 'https://api.jiekou.ai/anthropic' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        openModelEndpoint: false,
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    meganova: {
+        displayName: 'MegaNova',
+        family: 'MegaNova',
+        openai: { baseUrl: 'https://inference.meganova.ai/v1' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        openModelEndpoint: false,
         modelParser: {
             arrayPath: 'data',
             descriptionField: 'id',
@@ -291,6 +426,19 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         fetchModels: false
     },
+    moark: {
+        displayName: 'Moark',
+        family: 'Moark',
+        openai: { baseUrl: 'https://api.moark.ai/v1' },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        openModelEndpoint: false,
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     modelscope: {
         displayName: 'ModelScope',
         family: 'ModelScope',
@@ -342,6 +490,19 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
+    },
+    modal: {
+        displayName: 'Modal (Research)',
+        family: 'Modal',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.us-west-2.modal.direct/v1'
+        },
+        // This provider exposes a single fixed model for research: zai-org/GLM-5.1-FP8
+        fetchModels: false,
+        openModelEndpoint: false
     },
     nvidia: {
         displayName: 'NVIDIA NIM',
@@ -491,6 +652,81 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             baseUrl: 'https://api.hicap.ai/v1'
         },
         openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    baseten: {
+        displayName: 'Baseten',
+        family: 'Baseten',
+        supportsApiKey: true,
+        apiKeyTemplate: 'pt-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        openai: {
+            baseUrl: 'https://inference.baseten.co/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    berget: {
+        displayName: 'Berget',
+        family: 'Berget AI',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.berget.ai/v1'
+        },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    sherlock: {
+        displayName: 'Sherlock (CloudFerro)',
+        family: 'CloudFerro',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api-sherlock.cloudferro.com/openai/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    clarifai: {
+        displayName: 'Clarifai',
+        family: 'Clarifai',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // Clarifai exposes an OpenAI-compatible bridge for both the OpenAI SDK and the Responses API
+        openai: {
+            baseUrl: 'https://api.clarifai.com/v2/ext/openai/v1'
+        },
+        responses: {
+            baseUrl: 'https://api.clarifai.com/v2/ext/openai/v1'
+        },
+        // prefer explicit sdkMode selection when using this provider
+        sdkMode: 'openai',
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {

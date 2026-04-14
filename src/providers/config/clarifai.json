@@ -1,0 +1,18 @@
+{
+    "displayName": "Clarifai",
+    "baseUrl": "https://api.clarifai.com/v2/ext/openai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-4o",
+            "name": "GPT-4o",
+            "tooltip": "Placeholder model for Clarifai OpenAI bridge",
+            "maxInputTokens": 114688,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
+}

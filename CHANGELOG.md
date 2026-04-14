@@ -2,9 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.9] - Unreleased
+## [0.3.9] - 2026-04-14
+
+### Added
+
+- **Baseten Provider**: Added support for Baseten AI inference platform with OpenAI-compatible API endpoint at https://inference.baseten.co/v1. Supports API key authentication and automatic model fetching.
+ - **Berget Provider**: Added support for Berget AI via OpenAI-compatible endpoint at https://api.berget.ai/v1. Supports API key configuration and automatic model fetching; marked as an open model endpoint where available.
+ - **Clarifai Provider**: Added Clarifai OpenAI-compatible bridge at https://api.clarifai.com/v2/ext/openai/v1. Configured to support both OpenAI SDK and OpenAI Responses SDK modes and automatic model fetching.
+ - **Modal (Research) Provider**: Added Modal research provider pointing to https://api.us-west-2.modal.direct/v1 with a fixed research model `zai-org/GLM-5.1-FP8` (GLM family token limits applied).
+ - **Sherlock (CloudFerro) Provider**: Added Sherlock provider (https://api-sherlock.cloudferro.com/openai/v1) with OpenAI SDK compatibility and dynamic model fetching enabled; supports open model endpoint usage.
+ - **Cortecs Provider**: Added Cortecs (https://api.cortecs.ai/v1) as an OpenAI-compatible provider that exposes an open `/models` endpoint (no API key required for model listing).
+ - **Dinference Provider**: Added Dinference (https://api.dinference.com/v1) with OpenAI SDK compatibility. Model listing requires an API key and is enabled via the `/models` endpoint.
+ - **FastRouter Provider**: Added FastRouter (https://api.fastrouter.ai/api/v1) supporting OpenAI SDK, Responses SDK (`/responses`) and Anthropic (`/messages`) bridges. Model fetching requires an API key (`/models`).
+ - **Fireworks Provider**: Added Fireworks AI (https://api.fireworks.ai/inference/v1) with OpenAI-compatible inference, Responses (`/responses`) and Anthropic (`/messages`) bridges. Model listing via `/models` requires an API key.
+ - **Friendli Provider**: Added Friendli (https://api.friendli.ai/serverless/v1) with OpenAI SDK compatibility and an open `/models` endpoint for model discovery.
+- **Jiekou Provider**: Added Jiekou AI with OpenAI-compatible endpoint at https://api.jiekou.ai/openai/ and Anthropic-compatible endpoint at https://api.jiekou.ai/anthropic. Supports API key authentication and automatic model fetching.
+- **MegaNova Provider**: Added MegaNova AI via OpenAI-compatible endpoint at https://inference.meganova.ai/v1. Supports API key configuration and automatic model fetching.
+- **Moark Provider**: Added Moark AI via OpenAI-compatible endpoint at https://api.moark.ai/v1. Supports API key configuration and automatic model fetching.
 
 ### Fixed
+
+### Fixed
+
+- **Provider Registry/Command Activation Regression**: Fixed a critical bug where all Aether commands failed to register in VS Code due to a stale generated provider registry (`src/providers/config/index.ts`). The extension now correctly regenerates the provider registry before each build, ensuring all providers are included and activation succeeds. This resolves "command not found" errors for all Aether commands after adding or removing providers.
 
 - **OpenAI Responses API (`oai-response` mode) — System Messages**: System-role messages are now correctly sent via the `instructions` parameter of the Responses API instead of being embedded as `role: "system"` items inside the `input` array. This matches the Responses API spec and improves compatibility with providers that implement it.
 
@@ -18,7 +38,7 @@ All notable changes to this project will be documented in this file.
 
 - **Provider error messages**: When a provider returns HTTP 200 with a JSON error body (e.g. `{"error":{"message":"upstream service error…"}}`), the readable `error.message` field is now extracted and shown to the user instead of the raw JSON string that was previously thrown by `preprocessSSEResponse`.
 
-## [0.3.8] - 2026-06-06
+## [0.3.8] - 2026-04-06
 
 ### Added
 

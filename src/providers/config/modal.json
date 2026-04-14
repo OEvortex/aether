@@ -1,0 +1,18 @@
+{
+    "displayName": "Modal (Research)",
+    "baseUrl": "https://api.us-west-2.modal.direct/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "zai-org/GLM-5.1-FP8",
+            "name": "GLM-5.1-FP8",
+            "tooltip": "GLM-5.1-FP8 — Research model hosted via Modal (OpenAI-compatible bridge)",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        }
+    ]
+}

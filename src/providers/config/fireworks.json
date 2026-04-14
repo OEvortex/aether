@@ -1,0 +1,7 @@
+{
+    "displayName": "Fireworks AI",
+    "baseUrl": "https://api.fireworks.ai/inference/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "modelsEndpoint": "/models",
+    "models": []
+}

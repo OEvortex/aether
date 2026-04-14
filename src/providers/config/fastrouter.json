@@ -1,0 +1,6 @@
+{
+    "displayName": "FastRouter",
+    "baseUrl": "https://api.fastrouter.ai/api/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

@@ -1,0 +1,7 @@
+{
+    "displayName": "Friendli",
+    "baseUrl": "https://api.friendli.ai/serverless/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "modelsEndpoint": "/models",
+    "models": []
+}

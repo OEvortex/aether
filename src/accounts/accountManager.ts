@@ -67,6 +67,22 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Baseten,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Berget,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Blackbox,
             {
                 supportsMultiAccount: true,
@@ -84,6 +100,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Chutes,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Clarifai,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -115,6 +139,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Cortecs,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.DeepInfra,
             {
                 supportsMultiAccount: true,
@@ -131,6 +163,38 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Dinference,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Fastrouter,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Fireworks,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Friendli,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Hicapai,
             {
                 supportsMultiAccount: true,
@@ -140,6 +204,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Huggingface,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Jiekou,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -187,6 +259,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Meganova,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.MiniMax,
             {
                 supportsMultiAccount: true,
@@ -204,6 +284,22 @@ export class AccountManager {
         ],
         [
             ProviderKey.Mistral,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Moark,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Modal,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -300,6 +396,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Seraphyn,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Sherlock,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
