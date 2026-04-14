@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.7] - 2026-04-14
+
+### Fixed
+
+- **Dependency Version Fix**: Fixed yoga-layout dependency version from ^0.1.0 (non-existent) to ^3.2.1 (correct version on npm), resolving installation errors when installing the CLI globally.
+
 ## [0.0.6] - 2026-04-14
 
 ### Fixed
