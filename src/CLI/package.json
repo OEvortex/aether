@@ -1,6 +1,7 @@
 {
-  "name": "@aether/aether",
+  "name": "@aetherai/aether-workspace",
   "version": "0.0.5",
+  "private": true,
   "engines": {
     "node": ">=20.0.0"
   },
@@ -74,14 +75,6 @@
     },
     "baseline-browser-mapping": "^2.9.19"
   },
-  "bin": {
-    "aether": "dist/cli.js"
-  },
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
   "devDependencies": {
     "@types/marked": "^5.0.2",
     "@types/mime-types": "^3.0.1",

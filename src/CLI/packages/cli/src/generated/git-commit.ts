@@ -1,1 +1,1 @@
-export const GIT_COMMIT_INFO = '6fc70fba';
+export const GIT_COMMIT_INFO = 'fa809f39';
