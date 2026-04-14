@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.10] - 2026-04-14
+
+### Fixed
+
+- **Build Method Revert**: Reverted from esbuild bundling to TypeScript compilation for npm publication. The esbuild approach was incompatible with the codebase's dynamic require() usage. TypeScript compilation avoids this issue and provides a working CLI for global installation.
+
 ## [0.0.9] - 2026-04-14
 
 ### Fixed
