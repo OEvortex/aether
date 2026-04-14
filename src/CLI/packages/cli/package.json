@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/aether",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Aether",
     "repository": {
         "type": "git",
@@ -34,14 +34,14 @@
         "README.md"
     ],
     "config": {
-        "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.3"
+        "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.5"
     },
     "dependencies": {
         "@agentclientprotocol/sdk": "^0.14.1",
         "@google/genai": "1.30.0",
         "@iarna/toml": "^2.2.5",
         "@modelcontextprotocol/sdk": "^1.25.1",
-        "@aether/aether-core": "file:../core",
+        "@aetherai/aether-core": "^0.0.5",
         "@types/update-notifier": "^6.0.8",
         "ansi-regex": "^6.2.2",
         "command-exists": "^1.2.9",
@@ -75,7 +75,7 @@
     "devDependencies": {
         "@babel/runtime": "^7.27.6",
         "@google/gemini-cli-test-utils": "file:../test-utils",
-        "@aether/aether-test-utils": "file:../test-utils",
+        "@aetherai/aether-test-utils": "^0.0.5",
         "@testing-library/react": "^16.3.0",
         "@types/archiver": "^6.0.3",
         "@types/command-exists": "^1.2.3",
@@ -107,5 +107,8 @@
     },
     "engines": {
         "node": ">=20"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

@@ -22,6 +22,10 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+### Fixed
+
+- **Provider Registry/Command Activation Regression**: Fixed a critical bug where all Aether commands failed to register in VS Code due to a stale generated provider registry (`src/providers/config/index.ts`). The extension now correctly regenerates the provider registry before each build, ensuring all providers are included and activation succeeds. This resolves "command not found" errors for all Aether commands after adding or removing providers.
+
 - **OpenAI Responses API (`oai-response` mode) — System Messages**: System-role messages are now correctly sent via the `instructions` parameter of the Responses API instead of being embedded as `role: "system"` items inside the `input` array. This matches the Responses API spec and improves compatibility with providers that implement it.
 
 - **OpenAI Responses API — `store: false`**: Requests through the Responses API now explicitly set `store: false` so that conversations are not stored server-side without user consent.

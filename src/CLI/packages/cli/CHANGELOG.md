@@ -2,6 +2,36 @@
 
 All notable changes to the Aether CLI will be documented in this file.
 
+## [0.0.5] - 2026-04-14
+
+### Added
+- Added npm publish automation script for all @aetherai/* packages
+- Added version synchronization across all workspace packages
+- Added `publish:all`, `publish:all:patch`, `publish:all:minor` npm scripts
+- Added `prepack` script to automatically build before npm publish
+- Added `publishConfig` with public access for all workspace packages
+- Added esbuild bundling with proper shebang and executable permissions
+
+### Fixed
+- **CRITICAL**: Fixed missing `dist/` folder when installing from npm by adding `prepack` build step
+- Fixed bin entry point to correctly reference `dist/cli.js`
+- Fixed workspace dependency resolution (`file:` to versioned `^` dependencies)
+- Fixed esbuild output from `packages/cli/dist/index.js` to `dist/cli.js`
+- Fixed copy_bundle_assets script for standalone CLI publishing
+- Fixed cross-package dependency versions to sync at 0.0.5
+
+### Changed
+- Synchronized all @aether-* packages to version 0.0.5
+  - @aetherai/aether: 0.0.5
+  - @aether/aether-core: 0.0.5
+  - @aether/channel-base: 0.0.5
+  - @aether/channel-telegram: 0.0.5
+  - @aether/channel-weixin: 0.0.5
+  - @aether/channel-dingtalk: 0.0.5
+- Changed @aetherai/aether dependency from `file:../core` to `^0.0.5`
+- Simplified root package.json bin entry to use bundled `dist/cli.js`
+- Updated publish workflow to build all packages before publishing
+
 ## [0.0.2] - 2025-04-13
 
 ### Fixed

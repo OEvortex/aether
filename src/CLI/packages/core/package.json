@@ -1,6 +1,6 @@
 ﻿{
-  "name": "@aether/aether-core",
-  "version": "0.14.1",
+  "name": "@aetherai/aether-core",
+  "version": "0.0.5",
   "description": "Aether Core",
   "repository": {
     "type": "git",
@@ -83,7 +83,7 @@
     "@lydell/node-pty-win32-x64": "1.2.0-beta.10"
   },
   "devDependencies": {
-    "@aether/aether-test-utils": "file:../test-utils",
+    "@aetherai/aether-test-utils": "^0.0.5",
     "@types/diff": "^7.0.2",
     "@types/dotenv": "^6.1.1",
     "@types/fast-levenshtein": "^0.0.4",
@@ -99,5 +99,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

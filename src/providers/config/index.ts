@@ -1,4 +1,4 @@
-import type { ProviderConfig } from '../../types/sharedTypes';
+import type { ProviderConfig } from '../../types/sharedTypes.js';
 import aihubmix from './aihubmix.json';
 import apertis from './apertis.json';
 import avaSupernova from './ava-supernova.json';
@@ -38,6 +38,9 @@ import qwencli from './qwencli.json';
 import seraphyn from './seraphyn.json';
 import zenmux from './zenmux.json';
 import zhipu from './zhipu.json';
+import jiekou from './jiekou.json';
+import meganova from './meganova.json';
+import moark from './moark.json';
 
 const providers = {
 	aihubmix: aihubmix,
@@ -66,6 +69,7 @@ const providers = {
 	meganova: meganova,
 	minimax: minimax,
 	mistral: mistral,
+	moark: moark,
 	modal: modal,
 	modelscope: modelscope,
 	moonshot: moonshot,
