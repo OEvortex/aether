@@ -12,7 +12,7 @@ import type {
 } from './types.js';
 import { CommandKind } from './types.js';
 import { t } from '../../i18n/index.js';
-import type { HookRegistryEntry } from '@aether/aether-core';
+import type { HookRegistryEntry } from '@aetherai/aether-core';
 
 /**
  * Format hook source for display

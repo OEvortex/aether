@@ -25,7 +25,7 @@ import {
   SkillTool,
   buildSkillLlmContent,
   DEFAULT_CONTEXT_LENGTH,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { t } from '../../i18n/index.js';
 
 /**

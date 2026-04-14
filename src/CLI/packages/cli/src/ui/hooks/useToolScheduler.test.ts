@@ -24,18 +24,18 @@ import type {
   Status as ToolCallStatusType,
   AnyDeclarativeTool,
   AnyToolInvocation,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
   DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
   ApprovalMode,
   MockTool,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { ToolCallStatus } from '../types.js';
 
 // Mocks
-vi.mock('@aether/aether-core', async () => {
-  const actual = await vi.importActual('@aether/aether-core');
+vi.mock('@aetherai/aether-core', async () => {
+  const actual = await vi.importActual('@aetherai/aether-core');
   return {
     ...actual,
     ToolRegistry: vi.fn(),

@@ -17,7 +17,7 @@ import type {
   ThoughtSummary,
   ToolCallRequestInfo,
   GeminiErrorEventValue,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   GeminiEventType as ServerGeminiEventType,
   SendMessageType,
@@ -41,7 +41,7 @@ import {
   ApiCancelEvent,
   isSupportedImageMimeType,
   getUnsupportedImageFormatWarning,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { type Part, type PartListUnion, FinishReason } from '@google/genai';
 import type {
   HistoryItem,

@@ -2,7 +2,7 @@
 import type {
   SubagentConfig,
   McpToolProgressData,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 /**
  * Annotation for attaching metadata to content blocks

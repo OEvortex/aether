@@ -4,7 +4,7 @@
   ExtensionRequestOptions,
   SkillConfig,
   SubagentConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { ConfirmationRequest } from '../../ui/types.js';
 import chalk from 'chalk';
 import prompts from 'prompts';

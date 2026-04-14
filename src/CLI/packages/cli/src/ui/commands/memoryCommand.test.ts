@@ -21,11 +21,11 @@ import {
   setGeminiMdFilename,
   type FileDiscoveryService,
   type LoadServerHierarchicalMemoryResponse,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
   return {
     ...original,
     getErrorMessage: vi.fn((error: unknown) => {

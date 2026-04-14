@@ -10,12 +10,12 @@ import type {
   TelemetrySettings,
   AuthType,
   ChatCompressionSettings,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   ApprovalMode,
   DEFAULT_TRUNCATE_TOOL_OUTPUT_LINES,
   DEFAULT_TRUNCATE_TOOL_OUTPUT_THRESHOLD,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { CustomTheme } from '../ui/themes/theme.js';
 import { getLanguageSettingsOptions } from '../i18n/languages.js';
 

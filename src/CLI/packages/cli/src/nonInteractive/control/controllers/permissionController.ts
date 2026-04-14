@@ -19,11 +19,11 @@ import type {
   ToolExecuteConfirmationDetails,
   ToolMcpConfirmationDetails,
   ApprovalMode,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   InputFormat,
   ToolConfirmationOutcome,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type {
   CLIControlPermissionRequest,
   CLIControlSetPermissionModeRequest,

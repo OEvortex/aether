@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { HookEventName, HooksConfigSource } from '@aether/aether-core';
+import { HookEventName, HooksConfigSource } from '@aetherai/aether-core';
 
 // Mock i18n module
 vi.mock('../../../i18n/index.js', () => ({

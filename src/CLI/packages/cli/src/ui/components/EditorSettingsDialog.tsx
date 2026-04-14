@@ -17,11 +17,11 @@ import { RadioButtonSelect } from './shared/RadioButtonSelect.js';
 import { ScopeSelector } from './shared/ScopeSelector.js';
 import type { LoadedSettings } from '../../config/settings.js';
 import { SettingScope } from '../../config/settings.js';
-import type { EditorType } from '@aether/aether-core';
+import type { EditorType } from '@aetherai/aether-core';
 import {
   createDebugLogger,
   isEditorAvailable,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useKeypress } from '../hooks/useKeypress.js';
 import { t } from '../../i18n/index.js';
 

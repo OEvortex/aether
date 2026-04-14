@@ -7,8 +7,8 @@
 import type {
   Config,
   ConfigInitializeOptions,
-} from '@aether/aether-core';
-import { createDebugLogger } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import { StreamJsonInputReader } from './io/StreamJsonInputReader.js';
 import { StreamJsonOutputAdapter } from './io/StreamJsonOutputAdapter.js';
 import { ControlContext } from './control/ControlContext.js';

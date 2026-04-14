@@ -18,7 +18,7 @@ import {
   SlashCommandStatus,
   ToolConfirmationOutcome,
   IdeClient,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useSessionStats } from '../contexts/SessionContext.js';
 import type {
   Message,

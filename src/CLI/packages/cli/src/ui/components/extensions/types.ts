@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Extension, Config } from '@aether/aether-core';
+import type { Extension, Config } from '@aetherai/aether-core';
 
 /**
  * Management steps for the extensions manager dialog.

@@ -6,7 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { handleSlashCommand } from './nonInteractiveCliCommands.js';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import type { LoadedSettings } from './config/settings.js';
 import { CommandKind } from './ui/commands/types.js';
 

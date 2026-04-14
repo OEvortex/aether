@@ -18,8 +18,8 @@ import type {
   SessionMetrics,
   ModelMetrics,
   ToolCallStats,
-} from '@aether/aether-core';
-import { uiTelemetryService } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { uiTelemetryService } from '@aetherai/aether-core';
 
 export enum ToolCallDecision {
   ACCEPT = 'accept',

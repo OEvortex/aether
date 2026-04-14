@@ -7,7 +7,7 @@
 import { vi } from 'vitest';
 import type { CommandContext } from '../ui/commands/types.js';
 import type { LoadedSettings } from '../config/settings.js';
-import type { GitService } from '@aether/aether-core';
+import type { GitService } from '@aetherai/aether-core';
 import type { SessionStatsState } from '../ui/contexts/SessionContext.js';
 import { ToolCallDecision } from '../ui/contexts/SessionContext.js';
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuthType } from '@aether/aether-core';
-import type { WebSearchProviderConfig } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
+import type { WebSearchProviderConfig } from '@aetherai/aether-core';
 import type { Settings } from './settings.js';
 
 /**

@@ -14,7 +14,7 @@ import type {
   ToolResultDisplay,
   SlashCommandRecordPayload,
   AtCommandRecordPayload,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type {
   HistoryItem,
   HistoryItemWithoutId,

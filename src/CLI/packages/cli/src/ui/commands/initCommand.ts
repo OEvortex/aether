@@ -11,7 +11,7 @@ import type {
   SlashCommand,
   SlashCommandActionReturn,
 } from './types.js';
-import { getCurrentGeminiMdFilename } from '@aether/aether-core';
+import { getCurrentGeminiMdFilename } from '@aetherai/aether-core';
 import { CommandKind } from './types.js';
 import { Text } from 'ink';
 import React from 'react';

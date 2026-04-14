@@ -16,12 +16,12 @@ import type {
   ToolMcpConfirmationDetails,
   Config,
   EditorType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   IdeClient,
   ToolConfirmationOutcome,
   buildHumanReadableRuleLabel,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { RadioSelectItem } from '../shared/RadioButtonSelect.js';
 import { RadioButtonSelect } from '../shared/RadioButtonSelect.js';
 import { MaxSizedBox } from '../shared/MaxSizedBox.js';

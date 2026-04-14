@@ -8,7 +8,7 @@ import { describe, it, expect } from 'vitest';
 import type {
   ToolCallConfirmationDetails,
   ToolEditConfirmationDetails,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { escapeAnsiCtrlCodes, sanitizeSensitiveText } from './textUtils.js';
 
 describe('textUtils', () => {

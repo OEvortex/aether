@@ -25,7 +25,7 @@ import {
   type ArenaSessionCompleteEvent,
   type Config,
   type InProcessBackend,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { AgentViewActions } from '../contexts/AgentViewContext.js';
 import { theme } from '../semantic-colors.js';
 

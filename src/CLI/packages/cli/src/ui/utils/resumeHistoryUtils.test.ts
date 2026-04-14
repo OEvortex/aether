@@ -12,7 +12,7 @@ import type {
   Config,
   ConversationRecord,
   ResumedSessionData,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { Part } from '@google/genai';
 
 const makeConfig = (tools: Record<string, AnyDeclarativeTool>) =>

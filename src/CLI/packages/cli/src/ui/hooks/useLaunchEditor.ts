@@ -1,10 +1,10 @@
 ﻿import { useCallback } from 'react';
 import { useStdin } from 'ink';
-import type { EditorType } from '@aether/aether-core';
+import type { EditorType } from '@aetherai/aether-core';
 import {
   editorCommands,
   commandExists as coreCommandExists,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { spawnSync } from 'child_process';
 import { useSettings } from '../contexts/SettingsContext.js';
 

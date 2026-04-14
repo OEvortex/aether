@@ -11,10 +11,10 @@ import { SessionPicker } from './SessionPicker.js';
 import type {
   SessionListItem,
   ListSessionsResult,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
-vi.mock('@aether/aether-core', async () => {
-  const actual = await vi.importActual('@aether/aether-core');
+vi.mock('@aetherai/aether-core', async () => {
+  const actual = await vi.importActual('@aetherai/aether-core');
   return {
     ...actual,
     getGitBranch: vi.fn().mockReturnValue('main'),

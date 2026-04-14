@@ -6,8 +6,8 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { AskUserQuestionDialog } from './AskUserQuestionDialog.js';
-import type { ToolAskUserQuestionConfirmationDetails } from '@aether/aether-core';
-import { ToolConfirmationOutcome } from '@aether/aether-core';
+import type { ToolAskUserQuestionConfirmationDetails } from '@aetherai/aether-core';
+import { ToolConfirmationOutcome } from '@aetherai/aether-core';
 import { renderWithProviders } from '../../../test-utils/render.js';
 
 const wait = (ms = 50) => new Promise((resolve) => setTimeout(resolve, ms));

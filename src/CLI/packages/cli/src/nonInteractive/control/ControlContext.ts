@@ -13,7 +13,7 @@
  * runtime state (e.g. permission mode, active MCP clients).
  */
 
-import type { Config, MCPServerConfig } from '@aether/aether-core';
+import type { Config, MCPServerConfig } from '@aetherai/aether-core';
 import type { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { StreamJsonOutputAdapter } from '../io/StreamJsonOutputAdapter.js';
 import type { PermissionMode } from '../types.js';

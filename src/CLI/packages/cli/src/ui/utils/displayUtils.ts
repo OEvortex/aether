@@ -5,7 +5,7 @@
  */
 
 import { theme } from '../semantic-colors.js';
-import { AgentStatus } from '@aether/aether-core';
+import { AgentStatus } from '@aetherai/aether-core';
 
 // --- Status Labels ---
 

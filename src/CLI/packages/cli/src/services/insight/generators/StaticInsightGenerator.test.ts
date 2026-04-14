@@ -7,7 +7,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import path from 'path';
 import fs from 'fs/promises';
-import { Storage, type Config } from '@aether/aether-core';
+import { Storage, type Config } from '@aetherai/aether-core';
 import { StaticInsightGenerator } from './StaticInsightGenerator.js';
 
 vi.mock('fs/promises', () => ({

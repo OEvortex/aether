@@ -12,7 +12,7 @@ import {
   getCodingPlanConfig,
   CodingPlanRegion,
 } from '../../constants/codingPlan.js';
-import { AuthType } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 
 // Get region configs for testing
 const chinaConfig = getCodingPlanConfig(CodingPlanRegion.CHINA);

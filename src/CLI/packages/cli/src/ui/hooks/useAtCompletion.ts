@@ -5,8 +5,8 @@
  */
 
 import { useEffect, useReducer, useRef } from 'react';
-import type { Config, FileSearch } from '@aether/aether-core';
-import { FileSearchFactory, escapePath } from '@aether/aether-core';
+import type { Config, FileSearch } from '@aetherai/aether-core';
+import { FileSearchFactory, escapePath } from '@aetherai/aether-core';
 import type { Suggestion } from '../components/SuggestionsDisplay.js';
 import { MAX_SUGGESTIONS_TO_SHOW } from '../components/SuggestionsDisplay.js';
 

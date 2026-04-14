@@ -9,7 +9,7 @@ import {
   getAllGeminiMdFilenames,
   loadServerHierarchicalMemory,
   AETHER_DIR,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';

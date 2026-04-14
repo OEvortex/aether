@@ -5,7 +5,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import type { ProviderModelConfig as ModelConfig } from '@aether/aether-core';
+import type { ProviderModelConfig as ModelConfig } from '@aetherai/aether-core';
 
 /**
  * Coding plan regions

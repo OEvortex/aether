@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { AuthType } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import {
   formatAcpModelId,
   parseAcpBaseModelId,

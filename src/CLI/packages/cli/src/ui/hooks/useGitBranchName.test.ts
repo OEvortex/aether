@@ -10,13 +10,13 @@ import { act } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useGitBranchName } from './useGitBranchName.js';
 import { fs, vol } from 'memfs'; // For mocking fs
-import { isCommandAvailable, execCommand } from '@aether/aether-core';
+import { isCommandAvailable, execCommand } from '@aetherai/aether-core';
 
-// Mock @aether/aether-core
-vi.mock('@aether/aether-core', async () => {
+// Mock @aetherai/aether-core
+vi.mock('@aetherai/aether-core', async () => {
   const original = await vi.importActual<
-    typeof import('@aether/aether-core')
-  >('@aether/aether-core');
+    typeof import('@aetherai/aether-core')
+  >('@aetherai/aether-core');
   return {
     ...original,
     execCommand: vi.fn(),

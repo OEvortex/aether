@@ -10,7 +10,7 @@ import {
   aetherOAuth2Events,
   aetherOAuth2Event,
   type DeviceAuthorizationData,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 export interface aetherAuthState {
   deviceAuth: DeviceAuthorizationData | null;

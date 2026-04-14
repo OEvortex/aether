@@ -11,7 +11,7 @@ import * as path from 'node:path';
 import { restoreCommand } from './restoreCommand.js';
 import { type CommandContext } from './types.js';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
-import type { Config, GitService } from '@aether/aether-core';
+import type { Config, GitService } from '@aetherai/aether-core';
 
 describe('restoreCommand', () => {
   let mockContext: CommandContext;

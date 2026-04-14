@@ -12,7 +12,7 @@ import type {
   ToolConfirmationOutcome,
   ToolResultDisplay,
   AgentStatus,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { PartListUnion } from '@google/genai';
 import { type ReactNode } from 'react';
 

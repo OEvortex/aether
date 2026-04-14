@@ -24,7 +24,7 @@ import {
   isTerminalStatus,
   ApprovalMode,
   APPROVAL_MODES,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   useAgentViewState,
   useAgentViewActions,

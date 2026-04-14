@@ -11,8 +11,8 @@ import { tmpdir } from 'node:os';
 import type {
   ConfigParameters,
   ContentGeneratorConfig,
-} from '@aether/aether-core';
-import { Config } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { Config } from '@aetherai/aether-core';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 export const server = setupServer();
@@ -39,8 +39,8 @@ const TEST_CONTENT_GENERATOR_CONFIG: ContentGeneratorConfig = {
 };
 
 // Mock file discovery service and tool registry
-vi.mock('@aether/aether-core', async () => {
-  const actual = await vi.importActual('@aether/aether-core');
+vi.mock('@aetherai/aether-core', async () => {
+  const actual = await vi.importActual('@aetherai/aether-core');
   return {
     ...actual,
     FileDiscoveryService: vi.fn().mockImplementation(() => ({

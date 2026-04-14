@@ -7,11 +7,11 @@
 import { useState, useCallback } from 'react';
 import type { LoadedSettings, SettingScope } from '../../config/settings.js';
 import { type HistoryItem, MessageType } from '../types.js';
-import type { EditorType } from '@aether/aether-core';
+import type { EditorType } from '@aetherai/aether-core';
 import {
   allowEditorTypeInSandbox,
   checkHasEditorType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 interface UseEditorSettingsReturn {
   isEditorDialogOpen: boolean;

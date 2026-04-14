@@ -16,8 +16,8 @@
  */
 
 import { randomUUID } from 'node:crypto';
-import type { DebugLogger } from '@aether/aether-core';
-import { createDebugLogger } from '@aether/aether-core';
+import type { DebugLogger } from '@aetherai/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import type { IControlContext } from '../ControlContext.js';
 import type {
   ControlRequestPayload,

@@ -53,7 +53,7 @@ import {
     IDLE_SPECULATION,
     ApprovalMode,
     type PermissionMode,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { buildResumedHistoryItems } from './utils/resumeHistoryUtils.js';
 import { validateAuthMethod } from '../config/auth.js';
 import { loadHierarchicalGeminiMemory } from '../config/config.js';

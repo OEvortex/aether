@@ -11,9 +11,9 @@ import {
   Config,
   FileDiscoveryService,
   ExtensionManager,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { isWorkspaceTrusted } from '../../config/trustedFolders.js';
-import type { MCPServerConfig } from '@aether/aether-core';
+import type { MCPServerConfig } from '@aetherai/aether-core';
 
 async function getMcpServersFromConfig(
   extensionManager?: ExtensionManager,

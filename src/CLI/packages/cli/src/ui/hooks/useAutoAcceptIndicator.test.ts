@@ -16,17 +16,17 @@ import {
 import { renderHook, act } from '@testing-library/react';
 import { useAutoAcceptIndicator } from './useAutoAcceptIndicator.js';
 
-import { Config, ApprovalMode } from '@aether/aether-core';
-import type { Config as ActualConfigType } from '@aether/aether-core';
+import { Config, ApprovalMode } from '@aetherai/aether-core';
+import type { Config as ActualConfigType } from '@aetherai/aether-core';
 import type { Key } from './useKeypress.js';
 import { useKeypress } from './useKeypress.js';
 import { MessageType } from '../types.js';
 
 vi.mock('./useKeypress.js');
 
-vi.mock('@aether/aether-core', async () => {
+vi.mock('@aetherai/aether-core', async () => {
   const actualServerModule = (await vi.importActual(
-    '@aether/aether-core',
+    '@aetherai/aether-core',
   )) as Record<string, unknown>;
   return {
     ...actualServerModule,

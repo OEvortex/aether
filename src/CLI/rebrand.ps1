@@ -13,14 +13,14 @@ foreach ($file in $files) {
     $original = $content
     
     # Package names / imports
-    $content = $content -replace '@qwen-code/qwen-code-core','@aether/aether-core'
-    $content = $content -replace '@qwen-code/qwen-code-test-utils','@aether/aether-test-utils'
-    $content = $content -replace '@qwen-code/qwen-code','@aether/aether-cli'
-    $content = $content -replace '@qwen-code/channel-base','@aether/channel-base'
-    $content = $content -replace '@qwen-code/channel-telegram','@aether/channel-telegram'
-    $content = $content -replace '@qwen-code/channel-weixin','@aether/channel-weixin'
-    $content = $content -replace '@qwen-code/channel-dingtalk','@aether/channel-dingtalk'
-    $content = $content -replace '@qwen-code/web-templates','@aether/web-templates'
+    $content = $content -replace '@qwen-code/qwen-code-core','@aetherai/aether-core'
+    $content = $content -replace '@qwen-code/qwen-code-test-utils','@aetherai/aether-test-utils'
+    $content = $content -replace '@qwen-code/qwen-code','@aetherai/aether-cli'
+    $content = $content -replace '@qwen-code/channel-base','@aetherai/channel-base'
+    $content = $content -replace '@qwen-code/channel-telegram','@aetherai/channel-telegram'
+    $content = $content -replace '@qwen-code/channel-weixin','@aetherai/channel-weixin'
+    $content = $content -replace '@qwen-code/channel-dingtalk','@aetherai/channel-dingtalk'
+    $content = $content -replace '@qwen-code/web-templates','@aetherai/web-templates'
     # Auth types
     $content = $content -replace 'QWEN_OAUTH','AETHER_OAUTH'
     $content = $content -replace 'QWEN_OAUTH_MODELS','AETHER_OAUTH_MODELS'
@@ -55,9 +55,9 @@ foreach ($file in $files) {
     $content = $content -replace 'ghcr\.io/qwenlm','ghcr.io/oewortex'
     # Product names in comments and descriptions
     $content = $content -replace 'QwenCode','AetherCli'
-    # qwen-code -> aether-cli BUT NOT @aether/aether already replaced
+    # qwen-code -> aether-cli BUT NOT @aetherai/aether already replaced
     # We need to be careful here - replace qwen-code only where it hasn't been caught
-    $content = $content -replace '@aether/qwen-code','@aether/aether-cli'
+    $content = $content -replace '@aetherai/qwen-code','@aetherai/aether-cli'
     # VSCode extension ID
     $content = $content -replace 'qwenlm\.qwen-code-vscode-ide-companion','oewortex.aether-vscode-ide-companion'
     # qwen_code -> aether_cli  

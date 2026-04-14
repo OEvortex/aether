@@ -11,7 +11,7 @@ import {
   Storage,
   type Config,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { render } from 'ink';
 import dns from 'node:dns';
 import os from 'node:os';

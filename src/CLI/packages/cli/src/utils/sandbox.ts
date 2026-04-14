@@ -15,8 +15,8 @@ import {
   SETTINGS_DIRECTORY_NAME,
 } from '../config/settings.js';
 import { promisify } from 'node:util';
-import type { Config, SandboxConfig } from '@aether/aether-core';
-import { FatalSandboxError } from '@aether/aether-core';
+import type { Config, SandboxConfig } from '@aetherai/aether-core';
+import { FatalSandboxError } from '@aetherai/aether-core';
 import { randomBytes } from 'node:crypto';
 import { writeStderrLine } from './stdioHelpers.js';
 

@@ -5,8 +5,8 @@
  */
 
 import { Box, Text } from 'ink';
-import { type SubagentConfig } from '@aether/aether-core';
-import { createDebugLogger } from '@aether/aether-core';
+import { type SubagentConfig } from '@aetherai/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import type { StepNavigationProps } from '../types.js';
 import { theme } from '../../../semantic-colors.js';
 import { useKeypress } from '../../../hooks/useKeypress.js';

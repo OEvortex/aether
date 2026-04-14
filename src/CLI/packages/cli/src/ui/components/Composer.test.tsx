@@ -21,7 +21,7 @@ vi.mock('../contexts/VimModeContext.js', () => ({
     vimMode: 'NORMAL',
   })),
 }));
-import { ApprovalMode } from '@aether/aether-core';
+import { ApprovalMode } from '@aetherai/aether-core';
 import { StreamingState } from '../types.js';
 
 // Mock child components

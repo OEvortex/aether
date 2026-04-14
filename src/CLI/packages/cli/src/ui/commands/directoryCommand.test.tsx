@@ -6,7 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { directoryCommand, expandHomeDir } from './directoryCommand.js';
-import type { Config, WorkspaceContext } from '@aether/aether-core';
+import type { Config, WorkspaceContext } from '@aetherai/aether-core';
 import type { CommandContext } from './types.js';
 import { MessageType } from '../types.js';
 import * as os from 'node:os';

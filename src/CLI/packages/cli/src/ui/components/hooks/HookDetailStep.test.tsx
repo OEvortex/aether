@@ -10,7 +10,7 @@ import {
   HookEventName,
   HooksConfigSource,
   HookType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { HookDetailStep } from './HookDetailStep.js';
 import type { HookEventDisplayInfo } from './types.js';
 

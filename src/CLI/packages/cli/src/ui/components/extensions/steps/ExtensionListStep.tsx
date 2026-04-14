@@ -8,7 +8,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Box, Text } from 'ink';
 import { theme } from '../../../semantic-colors.js';
 import { useKeypress } from '../../../hooks/useKeypress.js';
-import { type Extension } from '@aether/aether-core';
+import { type Extension } from '@aetherai/aether-core';
 import { t } from '../../../../i18n/index.js';
 import { ExtensionUpdateState } from '../../../state/extensions.js';
 

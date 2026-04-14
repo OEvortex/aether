@@ -5,7 +5,7 @@
  */
 
 import { Box, Text } from 'ink';
-import { Storage, isDebugLoggingDegraded } from '@aether/aether-core';
+import { Storage, isDebugLoggingDegraded } from '@aetherai/aether-core';
 import { useConfig } from '../contexts/ConfigContext.js';
 import { theme } from '../semantic-colors.js';
 

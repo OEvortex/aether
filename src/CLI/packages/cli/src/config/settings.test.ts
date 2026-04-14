@@ -56,7 +56,7 @@ import {
   SETTINGS_VERSION_KEY,
 } from './settings.js';
 import { needsMigration } from './migration/index.js';
-import { FatalConfigError, AETHER_DIR } from '@aether/aether-core';
+import { FatalConfigError, AETHER_DIR } from '@aetherai/aether-core';
 
 const MOCK_WORKSPACE_DIR = '/mock/workspace';
 // Use the (mocked) SETTINGS_DIRECTORY_NAME for consistency

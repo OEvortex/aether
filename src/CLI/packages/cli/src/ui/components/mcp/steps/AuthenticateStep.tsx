@@ -15,8 +15,8 @@ import {
   MCPOAuthProvider,
   MCPOAuthTokenStorage,
   getErrorMessage,
-} from '@aether/aether-core';
-import type { OAuthDisplayPayload } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import type { OAuthDisplayPayload } from '@aetherai/aether-core';
 import { appEvents, AppEvent } from '../../../../utils/events.js';
 
 type AuthState = 'idle' | 'authenticating' | 'success' | 'error';

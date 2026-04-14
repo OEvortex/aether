@@ -13,7 +13,7 @@
  */
 
 import type { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import type { MCPServerConfig } from '@aether/aether-core';
+import type { MCPServerConfig } from '@aetherai/aether-core';
 import type { PermissionSuggestion } from '../../types.js';
 
 /**

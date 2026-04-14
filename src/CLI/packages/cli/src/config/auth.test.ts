@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuthType } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import { vi } from 'vitest';
 import { validateAuthMethod } from './auth.js';
 import * as settings from './settings.js';
@@ -27,7 +27,7 @@ function createConfig(modelId: string) {
         getModelsConfig: vi.fn().mockReturnValue({
             getModel: vi.fn().mockReturnValue(modelId),
         }),
-    } as unknown as import('@aether/aether-core').Config;
+    } as unknown as import('@aetherai/aether-core').Config;
 }
 
 describe('validateAuthMethod', () => {

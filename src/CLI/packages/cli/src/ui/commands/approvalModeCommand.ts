@@ -12,8 +12,8 @@ import type {
 } from './types.js';
 import { CommandKind } from './types.js';
 import { t } from '../../i18n/index.js';
-import type { ApprovalMode } from '@aether/aether-core';
-import { APPROVAL_MODES } from '@aether/aether-core';
+import type { ApprovalMode } from '@aetherai/aether-core';
+import { APPROVAL_MODES } from '@aetherai/aether-core';
 
 /**
  * Parses the argument string and returns the corresponding ApprovalMode if valid.

@@ -8,7 +8,7 @@ import {
   allowEditorTypeInSandbox,
   checkHasEditorType,
   type EditorType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 export interface EditorDisplay {
   name: string;

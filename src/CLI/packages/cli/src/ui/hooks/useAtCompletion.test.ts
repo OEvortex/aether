@@ -9,10 +9,10 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { useAtCompletion } from './useAtCompletion.js';
-import type { Config, FileSearch } from '@aether/aether-core';
-import { FileSearchFactory } from '@aether/aether-core';
-import type { FileSystemStructure } from '@aether/aether-test-utils';
-import { createTmpDir, cleanupTmpDir } from '@aether/aether-test-utils';
+import type { Config, FileSearch } from '@aetherai/aether-core';
+import { FileSearchFactory } from '@aetherai/aether-core';
+import type { FileSystemStructure } from '@aetherai/aether-test-utils';
+import { createTmpDir, cleanupTmpDir } from '@aetherai/aether-test-utils';
 import { useState } from 'react';
 import type { Suggestion } from '../components/SuggestionsDisplay.js';
 

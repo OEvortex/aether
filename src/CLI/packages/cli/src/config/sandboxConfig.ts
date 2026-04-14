@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { SandboxConfig } from '@aether/aether-core';
-import { FatalSandboxError } from '@aether/aether-core';
+import type { SandboxConfig } from '@aetherai/aether-core';
+import { FatalSandboxError } from '@aetherai/aether-core';
 import commandExists from 'command-exists';
 import * as os from 'node:os';
 import { getPackageJson } from '../utils/package.js';

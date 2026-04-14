@@ -7,7 +7,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PlanEmitter } from './PlanEmitter.js';
 import type { SessionContext, TodoItem } from '../types.js';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 
 describe('PlanEmitter', () => {
   let mockContext: SessionContext;

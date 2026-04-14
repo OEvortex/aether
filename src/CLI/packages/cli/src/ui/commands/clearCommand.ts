@@ -14,7 +14,7 @@ import {
   ToolNames,
   SkillTool,
   type PermissionMode,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 export const clearCommand: SlashCommand = {
   name: 'clear',

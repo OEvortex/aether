@@ -17,7 +17,7 @@ import {
   type HookConfig,
   createDebugLogger,
   HOOKS_CONFIG_FIELDS,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type {
   HooksManagementDialogProps,
   HookEventDisplayInfo,

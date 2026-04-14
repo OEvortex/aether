@@ -12,7 +12,7 @@ import {
   AuthType,
   type ContentGeneratorConfig,
   type Config,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 // Helper function to create a mock config
 function createMockConfig(

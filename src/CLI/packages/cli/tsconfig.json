@@ -4,14 +4,14 @@
     "rootDir": "../../..",
     "outDir": "dist",
     "paths": {
-      "@aether/aether-core": ["../core/src/index.ts"],
-      "@aether/aether-test-utils": ["../core/src/aetherTestUtils.ts"],
-      "@aether/channel-base": ["../channels/base/src/index.ts"],
-      "@aether/channel-telegram": ["../channels/telegram/src/index.ts"],
-      "@aether/channel-weixin": ["../channels/weixin/src/index.ts"],
-      "@aether/channel-weixin/*": ["../channels/weixin/src/*"],
-      "@aether/channel-dingtalk": ["../channels/dingtalk/src/index.ts"],
-      "@aether/channel-dingtalk/*": ["../channels/dingtalk/src/*"]
+      "@aetherai/aether-core": ["../core/src/index.ts"],
+      "@aetherai/aether-test-utils": ["../core/src/aetherTestUtils.ts"],
+      "@aetherai/channel-base": ["../channels/base/src/index.ts"],
+      "@aetherai/channel-telegram": ["../channels/telegram/src/index.ts"],
+      "@aetherai/channel-weixin": ["../channels/weixin/src/index.ts"],
+      "@aetherai/channel-weixin/*": ["../channels/weixin/src/*"],
+      "@aetherai/channel-dingtalk": ["../channels/dingtalk/src/index.ts"],
+      "@aetherai/channel-dingtalk/*": ["../channels/dingtalk/src/*"]
     },
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ES2023"],

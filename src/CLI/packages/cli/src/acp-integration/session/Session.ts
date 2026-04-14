@@ -17,7 +17,7 @@ import type {
   ToolResult,
   ChatRecord,
   AgentEventEmitter,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   AuthType,
   ApprovalMode,
@@ -43,7 +43,7 @@ import {
   injectPermissionRulesIfMissing,
   NotificationType,
   persistPermissionOutcome,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 import { RequestError } from '@agentclientprotocol/sdk';
 import type {
@@ -722,7 +722,7 @@ export class Session implements SessionContext {
       return;
     }
 
-    const { IdeClient } = await import('@aether/aether-core');
+    const { IdeClient } = await import('@aetherai/aether-core');
     const ideClient = await IdeClient.getInstance();
     const cliOutcome =
       outcome === ToolConfirmationOutcome.Cancel ? 'rejected' : 'accepted';

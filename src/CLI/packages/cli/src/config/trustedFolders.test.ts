@@ -5,7 +5,7 @@
  */
 
 import * as osActual from 'node:os';
-import { FatalConfigError, ideContextStore } from '@aether/aether-core';
+import { FatalConfigError, ideContextStore } from '@aetherai/aether-core';
 import {
   describe,
   it,

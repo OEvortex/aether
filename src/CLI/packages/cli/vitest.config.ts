@@ -11,7 +11,11 @@ import path from 'node:path';
 export default defineConfig({
   resolve: {
     alias: {
-      '@aether/aether-core': path.resolve(__dirname, '../core/index.ts'),
+      '@aetherai/aether-core': path.resolve(__dirname, '../core/index.ts'),
+      '@aetherai/aether-test-utils': path.resolve(
+        __dirname,
+        '../core/src/aetherTestUtils.ts',
+      ),
     },
   },
   test: {
@@ -47,7 +51,7 @@ export default defineConfig({
     },
     server: {
       deps: {
-        inline: [/@aether\/aether-core/],
+        inline: [/@aetherai\/aether-core/],
       },
     },
   },

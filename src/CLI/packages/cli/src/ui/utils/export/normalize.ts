@@ -5,8 +5,8 @@
  */
 
 import type { Part } from '@google/genai';
-import { ExitPlanModeTool, ToolNames } from '@aether/aether-core';
-import type { ChatRecord, Config, Kind } from '@aether/aether-core';
+import { ExitPlanModeTool, ToolNames } from '@aetherai/aether-core';
+import type { ChatRecord, Config, Kind } from '@aetherai/aether-core';
 import type { ExportMessage, ExportSessionData } from './types.js';
 
 /**

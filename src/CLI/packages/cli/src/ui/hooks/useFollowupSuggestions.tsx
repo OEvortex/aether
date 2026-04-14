@@ -14,11 +14,11 @@ import {
   createFollowupController,
   logPromptSuggestion,
   PromptSuggestionEvent,
-} from '@aether/aether-core';
-import type { FollowupState, Config } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import type { FollowupState, Config } from '@aetherai/aether-core';
 
 // Re-export for consumers that import from here
-export type { FollowupState } from '@aether/aether-core';
+export type { FollowupState } from '@aetherai/aether-core';
 
 /**
  * Options for the hook

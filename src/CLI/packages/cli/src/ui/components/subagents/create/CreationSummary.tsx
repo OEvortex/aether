@@ -10,8 +10,8 @@ import type { WizardStepProps } from '../types.js';
 import type {
   SubagentManager,
   SubagentConfig,
-} from '@aether/aether-core';
-import { createDebugLogger } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import { theme } from '../../../semantic-colors.js';
 import { shouldShowColor, getColorForDisplay } from '../utils.js';
 import { useLaunchEditor } from '../../../hooks/useLaunchEditor.js';

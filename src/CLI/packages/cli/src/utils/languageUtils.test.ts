@@ -34,8 +34,8 @@ vi.mock('../i18n/index.js', () => ({
   }),
 }));
 
-// Mock @aether/aether-core
-vi.mock('@aether/aether-core', () => ({
+// Mock @aetherai/aether-core
+vi.mock('@aetherai/aether-core', () => ({
   Storage: {
     getGlobalAetherDir: vi.fn(() => '/mock/home/.aether'),
   },

@@ -9,7 +9,7 @@ import type { CommandModule } from 'yargs';
 import {
   ExtensionManager,
   parseInstallSource,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { getErrorMessage } from '../../utils/errors.js';
 import { writeStdoutLine, writeStderrLine } from '../../utils/stdioHelpers.js';
 import { isWorkspaceTrusted } from '../../config/trustedFolders.js';

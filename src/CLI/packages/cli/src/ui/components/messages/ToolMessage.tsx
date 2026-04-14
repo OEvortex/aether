@@ -21,7 +21,7 @@ import type {
   AnsiOutput,
   Config,
   McpToolProgressData,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { AgentExecutionDisplay } from '../subagents/index.js';
 import { PlanSummaryDisplay } from '../PlanSummaryDisplay.js';
 import { ShellInputPrompt } from '../ShellInputPrompt.js';

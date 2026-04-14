@@ -23,11 +23,11 @@ All notable changes to the Aether CLI will be documented in this file.
 ### Changed
 - Synchronized all @aether-* packages to version 0.0.5
   - @aetherai/aether: 0.0.5
-  - @aether/aether-core: 0.0.5
-  - @aether/channel-base: 0.0.5
-  - @aether/channel-telegram: 0.0.5
-  - @aether/channel-weixin: 0.0.5
-  - @aether/channel-dingtalk: 0.0.5
+  - @aetherai/aether-core: 0.0.5
+  - @aetherai/channel-base: 0.0.5
+  - @aetherai/channel-telegram: 0.0.5
+  - @aetherai/channel-weixin: 0.0.5
+  - @aetherai/channel-dingtalk: 0.0.5
 - Changed @aetherai/aether dependency from `file:../core` to `^0.0.5`
 - Simplified root package.json bin entry to use bundled `dist/cli.js`
 - Updated publish workflow to build all packages before publishing

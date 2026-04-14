@@ -13,7 +13,7 @@ import {
 import type {
   ExtensionConfig,
   ClaudeMarketplaceConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import prompts from 'prompts';
 
 vi.mock('../../i18n/index.js', () => ({

@@ -18,7 +18,7 @@ import type {
   ListSessionsResult,
   SessionListItem,
   SessionService,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   filterSessions,
   SESSION_PAGE_SIZE,

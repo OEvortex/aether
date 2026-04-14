@@ -7,7 +7,7 @@
 import fs from 'node:fs/promises';
 import * as os from 'node:os';
 import path from 'node:path';
-import { canUseRipgrep } from '@aether/aether-core';
+import { canUseRipgrep } from '@aetherai/aether-core';
 
 type WarningCheckOptions = {
   workspaceRoot: string;

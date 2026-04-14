@@ -10,7 +10,7 @@ import type {
   AnsiLine,
   AnsiOutput,
   AnsiToken,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 const DEFAULT_HEIGHT = 24;
 

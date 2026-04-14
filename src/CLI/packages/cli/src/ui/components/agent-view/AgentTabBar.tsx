@@ -20,7 +20,7 @@
 
 import { Box, Text } from 'ink';
 import { useState, useEffect, useCallback } from 'react';
-import { AgentStatus, AgentEventType } from '@aether/aether-core';
+import { AgentStatus, AgentEventType } from '@aetherai/aether-core';
 import {
   useAgentViewState,
   useAgentViewActions,

@@ -8,7 +8,7 @@ import { Box, Text } from 'ink';
 import { theme } from '../../semantic-colors.js';
 import { useTerminalSize } from '../../hooks/useTerminalSize.js';
 import type { HookEventDisplayInfo } from './types.js';
-import { HooksConfigSource } from '@aether/aether-core';
+import { HooksConfigSource } from '@aetherai/aether-core';
 import { getTranslatedSourceDisplayMap } from './constants.js';
 import { t } from '../../../i18n/index.js';
 

@@ -11,7 +11,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { glob } from 'glob';
-import { convertTomlToMarkdown } from '@aether/aether-core';
+import { convertTomlToMarkdown } from '@aetherai/aether-core';
 import { t } from '../i18n/index.js';
 
 export interface MigrationResult {
