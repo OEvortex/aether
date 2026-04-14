@@ -8,8 +8,8 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import * as path from 'node:path';
 import mock from 'mock-fs';
 import { FileCommandLoader } from './FileCommandLoader.js';
-import type { Config } from '@aether/aether-core';
-import { Storage } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
+import { Storage } from '@aetherai/aether-core';
 
 describe('FileCommandLoader - Extension Commands Support', () => {
   const projectRoot = '/test/project';

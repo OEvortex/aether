@@ -20,7 +20,7 @@ import {
   resolveGlobalTokenLimits,
   DEFAULT_CONTEXT_LENGTH,
   DEFAULT_MAX_OUTPUT_TOKENS,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   AgentSideConnection,
   RequestError,

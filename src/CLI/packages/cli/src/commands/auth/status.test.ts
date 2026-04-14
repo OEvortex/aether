@@ -6,7 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { showAuthStatus } from './handler.js';
-import { AuthType } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import { CODING_PLAN_ENV_KEY } from '../../constants/codingPlan.js';
 import type { LoadedSettings } from '../../config/settings.js';
 

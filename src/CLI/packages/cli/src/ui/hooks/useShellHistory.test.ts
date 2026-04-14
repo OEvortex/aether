@@ -25,7 +25,7 @@ vi.mock('fs', async (importOriginal) => {
     mkdirSync: vi.fn(),
   };
 });
-vi.mock('@aether/aether-core', () => {
+vi.mock('@aetherai/aether-core', () => {
   class Storage {
     getProjectTempDir(): string {
       return path.join('/test/home/', '.aether', 'tmp', 'mocked_hash');

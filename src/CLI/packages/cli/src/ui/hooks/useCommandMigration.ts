@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Storage } from '@aether/aether-core';
+import { Storage } from '@aetherai/aether-core';
 import { detectTomlCommands } from '../../services/command-migration-tool.js';
 import type { LoadedSettings } from '../../config/settings.js';
 

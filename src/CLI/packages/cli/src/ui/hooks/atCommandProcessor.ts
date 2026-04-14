@@ -7,14 +7,14 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import type { PartListUnion } from '@google/genai';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import {
   getErrorMessage,
   isNodeError,
   Storage,
   unescapePath,
   readManyFiles,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type {
   HistoryItemToolGroup,
   HistoryItemWithoutId,

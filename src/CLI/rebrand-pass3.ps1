@@ -131,7 +131,7 @@ foreach ($file in $files) {
     $content = $content -replace 'qwen-assistant/qwen-invoke','aether-assistant/aether-invoke'
     
     # inline pattern
-    $content = $content -replace '/@qwen-code/qwen-code-core/','/@aether/aether-core/'
+    $content = $content -replace '/@qwen-code/qwen-code-core/','/@aetherai/aether-core/'
     
     # project path
     $content = $content -replace '/projects/qwen-code','/projects/aether'

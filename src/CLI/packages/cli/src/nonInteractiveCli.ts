@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config, ToolCallRequestInfo } from '@aether/aether-core';
+import type { Config, ToolCallRequestInfo } from '@aetherai/aether-core';
 import { isSlashCommand } from './ui/utils/commandUtils.js';
 import type { LoadedSettings } from './config/settings.js';
 import {
@@ -20,7 +20,7 @@ import {
   parseAndFormatApiError,
   createDebugLogger,
   SendMessageType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { Content, Part, PartListUnion } from '@google/genai';
 import type { CLIUserMessage, PermissionMode } from './nonInteractive/types.js';
 import type { JsonOutputAdapterInterface } from './nonInteractive/io/BaseJsonOutputAdapter.js';

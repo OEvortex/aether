@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { MCPServerConfig } from '@aether/aether-core';
-import { MCPServerStatus } from '@aether/aether-core';
+import type { MCPServerConfig } from '@aetherai/aether-core';
+import { MCPServerStatus } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
 import type React from 'react';
 import { theme } from '../../semantic-colors.js';

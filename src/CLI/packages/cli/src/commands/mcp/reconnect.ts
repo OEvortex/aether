@@ -11,9 +11,9 @@ import {
   Config,
   FileDiscoveryService,
   ExtensionManager,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { isWorkspaceTrusted } from '../../config/trustedFolders.js';
-import type { MCPServerConfig } from '@aether/aether-core';
+import type { MCPServerConfig } from '@aetherai/aether-core';
 
 async function getMcpServersFromConfig(
   extensionManager?: ExtensionManager,
@@ -93,17 +93,21 @@ async function reconnectMcpServer(serverName: string): Promise<void> {
 
   writeStdoutLine(`Reconnecting to server "${serverName}"...`);
 
+  let config: Config | undefined;
   try {
-    const config = await createMinimalConfig();
+    config = await createMinimalConfig();
     const toolRegistry = config.getToolRegistry();
     await toolRegistry.discoverToolsForServer(serverName);
     writeStdoutLine(`Successfully reconnected to server "${serverName}".`);
-    await config.shutdown();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw createReconnectError(
       `Failed to reconnect to server "${serverName}": ${message}`,
     );
+  } finally {
+    if (config) {
+      await config.shutdown();
+    }
   }
 }
 

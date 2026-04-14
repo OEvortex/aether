@@ -8,7 +8,7 @@ import {
   type UserFeedbackRating,
   isNodeError,
   AuthType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { StreamingState, MessageType, type HistoryItem } from '../types.js';
 import {
   SettingScope,

@@ -5,7 +5,7 @@
  */
 
 import { type CommandModule } from 'yargs';
-import { FatalConfigError, getErrorMessage } from '@aether/aether-core';
+import { FatalConfigError, getErrorMessage } from '@aetherai/aether-core';
 import { SettingScope } from '../../config/settings.js';
 import { writeStdoutLine } from '../../utils/stdioHelpers.js';
 import { getExtensionManager } from './utils.js';
@@ -19,26 +19,30 @@ interface EnableArgs {
 export async function handleEnable(args: EnableArgs) {
   const extensionManager = await getExtensionManager();
 
+  const normalizedScope = args.scope
+    ? Object.values(SettingScope).find(
+        (scope) => scope.toLowerCase() === args.scope?.toLowerCase(),
+      )
+    : undefined;
+  const scopesToEnable =
+    normalizedScope === undefined
+      ? [SettingScope.User, SettingScope.Workspace]
+      : [normalizedScope];
+
   try {
-    if (args.scope?.toLowerCase() === 'workspace') {
-      extensionManager.enableExtension(args.name, SettingScope.Workspace);
-    } else {
-      extensionManager.enableExtension(args.name, SettingScope.User);
-    }
-    if (args.scope) {
-      writeStdoutLine(
-        t('Extension "{{name}}" successfully enabled for scope "{{scope}}".', {
-          name: args.name,
-          scope: args.scope,
-        }),
-      );
-    } else {
-      writeStdoutLine(
-        t('Extension "{{name}}" successfully enabled in all scopes.', {
-          name: args.name,
-        }),
-      );
-    }
+    scopesToEnable.forEach((scope) => {
+      extensionManager.enableExtension(args.name, scope);
+    });
+
+    const scopeLabel =
+      normalizedScope ??
+      `${SettingScope.User} and ${SettingScope.Workspace}`;
+    writeStdoutLine(
+      t('Extension "{{name}}" successfully enabled for scope "{{scope}}".', {
+        name: args.name,
+        scope: scopeLabel,
+      }),
+    );
   } catch (error) {
     throw new FatalConfigError(getErrorMessage(error));
   }
@@ -55,7 +59,7 @@ export const enableCommand: CommandModule = {
       })
       .option('scope', {
         describe: t(
-          'The scope to enable the extenison in. If not set, will be enabled in all scopes.',
+          'The scope to enable the extension in. If not set, will be enabled in all scopes.',
         ),
         type: 'string',
       })

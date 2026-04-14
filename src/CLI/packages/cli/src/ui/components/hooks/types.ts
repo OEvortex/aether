@@ -8,7 +8,7 @@ import type {
   HookConfig,
   HooksConfigSource,
   HookEventName,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 /**
  * Exit code description for hooks

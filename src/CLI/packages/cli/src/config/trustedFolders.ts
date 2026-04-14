@@ -12,7 +12,7 @@ import {
   getErrorMessage,
   isWithinRoot,
   ideContextStore,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { Settings } from './settings.js';
 import stripJsonComments from 'strip-json-comments';
 import { writeStderrLine } from '../utils/stdioHelpers.js';

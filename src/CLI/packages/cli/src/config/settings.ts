@@ -15,7 +15,7 @@ import {
   getErrorMessage,
   Storage,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import stripJsonComments from 'strip-json-comments';
 import { DefaultLight } from '../ui/themes/default-light.js';
 import { DefaultDark } from '../ui/themes/default.js';

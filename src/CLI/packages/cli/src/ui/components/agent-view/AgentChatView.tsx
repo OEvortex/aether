@@ -28,7 +28,7 @@ import {
   AgentEventType,
   getGitBranch,
   type AgentStatusChangeEvent,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   useAgentViewState,
   useAgentViewActions,

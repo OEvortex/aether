@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import {
   KittySequenceOverflowEvent,
   logKittySequenceOverflow,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useStdin } from 'ink';
 import type React from 'react';
 import {

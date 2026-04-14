@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import { render, Box, useApp } from 'ink';
-import { getGitBranch, SessionService } from '@aether/aether-core';
+import { getGitBranch, SessionService } from '@aetherai/aether-core';
 import { KeypressProvider } from '../contexts/KeypressContext.js';
 import { SessionPicker } from './SessionPicker.js';
 import { writeStdoutLine } from '../../utils/stdioHelpers.js';

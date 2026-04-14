@@ -12,7 +12,7 @@
 
 import type React from 'react';
 import { Box, Text } from 'ink';
-import { ApprovalMode } from '@aether/aether-core';
+import { ApprovalMode } from '@aetherai/aether-core';
 import { AutoAcceptIndicator } from '../AutoAcceptIndicator.js';
 import { ContextUsageDisplay } from '../ContextUsageDisplay.js';
 import { theme } from '../../semantic-colors.js';

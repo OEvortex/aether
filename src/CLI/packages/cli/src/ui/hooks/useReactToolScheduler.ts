@@ -19,11 +19,11 @@ import type {
   ToolCall,
   Status as CoreStatus,
   EditorType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   CoreToolScheduler,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useCallback, useState, useMemo } from 'react';
 import type {
   HistoryItemToolGroup,

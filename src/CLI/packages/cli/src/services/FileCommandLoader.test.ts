@@ -5,8 +5,8 @@
  */
 
 import * as path from 'node:path';
-import type { Config } from '@aether/aether-core';
-import { Storage } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
+import { Storage } from '@aetherai/aether-core';
 import mock from 'mock-fs';
 import { FileCommandLoader } from './FileCommandLoader.js';
 import { assert, vi } from 'vitest';
@@ -57,9 +57,9 @@ vi.mock('./prompt-processors/argumentProcessor.js', async (importOriginal) => {
       .mockImplementation(() => new original.DefaultArgumentProcessor()),
   };
 });
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
   return {
     ...original,
     Storage: original.Storage,

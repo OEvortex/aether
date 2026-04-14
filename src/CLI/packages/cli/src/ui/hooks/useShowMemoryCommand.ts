@@ -6,9 +6,9 @@
 
 import type { Message } from '../types.js';
 import { MessageType } from '../types.js';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import type { LoadedSettings } from '../../config/settings.js';
-import { createDebugLogger } from '@aether/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 
 const debugLogger = createDebugLogger('SHOW_MEMORY');
 

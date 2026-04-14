@@ -12,8 +12,8 @@ import type {
   ToolRegistry,
   AnyDeclarativeTool,
   AnyToolInvocation,
-} from '@aether/aether-core';
-import { Kind, TodoWriteTool } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { Kind, TodoWriteTool } from '@aetherai/aether-core';
 import type { Part } from '@google/genai';
 
 // Helper to create mock message parts for tests

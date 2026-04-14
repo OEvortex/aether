@@ -14,12 +14,12 @@ import type {
   ToolCallConfirmationDetails,
   AnyDeclarativeTool,
   AnyToolInvocation,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   AgentEventType,
   ToolConfirmationOutcome,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { z } from 'zod';
 import type { SessionContext } from './types.js';
 import { ToolCallEmitter } from './emitters/ToolCallEmitter.js';

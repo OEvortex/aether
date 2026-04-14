@@ -16,7 +16,7 @@ import {
   ExtensionManager,
   parseInstallSource,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import open from 'open';
 
 const debugLogger = createDebugLogger('EXTENSIONS_COMMAND');

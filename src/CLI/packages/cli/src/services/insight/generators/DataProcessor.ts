@@ -9,7 +9,7 @@ import path from 'path';
 import {
   read as readJsonlFile,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import pLimit from 'p-limit';
 import type {
   InsightData,
@@ -33,7 +33,7 @@ import {
   getInsightPrompt,
   type Config,
   type ChatRecord,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 const logger = createDebugLogger('DataProcessor');
 

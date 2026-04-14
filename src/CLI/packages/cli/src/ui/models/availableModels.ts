@@ -8,7 +8,7 @@ import {
   AuthType,
   type Config,
   type AvailableModel as CoreAvailableModel,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { t } from '../../i18n/index.js';
 
 export type AvailableModel = {

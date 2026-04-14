@@ -26,7 +26,7 @@ vi.mock('./utils.js', () => ({
   }),
 }));
 
-vi.mock('@aether/aether-core', () => ({
+vi.mock('@aetherai/aether-core', () => ({
   ExtensionSettingScope: {
     USER: 'user',
     WORKSPACE: 'workspace',

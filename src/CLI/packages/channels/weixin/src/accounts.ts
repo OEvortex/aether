@@ -1,6 +1,6 @@
 /**
  * Credential storage for WeChat account.
- * Stores account data in ~/.qwen/channels/weixin/
+ * Stores account data in ~/.aether/channels/weixin/ (legacy: ~/.qwen/channels/weixin/)
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync, chmodSync } from 'node:fs';
@@ -17,11 +17,26 @@ export interface AccountData {
 }
 
 export function getStateDir(): string {
-    const dir = process.env['WEIXIN_STATE_DIR'] || join(homedir(), '.qwen', 'channels', 'weixin');
-    if (!existsSync(dir)) {
-        mkdirSync(dir, { recursive: true });
+    const envDir = process.env['WEIXIN_STATE_DIR'];
+    if (envDir) {
+        if (!existsSync(envDir)) {
+            mkdirSync(envDir, { recursive: true });
+        }
+        return envDir;
     }
-    return dir;
+
+    const defaultDir = join(homedir(), '.aether', 'channels', 'weixin');
+    if (existsSync(defaultDir)) {
+        return defaultDir;
+    }
+
+    const legacyDir = join(homedir(), '.qwen', 'channels', 'weixin');
+    if (existsSync(legacyDir)) {
+        return legacyDir;
+    }
+
+    mkdirSync(defaultDir, { recursive: true });
+    return defaultDir;
 }
 
 function accountPath(): string {

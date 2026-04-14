@@ -5,8 +5,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import type { Storage } from '@aether/aether-core';
-import { Logger } from '@aether/aether-core';
+import type { Storage } from '@aetherai/aether-core';
+import { Logger } from '@aetherai/aether-core';
 
 /**
  * Hook to manage the logger instance.

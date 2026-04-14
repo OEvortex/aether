@@ -26,7 +26,7 @@ import {
   MCPServerConfig,
   AuthProviderType,
   type MCPOAuthConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 const debugLogger = createDebugLogger('SYSTEM_CONTROLLER');
 

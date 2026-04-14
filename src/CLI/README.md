@@ -1,9 +1,9 @@
 ﻿<div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@aether/aether-cli.svg)](https://www.npmjs.com/package/@aether/aether-cli)
+[![npm version](https://img.shields.io/npm/v/@aetherai/aether-cli.svg)](https://www.npmjs.com/package/@aetherai/aether-cli)
 [![License](https://img.shields.io/github/license/OEvortex/aether.svg)](./LICENSE)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
-[![Downloads](https://img.shields.io/npm/dm/@aether/aether-cli.svg)](https://www.npmjs.com/package/@aether/aether-cli)
+[![Downloads](https://img.shields.io/npm/dm/@aetherai/aether-cli.svg)](https://www.npmjs.com/package/@aetherai/aether-cli)
 
 <a href="https://trendshift.io/repositories/15287" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15287" alt="OEvortex%2Faether | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
@@ -62,7 +62,7 @@ Make sure you have Node.js 20 or later installed. Download it from [nodejs.org](
 #### NPM
 
 ```bash
-npm install -g @aether/aether-cli@latest
+npm install -g @aetherai/aether-cli@latest
 ```
 
 #### Homebrew (macOS, Linux)

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import type { CLIAssistantMessage, CLIMessage } from '../types.js';
 import {
   BaseJsonOutputAdapter,

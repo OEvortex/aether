@@ -9,11 +9,11 @@ import { getInstallationInfo, PackageManager } from './installationInfo.js';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as childProcess from 'node:child_process';
-import { isGitRepository } from '@aether/aether-core';
+import { isGitRepository } from '@aetherai/aether-core';
 
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
   return {
     ...actual,
     isGitRepository: vi.fn(),
@@ -173,7 +173,7 @@ describe('getInstallationInfo', () => {
   });
 
   it('should detect global pnpm installation', () => {
-    const pnpmPath = `/Users/test/.pnpm/global/5/node_modules/.pnpm/some-hash/node_modules/@aether/aether-cli/dist/index.js`;
+    const pnpmPath = `/Users/test/.pnpm/global/5/node_modules/.pnpm/some-hash/node_modules/@aetherai/aether-cli/dist/index.js`;
     process.argv[1] = pnpmPath;
     mockedRealPathSync.mockReturnValue(pnpmPath);
     mockedExecSync.mockImplementation(() => {
@@ -184,7 +184,7 @@ describe('getInstallationInfo', () => {
     const info = getInstallationInfo(projectRoot, true);
     expect(info.packageManager).toBe(PackageManager.PNPM);
     expect(info.isGlobal).toBe(true);
-    expect(info.updateCommand).toBe('pnpm add -g @aether/aether-cli@latest');
+    expect(info.updateCommand).toBe('pnpm add -g @aetherai/aether-cli@latest');
     expect(info.updateMessage).toContain('Attempting to automatically update');
 
     // isAutoUpdateEnabled = false -> "Please run..."
@@ -193,7 +193,7 @@ describe('getInstallationInfo', () => {
   });
 
   it('should detect global yarn installation', () => {
-    const yarnPath = `/Users/test/.yarn/global/node_modules/@aether/aether-cli/dist/index.js`;
+    const yarnPath = `/Users/test/.yarn/global/node_modules/@aetherai/aether-cli/dist/index.js`;
     process.argv[1] = yarnPath;
     mockedRealPathSync.mockReturnValue(yarnPath);
     mockedExecSync.mockImplementation(() => {
@@ -205,7 +205,7 @@ describe('getInstallationInfo', () => {
     expect(info.packageManager).toBe(PackageManager.YARN);
     expect(info.isGlobal).toBe(true);
     expect(info.updateCommand).toBe(
-      'yarn global add @aether/aether-cli@latest',
+      'yarn global add @aetherai/aether-cli@latest',
     );
     expect(info.updateMessage).toContain('Attempting to automatically update');
 
@@ -226,7 +226,7 @@ describe('getInstallationInfo', () => {
     const info = getInstallationInfo(projectRoot, true);
     expect(info.packageManager).toBe(PackageManager.BUN);
     expect(info.isGlobal).toBe(true);
-    expect(info.updateCommand).toBe('bun add -g @aether/aether-cli@latest');
+    expect(info.updateCommand).toBe('bun add -g @aetherai/aether-cli@latest');
     expect(info.updateMessage).toContain('Attempting to automatically update');
 
     // isAutoUpdateEnabled = false -> "Please run..."
@@ -314,7 +314,7 @@ describe('getInstallationInfo', () => {
     expect(info.packageManager).toBe(PackageManager.NPM);
     expect(info.isGlobal).toBe(true);
     expect(info.updateCommand).toBe(
-      'npm install -g @aether/aether-cli@latest',
+      'npm install -g @aetherai/aether-cli@latest',
     );
     expect(info.updateMessage).toContain('Attempting to automatically update');
 

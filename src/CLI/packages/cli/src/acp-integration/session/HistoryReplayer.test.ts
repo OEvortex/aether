@@ -13,7 +13,7 @@ import type {
   ToolRegistry,
   ToolResultDisplay,
   TodoResultDisplay,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 describe('HistoryReplayer', () => {
   let mockContext: SessionContext;

@@ -30,7 +30,7 @@ import {
   createDebugLogger,
   NativeLspService,
   isToolEnabled,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { extensionsCommand } from '../commands/extensions.js';
 import { hooksCommand } from '../commands/hooks.js';
 import type { Settings } from './settings.js';

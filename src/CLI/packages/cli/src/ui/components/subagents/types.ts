@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { SubagentLevel, Config } from '@aether/aether-core';
+import type { SubagentLevel, Config } from '@aetherai/aether-core';
 
 /**
  * State management for the subagent creation wizard.

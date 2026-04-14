@@ -8,7 +8,7 @@ import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Box, Text } from 'ink';
 import { theme } from '../semantic-colors.js';
-import { ApprovalMode, APPROVAL_MODES } from '@aether/aether-core';
+import { ApprovalMode, APPROVAL_MODES } from '@aetherai/aether-core';
 import { RadioButtonSelect } from './shared/RadioButtonSelect.js';
 import type { LoadedSettings } from '../../config/settings.js';
 import { SettingScope } from '../../config/settings.js';

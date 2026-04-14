@@ -13,8 +13,8 @@ import {
 import { MessageType, type HistoryItemSkillsList } from '../types.js';
 import { t } from '../../i18n/index.js';
 import { AsyncFzf } from 'fzf';
-import type { SkillConfig } from '@aether/aether-core';
-import { createDebugLogger } from '@aether/aether-core';
+import type { SkillConfig } from '@aetherai/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 
 const debugLogger = createDebugLogger('SKILLS_COMMAND');
 

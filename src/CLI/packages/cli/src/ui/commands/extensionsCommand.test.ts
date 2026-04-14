@@ -20,11 +20,11 @@ import {
 import {
   ExtensionManager,
   parseInstallSource,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
   return {
     ...actual,
     parseInstallSource: vi.fn(),

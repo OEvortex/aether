@@ -12,7 +12,7 @@ import {
   ShellExecutionService,
   flatMapTextParts,
   checkArgumentSafety,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 import type { CommandContext } from '../../ui/commands/types.js';
 import type { IPromptProcessor, PromptPipelineContent } from './types.js';

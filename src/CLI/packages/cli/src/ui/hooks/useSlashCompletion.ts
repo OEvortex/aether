@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { AsyncFzf } from 'fzf';
-import { createDebugLogger } from '@aether/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import type { Suggestion } from '../components/SuggestionsDisplay.js';
 import {
   CommandKind,

@@ -9,7 +9,7 @@ import os from 'node:os';
 import { execSync } from 'node:child_process';
 import type { CommandContext } from '../ui/commands/types.js';
 import { getCliVersion } from './version.js';
-import { IdeClient, AuthType } from '@aether/aether-core';
+import { IdeClient, AuthType } from '@aetherai/aether-core';
 import { formatMemoryUsage } from '../ui/utils/formatters.js';
 import { GIT_COMMIT_INFO } from '../generated/git-commit.js';
 

@@ -51,7 +51,7 @@ vi.mock('node:stream', async (importOriginal) => {
 });
 
 // Mock core dependencies
-vi.mock('@aether/aether-core', () => ({
+vi.mock('@aetherai/aether-core', () => ({
   createDebugLogger: () => ({
     debug: vi.fn(),
     error: vi.fn(),
@@ -80,7 +80,7 @@ vi.mock('../utils/acpModelUtils.js', () => ({
 }));
 
 import { runAcpAgent } from './acpAgent.js';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import type { LoadedSettings } from '../config/settings.js';
 import type { CliArgs } from '../config/config.js';
 

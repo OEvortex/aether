@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ToolConfirmationOutcome } from '@aether/aether-core';
+import { ToolConfirmationOutcome } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
 import type React from 'react';
 import { theme } from '../semantic-colors.js';

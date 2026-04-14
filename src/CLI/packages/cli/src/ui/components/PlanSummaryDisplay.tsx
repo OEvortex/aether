@@ -8,7 +8,7 @@ import type React from 'react';
 import { Box, Text } from 'ink';
 import { MarkdownDisplay } from '../utils/MarkdownDisplay.js';
 import { Colors } from '../colors.js';
-import type { PlanResultDisplay } from '@aether/aether-core';
+import type { PlanResultDisplay } from '@aetherai/aether-core';
 
 interface PlanSummaryDisplayProps {
   data: PlanResultDisplay;

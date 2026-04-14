@@ -15,7 +15,7 @@ import {
   getToolInvalidReasons,
 } from './utils.js';
 import type { MCPServerDisplayInfo } from './types.js';
-import { MCPServerStatus } from '@aether/aether-core';
+import { MCPServerStatus } from '@aetherai/aether-core';
 
 describe('MCP utils', () => {
   describe('groupServersBySource', () => {

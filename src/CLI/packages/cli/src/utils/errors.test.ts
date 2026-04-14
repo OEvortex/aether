@@ -5,12 +5,12 @@
  */
 
 import { vi, type Mock, type MockInstance } from 'vitest';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import {
   OutputFormat,
   FatalInputError,
   ToolErrorType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   getErrorMessage,
   handleError,
@@ -28,9 +28,9 @@ const debugLoggerSpy = vi.hoisted(() => ({
 }));
 
 // Mock the core modules
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
 
   return {
     ...original,

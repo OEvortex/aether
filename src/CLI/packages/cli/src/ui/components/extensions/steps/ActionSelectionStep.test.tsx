@@ -8,7 +8,7 @@ import { render } from 'ink-testing-library';
 import { describe, it, expect, vi } from 'vitest';
 import { ActionSelectionStep } from './ActionSelectionStep.js';
 import { KeypressProvider } from '../../../contexts/KeypressContext.js';
-import type { Extension } from '@aether/aether-core';
+import type { Extension } from '@aetherai/aether-core';
 
 const createMockExtension = (name: string, isActive = true): Extension =>
   ({

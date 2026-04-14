@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import {
   OutputFormat,
   JsonFormatter,
@@ -13,7 +13,7 @@ import {
   FatalCancellationError,
   ToolErrorType,
   createDebugLogger,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { writeStderrLine } from './stdioHelpers.js';
 
 const debugLogger = createDebugLogger('CLI_ERRORS');

@@ -40,7 +40,7 @@ vi.mock('../utils/resumeHistoryUtils.js', () => ({
   buildResumedHistoryItems: vi.fn(() => [{ id: 1, type: 'user', text: 'hi' }]),
 }));
 
-vi.mock('@aether/aether-core', () => {
+vi.mock('@aetherai/aether-core', () => {
   class SessionService {
     constructor(_cwd: string) {}
     async loadSession(_sessionId: string) {
@@ -147,7 +147,7 @@ describe('useResumeCommand', () => {
         debug: vi.fn(),
         error: vi.fn(),
       }),
-    } as unknown as import('@aether/aether-core').Config;
+    } as unknown as import('@aetherai/aether-core').Config;
 
     const { result } = renderHook(() =>
       useResumeCommand({

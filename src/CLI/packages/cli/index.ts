@@ -8,7 +8,7 @@
 
 import './src/gemini.js';
 import { main } from './src/gemini.js';
-import { FatalError } from '@aether/aether-core';
+import { FatalError } from '@aetherai/aether-core';
 import { writeStderrLine } from './src/utils/stdioHelpers.js';
 
 // --- Global Entry Point ---

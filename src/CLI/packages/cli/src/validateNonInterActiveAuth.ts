@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@aether/aether-core';
-import { OutputFormat } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
+import { OutputFormat } from '@aetherai/aether-core';
 import { validateAuthMethod } from './config/auth.js';
 import { type LoadedSettings } from './config/settings.js';
 import { JsonOutputAdapter } from './nonInteractive/io/JsonOutputAdapter.js';

@@ -6,17 +6,17 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import type { DeviceAuthorizationData } from '@aether/aether-core';
+import type { DeviceAuthorizationData } from '@aetherai/aether-core';
 import { useAetherAuth } from './useAetherAuth.js';
 import {
   AuthType,
   aetherOAuth2Events,
   aetherOAuth2Event,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 // Mock the aetherOAuth2Events
-vi.mock('@aether/aether-core', async () => {
-  const actual = await vi.importActual('@aether/aether-core');
+vi.mock('@aetherai/aether-core', async () => {
+  const actual = await vi.importActual('@aetherai/aether-core');
   const mockEmitter = {
     on: vi.fn().mockReturnThis(),
     off: vi.fn().mockReturnThis(),

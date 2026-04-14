@@ -9,7 +9,7 @@ import {
   type ArenaManager,
   AgentStatus,
   ArenaSessionStatus,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { arenaCommand } from './arenaCommand.js';
 import type {
   CommandContext,

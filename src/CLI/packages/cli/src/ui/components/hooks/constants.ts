@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { HooksConfigSource, HookEventName } from '@aether/aether-core';
+import { HooksConfigSource, HookEventName } from '@aetherai/aether-core';
 import type { HookExitCode, HookEventDisplayInfo } from './types.js';
 import { t } from '../../../i18n/index.js';
 

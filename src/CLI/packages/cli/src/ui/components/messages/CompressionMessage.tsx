@@ -9,7 +9,7 @@ import type { CompressionProps } from '../../types.js';
 import Spinner from 'ink-spinner';
 import { theme } from '../../semantic-colors.js';
 import { SCREEN_READER_MODEL_PREFIX } from '../../textConstants.js';
-import { CompressionStatus } from '@aether/aether-core';
+import { CompressionStatus } from '@aetherai/aether-core';
 import { t } from '../../../i18n/index.js';
 
 export interface CompressionDisplayProps {

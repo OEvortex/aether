@@ -8,7 +8,7 @@ import { z } from 'zod';
 import {
   parse as parseYaml,
   normalizeContent,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 /**
  * Defines the Zod schema for a Markdown command definition file.

@@ -12,7 +12,7 @@ import {
   type ModelConfigSourcesInput,
   type ModelProvidersConfig,
   type ProviderModelConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { Settings } from '../config/settings.js';
 
 export interface CliGenerationConfigInputs {

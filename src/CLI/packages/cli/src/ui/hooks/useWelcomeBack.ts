@@ -9,7 +9,7 @@ import {
   getProjectSummaryInfo,
   type ProjectSummaryInfo,
   type Config,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { type Settings } from '../../config/settingsSchema.js';
 
 export interface WelcomeBackState {

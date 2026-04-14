@@ -7,7 +7,7 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import { join as pathJoin } from 'node:path';
-import { getErrorMessage } from '@aether/aether-core';
+import { getErrorMessage } from '@aetherai/aether-core';
 
 const warningsFilePath = pathJoin(os.tmpdir(), 'aether-warnings.txt');
 

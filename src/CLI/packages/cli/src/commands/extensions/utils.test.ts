@@ -6,14 +6,14 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getExtensionManager, extensionToOutputString } from './utils.js';
-import type { Extension, ExtensionManager } from '@aether/aether-core';
+import type { Extension, ExtensionManager } from '@aetherai/aether-core';
 
 const mockRefreshCache = vi.fn();
 const mockExtensionManagerInstance = {
   refreshCache: mockRefreshCache,
 };
 
-vi.mock('@aether/aether-core', () => ({
+vi.mock('@aetherai/aether-core', () => ({
   ExtensionManager: vi
     .fn()
     .mockImplementation(() => mockExtensionManagerInstance),
@@ -55,7 +55,7 @@ describe('getExtensionManager', () => {
   });
 
   it('should use current working directory as workspace', async () => {
-    const { ExtensionManager } = await import('@aether/aether-core');
+    const { ExtensionManager } = await import('@aetherai/aether-core');
 
     await getExtensionManager();
 

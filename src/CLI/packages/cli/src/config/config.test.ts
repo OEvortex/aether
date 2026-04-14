@@ -15,10 +15,10 @@ import {
   OutputFormat,
   NativeLspService,
   Storage,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { loadCliConfig, parseArguments, type CliArgs } from './config.js';
 import type { Settings } from './settings.js';
-import * as ServerConfig from '@aether/aether-core';
+import * as ServerConfig from '@aetherai/aether-core';
 import { isWorkspaceTrusted } from './trustedFolders.js';
 
 const mockWriteStderrLine = vi.hoisted(() => vi.fn());
@@ -115,7 +115,7 @@ vi.mock('read-package-up', () => ({
   ),
 }));
 
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const actualServer = await importOriginal<typeof ServerConfig>();
   const SkillManagerMock = vi.fn();
   SkillManagerMock.prototype.startWatching = vi

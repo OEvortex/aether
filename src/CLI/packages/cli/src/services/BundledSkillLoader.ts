@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import {
   createDebugLogger,
   appendToLastTextPart,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { ICommandLoader } from './types.js';
 import type {
   SlashCommand,

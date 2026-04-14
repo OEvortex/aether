@@ -8,7 +8,7 @@
 import type { CommandModule } from 'yargs';
 import { loadSettings, SettingScope } from '../../config/settings.js';
 import { writeStdoutLine, writeStderrLine } from '../../utils/stdioHelpers.js';
-import type { MCPServerConfig } from '@aether/aether-core';
+import type { MCPServerConfig } from '@aetherai/aether-core';
 
 async function addMcpServer(
   name: string,

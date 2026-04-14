@@ -12,7 +12,7 @@ import {
   type MessageActionReturn,
   CommandKind,
 } from './types.js';
-import { SessionService } from '@aether/aether-core';
+import { SessionService } from '@aetherai/aether-core';
 import {
   collectSessionData,
   normalizeSessionData,

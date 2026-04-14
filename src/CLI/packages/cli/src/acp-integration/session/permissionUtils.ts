@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ToolCallConfirmationDetails } from '@aether/aether-core';
-import { ToolConfirmationOutcome } from '@aether/aether-core';
+import type { ToolCallConfirmationDetails } from '@aetherai/aether-core';
+import { ToolConfirmationOutcome } from '@aetherai/aether-core';
 import type {
   PermissionOption,
   ToolCallContent,

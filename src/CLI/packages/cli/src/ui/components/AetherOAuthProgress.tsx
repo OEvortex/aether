@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { Box, Text } from 'ink';
 import Link from 'ink-link';
 import { theme } from '../semantic-colors.js';
-import type { DeviceAuthorizationData } from '@aether/aether-core';
+import type { DeviceAuthorizationData } from '@aetherai/aether-core';
 import { useKeypress } from '../hooks/useKeypress.js';
 import { t } from '../../i18n/index.js';
 

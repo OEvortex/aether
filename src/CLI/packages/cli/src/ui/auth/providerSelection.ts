@@ -8,7 +8,7 @@ import {
   AuthType,
   type ProviderModelConfig,
   type ModelProvidersConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import {

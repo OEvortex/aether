@@ -31,7 +31,7 @@ import {
   type ArenaSessionErrorEvent,
   type ArenaSessionStartEvent,
   type ArenaSessionUpdateEvent,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   MessageType,
   type ArenaAgentCardData,

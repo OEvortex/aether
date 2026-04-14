@@ -11,7 +11,7 @@
  * CLI commands (like `aether extensions list`) where the output IS the user-facing
  * result, not debug logging.
  *
- * For debug/diagnostic logging, use `createDebugLogger()` from @aether/aether-core.
+ * For debug/diagnostic logging, use `createDebugLogger()` from @aetherai/aether-core.
  */
 
 /**

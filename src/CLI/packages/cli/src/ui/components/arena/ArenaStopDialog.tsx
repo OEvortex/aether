@@ -11,7 +11,7 @@ import {
   ArenaSessionStatus,
   createDebugLogger,
   type Config,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { theme } from '../../semantic-colors.js';
 import { useKeypress } from '../../hooks/useKeypress.js';
 import { MessageType, type HistoryItemWithoutId } from '../../types.js';

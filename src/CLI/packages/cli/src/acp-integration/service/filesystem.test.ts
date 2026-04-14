@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it, vi } from 'vitest';
-import type { FileSystemService } from '@aether/aether-core';
+import type { FileSystemService } from '@aetherai/aether-core';
 import { AcpFileSystemService } from './filesystem.js';
 import type { AgentSideConnection } from '@agentclientprotocol/sdk';
 

@@ -5,9 +5,9 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AuthType } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import type { LoadedSettings } from '../config/settings.js';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import { initializeApp } from './initializer.js';
 import { performInitialAuth } from './auth.js';
 import { validateTheme } from './theme.js';

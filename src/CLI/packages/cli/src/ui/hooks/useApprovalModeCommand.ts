@@ -5,7 +5,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { ApprovalMode, Config } from '@aether/aether-core';
+import type { ApprovalMode, Config } from '@aetherai/aether-core';
 import type { LoadedSettings, SettingScope } from '../../config/settings.js';
 
 interface UseApprovalModeCommandReturn {

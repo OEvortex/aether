@@ -1,4 +1,4 @@
-﻿import { Storage } from '@aether/aether-core';
+﻿import { Storage } from '@aetherai/aether-core';
 import type { LoadedSettings } from '../config/settings.js';
 
 export function runWithAcpRuntimeOutputDir<T>(

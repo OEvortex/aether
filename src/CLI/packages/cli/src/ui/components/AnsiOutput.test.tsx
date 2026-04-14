@@ -6,7 +6,7 @@
 
 import { render } from 'ink-testing-library';
 import { AnsiOutputText } from './AnsiOutput.js';
-import type { AnsiOutput, AnsiToken } from '@aether/aether-core';
+import type { AnsiOutput, AnsiToken } from '@aetherai/aether-core';
 
 // Helper to create a valid AnsiToken with default values
 const createAnsiToken = (overrides: Partial<AnsiToken>): AnsiToken => ({

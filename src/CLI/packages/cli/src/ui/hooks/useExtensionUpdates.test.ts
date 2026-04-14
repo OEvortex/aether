@@ -21,7 +21,7 @@ import {
   type Extension,
   type ExtensionUpdateInfo,
   ExtensionUpdateState,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { MessageType } from '../types.js';
 

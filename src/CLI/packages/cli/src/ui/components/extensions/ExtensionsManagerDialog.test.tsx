@@ -10,7 +10,7 @@ import { ExtensionsManagerDialog } from './ExtensionsManagerDialog.js';
 import { UIStateContext } from '../../contexts/UIStateContext.js';
 import { KeypressProvider } from '../../contexts/KeypressContext.js';
 import type { UIState } from '../../contexts/UIStateContext.js';
-import type { Config, Extension } from '@aether/aether-core';
+import type { Config, Extension } from '@aetherai/aether-core';
 import { ExtensionUpdateState } from '../../state/extensions.js';
 
 const createMockExtension = (

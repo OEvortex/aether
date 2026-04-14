@@ -6,7 +6,7 @@
 
 import { render } from 'ink-testing-library';
 import type React from 'react';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import { LoadedSettings } from '../config/settings.js';
 import { KeypressProvider } from '../ui/contexts/KeypressContext.js';
 import { SettingsContext } from '../ui/contexts/SettingsContext.js';

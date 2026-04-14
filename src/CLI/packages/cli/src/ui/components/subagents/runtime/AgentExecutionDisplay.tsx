@@ -10,7 +10,7 @@ import type {
   AgentResultDisplay,
   AgentStatsSummary,
   Config,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { theme } from '../../../semantic-colors.js';
 import { useKeypress } from '../../../hooks/useKeypress.js';
 import { COLOR_OPTIONS } from '../constants.js';

@@ -7,7 +7,7 @@
 import type React from 'react';
 import { Box, Text } from 'ink';
 import { theme } from '../semantic-colors.js';
-import { ApprovalMode } from '@aether/aether-core';
+import { ApprovalMode } from '@aetherai/aether-core';
 import { t } from '../../i18n/index.js';
 
 interface AutoAcceptIndicatorProps {

@@ -15,12 +15,12 @@ import type {
   Config,
   GeminiClient,
   ShellExecutionResult,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   createDebugLogger,
   isBinary,
   ShellExecutionService,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { type PartListUnion } from '@google/genai';
 import type { UseHistoryManagerReturn } from './useHistoryManager.js';
 import { SHELL_COMMAND_NAME } from '../constants.js';

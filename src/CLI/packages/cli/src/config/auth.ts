@@ -8,7 +8,7 @@ import {
   AuthType,
   type Config,
   type ProviderModelConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { loadEnvironment, loadSettings, type Settings } from './settings.js';
 import { t } from '../i18n/index.js';
 import {

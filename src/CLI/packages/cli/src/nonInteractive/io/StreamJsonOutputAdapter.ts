@@ -9,7 +9,7 @@ import type {
   Config,
   ToolCallRequestInfo,
   McpToolProgressData,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type {
   CLIAssistantMessage,
   CLIMessage,

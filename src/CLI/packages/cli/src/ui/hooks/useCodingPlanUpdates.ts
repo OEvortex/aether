@@ -5,8 +5,8 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import type { Config, ModelProvidersConfig } from '@aether/aether-core';
-import { AuthType } from '@aether/aether-core';
+import type { Config, ModelProvidersConfig } from '@aetherai/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import type { LoadedSettings } from '../../config/settings.js';
 import { getPersistScopeForModelSelection } from '../../config/modelProvidersScope.js';
 import {

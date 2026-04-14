@@ -26,7 +26,7 @@ import {
   type AgentInteractive,
   type ApprovalMode,
   type Config,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useArenaInProcess } from '../hooks/useArenaInProcess.js';
 
 // ─── Types ──────────────────────────────────────────────────

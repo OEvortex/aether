@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ExtensionManager, type Extension } from '@aether/aether-core';
+import { ExtensionManager, type Extension } from '@aetherai/aether-core';
 import { loadSettings } from '../../config/settings.js';
 import {
   requestConsentOrFail,

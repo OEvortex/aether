@@ -11,7 +11,7 @@ import { ExtensionUpdateState } from '../../ui/state/extensions.js';
 import {
   checkForExtensionUpdate,
   type ExtensionUpdateInfo,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { getExtensionManager } from './utils.js';
 import { t } from '../../i18n/index.js';
 

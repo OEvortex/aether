@@ -6,8 +6,8 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { validateNonInteractiveAuth } from './validateNonInterActiveAuth.js';
-import { AuthType, OutputFormat } from '@aether/aether-core';
-import type { Config } from '@aether/aether-core';
+import { AuthType, OutputFormat } from '@aetherai/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import * as auth from './config/auth.js';
 import { type LoadedSettings } from './config/settings.js';
 import * as JsonOutputAdapterModule from './nonInteractive/io/JsonOutputAdapter.js';

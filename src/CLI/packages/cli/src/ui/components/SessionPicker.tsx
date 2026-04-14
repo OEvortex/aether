@@ -8,7 +8,7 @@ import { Box, Text } from 'ink';
 import type {
   SessionListItem as SessionData,
   SessionService,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { theme } from '../semantic-colors.js';
 import { useSessionPicker } from '../hooks/useSessionPicker.js';
 import { formatRelativeTime } from '../utils/formatters.js';

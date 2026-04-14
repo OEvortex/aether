@@ -5,8 +5,8 @@
  */
 
 import { Box, Text } from 'ink';
-import { type Extension } from '@aether/aether-core';
-import { createDebugLogger } from '@aether/aether-core';
+import { type Extension } from '@aetherai/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import { theme } from '../../../semantic-colors.js';
 import { useKeypress } from '../../../hooks/useKeypress.js';
 import { t } from '../../../../i18n/index.js';

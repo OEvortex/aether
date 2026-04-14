@@ -23,7 +23,7 @@ import type {
   EditorType,
   GeminiClient,
   AnyToolInvocation,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   ApprovalMode,
   AuthType,
@@ -31,7 +31,7 @@ import {
   SendMessageType,
   ToolErrorType,
   ToolConfirmationOutcome,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { Part, PartListUnion } from '@google/genai';
 import type { UseHistoryManagerReturn } from './useHistoryManager.js';
 import type { HistoryItem, SlashCommandProcessorResult } from '../types.js';
@@ -75,7 +75,7 @@ const mockParseAndFormatApiError = vi.hoisted(() =>
 );
 const mockLogApiCancel = vi.hoisted(() => vi.fn());
 
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const actualCoreModule = (await importOriginal()) as any;
   return {
     ...actualCoreModule,

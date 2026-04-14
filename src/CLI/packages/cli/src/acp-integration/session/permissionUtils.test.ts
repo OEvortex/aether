@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { ToolConfirmationOutcome } from '@aether/aether-core';
+import { ToolConfirmationOutcome } from '@aetherai/aether-core';
 import { toPermissionOptions } from './permissionUtils.js';
 
 describe('permissionUtils', () => {

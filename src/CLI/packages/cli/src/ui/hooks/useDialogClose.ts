@@ -6,7 +6,7 @@
 
 import { useCallback } from 'react';
 import { SettingScope } from '../../config/settings.js';
-import type { AuthType, ApprovalMode } from '@aether/aether-core';
+import type { AuthType, ApprovalMode } from '@aetherai/aether-core';
 import type { ArenaDialogType } from './useArenaCommand.js';
 // OpenAICredentials type (previously imported from OpenAIKeyPrompt)
 interface OpenAICredentials {

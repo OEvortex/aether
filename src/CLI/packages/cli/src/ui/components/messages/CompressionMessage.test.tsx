@@ -7,7 +7,7 @@
 import { render } from 'ink-testing-library';
 import type { CompressionDisplayProps } from './CompressionMessage.js';
 import { CompressionMessage } from './CompressionMessage.js';
-import { CompressionStatus } from '@aether/aether-core';
+import { CompressionStatus } from '@aetherai/aether-core';
 import type { CompressionProps } from '../../types.js';
 import { describe, it, expect } from 'vitest';
 

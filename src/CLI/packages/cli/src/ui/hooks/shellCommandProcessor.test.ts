@@ -17,9 +17,9 @@ import {
 
 const mockIsBinary = vi.hoisted(() => vi.fn());
 const mockShellExecutionService = vi.hoisted(() => vi.fn());
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
   return {
     ...original,
     ShellExecutionService: { execute: mockShellExecutionService },
@@ -40,7 +40,7 @@ import {
   type GeminiClient,
   type ShellExecutionResult,
   type ShellOutputEvent,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';

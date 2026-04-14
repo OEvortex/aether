@@ -7,8 +7,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { AuthDialog } from './AuthDialog.js';
 import { LoadedSettings } from '../../config/settings.js';
-import type { Config } from '@aether/aether-core';
-import { AuthType } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import { renderWithProviders } from '../../test-utils/render.js';
 import { UIStateContext } from '../contexts/UIStateContext.js';
 import { UIActionsContext } from '../contexts/UIActionsContext.js';

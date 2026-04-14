@@ -13,7 +13,7 @@ import type {
   InsightProgressCallback,
 } from '../types/StaticInsightTypes.js';
 
-import { updateSymlink, Storage, type Config } from '@aether/aether-core';
+import { updateSymlink, Storage, type Config } from '@aetherai/aether-core';
 
 export class StaticInsightGenerator {
   private dataProcessor: DataProcessor;

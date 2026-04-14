@@ -5,7 +5,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Config } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
 import { runNonInteractiveStreamJson } from './session.js';
 import type {
   CLIUserMessage,

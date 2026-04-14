@@ -7,7 +7,7 @@
 import type {
   MCPServerConfig,
   MCPServerStatus,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 /**
  * MCP管理步骤定义

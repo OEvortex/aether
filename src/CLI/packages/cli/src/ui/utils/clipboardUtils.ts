@@ -6,7 +6,7 @@
 
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { createDebugLogger } from '@aether/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 
 const debugLogger = createDebugLogger('CLIPBOARD_UTILS');
 

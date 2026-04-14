@@ -7,7 +7,7 @@
 import { useState, useMemo } from 'react';
 import { Box } from 'ink';
 import { RadioButtonSelect } from '../../shared/RadioButtonSelect.js';
-import { type Extension } from '@aether/aether-core';
+import { type Extension } from '@aetherai/aether-core';
 import { t } from '../../../../i18n/index.js';
 import { type ExtensionAction } from '../types.js';
 

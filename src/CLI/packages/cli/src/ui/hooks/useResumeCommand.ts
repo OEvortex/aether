@@ -10,7 +10,7 @@ import {
   type Config,
   SessionStartSource,
   type PermissionMode,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { buildResumedHistoryItems } from '../utils/resumeHistoryUtils.js';
 import type { UseHistoryManagerReturn } from './useHistoryManager.js';
 

@@ -11,13 +11,13 @@ import {
   logIdeConnection,
   IdeConnectionEvent,
   IdeConnectionType,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   aether_cli_COMPANION_EXTENSION_NAME,
   getIdeInstaller,
   IDEConnectionStatus,
   ideContextStore,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import path from 'node:path';
 import type {
   CommandContext,

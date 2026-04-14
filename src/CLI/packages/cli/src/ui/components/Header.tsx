@@ -7,7 +7,7 @@
 import type React from 'react';
 import { Box, Text } from 'ink';
 import Gradient from 'ink-gradient';
-import { shortenPath, tildeifyPath } from '@aether/aether-core';
+import { shortenPath, tildeifyPath } from '@aetherai/aether-core';
 import { theme } from '../semantic-colors.js';
 import { shortAsciiLogo } from './AsciiArt.js';
 import { getAsciiArtWidth, getCachedStringWidth } from '../utils/textUtils.js';

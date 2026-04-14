@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ChatRecord, AgentResultDisplay } from '@aether/aether-core';
+import type { ChatRecord, AgentResultDisplay } from '@aetherai/aether-core';
 import type {
   Content,
   GenerateContentResponseUsageMetadata,

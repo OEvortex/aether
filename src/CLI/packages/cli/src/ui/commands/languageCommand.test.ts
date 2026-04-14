@@ -58,9 +58,9 @@ vi.mock('node:fs', async (importOriginal) => {
 });
 
 // Mock Storage from core
-vi.mock('@aether/aether-core', async (importOriginal) => {
+vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import('@aether/aether-core')>();
+    await importOriginal<typeof import('@aetherai/aether-core')>();
   return {
     ...actual,
     Storage: {

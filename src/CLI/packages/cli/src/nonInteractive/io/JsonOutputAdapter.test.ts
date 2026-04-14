@@ -8,8 +8,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type {
   Config,
   ServerGeminiStreamEvent,
-} from '@aether/aether-core';
-import { GeminiEventType, OutputFormat } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { GeminiEventType, OutputFormat } from '@aetherai/aether-core';
 import type { Part } from '@google/genai';
 import { JsonOutputAdapter } from './JsonOutputAdapter.js';
 

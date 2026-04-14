@@ -9,9 +9,9 @@ import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { Session } from './Session.js';
-import type { Config, GeminiChat } from '@aether/aether-core';
-import { ApprovalMode, AuthType } from '@aether/aether-core';
-import * as core from '@aether/aether-core';
+import type { Config, GeminiChat } from '@aetherai/aether-core';
+import { ApprovalMode, AuthType } from '@aetherai/aether-core';
+import * as core from '@aetherai/aether-core';
 import type {
   AgentSideConnection,
   PromptRequest,

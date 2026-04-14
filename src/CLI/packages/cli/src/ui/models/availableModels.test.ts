@@ -9,7 +9,7 @@ import {
   getAvailableModelsForAuthType,
   getOpenAIAvailableModelFromEnv,
 } from './availableModels.js';
-import { AuthType, type Config } from '@aether/aether-core';
+import { AuthType, type Config } from '@aetherai/aether-core';
 
 describe('availableModels', () => {
   describe('getOpenAIAvailableModelFromEnv', () => {

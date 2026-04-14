@@ -8,12 +8,12 @@
 import type { CommandModule } from 'yargs';
 import { loadSettings } from '../../config/settings.js';
 import { writeStdoutLine } from '../../utils/stdioHelpers.js';
-import type { MCPServerConfig } from '@aether/aether-core';
+import type { MCPServerConfig } from '@aetherai/aether-core';
 import {
   MCPServerStatus,
   createTransport,
   ExtensionManager,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { isWorkspaceTrusted } from '../../config/trustedFolders.js';
 
@@ -64,23 +64,21 @@ async function testMCPConnection(
   try {
     // Use the same transport creation logic as core
     transport = await createTransport(serverName, config, false);
-  } catch (_error) {
-    await client.close();
-    return MCPServerStatus.DISCONNECTED;
-  }
 
-  try {
     // Attempt actual MCP connection with short timeout
     await client.connect(transport, { timeout: 5000 }); // 5s timeout
 
     // Test basic MCP protocol by pinging the server
     await client.ping();
 
-    await client.close();
     return MCPServerStatus.CONNECTED;
   } catch (_error) {
-    await transport.close();
     return MCPServerStatus.DISCONNECTED;
+  } finally {
+    await client.close();
+    if (transport) {
+      await transport.close();
+    }
   }
 }
 

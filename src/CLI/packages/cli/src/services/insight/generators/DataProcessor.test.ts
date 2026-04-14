@@ -6,17 +6,17 @@
 
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DataProcessor } from './DataProcessor.js';
-import type { Config, ChatRecord } from '@aether/aether-core';
+import type { Config, ChatRecord } from '@aetherai/aether-core';
 import type {
   InsightData,
   SessionFacets,
 } from '../types/StaticInsightTypes.js';
 
 // Mock dependencies
-vi.mock('@aether/aether-core', async () => {
+vi.mock('@aetherai/aether-core', async () => {
   const actual = await vi.importActual<
-    typeof import('@aether/aether-core')
-  >('@aether/aether-core');
+    typeof import('@aetherai/aether-core')
+  >('@aetherai/aether-core');
   return {
     ...actual,
     read: vi.fn(),
@@ -39,7 +39,7 @@ vi.mock('fs/promises', () => ({
 }));
 
 import fs from 'fs/promises';
-import { read as readJsonlFile } from '@aether/aether-core';
+import { read as readJsonlFile } from '@aetherai/aether-core';
 
 const mockedFs = vi.mocked(fs);
 const mockedReadJsonlFile = vi.mocked(readJsonlFile);

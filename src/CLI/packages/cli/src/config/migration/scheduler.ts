@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createDebugLogger } from '@aether/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 import type { SettingsMigration, MigrationResult } from './types.js';
 
 const debugLogger = createDebugLogger('SETTINGS_MIGRATION');

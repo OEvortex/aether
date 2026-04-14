@@ -5,7 +5,7 @@
  */
 
 import { Box } from 'ink';
-import { AuthType } from '@aether/aether-core';
+import { AuthType } from '@aetherai/aether-core';
 import { Header, AuthDisplayType } from './Header.js';
 import { Tips } from './Tips.js';
 import { useSettings } from '../contexts/SettingsContext.js';

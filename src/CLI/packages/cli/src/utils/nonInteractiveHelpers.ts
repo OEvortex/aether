@@ -13,13 +13,13 @@ import type {
   ToolCallResponseInfo,
   SessionMetrics,
   McpToolProgressData,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import {
   OutputFormat,
   ToolErrorType,
   createDebugLogger,
   getMCPServerStatus,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import type { Part, PartListUnion } from '@google/genai';
 import type {
   CLIUserMessage,

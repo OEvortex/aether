@@ -13,7 +13,7 @@ import {
     logModelSlashCommand,
     type ContentGeneratorConfig,
     type InputModalities,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useKeypress } from '../hooks/useKeypress.js';
 import { theme } from '../semantic-colors.js';
 import { DescriptiveRadioButtonSelect } from './shared/DescriptiveRadioButtonSelect.js';

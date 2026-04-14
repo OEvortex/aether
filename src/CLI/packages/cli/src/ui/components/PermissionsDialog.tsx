@@ -23,8 +23,8 @@ import type {
   PermissionManager,
   RuleWithSource,
   RuleType,
-} from '@aether/aether-core';
-import { isPathWithinRoot } from '@aether/aether-core';
+} from '@aetherai/aether-core';
+import { isPathWithinRoot } from '@aetherai/aether-core';
 
 // ---------------------------------------------------------------------------
 // Types

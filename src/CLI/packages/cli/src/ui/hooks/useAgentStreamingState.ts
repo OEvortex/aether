@@ -20,7 +20,7 @@ import {
   isTerminalStatus,
   type AgentInteractive,
   type AgentEventEmitter,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { StreamingState } from '../types.js';
 import { useTimer } from './useTimer.js';
 

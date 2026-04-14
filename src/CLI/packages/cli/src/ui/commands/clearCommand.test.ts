@@ -11,11 +11,11 @@ import { createMockCommandContext } from '../../test-utils/mockCommandContext.js
 import {
   SessionEndReason,
   SessionStartSource,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 // Mock the telemetry service
-vi.mock('@aether/aether-core', async () => {
-  const actual = await vi.importActual('@aether/aether-core');
+vi.mock('@aetherai/aether-core', async () => {
+  const actual = await vi.importActual('@aetherai/aether-core');
   return {
     ...actual,
     uiTelemetryService: {
@@ -24,7 +24,7 @@ vi.mock('@aether/aether-core', async () => {
   };
 });
 
-import type { GeminiClient } from '@aether/aether-core';
+import type { GeminiClient } from '@aetherai/aether-core';
 
 describe('clearCommand', () => {
   let mockContext: CommandContext;

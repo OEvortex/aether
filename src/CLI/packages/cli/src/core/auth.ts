@@ -10,7 +10,7 @@ import {
   getErrorMessage,
   logAuth,
   AuthEvent,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 /**
  * Handles the initial authentication flow.

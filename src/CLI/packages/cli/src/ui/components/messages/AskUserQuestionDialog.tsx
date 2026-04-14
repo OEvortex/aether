@@ -11,7 +11,7 @@ import {
   type ToolAskUserQuestionConfirmationDetails,
   ToolConfirmationOutcome,
   type ToolConfirmationPayload,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { theme } from '../../semantic-colors.js';
 import { useKeypress } from '../../hooks/useKeypress.js';
 import { TextInput } from '../shared/TextInput.js';

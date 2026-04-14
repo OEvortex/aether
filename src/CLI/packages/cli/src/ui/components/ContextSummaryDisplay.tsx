@@ -10,7 +10,7 @@ import { theme } from '../semantic-colors.js';
 import {
   type IdeContext,
   type MCPServerConfig,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { useTerminalSize } from '../hooks/useTerminalSize.js';
 import { isNarrowWidth } from '../utils/isNarrowWidth.js';
 import { t } from '../../i18n/index.js';

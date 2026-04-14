@@ -8,7 +8,7 @@ import {
   CompressionStatus,
   type ChatCompressionInfo,
   type GeminiClient,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { compressCommand } from './compressCommand.js';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';

@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { isCommandAvailable, execCommand } from '@aether/aether-core';
+import { isCommandAvailable, execCommand } from '@aetherai/aether-core';
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';

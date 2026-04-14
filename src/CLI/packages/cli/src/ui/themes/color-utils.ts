@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { createDebugLogger } from '@aether/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 
 // Mapping from common CSS color names (lowercase) to hex codes (lowercase)
 // Excludes names directly supported by Ink

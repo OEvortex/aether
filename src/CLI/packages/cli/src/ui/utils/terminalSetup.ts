@@ -31,7 +31,7 @@ import { promisify } from 'node:util';
 import { isKittyProtocolEnabled } from './kittyProtocolDetector.js';
 import { VSCODE_SHIFT_ENTER_SEQUENCE } from './platformConstants.js';
 import { t } from '../../i18n/index.js';
-import { createDebugLogger } from '@aether/aether-core';
+import { createDebugLogger } from '@aetherai/aether-core';
 
 const debugLogger = createDebugLogger('TERMINAL_SETUP');
 

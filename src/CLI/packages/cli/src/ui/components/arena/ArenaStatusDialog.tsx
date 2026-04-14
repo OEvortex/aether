@@ -15,7 +15,7 @@ import {
   isSettledStatus,
   ArenaSessionStatus,
   DISPLAY_MODE,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 import { theme } from '../../semantic-colors.js';
 import { useKeypress } from '../../hooks/useKeypress.js';
 import { formatDuration } from '../../utils/formatters.js';

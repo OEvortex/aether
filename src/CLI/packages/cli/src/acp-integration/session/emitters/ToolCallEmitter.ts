@@ -23,7 +23,7 @@ import {
   TodoWriteTool,
   Kind,
   ExitPlanModeTool,
-} from '@aether/aether-core';
+} from '@aetherai/aether-core';
 
 /**
  * Unified tool call event emitter.

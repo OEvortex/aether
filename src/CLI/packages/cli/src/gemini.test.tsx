@@ -21,8 +21,8 @@ import {
 } from './gemini.js';
 import { type LoadedSettings } from './config/settings.js';
 import { appEvents, AppEvent } from './utils/events.js';
-import type { Config } from '@aether/aether-core';
-import { OutputFormat } from '@aether/aether-core';
+import type { Config } from '@aetherai/aether-core';
+import { OutputFormat } from '@aetherai/aether-core';
 
 const mockWriteStderrLine = vi.hoisted(() => vi.fn());
 
