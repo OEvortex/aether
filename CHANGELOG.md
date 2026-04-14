@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.9] - 2026-04-14
+
+### Fixed
+
+- **Build Script Fix**: Updated build script to use esbuild bundling instead of TypeScript compilation for npm publication, ensuring the bundled file is included in the published package.
+
+## [0.0.8] - 2026-04-14
+
+### Fixed
+
+- **Package Files Configuration**: Updated package.json files field to only include the esbuild bundle (dist/aether-bundle.mjs) and package.json, excluding TypeScript build artifacts that were causing installation issues.
+
 ## [0.0.7] - 2026-04-14
 
 ### Fixed

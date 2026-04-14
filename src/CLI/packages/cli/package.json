@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/aether",
-    "version": "0.0.7",
+    "version": "0.0.9",
     "description": "Aether",
     "repository": {
         "type": "git",
@@ -19,7 +19,7 @@
         }
     },
     "scripts": {
-        "build": "node ../../scripts/build_package.js",
+        "build": "cd ../.. && node esbuild.config.cjs && copy dist\\cli.mjs packages\\cli\\dist\\aether-bundle.mjs && cd packages\\cli && copy package.json dist\\package.json",
         "prepack": "npm run build",
         "start": "node dist/index.js",
         "debug": "node --inspect-brk dist/index.js",
@@ -31,8 +31,8 @@
         "check-i18n": "tsx ../../scripts/check-i18n.ts"
     },
     "files": [
-        "dist",
-        "README.md"
+        "dist/aether-bundle.mjs",
+        "package.json"
     ],
     "config": {
         "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.5"
