@@ -105,245 +105,260 @@ export class AccountUI {
         // Choose provider
         const providers = [
             {
-                label: 'Codex (OpenAI)',
+                label: "Codex (OpenAI)",
                 value: ProviderKey.Codex,
-                authType: 'oauth' as const
+                authType: "oauth" as const
             },
             {
-                label: 'Qwen CLI',
+                label: "Qwen CLI",
                 value: ProviderKey.QwenCli,
-                authType: 'oauth' as const
+                authType: "oauth" as const
             },
             {
-                label: 'AIHubMix',
+                label: "AIHubMix",
                 value: ProviderKey.AIHubMix,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Apertis AI',
+                label: "Apertis AI",
                 value: ProviderKey.Apertis,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Baseten',
+                label: "Baseten",
                 value: ProviderKey.Baseten,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Berget',
+                label: "Berget",
                 value: ProviderKey.Berget,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Blackbox',
+                label: "Blackbox",
                 value: ProviderKey.Blackbox,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Chutes AI',
+                label: "Chutes AI",
                 value: ProviderKey.Chutes,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Clarifai',
+                label: "Clarifai",
                 value: ProviderKey.Clarifai,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Cline',
+                label: "Cline",
                 value: ProviderKey.Cline,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Cortecs',
+                label: "Cortecs",
                 value: ProviderKey.Cortecs,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'DashScope (Ali Bailian)',
+                label: "Crof AI",
+                value: ProviderKey.Crof,
+                authType: "apiKey" as const
+            },
+            {
+                label: "DashScope (Ali Bailian)",
                 value: ProviderKey.Dashscope,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'DeepInfra',
+                label: "DeepInfra",
                 value: ProviderKey.DeepInfra,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'DeepSeek',
+                label: "DeepSeek",
                 value: ProviderKey.DeepSeek,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Dinference',
+                label: "Dialagram",
+                value: ProviderKey.Dialagram,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Dinference",
                 value: ProviderKey.Dinference,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'FastRouter',
+                label: "FastRouter",
                 value: ProviderKey.Fastrouter,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Fireworks AI',
+                label: "Fireworks AI",
                 value: ProviderKey.Fireworks,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Friendli',
+                label: "Friendli",
                 value: ProviderKey.Friendli,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'HicapAI',
+                label: "HicapAI",
                 value: ProviderKey.Hicapai,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Hugging Face',
+                label: "Hugging Face",
                 value: ProviderKey.Huggingface,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Jiekou AI',
+                label: "Jiekou AI",
                 value: ProviderKey.Jiekou,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Kilo AI',
+                label: "Kilo AI",
                 value: ProviderKey.Kilo,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Kimi',
+                label: "Kimi",
                 value: ProviderKey.Kimi,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Knox',
+                label: "Knox",
                 value: ProviderKey.Knox,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Lightning AI',
+                label: "Lightning AI",
                 value: ProviderKey.LightningAI,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'LLMGateway',
+                label: "LLMGateway",
                 value: ProviderKey.Llmgateway,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'MegaNova',
+                label: "MegaNova",
                 value: ProviderKey.Meganova,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'MiniMax',
+                label: "MiniMax",
                 value: ProviderKey.MiniMax,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'MiniMax Coding',
+                label: "MiniMax Coding",
                 value: ProviderKey.MiniMaxCoding,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Mistral',
+                label: "Mistral",
                 value: ProviderKey.Mistral,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Moark',
+                label: "Moark",
                 value: ProviderKey.Moark,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Modal (Research)',
+                label: "Modal (Research)",
                 value: ProviderKey.Modal,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'ModelScope',
+                label: "ModelScope",
                 value: ProviderKey.ModelScope,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Moonshot',
+                label: "Moonshot",
                 value: ProviderKey.Moonshot,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'NanoGPT',
+                label: "NanoGPT",
                 value: ProviderKey.Nanogpt,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'NVIDIA NIM',
+                label: "NVIDIA NIM",
                 value: ProviderKey.Nvidia,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Ollama',
+                label: "Ollama",
                 value: ProviderKey.Ollama,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'OpenAI',
+                label: "OpenAI",
                 value: ProviderKey.OpenAI,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'OpenCode',
+                label: "OpenCode",
                 value: ProviderKey.OpenCode,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'OpenCode Zen Go',
+                label: "OpenCode Zen Go",
                 value: ProviderKey.Opencodego,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Pollinations AI',
+                label: "Pollinations AI",
                 value: ProviderKey.Pollinations,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Puter AI',
+                label: "Puter AI",
                 value: ProviderKey.Puter,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Seraphyn',
+                label: "Routing.run",
+                value: ProviderKey.Routingrun,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Seraphyn",
                 value: ProviderKey.Seraphyn,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Sherlock (CloudFerro)',
+                label: "Sherlock (CloudFerro)",
                 value: ProviderKey.Sherlock,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Vercel AI',
+                label: "Vercel AI",
                 value: ProviderKey.Vercelai,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Zenmux',
+                label: "Zenmux",
                 value: ProviderKey.Zenmux,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'ZhipuAI',
+                label: "ZhipuAI",
                 value: ProviderKey.Zhipu,
-                authType: 'apiKey' as const
+                authType: "apiKey" as const
             },
             {
-                label: 'Compatible (Custom)',
+                label: "Compatible (Custom)",
                 value: ProviderKey.Compatible,
-                authType: 'apiKey' as const
-            }
+                authType: "apiKey" as const
+            },
         ];
 
         const providerItems = providers.map((p) => ({
@@ -954,54 +969,57 @@ export class AccountUI {
      */
     private getProviderDisplayName(provider: string): string {
         const names: Record<string, string> = {
-            codex: 'Codex (OpenAI)',
-            qwencli: 'Qwen CLI',
-            aihubmix: 'AIHubMix',
-            apertis: 'Apertis AI',
-            baseten: 'Baseten',
-            berget: 'Berget',
-            blackbox: 'Blackbox',
-            chutes: 'Chutes AI',
-            clarifai: 'Clarifai',
-            cline: 'Cline',
-            cortecs: 'Cortecs',
-            dashscope: 'DashScope (Ali Bailian)',
-            deepinfra: 'DeepInfra',
-            deepseek: 'DeepSeek',
-            dinference: 'Dinference',
-            fastrouter: 'FastRouter',
-            fireworks: 'Fireworks AI',
-            friendli: 'Friendli',
-            hicapai: 'HicapAI',
-            huggingface: 'Hugging Face',
-            jiekou: 'Jiekou AI',
-            kilo: 'Kilo AI',
-            kimi: 'Kimi',
-            knox: 'Knox',
-            lightningai: 'Lightning AI',
-            llmgateway: 'LLMGateway',
-            meganova: 'MegaNova',
-            minimax: 'MiniMax',
-            'minimax-coding': 'MiniMax Coding',
-            mistral: 'Mistral',
-            moark: 'Moark',
-            modal: 'Modal (Research)',
-            modelscope: 'ModelScope',
-            moonshot: 'Moonshot',
-            nanogpt: 'NanoGPT',
-            nvidia: 'NVIDIA NIM',
-            ollama: 'Ollama',
-            openai: 'OpenAI',
-            opencode: 'OpenCode',
-            opencodego: 'OpenCode Zen Go',
-            pollinations: 'Pollinations AI',
-            puter: 'Puter AI',
-            seraphyn: 'Seraphyn',
-            sherlock: 'Sherlock (CloudFerro)',
-            vercelai: 'Vercel AI',
-            zenmux: 'Zenmux',
-            zhipu: 'ZhipuAI',
-            compatible: 'Compatible'
+            codex: "Codex (OpenAI)",
+            qwencli: "Qwen CLI",
+            aihubmix: "AIHubMix",
+            apertis: "Apertis AI",
+            baseten: "Baseten",
+            berget: "Berget",
+            blackbox: "Blackbox",
+            chutes: "Chutes AI",
+            clarifai: "Clarifai",
+            cline: "Cline",
+            cortecs: "Cortecs",
+            crof: "Crof AI",
+            dashscope: "DashScope (Ali Bailian)",
+            deepinfra: "DeepInfra",
+            deepseek: "DeepSeek",
+            dialagram: "Dialagram",
+            dinference: "Dinference",
+            fastrouter: "FastRouter",
+            fireworks: "Fireworks AI",
+            friendli: "Friendli",
+            hicapai: "HicapAI",
+            huggingface: "Hugging Face",
+            jiekou: "Jiekou AI",
+            kilo: "Kilo AI",
+            kimi: "Kimi",
+            knox: "Knox",
+            lightningai: "Lightning AI",
+            llmgateway: "LLMGateway",
+            meganova: "MegaNova",
+            minimax: "MiniMax",
+            "minimax-coding": "MiniMax Coding",
+            mistral: "Mistral",
+            moark: "Moark",
+            modal: "Modal (Research)",
+            modelscope: "ModelScope",
+            moonshot: "Moonshot",
+            nanogpt: "NanoGPT",
+            nvidia: "NVIDIA NIM",
+            ollama: "Ollama",
+            openai: "OpenAI",
+            opencode: "OpenCode",
+            opencodego: "OpenCode Zen Go",
+            pollinations: "Pollinations AI",
+            puter: "Puter AI",
+            routingrun: "Routing.run",
+            seraphyn: "Seraphyn",
+            sherlock: "Sherlock (CloudFerro)",
+            vercelai: "Vercel AI",
+            zenmux: "Zenmux",
+            zhipu: "ZhipuAI",
+            compatible: "Compatible",
         };
         return (
             names[provider] ||

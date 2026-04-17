@@ -767,6 +767,57 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openModelEndpoint: false,
         fetchModels: false
     }
+    ,dialagram: {
+        displayName: 'Dialagram',
+        family: 'Dialagram',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // Expose both OpenAI-compatible router and Anthropic/Claude router
+        openai: { baseUrl: 'https://www.dialagram.me/router/v1' },
+        anthropic: { baseUrl: 'https://www.dialagram.me/router/claude' },
+        sdkMode: 'openai',
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/model',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,routingrun: {
+        displayName: 'Routing.run',
+        family: 'Routing.run',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // Expose as OpenAI-compatible router
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.routing.run/v1' },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,crof: {
+        displayName: 'Crof AI',
+        family: 'Crof AI',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://crof.ai/v1' },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
 };
 
 export const KnownProviders: Record<string, KnownProviderConfig> =

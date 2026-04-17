@@ -231,9 +231,11 @@ export class AccountSyncAdapter {
             ProviderKey.Cline,
             ProviderKey.Compatible,
             ProviderKey.Cortecs,
+            ProviderKey.Crof,
             ProviderKey.Dashscope,
             ProviderKey.DeepInfra,
             ProviderKey.DeepSeek,
+            ProviderKey.Dialagram,
             ProviderKey.Dinference,
             ProviderKey.Fastrouter,
             ProviderKey.Fireworks,
@@ -262,11 +264,12 @@ export class AccountSyncAdapter {
             ProviderKey.Opencodego,
             ProviderKey.Pollinations,
             ProviderKey.Puter,
+            ProviderKey.Routingrun,
             ProviderKey.Seraphyn,
             ProviderKey.Sherlock,
             ProviderKey.Vercelai,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu
+            ProviderKey.Zhipu,
         ];
 
         // Sync Codex (OAuth)

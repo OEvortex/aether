@@ -64,9 +64,11 @@
         "onLanguageModelProvider:aether.cline",
         "onLanguageModelProvider:aether.codex",
         "onLanguageModelProvider:aether.cortecs",
+        "onLanguageModelProvider:aether.crof",
         "onLanguageModelProvider:aether.dashscope",
         "onLanguageModelProvider:aether.deepinfra",
         "onLanguageModelProvider:aether.deepseek",
+        "onLanguageModelProvider:aether.dialagram",
         "onLanguageModelProvider:aether.dinference",
         "onLanguageModelProvider:aether.fastrouter",
         "onLanguageModelProvider:aether.fireworks",
@@ -93,6 +95,7 @@
         "onLanguageModelProvider:aether.pollinations",
         "onLanguageModelProvider:aether.puter",
         "onLanguageModelProvider:aether.qwencli",
+        "onLanguageModelProvider:aether.routingrun",
         "onLanguageModelProvider:aether.seraphyn",
         "onLanguageModelProvider:aether.sherlock",
         "onLanguageModelProvider:aether.vercelai",
@@ -444,6 +447,21 @@
                 "command": "aether.dashscope.setApiKey",
                 "title": "Configure DashScope (Ali Bailian)",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.dialagram.setApiKey",
+                "title": "Configure Dialagram",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.crof.setApiKey",
+                "title": "Configure Crof AI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.routingrun.setApiKey",
+                "title": "Configure Routing.run",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -766,6 +784,16 @@
                     "description": "Select SDK compatibility mode for DeepSeek.",
                     "scope": "application"
                 },
+                "aether.dialagram.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for Dialagram.",
+                    "scope": "application"
+                },
                 "aether.fastrouter.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -1012,6 +1040,19 @@
                 }
             },
             {
+                "vendor": "aether.crof",
+                "displayName": "⦿ Crof AI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Crof AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.dashscope",
                 "displayName": "⦿ DashScope (Ali Bailian)",
                 "configuration": {
@@ -1045,6 +1086,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "DeepSeek API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.dialagram",
+                "displayName": "⦿ Dialagram",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Dialagram API key.",
                             "secret": true
                         }
                     }
@@ -1383,6 +1437,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Qwen CLI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.routingrun",
+                "displayName": "⦿ Routing.run",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Routing.run API key.",
                             "secret": true
                         }
                     }

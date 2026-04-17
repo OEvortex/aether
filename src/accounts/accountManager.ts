@@ -147,6 +147,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Crof,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Dashscope,
             {
                 supportsMultiAccount: true,
@@ -164,6 +172,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.DeepSeek,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Dialagram,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -403,6 +419,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Routingrun,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Seraphyn,
             {
                 supportsMultiAccount: true,
@@ -441,7 +465,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ]
+        ],
     ]);
 
     private constructor(context: vscode.ExtensionContext) {

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- **Dialagram provider**: Added Dialagram provider (`dialagram`) with OpenAI-compatible router at `https://www.dialagram.me/router/v1`, Anthropic/Claude router at `https://www.dialagram.me/router/claude`, and model listing endpoint `/model`.
+- **Routing.run provider**: Added Routing.run provider (`routingrun`) with OpenAI-compatible router at `https://api.routing.run/v1` and automatic model discovery via `/models`.
+- **Crof AI provider**: Added Crof AI provider (`crof`) with OpenAI-compatible endpoint at `https://crof.ai/v1` and automatic model discovery via `/models`.
+
 
 ## [0.4.0] - 2026-04-17
 
