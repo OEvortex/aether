@@ -1,0 +1,107 @@
+{
+    "displayName": "DashScope (Ali Bailian)",
+    "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+    "models": [
+        {
+            "id": "qwen3.6-plus",
+            "name": "qwen3.6-plus",
+            "tooltip": "Qwen3.6 Plus - supports image understanding",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "kimi-k2.5",
+            "name": "Kimi K2.5",
+            "tooltip": "Kimi K2.5 - supports image understanding",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "glm-5",
+            "name": "GLM-5",
+            "tooltip": "GLM-5",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "minimax-m2.5",
+            "name": "MiniMax M2.5",
+            "tooltip": "MiniMax M2.5",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3.5-plus",
+            "name": "qwen3.5-plus",
+            "tooltip": "Qwen3.5 Plus - supports image understanding",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "qwen3-max-2026-01-23",
+            "name": "qwen3-max-2026-01-23",
+            "tooltip": "Qwen3 Max (2026-01-23)",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-coder-next",
+            "name": "qwen3-coder-next",
+            "tooltip": "Qwen3 Coder Next",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-coder-plus",
+            "name": "qwen3-coder-plus",
+            "tooltip": "Qwen3 Coder Plus",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm-4.7",
+            "name": "GLM-4.7",
+            "tooltip": "GLM-4.7",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ],
+    "family": "DashScope",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}

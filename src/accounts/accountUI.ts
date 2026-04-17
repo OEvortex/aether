@@ -160,6 +160,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "DashScope (Ali Bailian)",
+                value: ProviderKey.Dashscope,
+                authType: "apiKey" as const
+            },
+            {
                 label: "DeepInfra",
                 value: ProviderKey.DeepInfra,
                 authType: "apiKey" as const
@@ -960,6 +965,7 @@ export class AccountUI {
             clarifai: "Clarifai",
             cline: "Cline",
             cortecs: "Cortecs",
+            dashscope: "DashScope (Ali Bailian)",
             deepinfra: "DeepInfra",
             deepseek: "DeepSeek",
             dinference: "Dinference",

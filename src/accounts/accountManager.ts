@@ -147,6 +147,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Dashscope,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.DeepInfra,
             {
                 supportsMultiAccount: true,

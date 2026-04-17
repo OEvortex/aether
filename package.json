@@ -64,6 +64,7 @@
         "onLanguageModelProvider:aether.cline",
         "onLanguageModelProvider:aether.codex",
         "onLanguageModelProvider:aether.cortecs",
+        "onLanguageModelProvider:aether.dashscope",
         "onLanguageModelProvider:aether.deepinfra",
         "onLanguageModelProvider:aether.deepseek",
         "onLanguageModelProvider:aether.dinference",
@@ -438,6 +439,11 @@
                 "command": "aether.moark.setApiKey",
                 "title": "Configure Moark",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.dashscope.setApiKey",
+                "title": "Configure DashScope (Ali Bailian)",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -740,6 +746,16 @@
                     "description": "Select SDK compatibility mode for Clarifai.",
                     "scope": "application"
                 },
+                "aether.dashscope.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for DashScope (Ali Bailian).",
+                    "scope": "application"
+                },
                 "aether.deepseek.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -990,6 +1006,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Cortecs API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.dashscope",
+                "displayName": "⦿ DashScope (Ali Bailian)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "DashScope (Ali Bailian) API key.",
                             "secret": true
                         }
                     }

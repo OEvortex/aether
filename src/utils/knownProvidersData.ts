@@ -406,6 +406,18 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    dashscope: {
+        displayName: 'DashScope (Ali Bailian)',
+        family: 'DashScope',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // OpenAI-compatible and Anthropic-compatible bridges
+        openai: { baseUrl: 'https://coding.dashscope.aliyuncs.com/v1' },
+        anthropic: { baseUrl: 'https://coding.dashscope.aliyuncs.com/apps/anthropic' },
+        sdkMode: 'openai',
+        openModelEndpoint: false,
+        fetchModels: false
+    },
     minimax: {
         displayName: 'MiniMax',
         family: 'MiniMax',

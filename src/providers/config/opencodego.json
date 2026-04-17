@@ -4,47 +4,49 @@
     "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     "models": [
         {
+            "id": "glm-5.1",
+            "name": "GLM-5.1",
+            "tooltip": "GLM-5.1 - OpenCode Zen Go",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "glm-5.1",
+            "sdkMode": "openai",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
+        },
+        {
             "id": "glm-5",
             "name": "GLM-5",
             "tooltip": "GLM-5 - OpenCode Zen Go",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "glm-5",
+            "sdkMode": "openai",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1"
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
         },
         {
-            "id": "kimi-k2-5",
+            "id": "kimi-k2.5",
             "name": "Kimi K2.5",
             "tooltip": "Kimi K2.5 - OpenCode Zen Go",
             "maxInputTokens": 229376,
             "maxOutputTokens": 32768,
             "model": "kimi-k2.5",
+            "sdkMode": "openai",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": true
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1"
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
         },
         {
-            "id": "minimax-m2-5",
-            "name": "MiniMax M2.5",
-            "tooltip": "MiniMax M2.5 - OpenCode Zen Go",
-            "maxInputTokens": 172032,
-            "maxOutputTokens": 32768,
-            "model": "minimax-m2.5",
-            "sdkMode": "anthropic",
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": false
-            },
-            "baseUrl": "https://opencode.ai/zen/go"
-        },
-        {
-            "id": "minimax-m2-7",
+            "id": "minimax-m2.7",
             "name": "MiniMax M2.7",
             "tooltip": "MiniMax M2.7 - OpenCode Zen Go",
             "maxInputTokens": 172032,
@@ -55,7 +57,21 @@
                 "toolCalling": true,
                 "imageInput": false
             },
-            "baseUrl": "https://opencode.ai/zen/go"
+            "baseUrl": "https://opencode.ai/zen/go/v1/messages"
+        },
+        {
+            "id": "minimax-m2.5",
+            "name": "MiniMax M2.5",
+            "tooltip": "MiniMax M2.5 - OpenCode Zen Go",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "model": "minimax-m2.5",
+            "sdkMode": "anthropic",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1/messages"
         },
         {
             "id": "mimo-v2-pro",
@@ -64,11 +80,12 @@
             "maxInputTokens": 131072,
             "maxOutputTokens": 32768,
             "model": "mimo-v2-pro",
+            "sdkMode": "openai",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": false
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1"
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
         },
         {
             "id": "mimo-v2-omni",
@@ -77,11 +94,40 @@
             "maxInputTokens": 131072,
             "maxOutputTokens": 32768,
             "model": "mimo-v2-omni",
+            "sdkMode": "openai",
             "capabilities": {
                 "toolCalling": true,
                 "imageInput": true
             },
-            "baseUrl": "https://opencode.ai/zen/go/v1"
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
+        },
+        {
+            "id": "qwen3.6-plus",
+            "name": "Qwen3.6 Plus",
+            "tooltip": "Qwen3.6 Plus - OpenCode Zen Go",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "model": "qwen3.6-plus",
+            "sdkMode": "openai",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
+        },
+        {
+            "id": "qwen3.5-plus",
+            "name": "Qwen3.5 Plus",
+            "tooltip": "Qwen3.5 Plus - OpenCode Zen Go",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "model": "qwen3.5-plus",
+            "sdkMode": "openai",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
         }
     ],
     "family": "OpenCode"

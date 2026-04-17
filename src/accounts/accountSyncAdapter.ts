@@ -231,6 +231,7 @@ export class AccountSyncAdapter {
             ProviderKey.Cline,
             ProviderKey.Compatible,
             ProviderKey.Cortecs,
+            ProviderKey.Dashscope,
             ProviderKey.DeepInfra,
             ProviderKey.DeepSeek,
             ProviderKey.Dinference,

@@ -12,6 +12,7 @@ export enum ProviderKey {
 	Codex = 'codex',
 	Compatible = 'compatible',
 	Cortecs = 'cortecs',
+	Dashscope = 'dashscope',
 	DeepInfra = 'deepinfra',
 	DeepSeek = 'deepseek',
 	Dinference = 'dinference',

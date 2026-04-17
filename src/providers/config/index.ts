@@ -32,6 +32,7 @@ import friendli from './friendli.json';
 import ollama from './ollama.json';
 import opencode from './opencode.json';
 import opencodego from './opencodego.json';
+import dashscope from './dashscope.json';
 import pollinations from './pollinations.json';
 import puter from './puter.json';
 import qwencli from './qwencli.json';
@@ -54,6 +55,7 @@ const providers = {
 	clarifai: clarifai,
 	codex: codex,
 	cortecs: cortecs,
+	dashscope: dashscope,
 	deepinfra: deepinfra,
 	deepseek: deepseek,
 	dinference: dinference,

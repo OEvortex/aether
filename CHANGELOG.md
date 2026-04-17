@@ -2,37 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.10] - 2026-04-14
+
+## [0.4.0] - 2026-04-17
+
+### Added
+
+- **DashScope (Ali Bailian) provider**: Added new OpenAI- and Anthropic-compatible provider "DashScope" (`dashscope`) with initial model config for Qwen3.6 Plus, Kimi K2.5, GLM-5, MiniMax M2.5 and additional Qwen/GLM variants. Config file: `src/providers/config/dashscope.json`.
+
+### Changed
+
+- Bumped provider configs to include new DashScope provider and cleaned up redundant model fields in JSON configs.
 
 ### Fixed
 
-- **Build Method Revert**: Reverted from esbuild bundling to TypeScript compilation for npm publication. The esbuild approach was incompatible with the codebase's dynamic require() usage. TypeScript compilation avoids this issue and provides a working CLI for global installation.
-
-## [0.0.9] - 2026-04-14
-
-### Fixed
-
-- **Build Script Fix**: Updated build script to use esbuild bundling instead of TypeScript compilation for npm publication, ensuring the bundled file is included in the published package.
-
-## [0.0.8] - 2026-04-14
-
-### Fixed
-
-- **Package Files Configuration**: Updated package.json files field to only include the esbuild bundle (dist/aether-bundle.mjs) and package.json, excluding TypeScript build artifacts that were causing installation issues.
-
-## [0.0.7] - 2026-04-14
-
-### Fixed
-
-- **Dependency Version Fix**: Fixed yoga-layout dependency version from ^0.1.0 (non-existent) to ^3.2.1 (correct version on npm), resolving installation errors when installing the CLI globally.
-
-## [0.0.6] - 2026-04-14
-
-### Fixed
-
-- **Aether CLI Global Installation**: Fixed global installation of the Aether CLI by configuring esbuild to externalize problematic packages (undici, native clipboard modules) that cause dynamic require() errors in ESM bundles. The CLI now supports both standalone installation from npm and workspace development usage.
-- **Build Configuration**: Updated esbuild.config.cjs with proper externalization of native modules and problematic dependencies, enabling successful bundling for npm publication.
-- **Package Dependencies**: Added yoga-layout to dependencies to ensure proper resolution when the CLI is installed globally from npm.
+- Minor schema fixes for provider config JSON files to conform with the project schema.
 
 ## [0.3.9] - 2026-04-14
 
