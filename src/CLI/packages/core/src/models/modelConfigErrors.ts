@@ -48,7 +48,7 @@ export class StrictMissingCredentialsError extends ModelConfigError {
     readonly code = 'STRICT_MISSING_CREDENTIALS';
 
     constructor(
-        authType: string | undefined,
+        _authType: string | undefined,
         model: string | undefined,
         envKey?: string
     ) {

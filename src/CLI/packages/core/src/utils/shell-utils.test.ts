@@ -593,9 +593,9 @@ describe('getShellConfiguration', () => {
         });
 
         it('should return cmd.exe configuration by default', async () => {
-            delete process.env['ComSpec'];
-            delete process.env['MSYSTEM'];
-            delete process.env['TERM'];
+            delete process.env.ComSpec;
+            delete process.env.MSYSTEM;
+            delete process.env.TERM;
             const config = getShellConfiguration();
             expect(config.executable).toBe('cmd.exe');
             expect(config.argsPrefix).toEqual(['/d', '/s', '/c']);
@@ -604,9 +604,9 @@ describe('getShellConfiguration', () => {
 
         it('should respect ComSpec for cmd.exe', async () => {
             const cmdPath = 'C:\\WINDOWS\\system32\\cmd.exe';
-            process.env['ComSpec'] = cmdPath;
-            delete process.env['MSYSTEM'];
-            delete process.env['TERM'];
+            process.env.ComSpec = cmdPath;
+            delete process.env.MSYSTEM;
+            delete process.env.TERM;
             const config = getShellConfiguration();
             expect(config.executable).toBe(cmdPath);
             expect(config.argsPrefix).toEqual(['/d', '/s', '/c']);
@@ -616,9 +616,9 @@ describe('getShellConfiguration', () => {
         it('should return PowerShell configuration if ComSpec points to powershell.exe', async () => {
             const psPath =
                 'C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe';
-            process.env['ComSpec'] = psPath;
-            delete process.env['MSYSTEM'];
-            delete process.env['TERM'];
+            process.env.ComSpec = psPath;
+            delete process.env.MSYSTEM;
+            delete process.env.TERM;
             const config = getShellConfiguration();
             expect(config.executable).toBe(psPath);
             expect(config.argsPrefix).toEqual(['-NoProfile', '-Command']);
@@ -627,9 +627,9 @@ describe('getShellConfiguration', () => {
 
         it('should return PowerShell configuration if ComSpec points to pwsh.exe', async () => {
             const pwshPath = 'C:\\Program Files\\PowerShell\\7\\pwsh.exe';
-            process.env['ComSpec'] = pwshPath;
-            delete process.env['MSYSTEM'];
-            delete process.env['TERM'];
+            process.env.ComSpec = pwshPath;
+            delete process.env.MSYSTEM;
+            delete process.env.TERM;
             const config = getShellConfiguration();
             expect(config.executable).toBe(pwshPath);
             expect(config.argsPrefix).toEqual(['-NoProfile', '-Command']);
@@ -637,9 +637,9 @@ describe('getShellConfiguration', () => {
         });
 
         it('should be case-insensitive when checking ComSpec', async () => {
-            process.env['ComSpec'] = 'C:\\Path\\To\\POWERSHELL.EXE';
-            delete process.env['MSYSTEM'];
-            delete process.env['TERM'];
+            process.env.ComSpec = 'C:\\Path\\To\\POWERSHELL.EXE';
+            delete process.env.MSYSTEM;
+            delete process.env.TERM;
             const config = getShellConfiguration();
             expect(config.executable).toBe('C:\\Path\\To\\POWERSHELL.EXE');
             expect(config.argsPrefix).toEqual(['-NoProfile', '-Command']);
@@ -648,7 +648,7 @@ describe('getShellConfiguration', () => {
 
         describe('Git Bash / MSYS2 / MinTTY detection', () => {
             it('should return bash configuration when MSYSTEM starts with MINGW', () => {
-                process.env['MSYSTEM'] = 'MINGW64';
+                process.env.MSYSTEM = 'MINGW64';
                 const config = getShellConfiguration();
                 // executable should be bash.exe path (either 'bash' or full path like 'C:\...\bash.exe')
                 expect(
@@ -660,7 +660,7 @@ describe('getShellConfiguration', () => {
             });
 
             it('should return bash configuration when MSYSTEM starts with MSYS', () => {
-                process.env['MSYSTEM'] = 'MSYS';
+                process.env.MSYSTEM = 'MSYS';
                 const config = getShellConfiguration();
                 expect(
                     config.executable.endsWith('bash.exe') ||
@@ -671,8 +671,8 @@ describe('getShellConfiguration', () => {
             });
 
             it('should return bash configuration when TERM includes msys', () => {
-                delete process.env['MSYSTEM'];
-                process.env['TERM'] = 'xterm-256color-msys';
+                delete process.env.MSYSTEM;
+                process.env.TERM = 'xterm-256color-msys';
                 const config = getShellConfiguration();
                 expect(
                     config.executable.endsWith('bash.exe') ||
@@ -683,8 +683,8 @@ describe('getShellConfiguration', () => {
             });
 
             it('should return bash configuration when TERM includes cygwin', () => {
-                delete process.env['MSYSTEM'];
-                process.env['TERM'] = 'xterm-256color-cygwin';
+                delete process.env.MSYSTEM;
+                process.env.TERM = 'xterm-256color-cygwin';
                 const config = getShellConfiguration();
                 expect(
                     config.executable.endsWith('bash.exe') ||
@@ -695,8 +695,8 @@ describe('getShellConfiguration', () => {
             });
 
             it('should prioritize MSYSTEM over TERM for Git Bash detection', () => {
-                process.env['MSYSTEM'] = 'MINGW64';
-                process.env['TERM'] = 'xterm';
+                process.env.MSYSTEM = 'MINGW64';
+                process.env.TERM = 'xterm';
                 const config = getShellConfiguration();
                 expect(
                     config.executable.endsWith('bash.exe') ||
@@ -707,9 +707,9 @@ describe('getShellConfiguration', () => {
             });
 
             it('should return cmd.exe when MSYSTEM and TERM do not indicate Git Bash', () => {
-                process.env['MSYSTEM'] = 'UNKNOWN';
-                process.env['TERM'] = 'xterm';
-                delete process.env['ComSpec'];
+                process.env.MSYSTEM = 'UNKNOWN';
+                process.env.TERM = 'xterm';
+                delete process.env.ComSpec;
                 const config = getShellConfiguration();
                 expect(config.executable).toBe('cmd.exe');
                 expect(config.argsPrefix).toEqual(['/d', '/s', '/c']);
@@ -717,7 +717,7 @@ describe('getShellConfiguration', () => {
             });
 
             it('should return bash when MSYSTEM is MINGW32', () => {
-                process.env['MSYSTEM'] = 'MINGW32';
+                process.env.MSYSTEM = 'MINGW32';
                 const config = getShellConfiguration();
                 expect(
                     config.executable.endsWith('bash.exe') ||

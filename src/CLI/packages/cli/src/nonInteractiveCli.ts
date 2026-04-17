@@ -403,7 +403,9 @@ export async function runNonInteractive(
                             };
 
                             const drainQueue = async () => {
-                                if (processing) return;
+                                if (processing) {
+                                    return;
+                                }
                                 processing = true;
                                 try {
                                     while (cronQueue.length > 0) {
@@ -447,7 +449,7 @@ export async function runNonInteractive(
                                                     scheduler.stop();
                                                     if (summary) {
                                                         process.stderr.write(
-                                                            summary + '\n'
+                                                            `${summary}\n`
                                                         );
                                                     }
                                                     resolve();

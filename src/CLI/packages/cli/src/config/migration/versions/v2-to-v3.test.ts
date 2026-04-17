@@ -83,16 +83,12 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
         });
 
@@ -110,9 +106,9 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['ui'] as Record<string, unknown>)['accessibility']
+                (result.ui as Record<string, unknown>).accessibility
             ).toEqual({
                 enableLoadingPhrases: false
             });
@@ -132,9 +128,9 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['context'] as Record<string, unknown>)['fileFiltering']
+                (result.context as Record<string, unknown>).fileFiltering
             ).toEqual({
                 enableFuzzySearch: true
             });
@@ -154,9 +150,9 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['model'] as Record<string, unknown>)['generationConfig']
+                (result.model as Record<string, unknown>).generationConfig
             ).toEqual({
                 enableCacheControl: false
             });
@@ -179,22 +175,16 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             // If ANY disable* is true, enable should be false
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableUpdateNag'
-                ]
+                (result.general as Record<string, unknown>).disableUpdateNag
             ).toBeUndefined();
         });
 
@@ -215,11 +205,9 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(true);
         });
 
@@ -243,15 +231,13 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
-            expect((result['ui'] as Record<string, unknown>)['theme']).toBe(
-                'dark'
-            );
-            expect((result['model'] as Record<string, unknown>)['name']).toBe(
+            expect(result.$version).toBe(3);
+            expect((result.ui as Record<string, unknown>).theme).toBe('dark');
+            expect((result.model as Record<string, unknown>).name).toBe(
                 'gemini'
             );
             expect(
-                (result['ui'] as Record<string, unknown>)['accessibility']
+                (result.ui as Record<string, unknown>).accessibility
             ).toEqual({
                 enableLoadingPhrases: false
             });
@@ -294,19 +280,17 @@ describe('V2ToV3Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(true);
             expect(
-                (result['ui'] as Record<string, unknown>)['accessibility']
+                (result.ui as Record<string, unknown>).accessibility
             ).toEqual({
                 enableLoadingPhrases: true
             });
             expect(
-                (result['context'] as Record<string, unknown>)['fileFiltering']
+                (result.context as Record<string, unknown>).fileFiltering
             ).toEqual({
                 enableFuzzySearch: true
             });
@@ -326,16 +310,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
             expect(warnings).toHaveLength(0);
         });
@@ -354,16 +334,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(true);
             expect(warnings).toHaveLength(0);
         });
@@ -385,21 +361,15 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableUpdateNag'
-                ]
+                (result.general as Record<string, unknown>).disableUpdateNag
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
             expect(warnings).toHaveLength(0);
         });
@@ -418,16 +388,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain('general.disableAutoUpdate');
@@ -447,16 +413,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain('general.disableAutoUpdate');
@@ -476,9 +438,9 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['model'] as Record<string, unknown>)['generationConfig']
+                (result.model as Record<string, unknown>).generationConfig
             ).toEqual({
                 enableCacheControl: false
             });
@@ -499,9 +461,9 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['model'] as Record<string, unknown>)['generationConfig']
+                (result.model as Record<string, unknown>).generationConfig
             ).toEqual({
                 enableCacheControl: true
             });
@@ -522,16 +484,15 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['model'] as Record<string, unknown>)['generationConfig']
+                (result.model as Record<string, unknown>).generationConfig
             ).toEqual({});
             expect(
                 (
-                    (result['model'] as Record<string, unknown>)[
-                        'generationConfig'
-                    ] as Record<string, unknown>
-                )['enableCacheControl']
+                    (result.model as Record<string, unknown>)
+                        .generationConfig as Record<string, unknown>
+                ).enableCacheControl
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain(
@@ -556,23 +517,17 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             // Only valid values should contribute to the consolidated result
             // Since disableAutoUpdate is true, enableAutoUpdate should be false
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableUpdateNag'
-                ]
+                (result.general as Record<string, unknown>).disableUpdateNag
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain('general.disableUpdateNag');
@@ -592,16 +547,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain('general.disableAutoUpdate');
@@ -621,16 +572,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain('general.disableAutoUpdate');
@@ -650,16 +597,12 @@ describe('V2ToV3Migration', () => {
                 warnings: string[];
             };
 
-            expect(result['$version']).toBe(3);
+            expect(result.$version).toBe(3);
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
             expect(
-                (result['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (result.general as Record<string, unknown>).enableAutoUpdate
             ).toBeUndefined();
             expect(warnings).toHaveLength(1);
             expect(warnings[0]).toContain('general.disableAutoUpdate');

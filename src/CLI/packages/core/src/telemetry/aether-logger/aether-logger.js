@@ -1,0 +1,823 @@
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+import { Buffer } from 'node:buffer';
+import fs from 'node:fs';
+import * as https from 'node:https';
+import * as os from 'node:os';
+import path from 'node:path';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { FixedDeque } from 'mnemonist';
+import { AuthType } from '../../core/contentGenerator.js';
+import { createDebugLogger } from '../../utils/debugLogger.js';
+import { InstallationManager } from '../../utils/installationManager.js';
+import { safeJsonStringify } from '../../utils/safeJsonStringify.js';
+import { sanitizeHookName } from '../sanitize.js';
+// Usage statistics collection endpoint
+const USAGE_STATS_HOSTNAME = 'gb4w8c3ygj-default-sea.rum.aliyuncs.com';
+const USAGE_STATS_PATH = '/';
+const RUN_APP_ID = 'gb4w8c3ygj@851d5d500f08f92';
+/**
+ * Interval in which buffered events are sent to RUM.
+ */
+const FLUSH_INTERVAL_MS = 1000 * 60;
+/**
+ * Minimum interval between logging network errors to avoid log spam.
+ */
+const ERROR_LOG_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+/**
+ * Maximum amount of events to keep in memory. Events added after this amount
+ * are dropped until the next flush to RUM, which happens periodically as
+ * defined by {@link FLUSH_INTERVAL_MS}.
+ */
+const MAX_EVENTS = 1000;
+/**
+ * Maximum events to retry after a failed RUM flush
+ */
+const MAX_RETRY_EVENTS = 100;
+// Singleton class for batch posting log events to RUM. When a new event comes in, the elapsed time
+// is checked and events are flushed to RUM if at least a minute has passed since the last flush.
+export class AetherLogger {
+    static instance;
+    config;
+    debugLogger;
+    installationManager;
+    /**
+     * Queue of pending events that need to be flushed to the server. New events
+     * are added to this queue and then flushed on demand (via `flushToRum`)
+     */
+    events;
+    /**
+     * The last time that the events were successfully flushed to the server.
+     */
+    lastFlushTime = Date.now();
+    userId;
+    sessionId;
+    /**
+     * Cached source information read from source.json.
+     * Only read once at session start to avoid repeated file I/O.
+     */
+    sourceInfo = '';
+    /**
+     * The value is true when there is a pending flush happening. This prevents
+     * concurrent flush operations.
+     */
+    isFlushInProgress = false;
+    /**
+     * This value is true when a flush was requested during an ongoing flush.
+     */
+    pendingFlush = false;
+    /**
+     * Timestamp of the last network error log to prevent log spam.
+     */
+    lastErrorLogTime = 0;
+    constructor(config) {
+        this.config = config;
+        this.debugLogger = createDebugLogger('QWEN_LOGGER');
+        this.events = new FixedDeque(Array, MAX_EVENTS);
+        this.installationManager = new InstallationManager();
+        this.userId = this.generateUserId();
+        this.sessionId = config.getSessionId();
+        // Read source info once during initialization
+        this.sourceInfo = this.readSourceInfo();
+    }
+    generateUserId() {
+        // Use InstallationManager to get installationId for userId
+        const installationId = this.installationManager.getInstallationId();
+        return `user-${installationId ?? 'unknown'}`;
+    }
+    static getInstance(config) {
+        if (config === undefined || !config?.getUsageStatisticsEnabled()) {
+            return undefined;
+        }
+        if (!AetherLogger.instance) {
+            AetherLogger.instance = new AetherLogger(config);
+        }
+        return AetherLogger.instance;
+    }
+    enqueueLogEvent(event) {
+        try {
+            // Manually handle overflow for FixedDeque, which throws when full.
+            const wasAtCapacity = this.events.size >= MAX_EVENTS;
+            if (wasAtCapacity) {
+                this.events.shift(); // Evict oldest element to make space.
+            }
+            this.events.push(event);
+            if (wasAtCapacity) {
+                this.debugLogger.debug(`AetherLogger: Dropped old event to prevent memory leak (queue size: ${this.events.size})`);
+            }
+        }
+        catch (error) {
+            this.debugLogger.error('AetherLogger: Failed to enqueue log event.', error);
+        }
+    }
+    createRumEvent(eventType, type, name, properties) {
+        return {
+            timestamp: Date.now(),
+            event_type: eventType,
+            type,
+            name,
+            ...(properties || {})
+        };
+    }
+    createViewEvent(type, name, properties) {
+        return this.createRumEvent('view', type, name, properties);
+    }
+    createActionEvent(type, name, properties) {
+        return this.createRumEvent('action', type, name, properties);
+    }
+    createResourceEvent(type, name, properties) {
+        return this.createRumEvent('resource', type, name, properties);
+    }
+    createExceptionEvent(type, name, properties) {
+        return this.createRumEvent('exception', type, name, properties);
+    }
+    getOsMetadata() {
+        return {
+            type: os.platform(),
+            version: os.release()
+        };
+    }
+    async createRumPayload() {
+        const authType = this.config?.getAuthType();
+        const version = this.config?.getCliVersion() || 'unknown';
+        const osMetadata = this.getOsMetadata();
+        // Use cached source information
+        return {
+            app: {
+                id: RUN_APP_ID,
+                env: process.env.DEBUG ? 'dev' : 'prod',
+                version: version || 'unknown',
+                type: 'cli',
+                channel: this.sourceInfo || undefined
+            },
+            user: {
+                id: this.userId
+            },
+            session: {
+                id: this.sessionId || this.config?.getSessionId()
+            },
+            view: {
+                id: this.sessionId || this.config?.getSessionId(),
+                name: 'aether-cli-cli'
+            },
+            os: osMetadata,
+            events: this.events.toArray(),
+            properties: {
+                auth_type: authType,
+                model: this.config?.getModel(),
+                base_url: authType === AuthType.USE_OPENAI
+                    ? this.config?.getContentGeneratorConfig().baseUrl || ''
+                    : '',
+                ...(this.config?.getChannel?.()
+                    ? { channel: this.config.getChannel() }
+                    : {})
+            },
+            _v: `aether-cli@${version}`
+        };
+    }
+    flushIfNeeded() {
+        if (Date.now() - this.lastFlushTime < FLUSH_INTERVAL_MS) {
+            return;
+        }
+        void this.flushToRum();
+    }
+    readSourceInfo() {
+        try {
+            const sourceJsonPath = path.join(os.homedir(), '.aether', 'source.json');
+            if (fs.existsSync(sourceJsonPath)) {
+                const sourceJsonContent = fs.readFileSync(sourceJsonPath, 'utf8');
+                const sourceData = JSON.parse(sourceJsonContent);
+                if (sourceData &&
+                    typeof sourceData === 'object' &&
+                    sourceData.source &&
+                    sourceData.source !== 'unknown') {
+                    return sourceData.source;
+                }
+            }
+        }
+        catch (_error) {
+            // Ignore errors when reading source.json - continue without source info
+        }
+        return '';
+    }
+    async flushToRum() {
+        if (this.isFlushInProgress) {
+            this.debugLogger.debug('AetherLogger: Flush already in progress, marking pending flush.');
+            this.pendingFlush = true;
+            return Promise.resolve({});
+        }
+        this.isFlushInProgress = true;
+        if (this.events.size === 0) {
+            this.isFlushInProgress = false;
+            return {};
+        }
+        const eventsToSend = this.events.toArray();
+        this.events.clear();
+        const rumPayload = await this.createRumPayload();
+        // Override events with the ones we're sending
+        rumPayload.events = eventsToSend;
+        try {
+            await new Promise((resolve, reject) => {
+                const body = safeJsonStringify(rumPayload);
+                const options = {
+                    hostname: USAGE_STATS_HOSTNAME,
+                    path: USAGE_STATS_PATH,
+                    method: 'POST',
+                    headers: {
+                        'Content-Length': Buffer.byteLength(body),
+                        'Content-Type': 'text/plain;charset=UTF-8'
+                    }
+                };
+                const bufs = [];
+                const req = https.request({
+                    ...options,
+                    agent: this.getProxyAgent()
+                }, (res) => {
+                    if (res.statusCode &&
+                        (res.statusCode < 200 || res.statusCode >= 300)) {
+                        const err = new Error(`Request failed with status ${res.statusCode}`);
+                        res.resume();
+                        return reject(err);
+                    }
+                    res.on('data', (buf) => bufs.push(buf));
+                    res.on('end', () => resolve(Buffer.concat(bufs)));
+                });
+                req.on('error', reject);
+                req.end(body);
+            });
+            this.lastFlushTime = Date.now();
+            return {};
+        }
+        catch (error) {
+            // Only log network errors if sufficient time has passed to avoid spam
+            const now = Date.now();
+            if (now - this.lastErrorLogTime > ERROR_LOG_INTERVAL_MS) {
+                this.debugLogger.error('RUM flush failed.', error);
+                this.lastErrorLogTime = now;
+            }
+            // Re-queue failed events for retry
+            this.requeueFailedEvents(eventsToSend);
+            return {};
+        }
+        finally {
+            this.isFlushInProgress = false;
+            // If a flush was requested while we were flushing, flush again
+            if (this.pendingFlush) {
+                this.pendingFlush = false;
+                // Fire and forget the pending flush
+                void this.flushToRum();
+            }
+        }
+    }
+    // session events
+    async logStartSessionEvent(event) {
+        // Flush all pending events with the old session ID first.
+        // If flush fails, discard the pending events to avoid mixing sessions.
+        await this.flushToRum();
+        // Clear any remaining events (discard if flush failed)
+        this.events.clear();
+        // Now set the new session ID
+        this.sessionId = event.session_id;
+        // Re-read source info at the start of each new session
+        this.sourceInfo = this.readSourceInfo();
+        const applicationEvent = this.createViewEvent('session', 'session_start', {
+            properties: {
+                approval_mode: event.approval_mode,
+                core_tools_enabled: event.core_tools_enabled,
+                debug_enabled: event.debug_enabled,
+                hooks: event.hooks,
+                ide_enabled: event.ide_enabled,
+                interactive_shell_enabled: event.interactive_shell_enabled,
+                mcp_servers: event.mcp_servers,
+                model: event.model,
+                sandbox_enabled: event.sandbox_enabled,
+                skills: event.skills,
+                subagents: event.subagents,
+                telemetry_enabled: event.telemetry_enabled,
+                truncate_tool_output_lines: event.truncate_tool_output_lines,
+                truncate_tool_output_threshold: event.truncate_tool_output_threshold
+            }
+        });
+        // Flush start event immediately
+        this.enqueueLogEvent(applicationEvent);
+        void this.flushToRum();
+    }
+    logEndSessionEvent(_event) {
+        const applicationEvent = this.createViewEvent('session', 'session_end', {});
+        // Flush immediately on session end.
+        this.enqueueLogEvent(applicationEvent);
+        void this.flushToRum();
+    }
+    logConversationFinishedEvent(event) {
+        const rumEvent = this.createActionEvent('conversation', 'conversation_finished', {
+            properties: {
+                approval_mode: event.approvalMode,
+                turn_count: event.turnCount
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // user action events
+    logNewPromptEvent(event) {
+        const rumEvent = this.createActionEvent('user', 'new_prompt', {
+            properties: {
+                prompt_id: event.prompt_id,
+                prompt_length: event.prompt_length
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logRetryEvent(event) {
+        const rumEvent = this.createActionEvent('user', 'retry', {
+            properties: {
+                prompt_id: event.prompt_id
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logSlashCommandEvent(event) {
+        const rumEvent = this.createActionEvent('user', 'slash_command', {
+            properties: {
+                command: event.command,
+                subcommand: event.subcommand
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logModelSlashCommandEvent(event) {
+        const rumEvent = this.createActionEvent('user', 'model_slash_command', {
+            properties: {
+                model: event.model_name
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // tool call events
+    logToolCallEvent(event) {
+        const rumEvent = this.createActionEvent('tool', `tool_call#${event.function_name}`, {
+            properties: {
+                prompt_id: event.prompt_id,
+                response_id: event.response_id,
+                tool_name: event.function_name,
+                permission: event.decision,
+                success: event.success ? 1 : 0,
+                duration_ms: event.duration_ms,
+                error_type: event.error_type,
+                error_message: event.error
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logFileOperationEvent(event) {
+        const rumEvent = this.createActionEvent('tool', `file_operation#${event.tool_name}`, {
+            properties: {
+                tool_name: event.tool_name,
+                operation: event.operation,
+                lines: event.lines,
+                mimetype: event.mimetype,
+                extension: event.extension,
+                programming_language: event.programming_language
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logSubagentExecutionEvent(event) {
+        const rumEvent = this.createActionEvent('tool', 'subagent_execution', {
+            properties: {
+                subagent_name: event.subagent_name,
+                status: event.status,
+                terminate_reason: event.terminate_reason
+            },
+            snapshots: JSON.stringify({
+                ...(event.execution_summary
+                    ? { execution_summary: event.execution_summary }
+                    : {})
+            })
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logToolOutputTruncatedEvent(event) {
+        const rumEvent = this.createActionEvent('tool', 'tool_output_truncated', {
+            properties: {
+                tool_name: event.tool_name
+            },
+            snapshots: JSON.stringify({
+                original_content_length: event.original_content_length,
+                truncated_content_length: event.truncated_content_length,
+                threshold: event.threshold,
+                lines: event.lines
+            })
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // api events
+    logApiRequestEvent(event) {
+        const rumEvent = this.createResourceEvent('api', 'api_request', {
+            properties: {
+                model: event.model,
+                prompt_id: event.prompt_id
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logApiResponseEvent(event) {
+        const rumEvent = this.createResourceEvent('api', 'api_response', {
+            status_code: event.status_code?.toString() ?? '',
+            duration: event.duration_ms,
+            success: 1,
+            trace_id: event.response_id,
+            properties: {
+                auth_type: event.auth_type,
+                model: event.model,
+                prompt_id: event.prompt_id
+            },
+            snapshots: JSON.stringify({
+                input_token_count: event.input_token_count,
+                output_token_count: event.output_token_count,
+                cached_content_token_count: event.cached_content_token_count,
+                thoughts_token_count: event.thoughts_token_count,
+                tool_token_count: event.tool_token_count
+            })
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logApiCancelEvent(event) {
+        const rumEvent = this.createActionEvent('api', 'api_cancel', {
+            properties: {
+                model: event.model,
+                prompt_id: event.prompt_id,
+                auth_type: event.auth_type
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logApiErrorEvent(event) {
+        const rumEvent = this.createResourceEvent('api', 'api_error', {
+            status_code: event.status_code?.toString() ?? '',
+            duration: event.duration_ms,
+            success: 0,
+            message: event.error_message,
+            trace_id: event.response_id,
+            properties: {
+                auth_type: event.auth_type,
+                model: event.model,
+                prompt_id: event.prompt_id,
+                error_message: event.error_message,
+                error_type: event.error_type
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // error events
+    logInvalidChunkEvent(event) {
+        const rumEvent = this.createExceptionEvent('error', 'invalid_chunk', {
+            subtype: 'invalid_chunk',
+            message: event.error_message
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logContentRetryFailureEvent(event) {
+        const rumEvent = this.createExceptionEvent('error', 'content_retry_failure', {
+            subtype: 'content_retry_failure',
+            message: `Content retry failed after ${event.total_attempts} attempts`,
+            properties: {
+                error_type: event.final_error_type,
+                total_attempts: event.total_attempts,
+                total_duration_ms: event.total_duration_ms
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logMalformedJsonResponseEvent(event) {
+        const rumEvent = this.createExceptionEvent('error', 'malformed_json_response', {
+            subtype: 'malformed_json_response',
+            properties: {
+                model: event.model
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logLoopDetectedEvent(event) {
+        const rumEvent = this.createExceptionEvent('error', 'loop_detected', {
+            subtype: 'loop_detected',
+            properties: {
+                prompt_id: event.prompt_id,
+                error_type: event.loop_type
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logKittySequenceOverflowEvent(event) {
+        const rumEvent = this.createExceptionEvent('overflow', 'kitty_sequence_overflow', {
+            subtype: 'kitty_sequence_overflow',
+            properties: {
+                sequence_length: event.sequence_length
+            },
+            snapshots: JSON.stringify({
+                truncated_sequence: event.truncated_sequence
+            })
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // ide events
+    logIdeConnectionEvent(event) {
+        const rumEvent = this.createActionEvent('ide', 'ide_connection', {
+            properties: {
+                connection_type: event.connection_type
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // extension events
+    logExtensionInstallEvent(event) {
+        const rumEvent = this.createActionEvent('extension', 'extension_install', {
+            properties: {
+                extension_name: event.extension_name,
+                extension_version: event.extension_version,
+                extension_source: event.extension_source,
+                status: event.status
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logExtensionUninstallEvent(event) {
+        const rumEvent = this.createActionEvent('extension', 'extension_uninstall', {
+            properties: {
+                extension_name: event.extension_name,
+                status: event.status
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logExtensionUpdateEvent(event) {
+        const rumEvent = this.createActionEvent('extension', 'extension_update', {
+            properties: {
+                extension_name: event.extension_name,
+                status: event.status,
+                extension_id: event.extension_id,
+                extension_previous_version: event.extension_previous_version,
+                extension_version: event.extension_version,
+                extension_source: event.extension_source
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logExtensionEnableEvent(event) {
+        const rumEvent = this.createActionEvent('extension', 'extension_enable', {
+            properties: {
+                extension_name: event.extension_name,
+                setting_scope: event.setting_scope
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logExtensionDisableEvent(event) {
+        const rumEvent = this.createActionEvent('extension', 'extension_disable', {
+            properties: {
+                extension_name: event.extension_name,
+                setting_scope: event.setting_scope
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logAuthEvent(event) {
+        const rumEvent = this.createActionEvent('auth', 'auth', {
+            properties: {
+                auth_type: event.auth_type,
+                action_type: event.action_type,
+                success: event.status === 'success' ? 1 : 0,
+                error_type: event.status !== 'success' ? event.status : undefined,
+                error_message: event.status === 'error' ? event.error_message : undefined
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // misc events
+    logFlashFallbackEvent(event) {
+        const rumEvent = this.createActionEvent('misc', 'flash_fallback', {
+            properties: {
+                auth_type: event.auth_type
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logRipgrepFallbackEvent(event) {
+        const rumEvent = this.createActionEvent('misc', 'ripgrep_fallback', {
+            properties: {
+                platform: process.platform,
+                arch: process.arch,
+                use_ripgrep: event.use_ripgrep,
+                use_builtin_ripgrep: event.use_builtin_ripgrep,
+                error_message: event.error
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logLoopDetectionDisabledEvent() {
+        const rumEvent = this.createActionEvent('misc', 'loop_detection_disabled', {});
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logNextSpeakerCheck(event) {
+        const rumEvent = this.createActionEvent('misc', 'next_speaker_check', {
+            properties: {
+                prompt_id: event.prompt_id,
+                finish_reason: event.finish_reason,
+                result: event.result
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logSkillLaunchEvent(event) {
+        const rumEvent = this.createActionEvent('misc', 'skill_launch', {
+            properties: {
+                skill_name: event.skill_name,
+                success: event.success ? 1 : 0
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logUserFeedbackEvent(event) {
+        const rumEvent = this.createActionEvent('user', 'user_feedback', {
+            properties: {
+                session_id: event.session_id,
+                rating: event.rating,
+                model: event.model,
+                approval_mode: event.approval_mode,
+                prompt_id: event.prompt_id || ''
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logChatCompressionEvent(event) {
+        const rumEvent = this.createActionEvent('misc', 'chat_compression', {
+            properties: {
+                tokens_before: event.tokens_before,
+                tokens_after: event.tokens_after
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logContentRetryEvent(event) {
+        const rumEvent = this.createActionEvent('misc', 'content_retry', {
+            properties: {
+                error_type: event.error_type,
+                attempt_number: event.attempt_number,
+                retry_delay_ms: event.retry_delay_ms
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    // arena events
+    logArenaSessionStartedEvent(event) {
+        const rumEvent = this.createActionEvent('arena', 'arena_session_started', {
+            properties: {
+                arena_session_id: event.arena_session_id,
+                model_ids: JSON.stringify(event.model_ids),
+                task_length: event.task_length
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logArenaAgentCompletedEvent(event) {
+        const rumEvent = this.createActionEvent('arena', 'arena_agent_completed', {
+            properties: {
+                arena_session_id: event.arena_session_id,
+                agent_session_id: event.agent_session_id,
+                agent_model_id: event.agent_model_id,
+                status: event.status,
+                duration_ms: event.duration_ms,
+                rounds: event.rounds,
+                total_tokens: event.total_tokens,
+                input_tokens: event.input_tokens,
+                output_tokens: event.output_tokens,
+                tool_calls: event.tool_calls,
+                successful_tool_calls: event.successful_tool_calls,
+                failed_tool_calls: event.failed_tool_calls
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    logArenaSessionEndedEvent(event) {
+        const rumEvent = this.createActionEvent('arena', 'arena_session_ended', {
+            properties: {
+                arena_session_id: event.arena_session_id,
+                status: event.status,
+                duration_ms: event.duration_ms,
+                display_backend: event.display_backend,
+                agent_count: event.agent_count,
+                completed_agents: event.completed_agents,
+                failed_agents: event.failed_agents,
+                cancelled_agents: event.cancelled_agents,
+                winner_model_id: event.winner_model_id
+            }
+        });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    /**
+     * Log a hook call event
+     * Records hook execution telemetry for observability
+     */
+    logHookCallEvent(event) {
+        // Sanitize hook name to remove potentially sensitive information
+        const sanitizedHookName = sanitizeHookName(event.hook_name);
+        const properties = {
+            hook_event_name: event.hook_event_name,
+            hook_type: event.hook_type,
+            hook_name: sanitizedHookName,
+            duration_ms: event.duration_ms,
+            success: event.success ? 1 : 0,
+            exit_code: event.exit_code
+        };
+        if (event.error && this.config?.getTelemetryLogPromptsEnabled()) {
+            properties.error = event.error;
+        }
+        const rumEvent = this.createActionEvent('hook', `hook_call#${event.hook_event_name}`, { properties });
+        this.enqueueLogEvent(rumEvent);
+        this.flushIfNeeded();
+    }
+    getProxyAgent() {
+        const proxyUrl = this.config?.getProxy();
+        if (!proxyUrl) {
+            return undefined;
+        }
+        // undici which is widely used in the repo can only support http & https proxy protocol,
+        // https://github.com/nodejs/undici/issues/2224
+        if (proxyUrl.startsWith('http')) {
+            return new HttpsProxyAgent(proxyUrl);
+        }
+        else {
+            throw new Error('Unsupported proxy type');
+        }
+    }
+    requeueFailedEvents(eventsToSend) {
+        // Add the events back to the front of the queue to be retried, but limit retry queue size
+        const eventsToRetry = eventsToSend.slice(-MAX_RETRY_EVENTS); // Keep only the most recent events
+        // Log a warning if we're dropping events
+        if (eventsToSend.length > MAX_RETRY_EVENTS) {
+            this.debugLogger.warn(`AetherLogger: Dropping ${eventsToSend.length - MAX_RETRY_EVENTS} events due to retry queue limit. Total events: ${eventsToSend.length}, keeping: ${MAX_RETRY_EVENTS}`);
+        }
+        // Determine how many events can be re-queued
+        const availableSpace = MAX_EVENTS - this.events.size;
+        const numEventsToRequeue = Math.min(eventsToRetry.length, availableSpace);
+        if (numEventsToRequeue === 0) {
+            return;
+        }
+        // Get the most recent events to re-queue
+        const eventsToRequeue = eventsToRetry.slice(eventsToRetry.length - numEventsToRequeue);
+        // Prepend events to the front of the deque to be retried first.
+        // We iterate backwards to maintain the original order of the failed events.
+        for (let i = eventsToRequeue.length - 1; i >= 0; i--) {
+            this.events.unshift(eventsToRequeue[i]);
+        }
+        // Clear any potential overflow
+        while (this.events.size > MAX_EVENTS) {
+            this.events.pop();
+        }
+        this.debugLogger.debug(`AetherLogger: Re-queued ${numEventsToRequeue} events for retry (queue size: ${this.events.size})`);
+    }
+}
+export const TEST_ONLY = {
+    MAX_RETRY_EVENTS,
+    MAX_EVENTS,
+    FLUSH_INTERVAL_MS
+};
+//# sourceMappingURL=aether-logger.js.map

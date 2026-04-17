@@ -451,8 +451,9 @@ export class WriteFileTool
                             .readTextFile({ path: params.file_path });
                         return content;
                     } catch (err) {
-                        if (!isNodeError(err) || err.code !== 'ENOENT')
+                        if (!isNodeError(err) || err.code !== 'ENOENT') {
                             throw err;
+                        }
                         return '';
                     }
                 } else {

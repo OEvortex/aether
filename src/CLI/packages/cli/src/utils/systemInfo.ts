@@ -82,11 +82,11 @@ export async function getIdeClientName(
  * @param stripPrefix - Whether to strip 'aether-' prefix (used for bug reports)
  */
 export function getSandboxEnv(stripPrefix = false): string {
-    const sandbox = process.env['SANDBOX'];
+    const sandbox = process.env.SANDBOX;
 
     if (!sandbox || sandbox === 'sandbox-exec') {
         if (sandbox === 'sandbox-exec') {
-            const profile = process.env['SEATBELT_PROFILE'] || 'unknown';
+            const profile = process.env.SEATBELT_PROFILE || 'unknown';
             return `sandbox-exec (${profile})`;
         }
         return 'no sandbox';

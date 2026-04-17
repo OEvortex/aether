@@ -98,15 +98,21 @@ function buildToolCallArgsIndex(records: ChatRecord[]): ToolCallArgsIndex {
     const byName = new Map<string, Array<Record<string, unknown>>>();
 
     for (const record of records) {
-        if (record.type !== 'assistant' || !record.message?.parts) continue;
+        if (record.type !== 'assistant' || !record.message?.parts) {
+            continue;
+        }
 
         for (const part of record.message.parts) {
-            if (!('functionCall' in part) || !part.functionCall?.name) continue;
+            if (!('functionCall' in part) || !part.functionCall?.name) {
+                continue;
+            }
 
             const normalizedArgs = normalizeFunctionCallArgs(
                 part.functionCall.args
             );
-            if (!normalizedArgs) continue;
+            if (!normalizedArgs) {
+                continue;
+            }
 
             const toolName = part.functionCall.name;
             const callId =
@@ -143,7 +149,9 @@ function calculateFileStats(records: ChatRecord[]): FileOperationStats {
     };
 
     for (const record of records) {
-        if (record.type !== 'tool_result' || !record.toolCallResult) continue;
+        if (record.type !== 'tool_result' || !record.toolCallResult) {
+            continue;
+        }
 
         const toolName = extractToolNameFromRecord(record);
         const callId =
@@ -188,7 +196,7 @@ function calculateFileStats(records: ChatRecord[]): FileOperationStats {
             let filePath: string;
             if (typeof display.fileName === 'string') {
                 // Prefer args.file_path for full path, fallback to fileName (which may be basename)
-                filePath = (args?.['file_path'] as string) || display.fileName;
+                filePath = (args?.file_path as string) || display.fileName;
             } else {
                 // Fallback if fileName is not a string
                 filePath = 'unknown';
@@ -512,7 +520,9 @@ class ExportSessionContext implements SessionContext {
         messageRole: 'user' | 'assistant' | 'thinking' = role,
         usageMetadata?: GenerateContentResponseUsageMetadata
     ): void {
-        if (content.type !== 'text' || !content.text) return;
+        if (content.type !== 'text' || !content.text) {
+            return;
+        }
 
         // If we're starting a new message type, flush the previous one
         if (
@@ -584,11 +594,16 @@ class ExportSessionContext implements SessionContext {
         const toolCall = this.toolCallMap.get(update.toolCallId);
         if (toolCall) {
             // Update the tool call in place
-            if (update.status) toolCall.status = update.status;
-            if (update.content) toolCall.content = update.content;
-            if (update.title)
+            if (update.status) {
+                toolCall.status = update.status;
+            }
+            if (update.content) {
+                toolCall.content = update.content;
+            }
+            if (update.title) {
                 toolCall.title =
                     typeof update.title === 'string' ? update.title : '';
+            }
         }
     }
 
@@ -644,7 +659,9 @@ class ExportSessionContext implements SessionContext {
     }
 
     private flushCurrentMessage(): void {
-        if (!this.currentMessage) return;
+        if (!this.currentMessage) {
+            return;
+        }
 
         const uuid = this.getMessageUuid();
         const exportMessage: ExportMessage = {

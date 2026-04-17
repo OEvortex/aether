@@ -140,11 +140,18 @@ function getMemoryFilePath(scope: 'global' | 'project' = 'global'): string {
  * Ensures proper newline separation before appending content.
  */
 function ensureNewlineSeparation(currentContent: string): string {
-    if (currentContent.length === 0) return '';
-    if (currentContent.endsWith('\n\n') || currentContent.endsWith('\r\n\r\n'))
+    if (currentContent.length === 0) {
         return '';
-    if (currentContent.endsWith('\n') || currentContent.endsWith('\r\n'))
+    }
+    if (
+        currentContent.endsWith('\n\n') ||
+        currentContent.endsWith('\r\n\r\n')
+    ) {
+        return '';
+    }
+    if (currentContent.endsWith('\n') || currentContent.endsWith('\r\n')) {
         return '\n';
+    }
     return '\n\n';
 }
 
@@ -158,7 +165,9 @@ async function readMemoryFileContent(
         return await fs.readFile(getMemoryFilePath(scope), 'utf-8');
     } catch (err) {
         const error = err as Error & { code?: string };
-        if (!(error instanceof Error) || error.code !== 'ENOENT') throw err;
+        if (!(error instanceof Error) || error.code !== 'ENOENT') {
+            throw err;
+        }
         return '';
     }
 }

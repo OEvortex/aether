@@ -1,0 +1,97 @@
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Integration test to verify circular reference handling with proxy agents
+ */
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { AetherLogger } from './aether-logger/aether-logger.js';
+describe('Circular Reference Integration Test', () => {
+    beforeEach(() => {
+        // Clear singleton instance before each test
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        AetherLogger.instance = undefined;
+    });
+    afterEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        AetherLogger.instance = undefined;
+    });
+    it('should handle HttpsProxyAgent-like circular references in qwen logging', () => {
+        // Create a mock config with proxy
+        const mockConfig = {
+            getTelemetryEnabled: () => true,
+            getUsageStatisticsEnabled: () => true,
+            getSessionId: () => 'test-session',
+            getModel: () => 'test-model',
+            getEmbeddingModel: () => 'test-embedding',
+            getDebugMode: () => false,
+            getProxy: () => 'http://proxy.example.com:8080'
+        };
+        // Simulate the structure that causes the circular reference error
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const proxyAgentLike = {
+            sockets: {},
+            options: { proxy: 'http://proxy.example.com:8080' }
+        };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const socketLike = {
+            _httpMessage: {
+                agent: proxyAgentLike,
+                socket: null
+            }
+        };
+        socketLike._httpMessage.socket = socketLike; // Create circular reference
+        proxyAgentLike.sockets['cloudcode-pa.googleapis.com:443'] = [
+            socketLike
+        ];
+        // Create an event that would contain this circular structure
+        const problematicEvent = {
+            timestamp: Date.now(),
+            event_type: 'exception',
+            type: 'error',
+            name: 'api_error',
+            error: new Error('Network error'),
+            function_args: {
+                filePath: '/test/file.txt',
+                httpAgent: proxyAgentLike // This would cause the circular reference
+            }
+        };
+        // Test that AetherLogger can handle this
+        const logger = AetherLogger.getInstance(mockConfig);
+        expect(() => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            logger?.enqueueLogEvent(problematicEvent);
+        }).not.toThrow();
+    });
+    it('should handle event overflow without memory leaks', () => {
+        const mockConfig = {
+            getTelemetryEnabled: () => true,
+            getUsageStatisticsEnabled: () => true,
+            getSessionId: () => 'test-session',
+            getDebugMode: () => true
+        };
+        const logger = AetherLogger.getInstance(mockConfig);
+        // Add more events than the maximum capacity
+        for (let i = 0; i < 1100; i++) {
+            logger?.enqueueLogEvent({
+                timestamp: Date.now(),
+                event_type: 'action',
+                type: 'test',
+                name: `overflow-test-${i}`
+            });
+        }
+        // Logger should still be functional
+        expect(logger).toBeDefined();
+        expect(() => {
+            logger?.enqueueLogEvent({
+                timestamp: Date.now(),
+                event_type: 'action',
+                type: 'test',
+                name: 'final-test'
+            });
+        }).not.toThrow();
+    });
+});
+//# sourceMappingURL=integration.test.circular.js.map

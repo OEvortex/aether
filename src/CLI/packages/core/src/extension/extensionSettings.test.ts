@@ -83,8 +83,7 @@ describe('extensionSettings', () => {
                 } as unknown as KeychainTokenStorage;
             }
         );
-        tempHomeDir =
-            os.tmpdir() + path.sep + `gemini-cli-test-home-${Date.now()}`;
+        tempHomeDir = `${os.tmpdir() + path.sep}gemini-cli-test-home-${Date.now()}`;
         tempWorkspaceDir = path.join(
             os.tmpdir(),
             `gemini-cli-test-workspace-${Date.now()}`
@@ -170,10 +169,10 @@ describe('extensionSettings', () => {
             );
             expect(mockRequestSetting).toHaveBeenCalledTimes(2);
             expect(mockRequestSetting).toHaveBeenCalledWith(
-                config.settings![0]
+                config.settings?.[0]
             );
             expect(mockRequestSetting).toHaveBeenCalledWith(
-                config.settings![1]
+                config.settings?.[1]
             );
         });
 
@@ -203,7 +202,7 @@ describe('extensionSettings', () => {
 
             expect(mockRequestSetting).toHaveBeenCalledTimes(1);
             expect(mockRequestSetting).toHaveBeenCalledWith(
-                newConfig.settings![1]
+                newConfig.settings?.[1]
             );
 
             const expectedEnvPath = path.join(extensionDir, '.env');
@@ -369,7 +368,7 @@ describe('extensionSettings', () => {
 
             expect(mockRequestSetting).toHaveBeenCalledTimes(1);
             expect(mockRequestSetting).toHaveBeenCalledWith(
-                newConfig.settings![0]
+                newConfig.settings?.[0]
             );
 
             // The value should now be in keychain, not the .env file.

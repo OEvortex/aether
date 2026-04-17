@@ -21,7 +21,7 @@ export function createGeminiContentGenerator(
     config: ContentGeneratorConfig,
     gcConfig: Config
 ): ContentGenerator {
-    const version = process.env['CLI_VERSION'] || process.version;
+    const version = process.env.CLI_VERSION || process.version;
     const userAgent =
         config.userAgent ||
         `AetherCode/${version} (${process.platform}; ${process.arch})`;

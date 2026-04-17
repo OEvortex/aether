@@ -505,7 +505,7 @@ describe('ChatCompressionService', () => {
         );
         expect(result.info.newTokenCount).toBe(250); // 800 - (1600 - 1000) + 50
         expect(result.newHistory).not.toBeNull();
-        expect(result.newHistory![0].parts![0].text).toBe('Summary');
+        expect(result.newHistory?.[0].parts?.[0].text).toBe('Summary');
         expect(mockGenerateContent).toHaveBeenCalled();
         expect(mockGetHookSystem).toHaveBeenCalled();
         expect(mockFireSessionStartEvent).toHaveBeenCalledWith(
@@ -1269,8 +1269,8 @@ describe('ChatCompressionService', () => {
             expect(result.newHistory).not.toBeNull();
             // Reconstructed history: [User(summary), Model("Got it...")] — valid structure
             expect(result.newHistory).toHaveLength(2);
-            expect(result.newHistory![0].role).toBe('user');
-            expect(result.newHistory![1].role).toBe('model');
+            expect(result.newHistory?.[0].role).toBe('user');
+            expect(result.newHistory?.[1].role).toBe('model');
             // The orphaned funcCall is stripped before compression, so only the first 5
             // messages are sent, plus the compression instruction (+1) = history.length total.
             const callArg = mockGenerateContent.mock.calls[0][0];

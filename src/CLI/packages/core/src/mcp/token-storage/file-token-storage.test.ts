@@ -76,7 +76,7 @@ describe('FileTokenStorage', () => {
                 updatedAt: Date.now()
             };
 
-            const encryptedData = storage['encrypt'](
+            const encryptedData = storage.encrypt(
                 JSON.stringify({ 'test-server': credentials })
             );
             mockFs.readFile.mockResolvedValue(encryptedData);
@@ -96,7 +96,7 @@ describe('FileTokenStorage', () => {
                 updatedAt: Date.now()
             };
 
-            const encryptedData = storage['encrypt'](
+            const encryptedData = storage.encrypt(
                 JSON.stringify({ 'test-server': credentials })
             );
             mockFs.readFile.mockResolvedValue(encryptedData);
@@ -116,7 +116,7 @@ describe('FileTokenStorage', () => {
 
     describe('setCredentials', () => {
         it('should save credentials with encryption', async () => {
-            const encryptedData = storage['encrypt'](
+            const encryptedData = storage.encrypt(
                 JSON.stringify({ 'existing-server': existingCredentials })
             );
             mockFs.readFile.mockResolvedValue(encryptedData);
@@ -146,7 +146,7 @@ describe('FileTokenStorage', () => {
         });
 
         it('should update existing credentials', async () => {
-            const encryptedData = storage['encrypt'](
+            const encryptedData = storage.encrypt(
                 JSON.stringify({ 'existing-server': existingCredentials })
             );
             mockFs.readFile.mockResolvedValue(encryptedData);
@@ -165,7 +165,7 @@ describe('FileTokenStorage', () => {
 
             expect(mockFs.writeFile).toHaveBeenCalled();
             const writeCall = mockFs.writeFile.mock.calls[0];
-            const decrypted = storage['decrypt'](writeCall[1]);
+            const decrypted = storage.decrypt(writeCall[1]);
             const saved = JSON.parse(decrypted);
 
             expect(saved['existing-server']).toEqual(existingCredentials);
@@ -192,7 +192,7 @@ describe('FileTokenStorage', () => {
                 updatedAt: Date.now()
             };
 
-            const encryptedData = storage['encrypt'](
+            const encryptedData = storage.encrypt(
                 JSON.stringify({ 'test-server': credentials })
             );
             mockFs.readFile.mockResolvedValue(encryptedData);
@@ -224,7 +224,7 @@ describe('FileTokenStorage', () => {
                 updatedAt: Date.now()
             };
 
-            const encryptedData = storage['encrypt'](
+            const encryptedData = storage.encrypt(
                 JSON.stringify({ server1: credentials1, server2: credentials2 })
             );
             mockFs.readFile.mockResolvedValue(encryptedData);
@@ -236,11 +236,11 @@ describe('FileTokenStorage', () => {
             expect(mockFs.unlink).not.toHaveBeenCalled();
 
             const writeCall = mockFs.writeFile.mock.calls[0];
-            const decrypted = storage['decrypt'](writeCall[1]);
+            const decrypted = storage.decrypt(writeCall[1]);
             const saved = JSON.parse(decrypted);
 
-            expect(saved['server1']).toBeUndefined();
-            expect(saved['server2']).toEqual(credentials2);
+            expect(saved.server1).toBeUndefined();
+            expect(saved.server2).toEqual(credentials2);
         });
     });
 
@@ -267,9 +267,7 @@ describe('FileTokenStorage', () => {
                 }
             };
 
-            const encryptedData = storage['encrypt'](
-                JSON.stringify(credentials)
-            );
+            const encryptedData = storage.encrypt(JSON.stringify(credentials));
             mockFs.readFile.mockResolvedValue(encryptedData);
 
             const result = await storage.listServers();
@@ -298,8 +296,8 @@ describe('FileTokenStorage', () => {
     describe('encryption', () => {
         it('should encrypt and decrypt data correctly', () => {
             const original = 'test-data-123';
-            const encrypted = storage['encrypt'](original);
-            const decrypted = storage['decrypt'](encrypted);
+            const encrypted = storage.encrypt(original);
+            const decrypted = storage.decrypt(encrypted);
 
             expect(decrypted).toBe(original);
             expect(encrypted).not.toBe(original);
@@ -308,16 +306,16 @@ describe('FileTokenStorage', () => {
 
         it('should produce different encrypted output each time', () => {
             const original = 'test-data';
-            const encrypted1 = storage['encrypt'](original);
-            const encrypted2 = storage['encrypt'](original);
+            const encrypted1 = storage.encrypt(original);
+            const encrypted2 = storage.encrypt(original);
 
             expect(encrypted1).not.toBe(encrypted2);
-            expect(storage['decrypt'](encrypted1)).toBe(original);
-            expect(storage['decrypt'](encrypted2)).toBe(original);
+            expect(storage.decrypt(encrypted1)).toBe(original);
+            expect(storage.decrypt(encrypted2)).toBe(original);
         });
 
         it('should throw on invalid encrypted data format', () => {
-            expect(() => storage['decrypt']('invalid-data')).toThrow(
+            expect(() => storage.decrypt('invalid-data')).toThrow(
                 'Invalid encrypted data format'
             );
         });

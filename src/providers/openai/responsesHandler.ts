@@ -9,7 +9,6 @@ import {
 } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
-import { RetryManager } from '../../utils/retryManager';
 import { TokenCounter } from '../../utils/tokenCounter';
 import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { getUserAgent } from '../../utils/userAgent';

@@ -69,9 +69,9 @@ describe('HookPlanner', () => {
             );
 
             expect(result).not.toBeNull();
-            expect(result!.eventName).toBe(HookEventName.PreToolUse);
-            expect(result!.hookConfigs).toHaveLength(1);
-            expect(result!.sequential).toBe(false);
+            expect(result?.eventName).toBe(HookEventName.PreToolUse);
+            expect(result?.hookConfigs).toHaveLength(1);
+            expect(result?.sequential).toBe(false);
         });
 
         it('should set sequential to true when any hook has sequential=true', () => {
@@ -88,7 +88,7 @@ describe('HookPlanner', () => {
                 HookEventName.PreToolUse
             );
 
-            expect(result!.sequential).toBe(true);
+            expect(result?.sequential).toBe(true);
         });
 
         it('should deduplicate hooks with same config', () => {
@@ -114,7 +114,7 @@ describe('HookPlanner', () => {
                 HookEventName.PreToolUse
             );
 
-            expect(result!.hookConfigs).toHaveLength(1);
+            expect(result?.hookConfigs).toHaveLength(1);
         });
     });
 

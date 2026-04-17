@@ -99,7 +99,7 @@ export class MigrationScheduler {
 
         // Determine final version from the settings object
         const finalVersion =
-            ((current as Record<string, unknown>)['$version'] as number) ?? 1;
+            ((current as Record<string, unknown>).$version as number) ?? 1;
 
         debugLogger.debug(
             `MigrationScheduler: Migration chain complete. Final version: ${finalVersion}, Executed: ${executed.length} migrations`

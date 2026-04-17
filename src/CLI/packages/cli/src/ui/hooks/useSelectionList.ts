@@ -83,7 +83,9 @@ const findNextValidIndex = <T>(
     items: Array<SelectionListItem<T>>
 ): number => {
     const len = items.length;
-    if (len === 0) return currentIndex;
+    if (len === 0) {
+        return currentIndex;
+    }
 
     let nextIndex = currentIndex;
     const step = direction === 'down' ? 1 : -1;
@@ -113,7 +115,7 @@ const computeInitialIndex = <T>(
 
     if (initialKey !== undefined) {
         for (let i = 0; i < items.length; i++) {
-            if (items[i]!.key === initialKey && !items[i]!.disabled) {
+            if (items[i]?.key === initialKey && !items[i]?.disabled) {
                 return i;
             }
         }
@@ -298,7 +300,7 @@ export function useSelectionList<T>({
         let needsClear = false;
 
         if (state.pendingHighlight && items[state.activeIndex]) {
-            onHighlight?.(items[state.activeIndex]!.value);
+            onHighlight?.(items[state.activeIndex]?.value);
             needsClear = true;
         }
 
@@ -384,7 +386,7 @@ export function useSelectionList<T>({
 
                     // If the number can't be a prefix for another valid number, select immediately
                     const potentialNextNumber = Number.parseInt(
-                        newNumberInput + '0',
+                        `${newNumberInput}0`,
                         10
                     );
                     if (potentialNextNumber > items.length) {

@@ -14,7 +14,7 @@ import { detectTomlCommands } from '../../services/command-migration-tool.js';
  * Checks all command directories: workspace, user, and global levels.
  */
 export function useCommandMigration(
-    settings: LoadedSettings,
+    _settings: LoadedSettings,
     storage: Storage
 ) {
     const [showMigrationNudge, setShowMigrationNudge] = useState(false);

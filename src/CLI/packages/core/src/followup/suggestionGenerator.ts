@@ -159,7 +159,7 @@ async function generateViaForkedQuery(
     }
 
     if (result.jsonResult) {
-        const raw = result.jsonResult['suggestion'];
+        const raw = result.jsonResult.suggestion;
         return typeof raw === 'string' ? raw : null;
     }
 
@@ -167,7 +167,7 @@ async function generateViaForkedQuery(
     if (result.text) {
         try {
             const parsed = JSON.parse(result.text) as Record<string, unknown>;
-            const raw = parsed['suggestion'];
+            const raw = parsed.suggestion;
             return typeof raw === 'string' ? raw : null;
         } catch {
             // Model returned plain text — use it directly
@@ -221,8 +221,10 @@ async function generateViaBaseLlm(
         // Try to parse as JSON first (model might return {"suggestion": "..."})
         try {
             const parsed = JSON.parse(text) as Record<string, unknown>;
-            const s = parsed['suggestion'];
-            if (typeof s === 'string') return s;
+            const s = parsed.suggestion;
+            if (typeof s === 'string') {
+                return s;
+            }
         } catch {
             // Not JSON — use raw text as the suggestion
         }
@@ -260,7 +262,9 @@ export function getFilterReason(suggestion: string): string | null {
     const lower = suggestion.toLowerCase();
     const wordCount = suggestion.trim().split(/\s+/).length;
 
-    if (lower === 'done') return 'done';
+    if (lower === 'done') {
+        return 'done';
+    }
 
     if (
         lower === 'nothing found' ||
@@ -273,7 +277,9 @@ export function getFilterReason(suggestion: string): string | null {
         return 'meta_text';
     }
 
-    if (/^\(.*\)$|^\[.*\]$/.test(suggestion)) return 'meta_wrapped';
+    if (/^\(.*\)$|^\[.*\]$/.test(suggestion)) {
+        return 'meta_wrapped';
+    }
 
     if (
         lower.startsWith('api error:') ||
@@ -285,7 +291,9 @@ export function getFilterReason(suggestion: string): string | null {
         return 'error_message';
     }
 
-    if (/^\w+:\s/.test(suggestion)) return 'prefixed_label';
+    if (/^\w+:\s/.test(suggestion)) {
+        return 'prefixed_label';
+    }
 
     // CJK text has no spaces — skip whitespace-based word count checks
     // and use character count instead
@@ -295,18 +303,34 @@ export function getFilterReason(suggestion: string): string | null {
         );
     if (!hasCJK) {
         if (wordCount < 2) {
-            if (suggestion.startsWith('/')) return null; // slash commands ok
-            if (!ALLOWED_SINGLE_WORDS.has(lower)) return 'too_few_words';
+            if (suggestion.startsWith('/')) {
+                return null; // slash commands ok
+            }
+            if (!ALLOWED_SINGLE_WORDS.has(lower)) {
+                return 'too_few_words';
+            }
         }
-        if (wordCount > 12) return 'too_many_words';
+        if (wordCount > 12) {
+            return 'too_many_words';
+        }
     } else {
         // For CJK: filter if too short (< 2 chars) or too long (> 30 chars)
-        if (suggestion.length < 2) return 'too_few_words';
-        if (suggestion.length > 30) return 'too_many_words';
+        if (suggestion.length < 2) {
+            return 'too_few_words';
+        }
+        if (suggestion.length > 30) {
+            return 'too_many_words';
+        }
     }
-    if (suggestion.length >= 100) return 'too_long';
-    if (/[.!?]\s+[A-Z]/.test(suggestion)) return 'multiple_sentences';
-    if (/[\n*]|\*\*/.test(suggestion)) return 'has_formatting';
+    if (suggestion.length >= 100) {
+        return 'too_long';
+    }
+    if (/[.!?]\s+[A-Z]/.test(suggestion)) {
+        return 'multiple_sentences';
+    }
+    if (/[\n*]|\*\*/.test(suggestion)) {
+        return 'has_formatting';
+    }
 
     if (
         /\bthanks\b|\bthank you\b|\blooks good\b|\bsounds good\b|\bthat works\b|\bthat worked\b|\bthat's all\b|\bnice\b|\bgreat\b|\bperfect\b|\bmakes sense\b|\bawesome\b|\bexcellent\b/.test(
@@ -350,7 +374,7 @@ function reportSuggestionUsage(
     durationMs: number
 ): void {
     const event = new ApiResponseEvent(
-        'suggestion-' + Date.now(),
+        `suggestion-${Date.now()}`,
         model,
         durationMs,
         'prompt_suggestion',

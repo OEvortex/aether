@@ -25,7 +25,9 @@ export function UninstallConfirmStep({
 }: UninstallConfirmStepProps) {
     useKeypress(
         async (key) => {
-            if (!selectedExtension) return;
+            if (!selectedExtension) {
+                return;
+            }
 
             if (key.name === 'y' || key.name === 'return') {
                 try {

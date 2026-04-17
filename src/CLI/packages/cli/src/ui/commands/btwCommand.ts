@@ -119,7 +119,7 @@ export const btwCommand: SlashCommand = {
     action: async (
         context: CommandContext,
         args: string
-    ): Promise<void | SlashCommandActionReturn> => {
+    ): Promise<undefined | SlashCommandActionReturn> => {
         const question = args.trim();
         const executionMode = context.executionMode ?? 'interactive';
         const abortSignal = context.abortSignal ?? new AbortController().signal;
@@ -240,7 +240,9 @@ export const btwCommand: SlashCommand = {
         const btwPromptId = makeBtwPromptId(sessionId);
         void askBtw(geminiClient, model, question, btwSignal, btwPromptId)
             .then((answer) => {
-                if (btwSignal.aborted) return;
+                if (btwSignal.aborted) {
+                    return;
+                }
 
                 ui.btwAbortControllerRef.current = null;
                 const completedItem: HistoryItemBtw = {
@@ -254,7 +256,9 @@ export const btwCommand: SlashCommand = {
                 ui.setBtwItem(completedItem);
             })
             .catch((error) => {
-                if (btwSignal.aborted) return;
+                if (btwSignal.aborted) {
+                    return;
+                }
 
                 ui.btwAbortControllerRef.current = null;
                 ui.setBtwItem(null);
@@ -266,5 +270,7 @@ export const btwCommand: SlashCommand = {
                     Date.now()
                 );
             });
+
+        return undefined;
     }
 };

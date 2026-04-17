@@ -60,7 +60,7 @@ export const linkCommand: CommandModule = {
             .check((_) => true),
     handler: async (argv) => {
         await handleLink({
-            path: argv['path'] as string
+            path: argv.path as string
         });
     }
 };

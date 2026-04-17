@@ -38,18 +38,16 @@ describe('Migration Framework Integration', () => {
 
             // Check V2 structure was created
             const settings = result.settings as Record<string, unknown>;
-            expect(settings['$version']).toBe(3);
-            expect(settings['ui']).toEqual({
+            expect(settings.$version).toBe(3);
+            expect(settings.ui).toEqual({
                 theme: 'dark',
                 accessibility: { enableLoadingPhrases: true }
             });
-            expect(settings['model']).toEqual({ name: 'gemini' });
+            expect(settings.model).toEqual({ name: 'gemini' });
 
             // Check disableAutoUpdate was inverted to enableAutoUpdate: false
             expect(
-                (settings['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (settings.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
         });
 
@@ -70,16 +68,12 @@ describe('Migration Framework Integration', () => {
             });
 
             const settings = result.settings as Record<string, unknown>;
-            expect(settings['$version']).toBe(3);
+            expect(settings.$version).toBe(3);
             expect(
-                (settings['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (settings.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(true);
             expect(
-                (settings['general'] as Record<string, unknown>)[
-                    'disableAutoUpdate'
-                ]
+                (settings.general as Record<string, unknown>).disableAutoUpdate
             ).toBeUndefined();
         });
 
@@ -190,21 +184,16 @@ describe('Migration Framework Integration', () => {
             expect(result.executedMigrations).toHaveLength(2);
 
             const settings = result.settings as Record<string, unknown>;
-            expect(settings['$version']).toBe(3);
-            expect((settings['ui'] as Record<string, unknown>)['theme']).toBe(
-                'dark'
-            );
+            expect(settings.$version).toBe(3);
+            expect((settings.ui as Record<string, unknown>).theme).toBe('dark');
             expect(
-                (settings['general'] as Record<string, unknown>)[
-                    'enableAutoUpdate'
-                ]
+                (settings.general as Record<string, unknown>).enableAutoUpdate
             ).toBe(false);
             expect(
                 (
-                    (settings['ui'] as Record<string, unknown>)[
-                        'accessibility'
-                    ] as Record<string, unknown>
-                )['enableLoadingPhrases']
+                    (settings.ui as Record<string, unknown>)
+                        .accessibility as Record<string, unknown>
+                ).enableLoadingPhrases
             ).toBe(false);
         });
     });

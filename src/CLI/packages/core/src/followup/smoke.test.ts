@@ -114,7 +114,7 @@ describe('SMOKE TESTS — E2E Verification', () => {
 
             const writeArgs: Record<string, unknown> = { file_path: filePath };
             await rewritePathArgs(writeArgs, overlay);
-            const op = writeArgs['file_path'] as string;
+            const op = writeArgs.file_path as string;
             expect(op).toContain('aether-speculation');
             await writeFile(op, 'speculated content');
 
@@ -125,7 +125,7 @@ describe('SMOKE TESTS — E2E Verification', () => {
                 overlay,
                 ApprovalMode.AUTO_EDIT
             );
-            expect(readArgs['file_path']).toBe(op);
+            expect(readArgs.file_path).toBe(op);
             expect(await readFile(filePath, 'utf-8')).toBe('real content');
 
             await overlay.cleanup();
@@ -150,13 +150,13 @@ describe('SMOKE TESTS — E2E Verification', () => {
 
             const p = getCacheSafeParams();
             expect(p).not.toBeNull();
-            expect(p!.model).toBe('aether-max');
+            expect(p?.model).toBe('aether-max');
 
             (
                 config.tools[0] as { functionDeclarations: unknown[] }
             ).functionDeclarations.push({ name: 'shell' });
             const saved = getCacheSafeParams();
-            const tools = saved!.generationConfig.tools as Array<{
+            const tools = saved?.generationConfig.tools as Array<{
                 functionDeclarations: unknown[];
             }>;
             expect(tools[0].functionDeclarations).toHaveLength(1);

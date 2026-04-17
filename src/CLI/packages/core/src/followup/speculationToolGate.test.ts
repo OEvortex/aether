@@ -164,8 +164,8 @@ describe('speculationToolGate', () => {
             const args: Record<string, unknown> = { file_path: filePath };
             await rewritePathArgs(args, overlayFs);
 
-            expect(args['file_path']).not.toBe(filePath);
-            expect(String(args['file_path'])).toContain('aether-speculation');
+            expect(args.file_path).not.toBe(filePath);
+            expect(String(args.file_path)).toContain('aether-speculation');
         });
 
         it('rewrites filePath argument (camelCase)', async () => {
@@ -175,14 +175,14 @@ describe('speculationToolGate', () => {
             const args: Record<string, unknown> = { filePath };
             await rewritePathArgs(args, overlayFs);
 
-            expect(args['filePath']).not.toBe(filePath);
+            expect(args.filePath).not.toBe(filePath);
         });
 
         it('does nothing when no path arguments present', async () => {
             const args: Record<string, unknown> = { command: 'ls' };
             await rewritePathArgs(args, overlayFs);
 
-            expect(args['command']).toBe('ls');
+            expect(args.command).toBe('ls');
         });
 
         it('rewrites path argument', async () => {
@@ -193,7 +193,7 @@ describe('speculationToolGate', () => {
             const args: Record<string, unknown> = { path: filePath };
             await rewritePathArgs(args, overlayFs);
 
-            expect(String(args['path'])).toContain('aether-speculation');
+            expect(String(args.path)).toContain('aether-speculation');
         });
     });
 
@@ -217,8 +217,8 @@ describe('speculationToolGate', () => {
 
             expect(result.action).toBe('allow');
             // The file_path arg should now point to the overlay
-            expect(String(args['file_path'])).toContain('aether-speculation');
-            expect(String(args['file_path'])).not.toBe(filePath);
+            expect(String(args.file_path)).toContain('aether-speculation');
+            expect(String(args.file_path)).not.toBe(filePath);
         });
 
         it('does not resolve read path when file was not written to overlay', async () => {
@@ -234,7 +234,7 @@ describe('speculationToolGate', () => {
             );
 
             // Path should remain unchanged
-            expect(args['file_path']).toBe(filePath);
+            expect(args.file_path).toBe(filePath);
         });
     });
 });

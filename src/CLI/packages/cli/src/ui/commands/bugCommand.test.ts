@@ -53,7 +53,9 @@ describe('bugCommand', () => {
             }
         });
 
-        if (!bugCommand.action) throw new Error('Action is not defined');
+        if (!bugCommand.action) {
+            throw new Error('Action is not defined');
+        }
         await bugCommand.action(mockContext, 'A test bug');
 
         const AetherCliLine =
@@ -88,7 +90,9 @@ Memory Usage: 100 MB`;
             }
         });
 
-        if (!bugCommand.action) throw new Error('Action is not defined');
+        if (!bugCommand.action) {
+            throw new Error('Action is not defined');
+        }
         await bugCommand.action(mockContext, 'A custom bug');
 
         const AetherCliLine =
@@ -141,7 +145,9 @@ Memory Usage: 100 MB`;
             }
         });
 
-        if (!bugCommand.action) throw new Error('Action is not defined');
+        if (!bugCommand.action) {
+            throw new Error('Action is not defined');
+        }
         await bugCommand.action(mockContext, 'OpenAI bug');
 
         const AetherCliLine =

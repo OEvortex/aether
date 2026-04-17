@@ -39,7 +39,7 @@ export interface UseCommandCompletionReturn {
 
 export function useCommandCompletion(
     buffer: TextBuffer,
-    dirs: readonly string[],
+    _dirs: readonly string[],
     cwd: string,
     slashCommands: readonly SlashCommand[],
     commandContext: CommandContext,
@@ -206,7 +206,7 @@ export function useCommandCompletion(
                     start > 1 &&
                     (buffer.lines[cursorRow] || '')[start - 1] !== ' '
                 ) {
-                    suggestionText = ' ' + suggestionText;
+                    suggestionText = ` ${suggestionText}`;
                 }
             }
 

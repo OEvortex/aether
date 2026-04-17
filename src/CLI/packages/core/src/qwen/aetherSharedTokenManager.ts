@@ -6,8 +6,8 @@
 
 import { randomUUID } from 'node:crypto';
 import { promises as fs, unlinkSync } from 'node:fs';
+import * as os from 'node:os';
 import path from 'node:path';
-import * as os from 'os';
 import { createDebugLogger } from '../utils/debugLogger.js';
 import type { IAetherOAuth2Client } from './aetherOAuth2.js';
 import {

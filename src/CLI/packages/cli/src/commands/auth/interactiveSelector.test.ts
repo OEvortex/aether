@@ -60,7 +60,7 @@ describe('InteractiveSelector', () => {
             const mockResume = vi.fn();
             const mockSetEncoding = vi.fn();
             const mockRemoveListener = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 // Simulate Enter key press
                 setTimeout(() => callback('\r'), 0);
                 return stdin;
@@ -92,7 +92,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });
@@ -129,7 +129,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });
@@ -170,7 +170,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });
@@ -196,7 +196,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });
@@ -235,7 +235,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });
@@ -272,7 +272,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });
@@ -312,7 +312,7 @@ describe('InteractiveSelector', () => {
 
             const mockSetRawMode = vi.fn();
             const mockResume = vi.fn();
-            const mockOn = vi.fn((event: any, callback: any) => {
+            const mockOn = vi.fn((_event: any, callback: any) => {
                 dataCallback = callback;
                 return stdin;
             });

@@ -2,6 +2,21 @@
 
 All notable changes to the Aether CLI will be documented in this file.
 
+## [0.0.12] - 2026-04-17
+
+### Fixed
+- Included `@aetherai/aether-test-utils` in the automated publishing process
+
+## [0.0.11] - 2026-04-17
+
+### Fixed
+- Fixed `ask_user_question` tool logic and UI issues
+- Fixed circular dependency between model selection and content generation
+- Improved multi-select UI in CLI with Enter key support
+- Fixed numerous TypeScript build errors across the workspace
+- Refactored utility classes to follow idiomatic module patterns
+- Synchronized all @aetherai/* packages to version 0.0.6
+
 ## [0.0.5] - 2026-04-14
 
 ### Added

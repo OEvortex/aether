@@ -895,11 +895,7 @@ export class MCPOAuthProvider {
             // Verify token was saved
             const savedToken =
                 await this.tokenStorage.getCredentials(serverName);
-            if (
-                savedToken &&
-                savedToken.token &&
-                savedToken.token.accessToken
-            ) {
+            if (savedToken?.token?.accessToken) {
                 // Avoid leaking token material; log a short SHA-256 fingerprint instead.
                 const tokenFingerprint = crypto
                     .createHash('sha256')

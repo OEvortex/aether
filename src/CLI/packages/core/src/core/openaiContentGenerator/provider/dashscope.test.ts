@@ -280,9 +280,8 @@ describe('DashScopeOpenAICompatibleProvider', () => {
 
         it('should handle missing session ID', () => {
             // Mock the method to not exist (simulate optional chaining returning undefined)
-            delete (mockCliConfig as unknown as Record<string, unknown>)[
-                'getSessionId'
-            ];
+            delete (mockCliConfig as unknown as Record<string, unknown>)
+                .getSessionId;
 
             const userPromptId = 'test-prompt-id';
             const metadata = provider.buildMetadata(userPromptId);

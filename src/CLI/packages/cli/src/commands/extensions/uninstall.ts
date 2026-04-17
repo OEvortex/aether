@@ -69,7 +69,7 @@ export const uninstallCommand: CommandModule = {
             }),
     handler: async (argv) => {
         await handleUninstall({
-            name: argv['name'] as string
+            name: argv.name as string
         });
     }
 };

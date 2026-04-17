@@ -18,7 +18,10 @@ export const toolsCommand: SlashCommand = {
         return t('list available Aether Code tools. Usage: /tools [desc]');
     },
     kind: CommandKind.BUILT_IN,
-    action: async (context: CommandContext, args?: string): Promise<void> => {
+    action: async (
+        context: CommandContext,
+        args?: string
+    ): Promise<undefined> => {
         const subCommand = args?.trim();
 
         // Default to NOT showing descriptions. The user must opt in with an argument.
@@ -36,7 +39,7 @@ export const toolsCommand: SlashCommand = {
                 },
                 Date.now()
             );
-            return;
+            return undefined;
         }
 
         const tools = toolRegistry.getAllTools();
@@ -54,5 +57,7 @@ export const toolsCommand: SlashCommand = {
         };
 
         context.ui.addItem(toolsListItem, Date.now());
+
+        return undefined;
     }
 };

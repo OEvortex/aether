@@ -5,8 +5,8 @@
  */
 
 import { promises as fs } from 'node:fs';
-import * as os from 'os';
-import * as path from 'path';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import type { AetherCredentials } from '../../../qwen/aetherOAuth2.js';
 import { BaseWebSearchProvider } from '../base-provider.js';
 import type {

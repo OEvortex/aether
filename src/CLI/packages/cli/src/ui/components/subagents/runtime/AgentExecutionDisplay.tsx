@@ -91,7 +91,9 @@ export const AgentExecutionDisplay: React.FC<AgentExecutionDisplayProps> = ({
 
     const footerText = React.useMemo(() => {
         // This component only listens to keyboard shortcut events when the subagent is running
-        if (data.status !== 'running') return '';
+        if (data.status !== 'running') {
+            return '';
+        }
 
         if (displayMode === 'default') {
             const hasMoreLines =
@@ -416,19 +418,23 @@ const ToolCallItem: React.FC<{
     }, [toolCall.status]);
 
     const description = React.useMemo(() => {
-        if (!toolCall.description) return '';
+        if (!toolCall.description) {
+            return '';
+        }
         const firstLine = toolCall.description.split('\n')[0];
         return firstLine.length > 80
-            ? firstLine.substring(0, 80) + '...'
+            ? `${firstLine.substring(0, 80)}...`
             : firstLine;
     }, [toolCall.description]);
 
     // Get first line of resultDisplay for truncated output
     const truncatedOutput = React.useMemo(() => {
-        if (!toolCall.resultDisplay) return '';
+        if (!toolCall.resultDisplay) {
+            return '';
+        }
         const firstLine = toolCall.resultDisplay.split('\n')[0];
         return firstLine.length > 80
-            ? firstLine.substring(0, 80) + '...'
+            ? `${firstLine.substring(0, 80)}...`
             : firstLine;
     }, [toolCall.resultDisplay]);
 

@@ -1,12 +1,15 @@
 {
     "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
     "files": {
+        "ignoreUnknown": true,
         "includes": [
             "**",
-            "!!dist",
-            "!!node_modules",
-            "!!.vscode-test",
-            "!!out",
+            "!dist",
+            "!**/dist",
+            "!node_modules",
+            "!**/node_modules",
+            "!.vscode-test",
+            "!out",
             "!src/openclaude",
             "!src/aether",
             "!**/*.d.ts",
@@ -37,11 +40,24 @@
                 "useBlockStatements": "warn"
             },
             "suspicious": {
-                "noEmptyBlockStatements": "off"
+                "noEmptyBlockStatements": "off",
+                "noExplicitAny": "error"
             },
             "correctness": {
                 "noUnusedVariables": "error"
             }
         }
-    }
+    },
+    "overrides": [
+        {
+            "includes": ["**/*.test.ts", "**/*.test.tsx", "**/test/**"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noExplicitAny": "off"
+                    }
+                }
+            }
+        }
+    ]
 }

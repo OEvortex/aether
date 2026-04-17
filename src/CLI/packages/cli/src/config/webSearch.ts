@@ -57,7 +57,7 @@ export function buildWebSearchConfig(
         const tavilyKey =
             argv.tavilyApiKey ||
             settings.advanced?.tavilyApiKey ||
-            process.env['TAVILY_API_KEY'];
+            process.env.TAVILY_API_KEY;
         if (tavilyKey) {
             providers.push({
                 type: 'tavily',
@@ -65,9 +65,9 @@ export function buildWebSearchConfig(
             } as WebSearchProviderConfig);
         }
 
-        const googleKey = argv.googleApiKey || process.env['GOOGLE_API_KEY'];
+        const googleKey = argv.googleApiKey || process.env.GOOGLE_API_KEY;
         const googleEngineId =
-            argv.googleSearchEngineId || process.env['GOOGLE_SEARCH_ENGINE_ID'];
+            argv.googleSearchEngineId || process.env.GOOGLE_SEARCH_ENGINE_ID;
         if (googleKey && googleEngineId) {
             providers.push({
                 type: 'google',

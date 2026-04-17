@@ -40,9 +40,7 @@ export class FileTokenStorage extends BaseTokenStorage {
 
         const authTag = cipher.getAuthTag();
 
-        return (
-            iv.toString('hex') + ':' + authTag.toString('hex') + ':' + encrypted
-        );
+        return `${iv.toString('hex')}:${authTag.toString('hex')}:${encrypted}`;
     }
 
     private decrypt(encryptedData: string): string {

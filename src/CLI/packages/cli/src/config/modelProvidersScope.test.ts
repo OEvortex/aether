@@ -23,10 +23,10 @@ function makeSettings({
     // When undefined, treat as "not present in this scope" (the key is omitted),
     // matching how LoadedSettings is shaped when a settings file doesn't define it.
     if (userModelProviders !== undefined) {
-        userSettings['modelProviders'] = userModelProviders;
+        userSettings.modelProviders = userModelProviders;
     }
     if (workspaceModelProviders !== undefined) {
-        workspaceSettings['modelProviders'] = workspaceModelProviders;
+        workspaceSettings.modelProviders = workspaceModelProviders;
     }
 
     return {

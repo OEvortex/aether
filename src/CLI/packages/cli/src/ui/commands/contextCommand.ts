@@ -39,7 +39,9 @@ const DEFAULT_COMPRESSION_THRESHOLD = 0.7;
  * ASCII chars ≈ 4 chars/token, CJK/non-ASCII chars ≈ 1.5 tokens/char.
  */
 function estimateTokens(text: string): number {
-    if (!text || text.length === 0) return 0;
+    if (!text || text.length === 0) {
+        return 0;
+    }
     let asciiChars = 0;
     let nonAsciiChars = 0;
     for (let i = 0; i < text.length; i++) {
@@ -59,7 +61,9 @@ function estimateTokens(text: string): number {
  * Memory content format: "--- Context from: <path> ---\n<content>\n--- End of Context from: <path> ---"
  */
 function parseMemoryFiles(memoryContent: string): ContextMemoryDetail[] {
-    if (!memoryContent || memoryContent.trim().length === 0) return [];
+    if (!memoryContent || memoryContent.trim().length === 0) {
+        return [];
+    }
 
     const results: ContextMemoryDetail[] = [];
     // Use backreference (\1) to ensure start/end path markers match
@@ -388,5 +392,7 @@ export const contextCommand: SlashCommand = {
         };
 
         context.ui.addItem(contextUsageItem, Date.now());
+
+        return undefined;
     }
 };

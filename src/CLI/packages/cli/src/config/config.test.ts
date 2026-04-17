@@ -144,7 +144,7 @@ vi.mock('@aetherai/aether-core', async (importOriginal) => {
         },
         loadEnvironment: vi.fn(),
         loadServerHierarchicalMemory: vi.fn(
-            (cwd, dirs, debug, fileService, extensionPaths, _maxDirs) =>
+            (_cwd, _dirs, _debug, _fileService, extensionPaths, _maxDirs) =>
                 Promise.resolve({
                     memoryContent: extensionPaths?.join(',') || '',
                     fileCount: extensionPaths?.length || 0
@@ -2510,21 +2510,21 @@ describe('Telemetry configuration via environment variables', () => {
 
 describe('loadCliConfig runtimeOutputDir', () => {
     const originalArgv = process.argv;
-    const originalRuntimeEnv = process.env['AETHER_RUNTIME_DIR'];
+    const originalRuntimeEnv = process.env.AETHER_RUNTIME_DIR;
 
     beforeEach(() => {
         process.argv = ['node', 'script.js'];
         Storage.setRuntimeBaseDir(null);
-        delete process.env['AETHER_RUNTIME_DIR'];
+        delete process.env.AETHER_RUNTIME_DIR;
     });
 
     afterEach(() => {
         process.argv = originalArgv;
         Storage.setRuntimeBaseDir(null);
         if (originalRuntimeEnv !== undefined) {
-            process.env['AETHER_RUNTIME_DIR'] = originalRuntimeEnv;
+            process.env.AETHER_RUNTIME_DIR = originalRuntimeEnv;
         } else {
-            delete process.env['AETHER_RUNTIME_DIR'];
+            delete process.env.AETHER_RUNTIME_DIR;
         }
         vi.unstubAllEnvs();
         vi.restoreAllMocks();
@@ -2560,7 +2560,7 @@ describe('loadCliConfig runtimeOutputDir', () => {
     it('should let AETHER_RUNTIME_DIR env var take priority over settings', async () => {
         const envDir = path.resolve('from-env');
         const settingsDir = path.resolve('from-settings');
-        process.env['AETHER_RUNTIME_DIR'] = envDir;
+        process.env.AETHER_RUNTIME_DIR = envDir;
         const argv = await parseArguments();
         const settings: Settings = {
             advanced: { runtimeOutputDir: settingsDir }

@@ -95,7 +95,9 @@ function pad(
     len: number,
     align: 'left' | 'right' = 'left'
 ): string {
-    if (str.length >= len) return str.slice(0, len);
+    if (str.length >= len) {
+        return str.slice(0, len);
+    }
     const padding = ' '.repeat(len - str.length);
     return align === 'right' ? padding + str : str + padding;
 }
@@ -104,8 +106,10 @@ function pad(
  * Truncate a string to a maximum length, adding ellipsis if truncated.
  */
 function truncate(str: string, maxLen: number): string {
-    if (str.length <= maxLen) return str;
-    return str.slice(0, maxLen - 1) + '…';
+    if (str.length <= maxLen) {
+        return str;
+    }
+    return `${str.slice(0, maxLen - 1)}…`;
 }
 
 /**
@@ -117,7 +121,9 @@ function getDiffStats(diff: string | undefined): {
     additions: number;
     deletions: number;
 } {
-    if (!diff) return { text: '', additions: 0, deletions: 0 };
+    if (!diff) {
+        return { text: '', additions: 0, deletions: 0 };
+    }
     const lines = diff.split('\n');
     let additions = 0;
     let deletions = 0;
@@ -142,7 +148,7 @@ export const ArenaSessionCard: React.FC<ArenaSessionCardProps> = ({
     // Truncate task for display
     const maxTaskLen = 60;
     const displayTask =
-        task.length > maxTaskLen ? task.slice(0, maxTaskLen - 1) + '…' : task;
+        task.length > maxTaskLen ? `${task.slice(0, maxTaskLen - 1)}…` : task;
 
     // Column widths for the agent table (unified with Arena Results)
     const colStatus = 14;

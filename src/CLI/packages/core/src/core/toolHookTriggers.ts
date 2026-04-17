@@ -475,7 +475,7 @@ export function appendAdditionalContext(
     }
 
     if (typeof content === 'string') {
-        return content + '\n\n' + additionalContext;
+        return `${content}\n\n${additionalContext}`;
     }
 
     // For PartListUnion content, append as an additional text part

@@ -31,7 +31,7 @@ export async function relaunchAppInChildProcess(
     additionalNodeArgs: string[],
     additionalScriptArgs: string[]
 ) {
-    if (process.env['aether_cli_NO_RELAUNCH']) {
+    if (process.env.aether_cli_NO_RELAUNCH) {
         return;
     }
 

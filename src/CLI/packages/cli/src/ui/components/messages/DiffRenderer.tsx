@@ -228,14 +228,16 @@ const renderDiffContent = (
     let baseIndentation = Infinity; // Start high to find the minimum
     for (const line of displayableLines) {
         // Only consider lines with actual content for indentation calculation
-        if (line.content.trim() === '') continue;
+        if (line.content.trim() === '') {
+            continue;
+        }
 
         const firstCharIndex = line.content.search(/\S/); // Find index of first non-whitespace char
         const currentIndent = firstCharIndex === -1 ? 0 : firstCharIndex; // Indent is 0 if no non-whitespace found
         baseIndentation = Math.min(baseIndentation, currentIndent);
     }
     // If baseIndentation remained Infinity (e.g., no displayable lines with content), default to 0
-    if (!isFinite(baseIndentation)) {
+    if (!Number.isFinite(baseIndentation)) {
         baseIndentation = 0;
     }
 

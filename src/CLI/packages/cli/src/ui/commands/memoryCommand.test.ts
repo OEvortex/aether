@@ -29,7 +29,7 @@ vi.mock('@aetherai/aether-core', async (importOriginal) => {
   return {
     ...original,
     getErrorMessage: vi.fn((error: unknown) => {
-      if (error instanceof Error) return error.message;
+      if (error instanceof Error) { return error.message; }
       return String(error);
     }),
     loadServerHierarchicalMemory: vi.fn(),
@@ -88,7 +88,7 @@ describe('memoryCommand', () => {
     });
 
     it('should display a message if memory is empty', async () => {
-      if (!showCommand.action) throw new Error('Command has no action');
+      if (!showCommand.action) { throw new Error('Command has no action'); }
 
       mockGetUserMemory.mockReturnValue('');
       mockGetGeminiMdFileCount.mockReturnValue(0);
@@ -105,7 +105,7 @@ describe('memoryCommand', () => {
     });
 
     it('should display the memory content and file count if it exists', async () => {
-      if (!showCommand.action) throw new Error('Command has no action');
+      if (!showCommand.action) { throw new Error('Command has no action'); }
 
       const memoryContent = 'This is a test memory.';
 
@@ -127,7 +127,7 @@ describe('memoryCommand', () => {
       const projectCommand = showCommand.subCommands?.find(
         (cmd) => cmd.name === '--project',
       );
-      if (!projectCommand?.action) throw new Error('Command has no action');
+      if (!projectCommand?.action) { throw new Error('Command has no action'); }
 
       setGeminiMdFilename('AGENTS.md');
       vi.spyOn(process, 'cwd').mockReturnValue('/test/project');
@@ -150,7 +150,7 @@ describe('memoryCommand', () => {
       const globalCommand = showCommand.subCommands?.find(
         (cmd) => cmd.name === '--global',
       );
-      if (!globalCommand?.action) throw new Error('Command has no action');
+      if (!globalCommand?.action) { throw new Error('Command has no action'); }
 
       setGeminiMdFilename('AGENTS.md');
       vi.spyOn(os, 'homedir').mockReturnValue('/home/user');
@@ -173,12 +173,12 @@ describe('memoryCommand', () => {
       const projectCommand = showCommand.subCommands?.find(
         (cmd) => cmd.name === '--project',
       );
-      if (!projectCommand?.action) throw new Error('Command has no action');
+      if (!projectCommand?.action) { throw new Error('Command has no action'); }
 
       setGeminiMdFilename(['AGENTS.md', 'AGENTS.md']);
       vi.spyOn(process, 'cwd').mockReturnValue('/test/project');
       mockReadFile.mockImplementation(async (filePath: string) => {
-        if (filePath.endsWith('AGENTS.md')) return 'agents memory content';
+        if (filePath.endsWith('AGENTS.md')) { return 'agents memory content'; }
         throw new Error('ENOENT');
       });
 
@@ -199,12 +199,12 @@ describe('memoryCommand', () => {
       const globalCommand = showCommand.subCommands?.find(
         (cmd) => cmd.name === '--global',
       );
-      if (!globalCommand?.action) throw new Error('Command has no action');
+      if (!globalCommand?.action) { throw new Error('Command has no action'); }
 
       setGeminiMdFilename(['AGENTS.md', 'AGENTS.md']);
       vi.spyOn(os, 'homedir').mockReturnValue('/home/user');
       mockReadFile.mockImplementation(async (filePath: string) => {
-        if (filePath.endsWith('AGENTS.md')) return 'global agents memory';
+        if (filePath.endsWith('AGENTS.md')) { return 'global agents memory'; }
         throw new Error('ENOENT');
       });
 
@@ -225,13 +225,13 @@ describe('memoryCommand', () => {
       const projectCommand = showCommand.subCommands?.find(
         (cmd) => cmd.name === '--project',
       );
-      if (!projectCommand?.action) throw new Error('Command has no action');
+      if (!projectCommand?.action) { throw new Error('Command has no action'); }
 
       setGeminiMdFilename(['AGENTS.md', 'AGENTS.md']);
       vi.spyOn(process, 'cwd').mockReturnValue('/test/project');
       mockReadFile.mockImplementation(async (filePath: string) => {
-        if (filePath.endsWith('AGENTS.md')) return  aether memory ;
-        if (filePath.endsWith('AGENTS.md')) return 'agents memory';
+        if (filePath.endsWith('AGENTS.md')) { return  aether  }memory ;
+        if (filePath.endsWith('AGENTS.md')) { return 'agents memory'; }
         throw new Error('ENOENT');
       });
 
@@ -254,13 +254,13 @@ describe('memoryCommand', () => {
       const globalCommand = showCommand.subCommands?.find(
         (cmd) => cmd.name === '--global',
       );
-      if (!globalCommand?.action) throw new Error('Command has no action');
+      if (!globalCommand?.action) { throw new Error('Command has no action'); }
 
       setGeminiMdFilename(['AGENTS.md', 'AGENTS.md']);
       vi.spyOn(os, 'homedir').mockReturnValue('/home/user');
       mockReadFile.mockImplementation(async (filePath: string) => {
-        if (filePath.endsWith('AGENTS.md')) return 'global aether memory';
-        if (filePath.endsWith('AGENTS.md')) return 'global agents memory';
+        if (filePath.endsWith('AGENTS.md')) { return 'global aether memory'; }
+        if (filePath.endsWith('AGENTS.md')) { return 'global agents memory'; }
         throw new Error('ENOENT');
       });
 
@@ -289,7 +289,7 @@ describe('memoryCommand', () => {
     });
 
     it('should return an error message if no arguments are provided', () => {
-      if (!addCommand.action) throw new Error('Command has no action');
+      if (!addCommand.action) { throw new Error('Command has no action'); }
 
       const result = addCommand.action(mockContext, '  ');
       expect(result).toEqual({
@@ -302,7 +302,7 @@ describe('memoryCommand', () => {
     });
 
     it('should return a tool action and add an info message when arguments are provided', () => {
-      if (!addCommand.action) throw new Error('Command has no action');
+      if (!addCommand.action) { throw new Error('Command has no action'); }
 
       const fact = 'remember this';
       const result = addCommand.action(mockContext, `  ${fact}  `);
@@ -323,7 +323,7 @@ describe('memoryCommand', () => {
     });
 
     it('should handle --global flag and add scope to tool args', () => {
-      if (!addCommand.action) throw new Error('Command has no action');
+      if (!addCommand.action) { throw new Error('Command has no action'); }
 
       const fact = 'remember this globally';
       const result = addCommand.action(mockContext, `--global ${fact}`);
@@ -344,7 +344,7 @@ describe('memoryCommand', () => {
     });
 
     it('should handle --project flag and add scope to tool args', () => {
-      if (!addCommand.action) throw new Error('Command has no action');
+      if (!addCommand.action) { throw new Error('Command has no action'); }
 
       const fact = 'remember this for project';
       const result = addCommand.action(mockContext, `--project ${fact}`);
@@ -365,7 +365,7 @@ describe('memoryCommand', () => {
     });
 
     it('should return error if flag is provided but no fact follows', () => {
-      if (!addCommand.action) throw new Error('Command has no action');
+      if (!addCommand.action) { throw new Error('Command has no action'); }
 
       const result = addCommand.action(mockContext, '--global   ');
       expect(result).toEqual({
@@ -417,7 +417,7 @@ describe('memoryCommand', () => {
     });
 
     it('should display success message when memory is refreshed with content', async () => {
-      if (!refreshCommand.action) throw new Error('Command has no action');
+      if (!refreshCommand.action) { throw new Error('Command has no action'); }
 
       const refreshResult: LoadServerHierarchicalMemoryResponse = {
         memoryContent: 'new memory content',
@@ -453,7 +453,7 @@ describe('memoryCommand', () => {
     });
 
     it('should display success message when memory is refreshed with no content', async () => {
-      if (!refreshCommand.action) throw new Error('Command has no action');
+      if (!refreshCommand.action) { throw new Error('Command has no action'); }
 
       const refreshResult = { memoryContent: '', fileCount: 0 };
       mockLoadServerHierarchicalMemory.mockResolvedValue(refreshResult);
@@ -474,7 +474,7 @@ describe('memoryCommand', () => {
     });
 
     it('should display an error message if refreshing fails', async () => {
-      if (!refreshCommand.action) throw new Error('Command has no action');
+      if (!refreshCommand.action) { throw new Error('Command has no action'); }
 
       const error = new Error('Failed to read memory files.');
       mockLoadServerHierarchicalMemory.mockRejectedValue(error);
@@ -497,7 +497,7 @@ describe('memoryCommand', () => {
     });
 
     it('should not throw if config service is unavailable', async () => {
-      if (!refreshCommand.action) throw new Error('Command has no action');
+      if (!refreshCommand.action) { throw new Error('Command has no action'); }
 
       const nullConfigContext = createMockCommandContext({
         services: { config: null },

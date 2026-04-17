@@ -277,7 +277,7 @@ export function parseRule(raw: string): PermissionRule {
  * silently skipping any empty entries.
  */
 export function parseRules(raws: string[]): PermissionRule[] {
-    return raws.filter((r) => r && r.trim()).map(parseRule);
+    return raws.filter((r) => r?.trim()).map(parseRule);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -401,8 +401,6 @@ export function buildPermissionRules(ctx: PermissionCheckContext): string[] {
                 return [`${displayName}(${ctx.domain})`];
             }
             return [displayName];
-
-        case 'literal':
         default:
             if (ctx.specifier) {
                 return [`${displayName}(${ctx.specifier})`];
@@ -467,7 +465,9 @@ function cleanPathSpecifier(specifier: string): string {
  * @returns A human-readable description string
  */
 export function buildHumanReadableRuleLabel(rules: string[]): string {
-    if (!rules.length) return '';
+    if (!rules.length) {
+        return '';
+    }
 
     const parts: string[] = [];
     for (const rule of rules) {
@@ -504,7 +504,6 @@ export function buildHumanReadableRuleLabel(rules: string[]): string {
             case 'domain':
                 parts.push(`${verb} ${specifier}`);
                 break;
-            case 'literal':
             default:
                 parts.push(`${verb} "${specifier}"`);
                 break;
@@ -625,7 +624,7 @@ export function matchesCommandPattern(
         // No wildcards: prefix matching (backward compat).
         // "git commit" matches "git commit" and "git commit -m test"
         // but NOT "gitcommit".
-        return command === pattern || command.startsWith(pattern + ' ');
+        return command === pattern || command.startsWith(`${pattern} `);
     }
 
     // Build regex from glob pattern with word-boundary semantics.
@@ -811,7 +810,7 @@ export function matchesDomainPattern(
     }
 
     // Subdomain match: "sub.example.com" matches "example.com"
-    if (normalizedDomain.endsWith('.' + normalizedPattern)) {
+    if (normalizedDomain.endsWith(`.${normalizedPattern}`)) {
         return true;
     }
 
@@ -961,8 +960,6 @@ export function matchesRule(
             }
             return matchesDomainPattern(rule.specifier, domain);
         }
-
-        case 'literal':
         default: {
             // Literal/exact matching (for Skill names, Agent subagent types, etc.)
             const value = command ?? specifier;

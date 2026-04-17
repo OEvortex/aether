@@ -78,10 +78,10 @@ const ensureLeadingAndTrailingSlash = (dirPath: string): string => {
     // Normalize separators to forward slashes for consistent matching across platforms.
     let result = dirPath.replace(/\\/g, '/');
     if (result.charAt(0) !== '/') {
-        result = '/' + result;
+        result = `/${result}`;
     }
     if (result.charAt(result.length - 1) !== '/') {
-        result = result + '/';
+        result = `${result}/`;
     }
     return result;
 };

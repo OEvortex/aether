@@ -193,7 +193,9 @@ function useCommandSuggestions(
 
         if (isArgumentCompletion) {
             const fetchAndSetSuggestions = async () => {
-                if (signal.aborted) return;
+                if (signal.aborted) {
+                    return;
+                }
 
                 // Safety check: ensure leafCommand and completion exist
                 if (!leafCommand?.completion) {
@@ -206,7 +208,9 @@ function useCommandSuggestions(
                 setIsLoading(true);
                 try {
                     const rawParts = [...commandPathParts];
-                    if (partial) rawParts.push(partial);
+                    if (partial) {
+                        rawParts.push(partial);
+                    }
                     const depth = commandPathParts.length;
                     const argString = rawParts.slice(depth).join(' ');
                     const results =
@@ -247,7 +251,9 @@ function useCommandSuggestions(
         const commandsToSearch = currentLevel || [];
         if (commandsToSearch.length > 0) {
             const performFuzzySearch = async () => {
-                if (signal.aborted) return;
+                if (signal.aborted) {
+                    return;
+                }
                 let potentialSuggestions: SlashCommand[] = [];
 
                 if (partial === '') {
@@ -262,13 +268,15 @@ function useCommandSuggestions(
                         try {
                             const fzfResults =
                                 await fzfInstance.fzf.find(partial);
-                            if (signal.aborted) return;
+                            if (signal.aborted) {
+                                return;
+                            }
                             const uniqueCommands = new Set<SlashCommand>();
                             fzfResults.forEach((result: FzfCommandResult) => {
                                 const cmd = fzfInstance.commandMap.get(
                                     result.item
                                 );
-                                if (cmd && cmd.description) {
+                                if (cmd?.description) {
                                     uniqueCommands.add(cmd);
                                 }
                             });

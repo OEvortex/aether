@@ -55,18 +55,32 @@ export const isWordCharWithCombining = (char: string): boolean =>
 
 // Get the script of a character (simplified for common scripts)
 export const getCharScript = (char: string): string => {
-    if (/[\p{Script=Latin}]/u.test(char)) return 'latin'; // All Latin script chars including diacritics
-    if (/[\p{Script=Han}]/u.test(char)) return 'han'; // Chinese
-    if (/[\p{Script=Arabic}]/u.test(char)) return 'arabic';
-    if (/[\p{Script=Hiragana}]/u.test(char)) return 'hiragana';
-    if (/[\p{Script=Katakana}]/u.test(char)) return 'katakana';
-    if (/[\p{Script=Cyrillic}]/u.test(char)) return 'cyrillic';
+    if (/[\p{Script=Latin}]/u.test(char)) {
+        return 'latin'; // All Latin script chars including diacritics
+    }
+    if (/[\p{Script=Han}]/u.test(char)) {
+        return 'han'; // Chinese
+    }
+    if (/[\p{Script=Arabic}]/u.test(char)) {
+        return 'arabic';
+    }
+    if (/[\p{Script=Hiragana}]/u.test(char)) {
+        return 'hiragana';
+    }
+    if (/[\p{Script=Katakana}]/u.test(char)) {
+        return 'katakana';
+    }
+    if (/[\p{Script=Cyrillic}]/u.test(char)) {
+        return 'cyrillic';
+    }
     return 'other';
 };
 
 // Check if two characters are from different scripts (indicating word boundary)
 export const isDifferentScript = (char1: string, char2: string): boolean => {
-    if (!isWordCharStrict(char1) || !isWordCharStrict(char2)) return false;
+    if (!isWordCharStrict(char1) || !isWordCharStrict(char2)) {
+        return false;
+    }
     return getCharScript(char1) !== getCharScript(char2);
 };
 
@@ -78,7 +92,9 @@ export const findNextWordStartInLine = (
     const chars = toCodePoints(line);
     let i = col;
 
-    if (i >= chars.length) return null;
+    if (i >= chars.length) {
+        return null;
+    }
 
     const currentChar = chars[i];
 
@@ -122,7 +138,9 @@ export const findPrevWordStartInLine = (
     const chars = toCodePoints(line);
     let i = col;
 
-    if (i <= 0) return null;
+    if (i <= 0) {
+        return null;
+    }
 
     i--;
 
@@ -131,7 +149,9 @@ export const findPrevWordStartInLine = (
         i--;
     }
 
-    if (i < 0) return null;
+    if (i < 0) {
+        return null;
+    }
 
     if (isWordCharStrict(chars[i])) {
         // We're in a word, move to its beginning
@@ -346,7 +366,9 @@ export const findPrevWordAcrossLines = (
         const line = lines[row] || '';
         const chars = toCodePoints(line);
 
-        if (chars.length === 0) continue;
+        if (chars.length === 0) {
+            continue;
+        }
 
         // Find last word start
         let lastWordStart = chars.length;
@@ -567,7 +589,9 @@ export function offsetToLogicalPos(
     let col = 0;
     let currentOffset = 0;
 
-    if (offset === 0) return [0, 0];
+    if (offset === 0) {
+        return [0, 0];
+    }
 
     const lines = text.split('\n');
     for (let i = 0; i < lines.length; i++) {
@@ -794,7 +818,9 @@ function calculateLayout(
     ) {
         if (visualLines.length === 0) {
             visualLines.push('');
-            if (!logicalToVisualMap[0]) logicalToVisualMap[0] = [];
+            if (!logicalToVisualMap[0]) {
+                logicalToVisualMap[0] = [];
+            }
             logicalToVisualMap[0].push([0, 0]);
             visualToLogicalMap.push([0, 0]);
         }
@@ -1045,7 +1071,9 @@ function textBufferReducerLogic(
 
             const currentLine = (r: number) => newLines[r] ?? '';
 
-            if (newCursorCol === 0 && newCursorRow === 0) return state;
+            if (newCursorCol === 0 && newCursorRow === 0) {
+                return state;
+            }
 
             if (newCursorCol > 0) {
                 const lineContent = currentLine(newCursorRow);
@@ -1139,8 +1167,9 @@ function textBufferReducerLogic(
                         break;
                     case 'up':
                         if (newVisualRow > 0) {
-                            if (newPreferredCol === null)
+                            if (newPreferredCol === null) {
                                 newPreferredCol = newVisualCol;
+                            }
                             newVisualRow--;
                             newVisualCol = clamp(
                                 newPreferredCol,
@@ -1151,8 +1180,9 @@ function textBufferReducerLogic(
                         break;
                     case 'down':
                         if (newVisualRow < visualLines.length - 1) {
-                            if (newPreferredCol === null)
+                            if (newPreferredCol === null) {
                                 newPreferredCol = newVisualCol;
+                            }
                             newVisualRow++;
                             newVisualCol = clamp(
                                 newPreferredCol,
@@ -1198,7 +1228,9 @@ function textBufferReducerLogic(
             // Logical movements
             switch (dir) {
                 case 'wordLeft': {
-                    if (cursorCol === 0 && cursorRow === 0) return state;
+                    if (cursorCol === 0 && cursorRow === 0) {
+                        return state;
+                    }
 
                     let newCursorRow = cursorRow;
                     let newCursorCol = cursorCol;
@@ -1220,10 +1252,12 @@ function textBufferReducerLogic(
                         if (onlySpaces && start > 0) {
                             start--;
                         } else {
-                            while (start > 0 && !isWordChar(arr[start - 1]))
+                            while (start > 0 && !isWordChar(arr[start - 1])) {
                                 start--;
-                            while (start > 0 && isWordChar(arr[start - 1]))
+                            }
+                            while (start > 0 && isWordChar(arr[start - 1])) {
                                 start--;
+                            }
                         }
                         newCursorCol = start;
                     }
@@ -1252,8 +1286,12 @@ function textBufferReducerLogic(
                         newCursorCol = 0;
                     } else {
                         let end = cursorCol;
-                        while (end < arr.length && !isWordChar(arr[end])) end++;
-                        while (end < arr.length && isWordChar(arr[end])) end++;
+                        while (end < arr.length && !isWordChar(arr[end])) {
+                            end++;
+                        }
+                        while (end < arr.length && isWordChar(arr[end])) {
+                            end++;
+                        }
                         newCursorCol = end;
                     }
                     return {
@@ -1306,7 +1344,9 @@ function textBufferReducerLogic(
 
         case 'delete_word_left': {
             const { cursorRow, cursorCol } = state;
-            if (cursorCol === 0 && cursorRow === 0) return state;
+            if (cursorCol === 0 && cursorRow === 0) {
+                return state;
+            }
 
             const nextState = pushUndoLocal(state);
             const newLines = [...nextState.lines];
@@ -1426,7 +1466,9 @@ function textBufferReducerLogic(
 
         case 'undo': {
             const stateToRestore = state.undoStack[state.undoStack.length - 1];
-            if (!stateToRestore) return state;
+            if (!stateToRestore) {
+                return state;
+            }
 
             const currentSnapshot = {
                 lines: [...state.lines],
@@ -1443,7 +1485,9 @@ function textBufferReducerLogic(
 
         case 'redo': {
             const stateToRestore = state.redoStack[state.redoStack.length - 1];
-            if (!stateToRestore) return state;
+            if (!stateToRestore) {
+                return state;
+            }
 
             const currentSnapshot = {
                 lines: [...state.lines],
@@ -1708,12 +1752,9 @@ export function useTextBuffer({
         dispatch({ type: 'delete' });
     }, []);
 
-    const move = useCallback(
-        (dir: Direction): void => {
-            dispatch({ type: 'move', payload: { dir } });
-        },
-        [dispatch]
-    );
+    const move = useCallback((dir: Direction): void => {
+        dispatch({ type: 'move', payload: { dir } });
+    }, []);
 
     const undo = useCallback((): void => {
         dispatch({ type: 'undo' });
@@ -1883,8 +1924,8 @@ export function useTextBuffer({
         async (opts: { editor?: string } = {}): Promise<void> => {
             const editor =
                 opts.editor ??
-                process.env['VISUAL'] ??
-                process.env['EDITOR'] ??
+                process.env.VISUAL ??
+                process.env.EDITOR ??
                 (process.platform === 'win32' ? 'notepad' : 'vi');
             const tmpDir = fs.mkdtempSync(
                 pathMod.join(os.tmpdir(), 'aether-edit-')
@@ -1900,11 +1941,14 @@ export function useTextBuffer({
                 const { status, error } = spawnSync(editor, [filePath], {
                     stdio: 'inherit'
                 });
-                if (error) throw error;
-                if (typeof status === 'number' && status !== 0)
+                if (error) {
+                    throw error;
+                }
+                if (typeof status === 'number' && status !== 0) {
                     throw new Error(
                         `External editor exited with status ${status}`
                     );
+                }
 
                 let newText = fs.readFileSync(filePath, 'utf8');
                 newText = newText.replace(/\r\n?/g, '\n');
@@ -1916,7 +1960,9 @@ export function useTextBuffer({
             } catch (err) {
                 debugLogger.error('[useTextBuffer] external editor error', err);
             } finally {
-                if (wasRaw) setRawMode?.(true);
+                if (wasRaw) {
+                    setRawMode?.(true);
+                }
                 try {
                     fs.unlinkSync(filePath);
                 } catch {
@@ -1955,45 +2001,61 @@ export function useTextBuffer({
                 input === '\r' ||
                 input === '\n' ||
                 input === '\\\r' // VSCode terminal represents shift + enter this way
-            )
+            ) {
                 newline();
-            else if (key.name === 'left' && !key.meta && !key.ctrl)
+            } else if (key.name === 'left' && !key.meta && !key.ctrl) {
                 move('left');
-            else if (key.ctrl && key.name === 'b') move('left');
-            else if (key.name === 'right' && !key.meta && !key.ctrl)
+            } else if (key.ctrl && key.name === 'b') {
+                move('left');
+            } else if (key.name === 'right' && !key.meta && !key.ctrl) {
                 move('right');
-            else if (key.ctrl && key.name === 'f') move('right');
-            else if (key.name === 'up' && !key.shift) move('up');
-            else if (key.name === 'down' && !key.shift) move('down');
-            else if ((key.ctrl || key.meta) && key.name === 'left')
+            } else if (key.ctrl && key.name === 'f') {
+                move('right');
+            } else if (key.name === 'up' && !key.shift) {
+                move('up');
+            } else if (key.name === 'down' && !key.shift) {
+                move('down');
+            } else if ((key.ctrl || key.meta) && key.name === 'left') {
                 move('wordLeft');
-            else if (key.meta && key.name === 'b') move('wordLeft');
-            else if ((key.ctrl || key.meta) && key.name === 'right')
+            } else if (key.meta && key.name === 'b') {
+                move('wordLeft');
+            } else if ((key.ctrl || key.meta) && key.name === 'right') {
                 move('wordRight');
-            else if (key.meta && key.name === 'f') move('wordRight');
-            else if (key.name === 'home') move('home');
-            else if (key.ctrl && key.name === 'a') move('home');
-            else if (key.name === 'end') move('end');
-            else if (key.ctrl && key.name === 'e') move('end');
-            else if (key.ctrl && key.name === 'w') deleteWordLeft();
-            else if (
+            } else if (key.meta && key.name === 'f') {
+                move('wordRight');
+            } else if (key.name === 'home') {
+                move('home');
+            } else if (key.ctrl && key.name === 'a') {
+                move('home');
+            } else if (key.name === 'end') {
+                move('end');
+            } else if (key.ctrl && key.name === 'e') {
+                move('end');
+            } else if (key.ctrl && key.name === 'w') {
+                deleteWordLeft();
+            } else if (
                 (key.meta || key.ctrl) &&
                 (key.name === 'backspace' || input === '\x7f')
-            )
+            ) {
                 deleteWordLeft();
-            else if ((key.meta || key.ctrl) && key.name === 'delete')
+            } else if ((key.meta || key.ctrl) && key.name === 'delete') {
                 deleteWordRight();
-            else if (
+            } else if (
                 key.name === 'backspace' ||
                 input === '\x7f' ||
                 (key.ctrl && key.name === 'h')
-            )
+            ) {
                 backspace();
-            else if (key.name === 'delete' || (key.ctrl && key.name === 'd'))
+            } else if (
+                key.name === 'delete' ||
+                (key.ctrl && key.name === 'd')
+            ) {
                 del();
-            else if (key.ctrl && !key.shift && key.name === 'z') undo();
-            else if (key.ctrl && key.shift && key.name === 'z') redo();
-            else if (input && !key.ctrl && !key.meta) {
+            } else if (key.ctrl && !key.shift && key.name === 'z') {
+                undo();
+            } else if (key.ctrl && key.shift && key.name === 'z') {
+                redo();
+            } else if (input && !key.ctrl && !key.meta) {
                 insert(input, { paste: key.paste });
             }
         },

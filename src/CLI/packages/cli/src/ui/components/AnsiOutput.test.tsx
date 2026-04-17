@@ -72,7 +72,7 @@ describe('<AnsiOutputText />', () => {
         const { lastFrame } = render(<AnsiOutputText data={data} />);
         const output = lastFrame();
         expect(output).toBeDefined();
-        const lines = output!.split('\n');
+        const lines = output?.split('\n');
         expect(lines[0]).toBe('First line');
         expect(lines[1]).toBe('Third line');
     });

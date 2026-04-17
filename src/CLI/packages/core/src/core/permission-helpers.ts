@@ -38,24 +38,24 @@ export function buildPermissionCheckContext(
     targetDir: string
 ): PermissionCheckContext {
     const command =
-        'command' in toolParams ? String(toolParams['command']) : undefined;
+        'command' in toolParams ? String(toolParams.command) : undefined;
 
     // Extract file path — tools use 'file_path' or 'path' (LS / grep / glob).
     let filePath =
-        typeof toolParams['file_path'] === 'string'
-            ? toolParams['file_path']
+        typeof toolParams.file_path === 'string'
+            ? toolParams.file_path
             : undefined;
-    if (filePath === undefined && typeof toolParams['path'] === 'string') {
+    if (filePath === undefined && typeof toolParams.path === 'string') {
         // LS uses absolute paths; grep/glob may be relative to targetDir.
-        filePath = path.isAbsolute(toolParams['path'])
-            ? toolParams['path']
-            : path.resolve(targetDir, toolParams['path']);
+        filePath = path.isAbsolute(toolParams.path)
+            ? toolParams.path
+            : path.resolve(targetDir, toolParams.path);
     }
 
     let domain: string | undefined;
-    if (typeof toolParams['url'] === 'string') {
+    if (typeof toolParams.url === 'string') {
         try {
-            domain = new URL(toolParams['url']).hostname;
+            domain = new URL(toolParams.url).hostname;
         } catch {
             // malformed URL — leave domain undefined
         }
@@ -63,10 +63,10 @@ export function buildPermissionCheckContext(
 
     // Generic specifier for literal matching (Skill name, Task subagent type, etc.)
     const specifier =
-        typeof toolParams['skill'] === 'string'
-            ? toolParams['skill']
-            : typeof toolParams['subagent_type'] === 'string'
-              ? toolParams['subagent_type']
+        typeof toolParams.skill === 'string'
+            ? toolParams.skill
+            : typeof toolParams.subagent_type === 'string'
+              ? toolParams.subagent_type
               : undefined;
 
     return { toolName, command, filePath, domain, specifier };
@@ -189,7 +189,7 @@ export async function persistPermissionOutcome(
     // falling back to payload for backward compatibility.
     const detailsRules = (
         confirmationDetails as unknown as Record<string, unknown>
-    )?.['permissionRules'] as string[] | undefined;
+    )?.permissionRules as string[] | undefined;
     const payloadRules = payload?.permissionRules;
     const rules = payloadRules ?? detailsRules ?? [];
 

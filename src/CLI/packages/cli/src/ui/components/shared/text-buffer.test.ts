@@ -1431,8 +1431,7 @@ Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots 
                 useTextBuffer({ viewport, isValidPath: () => false })
             );
             const unsafeChars = '\x07\x08\x0B\x0C';
-            const largeTextWithUnsafe =
-                'safe text'.repeat(600) + unsafeChars + 'more safe text';
+            const largeTextWithUnsafe = `${'safe text'.repeat(600) + unsafeChars}more safe text`;
 
             expect(largeTextWithUnsafe.length).toBeGreaterThan(5000);
 
@@ -1897,14 +1896,14 @@ describe('Unicode helper functions', () => {
         it('should handle combining characters', () => {
             // café with combining accent
             const cafeWithCombining = 'cafe\u0301';
-            const result = findWordEndInLine(cafeWithCombining + ' test', 0);
+            const result = findWordEndInLine(`${cafeWithCombining} test`, 0);
             expect(result).toBe(3); // End of 'café' at base character 'e', not combining accent
         });
 
         it('should handle precomposed characters with diacritics', () => {
             // café with precomposed é (U+00E9)
             const cafePrecomposed = 'café';
-            const result = findWordEndInLine(cafePrecomposed + ' test', 0);
+            const result = findWordEndInLine(`${cafePrecomposed} test`, 0);
             expect(result).toBe(3); // End of 'café' at precomposed character 'é'
         });
 

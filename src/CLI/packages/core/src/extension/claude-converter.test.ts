@@ -513,9 +513,9 @@ describe('convertClaudePluginPackage', () => {
 
         // Verify: The converted config should contain processed hooks
         expect(result.config.hooks).toBeDefined();
-        expect(result.config.hooks!['PostToolUse']).toHaveLength(1);
+        expect(result.config.hooks?.PostToolUse).toHaveLength(1);
         // Check that the variable was substituted
-        expect(result.config.hooks!['PostToolUse']![0].hooks![0].command).toBe(
+        expect(result.config.hooks?.PostToolUse?.[0].hooks?.[0].command).toBe(
             `${pluginSourceDir}/scripts/post-install.sh`
         );
 

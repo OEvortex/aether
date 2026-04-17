@@ -62,7 +62,9 @@ export function EditOptionsStep({
 
     const handleSelect = useCallback(
         async (selectedValue: string) => {
-            if (!selectedAgent) return;
+            if (!selectedAgent) {
+                return;
+            }
 
             setError(null);
 

@@ -19,7 +19,6 @@ import { ConfigManager } from '../../utils/configManager';
 import { getProviderRateLimit } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
-import { RetryManager } from '../../utils/retryManager';
 import {
     GenericModelProvider,
     ZHIPU_DEFAULT_CONTEXT_LENGTH,

@@ -210,7 +210,9 @@ export class InProcessBackend implements Backend {
     }
 
     async waitForAll(timeoutMs?: number): Promise<boolean> {
-        if (this.cleanedUp) return true;
+        if (this.cleanedUp) {
+            return true;
+        }
 
         const promises = Array.from(this.agents.values()).map((a) =>
             a.waitForCompletion()
@@ -275,13 +277,17 @@ export class InProcessBackend implements Backend {
     // ─── Input ─────────────────────────────────────────────────
 
     forwardInput(data: string): boolean {
-        if (!this.activeAgentId) return false;
+        if (!this.activeAgentId) {
+            return false;
+        }
         return this.writeToAgent(this.activeAgentId, data);
     }
 
     writeToAgent(agentId: string, data: string): boolean {
         const agent = this.agents.get(agentId);
-        if (!agent) return false;
+        if (!agent) {
+            return false;
+        }
 
         agent.enqueueMessage(data);
         return true;
@@ -312,11 +318,17 @@ export class InProcessBackend implements Backend {
     // ─── Private ───────────────────────────────────────────────
 
     private navigate(direction: 1 | -1): string | null {
-        if (this.agentOrder.length === 0) return null;
-        if (!this.activeAgentId) return this.agentOrder[0] ?? null;
+        if (this.agentOrder.length === 0) {
+            return null;
+        }
+        if (!this.activeAgentId) {
+            return this.agentOrder[0] ?? null;
+        }
 
         const currentIndex = this.agentOrder.indexOf(this.activeAgentId);
-        if (currentIndex === -1) return this.agentOrder[0] ?? null;
+        if (currentIndex === -1) {
+            return this.agentOrder[0] ?? null;
+        }
 
         const nextIndex =
             (currentIndex + direction + this.agentOrder.length) %

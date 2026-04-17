@@ -627,12 +627,11 @@ describe('AgentTool', () => {
             vi.mocked(config.getGeminiClient).mockReturnValue(
                 undefined as never
             );
-            (config as unknown as Record<string, unknown>)['getHookSystem'] = vi
+            (config as unknown as Record<string, unknown>).getHookSystem = vi
                 .fn()
                 .mockReturnValue(mockHookSystem);
-            (config as unknown as Record<string, unknown>)[
-                'getTranscriptPath'
-            ] = vi.fn().mockReturnValue('/test/transcript');
+            (config as unknown as Record<string, unknown>).getTranscriptPath =
+                vi.fn().mockReturnValue('/test/transcript');
         });
 
         it('should call fireSubagentStartEvent before execution', async () => {
@@ -731,7 +730,7 @@ describe('AgentTool', () => {
         });
 
         it('should skip hooks when hookSystem is not available', async () => {
-            (config as unknown as Record<string, unknown>)['getHookSystem'] = vi
+            (config as unknown as Record<string, unknown>).getHookSystem = vi
                 .fn()
                 .mockReturnValue(undefined);
 
@@ -814,12 +813,11 @@ describe('AgentTool', () => {
             vi.mocked(config.getGeminiClient).mockReturnValue(
                 undefined as never
             );
-            (config as unknown as Record<string, unknown>)['getHookSystem'] = vi
+            (config as unknown as Record<string, unknown>).getHookSystem = vi
                 .fn()
                 .mockReturnValue(mockHookSystem);
-            (config as unknown as Record<string, unknown>)[
-                'getTranscriptPath'
-            ] = vi.fn().mockReturnValue('/test/transcript');
+            (config as unknown as Record<string, unknown>).getTranscriptPath =
+                vi.fn().mockReturnValue('/test/transcript');
         });
 
         it('should call fireSubagentStopEvent after execution', async () => {
@@ -1293,7 +1291,7 @@ describe('AgentTool', () => {
                 )
             );
             expect(readResultSnapshot).toBeDefined();
-            expect(readResultSnapshot!.hasPendingConfirmation).toBe(true);
+            expect(readResultSnapshot?.hasPendingConfirmation).toBe(true);
         });
 
         it('should clear pendingConfirmation via onConfirm callback (terminal UI path)', async () => {
@@ -1350,7 +1348,7 @@ describe('AgentTool', () => {
 
             // Call onConfirm as if the user pressed "accept" in the terminal UI
             snapshots.length = 0;
-            await capturedOnConfirm!(ToolConfirmationOutcome.ProceedOnce);
+            await capturedOnConfirm?.(ToolConfirmationOutcome.ProceedOnce);
 
             // The onConfirm callback should have cleared pendingConfirmation
             expect(snapshots.some((s) => !s.hasPendingConfirmation)).toBe(true);

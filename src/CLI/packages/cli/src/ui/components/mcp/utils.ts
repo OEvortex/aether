@@ -80,8 +80,10 @@ export function getStatusIcon(status: string): string {
  * 截断文本
  */
 export function truncateText(text: string, maxLength: number): string {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength - 3) + '...';
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return `${text.substring(0, maxLength - 3)}...`;
 }
 
 /**
@@ -123,7 +125,11 @@ export function getToolInvalidReasons(
     description?: string
 ): string[] {
     const reasons: string[] = [];
-    if (!name) reasons.push('missing name');
-    if (!description) reasons.push('missing description');
+    if (!name) {
+        reasons.push('missing name');
+    }
+    if (!description) {
+        reasons.push('missing description');
+    }
     return reasons;
 }

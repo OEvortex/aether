@@ -21,7 +21,9 @@ export const ToolListStep: React.FC<ToolListStepProps> = ({
 
     // 动态计算工具名称列的最大宽度（基于实际内容）
     const toolNameWidth = useMemo(() => {
-        if (tools.length === 0) return 30;
+        if (tools.length === 0) {
+            return 30;
+        }
         const maxLength = Math.max(...tools.map((t) => t.name.length));
         // 最小 30，最大 50，留一些余量
         return Math.min(Math.max(maxLength + 2, 30), 50);
@@ -79,10 +81,18 @@ export const ToolListStep: React.FC<ToolListStepProps> = ({
 
     const getToolAnnotations = (tool: MCPToolDisplayInfo): string => {
         const hints: string[] = [];
-        if (tool.annotations?.destructiveHint) hints.push('destructive');
-        if (tool.annotations?.readOnlyHint) hints.push('read-only');
-        if (tool.annotations?.openWorldHint) hints.push('open-world');
-        if (tool.annotations?.idempotentHint) hints.push('idempotent');
+        if (tool.annotations?.destructiveHint) {
+            hints.push('destructive');
+        }
+        if (tool.annotations?.readOnlyHint) {
+            hints.push('read-only');
+        }
+        if (tool.annotations?.openWorldHint) {
+            hints.push('open-world');
+        }
+        if (tool.annotations?.idempotentHint) {
+            hints.push('idempotent');
+        }
         return hints.join(', ');
     };
 

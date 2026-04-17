@@ -56,7 +56,7 @@ export function agentMessagesToHistoryItems(
 
             // ── assistant ─────────────────────────────────────────────
         } else if (msg.role === 'assistant') {
-            if (msg.metadata?.['error']) {
+            if (msg.metadata?.error) {
                 items.push({ type: 'error', text: msg.content, id: nextId++ });
             } else if (msg.thought) {
                 items.push({
@@ -71,7 +71,7 @@ export function agentMessagesToHistoryItems(
 
             // ── info / warning / success / error ──────────────────────
         } else if (msg.role === 'info') {
-            const level = msg.metadata?.['level'] as string | undefined;
+            const level = msg.metadata?.level as string | undefined;
             const type =
                 level === 'warning' || level === 'success' || level === 'error'
                     ? level
@@ -99,38 +99,37 @@ export function agentMessagesToHistoryItems(
 
             while (
                 i < messages.length &&
-                (messages[i]!.role === 'tool_call' ||
-                    messages[i]!.role === 'tool_result')
+                (messages[i]?.role === 'tool_call' ||
+                    messages[i]?.role === 'tool_result')
             ) {
                 const m = messages[i]!;
-                const callId =
-                    (m.metadata?.['callId'] as string) ?? `unknown-${i}`;
+                const callId = (m.metadata?.callId as string) ?? `unknown-${i}`;
 
                 if (m.role === 'tool_call') {
-                    if (!callMap.has(callId)) callOrder.push(callId);
+                    if (!callMap.has(callId)) {
+                        callOrder.push(callId);
+                    }
                     callMap.set(callId, {
                         callId,
-                        name: (m.metadata?.['toolName'] as string) ?? 'unknown',
-                        description:
-                            (m.metadata?.['description'] as string) ?? '',
+                        name: (m.metadata?.toolName as string) ?? 'unknown',
+                        description: (m.metadata?.description as string) ?? '',
                         resultDisplay: undefined,
                         outputFile: undefined,
-                        renderOutputAsMarkdown: m.metadata?.[
-                            'renderOutputAsMarkdown'
-                        ] as boolean | undefined,
+                        renderOutputAsMarkdown: m.metadata
+                            ?.renderOutputAsMarkdown as boolean | undefined,
                         success: undefined
                     });
                 } else {
                     // tool_result — attach to existing call entry
                     const entry = callMap.get(callId);
-                    const resultDisplay = m.metadata?.['resultDisplay'] as
+                    const resultDisplay = m.metadata?.resultDisplay as
                         | ToolResultDisplay
                         | string
                         | undefined;
-                    const outputFile = m.metadata?.['outputFile'] as
+                    const outputFile = m.metadata?.outputFile as
                         | string
                         | undefined;
-                    const success = m.metadata?.['success'] as boolean;
+                    const success = m.metadata?.success as boolean;
 
                     if (entry) {
                         entry.success = success;
@@ -142,9 +141,7 @@ export function agentMessagesToHistoryItems(
                         callOrder.push(callId);
                         callMap.set(callId, {
                             callId,
-                            name:
-                                (m.metadata?.['toolName'] as string) ??
-                                'unknown',
+                            name: (m.metadata?.toolName as string) ?? 'unknown',
                             description: '',
                             resultDisplay,
                             outputFile,

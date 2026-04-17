@@ -179,7 +179,7 @@ export function useSessionPicker({
     useEffect(() => {
         setSelectedIndex(0);
         setFollowScrollOffset(0);
-    }, [filterByBranch]);
+    }, []);
 
     // Ensure selectedIndex is valid when filtered sessions change
     useEffect(() => {

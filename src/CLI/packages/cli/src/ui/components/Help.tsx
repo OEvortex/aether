@@ -73,24 +73,23 @@ export const Help: React.FC<Help> = ({ commands, width }) => (
                         {command.kind === CommandKind.MCP_PROMPT && (
                             <Text color={theme.text.secondary}> [MCP]</Text>
                         )}
-                        {command.description && ' - ' + command.description}
+                        {command.description && ` - ${command.description}`}
                     </Text>
-                    {command.subCommands &&
-                        command.subCommands
-                            .filter((subCommand) => !subCommand.hidden)
-                            .map((subCommand) => (
-                                <Text
-                                    key={subCommand.name}
-                                    color={theme.text.primary}
-                                >
-                                    <Text bold color={theme.text.accent}>
-                                        {'   '}
-                                        {formatCommandLabel(subCommand)}
-                                    </Text>
-                                    {subCommand.description &&
-                                        ' - ' + subCommand.description}
+                    {command.subCommands
+                        ?.filter((subCommand) => !subCommand.hidden)
+                        .map((subCommand) => (
+                            <Text
+                                key={subCommand.name}
+                                color={theme.text.primary}
+                            >
+                                <Text bold color={theme.text.accent}>
+                                    {'   '}
+                                    {formatCommandLabel(subCommand)}
                                 </Text>
-                            ))}
+                                {subCommand.description &&
+                                    ` - ${subCommand.description}`}
+                            </Text>
+                        ))}
                 </Box>
             ))}
         <Text color={theme.text.primary}>

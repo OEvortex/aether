@@ -192,7 +192,7 @@ export const ideCommand = async (): Promise<SlashCommand> => {
         kind: CommandKind.BUILT_IN,
         action: async (context) => {
             const installer = getIdeInstaller(currentIDE);
-            const isSandBox = !!process.env['SANDBOX'];
+            const isSandBox = !!process.env.SANDBOX;
             if (isSandBox) {
                 context.ui.addItem(
                     {
@@ -201,7 +201,7 @@ export const ideCommand = async (): Promise<SlashCommand> => {
                     },
                     Date.now()
                 );
-                return;
+                return undefined;
             }
             if (!installer) {
                 const ideName = ideClient.getDetectedIdeDisplayName();
@@ -212,7 +212,7 @@ export const ideCommand = async (): Promise<SlashCommand> => {
                     },
                     Date.now()
                 );
-                return;
+                return undefined;
             }
 
             context.ui.addItem(
@@ -271,6 +271,8 @@ export const ideCommand = async (): Promise<SlashCommand> => {
                     );
                 }
             }
+
+            return undefined;
         }
     };
 
@@ -280,7 +282,7 @@ export const ideCommand = async (): Promise<SlashCommand> => {
             return t('enable IDE integration');
         },
         kind: CommandKind.BUILT_IN,
-        action: async (context: CommandContext) => {
+        action: async (context: CommandContext): Promise<undefined> => {
             context.services.settings.setValue(
                 SettingScope.User,
                 'ide.enabled',
@@ -295,6 +297,8 @@ export const ideCommand = async (): Promise<SlashCommand> => {
                 },
                 Date.now()
             );
+
+            return undefined;
         }
     };
 
@@ -304,7 +308,7 @@ export const ideCommand = async (): Promise<SlashCommand> => {
             return t('disable IDE integration');
         },
         kind: CommandKind.BUILT_IN,
-        action: async (context: CommandContext) => {
+        action: async (context: CommandContext): Promise<undefined> => {
             context.services.settings.setValue(
                 SettingScope.User,
                 'ide.enabled',
@@ -319,6 +323,8 @@ export const ideCommand = async (): Promise<SlashCommand> => {
                 },
                 Date.now()
             );
+
+            return undefined;
         }
     };
 

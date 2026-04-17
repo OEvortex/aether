@@ -106,7 +106,9 @@ export async function getInitialChatHistory(
  * own working directory.
  */
 export function stripStartupContext(history: Content[]): Content[] {
-    if (history.length < 2) return history;
+    if (history.length < 2) {
+        return history;
+    }
 
     const secondEntry = history[1];
     const ackText = secondEntry?.parts?.[0]?.text;

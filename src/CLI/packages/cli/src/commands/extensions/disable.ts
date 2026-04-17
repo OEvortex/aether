@@ -79,8 +79,8 @@ export const disableCommand: CommandModule = {
             }),
     handler: async (argv) => {
         await handleDisable({
-            name: argv['name'] as string,
-            scope: argv['scope'] as string
+            name: argv.name as string,
+            scope: argv.scope as string
         });
     }
 };

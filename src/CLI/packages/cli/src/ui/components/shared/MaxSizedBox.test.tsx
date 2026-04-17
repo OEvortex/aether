@@ -370,14 +370,13 @@ Line 3`);
         const { lastFrame } = render(
             <OverflowProvider>
                 <MaxSizedBox maxWidth={80} maxHeight={10}>
-                    <>
-                        <Box>
-                            <Text>Line 1 from Fragment</Text>
-                        </Box>
-                        <Box>
-                            <Text>Line 2 from Fragment</Text>
-                        </Box>
-                    </>
+                    <Box>
+                        <Text>Line 1 from Fragment</Text>
+                    </Box>
+                    <Box>
+                        <Text>Line 2 from Fragment</Text>
+                    </Box>
+
                     <Box>
                         <Text>Line 3 direct child</Text>
                     </Box>

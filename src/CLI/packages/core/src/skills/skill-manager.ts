@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as fsSync from 'node:fs';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { type FSWatcher, watch as watchFs } from 'chokidar';
-import * as fsSync from 'fs';
-import * as fs from 'fs/promises';
-import * as os from 'os';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
 import type { Config } from '../config/config.js';
 import { SKILL_PROVIDER_CONFIG_DIRS } from '../config/storage.js';
 import { createDebugLogger } from '../utils/debugLogger.js';
@@ -383,8 +383,8 @@ export class SkillManager {
             >;
 
             // Extract required fields
-            const nameRaw = frontmatter['name'];
-            const descriptionRaw = frontmatter['description'];
+            const nameRaw = frontmatter.name;
+            const descriptionRaw = frontmatter.description;
 
             if (nameRaw == null || nameRaw === '') {
                 throw new Error('Missing "name" in frontmatter');
@@ -399,7 +399,7 @@ export class SkillManager {
             const description = String(descriptionRaw);
 
             // Extract optional fields
-            const allowedToolsRaw = frontmatter['allowedTools'] as
+            const allowedToolsRaw = frontmatter.allowedTools as
                 | unknown[]
                 | undefined;
             let allowedTools: string[] | undefined;

@@ -27,8 +27,12 @@ function getBestAvailableUpdate(
     nightly?: UpdateInfo,
     stable?: UpdateInfo
 ): UpdateInfo | null {
-    if (!nightly) return stable || null;
-    if (!stable) return nightly || null;
+    if (!nightly) {
+        return stable || null;
+    }
+    if (!stable) {
+        return nightly || null;
+    }
 
     const nightlyVer = nightly.latest;
     const stableVer = stable.latest;
@@ -45,7 +49,7 @@ function getBestAvailableUpdate(
 export async function checkForUpdates(): Promise<UpdateObject | null> {
     try {
         // Skip update check when running from source (development mode)
-        if (process.env['DEV'] === 'true') {
+        if (process.env.DEV === 'true') {
             return null;
         }
         const packageJson = await getPackageJson();
@@ -98,7 +102,7 @@ export async function checkForUpdates(): Promise<UpdateObject | null> {
 
         return null;
     } catch (e) {
-        debugLogger.warn('Failed to check for updates: ' + e);
+        debugLogger.warn(`Failed to check for updates: ${e}`);
         return null;
     }
 }

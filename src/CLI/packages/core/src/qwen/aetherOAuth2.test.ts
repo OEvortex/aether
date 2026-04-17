@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ChildProcess } from 'child_process';
-import { EventEmitter } from 'events';
+import type { ChildProcess } from 'node:child_process';
+import { EventEmitter } from 'node:events';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Config } from '../config/config.js';
 import {
@@ -55,7 +55,7 @@ vi.mock('./sharedTokenManager.js', () => ({
         ): Promise<AetherCredentials> {
             // Try to get credentials from the client first
             const clientCredentials = aetherClient.getCredentials();
-            if (clientCredentials && clientCredentials.access_token) {
+            if (clientCredentials?.access_token) {
                 return clientCredentials;
             }
 
@@ -154,7 +154,7 @@ describe('PKCE Code Generation', () => {
 describe('Type Guards', () => {
     describe('isDeviceAuthorizationSuccess', () => {
         it('should return true for successful authorization response', () => {
-            const expectedBaseUrl = process.env['DEBUG']
+            const expectedBaseUrl = process.env.DEBUG
                 ? 'https://pre4-chat.aether.dev'
                 : 'https://chat.aether.dev';
 
@@ -1638,8 +1638,8 @@ describe('Utility Functions', () => {
 
     describe('getQwenCachedCredentialPath', () => {
         it('should return correct path to cached credentials', async () => {
-            const os = await import('os');
-            const path = await import('path');
+            const os = await import('node:os');
+            const path = await import('node:path');
 
             const expectedPath = path.join(
                 os.homedir(),

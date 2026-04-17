@@ -125,7 +125,7 @@ describe('yaml-parser', () => {
 
                 testStrings.forEach((testString) => {
                     // Force quoting by adding a colon
-                    const originalObj = { key: testString + ':' };
+                    const originalObj = { key: `${testString}:` };
                     const yamlString = stringify(originalObj);
                     const parsedObj = parse(yamlString);
                     expect(parsedObj).toEqual(originalObj);
@@ -165,8 +165,8 @@ describe('yaml-parser', () => {
                     name: 11,
                     description: 333
                 });
-                expect(typeof result['name']).toBe('number');
-                expect(typeof result['description']).toBe('number');
+                expect(typeof result.name).toBe('number');
+                expect(typeof result.description).toBe('number');
             });
 
             it('should parse quoted numeric values as strings', () => {
@@ -176,8 +176,8 @@ describe('yaml-parser', () => {
                     name: '11',
                     description: '333'
                 });
-                expect(typeof result['name']).toBe('string');
-                expect(typeof result['description']).toBe('string');
+                expect(typeof result.name).toBe('string');
+                expect(typeof result.description).toBe('string');
             });
 
             it('should handle mixed numeric and string values', () => {
@@ -188,9 +188,9 @@ describe('yaml-parser', () => {
                     age: 25,
                     description: '333'
                 });
-                expect(typeof result['name']).toBe('string');
-                expect(typeof result['age']).toBe('number');
-                expect(typeof result['description']).toBe('string');
+                expect(typeof result.name).toBe('string');
+                expect(typeof result.age).toBe('number');
+                expect(typeof result.description).toBe('string');
             });
         });
     });

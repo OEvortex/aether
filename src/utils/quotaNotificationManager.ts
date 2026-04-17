@@ -13,7 +13,6 @@ export class QuotaNotificationManager {
     private quotaCountdownTimer: NodeJS.Timeout | undefined;
     private quotaCountdownEndAt = 0;
     private quotaCountdownModel: string | undefined;
-    private quotaCountdownAccountId: string | undefined;
     private quotaCountdownAccountName: string | undefined;
     private lastQuotaNoticeAt = 0;
 

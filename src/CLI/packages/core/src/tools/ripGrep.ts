@@ -122,7 +122,9 @@ class GrepToolInvocation extends BaseToolInvocation<
                         const secondColon = line.indexOf(':', firstColon + 1);
                         if (secondColon !== -1) {
                             const key = line.substring(0, secondColon);
-                            if (seen.has(key)) return false;
+                            if (seen.has(key)) {
+                                return false;
+                            }
                             seen.add(key);
                         }
                     }
@@ -171,7 +173,7 @@ class GrepToolInvocation extends BaseToolInvocation<
                             charLimit - currentLength - sep,
                             10
                         );
-                        parts.push(line.slice(0, remaining) + '...');
+                        parts.push(`${line.slice(0, remaining)}...`);
                         truncatedByCharLimit = true;
                         break;
                     }

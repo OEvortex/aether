@@ -46,8 +46,8 @@ describe('substituteHookVariables', () => {
         const result = substituteHookVariables(hooks, basePath);
 
         expect(result).toBeDefined();
-        expect(result!['PreToolUse']).toHaveLength(1);
-        expect(result!['PreToolUse']![0].hooks![0].command).toBe(
+        expect(result?.PreToolUse).toHaveLength(1);
+        expect(result?.PreToolUse?.[0].hooks?.[0].command).toBe(
             '/path/to/plugin/scripts/setup.sh'
         );
     });
@@ -82,11 +82,11 @@ describe('substituteHookVariables', () => {
         const result = substituteHookVariables(hooks, basePath);
 
         expect(result).toBeDefined();
-        expect(result!['PostToolUse']).toHaveLength(2);
-        expect(result!['PostToolUse']![0].hooks![0].command).toBe(
+        expect(result?.PostToolUse).toHaveLength(2);
+        expect(result?.PostToolUse?.[0].hooks?.[0].command).toBe(
             '/project/plugins/my-plugin/bin/init.sh'
         );
-        expect(result!['PostToolUse']![1].hooks![0].command).toBe(
+        expect(result?.PostToolUse?.[1].hooks?.[0].command).toBe(
             'chmod +x /project/plugins/my-plugin/bin/executable.sh'
         );
     });
@@ -127,12 +127,12 @@ describe('substituteHookVariables', () => {
         const result = substituteHookVariables(hooks, basePath);
 
         expect(result).toBeDefined();
-        expect(result!['PreToolUse']).toHaveLength(1);
-        expect(result!['PreToolUse']![0].hooks![0].command).toBe(
+        expect(result?.PreToolUse).toHaveLength(1);
+        expect(result?.PreToolUse?.[0].hooks?.[0].command).toBe(
             '/home/user/.aether/extensions/my-extension/scripts/pre-start.sh'
         );
-        expect(result!['UserPromptSubmit']).toHaveLength(1);
-        expect(result!['UserPromptSubmit']![0].hooks![0].command).toBe(
+        expect(result?.UserPromptSubmit).toHaveLength(1);
+        expect(result?.UserPromptSubmit?.[0].hooks?.[0].command).toBe(
             '/home/user/.aether/extensions/my-extension/setup/install.py'
         );
     });
@@ -163,11 +163,11 @@ describe('substituteHookVariables', () => {
         const result = substituteHookVariables(hooks, basePath);
 
         expect(result).toBeDefined();
-        expect(result!['SessionStart']).toHaveLength(1);
-        expect(result!['SessionStart']![0].hooks![0].command).toBe(
+        expect(result?.SessionStart).toHaveLength(1);
+        expect(result?.SessionStart?.[0].hooks?.[0].command).toBe(
             '/path/to/extension/scripts/run.sh'
         );
-        expect(result!['SessionStart']![0].hooks![1].command).toBe(
+        expect(result?.SessionStart?.[0].hooks?.[1].command).toBe(
             '${CLAUDE_PLUGIN_ROOT}/not-affected'
         ); // Non-command type won't be processed
     });
@@ -200,9 +200,7 @@ describe('substituteHookVariables', () => {
 
         expect(result).toBeDefined();
         expect(result).toEqual(hooks); // Should be equal but not the same object (deep clone)
-        expect(result!['Stop']![0].hooks![0].command).toBe(
-            'echo "hello world"'
-        );
+        expect(result?.Stop?.[0].hooks?.[0].command).toBe('echo "hello world"');
     });
 });
 

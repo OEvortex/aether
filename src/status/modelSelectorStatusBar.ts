@@ -5,7 +5,7 @@
 
 import * as vscode from 'vscode';
 import { Logger } from '../utils/logger';
-import { ModelSelector, type ParsedModelId } from '../utils/modelSelector';
+import { ModelSelector } from '../utils/modelSelector';
 
 export class ModelSelectorStatusBar implements vscode.Disposable {
     private statusBarItem: vscode.StatusBarItem;
@@ -50,7 +50,7 @@ export class ModelSelectorStatusBar implements vscode.Disposable {
         try {
             const currentModel = await ModelSelector.getCurrentModel();
 
-            if (currentModel && currentModel.modelId) {
+            if (currentModel?.modelId) {
                 this.statusBarItem.text = `$(symbol-misc) ${currentModel.modelId}`;
                 this.statusBarItem.tooltip = new vscode.MarkdownString(
                     `**Current Model**\n\n` +

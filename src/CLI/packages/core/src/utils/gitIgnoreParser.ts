@@ -76,17 +76,17 @@ export class GitIgnoreParser implements GitIgnoreFilter {
 
                     // Anchor the pattern to a nested gitignore directory.
                     if (!newPattern.startsWith('/')) {
-                        newPattern = '/' + newPattern;
+                        newPattern = `/${newPattern}`;
                     }
                 }
 
                 // Anchor the pattern if originally anchored
                 if (isAnchoredInFile && !newPattern.startsWith('/')) {
-                    newPattern = '/' + newPattern;
+                    newPattern = `/${newPattern}`;
                 }
 
                 if (isNegative) {
-                    newPattern = '!' + newPattern;
+                    newPattern = `!${newPattern}`;
                 }
 
                 // Even in windows, Ignore expects forward slashes.

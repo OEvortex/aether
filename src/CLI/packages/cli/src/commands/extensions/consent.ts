@@ -87,7 +87,7 @@ export async function requestConsentInteractive(
     addExtensionUpdateConfirmationRequest: (value: ConfirmationRequest) => void
 ): Promise<boolean> {
     return promptForConsentInteractive(
-        consentDescription + '\n\n' + t('Do you want to continue?'),
+        `${consentDescription}\n\n${t('Do you want to continue?')}`,
         addExtensionUpdateConfirmationRequest
     );
 }
@@ -176,7 +176,7 @@ export function extensionConsentString(
             const isLocal = !!mcpServer.command;
             const source =
                 mcpServer.httpUrl ??
-                `${mcpServer.command || ''}${mcpServer.args ? ' ' + mcpServer.args.join(' ') : ''}`;
+                `${mcpServer.command || ''}${mcpServer.args ? ` ${mcpServer.args.join(' ')}` : ''}`;
             output.push(
                 `  * ${key} (${isLocal ? t('local') : t('remote')}): ${source}`
             );
@@ -230,7 +230,9 @@ export const requestConsentOrFail = async (
     requestConsent: (consent: string) => Promise<boolean>,
     options?: ExtensionRequestOptions
 ) => {
-    if (!options) return;
+    if (!options) {
+        return;
+    }
     const {
         extensionConfig,
         originSource = 'AetherCli',

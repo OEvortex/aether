@@ -260,8 +260,7 @@ export class Session implements SessionContext {
                 this.turn += 1;
 
                 const chat = this.chat;
-                const promptId =
-                    this.config.getSessionId() + '########' + this.turn;
+                const promptId = `${this.config.getSessionId()}########${this.turn}`;
 
                 // Extract text from all text blocks to construct the full prompt text for logging
                 const promptText = params.prompt
@@ -444,9 +443,13 @@ export class Session implements SessionContext {
      * `cronQueue` and triggering `#drainCronQueue`.
      */
     #startCronSchedulerIfNeeded(): void {
-        if (!this.config.isCronEnabled()) return;
+        if (!this.config.isCronEnabled()) {
+            return;
+        }
         const scheduler = this.config.getCronScheduler();
-        if (scheduler.size === 0) return;
+        if (scheduler.size === 0) {
+            return;
+        }
 
         scheduler.start((job: { prompt: string }) => {
             this.cronQueue.push(job.prompt);
@@ -459,10 +462,14 @@ export class Session implements SessionContext {
      * as a mutex to prevent concurrent access to the chat.
      */
     async #drainCronQueue(): Promise<void> {
-        if (this.cronProcessing) return;
+        if (this.cronProcessing) {
+            return;
+        }
         // Don't process cron while a user prompt is active — the queue will be
         // drained after the prompt completes (see end of prompt()).
-        if (this.pendingPrompt) return;
+        if (this.pendingPrompt) {
+            return;
+        }
         this.cronProcessing = true;
 
         let resolveCompletion!: () => void;
@@ -472,8 +479,10 @@ export class Session implements SessionContext {
 
         try {
             while (this.cronQueue.length > 0) {
-                const prompt = this.cronQueue.shift()!;
-                await this.#executeCronPrompt(prompt);
+                const prompt = this.cronQueue.shift();
+                if (prompt) {
+                    await this.#executeCronPrompt(prompt);
+                }
             }
         } finally {
             this.cronProcessing = false;
@@ -501,8 +510,7 @@ export class Session implements SessionContext {
             async () => {
                 const ac = new AbortController();
                 this.cronAbortController = ac;
-                const promptId =
-                    this.config.getSessionId() + '########cron' + Date.now();
+                const promptId = `${this.config.getSessionId()}########cron${Date.now()}`;
 
                 try {
                     // Echo the cron prompt as a user message so the client sees it
@@ -518,7 +526,9 @@ export class Session implements SessionContext {
                     };
 
                     while (nextMessage !== null) {
-                        if (ac.signal.aborted) return;
+                        if (ac.signal.aborted) {
+                            return;
+                        }
 
                         const functionCalls: FunctionCall[] = [];
                         let usageMetadata: GenerateContentResponseUsageMetadata | null =
@@ -537,7 +547,9 @@ export class Session implements SessionContext {
                         nextMessage = null;
 
                         for await (const resp of responseStream) {
-                            if (ac.signal.aborted) return;
+                            if (ac.signal.aborted) {
+                                return;
+                            }
 
                             if (
                                 resp.type === StreamEventType.CHUNK &&
@@ -547,7 +559,9 @@ export class Session implements SessionContext {
                                 const candidate = resp.value.candidates[0];
                                 for (const part of candidate.content?.parts ??
                                     []) {
-                                    if (!part.text) continue;
+                                    if (!part.text) {
+                                        continue;
+                                    }
                                     this.messageEmitter.emitMessage(
                                         part.text,
                                         'assistant',
@@ -597,7 +611,9 @@ export class Session implements SessionContext {
                         }
                     }
                 } catch (error) {
-                    if (ac.signal.aborted) return;
+                    if (ac.signal.aborted) {
+                        return;
+                    }
                     debugLogger.error('Error processing cron prompt:', error);
                     const msg =
                         error instanceof Error ? error.message : String(error);
@@ -662,7 +678,7 @@ export class Session implements SessionContext {
      */
     async setMode(
         params: SetSessionModeRequest
-    ): Promise<SetSessionModeResponse | void> {
+    ): Promise<SetSessionModeResponse | undefined> {
         const modeMap: Record<ApprovalModeValue, ApprovalMode> = {
             plan: ApprovalMode.PLAN,
             default: ApprovalMode.DEFAULT,
@@ -672,6 +688,7 @@ export class Session implements SessionContext {
 
         const approvalMode = modeMap[params.modeId as ApprovalModeValue];
         this.config.setApprovalMode(approvalMode);
+        return {};
     }
 
     /**
@@ -680,7 +697,7 @@ export class Session implements SessionContext {
      */
     async setModel(
         params: SetSessionModelRequest
-    ): Promise<SetSessionModelResponse | void> {
+    ): Promise<SetSessionModelResponse | undefined> {
         const rawModelId = params.modelId.trim();
 
         if (!rawModelId) {
@@ -709,6 +726,8 @@ export class Session implements SessionContext {
                 ? { requireCachedCredentials: true }
                 : undefined
         );
+
+        return {};
     }
 
     /**
@@ -725,7 +744,6 @@ export class Session implements SessionContext {
             case ToolConfirmationOutcome.ProceedAlways:
                 newModeId = 'auto-edit';
                 break;
-            case ToolConfirmationOutcome.ProceedOnce:
             default:
                 newModeId = 'default';
                 break;
@@ -868,7 +886,7 @@ export class Session implements SessionContext {
 
                 // Extract subagent metadata from AgentTool call
                 const parentToolCallId = callId;
-                const subagentType = (args['subagent_type'] as string) ?? '';
+                const subagentType = (args.subagent_type as string) ?? '';
 
                 // Create a SubAgentTracker for this tool execution
                 const subSubAgentTracker = new SubAgentTracker(
@@ -1138,7 +1156,9 @@ export class Session implements SessionContext {
                 await invocation.execute(abortSignal);
 
             // Clean up event listeners
-            subAgentCleanupFunctions.forEach((cleanup) => cleanup());
+            subAgentCleanupFunctions.forEach((cleanup) => {
+                cleanup();
+            });
 
             // Create response parts first (needed for emitResult and recordToolResult)
             const responseParts = convertToFunctionResponse(
@@ -1155,10 +1175,7 @@ export class Session implements SessionContext {
                 );
 
                 // Match original logic: emit plan if todos.length > 0 OR if args had todos
-                if (
-                    (todos && todos.length > 0) ||
-                    Array.isArray(args['todos'])
-                ) {
+                if ((todos && todos.length > 0) || Array.isArray(args.todos)) {
                     await this.planEmitter.emitPlan(todos ?? []);
                 }
 
@@ -1213,7 +1230,9 @@ export class Session implements SessionContext {
             return responseParts;
         } catch (e) {
             // Ensure cleanup on error
-            subAgentCleanupFunctions.forEach((cleanup) => cleanup());
+            subAgentCleanupFunctions.forEach((cleanup) => {
+                cleanup();
+            });
 
             const error = e instanceof Error ? e : new Error(String(e));
 
@@ -1399,9 +1418,9 @@ export class Session implements SessionContext {
 
         // Extract paths from @ commands - pass directly to readManyFiles without filtering
         // since this is user-triggered behavior, not LLM-triggered
-        const pathSpecsToRead: string[] = atPathCommandParts.map(
-            (part) => part.fileData!.fileUri
-        );
+        const pathSpecsToRead: string[] = atPathCommandParts
+            .map((part) => part.fileData?.fileUri)
+            .filter((uri): uri is string => !!uri);
 
         // Construct the initial part of the query for the LLM
         let initialQueryText = '';
@@ -1410,7 +1429,7 @@ export class Session implements SessionContext {
             if ('text' in chunk) {
                 initialQueryText += chunk.text;
             } else if ('fileData' in chunk) {
-                const pathName = chunk.fileData!.fileUri;
+                const pathName = chunk.fileData?.fileUri;
                 if (
                     i > 0 &&
                     initialQueryText.length > 0 &&

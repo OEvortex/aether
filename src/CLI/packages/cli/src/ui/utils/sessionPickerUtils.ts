@@ -31,7 +31,7 @@ export function truncateText(text: string, maxWidth: number): string {
     if (maxWidth <= 3) {
         return firstLine.slice(0, maxWidth);
     }
-    return firstLine.slice(0, maxWidth - 3) + '...';
+    return `${firstLine.slice(0, maxWidth - 3)}...`;
 }
 
 /**

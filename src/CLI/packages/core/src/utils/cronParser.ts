@@ -56,7 +56,7 @@ function parseField(field: string, min: number, max: number): Set<number> {
             const [startStr, endStr] = base.split('-');
             rangeStart = parseInt(startStr!, 10);
             rangeEnd = parseInt(endStr!, 10);
-            if (isNaN(rangeStart) || isNaN(rangeEnd)) {
+            if (Number.isNaN(rangeStart) || Number.isNaN(rangeEnd)) {
                 throw new Error(`Invalid range: "${base}"`);
             }
             if (rangeStart < min || rangeEnd > max || rangeStart > rangeEnd) {
@@ -64,7 +64,7 @@ function parseField(field: string, min: number, max: number): Set<number> {
             }
         } else {
             const val = parseInt(base, 10);
-            if (isNaN(val) || val < min || val > max) {
+            if (Number.isNaN(val) || val < min || val > max) {
                 throw new Error(
                     `Value "${base}" out of bounds [${min}-${max}]`
                 );
@@ -74,7 +74,7 @@ function parseField(field: string, min: number, max: number): Set<number> {
         }
 
         const step = stepParts.length === 2 ? parseInt(stepParts[1]!, 10) : 1;
-        if (isNaN(step) || step <= 0) {
+        if (Number.isNaN(step) || step <= 0) {
             throw new Error(`Invalid step: "${stepParts[1]}"`);
         }
 
@@ -101,8 +101,8 @@ export function parseCron(cronExpr: string): CronFields {
     // Parse day-of-week with range 0-7, then normalize 7 → 0 (both mean Sunday)
     const dayOfWeek = parseField(
         parts[4]!,
-        FIELD_RANGES[4]![0],
-        FIELD_RANGES[4]![1]
+        FIELD_RANGES[4]?.[0],
+        FIELD_RANGES[4]?.[1]
     );
     if (dayOfWeek.has(7)) {
         dayOfWeek.delete(7);
@@ -110,17 +110,25 @@ export function parseCron(cronExpr: string): CronFields {
     }
 
     return {
-        minute: parseField(parts[0]!, FIELD_RANGES[0]![0], FIELD_RANGES[0]![1]),
-        hour: parseField(parts[1]!, FIELD_RANGES[1]![0], FIELD_RANGES[1]![1]),
+        minute: parseField(
+            parts[0]!,
+            FIELD_RANGES[0]?.[0],
+            FIELD_RANGES[0]?.[1]
+        ),
+        hour: parseField(parts[1]!, FIELD_RANGES[1]?.[0], FIELD_RANGES[1]?.[1]),
         dayOfMonth: parseField(
             parts[2]!,
-            FIELD_RANGES[2]![0],
-            FIELD_RANGES[2]![1]
+            FIELD_RANGES[2]?.[0],
+            FIELD_RANGES[2]?.[1]
         ),
-        month: parseField(parts[3]!, FIELD_RANGES[3]![0], FIELD_RANGES[3]![1]),
+        month: parseField(
+            parts[3]!,
+            FIELD_RANGES[3]?.[0],
+            FIELD_RANGES[3]?.[1]
+        ),
         dayOfWeek,
-        domIsWild: parts[2]!.trim() === '*',
-        dowIsWild: parts[4]!.trim() === '*'
+        domIsWild: parts[2]?.trim() === '*',
+        dowIsWild: parts[4]?.trim() === '*'
     };
 }
 

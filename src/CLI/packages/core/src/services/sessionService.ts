@@ -142,7 +142,9 @@ export class SessionService {
      * Extracts the first user prompt text from a Content object.
      */
     private extractPromptText(message: Content | undefined): string {
-        if (!message?.parts) return '';
+        if (!message?.parts) {
+            return '';
+        }
 
         for (const part of message.parts as Part[]) {
             if ('text' in part) {
@@ -161,9 +163,13 @@ export class SessionService {
      */
     private extractFirstPromptFromRecords(records: ChatRecord[]): string {
         for (const record of records) {
-            if (record.type !== 'user') continue;
+            if (record.type !== 'user') {
+                continue;
+            }
             const prompt = this.extractPromptText(record.message);
-            if (prompt) return prompt;
+            if (prompt) {
+                return prompt;
+            }
         }
         return '';
     }
@@ -183,7 +189,9 @@ export class SessionService {
 
             for await (const line of rl) {
                 const trimmed = line.trim();
-                if (!trimmed) continue;
+                if (!trimmed) {
+                    continue;
+                }
                 try {
                     const record = JSON.parse(trimmed) as ChatRecord;
                     if (record.type === 'user' || record.type === 'assistant') {
@@ -222,7 +230,9 @@ export class SessionService {
             const fileNames = fs.readdirSync(chatsDir);
             for (const name of fileNames) {
                 // Only process files matching session file pattern
-                if (!SESSION_FILE_PATTERN.test(name)) continue;
+                if (!SESSION_FILE_PATTERN.test(name)) {
+                    continue;
+                }
                 const filePath = path.join(chatsDir, name);
                 try {
                     const stats = fs.statSync(filePath);
@@ -274,13 +284,17 @@ export class SessionService {
                 MAX_PROMPT_SCAN_LINES
             );
 
-            if (records.length === 0) continue;
+            if (records.length === 0) {
+                continue;
+            }
             const firstRecord = records[0];
 
             // Skip if not matching current project
             // We use cwd comparison since first record doesn't have projectHash
             const recordProjectHash = getProjectHash(firstRecord.cwd);
-            if (recordProjectHash !== this.projectHash) continue;
+            if (recordProjectHash !== this.projectHash) {
+                continue;
+            }
 
             // Count messages for this session
             const messageCount = await this.countSessionMessages(filePath);
@@ -387,7 +401,9 @@ export class SessionService {
         records: ChatRecord[],
         leafUuid?: string
     ): ChatRecord[] {
-        if (records.length === 0) return [];
+        if (records.length === 0) {
+            return [];
+        }
 
         const recordsByUuid = new Map<string, ChatRecord[]>();
         for (const record of records) {
@@ -405,7 +421,9 @@ export class SessionService {
             visited.add(currentUuid);
             uuidChain.push(currentUuid);
             const recordsForUuid = recordsByUuid.get(currentUuid);
-            if (!recordsForUuid || recordsForUuid.length === 0) break;
+            if (!recordsForUuid || recordsForUuid.length === 0) {
+                break;
+            }
             currentUuid = recordsForUuid[0].parentUuid;
         }
 
@@ -557,7 +575,9 @@ export interface BuildApiHistoryOptions {
  * Returns null if the content only contained thought parts.
  */
 function stripThoughtsFromContent(content: Content): Content | null {
-    if (!content.parts) return content;
+    if (!content.parts) {
+        return content;
+    }
 
     const filteredParts = content.parts.filter(
         (part) => !(part as Part).thought
@@ -613,7 +633,9 @@ export function buildApiHistoryFromConversation(
         // Append everything after the compression record (newer turns)
         for (let i = lastCompressionIndex + 1; i < messages.length; i++) {
             const record = messages[i];
-            if (record.type === 'system') continue;
+            if (record.type === 'system') {
+                continue;
+            }
             if (record.message) {
                 baseHistory.push(structuredClone(record.message as Content));
             }

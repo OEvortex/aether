@@ -19,7 +19,7 @@ import type {
     ApiKeyCredentials
 } from '../../accounts/types';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
-import { ApiKeyManager, Logger, RateLimiter, RetryManager } from '../../utils';
+import { ApiKeyManager, Logger, RateLimiter } from '../../utils';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
@@ -49,7 +49,7 @@ export class SeraphynProvider implements LanguageModelChatProvider {
     private accountListener?: vscode.Disposable;
 
     constructor(
-        private readonly context: vscode.ExtensionContext,
+        readonly _context: vscode.ExtensionContext,
         private readonly providerKey: string,
         private readonly cachedProviderConfig: ProviderConfig
     ) {

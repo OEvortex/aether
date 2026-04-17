@@ -107,7 +107,9 @@ export class ModelRegistry {
      */
     getModelsForAuthType(authType: AuthType): AvailableModel[] {
         const models = this.modelsByAuthType.get(authType);
-        if (!models) return [];
+        if (!models) {
+            return [];
+        }
 
         return Array.from(models.values())
             .filter((model) => this.isSelectableModel(model))
@@ -164,7 +166,9 @@ export class ModelRegistry {
             return this.getModel(authType, DEFAULT_AETHER_MODEL);
         }
         const models = this.modelsByAuthType.get(authType);
-        if (!models || models.size === 0) return undefined;
+        if (!models || models.size === 0) {
+            return undefined;
+        }
         return Array.from(models.values()).find((model) =>
             this.isSelectableModel(model)
         );

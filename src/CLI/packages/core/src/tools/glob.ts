@@ -235,7 +235,7 @@ class GlobToolInvocation extends BaseToolInvocation<
 
             // Set filtering such that we first show the most recent files
             const oneDayInMs = 24 * 60 * 60 * 1000;
-            const nowTimestamp = new Date().getTime();
+            const nowTimestamp = Date.now();
 
             // Sort the filtered entries using the new helper function
             const sortedEntries = sortFileEntries(

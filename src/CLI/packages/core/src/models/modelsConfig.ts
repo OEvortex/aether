@@ -352,7 +352,7 @@ export class ModelsConfig {
         ) {
             this.strictModelProviderSelection = false;
             this._generationConfig.model = newModel;
-            this.generationConfigSources['model'] = {
+            this.generationConfigSources.model = {
                 kind: 'programmatic',
                 detail: metadata?.reason || 'setModel'
             };
@@ -376,7 +376,7 @@ export class ModelsConfig {
         // Raw model override: update generation config in-place
         this.strictModelProviderSelection = false;
         this._generationConfig.model = newModel;
-        this.generationConfigSources['model'] = {
+        this.generationConfigSources.model = {
             kind: 'programmatic',
             detail: metadata?.reason || 'setModel'
         };
@@ -584,21 +584,21 @@ export class ModelsConfig {
 
         if (credentials.apiKey) {
             this._generationConfig.apiKey = credentials.apiKey;
-            this.generationConfigSources['apiKey'] = {
+            this.generationConfigSources.apiKey = {
                 kind: 'programmatic',
                 detail: 'updateCredentials'
             };
         }
         if (credentials.baseUrl) {
             this._generationConfig.baseUrl = credentials.baseUrl;
-            this.generationConfigSources['baseUrl'] = {
+            this.generationConfigSources.baseUrl = {
                 kind: 'programmatic',
                 detail: 'updateCredentials'
             };
         }
         if (credentials.model) {
             this._generationConfig.model = credentials.model;
-            this.generationConfigSources['model'] = {
+            this.generationConfigSources.model = {
                 kind: 'programmatic',
                 detail: 'updateCredentials'
             };
@@ -729,7 +729,7 @@ export class ModelsConfig {
         this.hasManualCredentials = false;
 
         this._generationConfig.model = model.id;
-        this.generationConfigSources['model'] = {
+        this.generationConfigSources.model = {
             kind: 'modelProviders',
             authType: model.authType,
             modelId: model.id,
@@ -746,17 +746,17 @@ export class ModelsConfig {
         // replaced later.)
         if (this.currentAuthType === AuthType.AETHER_OAUTH) {
             this._generationConfig.apiKey = 'AETHER_OAUTH_DYNAMIC_TOKEN';
-            this.generationConfigSources['apiKey'] = {
+            this.generationConfigSources.apiKey = {
                 kind: 'computed',
                 detail: 'Aether OAuth placeholder token'
             };
             this._generationConfig.apiKeyEnvKey = undefined;
-            delete this.generationConfigSources['apiKeyEnvKey'];
+            delete this.generationConfigSources.apiKeyEnvKey;
         } else {
             // Use apiKey from model config if available (inherited from provider)
             if (model.apiKey) {
                 this._generationConfig.apiKey = model.apiKey;
-                this.generationConfigSources['apiKey'] = {
+                this.generationConfigSources.apiKey = {
                     kind: 'modelProviders',
                     authType: model.authType,
                     modelId: model.id,
@@ -772,7 +772,7 @@ export class ModelsConfig {
         // All credentials must come from settings/providers configuration
         if (model.envKey !== undefined) {
             this._generationConfig.apiKeyEnvKey = model.envKey;
-            this.generationConfigSources['apiKeyEnvKey'] = {
+            this.generationConfigSources.apiKeyEnvKey = {
                 kind: 'modelProviders',
                 authType: model.authType,
                 modelId: model.id,
@@ -782,7 +782,7 @@ export class ModelsConfig {
 
         // Base URL
         this._generationConfig.baseUrl = model.baseUrl;
-        this.generationConfigSources['baseUrl'] = {
+        this.generationConfigSources.baseUrl = {
             kind: 'modelProviders',
             authType: model.authType,
             modelId: model.id,
@@ -813,7 +813,7 @@ export class ModelsConfig {
                 }
             );
             this._generationConfig.contextWindowSize = maxInputTokens;
-            this.generationConfigSources['contextWindowSize'] = {
+            this.generationConfigSources.contextWindowSize = {
                 kind: 'computed',
                 detail: 'auto-detected from model'
             };
@@ -822,7 +822,7 @@ export class ModelsConfig {
         // modalities fallback: auto-detect from model when not set by provider
         if (gc.modalities === undefined) {
             this._generationConfig.modalities = defaultModalities(model.id);
-            this.generationConfigSources['modalities'] = {
+            this.generationConfigSources.modalities = {
                 kind: 'computed',
                 detail: 'auto-detected from model'
             };
@@ -922,8 +922,8 @@ export class ModelsConfig {
         }
 
         // Step 2: Check if there are existing credentials from other sources (not modelProviders)
-        const apiKeySource = this.generationConfigSources['apiKey'];
-        const baseUrlSource = this.generationConfigSources['baseUrl'];
+        const apiKeySource = this.generationConfigSources.apiKey;
+        const baseUrlSource = this.generationConfigSources.baseUrl;
         const hasExistingCredentials =
             (this._generationConfig.apiKey &&
                 apiKeySource?.kind !== 'modelProviders') ||
@@ -950,8 +950,8 @@ export class ModelsConfig {
             // Preserve existing credentials, just update authType and modelId if provided
             if (modelId) {
                 this._generationConfig.model = modelId;
-                if (!this.generationConfigSources['model']) {
-                    this.generationConfigSources['model'] = {
+                if (!this.generationConfigSources.model) {
+                    this.generationConfigSources.model = {
                         kind: 'programmatic',
                         detail: 'auth refresh (preserved credentials)'
                     };
@@ -974,8 +974,8 @@ export class ModelsConfig {
         // resolveContentGeneratorConfigWithSources will throw exceptions as expected
         if (modelId) {
             this._generationConfig.model = modelId;
-            if (!this.generationConfigSources['model']) {
-                this.generationConfigSources['model'] = {
+            if (!this.generationConfigSources.model) {
+                this.generationConfigSources.model = {
                     kind: 'programmatic',
                     detail: 'auth refresh (no default model)'
                 };
@@ -1106,15 +1106,15 @@ export class ModelsConfig {
             this.hasManualCredentials = true; // Mark as manual to prevent provider override
 
             this._generationConfig.model = runtimeModelSnapshot.modelId;
-            this.generationConfigSources['model'] = {
+            this.generationConfigSources.model = {
                 kind: 'programmatic',
                 detail: 'runtimeModelSwitch'
             };
 
             if (runtimeModelSnapshot.apiKey) {
                 this._generationConfig.apiKey = runtimeModelSnapshot.apiKey;
-                this.generationConfigSources['apiKey'] = runtimeModelSnapshot
-                    .sources['apiKey'] || {
+                this.generationConfigSources.apiKey = runtimeModelSnapshot
+                    .sources.apiKey || {
                     kind: 'programmatic',
                     detail: 'runtimeModelSwitch'
                 };
@@ -1122,8 +1122,8 @@ export class ModelsConfig {
 
             if (runtimeModelSnapshot.baseUrl) {
                 this._generationConfig.baseUrl = runtimeModelSnapshot.baseUrl;
-                this.generationConfigSources['baseUrl'] = runtimeModelSnapshot
-                    .sources['baseUrl'] || {
+                this.generationConfigSources.baseUrl = runtimeModelSnapshot
+                    .sources.baseUrl || {
                     kind: 'programmatic',
                     detail: 'runtimeModelSwitch'
                 };

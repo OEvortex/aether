@@ -72,7 +72,7 @@ export function generateEnvFile(settings: Record<string, string>): string {
         lines.push(`${key}=${quotedValue}`);
     }
 
-    return lines.join('\n') + '\n';
+    return `${lines.join('\n')}\n`;
 }
 
 /**

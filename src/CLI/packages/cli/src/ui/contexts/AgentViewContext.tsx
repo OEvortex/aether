@@ -206,13 +206,17 @@ export function AgentViewProvider({
 
     const unregisterAgent = useCallback((agentId: string) => {
         setAgents((prev) => {
-            if (!prev.has(agentId)) return prev;
+            if (!prev.has(agentId)) {
+                return prev;
+            }
             const next = new Map(prev);
             next.delete(agentId);
             return next;
         });
         setAgentApprovalModes((prev) => {
-            if (!prev.has(agentId)) return prev;
+            if (!prev.has(agentId)) {
+                return prev;
+            }
             const next = new Map(prev);
             next.delete(agentId);
             return next;
@@ -289,9 +293,6 @@ export function AgentViewProvider({
             registerAgent,
             unregisterAgent,
             unregisterAll,
-            setAgentShellFocused,
-            setAgentInputBufferText,
-            setAgentTabBarFocused,
             setAgentApprovalMode
         ]
     );

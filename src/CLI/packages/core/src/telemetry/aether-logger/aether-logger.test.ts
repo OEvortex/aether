@@ -178,7 +178,7 @@ describe('AetherLogger', () => {
             const logger = AetherLogger.getInstance(mockConfig)!;
 
             // Get the cached sourceInfo value
-            const cachedSourceInfo = logger['sourceInfo'];
+            const cachedSourceInfo = logger.sourceInfo;
 
             // Create multiple payloads
             const payload1 = await (
@@ -191,7 +191,7 @@ describe('AetherLogger', () => {
             // Both payloads should use the same cached source info
             expect(payload1.app.channel).toBe(payload2.app.channel);
             // The cached value should not have changed
-            expect(logger['sourceInfo']).toBe(cachedSourceInfo);
+            expect(logger.sourceInfo).toBe(cachedSourceInfo);
         });
         it('does not include source when source.json does not exist', async () => {
             // Note: Testing source information requires actual file system operations
@@ -246,8 +246,8 @@ describe('AetherLogger', () => {
                 });
             }
 
-            const events = logger['events'].toArray() as RumEvent[];
-            expect(logger['events'].size).toBe(TEST_ONLY.MAX_EVENTS);
+            const events = logger.events.toArray() as RumEvent[];
+            expect(logger.events.size).toBe(TEST_ONLY.MAX_EVENTS);
             expect(events[0]?.name).toBe('test-event-10');
             expect(events[events.length - 1]?.name).toBe(
                 `test-event-${TEST_ONLY.MAX_EVENTS + 9}`
@@ -258,8 +258,8 @@ describe('AetherLogger', () => {
             const logger = AetherLogger.getInstance(mockConfig)!;
 
             // Mock the events deque to throw an error
-            const originalPush = logger['events'].push;
-            logger['events'].push = vi.fn(() => {
+            const originalPush = logger.events.push;
+            logger.events.push = vi.fn(() => {
                 throw new Error('Test error');
             });
 
@@ -270,10 +270,10 @@ describe('AetherLogger', () => {
                 name: 'test-event'
             });
 
-            expect(logger['events'].size).toBe(0);
+            expect(logger.events.size).toBe(0);
 
             // Restore original method
-            logger['events'].push = originalPush;
+            logger.events.push = originalPush;
         });
     });
 
@@ -282,18 +282,18 @@ describe('AetherLogger', () => {
             const logger = AetherLogger.getInstance(mockConfig)!;
 
             // Manually set the flush in progress flag to simulate concurrent access
-            logger['isFlushInProgress'] = true;
+            logger.isFlushInProgress = true;
 
             // Try to flush while another flush is in progress
             const result = logger.flushToRum();
 
-            expect(logger['pendingFlush']).toBe(true);
+            expect(logger.pendingFlush).toBe(true);
 
             // Should return a resolved promise
             expect(result).toBeInstanceOf(Promise);
 
             // Reset the flag
-            logger['isFlushInProgress'] = false;
+            logger.isFlushInProgress = false;
         });
     });
 
@@ -315,7 +315,7 @@ describe('AetherLogger', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (logger as any).requeueFailedEvents(failedEvents);
 
-            expect(logger['events'].size).toBe(TEST_ONLY.MAX_RETRY_EVENTS);
+            expect(logger.events.size).toBe(TEST_ONLY.MAX_RETRY_EVENTS);
         });
 
         it('should handle empty retry queue gracefully', () => {
@@ -344,7 +344,7 @@ describe('AetherLogger', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (logger as any).requeueFailedEvents(failedEvents);
 
-            expect(logger['events'].size).toBe(TEST_ONLY.MAX_EVENTS);
+            expect(logger.events.size).toBe(TEST_ONLY.MAX_EVENTS);
         });
     });
 
@@ -429,7 +429,7 @@ describe('AetherLogger', () => {
             // readSourceInfo should be called when starting a new session
             expect(readSourceInfoSpy).toHaveBeenCalled();
             // Session ID should be updated
-            expect(logger['sessionId']).toBe('new-session-id');
+            expect(logger.sessionId).toBe('new-session-id');
         });
 
         it('should flush end session events immediately', async () => {

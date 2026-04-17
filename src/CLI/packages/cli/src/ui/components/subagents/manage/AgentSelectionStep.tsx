@@ -393,7 +393,7 @@ export const AgentSelectionStep = ({
             level: 'project' | 'user' | 'builtin' | 'session' | 'extension';
             isBuiltin?: boolean;
         },
-        index: number,
+        _index: number,
         isSelected: boolean
     ) => {
         const textColor = isSelected ? theme.text.accent : theme.text.primary;

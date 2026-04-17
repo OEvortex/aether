@@ -56,7 +56,13 @@ const setupMocks = ({
                     setIsLoadingSuggestions(isLoading);
                     setSuggestions(atSuggestions);
                 }
-            }, [enabled, setSuggestions, setIsLoadingSuggestions]);
+            }, [
+                enabled,
+                setSuggestions,
+                setIsLoadingSuggestions,
+                atSuggestions,
+                isLoading
+            ]);
         }
     );
 
@@ -78,7 +84,10 @@ const setupMocks = ({
                 enabled,
                 setSuggestions,
                 setIsLoadingSuggestions,
-                setIsPerfectMatch
+                setIsPerfectMatch,
+                isLoading,
+                isPerfectMatch,
+                slashSuggestions
             ]);
             // The hook returns a range, which we can mock simply
             return slashCompletionRange;

@@ -46,9 +46,13 @@ const setCommand: CommandModule<object, SetArgs> = {
     handler: async (args) => {
         const { name, setting, scope } = args;
         const extensionManager = await getExtensionManager();
-        if (!extensionManager) return;
+        if (!extensionManager) {
+            return;
+        }
         const extensions = extensionManager.getLoadedExtensions();
-        if (!extensions || extensions.length === 0) return;
+        if (!extensions || extensions.length === 0) {
+            return;
+        }
         const extension = extensions.find((e) => e.name === name);
         if (!extension) {
             writeStdoutLine(t('Extension "{{name}}" not found.', { name }));
@@ -81,9 +85,13 @@ const listCommand: CommandModule<object, ListArgs> = {
     handler: async (args) => {
         const { name } = args;
         const extensionManager = await getExtensionManager();
-        if (!extensionManager) return;
+        if (!extensionManager) {
+            return;
+        }
         const extensions = extensionManager.getLoadedExtensions();
-        if (!extensions || extensions.length === 0) return;
+        if (!extensions || extensions.length === 0) {
+            return;
+        }
         const extension = extensions.find((e) => e.name === name);
         if (!extension) {
             writeStdoutLine(t('Extension "{{name}}" not found.', { name }));
@@ -121,9 +129,9 @@ const listCommand: CommandModule<object, ListArgs> = {
             let scopeInfo = '';
 
             if (workspaceSettings[setting.envVar] !== undefined) {
-                scopeInfo = ' ' + t('(workspace)');
+                scopeInfo = ` ${t('(workspace)')}`;
             } else if (userSettings[setting.envVar] !== undefined) {
-                scopeInfo = ' ' + t('(user)');
+                scopeInfo = ` ${t('(user)')}`;
             }
 
             if (value === undefined) {

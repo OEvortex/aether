@@ -35,7 +35,9 @@ function isProcessAlive(pid: number): boolean {
  */
 export function readServiceInfo(): ServiceInfo | null {
     const filePath = pidFilePath();
-    if (!existsSync(filePath)) return null;
+    if (!existsSync(filePath)) {
+        return null;
+    }
 
     let info: ServiceInfo;
     try {
@@ -119,7 +121,9 @@ export async function waitForExit(
 ): Promise<boolean> {
     const start = Date.now();
     while (Date.now() - start < timeoutMs) {
-        if (!isProcessAlive(pid)) return true;
+        if (!isProcessAlive(pid)) {
+            return true;
+        }
         await new Promise((r) => setTimeout(r, pollMs));
     }
     return !isProcessAlive(pid);

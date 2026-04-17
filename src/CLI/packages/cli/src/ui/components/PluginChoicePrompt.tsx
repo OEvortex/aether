@@ -68,7 +68,12 @@ export const PluginChoicePrompt = (props: PluginChoicePromptProps) => {
 
             // Number shortcuts (1-9)
             const num = parseInt(sequence || '', 10);
-            if (!isNaN(num) && num >= 1 && num <= plugins.length && num <= 9) {
+            if (
+                !Number.isNaN(num) &&
+                num >= 1 &&
+                num <= plugins.length &&
+                num <= 9
+            ) {
                 setSelectedIndex(num - 1);
                 const plugin = plugins[num - 1];
                 if (plugin) {

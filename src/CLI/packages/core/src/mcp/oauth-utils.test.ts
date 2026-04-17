@@ -396,7 +396,7 @@ describe('OAuthUtils', () => {
             );
 
             expect(result).not.toBeNull();
-            expect(result!.scopes).toEqual([
+            expect(result?.scopes).toEqual([
                 'openid',
                 'profile',
                 'list-operational-mcp',
@@ -434,7 +434,7 @@ describe('OAuthUtils', () => {
 
             expect(result).not.toBeNull();
             // Should use protected resource scopes, not auth server scopes
-            expect(result!.scopes).toEqual(['mcp-read', 'mcp-write']);
+            expect(result?.scopes).toEqual(['mcp-read', 'mcp-write']);
         });
     });
 });

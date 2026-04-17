@@ -115,7 +115,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when text block is created.
      */
     protected override onTextBlockCreated(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         block: TextBlock,
         parentToolUseId: string | null
@@ -134,7 +134,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when text is appended.
      */
     protected override onTextAppended(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         fragment: string,
         parentToolUseId: string | null
@@ -153,7 +153,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when thinking block is created.
      */
     protected override onThinkingBlockCreated(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         block: ThinkingBlock,
         parentToolUseId: string | null
@@ -172,7 +172,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when thinking is appended.
      */
     protected override onThinkingAppended(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         fragment: string,
         parentToolUseId: string | null
@@ -191,7 +191,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when tool_use block is created.
      */
     protected override onToolUseBlockCreated(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         block: ToolUseBlock,
         parentToolUseId: string | null
@@ -210,7 +210,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when tool_use input is set.
      */
     protected override onToolUseInputSet(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         input: unknown,
         parentToolUseId: string | null
@@ -232,7 +232,7 @@ export class StreamJsonOutputAdapter
      * Overrides base class hook to emit stream event when block is closed.
      */
     protected override onBlockClosed(
-        state: MessageState,
+        _state: MessageState,
         index: number,
         parentToolUseId: string | null
     ): void {

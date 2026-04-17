@@ -51,7 +51,7 @@ export class ControlService {
      * @param context - Control context (unused directly, passed to dispatcher)
      * @param dispatcher - Control dispatcher that owns the controller instances
      */
-    constructor(context: IControlContext, dispatcher: ControlDispatcher) {
+    constructor(_context: IControlContext, dispatcher: ControlDispatcher) {
         this.dispatcher = dispatcher;
     }
 

@@ -58,7 +58,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
     const fetchServerData = useCallback(async (): Promise<
         MCPServerDisplayInfo[]
     > => {
-        if (!config) return [];
+        if (!config) {
+            return [];
+        }
 
         const mcpServers = config.getMcpServers() || {};
         const toolRegistry = config.getToolRegistry();
@@ -177,7 +179,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
 
     const handleNavigateBack = useCallback(() => {
         setNavigationStack((prev) => {
-            if (prev.length <= 1) return prev;
+            if (prev.length <= 1) {
+                return prev;
+            }
             return prev.slice(0, -1);
         });
     }, []);
@@ -193,10 +197,14 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
 
     // Get server tool list
     const getServerTools = useCallback((): MCPToolDisplayInfo[] => {
-        if (!config || !selectedServer) return [];
+        if (!config || !selectedServer) {
+            return [];
+        }
 
         const toolRegistry = config.getToolRegistry();
-        if (!toolRegistry) return [];
+        if (!toolRegistry) {
+            return [];
+        }
 
         const allTools: AnyDeclarativeTool[] = toolRegistry.getAllTools();
         const mcpTools: DiscoveredMCPTool[] = [];
@@ -267,7 +275,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
 
     // Clear OAuth authentication tokens and disconnect the server
     const handleClearAuth = useCallback(async () => {
-        if (!config || !selectedServer) return;
+        if (!config || !selectedServer) {
+            return;
+        }
 
         try {
             setIsLoading(true);
@@ -297,7 +307,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
 
     // Reconnect server
     const handleReconnect = useCallback(async () => {
-        if (!config || !selectedServer) return;
+        if (!config || !selectedServer) {
+            return;
+        }
 
         try {
             setIsLoading(true);
@@ -319,7 +331,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
 
     // Enable server
     const handleEnableServer = useCallback(async () => {
-        if (!config || !selectedServer) return;
+        if (!config || !selectedServer) {
+            return;
+        }
 
         try {
             setIsLoading(true);
@@ -367,7 +381,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
 
     // Handle disable/enable action
     const handleDisable = useCallback(async () => {
-        if (!selectedServer) return;
+        if (!selectedServer) {
+            return;
+        }
 
         // If server is already disabled, enable it directly
         if (selectedServer.isDisabled) {
@@ -436,7 +452,9 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
     // Execute disable after selecting scope
     const handleSelectDisableScope = useCallback(
         async (scope: 'user' | 'workspace') => {
-            if (!config || !selectedServer) return;
+            if (!config || !selectedServer) {
+                return;
+            }
 
             try {
                 setIsLoading(true);
@@ -573,7 +591,6 @@ export const MCPManagementDialog: React.FC<MCPManagementDialogProps> = ({
                     </Box>
                 );
                 break;
-            case MCP_MANAGEMENT_STEPS.SERVER_LIST:
             default:
                 break;
         }

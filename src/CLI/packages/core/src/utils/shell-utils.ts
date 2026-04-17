@@ -53,7 +53,7 @@ function findGitBashPath(): string {
     }
 
     // Search in PATH directories
-    const pathEnv = process.env['PATH'] || '';
+    const pathEnv = process.env.PATH || '';
     const pathDirs = pathEnv.split(path.delimiter).filter(Boolean);
 
     for (const dir of pathDirs) {
@@ -74,7 +74,7 @@ function findGitBashPath(): string {
         path.join('C:', 'Program Files (x86)', 'Git', 'bin', 'bash.exe'),
         path.join('C:', 'Program Files (x86)', 'Git', 'usr', 'bin', 'bash.exe'),
         path.join(
-            process.env['ProgramFiles'] || path.join('C:', 'Program Files'),
+            process.env.ProgramFiles || path.join('C:', 'Program Files'),
             'Git',
             'bin',
             'bash.exe'
@@ -115,8 +115,8 @@ export function getShellConfiguration(): ShellConfiguration {
     if (isWindows()) {
         // Detect Git Bash / MSYS2 / MinTTY environments
         // These environments should use bash instead of cmd/PowerShell
-        const msystem = process.env['MSYSTEM'];
-        const term = process.env['TERM'] || '';
+        const msystem = process.env.MSYSTEM;
+        const term = process.env.TERM || '';
         const isGitBash =
             msystem?.startsWith('MINGW') ||
             msystem?.startsWith('MSYS') ||
@@ -131,7 +131,7 @@ export function getShellConfiguration(): ShellConfiguration {
             };
         }
 
-        const comSpec = process.env['ComSpec'] || 'cmd.exe';
+        const comSpec = process.env.ComSpec || 'cmd.exe';
         const executable = comSpec.toLowerCase();
 
         if (
@@ -189,7 +189,6 @@ export function escapeShellArg(arg: string, shell: ShellType): string {
         case 'cmd':
             // Simple Windows escaping for cmd.exe: wrap in double quotes and escape inner double quotes.
             return `"${arg.replace(/"/g, '""')}"`;
-        case 'bash':
         default:
             // POSIX shell escaping using shell-quote.
             return quote([arg]);
@@ -366,8 +365,12 @@ export function detectCommandSubstitution(command: string): boolean {
     };
 
     const isCommentStart = (index: number): boolean => {
-        if (command[index] !== '#') return false;
-        if (index === 0) return true;
+        if (command[index] !== '#') {
+            return false;
+        }
+        if (index === 0) {
+            return true;
+        }
 
         const prev = command[index - 1]!;
         if (prev === ' ' || prev === '\t' || prev === '\n' || prev === '\r') {
@@ -398,7 +401,9 @@ export function detectCommandSubstitution(command: string): boolean {
 
         let i = startIndex + 2;
         const stripLeadingTabs = command[i] === '-';
-        if (stripLeadingTabs) i++;
+        if (stripLeadingTabs) {
+            i++;
+        }
 
         // Skip whitespace between operator and delimiter word.
         while (
@@ -437,7 +442,9 @@ export function detectCommandSubstitution(command: string): boolean {
                 if (char === '\\') {
                     isQuotedDelimiter = true;
                     i++;
-                    if (i >= command.length) break;
+                    if (i >= command.length) {
+                        break;
+                    }
                     delimiter += command[i]!;
                     i++;
                     continue;
@@ -469,7 +476,9 @@ export function detectCommandSubstitution(command: string): boolean {
                 // purposes, treat it as quoting and include the escaped char as-is.
                 isQuotedDelimiter = true;
                 i++;
-                if (i >= command.length) break;
+                if (i >= command.length) {
+                    break;
+                }
                 delimiter += command[i]!;
                 i++;
                 continue;
@@ -625,7 +634,9 @@ export function detectCommandSubstitution(command: string): boolean {
                 inComment = false;
                 if (pendingHeredocs.length > 0) {
                     const result = consumeHeredocBodies(i + 2, pendingHeredocs);
-                    if (result.hasSubstitution) return true;
+                    if (result.hasSubstitution) {
+                        return true;
+                    }
                     pendingHeredocs.length = 0;
                     i = result.nextIndex;
                     continue;
@@ -634,7 +645,9 @@ export function detectCommandSubstitution(command: string): boolean {
                 inComment = false;
                 if (pendingHeredocs.length > 0) {
                     const result = consumeHeredocBodies(i + 1, pendingHeredocs);
-                    if (result.hasSubstitution) return true;
+                    if (result.hasSubstitution) {
+                        return true;
+                    }
                     pendingHeredocs.length = 0;
                     i = result.nextIndex;
                     continue;
@@ -787,7 +800,7 @@ export async function checkCommandPermissions(
         for (const cmd of commandsToValidate) {
             // 1. Session allowlist always wins (checked first regardless of PM rules)
             if (sessionAllowlist) {
-                invocation.params['command'] = cmd;
+                invocation.params.command = cmd;
                 const isSessionAllowed = doesToolInvocationMatch(
                     'run_shell_command',
                     invocation,
@@ -795,7 +808,9 @@ export async function checkCommandPermissions(
                         SHELL_TOOL_NAMES.map((name) => `${name}(${c})`)
                     )
                 );
-                if (isSessionAllowed) continue;
+                if (isSessionAllowed) {
+                    continue;
+                }
             }
 
             const decision = await pm.isCommandAllowed(cmd);
@@ -809,7 +824,9 @@ export async function checkCommandPermissions(
                 };
             }
 
-            if (decision === 'allow') continue;
+            if (decision === 'allow') {
+                continue;
+            }
 
             // 'ask' → always requires confirmation
             if (decision === 'ask') {
@@ -857,7 +874,7 @@ export async function checkCommandPermissions(
     }
 
     for (const cmd of commandsToValidate) {
-        invocation.params['command'] = cmd;
+        invocation.params.command = cmd;
         if (
             doesToolInvocationMatch(
                 'run_shell_command',
@@ -897,20 +914,24 @@ export async function checkCommandPermissions(
         );
 
         for (const cmd of commandsToValidate) {
-            invocation.params['command'] = cmd;
+            invocation.params.command = cmd;
             const isSessionAllowed = doesToolInvocationMatch(
                 'run_shell_command',
                 invocation,
                 [...normalizedSessionAllowlist]
             );
-            if (isSessionAllowed) continue;
+            if (isSessionAllowed) {
+                continue;
+            }
 
             const isGloballyAllowed = doesToolInvocationMatch(
                 'run_shell_command',
                 invocation,
                 coreTools
             );
-            if (isGloballyAllowed) continue;
+            if (isGloballyAllowed) {
+                continue;
+            }
 
             disallowedCommands.push(cmd);
         }
@@ -934,7 +955,7 @@ export async function checkCommandPermissions(
 
         if (hasSpecificAllowedCommands) {
             for (const cmd of commandsToValidate) {
-                invocation.params['command'] = cmd;
+                invocation.params.command = cmd;
                 const isGloballyAllowed = doesToolInvocationMatch(
                     'run_shell_command',
                     invocation,
@@ -1058,7 +1079,9 @@ export function resolveCommandPath(command: string): {
                 return { path: null, error: undefined };
             }
 
-            if (!result) return { path: null, error: undefined };
+            if (!result) {
+                return { path: null, error: undefined };
+            }
             accessSync(result, fsConstants.X_OK);
             return { path: result, error: undefined };
         }
@@ -1132,27 +1155,46 @@ export function checkArgumentSafety(args: string): {
     const dangerousPatterns: string[] = [];
 
     // Command substitution patterns
-    if (args.includes('$(')) dangerousPatterns.push('$() command substitution');
-    if (args.includes('`'))
+    if (args.includes('$(')) {
+        dangerousPatterns.push('$() command substitution');
+    }
+    if (args.includes('`')) {
         dangerousPatterns.push('backtick command substitution');
-    if (args.includes('<(')) dangerousPatterns.push('<() process substitution');
-    if (args.includes('>(')) dangerousPatterns.push('>() process substitution');
+    }
+    if (args.includes('<(')) {
+        dangerousPatterns.push('<() process substitution');
+    }
+    if (args.includes('>(')) {
+        dangerousPatterns.push('>() process substitution');
+    }
 
     // Command separators (outside of quotes)
-    if (args.includes(';')) dangerousPatterns.push('; command separator');
-    if (args.includes('|')) dangerousPatterns.push('| pipe');
-    if (args.includes('&&')) dangerousPatterns.push('&& AND operator');
-    if (args.includes('||')) dangerousPatterns.push('|| OR operator');
+    if (args.includes(';')) {
+        dangerousPatterns.push('; command separator');
+    }
+    if (args.includes('|')) {
+        dangerousPatterns.push('| pipe');
+    }
+    if (args.includes('&&')) {
+        dangerousPatterns.push('&& AND operator');
+    }
+    if (args.includes('||')) {
+        dangerousPatterns.push('|| OR operator');
+    }
 
     // Background execution (space + &, with optional surrounding)
-    if (args.includes(' &') || args.includes('& '))
+    if (args.includes(' &') || args.includes('& ')) {
         dangerousPatterns.push('& background operator');
+    }
 
     // Input/Output redirection
     if (args.includes('>') || args.includes('<')) {
-        if (/>\s|\d>/.test(args))
+        if (/>\s|\d>/.test(args)) {
             dangerousPatterns.push('> output redirection');
-        if (/<\s|\d</.test(args)) dangerousPatterns.push('< input redirection');
+        }
+        if (/<\s|\d</.test(args)) {
+            dangerousPatterns.push('< input redirection');
+        }
     }
 
     return {
@@ -1166,7 +1208,9 @@ export function checkArgumentSafety(args: string): {
 const CONPTY_MIN_WINDOWS_BUILD = 19042;
 
 export function shouldDefaultToNodePty(): boolean {
-    if (os.platform() !== 'win32') return true;
+    if (os.platform() !== 'win32') {
+        return true;
+    }
     const build = parseInt(os.release().split('.')[2] ?? '', 10);
-    return !isNaN(build) && build >= CONPTY_MIN_WINDOWS_BUILD;
+    return !Number.isNaN(build) && build >= CONPTY_MIN_WINDOWS_BUILD;
 }

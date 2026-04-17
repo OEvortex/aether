@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as fs from 'fs/promises';
-import * as os from 'os';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import type {
     AgentEventEmitter,
     AgentHooks
@@ -123,7 +123,9 @@ export class SubagentManager {
                     config.name
                 );
             } catch (error) {
-                if (error instanceof SubagentError) throw error;
+                if (error instanceof SubagentError) {
+                    throw error;
+                }
                 // File doesn't exist, which is what we want
             }
         }
@@ -340,7 +342,7 @@ export class SubagentManager {
                 name,
                 currentLevel
             );
-            if (config && config.filePath) {
+            if (config?.filePath) {
                 try {
                     await fs.unlink(config.filePath);
                     deleted = true;
@@ -598,19 +600,19 @@ export class SubagentManager {
         };
 
         if (config.tools && config.tools.length > 0) {
-            frontmatter['tools'] = config.tools;
+            frontmatter.tools = config.tools;
         }
 
         if (config.model && config.model !== 'inherit') {
-            frontmatter['model'] = config.model;
+            frontmatter.model = config.model;
         }
 
         if (config.runConfig) {
-            frontmatter['runConfig'] = config.runConfig;
+            frontmatter.runConfig = config.runConfig;
         }
 
         if (config.color && config.color !== 'auto') {
-            frontmatter['color'] = config.color;
+            frontmatter.color = config.color;
         }
 
         // Serialize to YAML
@@ -896,7 +898,9 @@ export class SubagentManager {
             const subagents: SubagentConfig[] = [];
 
             for (const file of files) {
-                if (!file.endsWith('.md')) continue;
+                if (!file.endsWith('.md')) {
+                    continue;
+                }
 
                 const filePath = path.join(baseDir, file);
 
@@ -973,7 +977,9 @@ export async function loadSubagentFromDir(
         const subagents: SubagentConfig[] = [];
 
         for (const file of files) {
-            if (!file.endsWith('.md')) continue;
+            if (!file.endsWith('.md')) {
+                continue;
+            }
 
             const filePath = path.join(baseDir, file);
 
@@ -1022,8 +1028,8 @@ function parseSubagentContent(
         >;
 
         // Extract required fields and convert to strings
-        const nameRaw = frontmatter['name'];
-        const descriptionRaw = frontmatter['description'];
+        const nameRaw = frontmatter.name;
+        const descriptionRaw = frontmatter.description;
 
         if (nameRaw == null || nameRaw === '') {
             throw new Error('Missing "name" in frontmatter');
@@ -1038,20 +1044,20 @@ function parseSubagentContent(
         const description = String(descriptionRaw);
 
         // Extract optional fields
-        const tools = frontmatter['tools'] as string[] | undefined;
-        const modelRaw = frontmatter['model'];
-        const legacyModelConfig = frontmatter['modelConfig'] as
+        const tools = frontmatter.tools as string[] | undefined;
+        const modelRaw = frontmatter.model;
+        const legacyModelConfig = frontmatter.modelConfig as
             | Record<string, unknown>
             | undefined;
-        const runConfig = frontmatter['runConfig'] as
+        const runConfig = frontmatter.runConfig as
             | Record<string, unknown>
             | undefined;
-        const color = frontmatter['color'] as string | undefined;
+        const color = frontmatter.color as string | undefined;
         const model =
             modelRaw != null && modelRaw !== ''
                 ? String(modelRaw)
-                : typeof legacyModelConfig?.['model'] === 'string'
-                  ? legacyModelConfig['model']
+                : typeof legacyModelConfig?.model === 'string'
+                  ? legacyModelConfig.model
                   : undefined;
 
         const config: SubagentConfig = {

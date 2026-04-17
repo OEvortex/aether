@@ -39,20 +39,20 @@ describe('validateAuthMethod', () => {
 
     afterEach(() => {
         vi.unstubAllEnvs();
-        delete process.env['OPENAI_API_KEY'];
-        delete process.env['CUSTOM_API_KEY'];
-        delete process.env['GEMINI_API_KEY'];
-        delete process.env['GEMINI_API_KEY_ALTERED'];
-        delete process.env['ANTHROPIC_API_KEY'];
-        delete process.env['ANTHROPIC_BASE_URL'];
-        delete process.env['GOOGLE_API_KEY'];
-        delete process.env['GOOGLE_GENAI_USE_VERTEXAI'];
-        delete process.env['SETTINGS_API_KEY'];
-        delete process.env['CLI_API_KEY'];
+        delete process.env.OPENAI_API_KEY;
+        delete process.env.CUSTOM_API_KEY;
+        delete process.env.GEMINI_API_KEY;
+        delete process.env.GEMINI_API_KEY_ALTERED;
+        delete process.env.ANTHROPIC_API_KEY;
+        delete process.env.ANTHROPIC_BASE_URL;
+        delete process.env.GOOGLE_API_KEY;
+        delete process.env.GOOGLE_GENAI_USE_VERTEXAI;
+        delete process.env.SETTINGS_API_KEY;
+        delete process.env.CLI_API_KEY;
     });
 
     it('returns null for USE_OPENAI when the default env key is set', () => {
-        process.env['OPENAI_API_KEY'] = 'fake-key';
+        process.env.OPENAI_API_KEY = 'fake-key';
         expect(validateAuthMethod(AuthType.USE_OPENAI)).toBeNull();
     });
 
@@ -87,7 +87,7 @@ describe('validateAuthMethod', () => {
                 }
             }
         });
-        process.env['CUSTOM_API_KEY'] = 'custom-key';
+        process.env.CUSTOM_API_KEY = 'custom-key';
 
         expect(validateAuthMethod(AuthType.USE_OPENAI)).toBeNull();
     });
@@ -118,7 +118,7 @@ describe('validateAuthMethod', () => {
                 }
             }
         });
-        process.env['ANTHROPIC_API_KEY'] = 'custom-anthropic-key';
+        process.env.ANTHROPIC_API_KEY = 'custom-anthropic-key';
 
         expect(validateAuthMethod(AuthType.USE_ANTHROPIC)).toBeNull();
     });
@@ -133,8 +133,8 @@ describe('validateAuthMethod', () => {
                 }
             }
         });
-        process.env['ANTHROPIC_API_KEY'] = 'custom-key';
-        process.env['ANTHROPIC_BASE_URL'] = 'https://example.com';
+        process.env.ANTHROPIC_API_KEY = 'custom-key';
+        process.env.ANTHROPIC_BASE_URL = 'https://example.com';
 
         const result = validateAuthMethod(AuthType.USE_ANTHROPIC);
         expect(result).toContain('baseUrl');
@@ -144,17 +144,17 @@ describe('validateAuthMethod', () => {
         mockSettings({
             model: { name: 'claude-3' }
         });
-        process.env['ANTHROPIC_API_KEY'] = 'custom-key';
-        process.env['ANTHROPIC_BASE_URL'] = 'https://env-base-url';
+        process.env.ANTHROPIC_API_KEY = 'custom-key';
+        process.env.ANTHROPIC_BASE_URL = 'https://env-base-url';
 
         expect(validateAuthMethod(AuthType.USE_ANTHROPIC)).toBeNull();
     });
 
     it('returns null for USE_VERTEX_AI when default env key is set and sets vertex flag', () => {
-        process.env['GOOGLE_API_KEY'] = 'vertex-key';
+        process.env.GOOGLE_API_KEY = 'vertex-key';
 
         expect(validateAuthMethod(AuthType.USE_VERTEX_AI)).toBeNull();
-        expect(process.env['GOOGLE_GENAI_USE_VERTEXAI']).toBe('true');
+        expect(process.env.GOOGLE_GENAI_USE_VERTEXAI).toBe('true');
     });
 
     it('uses Config model selection when available', () => {
@@ -171,7 +171,7 @@ describe('validateAuthMethod', () => {
         });
 
         const config = createConfig('cli-model');
-        process.env['CLI_API_KEY'] = 'cli-key';
+        process.env.CLI_API_KEY = 'cli-key';
 
         const result = validateAuthMethod(AuthType.USE_OPENAI, config);
         expect(result).toBeNull();

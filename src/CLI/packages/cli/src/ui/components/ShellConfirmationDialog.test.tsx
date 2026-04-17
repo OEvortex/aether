@@ -27,7 +27,7 @@ describe('ShellConfirmationDialog', () => {
         const { lastFrame } = renderWithProviders(
             <ShellConfirmationDialog request={request} />
         );
-        const select = lastFrame()!.toString();
+        const select = lastFrame()?.toString();
         // Simulate selecting the first option
         // This is a simplified way to test the selection
         expect(select).toContain('Yes, allow once');
@@ -37,7 +37,7 @@ describe('ShellConfirmationDialog', () => {
         const { lastFrame } = renderWithProviders(
             <ShellConfirmationDialog request={request} />
         );
-        const select = lastFrame()!.toString();
+        const select = lastFrame()?.toString();
         // Simulate selecting the second option
         expect(select).toContain('Always allow in this project');
     });
@@ -46,7 +46,7 @@ describe('ShellConfirmationDialog', () => {
         const { lastFrame } = renderWithProviders(
             <ShellConfirmationDialog request={request} />
         );
-        const select = lastFrame()!.toString();
+        const select = lastFrame()?.toString();
         // Simulate selecting the third option
         expect(select).toContain('No (esc)');
     });

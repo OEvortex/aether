@@ -38,10 +38,14 @@ export function normalizeSessionData(
 
     // Merge tool result information into tool call messages
     for (const record of originalRecords) {
-        if (record.type !== 'tool_result') continue;
+        if (record.type !== 'tool_result') {
+            continue;
+        }
 
         const toolCallMessage = buildToolCallMessageFromResult(record, config);
-        if (!toolCallMessage?.toolCall) continue;
+        if (!toolCallMessage?.toolCall) {
+            continue;
+        }
 
         const existingIndex = toolCallIndexById.get(
             toolCallMessage.toolCall.toolCallId
@@ -68,8 +72,12 @@ export function normalizeSessionData(
 
     // Merge usageMetadata from assistant records
     for (const record of originalRecords) {
-        if (record.type !== 'assistant') continue;
-        if (!record.usageMetadata) continue;
+        if (record.type !== 'assistant') {
+            continue;
+        }
+        if (!record.usageMetadata) {
+            continue;
+        }
 
         const existingIndex = assistantMessageIndexByUuid.get(record.uuid);
         if (existingIndex !== undefined) {
@@ -289,9 +297,9 @@ function extractDiffContent(
         return [
             {
                 type: 'diff',
-                path: display['fileName'] as string,
-                oldText: (display['originalContent'] as string) ?? '',
-                newText: display['newContent'] as string
+                path: display.fileName as string,
+                oldText: (display.originalContent as string) ?? '',
+                newText: display.newContent as string
             }
         ];
     }
@@ -303,8 +311,12 @@ function extractDiffContent(
  * Normalizes raw input to string or object.
  */
 function normalizeRawInput(value: unknown): string | object | undefined {
-    if (typeof value === 'string') return value;
-    if (typeof value === 'object' && value !== null) return value;
+    if (typeof value === 'string') {
+        return value;
+    }
+    if (typeof value === 'object' && value !== null) {
+        return value;
+    }
     return undefined;
 }
 
@@ -330,8 +342,8 @@ function transformPartsToToolCallContent(
                 string,
                 unknown
             >;
-            const outputField = response?.['output'];
-            const errorField = response?.['error'];
+            const outputField = response?.output;
+            const errorField = response?.error;
             const responseText =
                 typeof outputField === 'string'
                     ? outputField

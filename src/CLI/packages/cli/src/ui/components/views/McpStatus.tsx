@@ -110,7 +110,6 @@ export const McpStatus: React.FC<McpStatusProps> = ({
                         );
                         statusColor = theme.status.warning;
                         break;
-                    case MCPServerStatus.DISCONNECTED:
                     default:
                         statusIndicator = '🔴';
                         statusText = t('Disconnected');

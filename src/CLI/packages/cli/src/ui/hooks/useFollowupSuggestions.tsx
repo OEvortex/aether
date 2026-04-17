@@ -105,7 +105,9 @@ export function useFollowupSuggestionsCLI(
             suggestion_length: number;
         }) => {
             const cfg = configRef.current;
-            if (!cfg) return;
+            if (!cfg) {
+                return;
+            }
             logPromptSuggestion(
                 cfg,
                 new PromptSuggestionEvent({

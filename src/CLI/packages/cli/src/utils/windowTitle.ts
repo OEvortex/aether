@@ -11,7 +11,7 @@
  * @returns The computed window title, either from CLI_TITLE environment variable or the default Aether title
  */
 export function computeWindowTitle(folderName: string): string {
-    const title = process.env['CLI_TITLE'] || `Aether - ${folderName}`;
+    const title = process.env.CLI_TITLE || `Aether - ${folderName}`;
 
     // Remove control characters that could cause issues in terminal titles
     return title.replace(

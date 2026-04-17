@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as fsSync from 'node:fs';
+import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import * as fsSync from 'fs';
-import * as fs from 'fs/promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Config } from '../config/config.js';
 import { Storage } from '../config/storage.js';
@@ -323,7 +323,7 @@ describe('TodoWriteTool – runtime output directory', () => {
     let tool: TodoWriteTool;
     let mockAbortSignal: AbortSignal;
     let mockConfig: Config;
-    const originalRuntimeEnv = process.env['AETHER_RUNTIME_DIR'];
+    const originalRuntimeEnv = process.env.AETHER_RUNTIME_DIR;
 
     beforeEach(() => {
         mockConfig = {
@@ -332,16 +332,16 @@ describe('TodoWriteTool – runtime output directory', () => {
         tool = new TodoWriteTool(mockConfig);
         mockAbortSignal = new AbortController().signal;
         Storage.setRuntimeBaseDir(null);
-        delete process.env['AETHER_RUNTIME_DIR'];
+        delete process.env.AETHER_RUNTIME_DIR;
         vi.clearAllMocks();
     });
 
     afterEach(() => {
         Storage.setRuntimeBaseDir(null);
         if (originalRuntimeEnv !== undefined) {
-            process.env['AETHER_RUNTIME_DIR'] = originalRuntimeEnv;
+            process.env.AETHER_RUNTIME_DIR = originalRuntimeEnv;
         } else {
-            delete process.env['AETHER_RUNTIME_DIR'];
+            delete process.env.AETHER_RUNTIME_DIR;
         }
         vi.restoreAllMocks();
     });
@@ -369,7 +369,7 @@ describe('TodoWriteTool – runtime output directory', () => {
 
     it('should write todos to env var dir when AETHER_RUNTIME_DIR is set', async () => {
         const envRuntimeDir = path.resolve('env', 'runtime');
-        process.env['AETHER_RUNTIME_DIR'] = envRuntimeDir;
+        process.env.AETHER_RUNTIME_DIR = envRuntimeDir;
 
         const params: TodoWriteParams = {
             todos: [{ id: '1', content: 'Task 1', status: 'pending' }]

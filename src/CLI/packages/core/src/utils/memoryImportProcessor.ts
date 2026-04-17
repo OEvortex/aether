@@ -87,7 +87,9 @@ function findImports(
     while (i < len) {
         // Find next @ symbol
         i = content.indexOf('@', i);
-        if (i === -1) break;
+        if (i === -1) {
+            break;
+        }
 
         // Check if it's a word boundary (not part of another word)
         if (i > 0 && !isWhitespace(content[i - 1])) {
@@ -243,7 +245,9 @@ export async function processImports(
             const normalizedPath = path.normalize(filePath);
 
             // Skip if already processed
-            if (processedFiles.has(normalizedPath)) return;
+            if (processedFiles.has(normalizedPath)) {
+                return;
+            }
 
             // Mark as processed before processing to prevent infinite recursion
             processedFiles.add(normalizedPath);
@@ -282,7 +286,9 @@ export async function processImports(
                 const normalizedFullPath = path.normalize(fullPath);
 
                 // Skip if already processed
-                if (processedFiles.has(normalizedFullPath)) continue;
+                if (processedFiles.has(normalizedFullPath)) {
+                    continue;
+                }
 
                 try {
                     await fs.access(fullPath);

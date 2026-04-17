@@ -69,11 +69,10 @@ export class IdeContextStore {
                     mostRecentFile.selectedText.length >
                         IDE_MAX_SELECTED_TEXT_LENGTH
                 ) {
-                    mostRecentFile.selectedText =
-                        mostRecentFile.selectedText.substring(
-                            0,
-                            IDE_MAX_SELECTED_TEXT_LENGTH
-                        ) + '... [TRUNCATED]';
+                    mostRecentFile.selectedText = `${mostRecentFile.selectedText.substring(
+                        0,
+                        IDE_MAX_SELECTED_TEXT_LENGTH
+                    )}... [TRUNCATED]`;
                 }
             }
 

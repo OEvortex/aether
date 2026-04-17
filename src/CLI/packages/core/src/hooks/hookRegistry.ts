@@ -135,7 +135,9 @@ export class HookRegistry {
      */
     private checkProjectHooksTrust(): void {
         const projectHooks = this.config.getProjectHooks();
-        if (!projectHooks) return;
+        if (!projectHooks) {
+            return;
+        }
 
         try {
             const trustedHooksManager = new TrustedHooksManager();

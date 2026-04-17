@@ -8,56 +8,66 @@ interface ProviderWizardOptions {
     supportsApiKey?: boolean;
 }
 
-export class ProviderWizard {
-    static configureBaseUrl(arg0: string, displayName: string) {
-        throw new Error('Method not implemented.');
+export function configureBaseUrl(_arg0: string, _displayName: string) {
+    throw new Error('Method not implemented.');
+}
+
+export async function configureApiKey(
+    options: ProviderWizardOptions
+): Promise<void> {
+    if (!options.apiKeyTemplate) {
+        return;
     }
-    static async startWizard(options: ProviderWizardOptions): Promise<void> {
-        const supportsApiKey = options.supportsApiKey !== false;
+    await ApiKeyManager.promptAndSetApiKey(
+        options.providerKey,
+        options.displayName,
+        options.apiKeyTemplate
+    );
+}
 
-        const actions: Array<{
-            label: string;
-            detail?: string;
-            description?: string;
-            action: 'apiKey';
-        }> = [];
+export async function startWizard(
+    options: ProviderWizardOptions
+): Promise<void> {
+    const supportsApiKey = options.supportsApiKey !== false;
 
-        if (supportsApiKey) {
-            actions.push({
-                label: `$(key) Configure ${options.displayName} API Key`,
-                detail: `Set or clear ${options.displayName} API key`,
-                action: 'apiKey'
-            });
-        }
+    const actions: Array<{
+        label: string;
+        detail?: string;
+        description?: string;
+        action: 'apiKey';
+    }> = [];
 
-        if (actions.length === 0) {
-            return;
-        }
-
-        const choice = await vscode.window.showQuickPick(actions, {
-            title: `${options.displayName} Configuration`,
-            placeHolder: 'Select an option to configure'
+    if (supportsApiKey) {
+        actions.push({
+            label: `$(key) Configure ${options.displayName} API Key`,
+            detail: `Set or clear ${options.displayName} API key`,
+            action: 'apiKey'
         });
-
-        if (!choice) {
-            return;
-        }
-
-        if (choice.action === 'apiKey') {
-            await ProviderWizard.configureApiKey(options);
-        }
     }
 
-    static async configureApiKey(
-        options: ProviderWizardOptions
-    ): Promise<void> {
-        if (!options.apiKeyTemplate) {
-            return;
-        }
-        await ApiKeyManager.promptAndSetApiKey(
-            options.providerKey,
-            options.displayName,
-            options.apiKeyTemplate
-        );
+    if (actions.length === 0) {
+        return;
+    }
+
+    const choice = await vscode.window.showQuickPick(actions, {
+        title: `${options.displayName} Configuration`,
+        placeHolder: 'Select an option to configure'
+    });
+
+    if (!choice) {
+        return;
+    }
+
+    if (choice.action === 'apiKey') {
+        await configureApiKey(options);
     }
 }
+
+/**
+ * Provider Wizard (deprecated class-like interface for backward compatibility)
+ */
+export const ProviderWizard = {
+    configureBaseUrl,
+    startWizard,
+    configureApiKey
+};

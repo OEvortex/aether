@@ -223,27 +223,35 @@ export class PermissionManager {
                 ...this.sessionRules.deny,
                 ...this.persistentRules.deny
             ]) {
-                if (matchesRule(rule, ...matchArgs)) return 'deny';
+                if (matchesRule(rule, ...matchArgs)) {
+                    return 'deny';
+                }
             }
             // Priority 2: ask rules
             for (const rule of [
                 ...this.sessionRules.ask,
                 ...this.persistentRules.ask
             ]) {
-                if (matchesRule(rule, ...matchArgs)) return 'ask';
+                if (matchesRule(rule, ...matchArgs)) {
+                    return 'ask';
+                }
             }
             // Priority 3: allow rules
             for (const rule of [
                 ...this.sessionRules.allow,
                 ...this.persistentRules.allow
             ]) {
-                if (matchesRule(rule, ...matchArgs)) return 'allow';
+                if (matchesRule(rule, ...matchArgs)) {
+                    return 'allow';
+                }
             }
             return 'default';
         })();
 
         // `deny` is the most restrictive result — no further checks needed.
-        if (baseDecision === 'deny') return 'deny';
+        if (baseDecision === 'deny') {
+            return 'deny';
+        }
 
         // For shell commands: evaluate virtual file/network operations extracted
         // from the command string against Read/Edit/Write/WebFetch/ListFiles rules.
@@ -284,7 +292,9 @@ export class PermissionManager {
         ops: ShellOperation[],
         _pathCtx: PathMatchContext | undefined
     ): PermissionDecision {
-        if (ops.length === 0) return 'default';
+        if (ops.length === 0) {
+            return 'default';
+        }
 
         let worst: PermissionDecision = 'default';
 
@@ -300,7 +310,9 @@ export class PermissionManager {
 
             if (DECISION_PRIORITY[opDecision] > DECISION_PRIORITY[worst]) {
                 worst = opDecision;
-                if (worst === 'deny') return 'deny'; // short-circuit
+                if (worst === 'deny') {
+                    return 'deny'; // short-circuit
+                }
             }
         }
 
@@ -582,8 +594,9 @@ export class PermissionManager {
             ...this.persistentRules.deny
         ];
 
-        if (allRules.some((rule) => matchesRule(rule, ...matchArgs)))
+        if (allRules.some((rule) => matchesRule(rule, ...matchArgs))) {
             return true;
+        }
 
         // For shell commands: also check whether any virtual file/network operation
         // extracted from the command has a relevant rule. This ensures the PM is
@@ -693,7 +706,7 @@ export class PermissionManager {
      * @param raw - The raw rule string, e.g. "Bash(git status)".
      */
     addSessionAllowRule(raw: string): void {
-        if (raw && raw.trim()) {
+        if (raw?.trim()) {
             this.sessionRules.allow.push(parseRule(raw));
         }
     }
@@ -702,7 +715,7 @@ export class PermissionManager {
      * Add a session-level deny rule (in-memory, cleared when the session ends).
      */
     addSessionDenyRule(raw: string): void {
-        if (raw && raw.trim()) {
+        if (raw?.trim()) {
             this.sessionRules.deny.push(parseRule(raw));
         }
     }
@@ -711,7 +724,7 @@ export class PermissionManager {
      * Add a session-level ask rule (in-memory, cleared when the session ends).
      */
     addSessionAskRule(raw: string): void {
-        if (raw && raw.trim()) {
+        if (raw?.trim()) {
             this.sessionRules.ask.push(parseRule(raw));
         }
     }

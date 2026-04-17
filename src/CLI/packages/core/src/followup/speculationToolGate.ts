@@ -90,8 +90,7 @@ export async function evaluateToolCall(
 
     // Shell — use AST parser for accurate read-only detection
     if (toolName === ToolNames.SHELL) {
-        const command =
-            typeof args['command'] === 'string' ? args['command'] : '';
+        const command = typeof args.command === 'string' ? args.command : '';
         if (command && (await isShellCommandReadOnlyAST(command))) {
             return { action: 'allow' };
         }

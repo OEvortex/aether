@@ -215,8 +215,12 @@ async function runSpeculativeLoop(
     messages.push(userMsg);
 
     for (let turn = 0; turn < MAX_SPECULATION_TURNS; turn++) {
-        if (state.abortController?.signal.aborted) break;
-        if (messages.length >= MAX_SPECULATION_MESSAGES) break;
+        if (state.abortController?.signal.aborted) {
+            break;
+        }
+        if (messages.length >= MAX_SPECULATION_MESSAGES) {
+            break;
+        }
 
         // Send user message for this turn
         const lastUserMsg = messages[messages.length - 1];
@@ -228,19 +232,20 @@ async function runSpeculativeLoop(
 
         const modelParts: Part[] = [];
         for await (const event of stream) {
-            if (state.abortController?.signal.aborted) break;
-            if (event.type !== StreamEventType.CHUNK) continue;
+            if (state.abortController?.signal.aborted) {
+                break;
+            }
+            if (event.type !== StreamEventType.CHUNK) {
+                continue;
+            }
             const response = event.value;
             const parts = response.candidates?.[0]?.content?.parts ?? [];
             for (const part of parts) {
                 // Skip thought/reasoning parts — only capture visible text + function calls
-                if (
-                    part.text &&
-                    !(part as Record<string, unknown>)['thought']
-                ) {
+                if (part.text && !(part as Record<string, unknown>).thought) {
                     modelParts.push({ text: part.text });
                 }
-                if (part.functionCall && part.functionCall.name) {
+                if (part.functionCall?.name) {
                     modelParts.push({
                         functionCall: {
                             name: part.functionCall.name,
@@ -251,8 +256,12 @@ async function runSpeculativeLoop(
             }
         }
 
-        if (state.abortController?.signal.aborted) break;
-        if (modelParts.length === 0) break;
+        if (state.abortController?.signal.aborted) {
+            break;
+        }
+        if (modelParts.length === 0) {
+            break;
+        }
 
         const modelMsg: Content = { role: 'model', parts: modelParts };
         messages.push(modelMsg);
@@ -318,7 +327,8 @@ async function runSpeculativeLoop(
 
                 const invocation = tool.build(args);
                 const result = await invocation.execute(
-                    state.abortController!.signal
+                    state.abortController?.signal ??
+                        new AbortController().signal
                 );
                 state.toolUseCount++;
 
@@ -353,7 +363,9 @@ async function runSpeculativeLoop(
                 // not by name, to handle duplicate tool names correctly.
                 let keptFunctionCalls = 0;
                 const keptModelParts = modelParts.filter((p) => {
-                    if (!p.functionCall) return true;
+                    if (!p.functionCall) {
+                        return true;
+                    }
                     if (keptFunctionCalls < functionResponses.length) {
                         keptFunctionCalls++;
                         return true;
@@ -480,7 +492,9 @@ export async function abortSpeculation(state: SpeculationState): Promise<void> {
  * remove those function call parts to keep the history API-legal.
  */
 export function ensureToolResultPairing(messages: Content[]): Content[] {
-    if (messages.length === 0) return messages;
+    if (messages.length === 0) {
+        return messages;
+    }
 
     const result = [...messages];
     const lastMsg = result[result.length - 1];
@@ -556,18 +570,24 @@ ${SUGGESTION_PROMPT}`;
             model: modelOverride
         });
 
-        if (abortSignal.aborted) return null;
+        if (abortSignal.aborted) {
+            return null;
+        }
 
         let raw: string | null = null;
         if (result.jsonResult) {
-            const val = result.jsonResult['suggestion'];
+            const val = result.jsonResult.suggestion;
             raw = typeof val === 'string' ? val.trim() : null;
         } else if (result.text) {
             raw = result.text;
         }
 
-        if (!raw) return null;
-        if (getFilterReason(raw)) return null;
+        if (!raw) {
+            return null;
+        }
+        if (getFilterReason(raw)) {
+            return null;
+        }
 
         return raw;
     } catch {

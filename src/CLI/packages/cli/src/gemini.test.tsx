@@ -114,10 +114,10 @@ describe('gemini.tsx main function', () => {
 
     beforeEach(() => {
         // Store and clear sandbox-related env variables to ensure a consistent test environment
-        originalEnvGeminiSandbox = process.env['AETHER_SANDBOX'];
-        originalEnvSandbox = process.env['SANDBOX'];
-        delete process.env['AETHER_SANDBOX'];
-        delete process.env['SANDBOX'];
+        originalEnvGeminiSandbox = process.env.AETHER_SANDBOX;
+        originalEnvSandbox = process.env.SANDBOX;
+        delete process.env.AETHER_SANDBOX;
+        delete process.env.SANDBOX;
 
         initialUnhandledRejectionListeners =
             process.listeners('unhandledRejection');
@@ -126,14 +126,14 @@ describe('gemini.tsx main function', () => {
     afterEach(() => {
         // Restore original env variables
         if (originalEnvGeminiSandbox !== undefined) {
-            process.env['AETHER_SANDBOX'] = originalEnvGeminiSandbox;
+            process.env.AETHER_SANDBOX = originalEnvGeminiSandbox;
         } else {
-            delete process.env['AETHER_SANDBOX'];
+            delete process.env.AETHER_SANDBOX;
         }
         if (originalEnvSandbox !== undefined) {
-            process.env['SANDBOX'] = originalEnvSandbox;
+            process.env.SANDBOX = originalEnvSandbox;
         } else {
-            delete process.env['SANDBOX'];
+            delete process.env.SANDBOX;
         }
 
         const currentListeners = process.listeners('unhandledRejection');
@@ -199,7 +199,9 @@ describe('gemini.tsx main function', () => {
             await main();
         } catch (e) {
             // Mocked process exit throws an error.
-            if (!(e instanceof MockProcessExitError)) throw e;
+            if (!(e instanceof MockProcessExitError)) {
+                throw e;
+            }
         }
 
         // It is critical that we call relaunch before loadCliConfig to avoid
@@ -372,7 +374,7 @@ describe('gemini.tsx main function', () => {
 
         vi.mocked(loadCliConfig).mockResolvedValue(configStub);
 
-        process.env['SANDBOX'] = '1';
+        process.env.SANDBOX = '1';
         try {
             await main();
         } catch (error) {
@@ -391,7 +393,7 @@ describe('gemini.tsx main function', () => {
             } else {
                 delete (process.stdin as { isRaw?: unknown }).isRaw;
             }
-            delete process.env['SANDBOX'];
+            delete process.env.SANDBOX;
         }
 
         expect(runStreamJsonSpy).toHaveBeenCalledTimes(1);
@@ -416,8 +418,8 @@ describe('gemini.tsx main function kitty protocol', () => {
 
     beforeEach(() => {
         // Set no relaunch in tests since process spawning causing issues in tests
-        originalEnvNoRelaunch = process.env['aether_cli_NO_RELAUNCH'];
-        process.env['aether_cli_NO_RELAUNCH'] = 'true';
+        originalEnvNoRelaunch = process.env.aether_cli_NO_RELAUNCH;
+        process.env.aether_cli_NO_RELAUNCH = 'true';
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!(process.stdin as any).setRawMode) {
@@ -439,9 +441,9 @@ describe('gemini.tsx main function kitty protocol', () => {
     afterEach(() => {
         // Restore original env variables
         if (originalEnvNoRelaunch !== undefined) {
-            process.env['aether_cli_NO_RELAUNCH'] = originalEnvNoRelaunch;
+            process.env.aether_cli_NO_RELAUNCH = originalEnvNoRelaunch;
         } else {
-            delete process.env['aether_cli_NO_RELAUNCH'];
+            delete process.env.aether_cli_NO_RELAUNCH;
         }
     });
 

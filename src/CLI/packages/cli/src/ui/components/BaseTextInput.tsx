@@ -101,7 +101,7 @@ export function defaultRenderLine({
         return (
             <Text>
                 {lineText}
-                {chalk.inverse(' ') + '\u200B'}
+                {`${chalk.inverse(' ')}\u200B`}
             </Text>
         );
     }

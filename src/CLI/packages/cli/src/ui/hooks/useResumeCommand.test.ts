@@ -44,7 +44,6 @@ vi.mock('../utils/resumeHistoryUtils.js', () => ({
 
 vi.mock('@aetherai/aether-core', () => {
     class SessionService {
-        constructor(_cwd: string) {}
         async loadSession(_sessionId: string) {
             return (
                 resumeMocks.getPendingLoadSession() ??

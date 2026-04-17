@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/channel-base",
-    "version": "0.0.5",
+    "version": "0.0.12",
     "type": "module",
     "main": "dist/packages/channels/base/src/index.js",
     "types": "dist/packages/channels/base/src/index.d.ts",

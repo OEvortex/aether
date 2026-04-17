@@ -108,104 +108,79 @@ const KNOWN_PROVIDERS = [
 ];
 
 /**
- * Settings Migrator class
- * Handles one-time migration of settings from old prefix to new prefix
+ * Migrate VS Code settings from chp.* to aether.*
  */
-export class SettingsMigrator {
-    /**
-     * Run migration if needed
-     * @param context Extension context for accessing global state and secrets
-     * @returns true if migration was performed, false if already migrated
-     */
-    static async migrateIfNeeded(
-        context: vscode.ExtensionContext
-    ): Promise<boolean> {
-        const migrationVersion = context.globalState.get<number>(
-            MIGRATION_VERSION_KEY,
-            0
-        );
+async function migrateSettings(): Promise<boolean> {
+    const oldConfig = vscode.workspace.getConfiguration(OLD_CONFIG_SECTION);
+    const newConfig = vscode.workspace.getConfiguration(NEW_CONFIG_SECTION);
 
-        if (migrationVersion >= CURRENT_MIGRATION_VERSION) {
-            Logger.debug(
-                'Settings already migrated (version ' + migrationVersion + ')'
-            );
-            return false;
-        }
+    let migrated = false;
 
-        Logger.info(
-            'Starting settings migration from ' +
-                OLD_CONFIG_SECTION +
-                ' to ' +
-                NEW_CONFIG_SECTION +
-                '...'
-        );
-
-        let migrated = false;
-
+    for (const setting of SETTINGS_TO_MIGRATE) {
         try {
-            // Migrate VS Code settings
-            const settingsMigrated = await SettingsMigrator.migrateSettings();
-            if (settingsMigrated) {
-                migrated = true;
-            }
+            // Check if old setting exists
+            const oldValue = oldConfig.inspect(setting);
 
-            // Migrate secrets (API keys)
-            const secretsMigrated =
-                await SettingsMigrator.migrateSecrets(context);
-            if (secretsMigrated) {
-                migrated = true;
-            }
+            if (
+                oldValue &&
+                (oldValue.globalValue !== undefined ||
+                    oldValue.workspaceValue !== undefined)
+            ) {
+                // Get the value from old config
+                const value = oldValue.globalValue ?? oldValue.workspaceValue;
+                const target =
+                    oldValue.globalValue !== undefined
+                        ? vscode.ConfigurationTarget.Global
+                        : vscode.ConfigurationTarget.Workspace;
 
-            // Migrate global state
-            const stateMigrated =
-                await SettingsMigrator.migrateGlobalState(context);
-            if (stateMigrated) {
-                migrated = true;
-            }
+                // Set in new config
+                await newConfig.update(setting, value, target);
 
-            // Mark migration as complete
-            await context.globalState.update(
-                MIGRATION_VERSION_KEY,
-                CURRENT_MIGRATION_VERSION
-            );
+                // Clear old setting
+                await oldConfig.update(setting, undefined, target);
 
-            if (migrated) {
-                Logger.info('Settings migration completed successfully');
-                void vscode.window.showInformationMessage(
-                    'Aether: Settings have been migrated from the previous version. Your API keys and configuration have been preserved.'
+                Logger.debug(
+                    'Migrated setting: ' +
+                        OLD_CONFIG_SECTION +
+                        '.' +
+                        setting +
+                        ' -> ' +
+                        NEW_CONFIG_SECTION +
+                        '.' +
+                        setting
                 );
+                migrated = true;
             }
-
-            return migrated;
         } catch (error) {
-            Logger.error('Settings migration failed:', error);
-            void vscode.window.showErrorMessage(
-                'Aether: Settings migration failed. Some settings may need to be reconfigured.'
-            );
-            throw error;
+            Logger.error(`Failed to migrate setting ${setting}:`, error);
         }
     }
 
-    /**
-     * Migrate VS Code settings from chp.* to aether.*
-     */
-    private static async migrateSettings(): Promise<boolean> {
-        const oldConfig = vscode.workspace.getConfiguration(OLD_CONFIG_SECTION);
-        const newConfig = vscode.workspace.getConfiguration(NEW_CONFIG_SECTION);
+    // Handle provider-specific baseUrl settings (chp.{provider}.baseUrl)
+    const allSettings = vscode.workspace.getConfiguration();
+    const oldSettingsKeys = Object.keys(allSettings).filter((key) =>
+        key.startsWith(`${OLD_CONFIG_SECTION}.`)
+    );
 
-        let migrated = false;
-
-        for (const setting of SETTINGS_TO_MIGRATE) {
+    for (const key of oldSettingsKeys) {
+        // Check for provider-specific settings not in the standard list
+        const match = key.match(
+            new RegExp(
+                '^' +
+                    OLD_CONFIG_SECTION +
+                    '.([^.]+)\\.(baseUrl|sdkMode|plan|endpoint)'
+            )
+        );
+        if (match) {
             try {
-                // Check if old setting exists
-                const oldValue = oldConfig.inspect(setting);
+                const oldSettingKey = key.replace(`${OLD_CONFIG_SECTION}.`, '');
+                const oldValue = oldConfig.inspect(oldSettingKey);
 
                 if (
                     oldValue &&
                     (oldValue.globalValue !== undefined ||
                         oldValue.workspaceValue !== undefined)
                 ) {
-                    // Get the value from old config
                     const value =
                         oldValue.globalValue ?? oldValue.workspaceValue;
                     const target =
@@ -213,187 +188,188 @@ export class SettingsMigrator {
                             ? vscode.ConfigurationTarget.Global
                             : vscode.ConfigurationTarget.Workspace;
 
-                    // Set in new config
-                    await newConfig.update(setting, value, target);
+                    await newConfig.update(oldSettingKey, value, target);
+                    await oldConfig.update(oldSettingKey, undefined, target);
 
-                    // Clear old setting
-                    await oldConfig.update(setting, undefined, target);
-
-                    Logger.debug(
-                        'Migrated setting: ' +
-                            OLD_CONFIG_SECTION +
-                            '.' +
-                            setting +
-                            ' -> ' +
-                            NEW_CONFIG_SECTION +
-                            '.' +
-                            setting
-                    );
+                    Logger.debug(`Migrated provider setting: ${key}`);
                     migrated = true;
                 }
             } catch (error) {
                 Logger.error(
-                    'Failed to migrate setting ' + setting + ':',
+                    `Failed to migrate provider setting ${key}:`,
                     error
                 );
             }
         }
+    }
 
-        // Handle provider-specific baseUrl settings (chp.{provider}.baseUrl)
-        const allSettings = vscode.workspace.getConfiguration();
-        const oldSettingsKeys = Object.keys(allSettings).filter((key) =>
-            key.startsWith(OLD_CONFIG_SECTION + '.')
+    return migrated;
+}
+
+/**
+ * Migrate secrets (API keys) from old keys to new keys
+ */
+async function migrateSecrets(
+    context: vscode.ExtensionContext
+): Promise<boolean> {
+    let migrated = false;
+
+    for (const provider of KNOWN_PROVIDERS) {
+        // API key patterns
+        const oldKeyPatterns = [
+            `${OLD_CONFIG_SECTION}.${provider}.apiKey`,
+            `${OLD_CONFIG_SECTION}.${provider}.codingPlanApiKey`,
+            `${OLD_CONFIG_SECTION}.${provider}.credentials`
+        ];
+
+        for (const oldKey of oldKeyPatterns) {
+            try {
+                const value = await context.secrets.get(oldKey);
+                if (value) {
+                    const newKey = oldKey.replace(
+                        `${OLD_CONFIG_SECTION}.`,
+                        `${NEW_CONFIG_SECTION}.`
+                    );
+                    await context.secrets.store(newKey, value);
+                    await context.secrets.delete(oldKey);
+
+                    Logger.debug(`Migrated secret: ${oldKey} -> ${newKey}`);
+                    migrated = true;
+                }
+            } catch (error) {
+                Logger.error(`Failed to migrate secret ${oldKey}:`, error);
+            }
+        }
+    }
+
+    return migrated;
+}
+
+/**
+ * Migrate global state keys from old prefix to new prefix
+ */
+async function migrateGlobalState(
+    context: vscode.ExtensionContext
+): Promise<boolean> {
+    let migrated = false;
+
+    // Get all keys from global state
+    const keys = context.globalState.keys();
+
+    for (const key of keys) {
+        // Skip the migration version key
+        if (key === MIGRATION_VERSION_KEY) {
+            continue;
+        }
+
+        // Check if this is a chp.* key
+        if (key.startsWith(`${OLD_CONFIG_SECTION}.`)) {
+            try {
+                const value = context.globalState.get(key);
+                if (value !== undefined) {
+                    const newKey = key.replace(
+                        `${OLD_CONFIG_SECTION}.`,
+                        `${NEW_CONFIG_SECTION}.`
+                    );
+                    await context.globalState.update(newKey, value);
+                    await context.globalState.update(key, undefined);
+
+                    Logger.debug(`Migrated global state: ${key} -> ${newKey}`);
+                    migrated = true;
+                }
+            } catch (error) {
+                Logger.error(`Failed to migrate global state ${key}:`, error);
+            }
+        }
+    }
+
+    return migrated;
+}
+
+/**
+ * Run migration if needed
+ * @param context Extension context for accessing global state and secrets
+ * @returns true if migration was performed, false if already migrated
+ */
+export async function migrateIfNeeded(
+    context: vscode.ExtensionContext
+): Promise<boolean> {
+    const migrationVersion = context.globalState.get<number>(
+        MIGRATION_VERSION_KEY,
+        0
+    );
+
+    if (migrationVersion >= CURRENT_MIGRATION_VERSION) {
+        Logger.debug(`Settings already migrated (version ${migrationVersion})`);
+        return false;
+    }
+
+    Logger.info(
+        'Starting settings migration from ' +
+            OLD_CONFIG_SECTION +
+            ' to ' +
+            NEW_CONFIG_SECTION +
+            '...'
+    );
+
+    let migrated = false;
+
+    try {
+        // Migrate VS Code settings
+        const settingsMigrated = await migrateSettings();
+        if (settingsMigrated) {
+            migrated = true;
+        }
+
+        // Migrate secrets (API keys)
+        const secretsMigrated = await migrateSecrets(context);
+        if (secretsMigrated) {
+            migrated = true;
+        }
+
+        // Migrate global state
+        const stateMigrated = await migrateGlobalState(context);
+        if (stateMigrated) {
+            migrated = true;
+        }
+
+        // Mark migration as complete
+        await context.globalState.update(
+            MIGRATION_VERSION_KEY,
+            CURRENT_MIGRATION_VERSION
         );
 
-        for (const key of oldSettingsKeys) {
-            // Check for provider-specific settings not in the standard list
-            const match = key.match(
-                new RegExp(
-                    '^' +
-                        OLD_CONFIG_SECTION +
-                        '.([^.]+)\\.(baseUrl|sdkMode|plan|endpoint)'
-                )
+        if (migrated) {
+            Logger.info('Settings migration completed successfully');
+            void vscode.window.showInformationMessage(
+                'Aether: Settings have been migrated from the previous version. Your API keys and configuration have been preserved.'
             );
-            if (match) {
-                try {
-                    const provider = match[1];
-                    const oldSettingKey = key.replace(
-                        OLD_CONFIG_SECTION + '.',
-                        ''
-                    );
-                    const oldValue = oldConfig.inspect(oldSettingKey);
-
-                    if (
-                        oldValue &&
-                        (oldValue.globalValue !== undefined ||
-                            oldValue.workspaceValue !== undefined)
-                    ) {
-                        const value =
-                            oldValue.globalValue ?? oldValue.workspaceValue;
-                        const target =
-                            oldValue.globalValue !== undefined
-                                ? vscode.ConfigurationTarget.Global
-                                : vscode.ConfigurationTarget.Workspace;
-
-                        await newConfig.update(oldSettingKey, value, target);
-                        await oldConfig.update(
-                            oldSettingKey,
-                            undefined,
-                            target
-                        );
-
-                        Logger.debug('Migrated provider setting: ' + key);
-                        migrated = true;
-                    }
-                } catch (error) {
-                    Logger.error(
-                        'Failed to migrate provider setting ' + key + ':',
-                        error
-                    );
-                }
-            }
         }
 
         return migrated;
-    }
-
-    /**
-     * Migrate secrets (API keys) from old keys to new keys
-     */
-    private static async migrateSecrets(
-        context: vscode.ExtensionContext
-    ): Promise<boolean> {
-        let migrated = false;
-
-        for (const provider of KNOWN_PROVIDERS) {
-            // API key patterns
-            const oldKeyPatterns = [
-                OLD_CONFIG_SECTION + '.' + provider + '.apiKey',
-                OLD_CONFIG_SECTION + '.' + provider + '.codingPlanApiKey',
-                OLD_CONFIG_SECTION + '.' + provider + '.credentials'
-            ];
-
-            for (const oldKey of oldKeyPatterns) {
-                try {
-                    const value = await context.secrets.get(oldKey);
-                    if (value) {
-                        const newKey = oldKey.replace(
-                            OLD_CONFIG_SECTION + '.',
-                            NEW_CONFIG_SECTION + '.'
-                        );
-                        await context.secrets.store(newKey, value);
-                        await context.secrets.delete(oldKey);
-
-                        Logger.debug(
-                            'Migrated secret: ' + oldKey + ' -> ' + newKey
-                        );
-                        migrated = true;
-                    }
-                } catch (error) {
-                    Logger.error(
-                        'Failed to migrate secret ' + oldKey + ':',
-                        error
-                    );
-                }
-            }
-        }
-
-        return migrated;
-    }
-
-    /**
-     * Migrate global state keys from old prefix to new prefix
-     */
-    private static async migrateGlobalState(
-        context: vscode.ExtensionContext
-    ): Promise<boolean> {
-        let migrated = false;
-
-        // Get all keys from global state
-        const keys = context.globalState.keys();
-
-        for (const key of keys) {
-            // Skip the migration version key
-            if (key === MIGRATION_VERSION_KEY) {
-                continue;
-            }
-
-            // Check if this is a chp.* key
-            if (key.startsWith(OLD_CONFIG_SECTION + '.')) {
-                try {
-                    const value = context.globalState.get(key);
-                    if (value !== undefined) {
-                        const newKey = key.replace(
-                            OLD_CONFIG_SECTION + '.',
-                            NEW_CONFIG_SECTION + '.'
-                        );
-                        await context.globalState.update(newKey, value);
-                        await context.globalState.update(key, undefined);
-
-                        Logger.debug(
-                            'Migrated global state: ' + key + ' -> ' + newKey
-                        );
-                        migrated = true;
-                    }
-                } catch (error) {
-                    Logger.error(
-                        'Failed to migrate global state ' + key + ':',
-                        error
-                    );
-                }
-            }
-        }
-
-        return migrated;
-    }
-
-    /**
-     * Force re-run of migration (for testing or recovery)
-     */
-    static async forceMigration(
-        context: vscode.ExtensionContext
-    ): Promise<boolean> {
-        await context.globalState.update(MIGRATION_VERSION_KEY, 0);
-        return SettingsMigrator.migrateIfNeeded(context);
+    } catch (error) {
+        Logger.error('Settings migration failed:', error);
+        void vscode.window.showErrorMessage(
+            'Aether: Settings migration failed. Some settings may need to be reconfigured.'
+        );
+        throw error;
     }
 }
+
+/**
+ * Force re-run of migration (for testing or recovery)
+ */
+export async function forceMigration(
+    context: vscode.ExtensionContext
+): Promise<boolean> {
+    await context.globalState.update(MIGRATION_VERSION_KEY, 0);
+    return migrateIfNeeded(context);
+}
+
+/**
+ * Settings Migrator (deprecated class-like interface for backward compatibility)
+ */
+export const SettingsMigrator = {
+    migrateIfNeeded,
+    forceMigration
+};

@@ -453,16 +453,21 @@ export class AgentCore {
                     if (resp.responseId) {
                         currentResponseId = resp.responseId;
                     }
-                    if (resp.functionCalls)
+                    if (resp.functionCalls) {
                         functionCalls.push(...resp.functionCalls);
+                    }
                     const content = resp.candidates?.[0]?.content;
                     const parts = content?.parts || [];
                     for (const p of parts) {
                         const txt = p.text;
                         const isThought = p.thought ?? false;
-                        if (txt && isThought) roundThoughtText += txt;
-                        if (txt && !isThought) roundText += txt;
-                        if (txt)
+                        if (txt && isThought) {
+                            roundThoughtText += txt;
+                        }
+                        if (txt && !isThought) {
+                            roundText += txt;
+                        }
+                        if (txt) {
                             this.eventEmitter?.emit(
                                 AgentEventType.STREAM_TEXT,
                                 {
@@ -473,8 +478,11 @@ export class AgentCore {
                                     timestamp: Date.now()
                                 }
                             );
+                        }
                     }
-                    if (resp.usageMetadata) lastUsage = resp.usageMetadata;
+                    if (resp.usageMetadata) {
+                        lastUsage = resp.usageMetadata;
+                    }
                 }
             }
 
@@ -669,7 +677,9 @@ export class AgentCore {
             },
             onAllToolCallsComplete: async (completedCalls) => {
                 for (const call of completedCalls) {
-                    if (emittedCallIds.has(call.request.callId)) continue;
+                    if (emittedCallIds.has(call.request.callId)) {
+                        continue;
+                    }
                     emittedCallIds.add(call.request.callId);
 
                     const toolName = call.request.name;
@@ -760,7 +770,9 @@ export class AgentCore {
                         }
                     }
 
-                    if (call.status !== 'awaiting_approval') continue;
+                    if (call.status !== 'awaiting_approval') {
+                        continue;
+                    }
                     const waiting = call as WaitingToolCall;
 
                     // Emit approval request event for UI visibility
@@ -786,8 +798,9 @@ export class AgentCore {
                                         ToolCallConfirmationDetails['onConfirm']
                                     >[1]
                                 ) => {
-                                    if (responded.has(waiting.request.callId))
+                                    if (responded.has(waiting.request.callId)) {
                                         return;
+                                    }
                                     responded.add(waiting.request.callId);
                                     await waiting.confirmationDetails.onConfirm(
                                         outcome,
@@ -859,7 +872,9 @@ export class AgentCore {
             const onAbort = () => {
                 resolveBatch?.();
                 for (const req of requests) {
-                    if (emittedCallIds.has(req.callId)) continue;
+                    if (emittedCallIds.has(req.callId)) {
+                        continue;
+                    }
                     emittedCallIds.add(req.callId);
 
                     const errorMessage = 'Tool call cancelled by user abort.';
@@ -1087,33 +1102,33 @@ Important Rules:
         // output from this round becomes history for the next, matching
         // the approach in geminiChat.ts.
         const contextTok =
-            isFinite(totalTok) && totalTok > 0 ? totalTok : inTok;
-        if (isFinite(contextTok) && contextTok > 0) {
+            Number.isFinite(totalTok) && totalTok > 0 ? totalTok : inTok;
+        if (Number.isFinite(contextTok) && contextTok > 0) {
             this.lastPromptTokenCount = contextTok;
         }
         if (
-            isFinite(inTok) ||
-            isFinite(outTok) ||
-            isFinite(thoughtTok) ||
-            isFinite(cachedTok)
+            Number.isFinite(inTok) ||
+            Number.isFinite(outTok) ||
+            Number.isFinite(thoughtTok) ||
+            Number.isFinite(cachedTok)
         ) {
             this.stats.recordTokens(
-                isFinite(inTok) ? inTok : 0,
-                isFinite(outTok) ? outTok : 0,
-                isFinite(thoughtTok) ? thoughtTok : 0,
-                isFinite(cachedTok) ? cachedTok : 0,
-                isFinite(totalTok) ? totalTok : 0
+                Number.isFinite(inTok) ? inTok : 0,
+                Number.isFinite(outTok) ? outTok : 0,
+                Number.isFinite(thoughtTok) ? thoughtTok : 0,
+                Number.isFinite(cachedTok) ? cachedTok : 0,
+                Number.isFinite(totalTok) ? totalTok : 0
             );
             // Mirror legacy fields for compatibility
             this.executionStats.inputTokens =
                 (this.executionStats.inputTokens || 0) +
-                (isFinite(inTok) ? inTok : 0);
+                (Number.isFinite(inTok) ? inTok : 0);
             this.executionStats.outputTokens =
                 (this.executionStats.outputTokens || 0) +
-                (isFinite(outTok) ? outTok : 0);
+                (Number.isFinite(outTok) ? outTok : 0);
             this.executionStats.totalTokens =
                 (this.executionStats.totalTokens || 0) +
-                (isFinite(totalTok) ? totalTok : 0);
+                (Number.isFinite(totalTok) ? totalTok : 0);
         }
         this.eventEmitter?.emit(AgentEventType.USAGE_METADATA, {
             subagentId: this.subagentId,

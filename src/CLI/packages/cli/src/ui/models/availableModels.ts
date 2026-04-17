@@ -23,7 +23,7 @@ export type AvailableModel = {
  * In the future, after settings.json is updated, we will allow users to configure this themselves.
  */
 export function getOpenAIAvailableModelFromEnv(): AvailableModel | null {
-    const id = process.env['OPENAI_MODEL']?.trim();
+    const id = process.env.OPENAI_MODEL?.trim();
     return id
         ? {
               id,
@@ -36,7 +36,7 @@ export function getOpenAIAvailableModelFromEnv(): AvailableModel | null {
 }
 
 export function getAnthropicAvailableModelFromEnv(): AvailableModel | null {
-    const id = process.env['ANTHROPIC_MODEL']?.trim();
+    const id = process.env.ANTHROPIC_MODEL?.trim();
     return id
         ? {
               id,

@@ -36,7 +36,7 @@ const _PrepareLabel: React.FC<PrepareLabelProps> = ({
         const display = isExpanded
             ? label
             : label.length > MAX_WIDTH
-              ? label.slice(0, MAX_WIDTH) + '...'
+              ? `${label.slice(0, MAX_WIDTH)}...`
               : label;
         return (
             <Text wrap="wrap" color={textColor}>
@@ -58,7 +58,7 @@ const _PrepareLabel: React.FC<PrepareLabelProps> = ({
     }
     // Case 2: The match itself is too long, so we only show a truncated portion of the match
     else if (matchLength >= MAX_WIDTH) {
-        match = label.slice(matchedIndex, matchedIndex + MAX_WIDTH - 1) + '...';
+        match = `${label.slice(matchedIndex, matchedIndex + MAX_WIDTH - 1)}...`;
     }
     // Case 3: Truncate the string to create a window around the match
     else {
@@ -90,10 +90,10 @@ const _PrepareLabel: React.FC<PrepareLabelProps> = ({
         after = slicedLabel.slice(finalMatchIndex + matchLength);
 
         if (start > 0) {
-            before = before.length >= 3 ? '...' + before.slice(3) : '...';
+            before = before.length >= 3 ? `...${before.slice(3)}` : '...';
         }
         if (end < label.length) {
-            after = after.length >= 3 ? after.slice(0, -3) + '...' : '...';
+            after = after.length >= 3 ? `${after.slice(0, -3)}...` : '...';
         }
     }
 

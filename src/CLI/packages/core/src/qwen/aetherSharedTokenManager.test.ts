@@ -6,8 +6,8 @@
  */
 
 import { promises as fs, type Stats, unlinkSync } from 'node:fs';
+import * as os from 'node:os';
 import path from 'node:path';
-import * as os from 'os';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type {
     AetherCredentials,
@@ -336,7 +336,7 @@ describe('SharedTokenManager', () => {
             const refreshResponse = createSuccessfulRefreshResponse();
 
             // Create a delayed refresh response
-            let resolveRefresh: (value: TokenRefreshData) => void;
+            let resolveRefresh: ((value: TokenRefreshData) => void) | undefined;
             const refreshPromise = new Promise<TokenRefreshData>((resolve) => {
                 resolveRefresh = resolve;
             });
@@ -355,7 +355,7 @@ describe('SharedTokenManager', () => {
             const promise2 = tokenManager.getValidCredentials(mockClient);
 
             // Resolve the refresh
-            resolveRefresh!(refreshResponse);
+            resolveRefresh?.(refreshResponse);
 
             const [result1, result2] = await Promise.all([promise1, promise2]);
 
@@ -443,7 +443,7 @@ describe('SharedTokenManager', () => {
                 );
 
             // Create a delayed refresh response
-            let resolveRefresh: (value: TokenRefreshData) => void;
+            let resolveRefresh: ((value: TokenRefreshData) => void) | undefined;
             const refreshPromise = new Promise<TokenRefreshData>((resolve) => {
                 resolveRefresh = resolve;
             });
@@ -467,7 +467,7 @@ describe('SharedTokenManager', () => {
             expect(tokenManager.isRefreshInProgress()).toBe(true);
 
             // Complete refresh
-            resolveRefresh!(createSuccessfulRefreshResponse());
+            resolveRefresh?.(createSuccessfulRefreshResponse());
             await refreshOperation;
 
             expect(tokenManager.isRefreshInProgress()).toBe(false);
@@ -590,7 +590,7 @@ describe('SharedTokenManager', () => {
             const lockError = new Error('File exists') as NodeJS.ErrnoException;
             lockError.code = 'EEXIST';
 
-            mockFs.writeFile.mockImplementation((path, data, options) => {
+            mockFs.writeFile.mockImplementation((_path, _data, options) => {
                 if (typeof options === 'object' && options?.flag === 'wx') {
                     return Promise.reject(lockError);
                 }

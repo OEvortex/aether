@@ -188,22 +188,21 @@ export class HookRunner {
                     if ('additionalContext' in hookOutput.hookSpecificOutput) {
                         // For UserPromptSubmit, we could modify the prompt with additional context
                         const additionalContext =
-                            hookOutput.hookSpecificOutput['additionalContext'];
+                            hookOutput.hookSpecificOutput.additionalContext;
                         if (
                             typeof additionalContext === 'string' &&
                             'prompt' in modifiedInput
                         ) {
                             (modifiedInput as UserPromptSubmitInput).prompt +=
-                                '\n\n' + additionalContext;
+                                `\n\n${additionalContext}`;
                         }
                     }
                     break;
 
                 case HookEventName.PreToolUse:
                     if ('tool_input' in hookOutput.hookSpecificOutput) {
-                        const newToolInput = hookOutput.hookSpecificOutput[
-                            'tool_input'
-                        ] as Record<string, unknown>;
+                        const newToolInput = hookOutput.hookSpecificOutput
+                            .tool_input as Record<string, unknown>;
                         if (newToolInput && 'tool_input' in modifiedInput) {
                             (modifiedInput as PreToolUseInput).tool_input = {
                                 ...(modifiedInput as PreToolUseInput)

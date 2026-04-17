@@ -65,8 +65,12 @@ export const AgentTabBar: React.FC = () => {
 
     useKeypress(
         (key) => {
-            if (embeddedShellFocused || agentShellFocused) return;
-            if (!agentTabBarFocused) return;
+            if (embeddedShellFocused || agentShellFocused) {
+                return;
+            }
+            if (!agentTabBarFocused) {
+                return;
+            }
 
             if (key.name === 'left') {
                 switchToPrevious();

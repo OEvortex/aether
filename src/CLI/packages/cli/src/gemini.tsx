@@ -96,7 +96,7 @@ function getNodeMemoryArgs(isDebugMode: boolean): string[] {
         );
     }
 
-    if (process.env['aether_cli_NO_RELAUNCH']) {
+    if (process.env.aether_cli_NO_RELAUNCH) {
         return [];
     }
 
@@ -185,7 +185,7 @@ export async function startInteractiveUI(
     };
 
     const instance = render(
-        process.env['DEBUG'] ? (
+        process.env.DEBUG ? (
             <React.StrictMode>
                 <AppWrapper />
             </React.StrictMode>
@@ -249,7 +249,7 @@ export async function main() {
     }
 
     // hop into sandbox if we are outside and sandboxing is enabled
-    if (!process.env['SANDBOX']) {
+    if (!process.env.SANDBOX) {
         const memoryArgs = settings.merged.advanced?.autoConfigureMemory
             ? getNodeMemoryArgs(isDebugMode)
             : [];

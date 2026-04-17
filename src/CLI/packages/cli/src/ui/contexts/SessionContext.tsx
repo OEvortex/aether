@@ -73,8 +73,12 @@ function areToolCallStatsEqual(a: ToolCallStats, b: ToolCallStats): boolean {
 }
 
 function areMetricsEqual(a: SessionMetrics, b: SessionMetrics): boolean {
-    if (a === b) return true;
-    if (!a || !b) return false;
+    if (a === b) {
+        return true;
+    }
+    if (!a || !b) {
+        return false;
+    }
 
     // Compare files
     if (
@@ -113,7 +117,9 @@ function areMetricsEqual(a: SessionMetrics, b: SessionMetrics): boolean {
     // Compare tools.byName
     const toolsByNameAKeys = Object.keys(toolsA.byName);
     const toolsByNameBKeys = Object.keys(toolsB.byName);
-    if (toolsByNameAKeys.length !== toolsByNameBKeys.length) return false;
+    if (toolsByNameAKeys.length !== toolsByNameBKeys.length) {
+        return false;
+    }
 
     for (const key of toolsByNameAKeys) {
         const toolA = toolsA.byName[key];
@@ -126,7 +132,9 @@ function areMetricsEqual(a: SessionMetrics, b: SessionMetrics): boolean {
     // Compare models
     const modelsAKeys = Object.keys(a.models);
     const modelsBKeys = Object.keys(b.models);
-    if (modelsAKeys.length !== modelsBKeys.length) return false;
+    if (modelsAKeys.length !== modelsBKeys.length) {
+        return false;
+    }
 
     for (const key of modelsAKeys) {
         if (

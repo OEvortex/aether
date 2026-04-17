@@ -61,7 +61,9 @@ export async function readLines<T = unknown>(
 
         const results: T[] = [];
         for await (const line of rl) {
-            if (results.length >= count) break;
+            if (results.length >= count) {
+                break;
+            }
             const trimmed = line.trim();
             if (trimmed.length > 0) {
                 results.push(JSON.parse(trimmed) as T);

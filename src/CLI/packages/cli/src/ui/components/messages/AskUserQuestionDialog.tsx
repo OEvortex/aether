@@ -105,43 +105,14 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
         await onConfirm(ToolConfirmationOutcome.ProceedOnce, { answers });
     };
 
-    const handleMultiSelectSubmit = () => {
-        if (!currentQuestion) return;
-        const selections = [
-            ...(multiSelectedOptions[currentQuestionIndex] ?? [])
-        ];
-        const customValue = currentCustomInputValue.trim();
-        if (customInputChecked[currentQuestionIndex] && customValue) {
-            selections.push(customValue);
-        }
-        if (selections.length === 0) return;
-
-        const value = selections.join(', ');
-        const updated = { ...selectedOptions, [currentQuestionIndex]: value };
-        setSelectedOptions(updated);
-
-        if (!hasMultipleQuestions) {
-            void onConfirm(ToolConfirmationOutcome.ProceedOnce, {
-                answers: { [currentQuestionIndex]: value }
-            });
-        } else {
-            if (currentQuestionIndex < totalTabs - 1) {
-                setTimeout(() => {
-                    setCurrentQuestionIndex((prev) =>
-                        Math.min(prev + 1, totalTabs - 1)
-                    );
-                    setSelectedIndex(0);
-                }, 150);
-            }
-        }
-    };
-
     const handleCustomInputSubmit = () => {
         const trimmedValue = currentCustomInputValue.trim();
 
         if (isMultiSelect) {
             // Toggle custom input checked state
-            if (!trimmedValue) return;
+            if (!trimmedValue) {
+                return;
+            }
             setCustomInputChecked((prev) => ({
                 ...prev,
                 [currentQuestionIndex]: !prev[currentQuestionIndex]
@@ -149,7 +120,9 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
             return;
         }
 
-        if (!trimmedValue) return;
+        if (!trimmedValue) {
+            return;
+        }
 
         const updated = {
             ...selectedOptions,
@@ -180,7 +153,9 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
     // Handle navigation and selection
     useKeypress(
         (key) => {
-            if (!isFocused) return;
+            if (!isFocused) {
+                return;
+            }
 
             // When custom input is focused, still allow up/down navigation, tab switch and escape
             if (isCustomInputSelected) {
@@ -231,7 +206,11 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
 
             // Number key selection
             const numKey = parseInt(input || '', 10);
-            if (!isNaN(numKey) && numKey >= 1 && numKey <= totalOptions) {
+            if (
+                !Number.isNaN(numKey) &&
+                numKey >= 1 &&
+                numKey <= totalOptions
+            ) {
                 setSelectedIndex(numKey - 1);
                 return;
             }
@@ -270,13 +249,26 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
                     return;
                 }
 
-                // Handle multi-select: Enter advances to next question / submits
+                // Handle multi-select: Enter toggles the option (same as space)
                 if (isMultiSelect && currentQuestion) {
                     // Custom input is handled by TextInput's onSubmit
                     if (selectedIndex === currentQuestion.options.length) {
                         return;
                     }
-                    handleMultiSelectSubmit();
+
+                    const option = currentQuestion.options[selectedIndex];
+                    if (option) {
+                        const current =
+                            multiSelectedOptions[currentQuestionIndex] ?? [];
+                        const isChecked = current.includes(option.label);
+                        const updated = isChecked
+                            ? current.filter((l) => l !== option.label)
+                            : [...current, option.label];
+                        setMultiSelectedOptions((prev) => ({
+                            ...prev,
+                            [currentQuestionIndex]: updated
+                        }));
+                    }
                     return;
                 }
 
@@ -458,16 +450,16 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
                 {!hasMultipleQuestions && (
                     <Box marginBottom={1}>
                         <Text color={theme.text.accent} bold>
-                            {currentQuestion!.header}
+                            {currentQuestion?.header}
                         </Text>
                     </Box>
                 )}
-                <Text>{currentQuestion!.question}</Text>
+                <Text>{currentQuestion?.question}</Text>
             </Box>
 
             {/* Options */}
             <Box flexDirection="column" marginBottom={1}>
-                {currentQuestion!.options.map((opt, index) => {
+                {currentQuestion?.options.map((opt, index) => {
                     const isSelected = selectedIndex === index;
                     const isMultiChecked =
                         isMultiSelect &&
@@ -528,7 +520,7 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
                                         ? '[✓] '
                                         : '[ ] '
                                     : ''}
-                                {currentQuestion!.options.length + 1}.{' '}
+                                {currentQuestion?.options.length + 1}.{' '}
                             </Text>
                             <TextInput
                                 value={currentCustomInputValue}
@@ -588,7 +580,7 @@ export const AskUserQuestionDialog: React.FC<AskUserQuestionDialogProps> = ({
                                         ? '[✓] '
                                         : '[ ] '
                                     : ''}
-                                {currentQuestion!.options.length + 1}.{' '}
+                                {(currentQuestion?.options?.length ?? 0) + 1}.{' '}
                                 {currentCustomInputValue ||
                                     t('Type something...')}
                                 {isCustomInputAnswer ? ' ✓' : ''}

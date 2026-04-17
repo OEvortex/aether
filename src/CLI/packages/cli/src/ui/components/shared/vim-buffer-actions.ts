@@ -23,7 +23,9 @@ import {
 // Check if we're at the end of a base word (on the last base character)
 // Returns true if current position has a base character followed only by combining marks until non-word
 function isAtEndOfBaseWord(lineCodePoints: string[], col: number): boolean {
-    if (!isWordCharStrict(lineCodePoints[col])) return false;
+    if (!isWordCharStrict(lineCodePoints[col])) {
+        return false;
+    }
 
     // Look ahead to see if we have only combining marks followed by non-word
     let i = col + 1;
@@ -212,7 +214,9 @@ export function handleVimAction(
 
         case 'vim_delete_line': {
             const { count } = action.payload;
-            if (lines.length === 0) return state;
+            if (lines.length === 0) {
+                return state;
+            }
 
             const linesToDelete = Math.min(count, lines.length - cursorRow);
             const totalLines = lines.length;
@@ -249,7 +253,9 @@ export function handleVimAction(
 
         case 'vim_change_line': {
             const { count } = action.payload;
-            if (lines.length === 0) return state;
+            if (lines.length === 0) {
+                return state;
+            }
 
             const linesToChange = Math.min(count, lines.length - cursorRow);
             const nextState = pushUndo(state);

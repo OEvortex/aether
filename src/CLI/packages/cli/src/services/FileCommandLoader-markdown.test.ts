@@ -38,8 +38,8 @@ This is a test prompt from markdown.`;
         const loader = new FileCommandLoader(null);
 
         // Mock the getCommandDirectories to return our temp dir
-        const originalMethod = loader['getCommandDirectories'];
-        loader['getCommandDirectories'] = () => [{ path: tempDir }];
+        const originalMethod = loader.getCommandDirectories;
+        loader.getCommandDirectories = () => [{ path: tempDir }];
 
         try {
             const commands = await loader.loadCommands(
@@ -51,7 +51,7 @@ This is a test prompt from markdown.`;
             expect(commands[0].description).toBe('Test markdown command');
         } finally {
             // Restore original method
-            loader['getCommandDirectories'] = originalMethod;
+            loader.getCommandDirectories = originalMethod;
         }
     });
 
@@ -63,8 +63,8 @@ This is a test prompt from markdown.`;
         await fs.writeFile(commandPath, mdContent, 'utf-8');
 
         const loader = new FileCommandLoader(null);
-        const originalMethod = loader['getCommandDirectories'];
-        loader['getCommandDirectories'] = () => [{ path: tempDir }];
+        const originalMethod = loader.getCommandDirectories;
+        loader.getCommandDirectories = () => [{ path: tempDir }];
 
         try {
             const commands = await loader.loadCommands(
@@ -77,7 +77,7 @@ This is a test prompt from markdown.`;
             expect(simpleCommand).toBeDefined();
             expect(simpleCommand?.description).toContain('Custom command from');
         } finally {
-            loader['getCommandDirectories'] = originalMethod;
+            loader.getCommandDirectories = originalMethod;
         }
     });
 
@@ -89,8 +89,8 @@ This is a test prompt from markdown.`;
         await fs.writeFile(commandPath, mdContent, 'utf-8');
 
         const loader = new FileCommandLoader(null);
-        const originalMethod = loader['getCommandDirectories'];
-        loader['getCommandDirectories'] = () => [{ path: tempDir }];
+        const originalMethod = loader.getCommandDirectories;
+        loader.getCommandDirectories = () => [{ path: tempDir }];
 
         try {
             const commands = await loader.loadCommands(
@@ -105,7 +105,7 @@ This is a test prompt from markdown.`;
                 'Windows markdown command'
             );
         } finally {
-            loader['getCommandDirectories'] = originalMethod;
+            loader.getCommandDirectories = originalMethod;
         }
     });
 
@@ -128,8 +128,8 @@ Markdown prompt`;
         await fs.writeFile(path.join(tempDir, 'md-cmd.md'), mdContent, 'utf-8');
 
         const loader = new FileCommandLoader(null);
-        const originalMethod = loader['getCommandDirectories'];
-        loader['getCommandDirectories'] = () => [{ path: tempDir }];
+        const originalMethod = loader.getCommandDirectories;
+        loader.getCommandDirectories = () => [{ path: tempDir }];
 
         try {
             const commands = await loader.loadCommands(
@@ -145,7 +145,7 @@ Markdown prompt`;
             expect(mdCommand).toBeDefined();
             expect(mdCommand?.description).toBe('Markdown command');
         } finally {
-            loader['getCommandDirectories'] = originalMethod;
+            loader.getCommandDirectories = originalMethod;
         }
     });
 });

@@ -102,7 +102,9 @@ export const ToolConfirmationMessage: React.FC<
 
     useKeypress(
         (key) => {
-            if (!isFocused) return;
+            if (!isFocused) {
+                return;
+            }
             if (key.name === 'escape' || (key.ctrl && key.name === 'c')) {
                 handleConfirm(ToolConfirmationOutcome.Cancel);
             }

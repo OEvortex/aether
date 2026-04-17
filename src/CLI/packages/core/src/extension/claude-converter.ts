@@ -169,37 +169,37 @@ export function convertClaudeAgentConfig(
     };
 
     if (claudeAgent.color) {
-        aetherAgent['color'] = claudeAgent.color;
+        aetherAgent.color = claudeAgent.color;
     }
 
     // Convert system prompt if present
     if (claudeAgent.systemPrompt) {
-        aetherAgent['systemPrompt'] = claudeAgent.systemPrompt;
+        aetherAgent.systemPrompt = claudeAgent.systemPrompt;
     }
 
     // Convert tools using claudeBuildInToolsTransform
     if (claudeAgent.tools && claudeAgent.tools.length > 0) {
-        aetherAgent['tools'] = claudeBuildInToolsTransform(claudeAgent.tools);
+        aetherAgent.tools = claudeBuildInToolsTransform(claudeAgent.tools);
     }
 
     // Preserve Claude's top-level model selector.
     if (claudeAgent.model) {
-        aetherAgent['model'] = claudeAgent.model;
+        aetherAgent.model = claudeAgent.model;
     }
 
     // Preserve unsupported fields as-is for potential future compatibility
     // These fields are not supported by Qwen Code SubagentConfig but we keep them
     if (claudeAgent.permissionMode) {
-        aetherAgent['permissionMode'] = claudeAgent.permissionMode;
+        aetherAgent.permissionMode = claudeAgent.permissionMode;
     }
     if (claudeAgent.hooks) {
-        aetherAgent['hooks'] = claudeAgent.hooks;
+        aetherAgent.hooks = claudeAgent.hooks;
     }
     if (claudeAgent.skills && claudeAgent.skills.length > 0) {
-        aetherAgent['skills'] = claudeAgent.skills;
+        aetherAgent.skills = claudeAgent.skills;
     }
     if (claudeAgent.disallowedTools && claudeAgent.disallowedTools.length > 0) {
-        aetherAgent['disallowedTools'] = claudeAgent.disallowedTools;
+        aetherAgent.disallowedTools = claudeAgent.disallowedTools;
     }
 
     return aetherAgent;
@@ -218,7 +218,9 @@ async function convertAgentFiles(agentsDir: string): Promise<void> {
     const files = await fs.promises.readdir(agentsDir);
 
     for (const file of files) {
-        if (!file.endsWith('.md')) continue;
+        if (!file.endsWith('.md')) {
+            continue;
+        }
 
         const filePath = path.join(agentsDir, file);
 
@@ -244,19 +246,19 @@ async function convertAgentFiles(agentsDir: string): Promise<void> {
             // Build Claude agent config from frontmatter
             // Note: Claude tools/disallowedTools/skills can be comma-separated strings like 'Glob, Grep, Read'
             const claudeAgent: ClaudeAgentConfig = {
-                name: String(frontmatter['name'] || ''),
-                description: String(frontmatter['description'] || ''),
-                tools: parseStringOrArray(frontmatter['tools']),
+                name: String(frontmatter.name || ''),
+                description: String(frontmatter.description || ''),
+                tools: parseStringOrArray(frontmatter.tools),
                 disallowedTools: parseStringOrArray(
-                    frontmatter['disallowedTools']
+                    frontmatter.disallowedTools
                 ),
-                model: frontmatter['model'] as string | undefined,
-                permissionMode: frontmatter['permissionMode'] as
+                model: frontmatter.model as string | undefined,
+                permissionMode: frontmatter.permissionMode as
                     | string
                     | undefined,
-                skills: parseStringOrArray(frontmatter['skills']),
-                hooks: frontmatter['hooks'],
-                color: frontmatter['color'] as string | undefined,
+                skills: parseStringOrArray(frontmatter.skills),
+                hooks: frontmatter.hooks,
+                color: frontmatter.color as string | undefined,
                 systemPrompt: body.trim()
             };
 
@@ -274,7 +276,7 @@ async function convertAgentFiles(agentsDir: string): Promise<void> {
             // Write converted content back
             const newYaml = stringifyYaml(newFrontmatter);
             const systemPrompt =
-                (aetherAgent['systemPrompt'] as string) || body.trim();
+                (aetherAgent.systemPrompt as string) || body.trim();
             const newContent = `---
 ${newYaml}
 ---
@@ -694,29 +696,51 @@ export function mergeClaudeConfigs(
           };
 
     // Overlay marketplace config (takes precedence)
-    if (marketplacePlugin.name) merged.name = marketplacePlugin.name;
-    if (marketplacePlugin.version) merged.version = marketplacePlugin.version;
-    if (marketplacePlugin.description)
+    if (marketplacePlugin.name) {
+        merged.name = marketplacePlugin.name;
+    }
+    if (marketplacePlugin.version) {
+        merged.version = marketplacePlugin.version;
+    }
+    if (marketplacePlugin.description) {
         merged.description = marketplacePlugin.description;
-    if (marketplacePlugin.author) merged.author = marketplacePlugin.author;
-    if (marketplacePlugin.homepage)
+    }
+    if (marketplacePlugin.author) {
+        merged.author = marketplacePlugin.author;
+    }
+    if (marketplacePlugin.homepage) {
         merged.homepage = marketplacePlugin.homepage;
-    if (marketplacePlugin.repository)
+    }
+    if (marketplacePlugin.repository) {
         merged.repository = marketplacePlugin.repository;
-    if (marketplacePlugin.license) merged.license = marketplacePlugin.license;
-    if (marketplacePlugin.keywords)
+    }
+    if (marketplacePlugin.license) {
+        merged.license = marketplacePlugin.license;
+    }
+    if (marketplacePlugin.keywords) {
         merged.keywords = marketplacePlugin.keywords;
-    if (marketplacePlugin.commands)
+    }
+    if (marketplacePlugin.commands) {
         merged.commands = marketplacePlugin.commands;
-    if (marketplacePlugin.agents) merged.agents = marketplacePlugin.agents;
-    if (marketplacePlugin.skills) merged.skills = marketplacePlugin.skills;
-    if (marketplacePlugin.hooks) merged.hooks = marketplacePlugin.hooks;
-    if (marketplacePlugin.mcpServers)
+    }
+    if (marketplacePlugin.agents) {
+        merged.agents = marketplacePlugin.agents;
+    }
+    if (marketplacePlugin.skills) {
+        merged.skills = marketplacePlugin.skills;
+    }
+    if (marketplacePlugin.hooks) {
+        merged.hooks = marketplacePlugin.hooks;
+    }
+    if (marketplacePlugin.mcpServers) {
         merged.mcpServers = marketplacePlugin.mcpServers;
-    if (marketplacePlugin.outputStyles)
+    }
+    if (marketplacePlugin.outputStyles) {
         merged.outputStyles = marketplacePlugin.outputStyles;
-    if (marketplacePlugin.lspServers)
+    }
+    if (marketplacePlugin.lspServers) {
         merged.lspServers = marketplacePlugin.lspServers;
+    }
 
     return merged;
 }
@@ -752,22 +776,24 @@ export function isClaudePluginConfig(
 
     // Must have name and owner
     if (
-        typeof marketplaceConfigObj['name'] !== 'string' ||
-        typeof marketplaceConfigObj['owner'] !== 'object'
+        typeof marketplaceConfigObj.name !== 'string' ||
+        typeof marketplaceConfigObj.owner !== 'object'
     ) {
         return false;
     }
 
-    if (!Array.isArray(marketplaceConfigObj['plugins'])) {
+    if (!Array.isArray(marketplaceConfigObj.plugins)) {
         return false;
     }
 
-    const marketplacePluginObj = marketplaceConfigObj['plugins'].find(
+    const marketplacePluginObj = marketplaceConfigObj.plugins.find(
         (plugin: ClaudeMarketplacePluginConfig) =>
             plugin.name === marketplace.pluginName
     );
 
-    if (!marketplacePluginObj) return false;
+    if (!marketplacePluginObj) {
+        return false;
+    }
 
     return true;
 }

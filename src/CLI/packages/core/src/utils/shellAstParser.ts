@@ -609,7 +609,9 @@ function resolveWasmPath(filename: string): string {
     for (const dir of candidateDirs) {
         const candidate = path.join(dir, 'vendor', 'tree-sitter', filename);
         try {
-            if (fs.existsSync(candidate)) return candidate;
+            if (fs.existsSync(candidate)) {
+                return candidate;
+            }
         } catch {
             /* ignore */
         }
@@ -638,7 +640,9 @@ function resolveWasmPath(filename: string): string {
 function getWasmCandidateDirs(rawModulePath: string): string[] {
     const unique = new Set<string>();
     const add = (p: string | null | undefined) => {
-        if (p) unique.add(p);
+        if (p) {
+            unique.add(p);
+        }
     };
 
     // Candidate 1: directory of import.meta.url as-is.
@@ -648,7 +652,9 @@ function getWasmCandidateDirs(rawModulePath: string): string[] {
     // Node.js has not already done so).
     try {
         const real = fs.realpathSync(rawModulePath);
-        if (typeof real === 'string') add(path.dirname(real));
+        if (typeof real === 'string') {
+            add(path.dirname(real));
+        }
     } catch {
         /* ignore */
     }
@@ -659,7 +665,9 @@ function getWasmCandidateDirs(rawModulePath: string): string[] {
         add(path.dirname(process.argv[1]));
         try {
             const real = fs.realpathSync(process.argv[1]);
-            if (typeof real === 'string') add(path.dirname(real));
+            if (typeof real === 'string') {
+                add(path.dirname(real));
+            }
         } catch {
             /* ignore */
         }
@@ -697,13 +705,18 @@ function resolveWasmPathForModule(
  * Safe to call multiple times – only the first call does real work.
  */
 export async function initParser(): Promise<void> {
-    if (parserInstance) return;
+    if (parserInstance) {
+        return;
+    }
     // Once init has permanently failed, skip retrying to prevent hangs.
-    if (parserInitFailed)
+    if (parserInitFailed) {
         throw new Error(
             'tree-sitter WASM failed to initialise; using regex-based fallback'
         );
-    if (initPromise) return initPromise;
+    }
+    if (initPromise) {
+        return initPromise;
+    }
 
     initPromise = (async () => {
         const treeSitterWasm = resolveWasmPath('tree-sitter.wasm');
@@ -732,7 +745,10 @@ export async function initParser(): Promise<void> {
  */
 export async function parseShellCommand(command: string): Promise<Parser.Tree> {
     await initParser();
-    return parserInstance!.parse(command);
+    if (!parserInstance) {
+        throw new Error('Parser failed to initialize');
+    }
+    return parserInstance.parse(command);
 }
 
 // ---------------------------------------------------------------------------
@@ -772,16 +788,22 @@ function containsCommandSubstitutionAST(node: SyntaxNode): boolean {
 
 /** Check if a redirected_statement contains a write-redirection. */
 function hasWriteRedirection(node: SyntaxNode): boolean {
-    if (node.type !== 'redirected_statement') return false;
+    if (node.type !== 'redirected_statement') {
+        return false;
+    }
     for (let i = 0; i < node.childCount; i++) {
         const child = node.child(i)!;
         if (child.type === 'file_redirect') {
             // The operator is the first non-descriptor child
             for (let j = 0; j < child.childCount; j++) {
                 const op = child.child(j)!;
-                if (op.type === 'file_descriptor') continue;
+                if (op.type === 'file_descriptor') {
+                    continue;
+                }
                 // operator token
-                if (WRITE_REDIRECT_OPERATORS.has(op.type)) return true;
+                if (WRITE_REDIRECT_OPERATORS.has(op.type)) {
+                    return true;
+                }
                 break; // only check the operator position
             }
         }
@@ -795,7 +817,9 @@ function hasWriteRedirection(node: SyntaxNode): boolean {
  */
 function getCommandName(commandNode: SyntaxNode): string | null {
     const nameNode = commandNode.childForFieldName('name');
-    if (!nameNode) return null;
+    if (!nameNode) {
+        return null;
+    }
     return nameNode.text.toLowerCase();
 }
 
@@ -839,17 +863,29 @@ function stripOuterQuotes(text: string): string {
  */
 function evaluateCommandReadOnly(commandNode: SyntaxNode): boolean {
     const root = getCommandName(commandNode);
-    if (!root) return true; // pure variable assignment
+    if (!root) {
+        return true; // pure variable assignment
+    }
     const argNodes = getArgumentNodes(commandNode);
     const argTexts = argNodes.map((n) => stripOuterQuotes(n.text));
 
-    if (!READ_ONLY_ROOT_COMMANDS.has(root)) return false;
+    if (!READ_ONLY_ROOT_COMMANDS.has(root)) {
+        return false;
+    }
 
     // Command-specific analysis
-    if (root === 'git') return evaluateGitReadOnly(argTexts);
-    if (root === 'find') return evaluateFindReadOnly(argTexts);
-    if (root === 'sed') return evaluateSedReadOnly(argTexts);
-    if (root === 'awk') return evaluateAwkReadOnly(argTexts);
+    if (root === 'git') {
+        return evaluateGitReadOnly(argTexts);
+    }
+    if (root === 'find') {
+        return evaluateFindReadOnly(argTexts);
+    }
+    if (root === 'sed') {
+        return evaluateSedReadOnly(argTexts);
+    }
+    if (root === 'awk') {
+        return evaluateAwkReadOnly(argTexts);
+    }
 
     return true;
 }
@@ -857,15 +893,21 @@ function evaluateCommandReadOnly(commandNode: SyntaxNode): boolean {
 function evaluateGitReadOnly(args: string[]): boolean {
     // Skip global flags to find subcommand
     let idx = 0;
-    while (idx < args.length && args[idx]!.startsWith('-')) {
-        const flag = args[idx]!.toLowerCase();
-        if (flag === '--version' || flag === '--help') return true;
+    while (idx < args.length && args[idx]?.startsWith('-')) {
+        const flag = args[idx]?.toLowerCase();
+        if (flag === '--version' || flag === '--help') {
+            return true;
+        }
         idx++;
     }
-    if (idx >= args.length) return true; // `git` with only flags
+    if (idx >= args.length) {
+        return true; // `git` with only flags
+    }
 
-    const subcommand = args[idx]!.toLowerCase();
-    if (!READ_ONLY_GIT_SUBCOMMANDS.has(subcommand)) return false;
+    const subcommand = args[idx]?.toLowerCase();
+    if (!READ_ONLY_GIT_SUBCOMMANDS.has(subcommand)) {
+        return false;
+    }
 
     const rest = args.slice(idx + 1);
     if (subcommand === 'remote') {
@@ -882,9 +924,12 @@ function evaluateGitReadOnly(args: string[]): boolean {
 function evaluateFindReadOnly(args: string[]): boolean {
     for (const arg of args) {
         const lower = arg.toLowerCase();
-        if (BLOCKED_FIND_FLAGS.has(lower)) return false;
-        if (BLOCKED_FIND_PREFIXES.some((p) => lower.startsWith(p)))
+        if (BLOCKED_FIND_FLAGS.has(lower)) {
             return false;
+        }
+        if (BLOCKED_FIND_PREFIXES.some((p) => lower.startsWith(p))) {
+            return false;
+        }
     }
     return true;
 }
@@ -921,13 +966,17 @@ function evaluateStatementReadOnly(node: SyntaxNode): boolean {
     switch (node.type) {
         case 'command':
             // Check for command substitution anywhere inside the command
-            if (containsCommandSubstitutionAST(node)) return false;
+            if (containsCommandSubstitutionAST(node)) {
+                return false;
+            }
             return evaluateCommandReadOnly(node);
 
         case 'pipeline': {
             // All commands in the pipeline must be read-only
             for (const child of node.namedChildren) {
-                if (!evaluateStatementReadOnly(child)) return false;
+                if (!evaluateStatementReadOnly(child)) {
+                    return false;
+                }
             }
             return true;
         }
@@ -935,14 +984,18 @@ function evaluateStatementReadOnly(node: SyntaxNode): boolean {
         case 'list': {
             // All commands joined by && / || must be read-only
             for (const child of node.namedChildren) {
-                if (!evaluateStatementReadOnly(child)) return false;
+                if (!evaluateStatementReadOnly(child)) {
+                    return false;
+                }
             }
             return true;
         }
 
         case 'redirected_statement': {
             // Write redirections make it non-read-only
-            if (hasWriteRedirection(node)) return false;
+            if (hasWriteRedirection(node)) {
+                return false;
+            }
             // Evaluate the body statement
             const body = node.namedChildren[0];
             return body ? evaluateStatementReadOnly(body) : true;
@@ -951,7 +1004,9 @@ function evaluateStatementReadOnly(node: SyntaxNode): boolean {
         case 'subshell': {
             // Evaluate all statements inside the subshell
             for (const child of node.namedChildren) {
-                if (!evaluateStatementReadOnly(child)) return false;
+                if (!evaluateStatementReadOnly(child)) {
+                    return false;
+                }
             }
             return true;
         }
@@ -959,7 +1014,9 @@ function evaluateStatementReadOnly(node: SyntaxNode): boolean {
         case 'compound_statement': {
             // { cmd1; cmd2; } – evaluate each inner statement
             for (const child of node.namedChildren) {
-                if (!evaluateStatementReadOnly(child)) return false;
+                if (!evaluateStatementReadOnly(child)) {
+                    return false;
+                }
             }
             return true;
         }
@@ -1016,7 +1073,9 @@ function evaluateStatementReadOnly(node: SyntaxNode): boolean {
 export async function isShellCommandReadOnlyAST(
     command: string
 ): Promise<boolean> {
-    if (typeof command !== 'string' || !command.trim()) return false;
+    if (typeof command !== 'string' || !command.trim()) {
+        return false;
+    }
 
     // If the WASM parser is permanently unavailable (e.g. WASM file missing
     // after a symlinked install), fall back to the regex-based checker so the
@@ -1030,7 +1089,9 @@ export async function isShellCommandReadOnlyAST(
         const root = tree.rootNode;
 
         // Empty program
-        if (root.namedChildCount === 0) return false;
+        if (root.namedChildCount === 0) {
+            return false;
+        }
 
         // Evaluate every top-level statement
         for (const stmt of root.namedChildren) {
@@ -1063,14 +1124,16 @@ export async function isShellCommandReadOnlyAST(
  */
 function extractRuleFromCommand(commandNode: SyntaxNode): string | null {
     const rootName = getCommandName(commandNode);
-    if (!rootName) return null;
+    if (!rootName) {
+        return null;
+    }
 
     const argNodes = getArgumentNodes(commandNode);
     const argTexts = argNodes.map((n) => n.text);
 
     // Skip leading flags to find potential subcommand
     let idx = 0;
-    while (idx < argTexts.length && argTexts[idx]!.startsWith('-')) {
+    while (idx < argTexts.length && argTexts[idx]?.startsWith('-')) {
         idx++;
     }
 
@@ -1078,7 +1141,7 @@ function extractRuleFromCommand(commandNode: SyntaxNode): string | null {
     let rule = rootName;
 
     if (knownSubs && knownSubs.size > 0 && idx < argTexts.length) {
-        const potentialSub = argTexts[idx]!.toLowerCase();
+        const potentialSub = argTexts[idx]?.toLowerCase();
         if (knownSubs.has(potentialSub)) {
             rule = `${rootName} ${argTexts[idx]!}`;
 
@@ -1088,7 +1151,7 @@ function extractRuleFromCommand(commandNode: SyntaxNode): string | null {
                 potentialSub === 'compose' &&
                 idx + 1 < argTexts.length
             ) {
-                const composeSub = argTexts[idx + 1]!.toLowerCase();
+                const composeSub = argTexts[idx + 1]?.toLowerCase();
                 if (DOCKER_COMPOSE_SUBCOMMANDS.has(composeSub)) {
                     rule = `${rootName} compose ${argTexts[idx + 1]!}`;
                     // Remaining args after compose sub
@@ -1191,7 +1254,9 @@ function extractRulesFromStatement(node: SyntaxNode): string[] {
  * // → ['docker compose up *']
  */
 export async function extractCommandRules(command: string): Promise<string[]> {
-    if (typeof command !== 'string' || !command.trim()) return [];
+    if (typeof command !== 'string' || !command.trim()) {
+        return [];
+    }
 
     const tree = await parseShellCommand(command);
     const root = tree.rootNode;

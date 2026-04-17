@@ -176,12 +176,16 @@ describe('readPathFromWorkspace', () => {
             // Convert to a single string for easier, order-independent checking
             const resultText = result
                 .map((p) => {
-                    if (typeof p === 'string') return p;
-                    if (typeof p === 'object' && p && 'text' in p)
+                    if (typeof p === 'string') {
+                        return p;
+                    }
+                    if (typeof p === 'object' && p && 'text' in p) {
                         return p.text;
+                    }
                     // This part is important for handling binary/image data which isn't just text
-                    if (typeof p === 'object' && p && 'inlineData' in p)
+                    if (typeof p === 'object' && p && 'inlineData' in p) {
                         return '';
+                    }
                     return p;
                 })
                 .join('');
@@ -217,9 +221,12 @@ describe('readPathFromWorkspace', () => {
 
             const resultText = result
                 .map((p) => {
-                    if (typeof p === 'string') return p;
-                    if (typeof p === 'object' && p && 'text' in p)
+                    if (typeof p === 'string') {
+                        return p;
+                    }
+                    if (typeof p === 'object' && p && 'text' in p) {
                         return p.text;
+                    }
                     return '';
                 })
                 .join('');
@@ -256,9 +263,12 @@ describe('readPathFromWorkspace', () => {
             // Check for the text part
             const textContent = result
                 .map((p) => {
-                    if (typeof p === 'string') return p;
-                    if (typeof p === 'object' && p && 'text' in p)
+                    if (typeof p === 'string') {
+                        return p;
+                    }
+                    if (typeof p === 'object' && p && 'text' in p) {
                         return p.text;
+                    }
                     return ''; // Ignore non-text parts for this assertion
                 })
                 .join('');
@@ -336,9 +346,12 @@ describe('readPathFromWorkspace', () => {
             const result = await readPathFromWorkspace('my-dir', config);
             const resultText = result
                 .map((p) => {
-                    if (typeof p === 'string') return p;
-                    if (typeof p === 'object' && p && 'text' in p)
+                    if (typeof p === 'string') {
+                        return p;
+                    }
+                    if (typeof p === 'object' && p && 'text' in p) {
                         return p.text;
+                    }
                     return '';
                 })
                 .join('');

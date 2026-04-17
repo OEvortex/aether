@@ -32,20 +32,22 @@ function getSandboxCommand(
     sandbox?: boolean | string
 ): SandboxConfig['command'] | '' {
     // If the SANDBOX env var is set, we're already inside the sandbox.
-    if (process.env['SANDBOX']) {
+    if (process.env.SANDBOX) {
         return '';
     }
 
     // note environment variable takes precedence over argument (from command line or settings)
     const environmentConfiguredSandbox =
-        process.env['AETHER_SANDBOX']?.toLowerCase().trim() ?? '';
+        process.env.AETHER_SANDBOX?.toLowerCase().trim() ?? '';
     sandbox =
         environmentConfiguredSandbox?.length > 0
             ? environmentConfiguredSandbox
             : sandbox;
-    if (sandbox === '1' || sandbox === 'true') sandbox = true;
-    else if (sandbox === '0' || sandbox === 'false' || !sandbox)
+    if (sandbox === '1' || sandbox === 'true') {
+        sandbox = true;
+    } else if (sandbox === '0' || sandbox === 'false' || !sandbox) {
         sandbox = false;
+    }
 
     if (sandbox === false) {
         return '';
@@ -99,7 +101,7 @@ export async function loadSandboxConfig(
     const packageJson = await getPackageJson();
     const image =
         argv.sandboxImage ??
-        process.env['AETHER_SANDBOX_IMAGE'] ??
+        process.env.AETHER_SANDBOX_IMAGE ??
         packageJson?.config?.sandboxImageUri;
 
     return command && image ? { command, image } : undefined;

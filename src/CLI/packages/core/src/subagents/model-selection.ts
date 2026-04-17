@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuthType } from '../core/contentGenerator.js';
+import type { AuthType } from '../core/contentGenerator.js';
 
 export interface ParsedSubagentModelSelection {
     authType?: AuthType;
@@ -12,7 +12,13 @@ export interface ParsedSubagentModelSelection {
     inherits: boolean;
 }
 
-const AUTH_TYPES = new Set<AuthType>(Object.values(AuthType));
+const AUTH_TYPES = new Set<string>([
+    'openai',
+    'aether-oauth',
+    'gemini',
+    'vertex-ai',
+    'anthropic'
+]);
 
 /**
  * Parse a subagent model selector.

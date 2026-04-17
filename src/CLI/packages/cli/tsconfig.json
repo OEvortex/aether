@@ -1,8 +1,8 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "rootDir": "../../..",
         "outDir": "dist",
+        "composite": true,
         "paths": {
             "@aetherai/aether-core": ["../core/src/index.ts"],
             "@aetherai/aether-test-utils": ["../core/src/aetherTestUtils.ts"],
@@ -23,8 +23,6 @@
         "src/**/*.tsx",
         "src/**/*.json",
         "../../../utils/knownProvidersData.ts",
-        "../core/src/**/*.ts",
-        "../channels/**/*.ts",
         "./package.json"
     ],
     "exclude": [

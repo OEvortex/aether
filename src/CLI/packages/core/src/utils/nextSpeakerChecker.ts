@@ -121,8 +121,7 @@ export async function checkNextSpeaker(
         })) as unknown as NextSpeakerResponse;
 
         if (
-            parsedResponse &&
-            parsedResponse.next_speaker &&
+            parsedResponse?.next_speaker &&
             ['user', 'model'].includes(parsedResponse.next_speaker)
         ) {
             return parsedResponse;

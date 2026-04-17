@@ -90,7 +90,9 @@ export function substituteHookVariables(
     hooks: { [K in HookEventName]?: HookDefinition[] } | undefined,
     basePath: string
 ): { [K in HookEventName]?: HookDefinition[] } | undefined {
-    if (!hooks) return hooks;
+    if (!hooks) {
+        return hooks;
+    }
 
     // Deep clone the hooks to avoid modifying the original
     const clonedHooks = JSON.parse(JSON.stringify(hooks));

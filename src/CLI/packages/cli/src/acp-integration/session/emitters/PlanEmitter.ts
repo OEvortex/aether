@@ -51,11 +51,13 @@ export class PlanEmitter extends BaseEmitter {
     ): TodoItem[] | null {
         // Try resultDisplay first (final state from tool execution)
         const fromDisplay = this.extractFromResultDisplay(resultDisplay);
-        if (fromDisplay) return fromDisplay;
+        if (fromDisplay) {
+            return fromDisplay;
+        }
 
         // Fallback to args (initial state)
-        if (args && Array.isArray(args['todos'])) {
-            return args['todos'] as TodoItem[];
+        if (args && Array.isArray(args.todos)) {
+            return args.todos as TodoItem[];
         }
 
         return null;
@@ -68,13 +70,15 @@ export class PlanEmitter extends BaseEmitter {
     private extractFromResultDisplay(
         resultDisplay: unknown
     ): TodoItem[] | null {
-        if (!resultDisplay) return null;
+        if (!resultDisplay) {
+            return null;
+        }
 
         // Handle direct object with type 'todo_list'
         if (typeof resultDisplay === 'object') {
             const obj = resultDisplay as Record<string, unknown>;
-            if (obj['type'] === 'todo_list' && Array.isArray(obj['todos'])) {
-                return obj['todos'] as TodoItem[];
+            if (obj.type === 'todo_list' && Array.isArray(obj.todos)) {
+                return obj.todos as TodoItem[];
             }
         }
 
@@ -86,10 +90,10 @@ export class PlanEmitter extends BaseEmitter {
                     unknown
                 >;
                 if (
-                    parsed?.['type'] === 'todo_list' &&
-                    Array.isArray(parsed['todos'])
+                    parsed?.type === 'todo_list' &&
+                    Array.isArray(parsed.todos)
                 ) {
-                    return parsed['todos'] as TodoItem[];
+                    return parsed.todos as TodoItem[];
                 }
             } catch {
                 // Not JSON, ignore

@@ -76,16 +76,13 @@ export const useAuthCommand = (
         isAuthenticating
     );
 
-    const onAuthError = useCallback(
-        (error: string | null) => {
-            setAuthError(error);
-            if (error) {
-                setAuthState(AuthState.Updating);
-                setIsAuthDialogOpen(true);
-            }
-        },
-        [setAuthError, setAuthState]
-    );
+    const onAuthError = useCallback((error: string | null) => {
+        setAuthError(error);
+        if (error) {
+            setAuthState(AuthState.Updating);
+            setIsAuthDialogOpen(true);
+        }
+    }, []);
 
     const handleAuthFailure = useCallback(
         (error: unknown) => {
@@ -344,7 +341,8 @@ export const useAuthCommand = (
             performAuth,
             isProviderManagedModel,
             onAuthError,
-            settings.merged.model?.generationConfig
+            settings.merged.model?.generationConfig,
+            settings
         ]
     );
 
@@ -665,7 +663,7 @@ export const useAuthCommand = (
     * or broken authentication cycles.
     */
     useEffect(() => {
-        const defaultAuthType = process.env['AETHER_DEFAULT_AUTH_TYPE'];
+        const defaultAuthType = process.env.AETHER_DEFAULT_AUTH_TYPE;
         if (
             defaultAuthType &&
             ![

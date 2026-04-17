@@ -119,9 +119,8 @@ describe('AnthropicContentGenerator', () => {
             mockConfig
         );
 
-        const headers = (anthropicState.constructorOptions?.[
-            'defaultHeaders'
-        ] || {}) as Record<string, string>;
+        const headers = (anthropicState.constructorOptions?.defaultHeaders ||
+            {}) as Record<string, string>;
         expect(headers['User-Agent']).toContain('AetherCode/1.2.3');
         expect(headers['User-Agent']).toContain(
             `(${process.platform}; ${process.arch})`
@@ -147,9 +146,8 @@ describe('AnthropicContentGenerator', () => {
             mockConfig
         );
 
-        const headers = (anthropicState.constructorOptions?.[
-            'defaultHeaders'
-        ] || {}) as Record<string, string>;
+        const headers = (anthropicState.constructorOptions?.defaultHeaders ||
+            {}) as Record<string, string>;
         expect(headers['User-Agent']).toContain('AetherCode/1.2.3');
         expect(headers['anthropic-beta']).toContain('effort-2025-11-24');
         expect(headers['X-Custom']).toBe('1');
@@ -171,9 +169,8 @@ describe('AnthropicContentGenerator', () => {
             mockConfig
         );
 
-        const headers = (anthropicState.constructorOptions?.[
-            'defaultHeaders'
-        ] || {}) as Record<string, string>;
+        const headers = (anthropicState.constructorOptions?.defaultHeaders ||
+            {}) as Record<string, string>;
         expect(headers['anthropic-beta']).toContain('effort-2025-11-24');
     });
 
@@ -192,9 +189,8 @@ describe('AnthropicContentGenerator', () => {
             mockConfig
         );
 
-        const headers = (anthropicState.constructorOptions?.[
-            'defaultHeaders'
-        ] || {}) as Record<string, string>;
+        const headers = (anthropicState.constructorOptions?.defaultHeaders ||
+            {}) as Record<string, string>;
         expect(headers['anthropic-beta']).not.toContain('effort-2025-11-24');
     });
 
@@ -214,9 +210,8 @@ describe('AnthropicContentGenerator', () => {
             mockConfig
         );
 
-        const headers = (anthropicState.constructorOptions?.[
-            'defaultHeaders'
-        ] || {}) as Record<string, string>;
+        const headers = (anthropicState.constructorOptions?.defaultHeaders ||
+            {}) as Record<string, string>;
         expect(headers['anthropic-beta']).toBeUndefined();
     });
 

@@ -75,8 +75,12 @@ export class GeminiContentGenerator implements ContentGenerator {
         ): T | undefined => {
             const requestValue = requestConfig[requestKey] as T | undefined;
 
-            if (configValue !== undefined) return configValue;
-            if (requestValue !== undefined) return requestValue;
+            if (configValue !== undefined) {
+                return configValue;
+            }
+            if (requestValue !== undefined) {
+                return requestValue;
+            }
             return defaultValue;
         };
 
@@ -177,9 +181,13 @@ export class GeminiContentGenerator implements ContentGenerator {
     private stripUnsupportedFields(
         contents: GenerateContentParameters['contents']
     ): GenerateContentParameters['contents'] {
-        if (!contents) return contents;
+        if (!contents) {
+            return contents;
+        }
 
-        if (typeof contents === 'string') return contents;
+        if (typeof contents === 'string') {
+            return contents;
+        }
 
         if (Array.isArray(contents)) {
             return contents.map((content) =>
@@ -206,7 +214,9 @@ export class GeminiContentGenerator implements ContentGenerator {
 
         // Handle Content object
         const contentObj = content as Content;
-        if (!contentObj.parts) return contentObj;
+        if (!contentObj.parts) {
+            return contentObj;
+        }
 
         return {
             ...contentObj,
@@ -265,7 +275,9 @@ export class GeminiContentGenerator implements ContentGenerator {
      * Convert unsupported media types (audio, video) to explanatory text for Gemini API
      */
     private convertUnsupportedMediaToText(part: Part): Part {
-        if (typeof part === 'string') return part;
+        if (typeof part === 'string') {
+            return part;
+        }
 
         const inlineMimeType = part.inlineData?.mimeType || '';
         const fileMimeType = part.fileData?.mimeType || '';

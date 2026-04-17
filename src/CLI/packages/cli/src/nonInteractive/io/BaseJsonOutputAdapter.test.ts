@@ -204,7 +204,7 @@ describe('BaseJsonOutputAdapter', () => {
     describe('getMessageState', () => {
         it('should return main agent state for null parentToolUseId', () => {
             const state = adapter.exposeGetMessageState(null);
-            expect(state).toBe(adapter['mainAgentMessageState']);
+            expect(state).toBe(adapter.mainAgentMessageState);
         });
 
         it('should create and return subagent state for non-null parentToolUseId', () => {
@@ -213,8 +213,8 @@ describe('BaseJsonOutputAdapter', () => {
             const state2 = adapter.exposeGetMessageState(parentToolUseId);
 
             expect(state1).toBe(state2);
-            expect(state1).not.toBe(adapter['mainAgentMessageState']);
-            expect(adapter['subagentMessageStates'].has(parentToolUseId)).toBe(
+            expect(state1).not.toBe(adapter.mainAgentMessageState);
+            expect(adapter.subagentMessageStates.has(parentToolUseId)).toBe(
                 true
             );
         });
@@ -286,7 +286,7 @@ describe('BaseJsonOutputAdapter', () => {
 
         it('should throw error if message not started', () => {
             // Manipulate the actual main agent state used by buildMessage
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             state.messageId = null; // Explicitly set to null to test error case
             state.blocks = [{ type: 'text', text: 'test' }];
 
@@ -338,7 +338,7 @@ describe('BaseJsonOutputAdapter', () => {
 
         it('should enforce single block type constraint', () => {
             adapter.startAssistantMessage();
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             state.messageId = 'test-id';
             state.blocks = [
                 { type: 'text', text: 'text' },
@@ -452,7 +452,7 @@ describe('BaseJsonOutputAdapter', () => {
 
         it('should finalize and start new message when block type changes', () => {
             adapter.startAssistantMessage();
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             adapter.processEvent({
                 type: GeminiEventType.Content,
                 value: 'text'
@@ -492,7 +492,7 @@ describe('BaseJsonOutputAdapter', () => {
     describe('finalizeAssistantMessageInternal', () => {
         it('should return same message if already finalized', () => {
             adapter.startAssistantMessage();
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             adapter.processEvent({
                 type: GeminiEventType.Content,
                 value: 'test'
@@ -513,7 +513,7 @@ describe('BaseJsonOutputAdapter', () => {
 
         it('should finalize pending blocks and emit message', () => {
             adapter.startAssistantMessage();
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             adapter.processEvent({
                 type: GeminiEventType.Content,
                 value: 'test'
@@ -531,7 +531,7 @@ describe('BaseJsonOutputAdapter', () => {
 
         it('should close all open blocks', () => {
             adapter.startAssistantMessage();
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             adapter.processEvent({
                 type: GeminiEventType.Content,
                 value: 'test'
@@ -802,7 +802,7 @@ describe('BaseJsonOutputAdapter', () => {
 
             adapter.startAssistantMessage();
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks).toHaveLength(0);
             expect(state.messageStarted).toBe(false);
         });
@@ -819,7 +819,7 @@ describe('BaseJsonOutputAdapter', () => {
                 value: 'Hello'
             });
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks).toHaveLength(1);
             expect(state.blocks[0]).toMatchObject({
                 type: 'text',
@@ -833,7 +833,7 @@ describe('BaseJsonOutputAdapter', () => {
                 value: 'Citation text'
             });
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks[0].type).toBe('text');
             const block = state.blocks[0] as { text: string };
             expect(block.text).toContain('Citation text');
@@ -845,7 +845,7 @@ describe('BaseJsonOutputAdapter', () => {
                 value: 123
             } as unknown as ServerGeminiStreamEvent);
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks).toHaveLength(0);
         });
 
@@ -858,7 +858,7 @@ describe('BaseJsonOutputAdapter', () => {
                 }
             });
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks).toHaveLength(1);
             expect(state.blocks[0]).toMatchObject({
                 type: 'thinking',
@@ -879,7 +879,7 @@ describe('BaseJsonOutputAdapter', () => {
                 }
             });
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks).toHaveLength(1);
             expect(state.blocks[0]).toMatchObject({
                 type: 'tool_use',
@@ -901,7 +901,7 @@ describe('BaseJsonOutputAdapter', () => {
                 }
             });
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.usage).toEqual({
                 input_tokens: 100,
                 output_tokens: 50
@@ -920,7 +920,7 @@ describe('BaseJsonOutputAdapter', () => {
                 value: 'Second'
             });
 
-            const state = adapter['mainAgentMessageState'];
+            const state = adapter.mainAgentMessageState;
             expect(state.blocks[0]).toMatchObject({
                 type: 'text',
                 text: 'First'
@@ -1164,7 +1164,7 @@ describe('BaseJsonOutputAdapter', () => {
             });
             const message = adapter.finalizeAssistantMessage();
             // Update lastAssistantMessage manually since test adapter doesn't do it automatically
-            adapter['lastAssistantMessage'] = message;
+            adapter.lastAssistantMessage = message;
         });
 
         it('should build success result message', () => {
@@ -1274,7 +1274,7 @@ describe('BaseJsonOutputAdapter', () => {
             const result = adapter.exposeBuildResultMessage(options);
 
             if (!result.is_error && 'stats' in result) {
-                expect(result['stats']).toEqual(stats);
+                expect(result.stats).toEqual(stats);
             }
         });
 

@@ -33,14 +33,18 @@ export function CreationSummary({
     const launchEditor = useLaunchEditor();
 
     const truncateText = (text: string, maxLength: number): string => {
-        if (text.length <= maxLength) return text;
-        return text.substring(0, maxLength - 3) + '...';
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return `${text.substring(0, maxLength - 3)}...`;
     };
 
     // Check for warnings
     useEffect(() => {
         const checkWarnings = async () => {
-            if (!config || !state.generatedName) return;
+            if (!config || !state.generatedName) {
+                return;
+            }
 
             const allWarnings: string[] = [];
 
@@ -220,7 +224,9 @@ export function CreationSummary({
     // Handle keyboard input
     useKeypress(
         (key) => {
-            if (saveSuccess) return;
+            if (saveSuccess) {
+                return;
+            }
 
             if (key.name === 'return' || key.sequence === 's') {
                 handleSave();

@@ -24,7 +24,6 @@ import {
     formatRateLimitSummary,
     parseRateLimitFromHeaders
 } from '../../utils/rateLimitParser';
-import { RetryManager } from '../../utils/retryManager';
 import type { UsageLimitError } from './codexTypes';
 
 const CODEX_BASE_URL = 'https://chatgpt.com/backend-api/codex';

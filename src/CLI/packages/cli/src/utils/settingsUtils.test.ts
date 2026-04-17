@@ -392,8 +392,8 @@ describe('SettingsUtils', () => {
                 const categories = getDialogSettingsByCategory();
 
                 // Should include UI settings that are marked for dialog
-                expect(categories['UI']).toBeDefined();
-                const uiSettings = categories['UI'];
+                expect(categories.UI).toBeDefined();
+                const uiSettings = categories.UI;
                 const uiKeys = uiSettings.map((s) => s.key);
                 expect(uiKeys).toContain('ui.requiresRestart');
                 expect(uiKeys).toContain(
@@ -406,7 +406,7 @@ describe('SettingsUtils', () => {
                 const categories = getDialogSettingsByCategory();
 
                 // Advanced settings should be filtered out
-                expect(categories['Advanced']).toBeUndefined();
+                expect(categories.Advanced).toBeUndefined();
             });
 
             it('should include settings with showInDialog=true', () => {

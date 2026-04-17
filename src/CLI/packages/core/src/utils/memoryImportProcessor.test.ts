@@ -636,17 +636,17 @@ describe('memoryImportProcessor', () => {
                 'nested.md'
             );
 
-            expect(result.importTree.imports![0].path).toContain(
+            expect(result.importTree.imports?.[0].path).toContain(
                 expectedNestedPath
             );
-            expect(result.importTree.imports![0].imports).toHaveLength(1);
+            expect(result.importTree.imports?.[0].imports).toHaveLength(1);
 
             const expectedInnerPath = testPath(projectRoot, 'src', 'inner.md');
-            expect(result.importTree.imports![0].imports![0].path).toContain(
+            expect(result.importTree.imports?.[0].imports?.[0].path).toContain(
                 expectedInnerPath
             );
             expect(
-                result.importTree.imports![0].imports![0].imports
+                result.importTree.imports?.[0].imports?.[0].imports
             ).toBeUndefined();
 
             // Second import: simple.md
@@ -655,10 +655,10 @@ describe('memoryImportProcessor', () => {
                 'src',
                 'simple.md'
             );
-            expect(result.importTree.imports![1].path).toContain(
+            expect(result.importTree.imports?.[1].path).toContain(
                 expectedSimplePath
             );
-            expect(result.importTree.imports![1].imports).toBeUndefined();
+            expect(result.importTree.imports?.[1].imports).toBeUndefined();
         });
 
         it('should produce flat output in Claude-style with unique files in order', async () => {

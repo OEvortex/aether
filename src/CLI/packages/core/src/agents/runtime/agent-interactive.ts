@@ -162,7 +162,9 @@ export class AgentInteractive {
      * Creates a per-round AbortController so cancellation is scoped.
      */
     private async runOneRound(message: string): Promise<void> {
-        if (!this.chat) return;
+        if (!this.chat) {
+            return;
+        }
 
         this.setStatus(AgentStatus.RUNNING);
         this.lastRoundError = undefined;
@@ -211,7 +213,9 @@ export class AgentInteractive {
             }
         } catch (err) {
             // User-initiated cancellation already logged by cancelCurrentRound().
-            if (this.roundCancelledByUser) return;
+            if (this.roundCancelledByUser) {
+                return;
+            }
             // Agent survives round errors — log and settle status in runLoop.
             const errorMessage =
                 err instanceof Error ? err.message : String(err);
@@ -370,7 +374,9 @@ export class AgentInteractive {
 
     private setStatus(newStatus: AgentStatus): void {
         const previousStatus = this.status;
-        if (previousStatus === newStatus) return;
+        if (previousStatus === newStatus) {
+            return;
+        }
 
         this.status = newStatus;
 
@@ -404,7 +410,9 @@ export class AgentInteractive {
 
     private setupEventListeners(): void {
         const emitter = this.core.eventEmitter;
-        if (!emitter) return;
+        if (!emitter) {
+            return;
+        }
 
         emitter.on(AgentEventType.ROUND_TEXT, (event: AgentRoundTextEvent) => {
             if (event.thoughtText) {

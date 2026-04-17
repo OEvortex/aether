@@ -42,7 +42,6 @@ export const AutoAcceptIndicator: React.FC<AutoAcceptIndicatorProps> = ({
             textContent = t('YOLO mode');
             subText = cycleText;
             break;
-        case ApprovalMode.DEFAULT:
         default:
             break;
     }

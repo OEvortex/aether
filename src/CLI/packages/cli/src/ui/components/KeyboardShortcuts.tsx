@@ -19,7 +19,9 @@ interface Shortcut {
 const getNewlineKey = () =>
     process.platform === 'win32' ? 'ctrl+enter' : 'ctrl+j';
 const getPasteKey = () => {
-    if (process.platform === 'win32') return 'alt+v';
+    if (process.platform === 'win32') {
+        return 'alt+v';
+    }
     return process.platform === 'darwin' ? 'cmd+v' : 'ctrl+v';
 };
 const getExternalEditorKey = () =>
@@ -36,7 +38,7 @@ const getShortcuts = (): Shortcut[] => [
         description: t('to cycle approvals')
     },
     { key: 'ctrl+c', description: t('to quit') },
-    { key: getNewlineKey(), description: t('for newline') + ' ⏎' },
+    { key: getNewlineKey(), description: `${t('for newline')} ⏎` },
     { key: 'ctrl+l', description: t('to clear screen') },
     { key: 'ctrl+r', description: t('to search history') },
     { key: 'ctrl+y', description: t('to retry last request') },

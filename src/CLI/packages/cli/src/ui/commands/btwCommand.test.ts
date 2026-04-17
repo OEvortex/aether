@@ -56,7 +56,7 @@ describe('btwCommand', () => {
     });
 
     it('should return error when no question is provided', async () => {
-        const result = await btwCommand.action!(mockContext, '');
+        const result = await btwCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -66,7 +66,7 @@ describe('btwCommand', () => {
     });
 
     it('should return error when only whitespace is provided', async () => {
-        const result = await btwCommand.action!(mockContext, '   ');
+        const result = await btwCommand.action?.(mockContext, '   ');
 
         expect(result).toEqual({
             type: 'message',
@@ -80,7 +80,7 @@ describe('btwCommand', () => {
             services: { config: null }
         });
 
-        const result = await btwCommand.action!(
+        const result = await btwCommand.action?.(
             noConfigContext,
             'test question'
         );
@@ -101,7 +101,7 @@ describe('btwCommand', () => {
             }
         });
 
-        const result = await btwCommand.action!(
+        const result = await btwCommand.action?.(
             noModelContext,
             'test question'
         );
@@ -128,7 +128,7 @@ describe('btwCommand', () => {
                 ]
             });
 
-            await btwCommand.action!(
+            await btwCommand.action?.(
                 mockContext,
                 'what is the meaning of life?'
             );
@@ -172,7 +172,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'answer' }] } }]
             });
 
-            await btwCommand.action!(mockContext, 'my question');
+            await btwCommand.action?.(mockContext, 'my question');
             await flushPromises();
 
             expect(mockGenerateContent).toHaveBeenCalledWith(
@@ -205,7 +205,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'answer' }] } }]
             });
 
-            await btwCommand.action!(mockContext, 'test');
+            await btwCommand.action?.(mockContext, 'test');
             await flushPromises();
 
             const calledContents = mockGenerateContent.mock.calls[0][0];
@@ -233,7 +233,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'answer' }] } }]
             });
 
-            await btwCommand.action!(mockContext, 'test');
+            await btwCommand.action?.(mockContext, 'test');
             await flushPromises();
 
             const calledContents = mockGenerateContent.mock.calls[0][0];
@@ -246,7 +246,7 @@ describe('btwCommand', () => {
         it('should add error item on failure and clear btwItem', async () => {
             mockGenerateContent.mockRejectedValue(new Error('API error'));
 
-            await btwCommand.action!(mockContext, 'test question');
+            await btwCommand.action?.(mockContext, 'test question');
             await flushPromises();
 
             // btwItem should be cleared on error
@@ -265,7 +265,7 @@ describe('btwCommand', () => {
         it('should handle non-Error exceptions', async () => {
             mockGenerateContent.mockRejectedValue('string error');
 
-            await btwCommand.action!(mockContext, 'test question');
+            await btwCommand.action?.(mockContext, 'test question');
             await flushPromises();
 
             expect(mockContext.ui.addItem).toHaveBeenCalledWith(
@@ -292,7 +292,7 @@ describe('btwCommand', () => {
             });
 
             // btw should NOT be blocked by pendingItem anymore
-            const result = await btwCommand.action!(
+            const result = await btwCommand.action?.(
                 busyContext,
                 'test question'
             );
@@ -320,7 +320,7 @@ describe('btwCommand', () => {
                     )
             );
 
-            await btwCommand.action!(mockContext, 'test question');
+            await btwCommand.action?.(mockContext, 'test question');
 
             // The btw command should have registered its AbortController
             expect(mockContext.ui.btwAbortControllerRef.current).toBeInstanceOf(
@@ -328,7 +328,7 @@ describe('btwCommand', () => {
             );
 
             // Simulate user pressing ESC: cancel the in-flight btw
-            mockContext.ui.btwAbortControllerRef.current!.abort();
+            mockContext.ui.btwAbortControllerRef.current?.abort();
 
             await flushPromises();
 
@@ -342,7 +342,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'answer' }] } }]
             });
 
-            await btwCommand.action!(mockContext, 'test question');
+            await btwCommand.action?.(mockContext, 'test question');
 
             // Ref is set during the call
             expect(mockContext.ui.btwAbortControllerRef.current).toBeInstanceOf(
@@ -358,7 +358,7 @@ describe('btwCommand', () => {
         it('should clear btwAbortControllerRef after error', async () => {
             mockGenerateContent.mockRejectedValue(new Error('API error'));
 
-            await btwCommand.action!(mockContext, 'test question');
+            await btwCommand.action?.(mockContext, 'test question');
 
             expect(mockContext.ui.btwAbortControllerRef.current).toBeInstanceOf(
                 AbortController
@@ -374,13 +374,13 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'answer' }] } }]
             });
 
-            await btwCommand.action!(mockContext, 'first question');
+            await btwCommand.action?.(mockContext, 'first question');
 
             // cancelBtw should have been called to clean up any previous btw
             expect(mockContext.ui.cancelBtw).toHaveBeenCalledTimes(1);
 
             // Second btw call
-            await btwCommand.action!(mockContext, 'second question');
+            await btwCommand.action?.(mockContext, 'second question');
 
             // cancelBtw called again for the second invocation
             expect(mockContext.ui.cancelBtw).toHaveBeenCalledTimes(2);
@@ -391,7 +391,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [] } }]
             });
 
-            await btwCommand.action!(mockContext, 'test question');
+            await btwCommand.action?.(mockContext, 'test question');
             await flushPromises();
 
             expect(mockContext.ui.setBtwItem).toHaveBeenCalledWith({
@@ -409,7 +409,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'answer' }] } }]
             });
 
-            const result = await btwCommand.action!(
+            const result = await btwCommand.action?.(
                 mockContext,
                 'test question'
             );
@@ -443,7 +443,7 @@ describe('btwCommand', () => {
                 candidates: [{ content: { parts: [{ text: 'the answer' }] } }]
             });
 
-            const result = await btwCommand.action!(
+            const result = await btwCommand.action?.(
                 nonInteractiveContext,
                 'my question'
             );
@@ -458,7 +458,7 @@ describe('btwCommand', () => {
         it('should return error message on failure', async () => {
             mockGenerateContent.mockRejectedValue(new Error('network error'));
 
-            const result = await btwCommand.action!(
+            const result = await btwCommand.action?.(
                 nonInteractiveContext,
                 'my question'
             );
@@ -490,7 +490,7 @@ describe('btwCommand', () => {
                 ]
             });
 
-            const result = (await btwCommand.action!(
+            const result = (await btwCommand.action?.(
                 acpContext,
                 'my question'
             )) as {
@@ -517,7 +517,7 @@ describe('btwCommand', () => {
         it('should yield error message on failure', async () => {
             mockGenerateContent.mockRejectedValue(new Error('api failure'));
 
-            const result = (await btwCommand.action!(
+            const result = (await btwCommand.action?.(
                 acpContext,
                 'my question'
             )) as {

@@ -67,8 +67,8 @@ export function useCodingPlanUpdates(
                 const nonCodingPlanConfigs = currentConfigs.filter(
                     (cfg) =>
                         !isCodingPlanConfig(
-                            cfg['baseUrl'] as string | undefined,
-                            cfg['envKey'] as string | undefined
+                            cfg.baseUrl as string | undefined,
+                            cfg.envKey as string | undefined
                         )
                 );
 

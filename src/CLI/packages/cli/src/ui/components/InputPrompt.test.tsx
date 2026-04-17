@@ -1298,9 +1298,9 @@ describe('InputPrompt', () => {
 
         it('should handle Unicode characters with escaped spaces', async () => {
             // Test combining Unicode and escaped spaces
-            mockBuffer.text = '@' + path.join('files', 'emoji\\ 👍\\ test.txt');
+            mockBuffer.text = `@${path.join('files', 'emoji\\ 👍\\ test.txt')}`;
             mockBuffer.lines = [
-                '@' + path.join('files', 'emoji\\ 👍\\ test.txt')
+                `@${path.join('files', 'emoji\\ 👍\\ test.txt')}`
             ];
             mockBuffer.cursor = [0, 25]; // After the escaped space and emoji
 
@@ -1648,7 +1648,7 @@ describe('InputPrompt', () => {
             await wait();
 
             const frame = stdout.lastFrame();
-            const lines = frame!.split('\n');
+            const lines = frame?.split('\n');
             // The line with the cursor should just be an inverted space inside the box border
             expect(
                 lines.find((l) => l.includes(chalk.inverse(' ')))
@@ -1683,7 +1683,7 @@ describe('InputPrompt', () => {
             expect(frame).toContain('hello');
             expect(frame).toContain(`world${chalk.inverse(' ')}`);
 
-            const outputLines = frame!.split('\n');
+            const outputLines = frame?.split('\n');
             // The number of lines should be 2 for the border plus 3 for the content.
             expect(outputLines.length).toBe(5);
             unmount();
@@ -1989,7 +1989,7 @@ describe('InputPrompt', () => {
             });
 
             mockedUseReverseSearchCompletion.mockImplementation(
-                (buffer, shellHistory, reverseSearchActive) => ({
+                (_buffer, _shellHistory, reverseSearchActive) => ({
                     ...mockReverseSearchCompletion,
                     suggestions: reverseSearchActive
                         ? [
@@ -2151,7 +2151,7 @@ describe('InputPrompt', () => {
             props.shellModeActive = false;
 
             vi.mocked(useReverseSearchCompletion).mockImplementation(
-                (buffer, data, isActive) => ({
+                (_buffer, _data, isActive) => ({
                     ...mockReverseSearchCompletion,
                     suggestions: isActive
                         ? [
@@ -2771,7 +2771,9 @@ describe('InputPrompt', () => {
     });
 });
 function clean(str: string | undefined): string {
-    if (!str) return '';
+    if (!str) {
+        return '';
+    }
     // Remove ANSI escape codes and trim whitespace
     return stripAnsi(str).trim();
 }

@@ -688,7 +688,7 @@ describe('useSlashCommandProcessor', () => {
             });
 
             await act(async () => {
-                onConfirm!(ToolConfirmationOutcome.Cancel, []); // Pass empty array for safety
+                onConfirm?.(ToolConfirmationOutcome.Cancel, []); // Pass empty array for safety
             });
 
             expect(result.current.shellConfirmationRequest).toBeNull();
@@ -721,7 +721,7 @@ describe('useSlashCommandProcessor', () => {
             });
 
             await act(async () => {
-                onConfirm!(ToolConfirmationOutcome.ProceedOnce, ['rm -rf /']);
+                onConfirm?.(ToolConfirmationOutcome.ProceedOnce, ['rm -rf /']);
             });
 
             expect(result.current.shellConfirmationRequest).toBeNull();
@@ -775,7 +775,9 @@ describe('useSlashCommandProcessor', () => {
             });
 
             await act(async () => {
-                onConfirm!(ToolConfirmationOutcome.ProceedAlways, ['rm -rf /']);
+                onConfirm?.(ToolConfirmationOutcome.ProceedAlways, [
+                    'rm -rf /'
+                ]);
             });
 
             expect(result.current.shellConfirmationRequest).toBeNull();
@@ -1024,12 +1026,10 @@ describe('useSlashCommandProcessor', () => {
         const loggingTestCommands: SlashCommand[] = [
             createTestCommand({
                 name: 'logtest',
-                action: vi
-                    .fn()
-                    .mockResolvedValue({
-                        type: 'message',
-                        content: 'hello world'
-                    })
+                action: vi.fn().mockResolvedValue({
+                    type: 'message',
+                    content: 'hello world'
+                })
             }),
             createTestCommand({
                 name: 'logwithsub',

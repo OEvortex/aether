@@ -8,16 +8,16 @@ import { vi } from 'vitest';
 import { registerCleanup, runExitCleanup } from './cleanup';
 
 describe('cleanup', () => {
-    const originalCleanupFunctions = global['cleanupFunctions'];
+    const originalCleanupFunctions = global.cleanupFunctions;
 
     beforeEach(() => {
         // Isolate cleanup functions for each test
-        global['cleanupFunctions'] = [];
+        global.cleanupFunctions = [];
     });
 
     afterAll(() => {
         // Restore original cleanup functions
-        global['cleanupFunctions'] = originalCleanupFunctions;
+        global.cleanupFunctions = originalCleanupFunctions;
     });
 
     it('should run a registered synchronous function', async () => {

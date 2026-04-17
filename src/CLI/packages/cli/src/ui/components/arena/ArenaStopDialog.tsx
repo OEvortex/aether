@@ -63,7 +63,9 @@ export function ArenaStopDialog({
 
     const onStop = useCallback(
         async (action: StopAction) => {
-            if (isProcessing) return;
+            if (isProcessing) {
+                return;
+            }
             setIsProcessing(true);
             closeArenaDialog();
 

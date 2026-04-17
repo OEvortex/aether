@@ -329,8 +329,12 @@ export function getDialogSettingKeys(): string[] {
             return indexA - indexB;
         }
         // If only one is in the array, prioritize the one in the array
-        if (indexA !== -1) return -1;
-        if (indexB !== -1) return 1;
+        if (indexA !== -1) {
+            return -1;
+        }
+        if (indexB !== -1) {
+            return 1;
+        }
         // If neither is in the array, maintain original order
         return 0;
     });
@@ -402,7 +406,9 @@ export function setNestedPropertyForce(
 ): void {
     const keys = path.split('.');
     const lastKey = keys.pop();
-    if (!lastKey) return;
+    if (!lastKey) {
+        return;
+    }
 
     let current: Record<string, unknown> = obj;
     for (const key of keys) {
@@ -422,7 +428,9 @@ export function setNestedPropertySafe(
 ): void {
     const keys = path.split('.');
     const lastKey = keys.pop();
-    if (!lastKey) return;
+    if (!lastKey) {
+        return;
+    }
 
     let current: Record<string, unknown> = obj;
     for (const key of keys) {
@@ -446,7 +454,9 @@ export function deleteNestedPropertySafe(
 ): void {
     const keys = path.split('.');
     const lastKey = keys.pop();
-    if (!lastKey) return;
+    if (!lastKey) {
+        return;
+    }
 
     let current: Record<string, unknown> = obj;
     for (const key of keys) {

@@ -337,7 +337,7 @@ export class GeminiChat {
     ): Promise<AsyncGenerator<StreamEvent>> {
         await this.sendPromise;
 
-        let streamDoneResolver: () => void;
+        let streamDoneResolver: (() => void) | undefined;
         const streamDonePromise = new Promise<void>((resolve) => {
             streamDoneResolver = resolve;
         });
@@ -522,7 +522,7 @@ export class GeminiChat {
                     throw lastError;
                 }
             } finally {
-                streamDoneResolver!();
+                streamDoneResolver?.();
             }
         })();
     }
@@ -545,14 +545,24 @@ export class GeminiChat {
         const streamResponse = await retryWithBackoff(apiCall, {
             shouldRetryOnError: (error: unknown) => {
                 if (error instanceof Error) {
-                    if (isSchemaDepthError(error.message)) return false;
-                    if (isInvalidArgumentError(error.message)) return false;
+                    if (isSchemaDepthError(error.message)) {
+                        return false;
+                    }
+                    if (isInvalidArgumentError(error.message)) {
+                        return false;
+                    }
                 }
 
                 const status = getErrorStatus(error);
-                if (status === 400) return false;
-                if (status === 429) return true;
-                if (status && status >= 500 && status < 600) return true;
+                if (status === 400) {
+                    return false;
+                }
+                if (status === 429) {
+                    return true;
+                }
+                if (status && status >= 500 && status < 600) {
+                    return true;
+                }
 
                 return false;
             },
@@ -615,7 +625,9 @@ export class GeminiChat {
     stripThoughtsFromHistory(): void {
         this.history = this.history
             .map((content) => {
-                if (!content.parts) return content;
+                if (!content.parts) {
+                    return content;
+                }
 
                 // Filter out thought parts entirely
                 const filteredParts = content.parts
@@ -659,7 +671,7 @@ export class GeminiChat {
     stripOrphanedUserEntriesFromHistory(): void {
         while (
             this.history.length > 0 &&
-            this.history[this.history.length - 1]!.role === 'user'
+            this.history[this.history.length - 1]?.role === 'user'
         ) {
             this.history.pop();
         }

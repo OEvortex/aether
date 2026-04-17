@@ -43,7 +43,7 @@ export interface GitHubDownloadResult {
 }
 
 function getGitHubToken(): string | undefined {
-    return process.env['GITHUB_TOKEN'];
+    return process.env.GITHUB_TOKEN;
 }
 
 /**

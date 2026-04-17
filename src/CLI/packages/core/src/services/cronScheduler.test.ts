@@ -96,7 +96,7 @@ describe('CronScheduler', () => {
             scheduler.tick(date);
 
             expect(fired).toHaveLength(1);
-            expect(fired[0]!.prompt).toBe('match');
+            expect(fired[0]?.prompt).toBe('match');
         });
 
         it('does not fire when no match', () => {
@@ -188,7 +188,7 @@ describe('CronScheduler', () => {
 
             scheduler.tick(new Date(2025, 0, 15, 10, 6, 0));
             expect(fired).toHaveLength(1);
-            expect(fired[0]!.prompt).toBe('hourly delayed');
+            expect(fired[0]?.prompt).toBe('hourly delayed');
         });
 
         it('fires one-shot jobs before the matching minute when negative jitter advances them', () => {
@@ -203,7 +203,7 @@ describe('CronScheduler', () => {
 
             scheduler.tick(new Date(2025, 0, 15, 10, 29, 30));
             expect(fired).toHaveLength(1);
-            expect(fired[0]!.prompt).toBe('oneshot early');
+            expect(fired[0]?.prompt).toBe('oneshot early');
         });
     });
 

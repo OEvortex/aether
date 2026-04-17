@@ -41,8 +41,10 @@ interface ContextUsageProps {
  * Truncate a string to maxLen, appending '…' if truncated.
  */
 function truncateName(name: string, maxLen: number): string {
-    if (name.length <= maxLen) return name;
-    return name.slice(0, maxLen - 1) + '\u2026';
+    if (name.length <= maxLen) {
+        return name;
+    }
+    return `${name.slice(0, maxLen - 1)}\u2026`;
 }
 
 /**
@@ -173,7 +175,9 @@ export const ContextUsage: React.FC<ContextUsageProps> = ({
     );
     // Sort skills: loaded first, then by total token cost descending
     const sortedSkills = [...skills].sort((a, b) => {
-        if (a.loaded !== b.loaded) return a.loaded ? -1 : 1;
+        if (a.loaded !== b.loaded) {
+            return a.loaded ? -1 : 1;
+        }
         const aTotal = a.tokens + (a.bodyTokens ?? 0);
         const bTotal = b.tokens + (b.bodyTokens ?? 0);
         return bTotal - aTotal;

@@ -1,6 +1,5 @@
 ﻿import type { GenerateContentConfig } from '@google/genai';
 import OpenAI from 'openai';
-import type { Config } from '../../../config/config.js';
 import { buildRuntimeFetchOptions } from '../../../utils/runtimeFetchOptions.js';
 import type { ContentGeneratorConfig } from '../../contentGenerator.js';
 import { AuthType } from '../../contentGenerator.js';
@@ -18,20 +17,17 @@ import type {
 } from './types.js';
 
 export class DashScopeOpenAICompatibleProvider extends DefaultOpenAICompatibleProvider {
-    constructor(
-        contentGeneratorConfig: ContentGeneratorConfig,
-        cliConfig: Config
-    ) {
-        super(contentGeneratorConfig, cliConfig);
-    }
-
     static isDashScopeProvider(
         contentGeneratorConfig: ContentGeneratorConfig
     ): boolean {
         const { authType, baseUrl } = contentGeneratorConfig;
 
-        if (authType === AuthType.AETHER_OAUTH) return true;
-        if (!baseUrl) return true;
+        if (authType === AuthType.AETHER_OAUTH) {
+            return true;
+        }
+        if (!baseUrl) {
+            return true;
+        }
 
         // Matches: dashscope.aliyuncs.com, *.dashscope.aliyuncs.com, or *.dashscope-intl.aliyuncs.com
         return /([\w-]+\.)?dashscope(-intl)?\.aliyuncs\.com/i.test(baseUrl);

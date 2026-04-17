@@ -193,7 +193,7 @@ export class HookAggregator {
             ...otherHookSpecificFields
         };
         if (additionalContexts.length > 0) {
-            hookSpecificOutput['additionalContext'] =
+            hookSpecificOutput.additionalContext =
                 additionalContexts.join('\n');
         }
 
@@ -226,9 +226,11 @@ export class HookAggregator {
 
         for (const output of outputs) {
             const specific = output.hookSpecificOutput;
-            if (!specific) continue;
+            if (!specific) {
+                continue;
+            }
 
-            const decision = specific['decision'] as
+            const decision = specific.decision as
                 | {
                       behavior?: string;
                       message?: string;
@@ -241,37 +243,36 @@ export class HookAggregator {
                   }
                 | undefined;
 
-            if (!decision) continue;
+            if (!decision) {
+                continue;
+            }
 
             // Check behavior
-            if (decision['behavior'] === 'deny') {
+            if (decision.behavior === 'deny') {
                 hasDeny = true;
-            } else if (decision['behavior'] === 'allow') {
+            } else if (decision.behavior === 'allow') {
                 hasAllow = true;
             }
 
             // Collect message
-            if (decision['message']) {
-                messages.push(decision['message'] as string);
+            if (decision.message) {
+                messages.push(decision.message as string);
             }
 
             // Check interrupt - true wins
-            if (decision['interrupt'] === true) {
+            if (decision.interrupt === true) {
                 interrupt = true;
             }
 
             // Collect updatedInput - use last non-empty
-            if (decision['updatedInput']) {
-                updatedInput = decision['updatedInput'] as Record<
-                    string,
-                    unknown
-                >;
+            if (decision.updatedInput) {
+                updatedInput = decision.updatedInput as Record<string, unknown>;
             }
 
             // Collect updatedPermissions
-            if (decision['updatedPermissions']) {
+            if (decision.updatedPermissions) {
                 allUpdatedPermissions.push(
-                    ...(decision['updatedPermissions'] as Array<{
+                    ...(decision.updatedPermissions as Array<{
                         type: string;
                         tool?: string;
                     }>)
@@ -291,25 +292,25 @@ export class HookAggregator {
         const mergedDecision: Record<string, unknown> = {};
 
         if (hasDeny) {
-            mergedDecision['behavior'] = 'deny';
+            mergedDecision.behavior = 'deny';
         } else if (hasAllow) {
-            mergedDecision['behavior'] = 'allow';
+            mergedDecision.behavior = 'allow';
         }
 
         if (messages.length > 0) {
-            mergedDecision['message'] = messages.join('\n');
+            mergedDecision.message = messages.join('\n');
         }
 
         if (interrupt) {
-            mergedDecision['interrupt'] = true;
+            mergedDecision.interrupt = true;
         }
 
         if (updatedInput) {
-            mergedDecision['updatedInput'] = updatedInput;
+            mergedDecision.updatedInput = updatedInput;
         }
 
         if (allUpdatedPermissions.length > 0) {
-            mergedDecision['updatedPermissions'] = allUpdatedPermissions;
+            mergedDecision.updatedPermissions = allUpdatedPermissions;
         }
 
         merged.hookSpecificOutput = {
@@ -383,9 +384,9 @@ export class HookAggregator {
         // Extract additionalContext from various hook types
         if (
             'additionalContext' in specific &&
-            typeof specific['additionalContext'] === 'string'
+            typeof specific.additionalContext === 'string'
         ) {
-            contexts.push(specific['additionalContext']);
+            contexts.push(specific.additionalContext);
         }
     }
 }

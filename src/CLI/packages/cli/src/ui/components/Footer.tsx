@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
     const isNarrow = isNarrowWidth(terminalWidth);
 
     // Determine sandbox info from environment
-    const sandboxEnv = process.env['SANDBOX'];
+    const sandboxEnv = process.env.SANDBOX;
     const sandboxInfo = sandboxEnv
         ? sandboxEnv === 'sandbox-exec'
             ? 'seatbelt'

@@ -149,7 +149,7 @@ describe('handleAtCommand', () => {
         // toolDisplays should be returned for caller to add to UI history
         expect(result.toolDisplays).toBeDefined();
         expect(result.toolDisplays).toHaveLength(1);
-        expect(result.toolDisplays![0].status).toBe(ToolCallStatus.Success);
+        expect(result.toolDisplays?.[0].status).toBe(ToolCallStatus.Success);
     });
 
     it('should process a valid directory path', async () => {
@@ -252,7 +252,7 @@ describe('handleAtCommand', () => {
         // toolDisplays should be returned for caller to add to UI history
         expect(result.toolDisplays).toBeDefined();
         expect(result.toolDisplays).toHaveLength(1);
-        expect(result.toolDisplays![0].status).toBe(ToolCallStatus.Success);
+        expect(result.toolDisplays?.[0].status).toBe(ToolCallStatus.Success);
     });
 
     it('should handle multiple @file references', async () => {
@@ -1047,7 +1047,7 @@ describe('handleAtCommand', () => {
 
         // Instead, it returns toolDisplays for the caller to add to UI history
         expect(result.toolDisplays).toBeDefined();
-        expect(result.toolDisplays!.length).toBeGreaterThan(0);
+        expect(result.toolDisplays?.length).toBeGreaterThan(0);
     });
 
     describe('chat recording', () => {
@@ -1074,7 +1074,7 @@ describe('handleAtCommand', () => {
 
             // Should return toolDisplays (one summary for all files)
             expect(result.toolDisplays).toBeDefined();
-            expect(result.toolDisplays!.length).toBeGreaterThanOrEqual(1);
+            expect(result.toolDisplays?.length).toBeGreaterThanOrEqual(1);
         });
 
         it('should return toolDisplays for UI and function parts in processedQuery', async () => {
@@ -1095,7 +1095,7 @@ describe('handleAtCommand', () => {
 
             // Should return toolDisplays for UI
             expect(result.toolDisplays).toBeDefined();
-            expect(result.toolDisplays!.length).toBeGreaterThanOrEqual(1);
+            expect(result.toolDisplays?.length).toBeGreaterThanOrEqual(1);
 
             // processedQuery should include file content sections
             expect(result.processedQuery).toBeDefined();
@@ -1144,8 +1144,8 @@ describe('handleAtCommand', () => {
             });
 
             expect(result.toolDisplays).toBeDefined();
-            expect(result.toolDisplays!.length).toBeGreaterThanOrEqual(1);
-            expect(result.toolDisplays![0].description).toContain('file.txt');
+            expect(result.toolDisplays?.length).toBeGreaterThanOrEqual(1);
+            expect(result.toolDisplays?.[0].description).toContain('file.txt');
         });
     });
 });

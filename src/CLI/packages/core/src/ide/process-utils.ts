@@ -33,7 +33,7 @@ async function getProcessInfo(pid: number): Promise<{
         const fullCommand = trimmedStdout.substring(ppidString.length).trim();
         const processName = path.basename(fullCommand.split(' ')[0]);
         return {
-            parentPid: isNaN(parentPid) ? 1 : parentPid,
+            parentPid: Number.isNaN(parentPid) ? 1 : parentPid,
             name: processName,
             command: fullCommand
         };

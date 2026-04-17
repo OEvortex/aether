@@ -32,8 +32,10 @@ vi.mock('child_process', async (importOriginal) => {
             const createStream = () => ({
                 on: vi.fn((event: string, cb: (...args: unknown[]) => void) => {
                     const key = `stream:${event}`;
-                    if (!listeners.has(key)) listeners.set(key, new Set());
-                    listeners.get(key)!.add(cb);
+                    if (!listeners.has(key)) {
+                        listeners.set(key, new Set());
+                    }
+                    listeners.get(key)?.add(cb);
                 }),
                 removeListener: vi.fn(
                     (event: string, cb: (...args: unknown[]) => void) => {
@@ -46,8 +48,10 @@ vi.mock('child_process', async (importOriginal) => {
             return {
                 on: vi.fn((event: string, cb: (...args: unknown[]) => void) => {
                     const key = `child:${event}`;
-                    if (!listeners.has(key)) listeners.set(key, new Set());
-                    listeners.get(key)!.add(cb);
+                    if (!listeners.has(key)) {
+                        listeners.set(key, new Set());
+                    }
+                    listeners.get(key)?.add(cb);
 
                     // Simulate command not found or error for git grep and system grep
                     // to force it to fall back to JS implementation.
@@ -71,7 +75,7 @@ vi.mock('child_process', async (importOriginal) => {
         }),
         exec: vi.fn(
             (
-                cmd: string,
+                _cmd: string,
                 callback: (
                     error: Error | null,
                     stdout: string,

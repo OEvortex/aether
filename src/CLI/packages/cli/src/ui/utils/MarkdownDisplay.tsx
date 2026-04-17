@@ -34,7 +34,9 @@ const MarkdownDisplayInternal: React.FC<MarkdownDisplayProps> = ({
     contentWidth,
     textColor = theme.text.primary
 }) => {
-    if (!text) return <></>;
+    if (!text) {
+        return <></>;
+    }
 
     const lines = text.split(/\r?\n/);
     const headerRegex = /^ *(#{1,4}) +(.*)/;
@@ -69,8 +71,7 @@ const MarkdownDisplayInternal: React.FC<MarkdownDisplayProps> = ({
         if (inCodeBlock) {
             const fenceMatch = line.match(codeFenceRegex);
             if (
-                fenceMatch &&
-                fenceMatch[1].startsWith(codeBlockFence[0]) &&
+                fenceMatch?.[1].startsWith(codeBlockFence[0]) &&
                 fenceMatch[1].length >= codeBlockFence.length
             ) {
                 addContentBlock(
@@ -229,7 +230,9 @@ const MarkdownDisplayInternal: React.FC<MarkdownDisplayProps> = ({
                     );
                     break;
             }
-            if (headerNode) addContentBlock(<Box key={key}>{headerNode}</Box>);
+            if (headerNode) {
+                addContentBlock(<Box key={key}>{headerNode}</Box>);
+            }
         } else if (ulMatch) {
             const leadingWhitespace = ulMatch[1];
             const marker = ulMatch[2];

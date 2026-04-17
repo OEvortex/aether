@@ -86,113 +86,113 @@ describe('ArenaAgentClient', () => {
 
     describe('create() factory', () => {
         it('should return null when ARENA_AGENT_ID is not set', () => {
-            const original = process.env['ARENA_AGENT_ID'];
-            const originalSession = process.env['ARENA_SESSION_ID'];
-            const originalDir = process.env['ARENA_SESSION_DIR'];
-            delete process.env['ARENA_AGENT_ID'];
-            delete process.env['ARENA_SESSION_ID'];
-            delete process.env['ARENA_SESSION_DIR'];
+            const original = process.env.ARENA_AGENT_ID;
+            const originalSession = process.env.ARENA_SESSION_ID;
+            const originalDir = process.env.ARENA_SESSION_DIR;
+            delete process.env.ARENA_AGENT_ID;
+            delete process.env.ARENA_SESSION_ID;
+            delete process.env.ARENA_SESSION_DIR;
 
             const reporter = ArenaAgentClient.create();
             expect(reporter).toBeNull();
 
             // Restore
             if (original !== undefined) {
-                process.env['ARENA_AGENT_ID'] = original;
+                process.env.ARENA_AGENT_ID = original;
             }
             if (originalSession !== undefined) {
-                process.env['ARENA_SESSION_ID'] = originalSession;
+                process.env.ARENA_SESSION_ID = originalSession;
             }
             if (originalDir !== undefined) {
-                process.env['ARENA_SESSION_DIR'] = originalDir;
+                process.env.ARENA_SESSION_DIR = originalDir;
             }
         });
 
         it('should return null when ARENA_SESSION_ID is not set', () => {
-            const originalAgent = process.env['ARENA_AGENT_ID'];
-            const originalSession = process.env['ARENA_SESSION_ID'];
-            const originalDir = process.env['ARENA_SESSION_DIR'];
+            const originalAgent = process.env.ARENA_AGENT_ID;
+            const originalSession = process.env.ARENA_SESSION_ID;
+            const originalDir = process.env.ARENA_SESSION_DIR;
 
-            process.env['ARENA_AGENT_ID'] = 'test-agent';
-            delete process.env['ARENA_SESSION_ID'];
-            process.env['ARENA_SESSION_DIR'] = tempDir;
+            process.env.ARENA_AGENT_ID = 'test-agent';
+            delete process.env.ARENA_SESSION_ID;
+            process.env.ARENA_SESSION_DIR = tempDir;
 
             const reporter = ArenaAgentClient.create();
             expect(reporter).toBeNull();
 
             // Restore
             if (originalAgent !== undefined) {
-                process.env['ARENA_AGENT_ID'] = originalAgent;
+                process.env.ARENA_AGENT_ID = originalAgent;
             } else {
-                delete process.env['ARENA_AGENT_ID'];
+                delete process.env.ARENA_AGENT_ID;
             }
             if (originalSession !== undefined) {
-                process.env['ARENA_SESSION_ID'] = originalSession;
+                process.env.ARENA_SESSION_ID = originalSession;
             }
             if (originalDir !== undefined) {
-                process.env['ARENA_SESSION_DIR'] = originalDir;
+                process.env.ARENA_SESSION_DIR = originalDir;
             } else {
-                delete process.env['ARENA_SESSION_DIR'];
+                delete process.env.ARENA_SESSION_DIR;
             }
         });
 
         it('should return null when ARENA_SESSION_DIR is not set', () => {
-            const originalAgent = process.env['ARENA_AGENT_ID'];
-            const originalSession = process.env['ARENA_SESSION_ID'];
-            const originalDir = process.env['ARENA_SESSION_DIR'];
+            const originalAgent = process.env.ARENA_AGENT_ID;
+            const originalSession = process.env.ARENA_SESSION_ID;
+            const originalDir = process.env.ARENA_SESSION_DIR;
 
-            process.env['ARENA_AGENT_ID'] = 'test-agent';
-            process.env['ARENA_SESSION_ID'] = 'test-session';
-            delete process.env['ARENA_SESSION_DIR'];
+            process.env.ARENA_AGENT_ID = 'test-agent';
+            process.env.ARENA_SESSION_ID = 'test-session';
+            delete process.env.ARENA_SESSION_DIR;
 
             const reporter = ArenaAgentClient.create();
             expect(reporter).toBeNull();
 
             // Restore
             if (originalAgent !== undefined) {
-                process.env['ARENA_AGENT_ID'] = originalAgent;
+                process.env.ARENA_AGENT_ID = originalAgent;
             } else {
-                delete process.env['ARENA_AGENT_ID'];
+                delete process.env.ARENA_AGENT_ID;
             }
             if (originalSession !== undefined) {
-                process.env['ARENA_SESSION_ID'] = originalSession;
+                process.env.ARENA_SESSION_ID = originalSession;
             } else {
-                delete process.env['ARENA_SESSION_ID'];
+                delete process.env.ARENA_SESSION_ID;
             }
             if (originalDir !== undefined) {
-                process.env['ARENA_SESSION_DIR'] = originalDir;
+                process.env.ARENA_SESSION_DIR = originalDir;
             } else {
-                delete process.env['ARENA_SESSION_DIR'];
+                delete process.env.ARENA_SESSION_DIR;
             }
         });
 
         it('should return an instance when all env vars are set', () => {
-            const originalAgent = process.env['ARENA_AGENT_ID'];
-            const originalSession = process.env['ARENA_SESSION_ID'];
-            const originalDir = process.env['ARENA_SESSION_DIR'];
+            const originalAgent = process.env.ARENA_AGENT_ID;
+            const originalSession = process.env.ARENA_SESSION_ID;
+            const originalDir = process.env.ARENA_SESSION_DIR;
 
-            process.env['ARENA_AGENT_ID'] = 'test-agent';
-            process.env['ARENA_SESSION_ID'] = 'test-session';
-            process.env['ARENA_SESSION_DIR'] = tempDir;
+            process.env.ARENA_AGENT_ID = 'test-agent';
+            process.env.ARENA_SESSION_ID = 'test-session';
+            process.env.ARENA_SESSION_DIR = tempDir;
 
             const reporter = ArenaAgentClient.create();
             expect(reporter).toBeInstanceOf(ArenaAgentClient);
 
             // Restore
             if (originalAgent !== undefined) {
-                process.env['ARENA_AGENT_ID'] = originalAgent;
+                process.env.ARENA_AGENT_ID = originalAgent;
             } else {
-                delete process.env['ARENA_AGENT_ID'];
+                delete process.env.ARENA_AGENT_ID;
             }
             if (originalSession !== undefined) {
-                process.env['ARENA_SESSION_ID'] = originalSession;
+                process.env.ARENA_SESSION_ID = originalSession;
             } else {
-                delete process.env['ARENA_SESSION_ID'];
+                delete process.env.ARENA_SESSION_ID;
             }
             if (originalDir !== undefined) {
-                process.env['ARENA_SESSION_DIR'] = originalDir;
+                process.env.ARENA_SESSION_DIR = originalDir;
             } else {
-                delete process.env['ARENA_SESSION_DIR'];
+                delete process.env.ARENA_SESSION_DIR;
             }
         });
     });
@@ -375,8 +375,8 @@ describe('ArenaAgentClient', () => {
             // Read it
             const signal = await reporter.checkControlSignal();
             expect(signal).not.toBeNull();
-            expect(signal!.type).toBe('shutdown');
-            expect(signal!.reason).toBe('User cancelled');
+            expect(signal?.type).toBe('shutdown');
+            expect(signal?.reason).toBe('User cancelled');
 
             // File should be deleted (consumed)
             await expect(fs.access(controlPath)).rejects.toThrow();

@@ -18,7 +18,7 @@ export const copyCommand: SlashCommand = {
     action: async (
         context,
         _args
-    ): Promise<SlashCommandActionReturn | void> => {
+    ): Promise<SlashCommandActionReturn | undefined> => {
         const chat = await context.services.config
             ?.getGeminiClient()
             ?.getChat();

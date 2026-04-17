@@ -141,7 +141,9 @@ export class ShellProcessor implements IPromptProcessor {
         for (const injection of resolvedInjections) {
             const command = injection.resolvedCommand;
 
-            if (!command) continue;
+            if (!command) {
+                continue;
+            }
 
             // Security check on the final, escaped command string.
             const {

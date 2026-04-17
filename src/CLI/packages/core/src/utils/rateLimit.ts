@@ -38,9 +38,15 @@ export function isRateLimitError(
     extraCodes?: readonly number[]
 ): boolean {
     const code = getErrorCode(error);
-    if (code === null) return false;
-    if (RATE_LIMIT_ERROR_CODES.has(code)) return true;
-    if (extraCodes && extraCodes.includes(code)) return true;
+    if (code === null) {
+        return false;
+    }
+    if (RATE_LIMIT_ERROR_CODES.has(code)) {
+        return true;
+    }
+    if (extraCodes?.includes(code)) {
+        return true;
+    }
     return false;
 }
 
@@ -49,7 +55,9 @@ export function isRateLimitError(
  * Mirrors the same parsing patterns used by parseAndFormatApiError.
  */
 function getErrorCode(error: unknown): number | null {
-    if (isApiError(error)) return Number(error.error.code) || null;
+    if (isApiError(error)) {
+        return Number(error.error.code) || null;
+    }
 
     // JSON in string / Error.message — check BEFORE isStructuredError because
     // Error instances also satisfy isStructuredError (both have .message).
@@ -64,7 +72,9 @@ function getErrorCode(error: unknown): number | null {
         if (i !== -1) {
             try {
                 const p = JSON.parse(msg.substring(i)) as unknown;
-                if (isApiError(p)) return Number(p.error.code) || null;
+                if (isApiError(p)) {
+                    return Number(p.error.code) || null;
+                }
             } catch {
                 /* not valid JSON */
             }
@@ -79,7 +89,9 @@ function getErrorCode(error: unknown): number | null {
     // HttpError (.status on Error)
     if (error instanceof Error && 'status' in error) {
         const s = (error as { status?: unknown }).status;
-        if (typeof s === 'number') return s;
+        if (typeof s === 'number') {
+            return s;
+        }
     }
 
     return null;

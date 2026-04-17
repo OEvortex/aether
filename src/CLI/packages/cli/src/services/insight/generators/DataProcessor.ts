@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import {
     type ChatRecord,
     type Config,
@@ -11,9 +13,7 @@ import {
     getInsightPrompt,
     read as readJsonlFile
 } from '@aetherai/aether-core';
-import fs from 'fs/promises';
 import pLimit from 'p-limit';
-import path from 'path';
 import type {
     InsightAtAGlance,
     InsightFrictionPoints,
@@ -104,7 +104,9 @@ export class DataProcessor {
     private async analyzeSession(
         records: ChatRecord[]
     ): Promise<SessionFacets | null> {
-        if (records.length === 0) return null;
+        if (records.length === 0) {
+            return null;
+        }
 
         const INSIGHT_SCHEMA = {
             type: 'object',
@@ -284,20 +286,28 @@ export class DataProcessor {
         facetsOutputDir?: string,
         onProgress?: InsightProgressCallback
     ): Promise<InsightData> {
-        if (onProgress) onProgress('Scanning chat history...', 0);
+        if (onProgress) {
+            onProgress('Scanning chat history...', 0);
+        }
         const allChatFiles = await this.scanChatFiles(baseDir);
 
-        if (onProgress) onProgress('Crunching the numbers', 10);
+        if (onProgress) {
+            onProgress('Crunching the numbers', 10);
+        }
         const metrics = await this.generateMetrics(allChatFiles, onProgress);
 
-        if (onProgress) onProgress('Preparing sessions...', 20);
+        if (onProgress) {
+            onProgress('Preparing sessions...', 20);
+        }
         const facets = await this.generateFacets(
             allChatFiles,
             facetsOutputDir,
             onProgress
         );
 
-        if (onProgress) onProgress('Generating personalized insights...', 80);
+        if (onProgress) {
+            onProgress('Generating personalized insights...', 80);
+        }
         const qualitative = await this.generateQualitativeInsights(
             metrics,
             facets
@@ -312,7 +322,9 @@ export class DataProcessor {
             goalsAgg
         } = this.aggregateFacetsData(facets);
 
-        if (onProgress) onProgress('Assembling report...', 100);
+        if (onProgress) {
+            onProgress('Assembling report...', 100);
+        }
 
         return {
             ...metrics,
@@ -912,7 +924,7 @@ None captured`;
                         ) {
                             for (const part of record.message.parts) {
                                 if ('functionCall' in part) {
-                                    const name = part.functionCall!.name!;
+                                    const name = part.functionCall?.name!;
                                     toolUsage[name] =
                                         (toolUsage[name] || 0) + 1;
                                 }

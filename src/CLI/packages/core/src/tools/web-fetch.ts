@@ -148,7 +148,7 @@ ${textContent}
     override getDescription(): string {
         const displayPrompt =
             this.params.prompt.length > 100
-                ? this.params.prompt.substring(0, 97) + '...'
+                ? `${this.params.prompt.substring(0, 97)}...`
                 : this.params.prompt;
         return `Fetching content from ${this.params.url} and processing with prompt: "${displayPrompt}"`;
     }

@@ -459,17 +459,14 @@ export class AnthropicContentGenerator implements ContentGenerator {
                     if (event.usage?.output_tokens !== undefined) {
                         completionTokens = event.usage.output_tokens;
                     }
-                    if (usageRecord?.['input_tokens'] !== undefined) {
-                        const inputTokens = usageRecord['input_tokens'];
+                    if (usageRecord?.input_tokens !== undefined) {
+                        const inputTokens = usageRecord.input_tokens;
                         if (typeof inputTokens === 'number') {
                             promptTokens = inputTokens;
                         }
                     }
-                    if (
-                        usageRecord?.['cache_read_input_tokens'] !== undefined
-                    ) {
-                        const cacheRead =
-                            usageRecord['cache_read_input_tokens'];
+                    if (usageRecord?.cache_read_input_tokens !== undefined) {
+                        const cacheRead = usageRecord.cache_read_input_tokens;
                         if (typeof cacheRead === 'number') {
                             cachedTokens = cacheRead;
                         }

@@ -42,9 +42,9 @@ describe('modelConfigResolver', () => {
                 expect(result.config.apiKey).toBe('cli-key');
                 expect(result.config.baseUrl).toBe('https://cli.example.com');
 
-                expect(result.sources['model'].kind).toBe('cli');
-                expect(result.sources['apiKey'].kind).toBe('cli');
-                expect(result.sources['baseUrl'].kind).toBe('cli');
+                expect(result.sources.model.kind).toBe('cli');
+                expect(result.sources.apiKey.kind).toBe('cli');
+                expect(result.sources.baseUrl.kind).toBe('cli');
             });
 
             it('falls back to env when CLI not provided', () => {
@@ -63,8 +63,8 @@ describe('modelConfigResolver', () => {
                 expect(result.config.model).toBe('env-model');
                 expect(result.config.apiKey).toBe('env-key');
 
-                expect(result.sources['model'].kind).toBe('env');
-                expect(result.sources['apiKey'].kind).toBe('env');
+                expect(result.sources.model.kind).toBe('env');
+                expect(result.sources.apiKey.kind).toBe('env');
             });
 
             it('falls back to settings when env not provided', () => {
@@ -85,9 +85,9 @@ describe('modelConfigResolver', () => {
                     'https://settings.example.com'
                 );
 
-                expect(result.sources['model'].kind).toBe('settings');
-                expect(result.sources['apiKey'].kind).toBe('settings');
-                expect(result.sources['baseUrl'].kind).toBe('settings');
+                expect(result.sources.model.kind).toBe('settings');
+                expect(result.sources.apiKey.kind).toBe('settings');
+                expect(result.sources.baseUrl.kind).toBe('settings');
             });
 
             it('uses default model when nothing provided', () => {
@@ -101,7 +101,7 @@ describe('modelConfigResolver', () => {
                 });
 
                 expect(result.config.model).toBe(MAINLINE_CODER_MODEL);
-                expect(result.sources['model'].kind).toBe('default');
+                expect(result.sources.model.kind).toBe('default');
             });
 
             it('prioritizes modelProvider over CLI', () => {
@@ -129,11 +129,9 @@ describe('modelConfigResolver', () => {
                     'https://provider.example.com'
                 );
 
-                expect(result.sources['model'].kind).toBe('modelProviders');
-                expect(result.sources['apiKey'].kind).toBe('env');
-                expect(result.sources['apiKey'].via?.kind).toBe(
-                    'modelProviders'
-                );
+                expect(result.sources.model.kind).toBe('modelProviders');
+                expect(result.sources.apiKey.kind).toBe('env');
+                expect(result.sources.apiKey.via?.kind).toBe('modelProviders');
             });
 
             it('reads QWEN_MODEL as fallback for OPENAI_MODEL', () => {
@@ -148,7 +146,7 @@ describe('modelConfigResolver', () => {
                 });
 
                 expect(result.config.model).toBe('aether-model');
-                expect(result.sources['model'].envKey).toBe('aether_MODEL');
+                expect(result.sources.model.envKey).toBe('aether_MODEL');
             });
         });
 
@@ -163,7 +161,7 @@ describe('modelConfigResolver', () => {
 
                 expect(result.config.model).toBe(DEFAULT_AETHER_MODEL);
                 expect(result.config.apiKey).toBe('AETHER_OAUTH_DYNAMIC_TOKEN');
-                expect(result.sources['apiKey'].kind).toBe('computed');
+                expect(result.sources.apiKey.kind).toBe('computed');
             });
 
             it('allows coder-model for Aether OAuth', () => {
@@ -177,7 +175,7 @@ describe('modelConfigResolver', () => {
                 });
 
                 expect(result.config.model).toBe('coder-model');
-                expect(result.sources['model'].kind).toBe('cli');
+                expect(result.sources.model.kind).toBe('cli');
             });
 
             it('warns and falls back for unsupported Aether OAuth models', () => {
@@ -239,8 +237,8 @@ describe('modelConfigResolver', () => {
                 expect(result.config.maxRetries).toBe(5);
                 expect(result.config.samplingParams?.temperature).toBe(0.7);
 
-                expect(result.sources['timeout'].kind).toBe('settings');
-                expect(result.sources['samplingParams'].kind).toBe('settings');
+                expect(result.sources.timeout.kind).toBe('settings');
+                expect(result.sources.samplingParams.kind).toBe('settings');
             });
 
             it('modelProvider config overrides settings', () => {
@@ -267,7 +265,7 @@ describe('modelConfigResolver', () => {
                 });
 
                 expect(result.config.timeout).toBe(60000);
-                expect(result.sources['timeout'].kind).toBe('modelProviders');
+                expect(result.sources.timeout.kind).toBe('modelProviders');
             });
         });
 
@@ -284,7 +282,7 @@ describe('modelConfigResolver', () => {
                 expect(result.config.proxy).toBe(
                     'http://proxy.example.com:8080'
                 );
-                expect(result.sources['proxy'].kind).toBe('computed');
+                expect(result.sources.proxy.kind).toBe('computed');
             });
         });
     });

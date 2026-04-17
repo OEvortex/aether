@@ -40,10 +40,10 @@ async function exploreAction(context: CommandContext, args: string) {
             },
             Date.now()
         );
-        return;
+        return undefined;
     }
     // Only check for NODE_ENV for explicit test mode, not for unit test framework
-    if (process.env['NODE_ENV'] === 'test') {
+    if (process.env.NODE_ENV === 'test') {
         context.ui.addItem(
             {
                 type: MessageType.INFO,
@@ -54,10 +54,7 @@ async function exploreAction(context: CommandContext, args: string) {
             },
             Date.now()
         );
-    } else if (
-        process.env['SANDBOX'] &&
-        process.env['SANDBOX'] !== 'sandbox-exec'
-    ) {
+    } else if (process.env.SANDBOX && process.env.SANDBOX !== 'sandbox-exec') {
         context.ui.addItem(
             {
                 type: MessageType.INFO,
@@ -92,6 +89,7 @@ async function exploreAction(context: CommandContext, args: string) {
             );
         }
     }
+    return undefined;
 }
 
 async function listAction(_context: CommandContext, _args: string) {
@@ -158,8 +156,9 @@ async function installAction(context: CommandContext, args: string) {
             },
             Date.now()
         );
-        return;
+        return undefined;
     }
+    return undefined;
 }
 
 export async function completeExtensions(
@@ -206,7 +205,7 @@ export async function completeExtensionsAndScopes(
 }
 
 export async function completeExtensionsExplore(
-    context: CommandContext,
+    _context: CommandContext,
     partialArg: string
 ) {
     const suggestions = Object.keys(EXTENSION_EXPLORE_URL).filter((name) =>
@@ -257,5 +256,5 @@ export const extensionsCommand: SlashCommand = {
     ],
     action: async (context, args) =>
         // Default to list if no subcommand is provided
-        manageExtensionsCommand.action!(context, args)
+        manageExtensionsCommand.action?.(context, args)
 };

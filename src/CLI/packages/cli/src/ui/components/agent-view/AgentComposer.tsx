@@ -153,7 +153,7 @@ export const AgentComposer: React.FC<AgentComposerProps> = ({ agentId }) => {
         if (!isInputActive) {
             setAgentTabBarFocused(true);
         }
-    }, [isInputActive, streamingState, setAgentTabBarFocused]);
+    }, [isInputActive, setAgentTabBarFocused]);
 
     // ── Focus management between input and tab bar ──
 
@@ -212,7 +212,9 @@ export const AgentComposer: React.FC<AgentComposerProps> = ({ agentId }) => {
     const handleSubmit = useCallback(
         (text: string) => {
             const trimmed = text.trim();
-            if (!trimmed || !interactiveAgent) return;
+            if (!trimmed || !interactiveAgent) {
+                return;
+            }
             if (streamingState === StreamingState.Idle) {
                 interactiveAgent.enqueueMessage(trimmed);
             } else {
@@ -298,7 +300,7 @@ export const AgentComposer: React.FC<AgentComposerProps> = ({ agentId }) => {
                     onSubmit={handleSubmit}
                     onKeypress={handleKeypress}
                     showCursor={isInputActive && !agentTabBarFocused}
-                    placeholder={'  ' + t('Send a message to this agent')}
+                    placeholder={`  ${t('Send a message to this agent')}`}
                     prefix={prefixNode}
                     borderColor={inputBorderColor}
                     isActive={isInputActive && !agentShellFocused}

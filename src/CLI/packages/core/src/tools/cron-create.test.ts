@@ -49,7 +49,7 @@ describe('CronCreateTool', () => {
         expect(result.llmContent).toContain('fire once then auto-delete');
         const jobs = config._scheduler.list();
         expect(jobs).toHaveLength(1);
-        expect(jobs[0]!.recurring).toBe(false);
+        expect(jobs[0]?.recurring).toBe(false);
     });
 
     it('returns error for invalid cron expression', async () => {

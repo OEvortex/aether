@@ -1,15 +1,7 @@
-import type { Config } from '../../../config/config.js';
 import type { ContentGeneratorConfig } from '../../contentGenerator.js';
 import { DefaultOpenAICompatibleProvider } from './default.js';
 
 export class OpenRouterOpenAICompatibleProvider extends DefaultOpenAICompatibleProvider {
-    constructor(
-        contentGeneratorConfig: ContentGeneratorConfig,
-        cliConfig: Config
-    ) {
-        super(contentGeneratorConfig, cliConfig);
-    }
-
     static isOpenRouterProvider(
         contentGeneratorConfig: ContentGeneratorConfig
     ): boolean {

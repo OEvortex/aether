@@ -1,0 +1,43 @@
+/**
+ * @license
+ * Copyright 2026 OEvortex
+ * SPDX-License-Identifier: Apache-2.0
+ */
+import { jsonrepair } from 'jsonrepair';
+import { createDebugLogger } from './debugLogger.js';
+const debugLogger = createDebugLogger('JSON_PARSE');
+/**
+ * Safely parse JSON string with jsonrepair fallback for malformed JSON.
+ * This function attempts to parse JSON normally first, and if that fails,
+ * it uses jsonrepair to fix common JSON formatting issues before parsing.
+ *
+ * @param jsonString - The JSON string to parse
+ * @param fallbackValue - The value to return if parsing fails completely
+ * @returns The parsed object or the fallback value
+ */
+export function safeJsonParse(jsonString, fallbackValue = {}) {
+    if (!jsonString || typeof jsonString !== 'string') {
+        return fallbackValue;
+    }
+    try {
+        // First attempt: try normal JSON.parse
+        return JSON.parse(jsonString);
+    }
+    catch (error) {
+        try {
+            // Second attempt: use jsonrepair to fix common JSON issues
+            const repairedJson = jsonrepair(jsonString);
+            // jsonrepair always returns a string, so we need to parse it
+            return JSON.parse(repairedJson);
+        }
+        catch (repairError) {
+            debugLogger.error('Failed to parse JSON even with jsonrepair:', {
+                originalError: error,
+                repairError,
+                jsonString
+            });
+            return fallbackValue;
+        }
+    }
+}
+//# sourceMappingURL=safeJsonParse.js.map

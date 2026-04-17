@@ -91,7 +91,9 @@ export const copyToClipboard = async (text: string): Promise<void> => {
             }
             child.on('error', reject);
             child.on('close', (code) => {
-                if (code === 0) return resolve();
+                if (code === 0) {
+                    return resolve();
+                }
                 const errorMsg = stderr.trim();
                 reject(
                     new Error(

@@ -127,10 +127,6 @@ export class HookPlanner {
                 return context.trigger
                     ? this.matchesSessionTrigger(matcher, context.trigger)
                     : true;
-
-            // Events that don't support matchers: always match
-            case HookEventName.UserPromptSubmit:
-            case HookEventName.Stop:
             default:
                 return true;
         }

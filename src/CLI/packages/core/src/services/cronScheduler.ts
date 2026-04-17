@@ -68,7 +68,7 @@ function computeJitter(
         const fields = cronExpr.trim().split(/\s+/);
         const minuteField = fields[0] ?? '';
         const minuteVal = parseInt(minuteField, 10);
-        if (!isNaN(minuteVal) && (minuteVal === 0 || minuteVal === 30)) {
+        if (!Number.isNaN(minuteVal) && (minuteVal === 0 || minuteVal === 30)) {
             // Negative jitter = fire early
             return -(hash % MAX_ONESHOT_JITTER_MS);
         }
@@ -149,7 +149,9 @@ export class CronScheduler {
      */
     start(onFire: (job: CronJob) => void): void {
         this.onFire = onFire;
-        if (this.timer) return; // already running
+        if (this.timer) {
+            return; // already running
+        }
 
         this.timer = setInterval(() => {
             this.tick();
@@ -217,7 +219,9 @@ export class CronScheduler {
             ) {
                 const candidateMs = nowMinuteMs + offset * 60_000;
                 const candidateDate = new Date(candidateMs);
-                if (!matches(job.cronExpr, candidateDate)) continue;
+                if (!matches(job.cronExpr, candidateDate)) {
+                    continue;
+                }
 
                 const fireTimeMs = candidateMs + job.jitterMs;
                 if (currentMs >= fireTimeMs) {
@@ -263,7 +267,9 @@ export class CronScheduler {
      * exit. Returns null if there are no active jobs.
      */
     getExitSummary(): string | null {
-        if (this.jobs.size === 0) return null;
+        if (this.jobs.size === 0) {
+            return null;
+        }
 
         const count = this.jobs.size;
         const lines = [
@@ -274,7 +280,7 @@ export class CronScheduler {
             // Truncate long prompts
             const prompt =
                 job.prompt.length > 60
-                    ? job.prompt.slice(0, 57) + '...'
+                    ? `${job.prompt.slice(0, 57)}...`
                     : job.prompt;
             lines.push(`  - [${job.id}] ${schedule}: ${prompt}`);
         }

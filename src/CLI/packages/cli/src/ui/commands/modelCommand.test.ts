@@ -43,7 +43,7 @@ describe('modelCommand', () => {
     it('should return error when config is not available', async () => {
         mockContext.services.config = null;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -56,7 +56,7 @@ describe('modelCommand', () => {
         const mockConfig = createMockConfig(null);
         mockContext.services.config = mockConfig as Config;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -72,7 +72,7 @@ describe('modelCommand', () => {
         });
         mockContext.services.config = mockConfig as Config;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -88,7 +88,7 @@ describe('modelCommand', () => {
         });
         mockContext.services.config = mockConfig as Config;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'dialog',
@@ -103,7 +103,7 @@ describe('modelCommand', () => {
         });
         mockContext.services.config = mockConfig as Config;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'dialog',
@@ -118,7 +118,7 @@ describe('modelCommand', () => {
         });
         mockContext.services.config = mockConfig as Config;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'dialog',
@@ -133,7 +133,7 @@ describe('modelCommand', () => {
         });
         mockContext.services.config = mockConfig as Config;
 
-        const result = await modelCommand.action!(mockContext, '');
+        const result = await modelCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',

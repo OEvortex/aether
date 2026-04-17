@@ -134,7 +134,7 @@ export function useReactToolScheduler(
                 })
             );
         },
-        [setToolCallsForDisplay]
+        []
     );
 
     const scheduler = useMemo(

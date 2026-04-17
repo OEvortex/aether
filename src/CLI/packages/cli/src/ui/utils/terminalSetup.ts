@@ -56,31 +56,29 @@ type SupportedTerminal = 'vscode' | 'cursor' | 'windsurf' | 'trae';
 
 // Terminal detection
 async function detectTerminal(): Promise<SupportedTerminal | null> {
-    const termProgram = process.env['TERM_PROGRAM'];
+    const termProgram = process.env.TERM_PROGRAM;
 
     // Check VS Code and its forks - check forks first to avoid false positives
     // Check for Cursor-specific indicators
     if (
-        process.env['CURSOR_TRACE_ID'] ||
-        process.env['VSCODE_GIT_ASKPASS_MAIN']?.toLowerCase().includes('cursor')
+        process.env.CURSOR_TRACE_ID ||
+        process.env.VSCODE_GIT_ASKPASS_MAIN?.toLowerCase().includes('cursor')
     ) {
         return 'cursor';
     }
     // Check for Windsurf-specific indicators
     if (
-        process.env['VSCODE_GIT_ASKPASS_MAIN']
-            ?.toLowerCase()
-            .includes('windsurf')
+        process.env.VSCODE_GIT_ASKPASS_MAIN?.toLowerCase().includes('windsurf')
     ) {
         return 'windsurf';
     }
 
-    if (process.env['TERM_PRODUCT']?.toLowerCase().includes('trae')) {
+    if (process.env.TERM_PRODUCT?.toLowerCase().includes('trae')) {
         return 'trae';
     }
 
     // Check VS Code last since forks may also set VSCODE env vars
-    if (termProgram === 'vscode' || process.env['VSCODE_GIT_IPC_HANDLE']) {
+    if (termProgram === 'vscode' || process.env.VSCODE_GIT_IPC_HANDLE) {
         return 'vscode';
     }
 
@@ -94,14 +92,21 @@ async function detectTerminal(): Promise<SupportedTerminal | null> {
             if (
                 parentName.includes('windsurf') ||
                 parentName.includes('Windsurf')
-            )
+            ) {
                 return 'windsurf';
-            if (parentName.includes('cursor') || parentName.includes('Cursor'))
+            }
+            if (
+                parentName.includes('cursor') ||
+                parentName.includes('Cursor')
+            ) {
                 return 'cursor';
-            if (parentName.includes('code') || parentName.includes('Code'))
+            }
+            if (parentName.includes('code') || parentName.includes('Code')) {
                 return 'vscode';
-            if (parentName.includes('trae') || parentName.includes('Trae'))
+            }
+            if (parentName.includes('trae') || parentName.includes('Trae')) {
                 return 'trae';
+            }
         } catch (error) {
             // Continue detection even if process check fails
             debugLogger.debug('Parent process detection failed:', error);
@@ -136,10 +141,10 @@ function getVSCodeStyleConfigDir(appName: string): string | null {
             'User'
         );
     } else if (platform === 'win32') {
-        if (!process.env['APPDATA']) {
+        if (!process.env.APPDATA) {
             return null;
         }
-        return path.join(process.env['APPDATA'], appName, 'User');
+        return path.join(process.env.APPDATA, appName, 'User');
     } else {
         return path.join(os.homedir(), '.config', appName, 'User');
     }
@@ -233,10 +238,10 @@ async function configureVSCodeStyle(
         if (existingShiftEnter || existingCtrlEnter) {
             const messages: string[] = [];
             if (existingShiftEnter) {
-                messages.push('- ' + t('Shift+Enter binding already exists'));
+                messages.push(`- ${t('Shift+Enter binding already exists')}`);
             }
             if (existingCtrlEnter) {
-                messages.push('- ' + t('Ctrl+Enter binding already exists'));
+                messages.push(`- ${t('Ctrl+Enter binding already exists')}`);
             }
             return {
                 success: false,
@@ -281,8 +286,12 @@ async function configureVSCodeStyle(
         });
 
         if (!hasOurShiftEnter || !hasOurCtrlEnter) {
-            if (!hasOurShiftEnter) keybindings.unshift(shiftEnterBinding);
-            if (!hasOurCtrlEnter) keybindings.unshift(ctrlEnterBinding);
+            if (!hasOurShiftEnter) {
+                keybindings.unshift(shiftEnterBinding);
+            }
+            if (!hasOurCtrlEnter) {
+                keybindings.unshift(ctrlEnterBinding);
+            }
 
             await fs.writeFile(
                 keybindingsFile,

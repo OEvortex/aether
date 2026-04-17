@@ -84,7 +84,7 @@ describe('MigrationScheduler', () => {
             toVersion: 2,
             shouldMigrate: vi.fn((settings) => {
                 const s = settings as Record<string, unknown>;
-                return s['$version'] !== 2;
+                return s.$version !== 2;
             }),
             migrate: vi.fn((settings) => ({
                 settings: {

@@ -79,7 +79,7 @@ describe('mcpCommand', () => {
 
     describe('basic functionality', () => {
         it('should open MCP management dialog by default', async () => {
-            const result = await mcpCommand.action!(mockContext, '');
+            const result = await mcpCommand.action?.(mockContext, '');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -94,7 +94,7 @@ describe('mcpCommand', () => {
                 }
             });
 
-            const result = await mcpCommand.action!(contextWithoutConfig, '');
+            const result = await mcpCommand.action?.(contextWithoutConfig, '');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -105,7 +105,7 @@ describe('mcpCommand', () => {
         it('should open MCP management dialog even if tool registry is not available', async () => {
             mockConfig.getToolRegistry = vi.fn().mockReturnValue(undefined);
 
-            const result = await mcpCommand.action!(mockContext, '');
+            const result = await mcpCommand.action?.(mockContext, '');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -126,7 +126,7 @@ describe('mcpCommand', () => {
         });
 
         it('should open MCP management dialog regardless of server configuration', async () => {
-            const result = await mcpCommand.action!(mockContext, '');
+            const result = await mcpCommand.action?.(mockContext, '');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -135,7 +135,7 @@ describe('mcpCommand', () => {
         });
 
         it('should open MCP management dialog with desc argument', async () => {
-            const result = await mcpCommand.action!(mockContext, 'desc');
+            const result = await mcpCommand.action?.(mockContext, 'desc');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -144,7 +144,7 @@ describe('mcpCommand', () => {
         });
 
         it('should open MCP management dialog with nodesc argument', async () => {
-            const result = await mcpCommand.action!(mockContext, 'nodesc');
+            const result = await mcpCommand.action?.(mockContext, 'nodesc');
 
             expect(result).toEqual({
                 type: 'dialog',

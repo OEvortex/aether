@@ -335,15 +335,15 @@ export const ShadesOfPurple = new Theme(
 
         // Selection styling
         'hljs::selection': {
-            background: shadesOfPurpleColors.AccentBlue + '40' // 40 = 25% opacity
+            background: `${shadesOfPurpleColors.AccentBlue}40` // 40 = 25% opacity
         },
         'hljs ::-moz-selection': {
-            background: shadesOfPurpleColors.AccentBlue + '40'
+            background: `${shadesOfPurpleColors.AccentBlue}40`
         },
 
         // Highlighted lines (for emphasis)
         'hljs .hljs-highlight': {
-            background: shadesOfPurpleColors.AccentPurple + '20', // 20 = 12.5% opacity
+            background: `${shadesOfPurpleColors.AccentPurple}20`, // 20 = 12.5% opacity
             display: 'block',
             width: '100%'
         }

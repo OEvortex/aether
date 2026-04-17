@@ -18,7 +18,7 @@ import {
 async function restoreAction(
     context: CommandContext,
     args: string
-): Promise<void | SlashCommandActionReturn> {
+): Promise<undefined | SlashCommandActionReturn> {
     const { services, ui } = context;
     const { config, git: gitService } = services;
     const { addItem, loadHistory } = ui;

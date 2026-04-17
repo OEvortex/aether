@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as fs from 'fs/promises';
-import * as os from 'os';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Config } from '../config/config.js';
 import { makeFakeConfig } from '../test-utils/config.js';
@@ -347,7 +347,7 @@ You are a helpful assistant.
             const config = await manager.loadSkill('test-skill');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('test-skill');
+            expect(config?.name).toBe('test-skill');
         });
 
         it('should fall back to user level if project level fails', async () => {
@@ -367,7 +367,7 @@ You are a helpful assistant.
             const config = await manager.loadSkill('test-skill');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('test-skill');
+            expect(config?.name).toBe('test-skill');
         });
 
         it('should return null if not found at either level', async () => {
@@ -398,7 +398,7 @@ You are a helpful assistant.
             const config = await manager.loadSkillForRuntime('test-skill');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('test-skill');
+            expect(config?.name).toBe('test-skill');
         });
 
         it('should return null if skill not found', async () => {
@@ -517,7 +517,7 @@ Skill 3 content`);
             const skills = await manager.listSkills();
             const skill1 = skills.find((s) => s.name === 'skill1');
 
-            expect(skill1!.level).toBe('project');
+            expect(skill1?.level).toBe('project');
         });
 
         it('should filter by level', async () => {
@@ -732,7 +732,7 @@ Review content`);
 
             expect(skills.some((s) => s.name === 'review')).toBe(true);
             const reviewSkill = skills.find((s) => s.name === 'review');
-            expect(reviewSkill!.level).toBe('bundled');
+            expect(reviewSkill?.level).toBe('bundled');
         });
 
         it('should prioritize project-level over bundled skills with same name', async () => {
@@ -765,8 +765,8 @@ Review content`);
             const skill = await manager.loadSkill('review');
 
             expect(skill).toBeDefined();
-            expect(skill!.name).toBe('review');
-            expect(skill!.level).toBe('bundled');
+            expect(skill?.name).toBe('review');
+            expect(skill?.level).toBe('bundled');
         });
     });
 

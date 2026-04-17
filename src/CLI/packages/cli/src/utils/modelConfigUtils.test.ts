@@ -48,76 +48,76 @@ describe('modelConfigUtils', () => {
     });
 
     it('should return USE_OPENAI when all OpenAI env vars are set', () => {
-      process.env['OPENAI_API_KEY'] = 'test-key';
-      process.env['OPENAI_MODEL'] = 'gpt-4';
-      process.env['OPENAI_BASE_URL'] = 'https://api.openai.com';
+      process.env.OPENAI_API_KEY = 'test-key';
+      process.env.OPENAI_MODEL = 'gpt-4';
+      process.env.OPENAI_BASE_URL = 'https://api.openai.com';
 
       expect(getAuthTypeFromEnv()).toBe(AuthType.USE_OPENAI);
     });
 
     it('should return undefined when OpenAI env vars are incomplete', () => {
-      process.env['OPENAI_API_KEY'] = 'test-key';
-      process.env['OPENAI_MODEL'] = 'gpt-4';
+      process.env.OPENAI_API_KEY = 'test-key';
+      process.env.OPENAI_MODEL = 'gpt-4';
       // Missing OPENAI_BASE_URL
 
       expect(getAuthTypeFromEnv()).toBeUndefined();
     });
 
     it('should return AETHER_OAUTH when AETHER_OAUTH is set', () => {
-      process.env['AETHER_OAUTH'] = 'true';
+      process.env.AETHER_OAUTH = 'true';
 
       expect(getAuthTypeFromEnv()).toBe(AuthType.AETHER_OAUTH);
     });
 
     it('should return USE_GEMINI when Gemini env vars are set', () => {
-      process.env['GEMINI_API_KEY'] = 'test-key';
-      process.env['GEMINI_MODEL'] = 'gemini-pro';
+      process.env.GEMINI_API_KEY = 'test-key';
+      process.env.GEMINI_MODEL = 'gemini-pro';
 
       expect(getAuthTypeFromEnv()).toBe(AuthType.USE_GEMINI);
     });
 
     it('should return undefined when Gemini env vars are incomplete', () => {
-      process.env['GEMINI_API_KEY'] = 'test-key';
+      process.env.GEMINI_API_KEY = 'test-key';
       // Missing GEMINI_MODEL
 
       expect(getAuthTypeFromEnv()).toBeUndefined();
     });
 
     it('should return USE_VERTEX_AI when Google env vars are set', () => {
-      process.env['GOOGLE_API_KEY'] = 'test-key';
-      process.env['GOOGLE_MODEL'] = 'vertex-model';
+      process.env.GOOGLE_API_KEY = 'test-key';
+      process.env.GOOGLE_MODEL = 'vertex-model';
 
       expect(getAuthTypeFromEnv()).toBe(AuthType.USE_VERTEX_AI);
     });
 
     it('should return undefined when Google env vars are incomplete', () => {
-      process.env['GOOGLE_API_KEY'] = 'test-key';
+      process.env.GOOGLE_API_KEY = 'test-key';
       // Missing GOOGLE_MODEL
 
       expect(getAuthTypeFromEnv()).toBeUndefined();
     });
 
     it('should return USE_ANTHROPIC when Anthropic env vars are set', () => {
-      process.env['ANTHROPIC_API_KEY'] = 'test-key';
-      process.env['ANTHROPIC_MODEL'] = 'claude-3';
-      process.env['ANTHROPIC_BASE_URL'] = 'https://api.anthropic.com';
+      process.env.ANTHROPIC_API_KEY = 'test-key';
+      process.env.ANTHROPIC_MODEL = 'claude-3';
+      process.env.ANTHROPIC_BASE_URL = 'https://api.anthropic.com';
 
       expect(getAuthTypeFromEnv()).toBe(AuthType.USE_ANTHROPIC);
     });
 
     it('should return undefined when Anthropic env vars are incomplete', () => {
-      process.env['ANTHROPIC_API_KEY'] = 'test-key';
-      process.env['ANTHROPIC_MODEL'] = 'claude-3';
+      process.env.ANTHROPIC_API_KEY = 'test-key';
+      process.env.ANTHROPIC_MODEL = 'claude-3';
       // Missing ANTHROPIC_BASE_URL
 
       expect(getAuthTypeFromEnv()).toBeUndefined();
     });
 
     it('should prioritize AETHER_OAUTH over other auth types when explicitly set', () => {
-      process.env['AETHER_OAUTH'] = 'true';
-      process.env['OPENAI_API_KEY'] = 'test-key';
-      process.env['OPENAI_MODEL'] = 'gpt-4';
-      process.env['OPENAI_BASE_URL'] = 'https://api.openai.com';
+      process.env.AETHER_OAUTH = 'true';
+      process.env.OPENAI_API_KEY = 'test-key';
+      process.env.OPENAI_MODEL = 'gpt-4';
+      process.env.OPENAI_BASE_URL = 'https://api.openai.com';
 
       // AETHER_OAUTH is checked first, so it should be returned even when other auth vars are set
       expect(getAuthTypeFromEnv()).toBe(AuthType.AETHER_OAUTH);
@@ -476,10 +476,10 @@ describe('modelConfigUtils', () => {
     });
 
     it('should not find modelProvider when modelProvidersConfig is not an array', () => {
-      const argv = { model: 'test-model' };
-      const settings = makeMockSettings({});
-      const selectedAuthType = AuthType.USE_OPENAI;
-      const modelProvidersConfig = {
+      const _argv = { model: 'test-model' };
+      const _settings = makeMockSettings({});
+      const _selectedAuthType = AuthType.USE_OPENAI;
+      const _modelProvidersConfig = {
         [AuthType.USE_OPENAI]: null as unknown as ProviderModelConfig[],
       };
 

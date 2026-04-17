@@ -37,13 +37,13 @@ export function convertTomlToMarkdown(tomlContent: string): string {
 
     const obj = parsed as Record<string, unknown>;
 
-    if (typeof obj['prompt'] !== 'string') {
+    if (typeof obj.prompt !== 'string') {
         throw new Error('TOML must contain a "prompt" field');
     }
 
-    const prompt = obj['prompt'];
+    const prompt = obj.prompt;
     const description =
-        typeof obj['description'] === 'string' ? obj['description'] : undefined;
+        typeof obj.description === 'string' ? obj.description : undefined;
 
     // Generate Markdown
     if (description) {

@@ -206,7 +206,9 @@ export class AetherContentGenerator extends OpenAIContentGenerator {
      * Check if an error is related to authentication/authorization
      */
     private isAuthError(error: unknown): boolean {
-        if (!error) return false;
+        if (!error) {
+            return false;
+        }
 
         const errorMessage =
             error instanceof Error

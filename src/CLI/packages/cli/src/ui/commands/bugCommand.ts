@@ -21,7 +21,10 @@ export const bugCommand: SlashCommand = {
         return t('submit a bug report');
     },
     kind: CommandKind.BUILT_IN,
-    action: async (context: CommandContext, args?: string): Promise<void> => {
+    action: async (
+        context: CommandContext,
+        args?: string
+    ): Promise<undefined> => {
         const bugDescription = (args || '').trim();
         const systemInfo = await getExtendedSystemInfo(context);
 
@@ -64,5 +67,7 @@ export const bugCommand: SlashCommand = {
                 Date.now()
             );
         }
+
+        return undefined;
     }
 };

@@ -374,8 +374,12 @@ export class ContentGenerationPipeline {
                 ? (defaultSamplingParams[requestKey] as T)
                 : undefined;
 
-            if (configValue !== undefined) return configValue;
-            if (requestValue !== undefined) return requestValue;
+            if (configValue !== undefined) {
+                return configValue;
+            }
+            if (requestValue !== undefined) {
+                return requestValue;
+            }
             return defaultValue;
         };
 

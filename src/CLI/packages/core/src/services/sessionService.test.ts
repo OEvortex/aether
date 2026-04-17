@@ -218,8 +218,12 @@ describe('SessionService', () => {
             statSyncSpy.mockImplementation((filePath: fs.PathLike) => {
                 const path = filePath.toString();
                 let mtime = now;
-                if (path.includes(sessionIdB)) mtime = now - 1000;
-                if (path.includes(sessionIdA)) mtime = now - 2000;
+                if (path.includes(sessionIdB)) {
+                    mtime = now - 1000;
+                }
+                if (path.includes(sessionIdA)) {
+                    mtime = now - 2000;
+                }
                 return {
                     mtimeMs: mtime,
                     isFile: () => true
@@ -261,8 +265,12 @@ describe('SessionService', () => {
             statSyncSpy.mockImplementation((filePath: fs.PathLike) => {
                 const path = filePath.toString();
                 let mtime = now;
-                if (path.includes(sessionIdB)) mtime = cursorMtime;
-                if (path.includes(sessionIdA)) mtime = oldMtime;
+                if (path.includes(sessionIdB)) {
+                    mtime = cursorMtime;
+                }
+                if (path.includes(sessionIdA)) {
+                    mtime = oldMtime;
+                }
                 return {
                     mtimeMs: mtime,
                     isFile: () => true

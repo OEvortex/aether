@@ -58,21 +58,21 @@ function isValidHookDefinition(def: unknown): def is HookDefinition {
     }
     const obj = def as Record<string, unknown>;
     // hooks array is required
-    if (!('hooks' in obj) || !Array.isArray(obj['hooks'])) {
+    if (!('hooks' in obj) || !Array.isArray(obj.hooks)) {
         return false;
     }
     // Validate each hook config in the array
-    for (const hook of obj['hooks']) {
+    for (const hook of obj.hooks) {
         if (!isValidHookConfig(hook)) {
             return false;
         }
     }
     // matcher is optional but must be a string if present
-    if ('matcher' in obj && typeof obj['matcher'] !== 'string') {
+    if ('matcher' in obj && typeof obj.matcher !== 'string') {
         return false;
     }
     // sequential is optional but must be a boolean if present
-    if ('sequential' in obj && typeof obj['sequential'] !== 'boolean') {
+    if ('sequential' in obj && typeof obj.sequential !== 'boolean') {
         return false;
     }
     return true;
@@ -230,7 +230,9 @@ export function HooksManagementDialog({
 
     // Load hooks data
     const fetchHooksData = useCallback((): HookEventDisplayInfo[] => {
-        if (!config) return [];
+        if (!config) {
+            return [];
+        }
 
         const settings = loadSettings();
         const userSettings = settings.forScope(SettingScope.User).settings;
@@ -248,7 +250,7 @@ export function HooksManagementDialog({
 
             // Get hooks from user settings (with type validation)
             const userSettingsRecord = userSettings as Record<string, unknown>;
-            const userHooksRaw = userSettingsRecord?.['hooks'];
+            const userHooksRaw = userSettingsRecord?.hooks;
             if (isValidHooksRecord(userHooksRaw) && userHooksRaw[eventName]) {
                 for (const def of userHooksRaw[eventName]) {
                     for (const hookConfig of def.hooks) {
@@ -268,7 +270,7 @@ export function HooksManagementDialog({
                 string,
                 unknown
             >;
-            const workspaceHooksRaw = workspaceSettingsRecord?.['hooks'];
+            const workspaceHooksRaw = workspaceSettingsRecord?.hooks;
             if (
                 isValidHooksRecord(workspaceHooksRaw) &&
                 workspaceHooksRaw[eventName]

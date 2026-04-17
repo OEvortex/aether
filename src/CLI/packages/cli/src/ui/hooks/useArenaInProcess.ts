@@ -52,7 +52,9 @@ export function useArenaInProcess(
     actionsRef.current = actions;
 
     useEffect(() => {
-        if (!config) return;
+        if (!config) {
+            return;
+        }
 
         let detachArenaListeners: (() => void) | null = null;
         const retryTimeouts = new Set<ReturnType<typeof setTimeout>>();
@@ -60,7 +62,9 @@ export function useArenaInProcess(
         /** Remove agent tabs, cancel pending retries, and detach arena events. */
         const detachSession = () => {
             actionsRef.current.unregisterAll();
-            for (const t of retryTimeouts) clearTimeout(t);
+            for (const t of retryTimeouts) {
+                clearTimeout(t);
+            }
             retryTimeouts.clear();
             detachArenaListeners?.();
             detachArenaListeners = null;
@@ -80,8 +84,9 @@ export function useArenaInProcess(
             /** Resolve the InProcessBackend, or null if not applicable. */
             const getInProcessBackend = (): InProcessBackend | null => {
                 const backend = manager.getBackend();
-                if (!backend || backend.type !== DISPLAY_MODE.IN_PROCESS)
+                if (!backend || backend.type !== DISPLAY_MODE.IN_PROCESS) {
                     return null;
+                }
                 return backend as InProcessBackend;
             };
 
@@ -113,7 +118,9 @@ export function useArenaInProcess(
             const onAgentStart = (event: ArenaAgentStartEvent) => {
                 const tryRegister = (retriesLeft: number) => {
                     const backend = getInProcessBackend();
-                    if (!backend) return; // not an in-process session
+                    if (!backend) {
+                        return; // not an in-process session
+                    }
 
                     const interactive = backend.getAgent(event.agentId);
                     if (interactive) {
@@ -140,7 +147,9 @@ export function useArenaInProcess(
             const onSessionComplete = (event: ArenaSessionCompleteEvent) => {
                 // IDLE means agents finished but the session is still alive for
                 // follow-up interaction — keep the tab bar.
-                if (event.result.status === ArenaSessionStatus.IDLE) return;
+                if (event.result.status === ArenaSessionStatus.IDLE) {
+                    return;
+                }
                 detachSession();
             };
 

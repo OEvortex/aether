@@ -187,6 +187,6 @@ describe('LspConfigLoader extension configs', () => {
         const configs = await loader.loadExtensionConfigs([extension]);
 
         expect(configs).toHaveLength(1);
-        expect(configs[0]?.env?.['EXT_ROOT']).toBe(extensionPath);
+        expect(configs[0]?.env?.EXT_ROOT).toBe(extensionPath);
     });
 });

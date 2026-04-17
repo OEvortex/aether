@@ -16,10 +16,6 @@ export class HybridTokenStorage extends BaseTokenStorage {
     private storageType: TokenStorageType | null = null;
     private storageInitPromise: Promise<TokenStorage> | null = null;
 
-    constructor(serviceName: string) {
-        super(serviceName);
-    }
-
     private async initializeStorage(): Promise<TokenStorage> {
         const forceFileStorage =
             process.env[FORCE_FILE_STORAGE_ENV_VAR] === 'true';

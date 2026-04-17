@@ -75,7 +75,7 @@ export function getSystemEncoding(): string | null {
             const match = output.match(/:\s*(\d+)/);
             if (match) {
                 const codePage = parseInt(match[1], 10);
-                if (!isNaN(codePage)) {
+                if (!Number.isNaN(codePage)) {
                     return windowsCodePageToEncoding(codePage);
                 }
             }
@@ -97,7 +97,7 @@ export function getSystemEncoding(): string | null {
     // system encoding. However, these environment variables might not always
     // be set or accurate. Handle cases where none of these variables are set.
     const env = process.env;
-    let locale = env['LC_ALL'] || env['LC_CTYPE'] || env['LANG'] || '';
+    let locale = env.LC_ALL || env.LC_CTYPE || env.LANG || '';
 
     // Fallback to querying the system directly when environment variables are missing
     if (!locale) {
@@ -112,7 +112,7 @@ export function getSystemEncoding(): string | null {
     }
 
     const match = locale.match(/\.(.+)/); // e.g., "en_US.UTF-8"
-    if (match && match[1]) {
+    if (match?.[1]) {
         return match[1].toLowerCase();
     }
 

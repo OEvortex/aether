@@ -550,8 +550,8 @@ describe('extension tests', () => {
 
     describe('loadExtensionConfig', () => {
         it('should resolve environment variables in extension configuration', async () => {
-            process.env['TEST_API_KEY'] = 'test-api-key-123';
-            process.env['TEST_DB_URL'] = 'postgresql://localhost:5432/testdb';
+            process.env.TEST_API_KEY = 'test-api-key-123';
+            process.env.TEST_DB_URL = 'postgresql://localhost:5432/testdb';
 
             try {
                 const extDir = path.join(userExtensionsDir, 'test-extension');
@@ -590,16 +590,14 @@ describe('extension tests', () => {
                     extension.config.mcpServers?.['test-server'];
                 expect(serverConfig).toBeDefined();
                 expect(serverConfig?.env).toBeDefined();
-                expect(serverConfig?.env?.['API_KEY']).toBe('test-api-key-123');
-                expect(serverConfig?.env?.['DATABASE_URL']).toBe(
+                expect(serverConfig?.env?.API_KEY).toBe('test-api-key-123');
+                expect(serverConfig?.env?.DATABASE_URL).toBe(
                     'postgresql://localhost:5432/testdb'
                 );
-                expect(serverConfig?.env?.['STATIC_VALUE']).toBe(
-                    'no-substitution'
-                );
+                expect(serverConfig?.env?.STATIC_VALUE).toBe('no-substitution');
             } finally {
-                delete process.env['TEST_API_KEY'];
-                delete process.env['TEST_DB_URL'];
+                delete process.env.TEST_API_KEY;
+                delete process.env.TEST_DB_URL;
             }
         });
 
@@ -633,10 +631,10 @@ describe('extension tests', () => {
 
             expect(extensions).toHaveLength(1);
             const extension = extensions[0];
-            const serverConfig = extension.config.mcpServers!['test-server'];
+            const serverConfig = extension.config.mcpServers?.['test-server'];
             expect(serverConfig.env).toBeDefined();
-            expect(serverConfig.env!['MISSING_VAR']).toBe('$UNDEFINED_ENV_VAR');
-            expect(serverConfig.env!['MISSING_VAR_BRACES']).toBe(
+            expect(serverConfig.env?.MISSING_VAR).toBe('$UNDEFINED_ENV_VAR');
+            expect(serverConfig.env?.MISSING_VAR_BRACES).toBe(
                 '${ALSO_UNDEFINED}'
             );
         });
@@ -865,9 +863,9 @@ describe('extension tests', () => {
 
             expect(extensions).toHaveLength(1);
             expect(extensions[0].hooks).toBeDefined();
-            expect(extensions[0].hooks!['PreToolUse']).toHaveLength(1);
+            expect(extensions[0].hooks?.PreToolUse).toHaveLength(1);
             expect(
-                extensions[0].hooks!['PreToolUse']![0].hooks![0].command
+                extensions[0].hooks?.PreToolUse?.[0].hooks?.[0].command
             ).toBe('echo "hello"');
         });
 
@@ -918,9 +916,9 @@ describe('extension tests', () => {
 
             expect(extensions).toHaveLength(1);
             expect(extensions[0].hooks).toBeDefined();
-            expect(extensions[0].hooks!['PostToolUse']).toHaveLength(1);
+            expect(extensions[0].hooks?.PostToolUse).toHaveLength(1);
             expect(
-                extensions[0].hooks!['PostToolUse']![0].hooks![0].command
+                extensions[0].hooks?.PostToolUse?.[0].hooks?.[0].command
             ).toBe(`echo "installed in ${extensionDir}"`);
         });
 
@@ -962,9 +960,9 @@ describe('extension tests', () => {
 
             expect(extensions).toHaveLength(1);
             expect(extensions[0].hooks).toBeDefined();
-            expect(extensions[0].hooks!['PreToolUse']).toHaveLength(1);
+            expect(extensions[0].hooks?.PreToolUse).toHaveLength(1);
             expect(
-                extensions[0].hooks!['PreToolUse']![0].hooks![0].command
+                extensions[0].hooks?.PreToolUse?.[0].hooks?.[0].command
             ).toBe(`${extensionDir}/scripts/setup.sh`);
         });
 
@@ -1016,9 +1014,9 @@ describe('extension tests', () => {
 
             expect(extensions).toHaveLength(1);
             expect(extensions[0].hooks).toBeDefined();
-            expect(extensions[0].hooks!['PreToolUse']).toHaveLength(1);
+            expect(extensions[0].hooks?.PreToolUse).toHaveLength(1);
             expect(
-                extensions[0].hooks!['PreToolUse']![0].hooks![0].command
+                extensions[0].hooks?.PreToolUse?.[0].hooks?.[0].command
             ).toBe('echo "custom hooks path"');
         });
 
@@ -1083,7 +1081,7 @@ describe('extension tests', () => {
             expect(extensions).toHaveLength(1);
             expect(extensions[0].hooks).toBeDefined();
             expect(
-                extensions[0].hooks!['PreToolUse']![0].hooks![0].command
+                extensions[0].hooks?.PreToolUse?.[0].hooks?.[0].command
             ).toBe('echo "config path"');
         });
 
@@ -1134,9 +1132,9 @@ describe('extension tests', () => {
 
             expect(extensions).toHaveLength(1);
             expect(extensions[0].hooks).toBeDefined();
-            expect(extensions[0].hooks!['PreToolUse']).toHaveLength(1);
+            expect(extensions[0].hooks?.PreToolUse).toHaveLength(1);
             expect(
-                extensions[0].hooks!['PreToolUse']![0].hooks![0].command
+                extensions[0].hooks?.PreToolUse?.[0].hooks?.[0].command
             ).toBe(`${extensionDir}/scripts/setup.sh`);
         });
     });

@@ -83,7 +83,7 @@ export function useIdeTrustListener() {
             setNeedsRestart(true);
         }
         previousTrust.current = currentTrust;
-    }, [isIdeTrusted, settings.merged]);
+    }, [settings.merged]);
 
     return { isIdeTrusted, needsRestart, restartReason };
 }

@@ -65,8 +65,12 @@ describe('relaunchOnExitCode', () => {
         let callCount = 0;
         const runner = vi.fn().mockImplementation(async () => {
             callCount++;
-            if (callCount === 1) return RELAUNCH_EXIT_CODE;
-            if (callCount === 2) return RELAUNCH_EXIT_CODE;
+            if (callCount === 1) {
+                return RELAUNCH_EXIT_CODE;
+            }
+            if (callCount === 2) {
+                return RELAUNCH_EXIT_CODE;
+            }
             return 0; // Exit on third call
         });
 
@@ -107,7 +111,7 @@ describe('relaunchAppInChildProcess', () => {
         vi.clearAllMocks();
 
         process.env = { ...originalEnv };
-        delete process.env['aether_cli_NO_RELAUNCH'];
+        delete process.env.aether_cli_NO_RELAUNCH;
 
         process.execArgv = [...originalExecArgv];
         process.argv = [...originalArgv];
@@ -137,7 +141,7 @@ describe('relaunchAppInChildProcess', () => {
 
     describe('when aether_cli_NO_RELAUNCH is set', () => {
         it('should return early without spawning a child process', async () => {
-            process.env['aether_cli_NO_RELAUNCH'] = 'true';
+            process.env.aether_cli_NO_RELAUNCH = 'true';
 
             await relaunchAppInChildProcess(['--test'], ['--verbose']);
 
@@ -148,7 +152,7 @@ describe('relaunchAppInChildProcess', () => {
 
     describe('when aether_cli_NO_RELAUNCH is not set', () => {
         beforeEach(() => {
-            delete process.env['aether_cli_NO_RELAUNCH'];
+            delete process.env.aether_cli_NO_RELAUNCH;
         });
 
         it('should construct correct node arguments from execArgv, additionalNodeArgs, script, additionalScriptArgs, and argv', () => {

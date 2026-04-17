@@ -242,14 +242,14 @@ class DiscoveredMCPToolInvocation extends BaseToolInvocation<
             const newTool = await this.attemptReconnect();
             if (newTool) {
                 const newInvocation = new DiscoveredMCPToolInvocation(
-                    newTool['mcpTool'],
+                    newTool.mcpTool,
                     this.serverName,
                     this.serverToolName,
                     this.displayName,
                     this.trust,
                     this.params,
                     this.cliConfig,
-                    newTool['mcpClient'],
+                    newTool.mcpClient,
                     this.mcpTimeout,
                     this.annotations,
                     this.retryCount + 1
@@ -290,7 +290,7 @@ class DiscoveredMCPToolInvocation extends BaseToolInvocation<
         updateOutput?: (output: ToolResultDisplay) => void
     ): Promise<ToolResult> {
         try {
-            const callToolResult = await this.mcpClient!.callTool(
+            const callToolResult = await this.mcpClient?.callTool(
                 {
                     name: this.serverToolName,
                     arguments: this.params as Record<string, unknown>
@@ -470,15 +470,15 @@ export class DiscoveredMCPTool extends BaseDeclarativeTool<
     ToolResult
 > {
     constructor(
-        private readonly mcpTool: CallableTool,
+        readonly mcpTool: CallableTool,
         readonly serverName: string,
         readonly serverToolName: string,
         description: string,
         override readonly parameterSchema: unknown,
         readonly trust?: boolean,
         nameOverride?: string,
-        private readonly cliConfig?: Config,
-        private readonly mcpClient?: McpDirectClient,
+        readonly cliConfig?: Config,
+        readonly mcpClient?: McpDirectClient,
         private readonly mcpTimeout?: number,
         readonly annotations?: McpToolAnnotations
     ) {
@@ -537,11 +537,21 @@ export class DiscoveredMCPTool extends BaseDeclarativeTool<
  */
 function wrapMcpCallToolResultAsParts(
     toolName: string,
-    result: {
+    result?: {
         content?: Array<{ [key: string]: unknown }>;
         isError?: boolean;
     }
 ): Part[] {
+    if (!result) {
+        return [
+            {
+                functionResponse: {
+                    name: toolName,
+                    response: { error: 'No response from MCP tool' }
+                }
+            }
+        ];
+    }
     const response = result.isError
         ? { error: result, content: result.content }
         : result;
@@ -617,7 +627,7 @@ function transformResourceLinkBlock(block: McpResourceLinkBlock): Part {
  */
 function transformMcpContentToParts(sdkResponse: Part[]): Part[] {
     const funcResponse = sdkResponse?.[0]?.functionResponse;
-    const mcpContent = funcResponse?.response?.['content'] as McpContentBlock[];
+    const mcpContent = funcResponse?.response?.content as McpContentBlock[];
     const toolName = funcResponse?.name || 'unknown tool';
 
     if (!Array.isArray(mcpContent)) {
@@ -674,8 +684,7 @@ export function generateValidName(name: string) {
     // If longer than 63 characters, replace middle with '___'
     // (Gemini API says max length 64, but actual limit seems to be 63)
     if (validToolname.length > 63) {
-        validToolname =
-            validToolname.slice(0, 28) + '___' + validToolname.slice(-32);
+        validToolname = `${validToolname.slice(0, 28)}___${validToolname.slice(-32)}`;
     }
     return validToolname;
 }

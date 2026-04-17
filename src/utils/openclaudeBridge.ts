@@ -406,7 +406,7 @@ export async function buildOpenClaudeProfile(
 }
 
 export async function writeOpenClaudeBridgeProfile(
-    context: vscode.ExtensionContext,
+    _context: vscode.ExtensionContext,
     providerId: string
 ): Promise<OpenClaudeBridgeResult> {
     const profile = await buildOpenClaudeProfile(providerId);

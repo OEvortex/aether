@@ -31,6 +31,7 @@ import {
     ShellTool,
     Storage,
     setGeminiMdFilename as setServerGeminiMdFilename,
+    type TelemetrySettings,
     type ToolName,
     WriteFileTool
 } from '@aetherai/aether-core';
@@ -557,7 +558,7 @@ export async function parseArguments(): Promise<CliArgs> {
                     .check((argv: { [x: string]: unknown }) => {
                         // The 'query' positional can be a string (for one arg) or string[] (for multiple).
                         // This guard safely checks if any positional argument was provided.
-                        const query = argv['query'] as
+                        const query = argv.query as
                             | string
                             | string[]
                             | undefined;
@@ -565,47 +566,44 @@ export async function parseArguments(): Promise<CliArgs> {
                             ? query.length > 0
                             : !!query;
 
-                        if (argv['prompt'] && hasPositionalQuery) {
+                        if (argv.prompt && hasPositionalQuery) {
                             return 'Cannot use both a positional prompt and the --prompt (-p) flag together';
                         }
-                        if (argv['prompt'] && argv['promptInteractive']) {
+                        if (argv.prompt && argv.promptInteractive) {
                             return 'Cannot use both --prompt (-p) and --prompt-interactive (-i) together';
                         }
-                        if (argv['yolo'] && argv['approvalMode']) {
+                        if (argv.yolo && argv.approvalMode) {
                             return 'Cannot use both --yolo (-y) and --approval-mode together. Use --approval-mode=yolo instead.';
                         }
                         if (
-                            argv['includePartialMessages'] &&
-                            argv['outputFormat'] !== OutputFormat.STREAM_JSON
+                            argv.includePartialMessages &&
+                            argv.outputFormat !== OutputFormat.STREAM_JSON
                         ) {
                             return '--include-partial-messages requires --output-format stream-json';
                         }
                         if (
-                            argv['inputFormat'] === 'stream-json' &&
-                            argv['outputFormat'] !== OutputFormat.STREAM_JSON
+                            argv.inputFormat === 'stream-json' &&
+                            argv.outputFormat !== OutputFormat.STREAM_JSON
                         ) {
                             return '--input-format stream-json requires --output-format stream-json';
                         }
-                        if (argv['continue'] && argv['resume']) {
+                        if (argv.continue && argv.resume) {
                             return 'Cannot use both --continue and --resume together. Use --continue to resume the latest session, or --resume <sessionId> to resume a specific session.';
                         }
-                        if (
-                            argv['sessionId'] &&
-                            (argv['continue'] || argv['resume'])
-                        ) {
+                        if (argv.sessionId && (argv.continue || argv.resume)) {
                             return 'Cannot use --session-id with --continue or --resume. Use --session-id to start a new session with a specific ID, or use --continue/--resume to resume an existing session.';
                         }
                         if (
-                            argv['sessionId'] &&
-                            !isValidSessionId(argv['sessionId'] as string)
+                            argv.sessionId &&
+                            !isValidSessionId(argv.sessionId as string)
                         ) {
-                            return `Invalid --session-id: "${argv['sessionId']}". Must be a valid UUID (e.g., "123e4567-e89b-12d3-a456-426614174000").`;
+                            return `Invalid --session-id: "${argv.sessionId}". Must be a valid UUID (e.g., "123e4567-e89b-12d3-a456-426614174000").`;
                         }
                         if (
-                            argv['resume'] &&
-                            !isValidSessionId(argv['resume'] as string)
+                            argv.resume &&
+                            !isValidSessionId(argv.resume as string)
                         ) {
-                            return `Invalid --resume: "${argv['resume']}". Must be a valid UUID (e.g., "123e4567-e89b-12d3-a456-426614174000").`;
+                            return `Invalid --resume: "${argv.resume}". Must be a valid UUID (e.g., "123e4567-e89b-12d3-a456-426614174000").`;
                         }
                         return true;
                     })
@@ -655,36 +653,36 @@ export async function parseArguments(): Promise<CliArgs> {
         : queryArg;
 
     // Route positional args: explicit -i flag -> interactive; else -> one-shot (even for @commands)
-    if (q && !result['prompt']) {
+    if (q && !result.prompt) {
         const hasExplicitInteractive =
-            result['promptInteractive'] === '' || !!result['promptInteractive'];
+            result.promptInteractive === '' || !!result.promptInteractive;
         if (hasExplicitInteractive) {
-            result['promptInteractive'] = q;
+            result.promptInteractive = q;
         } else {
-            result['prompt'] = q;
+            result.prompt = q;
         }
     }
 
     // Keep CliArgs.query as a string for downstream typing
-    (result as Record<string, unknown>)['query'] = q || undefined;
+    (result as Record<string, unknown>).query = q || undefined;
 
     // The import format is now only controlled by settings.memoryImportFormat
     // We no longer accept it as a CLI argument
 
     // Handle deprecated --experimental-acp flag
-    if (result['experimentalAcp']) {
+    if (result.experimentalAcp) {
         writeStderrLine(
             '\x1b[33m⚠ Warning: --experimental-acp is deprecated and will be removed in a future release. Please use --acp instead.\x1b[0m'
         );
         // Map experimental-acp to acp if acp is not explicitly set
-        if (!result['acp']) {
-            (result as Record<string, unknown>)['acp'] = true;
+        if (!result.acp) {
+            (result as Record<string, unknown>).acp = true;
         }
     }
 
     // Apply ACP fallback: if acp or experimental-acp is present but no explicit --channel, treat as ACP
-    if ((result['acp'] || result['experimentalAcp']) && !result['channel']) {
-        (result as Record<string, unknown>)['channel'] = 'ACP';
+    if ((result.acp || result.experimentalAcp) && !result.channel) {
+        (result as Record<string, unknown>).channel = 'ACP';
     }
 
     return result as unknown as CliArgs;
@@ -724,7 +722,7 @@ export async function loadHierarchicalGeminiMemory(
 export function isDebugMode(argv: CliArgs): boolean {
     return (
         argv.debug ||
-        [process.env['DEBUG'], process.env['DEBUG_MODE']].some(
+        [process.env.DEBUG, process.env.DEBUG_MODE].some(
             (v) => v === 'true' || v === '1'
         )
     );
@@ -828,7 +826,7 @@ export async function loadCliConfig(
         approvalMode = ApprovalMode.DEFAULT;
     }
 
-    let telemetrySettings;
+    let telemetrySettings: TelemetrySettings;
     try {
         telemetrySettings = await resolveTelemetrySettings({
             argv,
@@ -903,12 +901,16 @@ export async function loadCliConfig(
 
     // argv.allowedTools adds allow rules (auto-approve).
     for (const t of argv.allowedTools ?? []) {
-        if (t && !mergedAllow.includes(t)) mergedAllow.push(t);
+        if (t && !mergedAllow.includes(t)) {
+            mergedAllow.push(t);
+        }
     }
 
     // argv.excludeTools adds deny rules.
     for (const t of argv.excludeTools ?? []) {
-        if (t && !mergedDeny.includes(t)) mergedDeny.push(t);
+        if (t && !mergedDeny.includes(t)) {
+            mergedDeny.push(t);
+        }
     }
 
     // Helper: check if a tool is explicitly covered by an allow rule OR by the
@@ -947,7 +949,9 @@ export async function loadCliConfig(
         const denyUnlessAllowed = (toolName: ToolName): void => {
             if (!isExplicitlyAllowed(toolName)) {
                 const name = toolName as string;
-                if (!mergedDeny.includes(name)) mergedDeny.push(name);
+                if (!mergedDeny.includes(name)) {
+                    mergedDeny.push(name);
+                }
             }
         };
 
@@ -1042,17 +1046,17 @@ export async function loadCliConfig(
                 process.exit(1);
             }
         }
-    } else if (argv['sessionId']) {
+    } else if (argv.sessionId) {
         // Use provided session ID without session resumption
         // Check if session ID is already in use
         const sessionService = new SessionService(cwd);
-        const exists = await sessionService.sessionExists(argv['sessionId']);
+        const exists = await sessionService.sessionExists(argv.sessionId);
         if (exists) {
-            const message = `Error: Session Id ${argv['sessionId']} is already in use.`;
+            const message = `Error: Session Id ${argv.sessionId} is already in use.`;
             writeStderrLine(message);
             process.exit(1);
         }
-        sessionId = argv['sessionId'];
+        sessionId = argv.sessionId;
     }
 
     const modelProvidersConfig = runtimeModelProvidersConfig;
@@ -1123,10 +1127,10 @@ export async function loadCliConfig(
             argv.checkpointing || settings.general?.checkpointing?.enabled,
         proxy:
             argv.proxy ||
-            process.env['HTTPS_PROXY'] ||
-            process.env['https_proxy'] ||
-            process.env['HTTP_PROXY'] ||
-            process.env['http_proxy'],
+            process.env.HTTPS_PROXY ||
+            process.env.https_proxy ||
+            process.env.HTTP_PROXY ||
+            process.env.http_proxy,
         cwd,
         fileDiscoveryService: fileService,
         bugCommand: settings.advanced?.bugCommand,
@@ -1139,7 +1143,7 @@ export async function loadCliConfig(
         cronEnabled: settings.experimental?.cron ?? false,
         listExtensions: argv.listExtensions || false,
         overrideExtensions: overrideExtensions || argv.extensions,
-        noBrowser: !!process.env['NO_BROWSER'],
+        noBrowser: !!process.env.NO_BROWSER,
         authType: selectedAuthType,
         inputFormat,
         outputFormat,

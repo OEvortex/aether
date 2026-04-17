@@ -88,7 +88,9 @@ export function detectBOM(buf: Buffer): BOMInfo | null {
  * (Node has 'utf16le' but not 'utf16be'.)
  */
 function decodeUTF16BE(buf: Buffer): string {
-    if (buf.length === 0) return '';
+    if (buf.length === 0) {
+        return '';
+    }
     const swapped = Buffer.from(buf); // swap16 mutates in place, so copy
     swapped.swap16();
     return swapped.toString('utf16le');
@@ -99,7 +101,9 @@ function decodeUTF16BE(buf: Buffer): string {
  * Invalid code points are replaced with U+FFFD, partial trailing bytes are ignored.
  */
 function decodeUTF32(buf: Buffer, littleEndian: boolean): string {
-    if (buf.length < 4) return '';
+    if (buf.length < 4) {
+        return '';
+    }
     const usable = buf.length - (buf.length % 4);
     let out = '';
     for (let i = 0; i < usable; i += 4) {
@@ -210,8 +214,9 @@ export async function readFileWithEncodingInfo(
 ): Promise<FileReadResult> {
     // Read the file once; detect BOM and decode from the single buffer.
     const full = await fs.promises.readFile(filePath);
-    if (full.length === 0)
+    if (full.length === 0) {
         return { content: '', encoding: 'utf-8', bom: false };
+    }
 
     const bomInfo = detectBOM(full);
     if (bomInfo) {
@@ -310,13 +315,17 @@ export async function detectFileEncoding(filePath: string): Promise<string> {
     try {
         fh = await fs.promises.open(filePath, 'r');
         const stats = await fh.stat();
-        if (stats.size === 0) return 'utf-8';
+        if (stats.size === 0) {
+            return 'utf-8';
+        }
 
         // Read a sample (up to 8KB) for detection
         const sampleSize = Math.min(8192, stats.size);
         const buf = Buffer.alloc(sampleSize);
         const { bytesRead } = await fh.read(buf, 0, sampleSize, 0);
-        if (bytesRead === 0) return 'utf-8';
+        if (bytesRead === 0) {
+            return 'utf-8';
+        }
         const sample = buf.subarray(0, bytesRead);
 
         // 1. Check for BOM
@@ -339,7 +348,9 @@ export async function detectFileEncoding(filePath: string): Promise<string> {
         }
 
         // 2. Validate UTF-8
-        if (isValidUtf8(sample)) return 'utf-8';
+        if (isValidUtf8(sample)) {
+            return 'utf-8';
+        }
 
         // 3. Use chardet for detection
         const detected = detectEncodingFromBuffer(sample);
@@ -410,21 +421,29 @@ export async function isBinaryFile(filePath: string): Promise<boolean> {
         fh = await fs.promises.open(filePath, 'r');
         const stats = await fh.stat();
         const fileSize = stats.size;
-        if (fileSize === 0) return false; // empty is not binary
+        if (fileSize === 0) {
+            return false; // empty is not binary
+        }
 
         // Sample up to 4KB from the head (previous behavior)
         const sampleSize = Math.min(4096, fileSize);
         const buf = Buffer.alloc(sampleSize);
         const { bytesRead } = await fh.read(buf, 0, sampleSize, 0);
-        if (bytesRead === 0) return false;
+        if (bytesRead === 0) {
+            return false;
+        }
 
         // BOM → text (avoid false positives for UTF‑16/32 with nulls)
         const bom = detectBOM(buf.subarray(0, Math.min(4, bytesRead)));
-        if (bom) return false;
+        if (bom) {
+            return false;
+        }
 
         let nonPrintableCount = 0;
         for (let i = 0; i < bytesRead; i++) {
-            if (buf[i] === 0) return true; // strong indicator of binary when no BOM
+            if (buf[i] === 0) {
+                return true; // strong indicator of binary when no BOM
+            }
             if (buf[i] < 9 || (buf[i] > 13 && buf[i] < 32)) {
                 nonPrintableCount++;
             }
@@ -692,7 +711,7 @@ export async function processSingleFileContent(
                                 10
                             );
                             formattedLines.push(
-                                line.substring(0, remaining) + '... [truncated]'
+                                `${line.substring(0, remaining)}... [truncated]`
                             );
                             contentLengthTruncated = true;
                             break;

@@ -28,7 +28,9 @@ describe('statsCommand', () => {
     });
 
     it('should display general session stats when run with no subcommand', () => {
-        if (!statsCommand.action) throw new Error('Command has no action');
+        if (!statsCommand.action) {
+            throw new Error('Command has no action');
+        }
 
         statsCommand.action(mockContext, '');
 
@@ -48,8 +50,9 @@ describe('statsCommand', () => {
         const modelSubCommand = statsCommand.subCommands?.find(
             (sc) => sc.name === 'model'
         );
-        if (!modelSubCommand?.action)
+        if (!modelSubCommand?.action) {
             throw new Error('Subcommand has no action');
+        }
 
         modelSubCommand.action(mockContext, '');
 
@@ -65,8 +68,9 @@ describe('statsCommand', () => {
         const toolsSubCommand = statsCommand.subCommands?.find(
             (sc) => sc.name === 'tools'
         );
-        if (!toolsSubCommand?.action)
+        if (!toolsSubCommand?.action) {
             throw new Error('Subcommand has no action');
+        }
 
         toolsSubCommand.action(mockContext, '');
 

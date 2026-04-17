@@ -15,7 +15,7 @@ export type Runtime = 'node' | 'bun' | 'unknown';
  * Detect the current JavaScript runtime
  */
 export function detectRuntime(): Runtime {
-    if (typeof process !== 'undefined' && process.versions?.['bun']) {
+    if (typeof process !== 'undefined' && process.versions?.bun) {
         return 'bun';
     }
     if (typeof process !== 'undefined' && process.versions?.node) {

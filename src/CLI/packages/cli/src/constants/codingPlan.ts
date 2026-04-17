@@ -308,7 +308,9 @@ export function isCodingPlanConfig(
 export function getRegionFromBaseUrl(
     baseUrl: string | undefined
 ): CodingPlanRegion | null {
-    if (!baseUrl) return null;
+    if (!baseUrl) {
+        return null;
+    }
 
     if (baseUrl === 'https://coding.dashscope.aliyuncs.com/v1') {
         return CodingPlanRegion.CHINA;

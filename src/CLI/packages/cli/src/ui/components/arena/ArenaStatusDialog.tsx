@@ -31,8 +31,10 @@ interface ArenaStatusDialogProps {
 }
 
 function truncate(str: string, maxLen: number): string {
-    if (str.length <= maxLen) return str;
-    return str.slice(0, maxLen - 1) + '…';
+    if (str.length <= maxLen) {
+        return str;
+    }
+    return `${str.slice(0, maxLen - 1)}…`;
 }
 
 function pad(
@@ -40,7 +42,9 @@ function pad(
     len: number,
     align: 'left' | 'right' = 'left'
 ): string {
-    if (str.length >= len) return str.slice(0, len);
+    if (str.length >= len) {
+        return str.slice(0, len);
+    }
     const padding = ' '.repeat(len - str.length);
     return align === 'right' ? padding + str : str + padding;
 }
@@ -108,7 +112,9 @@ export function ArenaStatusDialog({
 
     // For in-process mode, read live stats directly from AgentInteractive
     const liveStats = useMemo(() => {
-        if (!inProcessBackend) return null;
+        if (!inProcessBackend) {
+            return null;
+        }
         const statsMap = new Map<string, AgentStatsSummary>();
         for (const agent of agents) {
             const interactive = inProcessBackend.getAgent(agent.agentId);
@@ -118,11 +124,11 @@ export function ArenaStatusDialog({
         }
         return statsMap;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inProcessBackend, agents, tick]);
+    }, [inProcessBackend, agents]);
 
     const maxTaskLen = 60;
     const displayTask =
-        task.length > maxTaskLen ? task.slice(0, maxTaskLen - 1) + '…' : task;
+        task.length > maxTaskLen ? `${task.slice(0, maxTaskLen - 1)}…` : task;
 
     const colStatus = 14;
     const colTime = 8;

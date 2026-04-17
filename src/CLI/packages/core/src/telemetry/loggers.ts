@@ -126,7 +126,9 @@ export function logStartSession(
     event: StartSessionEvent
 ): void {
     AetherLogger.getInstance(config)?.logStartSessionEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -163,7 +165,9 @@ export function logStartSession(
 
 export function logUserPrompt(config: Config, event: UserPromptEvent): void {
     AetherLogger.getInstance(config)?.logNewPromptEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -174,11 +178,11 @@ export function logUserPrompt(config: Config, event: UserPromptEvent): void {
     };
 
     if (event.auth_type) {
-        attributes['auth_type'] = event.auth_type;
+        attributes.auth_type = event.auth_type;
     }
 
     if (shouldLogUserPrompts(config)) {
-        attributes['prompt'] = event.prompt;
+        attributes.prompt = event.prompt;
     }
 
     const logger = logs.getLogger(SERVICE_NAME);
@@ -191,7 +195,9 @@ export function logUserPrompt(config: Config, event: UserPromptEvent): void {
 
 export function logUserRetry(config: Config, event: UserRetryEvent): void {
     AetherLogger.getInstance(config)?.logRetryEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -217,7 +223,9 @@ export function logToolCall(config: Config, event: ToolCallEvent): void {
     uiTelemetryService.addEvent(uiEvent);
     config.getChatRecordingService()?.recordUiTelemetryEvent(uiEvent);
     AetherLogger.getInstance(config)?.logToolCallEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -252,7 +260,9 @@ export function logToolOutputTruncated(
     event: ToolOutputTruncatedEvent
 ): void {
     AetherLogger.getInstance(config)?.logToolOutputTruncatedEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -274,7 +284,9 @@ export function logFileOperation(
     event: FileOperationEvent
 ): void {
     AetherLogger.getInstance(config)?.logFileOperationEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -285,16 +297,16 @@ export function logFileOperation(
     };
 
     if (event.lines) {
-        attributes['lines'] = event.lines;
+        attributes.lines = event.lines;
     }
     if (event.mimetype) {
-        attributes['mimetype'] = event.mimetype;
+        attributes.mimetype = event.mimetype;
     }
     if (event.extension) {
-        attributes['extension'] = event.extension;
+        attributes.extension = event.extension;
     }
     if (event.programming_language) {
-        attributes['programming_language'] = event.programming_language;
+        attributes.programming_language = event.programming_language;
     }
 
     const logger = logs.getLogger(SERVICE_NAME);
@@ -315,7 +327,9 @@ export function logFileOperation(
 
 export function logApiRequest(config: Config, event: ApiRequestEvent): void {
     // AetherLogger.getInstance(config)?.logApiRequestEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -337,7 +351,9 @@ export function logFlashFallback(
     event: FlashFallbackEvent
 ): void {
     AetherLogger.getInstance(config)?.logFlashFallbackEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -359,7 +375,9 @@ export function logRipgrepFallback(
     event: RipgrepFallbackEvent
 ): void {
     AetherLogger.getInstance(config)?.logRipgrepFallbackEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -385,14 +403,16 @@ export function logApiError(config: Config, event: ApiErrorEvent): void {
     uiTelemetryService.addEvent(uiEvent);
     config.getChatRecordingService()?.recordUiTelemetryEvent(uiEvent);
     AetherLogger.getInstance(config)?.logApiErrorEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
         ...event,
         'event.name': EVENT_API_ERROR,
         'event.timestamp': new Date().toISOString(),
-        ['error.message']: event.error_message,
+        'error.message': event.error_message,
         model_name: event.model,
         duration: event.duration_ms
     };
@@ -425,7 +445,9 @@ export function logApiCancel(config: Config, event: ApiCancelEvent): void {
     } as UiEvent;
     uiTelemetryService.addEvent(uiEvent);
     AetherLogger.getInstance(config)?.logApiCancelEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -452,7 +474,9 @@ export function logApiResponse(config: Config, event: ApiResponseEvent): void {
     uiTelemetryService.addEvent(uiEvent);
     config.getChatRecordingService()?.recordUiTelemetryEvent(uiEvent);
     AetherLogger.getInstance(config)?.logApiResponseEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
         ...event,
@@ -460,7 +484,7 @@ export function logApiResponse(config: Config, event: ApiResponseEvent): void {
         'event.timestamp': new Date().toISOString()
     };
     if (event.response_text) {
-        attributes['response_text'] = event.response_text;
+        attributes.response_text = event.response_text;
     }
     if (event.status_code) {
         if (typeof event.status_code === 'number') {
@@ -505,7 +529,9 @@ export function logLoopDetected(
     event: LoopDetectedEvent
 ): void {
     AetherLogger.getInstance(config)?.logLoopDetectedEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -532,7 +558,9 @@ export function logNextSpeakerCheck(
     event: NextSpeakerCheckEvent
 ): void {
     AetherLogger.getInstance(config)?.logNextSpeakerCheck(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -553,7 +581,9 @@ export function logSlashCommand(
     event: SlashCommandEvent
 ): void {
     AetherLogger.getInstance(config)?.logSlashCommandEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -574,7 +604,9 @@ export function logIdeConnection(
     event: IdeConnectionEvent
 ): void {
     AetherLogger.getInstance(config)?.logIdeConnectionEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -595,7 +627,9 @@ export function logConversationFinishedEvent(
     event: ConversationFinishedEvent
 ): void {
     AetherLogger.getInstance(config)?.logConversationFinishedEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -641,7 +675,9 @@ export function logKittySequenceOverflow(
     event: KittySequenceOverflowEvent
 ): void {
     AetherLogger.getInstance(config)?.logKittySequenceOverflowEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
         ...event
@@ -659,7 +695,9 @@ export function logMalformedJsonResponse(
     event: MalformedJsonResponseEvent
 ): void {
     AetherLogger.getInstance(config)?.logMalformedJsonResponseEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -680,7 +718,9 @@ export function logInvalidChunk(
     event: InvalidChunkEvent
 ): void {
     AetherLogger.getInstance(config)?.logInvalidChunkEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -706,7 +746,9 @@ export function logContentRetry(
     event: ContentRetryEvent
 ): void {
     AetherLogger.getInstance(config)?.logContentRetryEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -728,7 +770,9 @@ export function logContentRetryFailure(
     event: ContentRetryFailureEvent
 ): void {
     AetherLogger.getInstance(config)?.logContentRetryFailureEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -750,7 +794,9 @@ export function logSubagentExecution(
     event: SubagentExecutionEvent
 ): void {
     AetherLogger.getInstance(config)?.logSubagentExecutionEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -778,7 +824,9 @@ export function logModelSlashCommand(
     event: ModelSlashCommandEvent
 ): void {
     AetherLogger.getInstance(config)?.logModelSlashCommandEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -805,7 +853,9 @@ export function logExtensionInstallEvent(
     event: ExtensionInstallEvent
 ): void {
     AetherLogger.getInstance(config)?.logExtensionInstallEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -831,7 +881,9 @@ export function logExtensionUninstall(
     event: ExtensionUninstallEvent
 ): void {
     AetherLogger.getInstance(config)?.logExtensionUninstallEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -879,7 +931,9 @@ export function logExtensionEnable(
     event: ExtensionEnableEvent
 ): void {
     AetherLogger.getInstance(config)?.logExtensionEnableEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -901,7 +955,9 @@ export function logExtensionDisable(
     event: ExtensionDisableEvent
 ): void {
     AetherLogger.getInstance(config)?.logExtensionDisableEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -920,7 +976,9 @@ export function logExtensionDisable(
 
 export function logAuth(config: Config, event: AuthEvent): void {
     AetherLogger.getInstance(config)?.logAuthEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -945,7 +1003,9 @@ export function logAuth(config: Config, event: AuthEvent): void {
 }
 
 export function logSkillLaunch(config: Config, event: SkillLaunchEvent): void {
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -974,7 +1034,9 @@ export function logUserFeedback(
     uiTelemetryService.addEvent(uiEvent);
     config.getChatRecordingService()?.recordUiTelemetryEvent(uiEvent);
     AetherLogger.getInstance(config)?.logUserFeedbackEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -996,7 +1058,9 @@ export function logArenaSessionStarted(
     event: ArenaSessionStartedEvent
 ): void {
     AetherLogger.getInstance(config)?.logArenaSessionStartedEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -1020,7 +1084,9 @@ export function logArenaAgentCompleted(
     event: ArenaAgentCompletedEvent
 ): void {
     AetherLogger.getInstance(config)?.logArenaAgentCompletedEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -1050,7 +1116,9 @@ export function logArenaSessionEnded(
     event: ArenaSessionEndedEvent
 ): void {
     AetherLogger.getInstance(config)?.logArenaSessionEndedEvent(event);
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -1078,7 +1146,9 @@ export function logPromptSuggestion(
     config: Config,
     event: PromptSuggestionEvent
 ): void {
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -1088,32 +1158,32 @@ export function logPromptSuggestion(
     };
 
     if (event.prompt_id) {
-        attributes['prompt_id'] = event.prompt_id;
+        attributes.prompt_id = event.prompt_id;
     }
     if (event.accept_method) {
-        attributes['accept_method'] = event.accept_method;
+        attributes.accept_method = event.accept_method;
     }
     if (event.time_to_accept_ms !== undefined) {
-        attributes['time_to_accept_ms'] = event.time_to_accept_ms;
+        attributes.time_to_accept_ms = event.time_to_accept_ms;
     }
     if (event.time_to_ignore_ms !== undefined) {
-        attributes['time_to_ignore_ms'] = event.time_to_ignore_ms;
+        attributes.time_to_ignore_ms = event.time_to_ignore_ms;
     }
     if (event.time_to_first_keystroke_ms !== undefined) {
-        attributes['time_to_first_keystroke_ms'] =
+        attributes.time_to_first_keystroke_ms =
             event.time_to_first_keystroke_ms;
     }
     if (event.suggestion_length !== undefined) {
-        attributes['suggestion_length'] = event.suggestion_length;
+        attributes.suggestion_length = event.suggestion_length;
     }
     if (event.similarity !== undefined) {
-        attributes['similarity'] = event.similarity;
+        attributes.similarity = event.similarity;
     }
     if (event.was_focused_when_shown !== undefined) {
-        attributes['was_focused_when_shown'] = event.was_focused_when_shown;
+        attributes.was_focused_when_shown = event.was_focused_when_shown;
     }
     if (event.reason) {
-        attributes['reason'] = event.reason;
+        attributes.reason = event.reason;
     }
 
     const logger = logs.getLogger(SERVICE_NAME);
@@ -1125,7 +1195,9 @@ export function logPromptSuggestion(
 }
 
 export function logSpeculation(config: Config, event: SpeculationEvent): void {
-    if (!isTelemetrySdkInitialized()) return;
+    if (!isTelemetrySdkInitialized()) {
+        return;
+    }
 
     const attributes: LogAttributes = {
         ...getCommonAttributes(config),
@@ -1140,7 +1212,7 @@ export function logSpeculation(config: Config, event: SpeculationEvent): void {
     };
 
     if (event.boundary_type) {
-        attributes['boundary_type'] = event.boundary_type;
+        attributes.boundary_type = event.boundary_type;
     }
 
     const logger = logs.getLogger(SERVICE_NAME);

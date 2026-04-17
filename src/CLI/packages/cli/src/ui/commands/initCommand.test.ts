@@ -59,7 +59,7 @@ describe('initCommand', () => {
         vi.spyOn(fs, 'readFileSync').mockReturnValue('# Existing content');
 
         // Act: Run the command's action
-        const result = await initCommand.action!(mockContext, '');
+        const result = await initCommand.action?.(mockContext, '');
 
         // Assert: Check for the correct confirmation request
         expect(result).toEqual(
@@ -78,7 +78,7 @@ describe('initCommand', () => {
         vi.mocked(fs.existsSync).mockReturnValue(false);
 
         // Act: Run the command's action
-        const result = await initCommand.action!(mockContext, '');
+        const result = await initCommand.action?.(mockContext, '');
 
         // Assert: Check that writeFileSync was called correctly
         expect(fs.writeFileSync).toHaveBeenCalledWith(geminiMdPath, '', 'utf8');
@@ -107,7 +107,7 @@ describe('initCommand', () => {
         vi.mocked(fs.existsSync).mockReturnValue(true);
         vi.spyOn(fs, 'readFileSync').mockReturnValue('   \n  ');
 
-        const result = await initCommand.action!(mockContext, '');
+        const result = await initCommand.action?.(mockContext, '');
 
         expect(fs.writeFileSync).toHaveBeenCalledWith(geminiMdPath, '', 'utf8');
         expect(result).toEqual(
@@ -124,7 +124,7 @@ describe('initCommand', () => {
         mockContext.overwriteConfirmed = true;
 
         // Act: Run the command's action
-        const result = await initCommand.action!(mockContext, '');
+        const result = await initCommand.action?.(mockContext, '');
 
         // Assert: Check that writeFileSync was called correctly
         expect(fs.writeFileSync).toHaveBeenCalledWith(geminiMdPath, '', 'utf8');
@@ -157,7 +157,7 @@ describe('initCommand', () => {
         }
 
         // Act: Run the command's action
-        const result = await initCommand.action!(noConfigContext, '');
+        const result = await initCommand.action?.(noConfigContext, '');
 
         // Assert: Check for the correct error message
         expect(result).toEqual({

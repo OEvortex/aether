@@ -5,16 +5,16 @@
  */
 
 // Unset NO_COLOR environment variable to ensure consistent theme behavior between local and CI test runs
-if (process.env['NO_COLOR'] !== undefined) {
-    delete process.env['NO_COLOR'];
+if (process.env.NO_COLOR !== undefined) {
+    delete process.env.NO_COLOR;
 }
 
 import { setSimulate429 } from './src/utils/testUtils.js';
 
 // Avoid writing per-session debug log files during tests.
 // Unit tests can opt-in by overriding this env var.
-if (process.env['AETHER_DEBUG_LOG_FILE'] === undefined) {
-    process.env['AETHER_DEBUG_LOG_FILE'] = '0';
+if (process.env.AETHER_DEBUG_LOG_FILE === undefined) {
+    process.env.AETHER_DEBUG_LOG_FILE = '0';
 }
 
 // Disable 429 simulation globally for all tests

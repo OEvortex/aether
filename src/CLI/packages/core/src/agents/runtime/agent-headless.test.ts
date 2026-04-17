@@ -292,8 +292,9 @@ describe('subagent.ts', () => {
             const generationConfig = callArgs?.[1];
             // Ensure it's defined before proceeding
             expect(generationConfig).toBeDefined();
-            if (!generationConfig)
+            if (!generationConfig) {
                 throw new Error('generationConfig is undefined');
+            }
             return generationConfig as GenerateContentConfig & {
                 systemInstruction?: string | Content;
             };
@@ -791,7 +792,7 @@ describe('subagent.ts', () => {
                 const parts = secondCallArgs.message as unknown[];
                 expect(Array.isArray(parts)).toBe(true);
                 const firstPart = parts[0] as Part;
-                expect(firstPart.functionResponse?.response?.['output']).toBe(
+                expect(firstPart.functionResponse?.response?.output).toBe(
                     'file1.txt\nfile2.ts'
                 );
 
@@ -891,7 +892,7 @@ describe('subagent.ts', () => {
 
                 // Now resolve the stream. The model returns 'stop'.
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                resolveStream!(createMockStream(['stop'])() as any);
+                resolveStream?.(createMockStream(['stop'])() as any);
 
                 await runPromise;
 
@@ -982,10 +983,10 @@ describe('subagent.ts', () => {
                 await scope.execute(new ContextState());
 
                 expect(events).toHaveLength(2);
-                expect(events[0]!.text).toBe('Let me think...');
-                expect(events[0]!.thought).toBe(true);
-                expect(events[1]!.text).toBe('Here is the answer.');
-                expect(events[1]!.thought).toBe(false);
+                expect(events[0]?.text).toBe('Let me think...');
+                expect(events[0]?.thought).toBe(true);
+                expect(events[1]?.text).toBe('Here is the answer.');
+                expect(events[1]?.thought).toBe(false);
             });
 
             it('should exclude thought text from finalText', async () => {
@@ -1171,8 +1172,12 @@ describe('subagent.ts', () => {
                         .fn()
                         .mockReturnValue([readFileToolDef, editFileToolDef]),
                     getTool: vi.fn().mockImplementation((name: string) => {
-                        if (name === 'read_file') return readFileTool;
-                        if (name === 'edit_file') return editFileTool;
+                        if (name === 'read_file') {
+                            return readFileTool;
+                        }
+                        if (name === 'edit_file') {
+                            return editFileTool;
+                        }
                         return undefined;
                     })
                 });
@@ -1253,16 +1258,16 @@ describe('subagent.ts', () => {
                     (e) => e.name === 'edit_file'
                 );
                 expect(editResult).toBeDefined();
-                expect(editResult!.success).toBe(false);
-                expect(editResult!.error).toContain('not found');
-                expect(editResult!.callId).toBe('call_edit');
+                expect(editResult?.success).toBe(false);
+                expect(editResult?.error).toContain('not found');
+                expect(editResult?.callId).toBe('call_edit');
 
                 // 5. Verify allowed tool result has success=true
                 const readResult = toolResultEvents.find(
                     (e) => e.name === 'read_file'
                 );
                 expect(readResult).toBeDefined();
-                expect(readResult!.success).toBe(true);
+                expect(readResult?.success).toBe(true);
             });
         });
     });

@@ -181,7 +181,7 @@ describe('languageCommand', () => {
             vi.mocked(i18n.t).mockImplementation(
                 (key: string, params?: Record<string, string>) => {
                     if (params && key.includes('{{lang}}')) {
-                        return key.replace('{{lang}}', params['lang'] || '');
+                        return key.replace('{{lang}}', params.lang || '');
                     }
                     return key;
                 }
@@ -218,7 +218,7 @@ describe('languageCommand', () => {
             vi.mocked(i18n.t).mockImplementation(
                 (key: string, params?: Record<string, string>) => {
                     if (params && key.includes('{{lang}}')) {
-                        return key.replace('{{lang}}', params['lang'] || '');
+                        return key.replace('{{lang}}', params.lang || '');
                     }
                     return key;
                 }

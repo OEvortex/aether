@@ -237,7 +237,7 @@ describe('GeminiChat', async () => {
             expect(history.length).toBe(2); // user turn + model turn
             const modelTurn = history[1]!;
             expect(modelTurn?.parts?.length).toBe(1); // The empty part is discarded
-            expect(modelTurn?.parts![0]!.functionCall).toBeDefined();
+            expect(modelTurn?.parts?.[0]?.functionCall).toBeDefined();
         });
 
         it('should fail if the stream ends with an empty part and has no finishReason', async () => {
@@ -331,7 +331,9 @@ describe('GeminiChat', async () => {
             expect(history.length).toBe(2); // user turn + model turn
             const modelTurn = history[1]!;
             expect(modelTurn?.parts?.length).toBe(1);
-            expect(modelTurn?.parts![0]!.text).toBe('Initial valid content...');
+            expect(modelTurn?.parts?.[0]?.text).toBe(
+                'Initial valid content...'
+            );
         });
 
         it('should consolidate subsequent text chunks after receiving an empty text chunk', async () => {
@@ -382,7 +384,7 @@ describe('GeminiChat', async () => {
             expect(history.length).toBe(2);
             const modelTurn = history[1]!;
             expect(modelTurn?.parts?.length).toBe(1);
-            expect(modelTurn?.parts![0]!.text).toBe('Hello World!');
+            expect(modelTurn?.parts?.[0]?.text).toBe('Hello World!');
         });
 
         it('should consolidate adjacent text parts that arrive in separate stream chunks', async () => {
@@ -463,9 +465,9 @@ describe('GeminiChat', async () => {
 
             // The model turn should have 3 distinct parts: the merged text, the function call, and the final text.
             expect(modelTurn?.parts?.length).toBe(3);
-            expect(modelTurn?.parts![0]!.text).toBe('This is the first part.');
-            expect(modelTurn.parts![1]!.functionCall).toBeDefined();
-            expect(modelTurn.parts![2]!.text).toBe('This is the second part.');
+            expect(modelTurn?.parts?.[0]?.text).toBe('This is the first part.');
+            expect(modelTurn.parts?.[1]?.functionCall).toBeDefined();
+            expect(modelTurn.parts?.[2]?.text).toBe('This is the second part.');
         });
         it('should preserve text parts that stream in the same chunk as a thought', async () => {
             // 1. Mock the API to return a single chunk containing both a thought and visible text.
@@ -515,7 +517,7 @@ describe('GeminiChat', async () => {
             // The buggy code would fail here, resulting in parts.length being 0.
             // The corrected code will pass, preserving the single visible text part.
             expect(modelTurn?.parts?.length).toBe(1);
-            expect(modelTurn?.parts![0]!.text).toBe(
+            expect(modelTurn?.parts?.[0]?.text).toBe(
                 'This is the visible text that should not be lost.'
             );
         });
@@ -907,10 +909,11 @@ describe('GeminiChat', async () => {
                 { message: 'h1' },
                 'p1'
             );
-            for await (const _ of res);
+            for await (const _ of res) {
+            }
 
             const history = chat.getHistory();
-            expect(history[1].parts![0]).toEqual({
+            expect(history[1].parts?.[0]).toEqual({
                 text: 'p1',
                 thoughtSignature: 's1'
             });
@@ -1189,7 +1192,9 @@ describe('GeminiChat', async () => {
 
                 for (;;) {
                     const next = await iterator.next();
-                    if (next.done) break;
+                    if (next.done) {
+                        break;
+                    }
                     events.push(next.value);
                 }
 
@@ -1253,7 +1258,7 @@ describe('GeminiChat', async () => {
                 // First event: RETRY with retryInfo containing skipDelay
                 const first = await iterator.next();
                 expect(first.value.type).toBe(StreamEventType.RETRY);
-                const skipDelay = first.value.retryInfo!.skipDelay!;
+                const skipDelay = first.value.retryInfo?.skipDelay!;
 
                 // Resume generator — it's now awaiting the 60s delay.
                 // Call skipDelay() to resolve it immediately instead of advancing timers.
@@ -1269,7 +1274,9 @@ describe('GeminiChat', async () => {
                 const events: StreamEvent[] = [first.value, second.value];
                 for (;;) {
                     const next = await iterator.next();
-                    if (next.done) break;
+                    if (next.done) {
+                        break;
+                    }
                     events.push(next.value);
                 }
 
@@ -1439,7 +1446,9 @@ describe('GeminiChat', async () => {
                 const events: StreamEvent[] = [first.value, second.value];
                 for (;;) {
                     const next = await iterator.next();
-                    if (next.done) break;
+                    if (next.done) {
+                        break;
+                    }
                     events.push(next.value);
                 }
 
@@ -1470,10 +1479,7 @@ describe('GeminiChat', async () => {
                         try {
                             return await apiCall();
                         } catch (error) {
-                            if (
-                                options?.shouldRetryOnError &&
-                                options.shouldRetryOnError(error)
-                            ) {
+                            if (options?.shouldRetryOnError?.(error)) {
                                 // Try again
                                 return await apiCall();
                             }
@@ -1861,7 +1867,7 @@ describe('GeminiChat', async () => {
         ).toHaveBeenCalledTimes(1);
 
         // 6. Unblock and fully consume the first stream to completion.
-        continueFirstStream!();
+        continueFirstStream?.();
         await firstStreamIterator.next(); // Consume the rest of the stream
         await firstStreamIterator.next(); // Finish the iterator
 
@@ -1998,9 +2004,9 @@ describe('GeminiChat', async () => {
 
         const modelTurn = history[1]!;
         // The model turn should only contain the text from the successful attempt
-        expect(modelTurn!.parts![0]!.text).toBe('Successful final response');
+        expect(modelTurn?.parts?.[0]?.text).toBe('Successful final response');
         // It should NOT contain any text from the failed attempt
-        expect(modelTurn!.parts![0]!.text).not.toContain(
+        expect(modelTurn?.parts?.[0]?.text).not.toContain(
             'This valid part should be discarded'
         );
     });

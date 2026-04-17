@@ -33,7 +33,9 @@ export function isAutoLanguage(value: string | undefined | null): boolean {
  * (English, Spanish, French, Japanese, etc).
  */
 export function normalizeOutputLanguage(language: string): string {
-    if (!language) return 'English';
+    if (!language) {
+        return 'English';
+    }
     return language;
 }
 

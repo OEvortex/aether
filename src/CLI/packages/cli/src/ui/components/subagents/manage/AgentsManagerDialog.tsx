@@ -55,7 +55,9 @@ export function AgentsManagerDialog({
 
     // Function to load agents
     const loadAgents = useCallback(async () => {
-        if (!config) return;
+        if (!config) {
+            return;
+        }
 
         const manager = config.getSubagentManager();
 
@@ -101,7 +103,9 @@ export function AgentsManagerDialog({
 
     const handleDeleteAgent = useCallback(
         async (agent: SubagentConfig) => {
-            if (!config) return;
+            if (!config) {
+                return;
+            }
 
             try {
                 const subagentManager = config.getSubagentManager();

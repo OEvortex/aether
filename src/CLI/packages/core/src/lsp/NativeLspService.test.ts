@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { EventEmitter } from 'node:events';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { EventEmitter } from 'events';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { Config as CoreConfig } from '../config/config.js';
 import type { IdeContextStore } from '../ide/ideContext.js';
@@ -54,7 +54,7 @@ class MockWorkspaceContext {
     }
 
     resolvePath(_path: string): string {
-        return this.rootPath + '/' + _path;
+        return `${this.rootPath}/${_path}`;
     }
 
     isPathWithinWorkspace(_path: string): boolean {
@@ -685,11 +685,11 @@ describe('NativeLspService', () => {
 
             // Verify didOpen fires before the definition request
             expect(timeline.length).toBe(2);
-            expect(timeline[0]!.event).toBe('didOpen');
-            expect(timeline[1]!.event).toBe('definition');
+            expect(timeline[0]?.event).toBe('didOpen');
+            expect(timeline[1]?.event).toBe('definition');
             // The delay should have elapsed between the two events (200ms)
             expect(
-                timeline[1]!.time - timeline[0]!.time
+                timeline[1]?.time - timeline[0]?.time
             ).toBeGreaterThanOrEqual(200);
             expect(results.length).toBe(1);
         } finally {

@@ -177,7 +177,7 @@ export function escapePath(filePath: string): string {
 
         // Only escape if not already escaped
         if (!isAlreadyEscaped && SHELL_SPECIAL_CHARS.test(char)) {
-            result += '\\' + char;
+            result += `\\${char}`;
         } else {
             result += char;
         }

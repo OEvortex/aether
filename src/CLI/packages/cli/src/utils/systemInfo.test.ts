@@ -77,7 +77,7 @@ describe('systemInfo', () => {
 
         vi.mocked(versionUtils.getCliVersion).mockResolvedValue('test-version');
         vi.mocked(child_process.execSync).mockImplementation(
-            (command: string, options?: ExecSyncOptions) => {
+            (_command: string, options?: ExecSyncOptions) => {
                 if (
                     options &&
                     typeof options === 'object' &&
@@ -90,7 +90,7 @@ describe('systemInfo', () => {
             }
         );
         vi.mocked(os.release).mockReturnValue('22.0.0');
-        process.env['GOOGLE_CLOUD_PROJECT'] = 'test-gcp-project';
+        process.env.GOOGLE_CLOUD_PROJECT = 'test-gcp-project';
         Object.defineProperty(process, 'platform', {
             value: 'test-os'
         });
@@ -121,7 +121,7 @@ describe('systemInfo', () => {
     describe('getNpmVersion', () => {
         it('should return npm version when available', async () => {
             vi.mocked(child_process.execSync).mockImplementation(
-                (command: string, options?: ExecSyncOptions) => {
+                (_command: string, options?: ExecSyncOptions) => {
                     if (
                         options &&
                         typeof options === 'object' &&
@@ -148,28 +148,28 @@ describe('systemInfo', () => {
 
     describe('getSandboxEnv', () => {
         it('should return "no sandbox" when SANDBOX is not set', () => {
-            delete process.env['SANDBOX'];
+            delete process.env.SANDBOX;
             expect(getSandboxEnv()).toBe('no sandbox');
         });
 
         it('should return sandbox-exec info when SANDBOX is sandbox-exec', () => {
-            process.env['SANDBOX'] = 'sandbox-exec';
-            process.env['SEATBELT_PROFILE'] = 'test-profile';
+            process.env.SANDBOX = 'sandbox-exec';
+            process.env.SEATBELT_PROFILE = 'test-profile';
             expect(getSandboxEnv()).toBe('sandbox-exec (test-profile)');
         });
 
         it('should return sandbox name without prefix when stripPrefix is true', () => {
-            process.env['SANDBOX'] = 'aether-test-sandbox';
+            process.env.SANDBOX = 'aether-test-sandbox';
             expect(getSandboxEnv(true)).toBe('test-sandbox');
         });
 
         it('should return sandbox name with prefix when stripPrefix is false', () => {
-            process.env['SANDBOX'] = 'aether-test-sandbox';
+            process.env.SANDBOX = 'aether-test-sandbox';
             expect(getSandboxEnv(false)).toBe('aether-test-sandbox');
         });
 
         it('should handle aether- prefix removal', () => {
-            process.env['SANDBOX'] = 'aether-custom-sandbox';
+            process.env.SANDBOX = 'aether-custom-sandbox';
             expect(getSandboxEnv(true)).toBe('custom-sandbox');
         });
     });
@@ -185,7 +185,7 @@ describe('systemInfo', () => {
         });
 
         it('should return empty string when IDE mode is disabled', async () => {
-            vi.mocked(mockContext.services.config!.getIdeMode).mockReturnValue(
+            vi.mocked(mockContext.services.config?.getIdeMode).mockReturnValue(
                 false
             );
 
@@ -206,12 +206,12 @@ describe('systemInfo', () => {
     describe('getSystemInfo', () => {
         it('should collect all system information', async () => {
             // Ensure SANDBOX is not set for this test
-            delete process.env['SANDBOX'];
+            delete process.env.SANDBOX;
             vi.mocked(IdeClient.getInstance).mockResolvedValue({
                 getDetectedIdeDisplayName: vi.fn().mockReturnValue('test-ide')
             } as unknown as IdeClient);
             vi.mocked(child_process.execSync).mockImplementation(
-                (command: string, options?: ExecSyncOptions) => {
+                (_command: string, options?: ExecSyncOptions) => {
                     if (
                         options &&
                         typeof options === 'object' &&
@@ -261,7 +261,7 @@ describe('systemInfo', () => {
                 getDetectedIdeDisplayName: vi.fn().mockReturnValue('test-ide')
             } as unknown as IdeClient);
             vi.mocked(child_process.execSync).mockImplementation(
-                (command: string, options?: ExecSyncOptions) => {
+                (_command: string, options?: ExecSyncOptions) => {
                     if (
                         options &&
                         typeof options === 'object' &&
@@ -276,9 +276,9 @@ describe('systemInfo', () => {
 
             const { AuthType } = await import('@aetherai/aether-core');
             // Update the mock context to use OpenAI auth
-            mockContext.services.settings.merged.security!.auth!.selectedType =
+            mockContext.services.settings.merged.security?.auth!.selectedType =
                 AuthType.USE_OPENAI;
-            vi.mocked(mockContext.services.config!.getAuthType).mockReturnValue(
+            vi.mocked(mockContext.services.config?.getAuthType).mockReturnValue(
                 AuthType.USE_OPENAI
             );
 
@@ -290,12 +290,12 @@ describe('systemInfo', () => {
         });
 
         it('should use sandbox env without prefix for bug reports', async () => {
-            process.env['SANDBOX'] = 'aether-test-sandbox';
+            process.env.SANDBOX = 'aether-test-sandbox';
             vi.mocked(IdeClient.getInstance).mockResolvedValue({
                 getDetectedIdeDisplayName: vi.fn().mockReturnValue('')
             } as unknown as IdeClient);
             vi.mocked(child_process.execSync).mockImplementation(
-                (command: string, options?: ExecSyncOptions) => {
+                (_command: string, options?: ExecSyncOptions) => {
                     if (
                         options &&
                         typeof options === 'object' &&
@@ -318,7 +318,7 @@ describe('systemInfo', () => {
                 getDetectedIdeDisplayName: vi.fn().mockReturnValue('')
             } as unknown as IdeClient);
             vi.mocked(child_process.execSync).mockImplementation(
-                (command: string, options?: ExecSyncOptions) => {
+                (_command: string, options?: ExecSyncOptions) => {
                     if (
                         options &&
                         typeof options === 'object' &&

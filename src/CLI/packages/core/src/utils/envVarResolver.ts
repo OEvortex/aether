@@ -27,11 +27,7 @@ export function resolveEnvVarsInString(
         if (customEnv && typeof customEnv[varName] === 'string') {
             return customEnv[varName];
         }
-        if (
-            process &&
-            process.env &&
-            typeof process.env[varName] === 'string'
-        ) {
+        if (process?.env && typeof process.env[varName] === 'string') {
             return process.env[varName]!;
         }
         return match;

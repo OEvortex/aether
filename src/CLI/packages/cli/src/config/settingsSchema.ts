@@ -1679,9 +1679,9 @@ export type SettingsSchemaType = typeof SETTINGS_SCHEMA;
 export function getSettingsSchema(): SettingsSchemaType {
     // Inject dynamic language options
     const schema = SETTINGS_SCHEMA as unknown as SettingsSchema;
-    if (schema['general']?.properties?.['language']) {
+    if (schema.general?.properties?.language) {
         (
-            schema['general'].properties['language'] as {
+            schema.general.properties.language as {
                 options?: SettingEnumOption[];
             }
         ).options = getLanguageSettingsOptions();

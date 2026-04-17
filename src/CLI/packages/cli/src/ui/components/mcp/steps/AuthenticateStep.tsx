@@ -34,7 +34,9 @@ export const AuthenticateStep: React.FC<AuthenticateStepProps> = ({
     const isRunning = useRef(false);
 
     const runAuthentication = useCallback(async () => {
-        if (!server || !config || isRunning.current) return;
+        if (!server || !config || isRunning.current) {
+            return;
+        }
         isRunning.current = true;
 
         setAuthState('authenticating');
@@ -139,11 +141,13 @@ export const AuthenticateStep: React.FC<AuthenticateStepProps> = ({
     useEffect(() => {
         runAuthentication();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [runAuthentication]);
 
     // Auto-navigate back after authentication succeeds
     useEffect(() => {
-        if (authState !== 'success') return;
+        if (authState !== 'success') {
+            return;
+        }
         const timer = setTimeout(() => {
             onBack();
         }, AUTO_BACK_DELAY_MS);

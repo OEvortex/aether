@@ -152,7 +152,9 @@ class GrepToolInvocation extends BaseToolInvocation<
                 const seen = new Set<string>();
                 rawMatches = rawMatches.filter((match) => {
                     const key = `${match.filePath}:${match.lineNumber}`;
-                    if (seen.has(key)) return false;
+                    if (seen.has(key)) {
+                        return false;
+                    }
                     seen.add(key);
                     return true;
                 });
@@ -219,7 +221,7 @@ class GrepToolInvocation extends BaseToolInvocation<
             // Apply character limit as safety net
             let truncatedByCharLimit = false;
             if (Number.isFinite(charLimit) && grepOutput.length > charLimit) {
-                grepOutput = grepOutput.slice(0, charLimit) + '...';
+                grepOutput = `${grepOutput.slice(0, charLimit)}...`;
                 truncatedByCharLimit = true;
             }
 
@@ -277,20 +279,28 @@ class GrepToolInvocation extends BaseToolInvocation<
      */
     private parseGrepOutput(output: string, basePath: string): GrepMatch[] {
         const results: GrepMatch[] = [];
-        if (!output) return results;
+        if (!output) {
+            return results;
+        }
 
         const lines = output.split(EOL); // Use OS-specific end-of-line
 
         for (const line of lines) {
-            if (!line.trim()) continue;
+            if (!line.trim()) {
+                continue;
+            }
 
             // Find the index of the first colon.
             const firstColonIndex = line.indexOf(':');
-            if (firstColonIndex === -1) continue; // Malformed
+            if (firstColonIndex === -1) {
+                continue; // Malformed
+            }
 
             // Find the index of the second colon, searching *after* the first one.
             const secondColonIndex = line.indexOf(':', firstColonIndex + 1);
-            if (secondColonIndex === -1) continue; // Malformed
+            if (secondColonIndex === -1) {
+                continue; // Malformed
+            }
 
             // Extract parts based on the found colon indices
             const filePathRaw = line.substring(0, firstColonIndex);
@@ -302,7 +312,7 @@ class GrepToolInvocation extends BaseToolInvocation<
 
             const lineNumber = parseInt(lineNumberStr, 10);
 
-            if (!isNaN(lineNumber)) {
+            if (!Number.isNaN(lineNumber)) {
                 const absoluteFilePath = path.resolve(basePath, filePathRaw);
                 const relativeFilePath = path.relative(
                     basePath,
@@ -398,15 +408,17 @@ class GrepToolInvocation extends BaseToolInvocation<
                                     Buffer.concat(stderrChunks).toString(
                                         'utf8'
                                     );
-                                if (code === 0) resolve(stdoutData);
-                                else if (code === 1)
+                                if (code === 0) {
+                                    resolve(stdoutData);
+                                } else if (code === 1) {
                                     resolve(''); // No matches
-                                else
+                                } else {
                                     reject(
                                         new Error(
                                             `git grep exited with code ${code}: ${stderrData}`
                                         )
                                     );
+                                }
                             });
                         }
                     );
@@ -494,17 +506,20 @@ class GrepToolInvocation extends BaseToolInvocation<
                                     .toString('utf8')
                                     .trim();
                                 cleanup();
-                                if (code === 0) resolve(stdoutData);
-                                else if (code === 1)
+                                if (code === 0) {
+                                    resolve(stdoutData);
+                                } else if (code === 1) {
                                     resolve(''); // No matches
-                                else {
-                                    if (stderrData)
+                                } else {
+                                    if (stderrData) {
                                         reject(
                                             new Error(
                                                 `System grep exited with code ${code}: ${stderrData}`
                                             )
                                         );
-                                    else resolve(''); // Exit code > 1 but no stderr, likely just suppressed errors
+                                    } else {
+                                        resolve(''); // Exit code > 1 but no stderr, likely just suppressed errors
+                                    }
                                 }
                             };
 

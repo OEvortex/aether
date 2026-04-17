@@ -78,8 +78,8 @@ describe('ITermBackend', () => {
 
     beforeEach(() => {
         vi.useFakeTimers();
-        savedItermSessionId = process.env['ITERM_SESSION_ID'];
-        delete process.env['ITERM_SESSION_ID'];
+        savedItermSessionId = process.env.ITERM_SESSION_ID;
+        delete process.env.ITERM_SESSION_ID;
         setupDefaultMocks();
         backend = new ITermBackend();
     });
@@ -89,9 +89,9 @@ describe('ITermBackend', () => {
         vi.restoreAllMocks();
         vi.useRealTimers();
         if (savedItermSessionId !== undefined) {
-            process.env['ITERM_SESSION_ID'] = savedItermSessionId;
+            process.env.ITERM_SESSION_ID = savedItermSessionId;
         } else {
-            delete process.env['ITERM_SESSION_ID'];
+            delete process.env.ITERM_SESSION_ID;
         }
     });
 
@@ -125,7 +125,7 @@ describe('ITermBackend', () => {
     // ─── Spawning ─────────────────────────────────────────────
 
     it('spawns first agent using ITERM_SESSION_ID when set', async () => {
-        process.env['ITERM_SESSION_ID'] = 'leader-sess';
+        process.env.ITERM_SESSION_ID = 'leader-sess';
         backend = new ITermBackend();
         await backend.init();
 
@@ -221,7 +221,7 @@ describe('ITermBackend', () => {
         await backend.init();
         await backend.spawnAgent(makeConfig('a'));
 
-        const cmdArg = hoistedItermRunCommand.mock.calls[0]![1] as string;
+        const cmdArg = hoistedItermRunCommand.mock.calls[0]?.[1] as string;
         // Should contain write-then-rename pattern
         expect(cmdArg).toMatch(/echo \$\? > .+\.tmp.+ && mv .+\.tmp/);
     });
@@ -230,7 +230,7 @@ describe('ITermBackend', () => {
         await backend.init();
         await backend.spawnAgent(makeConfig('a'));
 
-        const cmdArg = hoistedItermRunCommand.mock.calls[0]![1] as string;
+        const cmdArg = hoistedItermRunCommand.mock.calls[0]?.[1] as string;
         expect(cmdArg).toContain("cd '/tmp/test'");
         expect(cmdArg).toContain("'/usr/bin/node'");
         expect(cmdArg).toContain("'agent.js'");
@@ -242,7 +242,7 @@ describe('ITermBackend', () => {
             makeConfig('a', { env: { NODE_ENV: 'test' } })
         );
 
-        const cmdArg = hoistedItermRunCommand.mock.calls[0]![1] as string;
+        const cmdArg = hoistedItermRunCommand.mock.calls[0]?.[1] as string;
         expect(cmdArg).toContain("NODE_ENV='test'");
         expect(cmdArg).toContain('env ');
     });

@@ -100,7 +100,9 @@ function checkImageFormatsSupport(parts: PartListUnion): {
     const partsArray = Array.isArray(parts) ? parts : [parts];
 
     for (const part of partsArray) {
-        if (typeof part === 'string') continue;
+        if (typeof part === 'string') {
+            continue;
+        }
 
         let mimeType: string | undefined;
 
@@ -380,7 +382,9 @@ export const useGeminiStream = (
         // Check if any executing subagent task has a pending confirmation
         if (
             toolCalls.some((tc) => {
-                if (tc.status !== 'executing') return false;
+                if (tc.status !== 'executing') {
+                    return false;
+                }
                 const liveOutput = (tc as TrackedExecutingToolCall).liveOutput;
                 return (
                     typeof liveOutput === 'object' &&
@@ -460,7 +464,7 @@ export const useGeminiStream = (
         config.getArenaAgentClient()?.reportCancelled();
 
         // Log API cancellation
-        const prompt_id = config.getSessionId() + '########' + getPromptCount();
+        const prompt_id = `${config.getSessionId()}########${getPromptCount()}`;
         const cancellationEvent = new ApiCancelEvent(
             config.getModel(),
             prompt_id,
@@ -689,19 +693,16 @@ export const useGeminiStream = (
         [addItem, pendingHistoryItemRef, setPendingHistoryItem]
     );
 
-    const mergeThought = useCallback(
-        (incoming: ThoughtSummary) => {
-            setThought((prev) => {
-                if (!prev) {
-                    return incoming;
-                }
-                const subject = incoming.subject || prev.subject;
-                const description = `${prev.description ?? ''}${incoming.description ?? ''}`;
-                return { subject, description };
-            });
-        },
-        [setThought]
-    );
+    const mergeThought = useCallback((incoming: ThoughtSummary) => {
+        setThought((prev) => {
+            if (!prev) {
+                return incoming;
+            }
+            const subject = incoming.subject || prev.subject;
+            const description = `${prev.description ?? ''}${incoming.description ?? ''}`;
+            return { subject, description };
+        });
+    }, []);
 
     const handleThoughtEvent = useCallback(
         (
@@ -820,7 +821,6 @@ export const useGeminiStream = (
             addItem,
             pendingHistoryItemRef,
             setPendingHistoryItem,
-            setThought,
             clearRetryCountdown
         ]
     );
@@ -858,7 +858,6 @@ export const useGeminiStream = (
             setPendingHistoryItem,
             setPendingRetryErrorItem,
             config,
-            setThought,
             clearRetryCountdown
         ]
     );
@@ -1211,7 +1210,6 @@ export const useGeminiStream = (
             handleCitationEvent,
             startRetryCountdown,
             clearRetryCountdown,
-            setThought,
             pendingHistoryItemRef,
             setPendingHistoryItem,
             handleUserPromptSubmitBlockedEvent,
@@ -1247,8 +1245,9 @@ export const useGeminiStream = (
                     streamingState === StreamingState.WaitingForConfirmation) &&
                 submitType !== SendMessageType.ToolResult &&
                 !allowConcurrentBtwDuringResponse
-            )
+            ) {
                 return;
+            }
 
             // Set the flag to indicate we're now executing
             isSubmittingQueryRef.current = true;
@@ -1284,8 +1283,7 @@ export const useGeminiStream = (
             }
 
             if (!prompt_id) {
-                prompt_id =
-                    config.getSessionId() + '########' + getPromptCount();
+                prompt_id = `${config.getSessionId()}########${getPromptCount()}`;
             }
 
             return promptIdContext.run(prompt_id, async () => {
@@ -1429,7 +1427,6 @@ export const useGeminiStream = (
             pendingHistoryItemRef,
             addItem,
             setPendingHistoryItem,
-            setInitError,
             geminiClient,
             onAuthError,
             config,
@@ -1730,9 +1727,7 @@ export const useGeminiStream = (
                 }
 
                 for (const toolCall of restorableToolCalls) {
-                    const filePath = toolCall.request.args[
-                        'file_path'
-                    ] as string;
+                    const filePath = toolCall.request.args.file_path as string;
                     if (!filePath) {
                         onDebugMessage(
                             `Skipping restorable tool call due to missing file_path: ${toolCall.request.name}`
@@ -1824,11 +1819,13 @@ export const useGeminiStream = (
 
     // ─── Cron scheduler integration ─────────────────────────
     const cronQueueRef = useRef<string[]>([]);
-    const [cronTrigger, setCronTrigger] = useState(0);
+    const [_cronTrigger, setCronTrigger] = useState(0);
 
     // Start the scheduler on mount, stop on unmount
     useEffect(() => {
-        if (!config.isCronEnabled()) return;
+        if (!config.isCronEnabled()) {
+            return;
+        }
         const scheduler = config.getCronScheduler();
         scheduler.start((job: { prompt: string }) => {
             cronQueueRef.current.push(job.prompt);
@@ -1838,7 +1835,7 @@ export const useGeminiStream = (
             const summary = scheduler.getExitSummary();
             scheduler.stop();
             if (summary) {
-                process.stderr.write(summary + '\n');
+                process.stderr.write(`${summary}\n`);
             }
         };
     }, [config]);
@@ -1852,7 +1849,7 @@ export const useGeminiStream = (
             const prompt = cronQueueRef.current.shift()!;
             submitQuery(prompt, SendMessageType.Cron);
         }
-    }, [streamingState, submitQuery, cronTrigger]);
+    }, [streamingState, submitQuery]);
 
     return {
         streamingState,

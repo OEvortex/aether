@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import type { CommandModule } from 'yargs';
 import type {
     ChannelBase,
+    ChannelConfig,
     ChannelPlugin,
     ToolCallEvent
 } from '../../../../channels/base/src/index.js';
@@ -50,8 +51,11 @@ async function loadChannelsFromExtensions(): Promise<number> {
             .filter((e) => e.isActive && e.channels);
 
         for (const ext of extensions) {
+            if (!ext.channels) {
+                continue;
+            }
             for (const [channelType, channelDef] of Object.entries(
-                ext.channels!
+                ext.channels
             )) {
                 if (getPlugin(channelType)) {
                     writeStderrLine(
@@ -156,7 +160,7 @@ async function startSingle(name: string): Promise<void> {
         process.exit(1);
     }
 
-    let config;
+    let config: ChannelConfig & Record<string, unknown>;
     try {
         config = parseChannelConfig(
             name,
@@ -194,7 +198,9 @@ async function startSingle(name: string): Promise<void> {
     writeStdoutLine(`[Channel] "${name}" is running. Press Ctrl+C to stop.`);
 
     bridge.on('disconnected', async () => {
-        if (shuttingDown) return;
+        if (shuttingDown) {
+            return;
+        }
 
         const now = Date.now();
         crashTimestamps.push(now);
@@ -354,7 +360,9 @@ async function startAll(): Promise<void> {
     );
 
     bridge.on('disconnected', async () => {
-        if (shuttingDown) return;
+        if (shuttingDown) {
+            return;
+        }
 
         const now = Date.now();
         crashTimestamps.push(now);

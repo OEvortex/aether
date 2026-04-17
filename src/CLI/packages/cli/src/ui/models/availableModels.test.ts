@@ -24,19 +24,19 @@ describe('availableModels', () => {
         });
 
         it('should return null when OPENAI_MODEL is not set', () => {
-            delete process.env['OPENAI_MODEL'];
+            delete process.env.OPENAI_MODEL;
             expect(getOpenAIAvailableModelFromEnv()).toBeNull();
         });
 
         it('should return model from OPENAI_MODEL env var', () => {
-            process.env['OPENAI_MODEL'] = 'gpt-4-turbo';
+            process.env.OPENAI_MODEL = 'gpt-4-turbo';
             const model = getOpenAIAvailableModelFromEnv();
             expect(model?.id).toBe('gpt-4-turbo');
             expect(model?.label).toBe('gpt-4-turbo');
         });
 
         it('should trim whitespace from env var', () => {
-            process.env['OPENAI_MODEL'] = '  gpt-4  ';
+            process.env.OPENAI_MODEL = '  gpt-4  ';
             const model = getOpenAIAvailableModelFromEnv();
             expect(model?.id).toBe('gpt-4');
         });
@@ -82,7 +82,7 @@ describe('availableModels', () => {
         });
 
         it('returns env model for openai without config', () => {
-            process.env['OPENAI_MODEL'] = 'gpt-4-turbo';
+            process.env.OPENAI_MODEL = 'gpt-4-turbo';
             const models = getAvailableModelsForAuthType(AuthType.USE_OPENAI);
             expect(models[0].id).toBe('gpt-4-turbo');
         });

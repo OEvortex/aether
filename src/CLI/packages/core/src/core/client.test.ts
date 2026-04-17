@@ -78,10 +78,6 @@ vi.mock('./turn', async (importOriginal) => {
         pendingToolCalls = [];
         // The run method is a property that holds our mock function
         run = mockTurnRunFn;
-
-        constructor() {
-            // The constructor can be empty or do some mock setup
-        }
     }
     // Export the mock class as 'Turn'
     return {
@@ -395,7 +391,7 @@ describe('Gemini Client (client.ts)', () => {
             const mockChat = {
                 addHistory: vi.fn()
             } as unknown as GeminiChat;
-            client['chat'] = mockChat;
+            client.chat = mockChat;
 
             const newContent = {
                 role: 'user',
@@ -441,7 +437,7 @@ describe('Gemini Client (client.ts)', () => {
         const mockGetHistory = vi.fn();
 
         beforeEach(() => {
-            client['chat'] = {
+            client.chat = {
                 getHistory: mockGetHistory,
                 addHistory: vi.fn(),
                 setHistory: vi.fn(),
@@ -468,7 +464,7 @@ describe('Gemini Client (client.ts)', () => {
                 setHistory: vi.fn(),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockOriginalChat as GeminiChat;
+            client.chat = mockOriginalChat as GeminiChat;
 
             vi.mocked(
                 uiTelemetryService.getLastPromptTokenCount
@@ -526,8 +522,8 @@ describe('Gemini Client (client.ts)', () => {
                 setHistory: vi.fn()
             };
 
-            client['startChat'] = vi.fn().mockImplementation(async () => {
-                client['chat'] = mockNewChat as GeminiChat;
+            client.startChat = vi.fn().mockImplementation(async () => {
+                client.chat = mockNewChat as GeminiChat;
                 return mockNewChat as GeminiChat;
             });
 
@@ -601,7 +597,7 @@ describe('Gemini Client (client.ts)', () => {
 
                 // Mock contextWindowSize to ensure compression is triggered
                 vi.spyOn(
-                    client['config'],
+                    client.config,
                     'getContentGeneratorConfig'
                 ).mockReturnValue({
                     model: 'test-model',
@@ -643,7 +639,7 @@ describe('Gemini Client (client.ts)', () => {
                 await client.tryCompressChat('prompt-id-4', false);
 
                 // On failure, the chat should NOT be replaced
-                expect(client['chat']).toBe(mockOriginalChat);
+                expect(client.chat).toBe(mockOriginalChat);
             });
 
             it('will not attempt to compress context after a failure', async () => {
@@ -659,7 +655,7 @@ describe('Gemini Client (client.ts)', () => {
 
                 // Mock contextWindowSize to ensure compression is triggered
                 vi.spyOn(
-                    client['config'],
+                    client.config,
                     'getContentGeneratorConfig'
                 ).mockReturnValue({
                     model: 'test-model',
@@ -690,7 +686,7 @@ describe('Gemini Client (client.ts)', () => {
         it('should not trigger summarization if token count is below threshold', async () => {
             const MOCKED_TOKEN_LIMIT = 1000;
             vi.spyOn(
-                client['config'],
+                client.config,
                 'getContentGeneratorConfig'
             ).mockReturnValue({
                 model: 'test-model',
@@ -728,7 +724,7 @@ describe('Gemini Client (client.ts)', () => {
             const MOCKED_TOKEN_LIMIT = 1000;
             const MOCKED_CONTEXT_PERCENTAGE_THRESHOLD = 0.5;
             vi.spyOn(
-                client['config'],
+                client.config,
                 'getContentGeneratorConfig'
             ).mockReturnValue({
                 model: 'test-model',
@@ -737,7 +733,7 @@ describe('Gemini Client (client.ts)', () => {
                 authType: AuthType.USE_GEMINI,
                 contextWindowSize: MOCKED_TOKEN_LIMIT
             });
-            vi.spyOn(client['config'], 'getChatCompression').mockReturnValue({
+            vi.spyOn(client.config, 'getChatCompression').mockReturnValue({
                 contextPercentageThreshold: MOCKED_CONTEXT_PERCENTAGE_THRESHOLD
             });
             // Need multiple history items so there's something to compress
@@ -797,7 +793,7 @@ describe('Gemini Client (client.ts)', () => {
             const mockNewChat: Partial<GeminiChat> = {
                 getHistory: vi.fn().mockReturnValue(newCompressedHistory)
             };
-            client['startChat'] = vi
+            client.startChat = vi
                 .fn()
                 .mockResolvedValue(mockNewChat as GeminiChat);
 
@@ -818,7 +814,7 @@ describe('Gemini Client (client.ts)', () => {
             const MOCKED_TOKEN_LIMIT = 1000;
             const MOCKED_CONTEXT_PERCENTAGE_THRESHOLD = 0.5;
             vi.spyOn(
-                client['config'],
+                client.config,
                 'getContentGeneratorConfig'
             ).mockReturnValue({
                 model: 'test-model',
@@ -827,7 +823,7 @@ describe('Gemini Client (client.ts)', () => {
                 authType: AuthType.USE_GEMINI,
                 contextWindowSize: MOCKED_TOKEN_LIMIT
             });
-            vi.spyOn(client['config'], 'getChatCompression').mockReturnValue({
+            vi.spyOn(client.config, 'getChatCompression').mockReturnValue({
                 contextPercentageThreshold: MOCKED_CONTEXT_PERCENTAGE_THRESHOLD
             });
             // Need multiple history items so there's something to compress
@@ -869,8 +865,8 @@ describe('Gemini Client (client.ts)', () => {
             const mockNewChat: Partial<GeminiChat> = {
                 getHistory: vi.fn().mockReturnValue(newCompressedHistory)
             };
-            client['startChat'] = vi.fn().mockImplementation(async () => {
-                client['chat'] = mockNewChat as GeminiChat;
+            client.startChat = vi.fn().mockImplementation(async () => {
+                client.chat = mockNewChat as GeminiChat;
                 return mockNewChat as GeminiChat;
             });
 
@@ -913,7 +909,7 @@ describe('Gemini Client (client.ts)', () => {
         it('should not compress across a function call response', async () => {
             const MOCKED_TOKEN_LIMIT = 1000;
             vi.spyOn(
-                client['config'],
+                client.config,
                 'getContentGeneratorConfig'
             ).mockReturnValue({
                 model: 'test-model',
@@ -974,8 +970,8 @@ describe('Gemini Client (client.ts)', () => {
             const mockNewChat: Partial<GeminiChat> = {
                 getHistory: vi.fn().mockReturnValue(newCompressedHistory)
             };
-            client['startChat'] = vi.fn().mockImplementation(async () => {
-                client['chat'] = mockNewChat as GeminiChat;
+            client.startChat = vi.fn().mockImplementation(async () => {
+                client.chat = mockNewChat as GeminiChat;
                 return mockNewChat as GeminiChat;
             });
 
@@ -1058,8 +1054,8 @@ describe('Gemini Client (client.ts)', () => {
             const mockNewChat: Partial<GeminiChat> = {
                 getHistory: vi.fn().mockReturnValue(newCompressedHistory)
             };
-            client['startChat'] = vi.fn().mockImplementation(async () => {
-                client['chat'] = mockNewChat as GeminiChat;
+            client.startChat = vi.fn().mockImplementation(async () => {
+                client.chat = mockNewChat as GeminiChat;
                 return mockNewChat as GeminiChat;
             });
 
@@ -1218,7 +1214,7 @@ describe('Gemini Client (client.ts)', () => {
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             } as unknown as GeminiChat;
-            client['chat'] = mockChat;
+            client.chat = mockChat;
 
             const initialRequest: Part[] = [{ text: 'Hi' }];
 
@@ -1261,7 +1257,7 @@ Other open files:
                 }
             });
 
-            vi.spyOn(client['config'], 'getIdeMode').mockReturnValue(true);
+            vi.spyOn(client.config, 'getIdeMode').mockReturnValue(true);
 
             const mockStream = (async function* () {
                 yield { type: 'content', value: 'Hello' };
@@ -1273,7 +1269,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             const initialRequest = [{ text: 'Hi' }];
 
@@ -1311,7 +1307,7 @@ Other open files:
                 }
             });
 
-            vi.spyOn(client['config'], 'getIdeMode').mockReturnValue(true);
+            vi.spyOn(client.config, 'getIdeMode').mockReturnValue(true);
 
             vi.spyOn(client, 'tryCompressChat').mockResolvedValue({
                 originalTokenCount: 0,
@@ -1329,7 +1325,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             const initialRequest = [{ text: 'Hi' }];
 
@@ -1377,7 +1373,7 @@ hello
                 }
             });
 
-            vi.spyOn(client['config'], 'getIdeMode').mockReturnValue(true);
+            vi.spyOn(client.config, 'getIdeMode').mockReturnValue(true);
 
             vi.spyOn(client, 'tryCompressChat').mockResolvedValue({
                 originalTokenCount: 0,
@@ -1395,7 +1391,7 @@ hello
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             const initialRequest = [{ text: 'Hi' }];
 
@@ -1434,7 +1430,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Act
             const stream = client.sendMessageStream(
@@ -1479,7 +1475,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Use a signal that never gets aborted
             const abortController = new AbortController();
@@ -1553,7 +1549,7 @@ Other open files:
         it('should yield MaxSessionTurns and stop when session turn limit is reached', async () => {
             // Arrange
             const MAX_SESSION_TURNS = 5;
-            vi.spyOn(client['config'], 'getMaxSessionTurns').mockReturnValue(
+            vi.spyOn(client.config, 'getMaxSessionTurns').mockReturnValue(
                 MAX_SESSION_TURNS
             );
 
@@ -1567,7 +1563,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Act & Assert
             // Run up to the limit
@@ -1624,7 +1620,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Use a signal that never gets aborted
             const abortController = new AbortController();
@@ -1685,30 +1681,28 @@ Other open files:
             })();
 
             beforeEach(() => {
-                client['forceFullIdeContext'] = false; // Reset before each delta test
+                client.forceFullIdeContext = false; // Reset before each delta test
                 vi.spyOn(client, 'tryCompressChat').mockResolvedValue({
                     originalTokenCount: 0,
                     newTokenCount: 0,
                     compressionStatus: CompressionStatus.COMPRESSED
                 });
-                vi.spyOn(client['config'], 'getIdeMode').mockReturnValue(true);
+                vi.spyOn(client.config, 'getIdeMode').mockReturnValue(true);
                 mockTurnRunFn.mockReturnValue(mockStream);
 
                 const mockChat: Partial<GeminiChat> = {
                     addHistory: vi.fn(),
                     setHistory: vi.fn(),
                     // Assume history is not empty for delta checks
-                    getHistory: vi
-                        .fn()
-                        .mockReturnValue([
-                            {
-                                role: 'user',
-                                parts: [{ text: 'previous message' }]
-                            }
-                        ]),
+                    getHistory: vi.fn().mockReturnValue([
+                        {
+                            role: 'user',
+                            parts: [{ text: 'previous message' }]
+                        }
+                    ]),
                     stripThoughtsFromHistory: vi.fn()
                 };
-                client['chat'] = mockChat as GeminiChat;
+                client.chat = mockChat as GeminiChat;
             });
 
             const testCases = [
@@ -1816,7 +1810,7 @@ Other open files:
                 shouldSendContext
             }) => {
                 // Setup previous context
-                client['lastSentIdeContext'] = {
+                client.lastSentIdeContext = {
                     workspaceState: {
                         openFiles: [
                             {
@@ -1852,7 +1846,7 @@ Other open files:
                     // consume stream
                 }
 
-                const mockChat = client['chat'] as unknown as {
+                const mockChat = client.chat as unknown as {
                     addHistory: (typeof vi)['fn'];
                 };
 
@@ -1881,7 +1875,7 @@ Other open files:
                 };
 
                 // Setup previous context
-                client['lastSentIdeContext'] = {
+                client.lastSentIdeContext = {
                     workspaceState: {
                         openFiles: [
                             {
@@ -1909,7 +1903,7 @@ Other open files:
                 });
 
                 // Make history empty
-                const mockChat = client['chat'] as unknown as {
+                const mockChat = client.chat as unknown as {
                     getHistory: ReturnType<(typeof vi)['fn']>;
                     addHistory: ReturnType<(typeof vi)['fn']>;
                 };
@@ -1966,9 +1960,9 @@ Other open files:
                     setHistory: vi.fn(),
                     stripThoughtsFromHistory: vi.fn()
                 };
-                client['chat'] = mockChat as GeminiChat;
+                client.chat = mockChat as GeminiChat;
 
-                vi.spyOn(client['config'], 'getIdeMode').mockReturnValue(true);
+                vi.spyOn(client.config, 'getIdeMode').mockReturnValue(true);
                 vi.mocked(ideContextStore.get).mockReturnValue({
                     workspaceState: {
                         openFiles: [
@@ -2169,13 +2163,13 @@ Other open files:
                     JSON.stringify(call[0]).includes("user's editor context")
                 );
                 expect(contextCall).toBeDefined();
-                expect(JSON.stringify(contextCall![0])).toContain(
+                expect(JSON.stringify(contextCall?.[0])).toContain(
                     "Here is the user's editor context."
                 );
                 // Check that the sent context is the new one (fileB.ts)
-                expect(JSON.stringify(contextCall![0])).toContain('fileB.ts');
+                expect(JSON.stringify(contextCall?.[0])).toContain('fileB.ts');
                 // Check that the sent context is NOT the old one (fileA.ts)
-                expect(JSON.stringify(contextCall![0])).not.toContain(
+                expect(JSON.stringify(contextCall?.[0])).not.toContain(
                     'fileA.ts'
                 );
             });
@@ -2348,7 +2342,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Act
             const stream = client.sendMessageStream(
@@ -2385,7 +2379,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Act
             const stream = client.sendMessageStream(
@@ -2404,7 +2398,7 @@ Other open files:
         it('does not run loop checks when skipLoopDetection is true', async () => {
             // Arrange
             // Ensure config returns true for skipLoopDetection
-            vi.spyOn(client['config'], 'getSkipLoopDetection').mockReturnValue(
+            vi.spyOn(client.config, 'getSkipLoopDetection').mockReturnValue(
                 true
             );
 
@@ -2414,7 +2408,7 @@ Other open files:
                 reset: vi.fn()
             };
             // @ts-expect-error override private for testing
-            client['loopDetector'] = ldMock;
+            client.loopDetector = ldMock;
 
             const mockStream = (async function* () {
                 yield { type: 'content', value: 'Hello' };
@@ -2427,7 +2421,7 @@ Other open files:
                 getHistory: vi.fn().mockReturnValue([]),
                 stripThoughtsFromHistory: vi.fn()
             };
-            client['chat'] = mockChat as GeminiChat;
+            client.chat = mockChat as GeminiChat;
 
             // Act
             const stream = client.sendMessageStream(
@@ -2452,7 +2446,7 @@ Other open files:
                     stripThoughtsFromHistory: vi.fn(),
                     stripOrphanedUserEntriesFromHistory: vi.fn()
                 };
-                client['chat'] = mockChat as GeminiChat;
+                client.chat = mockChat as GeminiChat;
 
                 const mockStream = (async function* () {
                     yield { type: 'content', value: 'retry response' };
@@ -2484,14 +2478,14 @@ Other open files:
                     stripThoughtsFromHistory: vi.fn(),
                     stripOrphanedUserEntriesFromHistory: vi.fn()
                 };
-                client['chat'] = mockChat as GeminiChat;
+                client.chat = mockChat as GeminiChat;
 
                 const mockStream = (async function* () {
                     yield { type: 'content', value: 'ok' };
                 })();
                 mockTurnRunFn.mockReturnValue(mockStream);
 
-                const turnCountBefore = client['sessionTurnCount'];
+                const turnCountBefore = client.sessionTurnCount;
 
                 const stream = client.sendMessageStream(
                     [{ text: 'retry' }],
@@ -2503,7 +2497,7 @@ Other open files:
                     /* consume */
                 }
 
-                expect(client['sessionTurnCount']).toBe(turnCountBefore);
+                expect(client.sessionTurnCount).toBe(turnCountBefore);
             });
         });
 
@@ -2527,7 +2521,7 @@ Other open files:
                     getHistory: vi.fn().mockReturnValue([]),
                     stripThoughtsFromHistory: vi.fn()
                 };
-                client['chat'] = mockChat as GeminiChat;
+                client.chat = mockChat as GeminiChat;
             });
 
             it('should skip messageBus.request for UserPromptSubmit when hasHooksForEvent returns false', async () => {
@@ -2643,11 +2637,11 @@ Other open files:
         });
 
         it('should use current model from config for content generation', async () => {
-            const initialModel = client['config'].getModel();
+            const initialModel = client.config.getModel();
             const contents = [{ role: 'user', parts: [{ text: 'test' }] }];
-            const currentModel = initialModel + '-changed';
+            const currentModel = `${initialModel}-changed`;
 
-            vi.spyOn(client['config'], 'getModel').mockReturnValueOnce(
+            vi.spyOn(client.config, 'getModel').mockReturnValueOnce(
                 currentModel
             );
 
@@ -2728,10 +2722,10 @@ Other open files:
             const contents = [{ role: 'user', parts: [{ text: 'hello' }] }];
             const abortSignal = new AbortController().signal;
 
-            vi.spyOn(client['config'], 'getSystemPrompt').mockReturnValue(
+            vi.spyOn(client.config, 'getSystemPrompt').mockReturnValue(
                 'Override prompt'
             );
-            vi.spyOn(client['config'], 'getUserMemory').mockReturnValue(
+            vi.spyOn(client.config, 'getUserMemory').mockReturnValue(
                 'Saved memory'
             );
             vi.mocked(getCustomSystemPrompt).mockReturnValueOnce(
@@ -2765,7 +2759,7 @@ Other open files:
             const abortSignal = new AbortController().signal;
 
             vi.mocked(getCoreSystemPrompt).mockClear();
-            vi.spyOn(client['config'], 'getAppendSystemPrompt').mockReturnValue(
+            vi.spyOn(client.config, 'getAppendSystemPrompt').mockReturnValue(
                 'Be extra concise.'
             );
 
@@ -2787,13 +2781,13 @@ Other open files:
             const contents = [{ role: 'user', parts: [{ text: 'hello' }] }];
             const abortSignal = new AbortController().signal;
 
-            vi.spyOn(client['config'], 'getSystemPrompt').mockReturnValue(
+            vi.spyOn(client.config, 'getSystemPrompt').mockReturnValue(
                 'Override prompt'
             );
-            vi.spyOn(client['config'], 'getAppendSystemPrompt').mockReturnValue(
+            vi.spyOn(client.config, 'getAppendSystemPrompt').mockReturnValue(
                 'Focus on findings only.'
             );
-            vi.spyOn(client['config'], 'getUserMemory').mockReturnValue(
+            vi.spyOn(client.config, 'getUserMemory').mockReturnValue(
                 'Saved memory'
             );
             vi.mocked(getCustomSystemPrompt).mockReturnValueOnce(

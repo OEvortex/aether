@@ -103,7 +103,7 @@ function normalizePathEnvForWindows(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
     }
 
     if (canonicalValue !== undefined) {
-        normalized['PATH'] = canonicalValue;
+        normalized.PATH = canonicalValue;
     }
 
     return normalized;
@@ -116,9 +116,7 @@ function normalizePathEnvForWindows(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
  */
 function applyPowerShellUtf8Prefix(command: string, shell: string): string {
     if (os.platform() === 'win32' && shell === 'powershell') {
-        return (
-            '[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;' + command
-        );
+        return `[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;${command}`;
     }
     return command;
 }
@@ -529,7 +527,9 @@ export class ShellExecutionService {
                                     process.kill(-child.pid, 'SIGKILL');
                                 }
                             } catch (_e) {
-                                if (!exited) child.kill('SIGKILL');
+                                if (!exited) {
+                                    child.kill('SIGKILL');
+                                }
                             }
                         }
                     }
@@ -834,15 +834,19 @@ export class ShellExecutionService {
                                 }
 
                                 if (isStreamingRawContent) {
-                                    const decodedChunk = decoder!.decode(data, {
+                                    const decodedChunk = decoder?.decode(data, {
                                         stream: true
                                     });
-                                    isWriting = true;
-                                    headlessTerminal.write(decodedChunk, () => {
-                                        render();
-                                        isWriting = false;
+                                    if (decodedChunk) {
+                                        isWriting = true;
+                                        headlessTerminal.write(decodedChunk, () => {
+                                            render();
+                                            isWriting = false;
+                                            resolve();
+                                        });
+                                    } else {
                                         resolve();
-                                    });
+                                    }
                                 } else {
                                     onOutputEvent({
                                         type: 'binary_progress',

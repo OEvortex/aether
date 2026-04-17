@@ -74,10 +74,14 @@ export class TrustedHooksManager {
 
         for (const eventName of Object.keys(hooks)) {
             const definitions = hooks[eventName as HookEventName];
-            if (!Array.isArray(definitions)) continue;
+            if (!Array.isArray(definitions)) {
+                continue;
+            }
 
             for (const def of definitions) {
-                if (!def || !Array.isArray(def.hooks)) continue;
+                if (!def || !Array.isArray(def.hooks)) {
+                    continue;
+                }
                 for (const hook of def.hooks) {
                     const key = getHookKey(hook);
                     if (!trustedKeys.has(key)) {
@@ -104,10 +108,14 @@ export class TrustedHooksManager {
 
         for (const eventName of Object.keys(hooks)) {
             const definitions = hooks[eventName as HookEventName];
-            if (!Array.isArray(definitions)) continue;
+            if (!Array.isArray(definitions)) {
+                continue;
+            }
 
             for (const def of definitions) {
-                if (!def || !Array.isArray(def.hooks)) continue;
+                if (!def || !Array.isArray(def.hooks)) {
+                    continue;
+                }
                 for (const hook of def.hooks) {
                     currentTrusted.add(getHookKey(hook));
                 }

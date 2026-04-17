@@ -71,7 +71,7 @@ export class V1ToV2Migration implements SettingsMigration {
         const s = settings as Record<string, unknown>;
 
         // If $version exists and is a number >= 2, it's not V1
-        const version = s['$version'];
+        const version = s.$version;
         if (typeof version === 'number' && version >= 2) {
             return false;
         }
@@ -160,7 +160,7 @@ export class V1ToV2Migration implements SettingsMigration {
                     typeof value === 'object' &&
                     value !== null &&
                     !Array.isArray(value) &&
-                    v2Path.startsWith(v1Key + '.')
+                    v2Path.startsWith(`${v1Key}.`)
                 ) {
                     // Merge nested properties from this partial V2 structure
                     for (const [nestedKey, nestedValue] of Object.entries(
@@ -199,7 +199,7 @@ export class V1ToV2Migration implements SettingsMigration {
 
         // Step 3: Preserve mcpServers at the top level
         if ('mcpServers' in source) {
-            result['mcpServers'] = source['mcpServers'];
+            result.mcpServers = source.mcpServers;
             processedKeys.add('mcpServers');
         }
 
@@ -215,9 +215,11 @@ export class V1ToV2Migration implements SettingsMigration {
                         const v2Path =
                             V1_TO_V2_MIGRATION_MAP[processedKey] ||
                             V1_TO_V2_PRESERVE_DISABLE_MAP[processedKey];
-                        if (!v2Path) return false;
+                        if (!v2Path) {
+                            return false;
+                        }
                         // Check if the v2 path starts with this key + '.'
-                        return v2Path.startsWith(key + '.');
+                        return v2Path.startsWith(`${key}.`);
                     }
                 );
 
@@ -265,7 +267,7 @@ export class V1ToV2Migration implements SettingsMigration {
         }
 
         // Step 5: Set version to 2
-        result['$version'] = 2;
+        result.$version = 2;
 
         return { settings: result, warnings };
     }

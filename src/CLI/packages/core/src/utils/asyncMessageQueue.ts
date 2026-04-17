@@ -25,7 +25,9 @@ export class AsyncMessageQueue<T> {
 
     /** Add an item to the queue. Dropped silently after drain. */
     enqueue(item: T): void {
-        if (this.drained) return;
+        if (this.drained) {
+            return;
+        }
         this.items.push(item);
     }
 

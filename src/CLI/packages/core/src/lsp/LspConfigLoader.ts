@@ -5,8 +5,8 @@
  */
 
 import * as fs from 'node:fs';
-import * as path from 'path';
-import { pathToFileURL } from 'url';
+import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import type { Extension } from '../extension/extensionManager.js';
 import {
     type JsonValue,
@@ -190,8 +190,8 @@ export class LspConfigLoader {
             // In basic format: key is language name, server name comes from command.
             const languages = [key];
             const name =
-                typeof spec['command'] === 'string'
-                    ? (spec['command'] as string)
+                typeof spec.command === 'string'
+                    ? (spec.command as string)
                     : key;
 
             const config = this.buildServerConfig(
@@ -236,38 +236,36 @@ export class LspConfigLoader {
         spec: Record<string, unknown>,
         origin: string
     ): LspServerConfig | null {
-        const transport = this.normalizeTransport(spec['transport']);
+        const transport = this.normalizeTransport(spec.transport);
         const command =
-            typeof spec['command'] === 'string'
-                ? (spec['command'] as string)
+            typeof spec.command === 'string'
+                ? (spec.command as string)
                 : undefined;
-        const args = this.normalizeStringArray(spec['args']) ?? [];
-        const env = this.normalizeEnv(spec['env']);
-        const initializationOptions = this.isRecord(
-            spec['initializationOptions']
-        )
-            ? (spec['initializationOptions'] as LspInitializationOptions)
+        const args = this.normalizeStringArray(spec.args) ?? [];
+        const env = this.normalizeEnv(spec.env);
+        const initializationOptions = this.isRecord(spec.initializationOptions)
+            ? (spec.initializationOptions as LspInitializationOptions)
             : undefined;
-        const settings = this.isRecord(spec['settings'])
-            ? (spec['settings'] as Record<string, unknown>)
+        const settings = this.isRecord(spec.settings)
+            ? (spec.settings as Record<string, unknown>)
             : undefined;
         const extensionToLanguage = this.normalizeExtensionToLanguage(
-            spec['extensionToLanguage']
+            spec.extensionToLanguage
         );
         const workspaceFolder = this.resolveWorkspaceFolder(
-            spec['workspaceFolder']
+            spec.workspaceFolder
         );
         const rootUri = pathToFileURL(workspaceFolder).toString();
-        const startupTimeout = this.normalizeTimeout(spec['startupTimeout']);
-        const shutdownTimeout = this.normalizeTimeout(spec['shutdownTimeout']);
+        const startupTimeout = this.normalizeTimeout(spec.startupTimeout);
+        const shutdownTimeout = this.normalizeTimeout(spec.shutdownTimeout);
         const restartOnCrash =
-            typeof spec['restartOnCrash'] === 'boolean'
-                ? (spec['restartOnCrash'] as boolean)
+            typeof spec.restartOnCrash === 'boolean'
+                ? (spec.restartOnCrash as boolean)
                 : undefined;
-        const maxRestarts = this.normalizeMaxRestarts(spec['maxRestarts']);
+        const maxRestarts = this.normalizeMaxRestarts(spec.maxRestarts);
         const trustRequired =
-            typeof spec['trustRequired'] === 'boolean'
-                ? (spec['trustRequired'] as boolean)
+            typeof spec.trustRequired === 'boolean'
+                ? (spec.trustRequired as boolean)
                 : true;
         const socket = this.normalizeSocketOptions(spec);
 
@@ -390,23 +388,23 @@ export class LspConfigLoader {
     private normalizeSocketOptions(
         value: Record<string, unknown>
     ): LspSocketOptions | undefined {
-        const socketValue = value['socket'];
+        const socketValue = value.socket;
         if (typeof socketValue === 'string') {
             return { path: socketValue };
         }
 
         const source = this.isRecord(socketValue) ? socketValue : value;
         const host =
-            typeof source['host'] === 'string'
-                ? (source['host'] as string)
+            typeof source.host === 'string'
+                ? (source.host as string)
                 : undefined;
         const pathValue =
-            typeof source['path'] === 'string'
-                ? (source['path'] as string)
-                : typeof source['socketPath'] === 'string'
-                  ? (source['socketPath'] as string)
+            typeof source.path === 'string'
+                ? (source.path as string)
+                : typeof source.socketPath === 'string'
+                  ? (source.socketPath as string)
                   : undefined;
-        const portValue = source['port'];
+        const portValue = source.port;
         const port =
             typeof portValue === 'number'
                 ? portValue

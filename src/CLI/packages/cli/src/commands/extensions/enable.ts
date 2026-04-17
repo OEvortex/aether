@@ -89,8 +89,8 @@ export const enableCommand: CommandModule = {
             }),
     handler: async (argv) => {
         await handleEnable({
-            name: argv['name'] as string,
-            scope: argv['scope'] as string
+            name: argv.name as string,
+            scope: argv.scope as string
         });
     }
 };

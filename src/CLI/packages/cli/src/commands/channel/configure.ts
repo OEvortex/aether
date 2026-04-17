@@ -74,13 +74,13 @@ export const configureWeixinCommand: CommandModule<
                     userId: result.userId,
                     savedAt: new Date().toISOString()
                 });
-                writeStdoutLine('\n' + result.message);
+                writeStdoutLine(`\n${result.message}`);
                 writeStdoutLine(
                     'Credentials saved. You can now start a weixin channel with:'
                 );
                 writeStdoutLine('  aether channel start <name>');
             } else {
-                writeStderrLine('\n' + result.message);
+                writeStderrLine(`\n${result.message}`);
                 process.exit(1);
             }
         } catch (err) {

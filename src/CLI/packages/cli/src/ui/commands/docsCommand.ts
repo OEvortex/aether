@@ -20,14 +20,11 @@ export const docsCommand: SlashCommand = {
         return t('open full Aether Code documentation in your browser');
     },
     kind: CommandKind.BUILT_IN,
-    action: async (context: CommandContext): Promise<void> => {
+    action: async (context: CommandContext): Promise<undefined> => {
         const langPath = getCurrentLanguage()?.startsWith('zh') ? 'zh' : 'en';
         const docsUrl = `https://OEvortex.github.io/aether-docs/${langPath}`;
 
-        if (
-            process.env['SANDBOX'] &&
-            process.env['SANDBOX'] !== 'sandbox-exec'
-        ) {
+        if (process.env.SANDBOX && process.env.SANDBOX !== 'sandbox-exec') {
             context.ui.addItem(
                 {
                     type: MessageType.INFO,
@@ -52,5 +49,7 @@ export const docsCommand: SlashCommand = {
             );
             await open(docsUrl);
         }
+
+        return undefined;
     }
 };

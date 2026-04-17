@@ -17,7 +17,9 @@ let cachedClipboardModule: ClipboardModule | null = null;
 let clipboardLoadAttempted = false;
 
 async function getClipboardModule(): Promise<ClipboardModule | null> {
-    if (clipboardLoadAttempted) return cachedClipboardModule;
+    if (clipboardLoadAttempted) {
+        return cachedClipboardModule;
+    }
     clipboardLoadAttempted = true;
 
     try {
@@ -39,7 +41,9 @@ async function getClipboardModule(): Promise<ClipboardModule | null> {
 export async function clipboardHasImage(): Promise<boolean> {
     try {
         const mod = await getClipboardModule();
-        if (!mod) return false;
+        if (!mod) {
+            return false;
+        }
         const clipboard = new mod.ClipboardManager();
         return clipboard.hasFormat('image');
     } catch (error) {
@@ -58,7 +62,9 @@ export async function saveClipboardImage(
 ): Promise<string | null> {
     try {
         const mod = await getClipboardModule();
-        if (!mod) return null;
+        if (!mod) {
+            return null;
+        }
         const clipboard = new mod.ClipboardManager();
 
         if (!clipboard.hasFormat('image')) {
@@ -72,7 +78,7 @@ export async function saveClipboardImage(
         await fs.mkdir(tempDir, { recursive: true });
 
         // Generate a unique filename with timestamp
-        const timestamp = new Date().getTime();
+        const timestamp = Date.now();
         const tempFilePath = path.join(tempDir, `clipboard-${timestamp}.png`);
 
         const imageData = clipboard.getImageData();

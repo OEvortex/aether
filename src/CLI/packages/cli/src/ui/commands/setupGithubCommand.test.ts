@@ -46,7 +46,9 @@ describe('setupGithubCommand', async () => {
 
     afterEach(async () => {
         vi.restoreAllMocks();
-        if (scratchDir) await fs.rm(scratchDir, { recursive: true });
+        if (scratchDir) {
+            await fs.rm(scratchDir, { recursive: true });
+        }
     });
 
     it('returns a tool action to download github workflows and handles paths', async () => {
@@ -128,7 +130,9 @@ describe('updateGitignore', () => {
     });
 
     afterEach(async () => {
-        if (scratchDir) await fs.rm(scratchDir, { recursive: true });
+        if (scratchDir) {
+            await fs.rm(scratchDir, { recursive: true });
+        }
     });
 
     it('creates a new .gitignore file when none exists', async () => {

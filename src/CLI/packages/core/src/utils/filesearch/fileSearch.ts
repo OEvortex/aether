@@ -70,8 +70,12 @@ export async function filter(
         const aIsDir = a.endsWith('/');
         const bIsDir = b.endsWith('/');
 
-        if (aIsDir && !bIsDir) return -1;
-        if (!aIsDir && bIsDir) return 1;
+        if (aIsDir && !bIsDir) {
+            return -1;
+        }
+        if (!aIsDir && bIsDir) {
+            return 1;
+        }
 
         // This is 40% faster than localeCompare and the only thing we would really
         // gain from localeCompare is case-sensitive sort
@@ -130,7 +134,7 @@ class RecursiveFileSearch implements FileSearch {
 
         let filteredCandidates;
         const { files: candidates, isExactMatch } =
-            await this.resultCache!.get(pattern);
+            await this.resultCache?.get(pattern);
 
         if (isExactMatch) {
             // Use the cached result.
@@ -158,7 +162,7 @@ class RecursiveFileSearch implements FileSearch {
             }
 
             if (shouldCache) {
-                this.resultCache!.set(pattern, filteredCandidates);
+                this.resultCache?.set(pattern, filteredCandidates);
             }
         }
 

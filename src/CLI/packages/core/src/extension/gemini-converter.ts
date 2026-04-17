@@ -213,13 +213,13 @@ export function isGeminiExtensionConfig(extensionDir: string) {
     const obj = parsedConfig as Record<string, unknown>;
 
     // Must have name and version
-    if (typeof obj['name'] !== 'string' || typeof obj['version'] !== 'string') {
+    if (typeof obj.name !== 'string' || typeof obj.version !== 'string') {
         return false;
     }
 
     // Check for Gemini-specific settings format
-    if (obj['settings'] && Array.isArray(obj['settings'])) {
-        const firstSetting = obj['settings'][0];
+    if (obj.settings && Array.isArray(obj.settings)) {
+        const firstSetting = obj.settings[0];
         if (
             firstSetting &&
             typeof firstSetting === 'object' &&

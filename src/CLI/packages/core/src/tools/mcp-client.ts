@@ -15,6 +15,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import type { StreamableHTTPClientTransportOptions } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
+export type { Transport };
 import type {
     GetPromptResult,
     JSONRPCMessage,
@@ -31,7 +32,9 @@ import { parse } from 'shell-quote';
 import type { Config, MCPServerConfig } from '../config/config.js';
 import { AuthProviderType, isSdkMcpServerConfig } from '../config/config.js';
 import { GoogleCredentialProvider } from '../mcp/google-auth-provider.js';
+import type { MCPOAuthConfig } from '../mcp/oauth-provider.js';
 import { MCPOAuthProvider } from '../mcp/oauth-provider.js';
+
 import { MCPOAuthTokenStorage } from '../mcp/oauth-token-storage.js';
 import { OAuthUtils } from '../mcp/oauth-utils.js';
 import { ServiceAccountImpersonationProvider } from '../mcp/sa-impersonation-provider.js';
@@ -379,7 +382,7 @@ async function handleAutomaticOAuth(
         debugLogger.info(`'${mcpServerName}' requires OAuth authentication`);
 
         // Always try to parse the resource metadata URI from the www-authenticate header
-        let oauthConfig;
+        let oauthConfig: MCPOAuthConfig | null = null;
         const resourceMetadataUri =
             OAuthUtils.parseWWWAuthenticateHeader(wwwAuthenticate);
         if (resourceMetadataUri) {
@@ -538,10 +541,10 @@ export function populateMcpServerCommand(
         const cmd = mcpServerCommand;
         const args = parse(cmd, process.env) as string[];
         if (args.some((arg) => typeof arg !== 'string')) {
-            throw new Error('failed to parse mcpServerCommand: ' + cmd);
+            throw new Error(`failed to parse mcpServerCommand: ${cmd}`);
         }
         // use generic server name 'mcp'
-        mcpServers['mcp'] = {
+        mcpServers.mcp = {
             command: args[0],
             args: args.slice(1)
         };
@@ -737,7 +740,9 @@ export async function discoverPrompts(
 ): Promise<Prompt[]> {
     try {
         // Only request prompts if the server supports them.
-        if (mcpClient.getServerCapabilities()?.prompts == null) return [];
+        if (mcpClient.getServerCapabilities()?.prompts == null) {
+            return [];
+        }
 
         const response = await mcpClient.request(
             { method: 'prompts/list', params: {} },
@@ -1277,7 +1282,7 @@ export async function connectToMcpServer(
                 conciseError = `Connection failed for '${mcpServerName}': ${errorMessage}`;
             }
 
-            if (process.env['SANDBOX']) {
+            if (process.env.SANDBOX) {
                 conciseError += ` (check sandbox availability)`;
             }
 
@@ -1459,7 +1464,7 @@ export async function createTransport(
             stderr: 'pipe'
         });
         if (debugMode) {
-            transport.stderr!.on('data', (data) => {
+            transport.stderr?.on('data', (data) => {
                 const stderrStr = data.toString().trim();
                 debugLogger.debug(`MCP STDERR (${mcpServerName}):`, stderrStr);
             });
@@ -1487,7 +1492,7 @@ export function isEnabled(
     const { includeTools, excludeTools } = mcpServerConfig;
 
     // excludeTools takes precedence over includeTools
-    if (excludeTools && excludeTools.includes(funcDecl.name)) {
+    if (excludeTools?.includes(funcDecl.name)) {
         return false;
     }
 

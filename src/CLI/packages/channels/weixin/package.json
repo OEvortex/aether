@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/channel-weixin",
-    "version": "0.0.5",
+    "version": "0.0.12",
     "type": "module",
     "main": "dist/packages/channels/weixin/src/index.js",
     "types": "dist/packages/channels/weixin/src/index.d.ts",

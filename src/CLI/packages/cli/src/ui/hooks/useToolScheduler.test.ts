@@ -441,8 +441,12 @@ describe('useReactToolScheduler', () => {
         });
 
         mockToolRegistry.getTool.mockImplementation((name) => {
-            if (name === 'tool1') return tool1;
-            if (name === 'tool2') return tool2;
+            if (name === 'tool1') {
+                return tool1;
+            }
+            if (name === 'tool2') {
+                return tool2;
+            }
             return undefined;
         });
 
@@ -739,7 +743,7 @@ describe('mapToDisplay', () => {
                 );
                 if (status === 'awaiting_approval') {
                     expect(toolDisplay.confirmationDetails).toBe(
-                        extraProps!.confirmationDetails
+                        extraProps?.confirmationDetails
                     );
                 } else {
                     expect(toolDisplay.confirmationDetails).toBeUndefined();

@@ -124,7 +124,7 @@ export class BaseLlmClient {
                 const functionCall = functionCalls.find(
                     (call) => call.name === 'respond_in_schema'
                 );
-                if (functionCall && functionCall.args) {
+                if (functionCall?.args) {
                     return functionCall.args as Record<string, unknown>;
                 }
             }

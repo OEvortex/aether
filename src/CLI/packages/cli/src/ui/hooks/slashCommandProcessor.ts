@@ -52,8 +52,8 @@ function serializeHistoryItemForRecording(
     item: Omit<HistoryItem, 'id'>
 ): SerializableHistoryItem {
     const clone: SerializableHistoryItem = { ...item };
-    if ('timestamp' in clone && clone['timestamp'] instanceof Date) {
-        clone['timestamp'] = clone['timestamp'].toISOString();
+    if ('timestamp' in clone && clone.timestamp instanceof Date) {
+        clone.timestamp = clone.timestamp.toISOString();
     }
     return clone;
 }
@@ -106,12 +106,12 @@ export const useSlashCommandProcessor = (
     setGeminiMdFileCount: (count: number) => void,
     actions: SlashCommandProcessorActions,
     extensionsUpdateState: Map<string, ExtensionUpdateStatus>,
-    isConfigInitialized: boolean,
+    _isConfigInitialized: boolean,
     logger: Logger | null
 ) => {
     const { stats: sessionStats, startNewSession } = useSessionStats();
     const [commands, setCommands] = useState<readonly SlashCommand[]>([]);
-    const [reloadTrigger, setReloadTrigger] = useState(0);
+    const [_reloadTrigger, setReloadTrigger] = useState(0);
 
     const reloadCommands = useCallback(() => {
         setReloadTrigger((v) => v + 1);
@@ -297,9 +297,7 @@ export const useSlashCommandProcessor = (
             startNewSession,
             actions,
             pendingItem,
-            setPendingItem,
             btwItem,
-            setBtwItem,
             cancelBtw,
             toggleVimEnabled,
             sessionShellAllowlist,
@@ -359,7 +357,7 @@ export const useSlashCommandProcessor = (
         return () => {
             controller.abort();
         };
-    }, [config, reloadTrigger, isConfigInitialized]);
+    }, [config]);
 
     const handleSlashCommand = useCallback(
         async (
@@ -788,10 +786,7 @@ export const useSlashCommandProcessor = (
             commands,
             commandContext,
             addMessage,
-            setShellConfirmationRequest,
-            setSessionShellAllowlist,
-            setIsProcessing,
-            setConfirmationRequest
+            setIsProcessing
         ]
     );
 

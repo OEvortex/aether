@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as fs from 'fs/promises';
-import * as os from 'os';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Config } from '../config/config.js';
 import { AuthType } from '../core/contentGenerator.js';
@@ -568,7 +568,7 @@ You are a helpful assistant.
             const config = await manager.loadSubagent('test-agent');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('test-agent');
+            expect(config?.name).toBe('test-agent');
             expect(fs.readdir).toHaveBeenCalledWith(
                 path.normalize('/test/project/.aether/agents')
             );
@@ -588,7 +588,7 @@ You are a helpful assistant.
             const config = await manager.loadSubagent('test-agent');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('test-agent');
+            expect(config?.name).toBe('test-agent');
             expect(fs.readdir).toHaveBeenCalledWith(
                 path.normalize('/home/user/.aether/agents')
             );
@@ -649,8 +649,8 @@ You are another assistant.`;
             const config = await manager.loadSubagent('correct-agent-name');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('correct-agent-name');
-            expect(config!.filePath).toBe(
+            expect(config?.name).toBe('correct-agent-name');
+            expect(config?.filePath).toBe(
                 path.normalize('/test/project/.aether/agents/wrong-filename.md')
             );
 
@@ -700,11 +700,11 @@ You are a helpful assistant.`;
             const config = await manager.loadSubagent('target-agent');
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('target-agent');
-            expect(config!.filePath).toBe(
+            expect(config?.name).toBe('target-agent');
+            expect(config?.filePath).toBe(
                 path.normalize('/home/user/.aether/agents/user-agent.md')
             );
-            expect(config!.level).toBe('user');
+            expect(config?.level).toBe('user');
         });
 
         it('should handle specific level search with filename mismatch', async () => {
@@ -733,8 +733,8 @@ You are a helpful assistant.`;
             );
 
             expect(config).toBeDefined();
-            expect(config!.name).toBe('specific-agent');
-            expect(config!.filePath).toBe(
+            expect(config?.name).toBe('specific-agent');
+            expect(config?.filePath).toBe(
                 path.normalize('/test/project/.aether/agents/misnamed-file.md')
             );
         });
@@ -992,7 +992,7 @@ System prompt 3`);
             const subagents = await manager.listSubagents();
             const agent1 = subagents.find((s) => s.name === 'agent1');
 
-            expect(agent1!.level).toBe('project');
+            expect(agent1?.level).toBe('project');
         });
 
         it('should filter by level', async () => {
@@ -1065,8 +1065,8 @@ System prompt 3`);
             const metadata = await manager.findSubagentByName('test-agent');
 
             expect(metadata).toBeDefined();
-            expect(metadata!.name).toBe('test-agent');
-            expect(metadata!.description).toBe('A test subagent');
+            expect(metadata?.name).toBe('test-agent');
+            expect(metadata?.description).toBe('A test subagent');
         });
 
         it('should return null for non-existent subagent', async () => {
@@ -1153,7 +1153,7 @@ System prompt 3`);
                     manager.convertToRuntimeConfig(configWithTools);
 
                 expect(runtimeConfig.toolConfig).toBeDefined();
-                expect(runtimeConfig.toolConfig!.tools).toEqual([
+                expect(runtimeConfig.toolConfig?.tools).toEqual([
                     'read_file',
                     'write_file'
                 ]);
@@ -1175,7 +1175,7 @@ System prompt 3`);
                 );
 
                 expect(runtimeConfig.toolConfig).toBeDefined();
-                expect(runtimeConfig.toolConfig!.tools).toEqual([
+                expect(runtimeConfig.toolConfig?.tools).toEqual([
                     'read_file', // 'Read File' -> 'read_file' (display name match)
                     'write_file', // 'write_file' -> 'write_file' (exact name match)
                     'grep', // 'Search Files' -> 'grep' (display name match)
@@ -1245,8 +1245,8 @@ System prompt 3`);
                 );
 
                 expect(merged.model).toBe('updated-model');
-                expect(merged.runConfig!.max_time_minutes).toBe(5); // Should update
-                expect(merged.runConfig!.max_turns).toBe(20); // Should keep original
+                expect(merged.runConfig?.max_time_minutes).toBe(5); // Should update
+                expect(merged.runConfig?.max_turns).toBe(20); // Should keep original
             });
         });
 

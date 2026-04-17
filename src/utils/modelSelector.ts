@@ -46,217 +46,192 @@ export interface ModelInfo {
     };
 }
 
+let _modelInfoCache: ModelInfoCache | undefined;
+const _onDidChangeModel = new vscode.EventEmitter<{
+    providerId: string;
+    modelId: string;
+    fullId: string;
+}>();
+
 /**
- * Model Selector - manages current model/provider selection
+ * Initialize ModelSelector with a real extension context.
  */
-export class ModelSelector {
-    private static _modelInfoCache: ModelInfoCache | undefined;
+export function initialize(context: vscode.ExtensionContext): void {
+    _modelInfoCache = new ModelInfoCache(context);
+}
 
-    /**
-     * Initialize ModelSelector with a real extension context.
-     * Must be called from `activate()` before any other ModelSelector API.
-     */
-    static initialize(context: vscode.ExtensionContext): void {
-        ModelSelector._modelInfoCache = new ModelInfoCache(context);
-    }
-
-    private static get modelInfoCache(): ModelInfoCache {
-        if (!ModelSelector._modelInfoCache) {
-            throw new Error(
-                '[ModelSelector] Not initialized. Call ModelSelector.initialize(context) from activate().'
-            );
-        }
-        return ModelSelector._modelInfoCache;
-    }
-
-    /**
-     * Parse provider::model string into components
-     */
-    static parseModelId(modelString: string): ParsedModelId | null {
-        if (!modelString) {
-            return null;
-        }
-
-        const separatorIndex = modelString.indexOf(MODEL_SEPARATOR);
-        if (separatorIndex === -1) {
-            // Try to find in known providers
-            if (KnownProviders[modelString]) {
-                return {
-                    providerId: modelString,
-                    modelId: '',
-                    fullId: `${modelString}${MODEL_SEPARATOR}`,
-                    displayName: KnownProviders[modelString].displayName
-                };
-            }
-            return null;
-        }
-
-        const providerId = modelString.substring(0, separatorIndex);
-        const modelId = modelString.substring(
-            separatorIndex + MODEL_SEPARATOR.length
+function getModelInfoCache(): ModelInfoCache {
+    if (!_modelInfoCache) {
+        throw new Error(
+            '[ModelSelector] Not initialized. Call ModelSelector.initialize(context) from activate().'
         );
-        const providerName =
-            KnownProviders[providerId]?.displayName || providerId;
+    }
+    return _modelInfoCache;
+}
 
-        return {
-            providerId,
-            modelId,
-            fullId: modelString,
-            displayName: `${providerName} / ${modelId}`
-        };
+/**
+ * Parse provider::model string into components
+ */
+export function parseModelId(modelString: string): ParsedModelId | null {
+    if (!modelString) {
+        return null;
     }
 
-    /**
-     * Create provider::model string from components
-     */
-    static formatModelId(providerId: string, modelId: string): string {
-        return `${providerId}${MODEL_SEPARATOR}${modelId}`;
-    }
-
-    /**
-     * Get current selected model in provider::model format
-     */
-    static async getCurrentModel(): Promise<ParsedModelId | null> {
-        const config = vscode.workspace.getConfiguration('aether');
-        const modelString = config.get<string>('selectedModel');
-
-        if (modelString) {
-            const parsed = ModelSelector.parseModelId(modelString);
-            if (parsed) {
-                return parsed;
-            }
+    const separatorIndex = modelString.indexOf(MODEL_SEPARATOR);
+    if (separatorIndex === -1) {
+        // Try to find in known providers
+        if (KnownProviders[modelString]) {
+            return {
+                providerId: modelString,
+                modelId: '',
+                fullId: `${modelString}${MODEL_SEPARATOR}`,
+                displayName: KnownProviders[modelString].displayName
+            };
         }
-
-        // Fallback: try to get from last used model
-        return ModelSelector.getLastUsedModel();
+        return null;
     }
 
-    /**
-     * Set current selected model
-     */
-    static async setCurrentModel(
-        providerId: string,
-        modelId: string
-    ): Promise<void> {
-        const modelString = ModelSelector.formatModelId(providerId, modelId);
-        const config = vscode.workspace.getConfiguration('aether');
-        await config.update(
-            'selectedModel',
-            modelString,
-            vscode.ConfigurationTarget.Global
-        );
+    const providerId = modelString.substring(0, separatorIndex);
+    const modelId = modelString.substring(
+        separatorIndex + MODEL_SEPARATOR.length
+    );
+    const providerName = KnownProviders[providerId]?.displayName || providerId;
 
-        // Also save to model info cache for quick access
-        await ModelSelector.modelInfoCache.setLastSelectedModelForProvider(
-            providerId,
-            modelId
-        );
+    return {
+        providerId,
+        modelId,
+        fullId: modelString,
+        displayName: `${providerName} / ${modelId}`
+    };
+}
 
-        Logger.info(`[ModelSelector] Selected model: ${modelString}`);
+/**
+ * Create provider::model string from components
+ */
+export function formatModelId(providerId: string, modelId: string): string {
+    return `${providerId}${MODEL_SEPARATOR}${modelId}`;
+}
 
-        // Notify listeners of model change
-        ModelSelector._onDidChangeModel.fire({
-            providerId,
-            modelId,
-            fullId: modelString
-        });
-    }
+/**
+ * Get current selected model in provider::model format
+ */
+export async function getCurrentModel(): Promise<ParsedModelId | null> {
+    const config = vscode.workspace.getConfiguration('aether');
+    const modelString = config.get<string>('selectedModel');
 
-    /**
-     * Get all available models from all providers (merged)
-     */
-    static async getAllModels(): Promise<ModelInfo[]> {
-        const models: ModelInfo[] = [];
-
-        // Get models from all registered providers
-        for (const [providerId, providerConfig] of Object.entries(
-            KnownProviders
-        )) {
-            try {
-                // Skip providers that don't support model fetching
-                if (
-                    !providerConfig.fetchModels &&
-                    (!providerConfig.models ||
-                        providerConfig.models.length === 0)
-                ) {
-                    continue;
-                }
-
-                // Try to get models from config or cache
-                const providerModels =
-                    await ModelSelector.getProviderModels(providerId);
-                for (const model of providerModels) {
-                    models.push({
-                        id: model.id,
-                        providerId,
-                        providerName: providerConfig.displayName || providerId,
-                        name: model.name || model.id,
-                        maxInputTokens: model.maxInputTokens,
-                        maxOutputTokens: model.maxOutputTokens,
-                        capabilities: model.capabilities
-                    });
-                }
-            } catch (err) {
-                Logger.warn(
-                    `[ModelSelector] Failed to get models for ${providerId}:`,
-                    err
-                );
-            }
+    if (modelString) {
+        const parsed = parseModelId(modelString);
+        if (parsed) {
+            return parsed;
         }
-
-        return models.sort((a, b) => {
-            // Sort by provider name, then model name
-            const providerCompare = a.providerName.localeCompare(
-                b.providerName
-            );
-            if (providerCompare !== 0) {
-                return providerCompare;
-            }
-            return a.name.localeCompare(b.name);
-        });
     }
 
-    /**
-     * Get models for a specific provider
-     */
-    static async getProviderModels(providerId: string): Promise<ModelInfo[]> {
-        const providerConfig = KnownProviders[providerId];
-        if (!providerConfig) {
-            return [];
-        }
+    // Fallback: try to get from last used model
+    return getLastUsedModel();
+}
 
-        // Try to get from cached model info (compute API key hash for cache validation)
+/**
+ * Set current selected model
+ */
+export async function setCurrentModel(
+    providerId: string,
+    modelId: string
+): Promise<void> {
+    const modelString = formatModelId(providerId, modelId);
+    const config = vscode.workspace.getConfiguration('aether');
+    await config.update(
+        'selectedModel',
+        modelString,
+        vscode.ConfigurationTarget.Global
+    );
+
+    // Also save to model info cache for quick access
+    await getModelInfoCache().setLastSelectedModelForProvider(
+        providerId,
+        modelId
+    );
+
+    Logger.info(`[ModelSelector] Selected model: ${modelString}`);
+
+    // Notify listeners of model change
+    _onDidChangeModel.fire({
+        providerId,
+        modelId,
+        fullId: modelString
+    });
+}
+
+/**
+ * Get all available models from all providers (merged)
+ */
+export async function getAllModels(): Promise<ModelInfo[]> {
+    const models: ModelInfo[] = [];
+
+    // Get models from all registered providers
+    for (const [providerId, providerConfig] of Object.entries(KnownProviders)) {
         try {
-            const apiKey = await ApiKeyManager.getApiKey(providerId);
-            const apiKeyHash = apiKey
-                ? await ModelInfoCache.computeApiKeyHash(apiKey)
-                : '';
-            const cachedModels =
-                await ModelSelector.modelInfoCache.getCachedModels(
-                    providerId,
-                    apiKeyHash
-                );
-            if (cachedModels && cachedModels.length > 0) {
-                return cachedModels.map((m) => ({
-                    id: m.id,
+            // Skip providers that don't support model fetching
+            if (
+                !providerConfig.fetchModels &&
+                (!providerConfig.models || providerConfig.models.length === 0)
+            ) {
+                continue;
+            }
+
+            // Try to get models from config or cache
+            const providerModels = await getProviderModels(providerId);
+            for (const model of providerModels) {
+                models.push({
+                    id: model.id,
                     providerId,
                     providerName: providerConfig.displayName || providerId,
-                    name: m.name || m.id,
-                    maxInputTokens: m.maxInputTokens,
-                    maxOutputTokens: m.maxOutputTokens,
-                    capabilities: m.capabilities
-                }));
+                    name: model.name || model.id,
+                    maxInputTokens: model.maxInputTokens,
+                    maxOutputTokens: model.maxOutputTokens,
+                    capabilities: model.capabilities
+                });
             }
         } catch (err) {
             Logger.warn(
-                `[ModelSelector] Cache lookup failed for ${providerId}:`,
+                `[ModelSelector] Failed to get models for ${providerId}:`,
                 err
             );
         }
+    }
 
-        // Fallback to configured models
-        if (providerConfig.models) {
-            return providerConfig.models.map((m) => ({
+    return models.sort((a, b) => {
+        // Sort by provider name, then model name
+        const providerCompare = a.providerName.localeCompare(b.providerName);
+        if (providerCompare !== 0) {
+            return providerCompare;
+        }
+        return a.name.localeCompare(b.name);
+    });
+}
+
+/**
+ * Get models for a specific provider
+ */
+export async function getProviderModels(
+    providerId: string
+): Promise<ModelInfo[]> {
+    const providerConfig = KnownProviders[providerId];
+    if (!providerConfig) {
+        return [];
+    }
+
+    // Try to get from cached model info (compute API key hash for cache validation)
+    try {
+        const apiKey = await ApiKeyManager.getApiKey(providerId);
+        const apiKeyHash = apiKey
+            ? await ModelInfoCache.computeApiKeyHash(apiKey)
+            : '';
+        const cachedModels = await getModelInfoCache().getCachedModels(
+            providerId,
+            apiKeyHash
+        );
+        if (cachedModels && cachedModels.length > 0) {
+            return cachedModels.map((m) => ({
                 id: m.id,
                 providerId,
                 providerName: providerConfig.displayName || providerId,
@@ -266,129 +241,150 @@ export class ModelSelector {
                 capabilities: m.capabilities
             }));
         }
-
-        return [];
+    } catch (err) {
+        Logger.warn(
+            `[ModelSelector] Cache lookup failed for ${providerId}:`,
+            err
+        );
     }
 
-    /**
-     * Get last used model (fallback)
-     */
-    static async getLastUsedModel(): Promise<ParsedModelId | null> {
-        // Try to get from model info cache
-        for (const providerId of Object.keys(KnownProviders)) {
-            const lastModel =
-                ModelSelector.modelInfoCache.getLastSelectedModel(providerId);
-            if (lastModel) {
-                return {
-                    providerId,
-                    modelId: lastModel,
-                    fullId: ModelSelector.formatModelId(providerId, lastModel),
-                    displayName: `${KnownProviders[providerId]?.displayName || providerId} / ${lastModel}`
-                };
-            }
-        }
-        return null;
+    // Fallback to configured models
+    if (providerConfig.models) {
+        return providerConfig.models.map((m) => ({
+            id: m.id,
+            providerId,
+            providerName: providerConfig.displayName || providerId,
+            name: m.name || m.id,
+            maxInputTokens: m.maxInputTokens,
+            maxOutputTokens: m.maxOutputTokens,
+            capabilities: m.capabilities
+        }));
     }
 
-    /**
-     * Show quick pick to select model
-     */
-    static async showModelPicker(): Promise<ParsedModelId | undefined> {
-        const allModels = await ModelSelector.getAllModels();
+    return [];
+}
 
-        if (allModels.length === 0) {
-            vscode.window.showInformationMessage(
-                'No models available. Please configure API keys for providers first.'
-            );
-            return undefined;
+/**
+ * Get last used model (fallback)
+ */
+export async function getLastUsedModel(): Promise<ParsedModelId | null> {
+    // Try to get from model info cache
+    for (const providerId of Object.keys(KnownProviders)) {
+        const lastModel = getModelInfoCache().getLastSelectedModel(providerId);
+        if (lastModel) {
+            return {
+                providerId,
+                modelId: lastModel,
+                fullId: formatModelId(providerId, lastModel),
+                displayName: `${KnownProviders[providerId]?.displayName || providerId} / ${lastModel}`
+            };
         }
+    }
+    return null;
+}
 
-        // Group by provider
-        const providerGroups = new Map<string, ModelInfo[]>();
-        for (const model of allModels) {
-            const existing = providerGroups.get(model.providerId) || [];
-            existing.push(model);
-            providerGroups.set(model.providerId, existing);
-        }
+/**
+ * Show quick pick to select model
+ */
+export async function showModelPicker(): Promise<ParsedModelId | undefined> {
+    const allModels = await getAllModels();
 
-        const items: ModelPickItem[] = [];
-        for (const [providerId, models] of providerGroups) {
-            // Add provider separator
-            items.push({
-                label: `$(cloud) ${KnownProviders[providerId]?.displayName || providerId}`,
-                kind: vscode.QuickPickItemKind.Separator
-            });
-
-            // Add models
-            for (const model of models) {
-                const detail = `${model.maxInputTokens ? `${(model.maxInputTokens / 1000).toFixed(0)}K` : '?'} context`;
-                items.push({
-                    label: model.name,
-                    description: model.id,
-                    detail,
-                    modelInfo: model
-                });
-            }
-        }
-
-        const selected = await vscode.window.showQuickPick(items, {
-            title: 'Select Model',
-            placeHolder: 'Search and select a model...',
-            matchOnDescription: true,
-            matchOnDetail: true
-        });
-
-        if (selected?.modelInfo) {
-            const modelInfo = selected.modelInfo;
-            const fullId = ModelSelector.formatModelId(
-                modelInfo.providerId,
-                modelInfo.id
-            );
-            await ModelSelector.setCurrentModel(
-                modelInfo.providerId,
-                modelInfo.id
-            );
-            return ModelSelector.parseModelId(fullId) ?? undefined;
-        }
+    if (allModels.length === 0) {
+        vscode.window.showInformationMessage(
+            'No models available. Please configure API keys for providers first.'
+        );
         return undefined;
     }
 
-    /**
-     * Show quick pick to select provider only
-     */
-    static async showProviderPicker(): Promise<string | undefined> {
-        const providers = Object.entries(KnownProviders)
-            .filter(
-                ([_, config]) =>
-                    config.fetchModels ||
-                    (config.models && config.models.length > 0)
-            )
-            .map(([id, config]) => ({
-                label: `$(cloud) ${config.displayName || id}`,
-                description: id,
-                detail: config.fetchModels ? 'Dynamic models' : 'Static models'
-            }));
+    // Group by provider
+    const providerGroups = new Map<string, ModelInfo[]>();
+    for (const model of allModels) {
+        const existing = providerGroups.get(model.providerId) || [];
+        existing.push(model);
+        providerGroups.set(model.providerId, existing);
+    }
 
-        const selected = await vscode.window.showQuickPick(providers, {
-            title: 'Select Provider',
-            placeHolder: 'Choose a provider...'
+    const items: ModelPickItem[] = [];
+    for (const [providerId, models] of providerGroups) {
+        // Add provider separator
+        items.push({
+            label: `$(cloud) ${KnownProviders[providerId]?.displayName || providerId}`,
+            kind: vscode.QuickPickItemKind.Separator
         });
 
-        return selected?.description;
+        // Add models
+        for (const model of models) {
+            const detail = `${model.maxInputTokens ? `${(model.maxInputTokens / 1000).toFixed(0)}K` : '?'} context`;
+            items.push({
+                label: model.name,
+                description: model.id,
+                detail,
+                modelInfo: model
+            });
+        }
     }
 
-    // Event for model changes
-    private static _onDidChangeModel = new vscode.EventEmitter<{
-        providerId: string;
-        modelId: string;
-        fullId: string;
-    }>();
-    static readonly onDidChangeModel = this._onDidChangeModel.event;
+    const selected = await vscode.window.showQuickPick(items, {
+        title: 'Select Model',
+        placeHolder: 'Search and select a model...',
+        matchOnDescription: true,
+        matchOnDetail: true
+    });
 
-    /**
-     * Dispose resources
-     */
-    static dispose(): void {
-        ModelSelector._onDidChangeModel.dispose();
+    if (selected?.modelInfo) {
+        const modelInfo = selected.modelInfo;
+        const fullId = formatModelId(modelInfo.providerId, modelInfo.id);
+        await setCurrentModel(modelInfo.providerId, modelInfo.id);
+        return parseModelId(fullId) ?? undefined;
     }
+    return undefined;
 }
+
+/**
+ * Show quick pick to select provider only
+ */
+export async function showProviderPicker(): Promise<string | undefined> {
+    const providers = Object.entries(KnownProviders)
+        .filter(
+            ([_, config]) =>
+                config.fetchModels ||
+                (config.models && config.models.length > 0)
+        )
+        .map(([id, config]) => ({
+            label: `$(cloud) ${config.displayName || id}`,
+            description: id,
+            detail: config.fetchModels ? 'Dynamic models' : 'Static models'
+        }));
+
+    const selected = await vscode.window.showQuickPick(providers, {
+        title: 'Select Provider',
+        placeHolder: 'Choose a provider...'
+    });
+
+    return selected?.description;
+}
+
+/**
+ * Dispose resources
+ */
+export function dispose(): void {
+    _onDidChangeModel.dispose();
+}
+
+/**
+ * Model Selector (deprecated class-like interface for backward compatibility)
+ */
+export const ModelSelector = {
+    initialize,
+    parseModelId,
+    formatModelId,
+    getCurrentModel,
+    setCurrentModel,
+    getAllModels,
+    getProviderModels,
+    getLastUsedModel,
+    showModelPicker,
+    showProviderPicker,
+    onDidChangeModel: _onDidChangeModel.event,
+    dispose
+};

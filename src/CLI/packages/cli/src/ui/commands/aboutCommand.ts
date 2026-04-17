@@ -26,5 +26,7 @@ export const aboutCommand: SlashCommand = {
         };
 
         context.ui.addItem(aboutItem, Date.now());
+
+        return undefined;
     }
 };

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { join } from 'node:path';
 import { createDebugLogger, Storage } from '@aetherai/aether-core';
 import open from 'open';
-import { join } from 'path';
 import { t } from '../../i18n/index.js';
 import { StaticInsightGenerator } from '../../services/insight/generators/StaticInsightGenerator.js';
 import type { HistoryItemInsightProgress } from '../types.js';
@@ -130,5 +130,7 @@ export const insightCommand: SlashCommand = {
 
             logger.error('Insight generation error:', error);
         }
+
+        return undefined;
     }
 };

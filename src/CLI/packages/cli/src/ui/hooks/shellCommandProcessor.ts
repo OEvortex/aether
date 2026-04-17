@@ -42,7 +42,7 @@ function addShellCommandToGeminiHistory(
 ) {
     const modelContent =
         resultText.length > MAX_OUTPUT_LENGTH
-            ? resultText.substring(0, MAX_OUTPUT_LENGTH) + '\n... (truncated)'
+            ? `${resultText.substring(0, MAX_OUTPUT_LENGTH)}\n... (truncated)`
             : resultText;
 
     geminiClient.addHistory({
@@ -168,7 +168,9 @@ export const useShellCommandProcessor = (
                             switch (event.type) {
                                 case 'data':
                                     // Do not process text data if we've already switched to binary mode.
-                                    if (isBinaryStream) break;
+                                    if (isBinaryStream) {
+                                        break;
+                                    }
                                     // PTY provides the full screen state, so we just replace.
                                     // Child process provides chunks, so we append.
                                     if (config.getShouldUseNodePtyShell()) {

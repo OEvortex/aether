@@ -423,8 +423,12 @@ describe('languageUtils', () => {
             const globalPath = '/mock/home/.aether/output-language.md';
 
             vi.mocked(fs.existsSync).mockImplementation((p) => {
-                if (p.toString() === projectPath) return true;
-                if (p.toString() === globalPath) return true;
+                if (p.toString() === projectPath) {
+                    return true;
+                }
+                if (p.toString() === globalPath) {
+                    return true;
+                }
                 return false;
             });
 
@@ -443,8 +447,12 @@ describe('languageUtils', () => {
             const globalPath = '/mock/home/.aether/output-language.md';
 
             vi.mocked(fs.existsSync).mockImplementation((p) => {
-                if (p.toString() === projectPath) return false;
-                if (p.toString() === globalPath) return true;
+                if (p.toString() === projectPath) {
+                    return false;
+                }
+                if (p.toString() === globalPath) {
+                    return true;
+                }
                 return false;
             });
 

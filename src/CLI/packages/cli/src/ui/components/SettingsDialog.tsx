@@ -239,7 +239,9 @@ export function SettingsDialog({
 
                         // Remove from global pending changes if present
                         setGlobalPendingChanges((prev) => {
-                            if (!prev.has(key)) return prev;
+                            if (!prev.has(key)) {
+                                return prev;
+                            }
                             const next = new Map(prev);
                             next.delete(key);
                             return next;
@@ -373,7 +375,9 @@ export function SettingsDialog({
 
             // Remove from global pending since it's immediately saved
             setGlobalPendingChanges((prev) => {
-                if (!prev.has(key)) return prev;
+                if (!prev.has(key)) {
+                    return prev;
+                }
                 const next = new Map(prev);
                 next.delete(key);
                 return next;
@@ -734,8 +738,9 @@ export function SettingsDialog({
 
                             // Remove from global pending changes if present
                             setGlobalPendingChanges((prev) => {
-                                if (!prev.has(currentSetting.value))
+                                if (!prev.has(currentSetting.value)) {
                                     return prev;
+                                }
                                 const next = new Map(prev);
                                 next.delete(currentSetting.value);
                                 return next;
@@ -782,7 +787,9 @@ export function SettingsDialog({
 
                     // Remove saved keys from global pending changes
                     setGlobalPendingChanges((prev) => {
-                        if (prev.size === 0) return prev;
+                        if (prev.size === 0) {
+                            return prev;
+                        }
                         const next = new Map(prev);
                         for (const key of restartRequiredSet) {
                             next.delete(key);
@@ -792,7 +799,9 @@ export function SettingsDialog({
                 }
 
                 setRestartRequiredSettings(new Set()); // Clear restart-required settings
-                if (onRestartRequest) onRestartRequest();
+                if (onRestartRequest) {
+                    onRestartRequest();
+                }
             }
             if (name === 'escape') {
                 if (editingKey) {

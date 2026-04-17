@@ -26,7 +26,9 @@ import { ToolCallStatus } from '../types.js';
  * Extracts text content from a Content object's parts (excluding thought parts).
  */
 function extractTextFromParts(parts: Part[] | undefined): string {
-    if (!parts) return '';
+    if (!parts) {
+        return '';
+    }
 
     const textParts: string[] = [];
     for (const part of parts) {
@@ -45,7 +47,9 @@ function extractTextFromParts(parts: Part[] | undefined): string {
  * Thought parts are identified by having `thought: true`.
  */
 function extractThoughtTextFromParts(parts: Part[] | undefined): string {
-    if (!parts) return '';
+    if (!parts) {
+        return '';
+    }
 
     const thoughtParts: string[] = [];
     for (const part of parts) {
@@ -62,7 +66,9 @@ function extractThoughtTextFromParts(parts: Part[] | undefined): string {
 function extractFunctionCalls(
     parts: Part[] | undefined
 ): Array<{ id: string; name: string; args: Record<string, unknown> }> {
-    if (!parts) return [];
+    if (!parts) {
+        return [];
+    }
 
     const calls: Array<{
         id: string;
@@ -101,8 +107,8 @@ function formatToolDescription(
         return invocation.getDescription();
     } catch {
         // Fallback: use the description arg directly if available
-        if (typeof args['description'] === 'string') {
-            return args['description'];
+        if (typeof args.description === 'string') {
+            return args.description;
         }
         return '';
     }
@@ -119,13 +125,13 @@ function restoreHistoryItem(raw: unknown): HistoryItemWithoutId | undefined {
 
     const clone = { ...(raw as Record<string, unknown>) };
     if ('timestamp' in clone) {
-        const ts = clone['timestamp'];
+        const ts = clone.timestamp;
         if (typeof ts === 'string' || typeof ts === 'number') {
-            clone['timestamp'] = new Date(ts);
+            clone.timestamp = new Date(ts);
         }
     }
 
-    if (typeof clone['type'] !== 'string') {
+    if (typeof clone.type !== 'string') {
         return;
     }
 
@@ -232,7 +238,9 @@ function convertToHistoryItems(
                 const payload = record.systemPayload as
                     | SlashCommandRecordPayload
                     | undefined;
-                if (!payload) continue;
+                if (!payload) {
+                    continue;
+                }
                 if (payload.phase === 'invocation' && payload.rawCommand) {
                     items.push({ type: 'user', text: payload.rawCommand });
                 }
@@ -250,7 +258,9 @@ function convertToHistoryItems(
                 const payload = record.systemPayload as
                     | AtCommandRecordPayload
                     | undefined;
-                if (!payload) continue;
+                if (!payload) {
+                    continue;
+                }
                 pendingAtCommands.push(payload);
             }
             continue;
@@ -382,7 +392,7 @@ function convertToHistoryItems(
                         // Check if status exists and use it
                         const rawStatus = (
                             record.toolCallResult as Record<string, unknown>
-                        )['status'] as string | undefined;
+                        ).status as string | undefined;
                         toolCall.status =
                             rawStatus === 'error'
                                 ? ToolCallStatus.Error

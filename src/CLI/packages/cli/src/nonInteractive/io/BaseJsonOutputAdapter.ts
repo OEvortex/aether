@@ -886,7 +886,7 @@ export abstract class BaseJsonOutputAdapter {
         }
 
         // current is guaranteed to be defined here (either existing or newly created)
-        current!.thinking = `${current!.thinking ?? ''}${fragment}`;
+        current!.thinking = `${current?.thinking ?? ''}${fragment}`;
         const index = state.blocks.length - 1;
         this.onThinkingAppended(state, index, fragment, actualParentToolUseId);
     }
@@ -1229,8 +1229,8 @@ export function partsToContentBlock(parts: Part[]): ContentBlock[] {
         // Handle functionResponse parts - extract output content
         else if ('functionResponse' in part && part.functionResponse) {
             const output =
-                part.functionResponse.response?.['output'] ??
-                part.functionResponse.response?.['content'] ??
+                part.functionResponse.response?.output ??
+                part.functionResponse.response?.content ??
                 '';
             textContent =
                 typeof output === 'string' ? output : JSON.stringify(output);
@@ -1297,9 +1297,9 @@ function checkResponsePartsForError(
             part.functionResponse?.response &&
             typeof part.functionResponse.response === 'object' &&
             'error' in part.functionResponse.response &&
-            part.functionResponse.response['error']
+            part.functionResponse.response.error
         ) {
-            const error = part.functionResponse.response['error'];
+            const error = part.functionResponse.response.error;
             return typeof error === 'string' ? error : String(error);
         }
     }

@@ -121,9 +121,9 @@ describe('TmuxBackend', () => {
 
     beforeEach(() => {
         vi.useFakeTimers();
-        savedTmuxEnv = process.env['TMUX'];
+        savedTmuxEnv = process.env.TMUX;
         // Default: running outside tmux
-        delete process.env['TMUX'];
+        delete process.env.TMUX;
         setupDefaultMocks();
         backend = new TmuxBackend();
     });
@@ -133,9 +133,9 @@ describe('TmuxBackend', () => {
         vi.restoreAllMocks();
         vi.useRealTimers();
         if (savedTmuxEnv !== undefined) {
-            process.env['TMUX'] = savedTmuxEnv;
+            process.env.TMUX = savedTmuxEnv;
         } else {
-            delete process.env['TMUX'];
+            delete process.env.TMUX;
         }
     });
 
@@ -200,7 +200,7 @@ describe('TmuxBackend', () => {
     // ─── Spawning (inside tmux) ───────────────────────────────
 
     it('spawns first agent inside tmux by splitting from main pane', async () => {
-        process.env['TMUX'] = '/tmp/tmux-1000/default,12345,0';
+        process.env.TMUX = '/tmp/tmux-1000/default,12345,0';
         backend = new TmuxBackend();
         await backend.init();
 
@@ -308,7 +308,7 @@ describe('TmuxBackend', () => {
     });
 
     it('cleanup does not kill session when running inside tmux', async () => {
-        process.env['TMUX'] = '/tmp/tmux-1000/default,12345,0';
+        process.env.TMUX = '/tmp/tmux-1000/default,12345,0';
         backend = new TmuxBackend();
         await backend.init();
 
@@ -464,7 +464,7 @@ describe('TmuxBackend', () => {
     });
 
     it('returns null when inside tmux', async () => {
-        process.env['TMUX'] = '/tmp/tmux-1000/default,12345,0';
+        process.env.TMUX = '/tmp/tmux-1000/default,12345,0';
         backend = new TmuxBackend();
         await backend.init();
         expect(backend.getAttachHint()).toBeNull();

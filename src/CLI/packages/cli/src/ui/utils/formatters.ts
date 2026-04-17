@@ -98,8 +98,12 @@ export const formatDuration = (milliseconds: number): string => {
 
     // If all parts are zero (e.g., exactly 1 hour), return the largest unit.
     if (parts.length === 0) {
-        if (hours > 0) return `${hours}h`;
-        if (minutes > 0) return `${minutes}m`;
+        if (hours > 0) {
+            return `${hours}h`;
+        }
+        if (minutes > 0) {
+            return `${minutes}m`;
+        }
         return `${seconds}s`;
     }
 

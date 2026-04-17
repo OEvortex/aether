@@ -129,7 +129,7 @@ export class PermissionController extends BaseController {
         };
 
         if (message) {
-            response['message'] = message;
+            response.message = message;
         }
 
         return response;
@@ -147,8 +147,6 @@ export class PermissionController extends BaseController {
             case 'auto-edit': // Auto-approve edit operations
             case 'plan': // Auto-approve planning operations
                 return { allowed: true };
-
-            case 'default': // TODO: allow all tools for test
             default:
                 return {
                     allowed: false,
@@ -252,9 +250,9 @@ export class PermissionController extends BaseController {
         }
 
         const details = confirmationDetails as Record<string, unknown>;
-        const type = String(details['type'] ?? '');
+        const type = String(details.type ?? '');
         const title =
-            typeof details['title'] === 'string' ? details['title'] : undefined;
+            typeof details.title === 'string' ? details.title : undefined;
 
         // Ensure type matches ToolCallConfirmationDetails union
         const confirmationType = type as ToolConfirmationType;
@@ -265,7 +263,7 @@ export class PermissionController extends BaseController {
                     {
                         type: 'allow',
                         label: 'Allow Command',
-                        description: `Execute: ${details['command']}`
+                        description: `Execute: ${details.command}`
                     },
                     {
                         type: 'deny',
@@ -279,7 +277,7 @@ export class PermissionController extends BaseController {
                     {
                         type: 'allow',
                         label: 'Allow Edit',
-                        description: `Edit file: ${details['fileName']}`
+                        description: `Edit file: ${details.fileName}`
                     },
                     {
                         type: 'deny',
@@ -313,7 +311,7 @@ export class PermissionController extends BaseController {
                     {
                         type: 'allow',
                         label: 'Allow MCP Call',
-                        description: `${details['serverName']}: ${details['toolName']}`
+                        description: `${details.serverName}: ${details.toolName}`
                     },
                     {
                         type: 'deny',
@@ -445,11 +443,11 @@ export class PermissionController extends BaseController {
                 string,
                 unknown
             >;
-            const behavior = String(payload['behavior'] || '').toLowerCase();
+            const behavior = String(payload.behavior || '').toLowerCase();
 
             if (behavior === 'allow') {
                 // Handle updated input if provided
-                const updatedInput = payload['updatedInput'];
+                const updatedInput = payload.updatedInput;
                 if (updatedInput && typeof updatedInput === 'object') {
                     toolCall.request.args = updatedInput as Record<
                         string,
@@ -462,8 +460,8 @@ export class PermissionController extends BaseController {
             } else {
                 // Extract cancel message from response if available
                 const cancelMessage =
-                    typeof payload['message'] === 'string'
-                        ? payload['message']
+                    typeof payload.message === 'string'
+                        ? payload.message
                         : undefined;
 
                 await toolCall.confirmationDetails.onConfirm(

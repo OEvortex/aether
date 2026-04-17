@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { EventEmitter } from 'node:events';
 import * as fs from 'node:fs';
-import type { EventEmitter } from 'events';
+import * as path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { globSync } from 'glob';
-import * as path from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
 import type { Config as CoreConfig } from '../config/config.js';
 import type { Extension } from '../extension/extensionManager.js';
 import type { IdeContextStore } from '../ide/ideContext.js';
@@ -295,7 +295,7 @@ export class NativeLspService {
         const ext = path.extname(filePath).slice(1).toLowerCase();
         if (ext && handle.config.extensionToLanguage) {
             const mapping = handle.config.extensionToLanguage;
-            return mapping[ext] ?? mapping['.' + ext];
+            return mapping[ext] ?? mapping[`.${ext}`];
         }
         if (handle.config.languages && handle.config.languages.length > 0) {
             return handle.config.languages[0];
@@ -1082,7 +1082,7 @@ export class NativeLspService {
 
                 if (response && typeof response === 'object') {
                     const responseObj = response as Record<string, unknown>;
-                    const items = responseObj['items'];
+                    const items = responseObj.items;
                     if (Array.isArray(items)) {
                         for (const item of items) {
                             const normalized =
@@ -1130,7 +1130,7 @@ export class NativeLspService {
 
                 if (response && typeof response === 'object') {
                     const responseObj = response as Record<string, unknown>;
-                    const items = responseObj['items'];
+                    const items = responseObj.items;
                     if (Array.isArray(items)) {
                         for (const item of items) {
                             if (results.length >= limit) {
@@ -1351,9 +1351,9 @@ export class NativeLspService {
         const message =
             typeof response === 'string'
                 ? response
-                : typeof (response as Record<string, unknown>)['message'] ===
+                : typeof (response as Record<string, unknown>).message ===
                     'string'
-                  ? ((response as Record<string, unknown>)['message'] as string)
+                  ? ((response as Record<string, unknown>).message as string)
                   : '';
         return message.includes('No Project');
     }

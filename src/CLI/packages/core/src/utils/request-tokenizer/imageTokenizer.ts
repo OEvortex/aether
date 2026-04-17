@@ -415,7 +415,9 @@ export class ImageTokenizer {
         for (let i = 0; i < numEntries; i++) {
             const entryOffset = ifdOffset + 2 + i * 12;
 
-            if (entryOffset + 12 > buffer.length) break;
+            if (entryOffset + 12 > buffer.length) {
+                break;
+            }
 
             const tag = isLittleEndian
                 ? buffer.readUInt16LE(entryOffset)
@@ -437,7 +439,9 @@ export class ImageTokenizer {
                 height = type === 3 ? value : value; // SHORT or LONG
             }
 
-            if (width > 0 && height > 0) break;
+            if (width > 0 && height > 0) {
+                break;
+            }
         }
 
         if (width === 0 || height === 0) {
@@ -501,12 +505,16 @@ export class ImageTokenizer {
                         }
                     }
 
-                    if (innerBoxSize === 0) break;
+                    if (innerBoxSize === 0) {
+                        break;
+                    }
                     innerOffset += innerBoxSize;
                 }
             }
 
-            if (boxSize === 0) break;
+            if (boxSize === 0) {
+                break;
+            }
             offset += boxSize;
         }
 

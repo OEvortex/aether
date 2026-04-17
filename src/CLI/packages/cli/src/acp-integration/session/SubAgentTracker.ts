@@ -124,7 +124,9 @@ export class SubAgentTracker {
     ): (...args: unknown[]) => void {
         return (...args: unknown[]) => {
             const event = args[0] as AgentToolCallEvent;
-            if (abortSignal.aborted) return;
+            if (abortSignal.aborted) {
+                return;
+            }
 
             // Look up tool and build invocation for metadata
             const toolRegistry = this.ctx.config.getToolRegistry();
@@ -168,7 +170,9 @@ export class SubAgentTracker {
     ): (...args: unknown[]) => void {
         return (...args: unknown[]) => {
             const event = args[0] as AgentToolResultEvent;
-            if (abortSignal.aborted) return;
+            if (abortSignal.aborted) {
+                return;
+            }
 
             const state = this.toolStates.get(event.callId);
 
@@ -196,7 +200,9 @@ export class SubAgentTracker {
     ): (...args: unknown[]) => Promise<void> {
         return async (...args: unknown[]) => {
             const event = args[0] as AgentApprovalRequestEvent;
-            if (abortSignal.aborted) return;
+            if (abortSignal.aborted) {
+                return;
+            }
 
             const state = this.toolStates.get(event.callId);
 
@@ -263,7 +269,9 @@ export class SubAgentTracker {
     ): (...args: unknown[]) => void {
         return (...args: unknown[]) => {
             const event = args[0] as AgentUsageEvent;
-            if (abortSignal.aborted) return;
+            if (abortSignal.aborted) {
+                return;
+            }
 
             this.messageEmitter.emitUsageMetadata(
                 event.usage,
@@ -283,7 +291,9 @@ export class SubAgentTracker {
     ): (...args: unknown[]) => void {
         return (...args: unknown[]) => {
             const event = args[0] as AgentStreamTextEvent;
-            if (abortSignal.aborted) return;
+            if (abortSignal.aborted) {
+                return;
+            }
 
             // Emit streamed text as agent message or thought based on the flag
             void this.messageEmitter.emitMessage(

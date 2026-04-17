@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import path from 'node:path';
 import { Storage } from '@aetherai/aether-core';
 import open from 'open';
-import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
 import { insightCommand } from './insightCommand.js';

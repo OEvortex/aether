@@ -81,7 +81,7 @@ export const TableRenderer: React.FC<TableRendererProps> = ({
                     }
                 }
 
-                cellContent = bestTruncated + '...';
+                cellContent = `${bestTruncated}...`;
             }
         }
 

@@ -28,7 +28,7 @@ vi.mock('../i18n/index.js', () => ({
 describe('initializeApp', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        delete process.env['aether_cli_LANG'];
+        delete process.env.aether_cli_LANG;
 
         vi.mocked(initializeI18n).mockResolvedValue(undefined);
         vi.mocked(validateTheme).mockReturnValue(null);

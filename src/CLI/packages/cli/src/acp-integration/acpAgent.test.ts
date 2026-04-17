@@ -106,10 +106,12 @@ describe('runAcpAgent shutdown cleanup', () => {
             event: string,
             listener: (...args: unknown[]) => void
         ) => {
-            if (event === 'SIGTERM')
+            if (event === 'SIGTERM') {
                 sigTermListeners.push(listener as NodeJS.SignalsListener);
-            if (event === 'SIGINT')
+            }
+            if (event === 'SIGINT') {
                 sigIntListeners.push(listener as NodeJS.SignalsListener);
+            }
             return process;
         }) as typeof process.on);
 

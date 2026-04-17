@@ -361,7 +361,7 @@ export const AppContainer = (props: AppContainerProps) => {
             await ideClient.disconnect();
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [config]);
+    }, [config, historyManager.loadHistory]);
 
     useEffect(
         () => setUpdateHandler(historyManager.addItem, setUpdateInfo),
@@ -381,7 +381,7 @@ export const AppContainer = (props: AppContainerProps) => {
         const interval = setInterval(checkModelChange, 1000); // Check every second
 
         return () => clearInterval(interval);
-    }, [config, currentModel, getCurrentModel]);
+    }, [currentModel, getCurrentModel]);
 
     // Derive widths for InputPrompt using shared helper
     const { inputWidth, suggestionsWidth } = useMemo(() => {
@@ -446,7 +446,7 @@ export const AppContainer = (props: AppContainerProps) => {
     const refreshStatic = useCallback(() => {
         stdout.write(ansiEscapes.clearTerminal);
         setHistoryRemountKey((prev) => prev + 1);
-    }, [setHistoryRemountKey, stdout]);
+    }, [stdout]);
 
     const {
         isThemeDialogOpen,
@@ -617,7 +617,6 @@ export const AppContainer = (props: AppContainerProps) => {
             openSettingsDialog,
             openModelDialog,
             openArenaDialog,
-            setDebugMessage,
             dispatchExtensionStateUpdate,
             openTrustDialog,
             openPermissionsDialog,
@@ -802,7 +801,9 @@ export const AppContainer = (props: AppContainerProps) => {
     messageQueueRef.current = messageQueue;
     midTurnDrainRef.current = () => {
         const queue = messageQueueRef.current;
-        if (queue.length === 0) return [];
+        if (queue.length === 0) {
+            return [];
+        }
         messageQueueRef.current = [];
         clearQueue();
         return [...queue];
@@ -931,7 +932,7 @@ export const AppContainer = (props: AppContainerProps) => {
                                                               string,
                                                               unknown
                                                           >
-                                                      )['output'] ??
+                                                      ).output ??
                                                       JSON.stringify(resp))
                                                     : String(resp ?? '');
                                             return {
@@ -1080,7 +1081,7 @@ export const AppContainer = (props: AppContainerProps) => {
                 setControlsHeight(fullFooterMeasurement.height);
             }
         }
-    }, [buffer, terminalWidth, terminalHeight]);
+    }, []);
 
     // agentViewState is declared earlier (before handleFinalSubmit) so it
     // is available for input routing. Referenced here for layout computation.
@@ -1224,7 +1225,9 @@ export const AppContainer = (props: AppContainerProps) => {
                 model: settings.merged.fastModel || undefined
             })
                 .then((result) => {
-                    if (ac.signal.aborted) return;
+                    if (ac.signal.aborted) {
+                        return;
+                    }
                     if (result.suggestion) {
                         setPromptSuggestion(result.suggestion);
                         // Start speculation if enabled (runs in background)
@@ -1283,7 +1286,16 @@ export const AppContainer = (props: AppContainerProps) => {
         confirmationRequest,
         loopDetectionConfirmationRequest,
         isPermissionsDialogOpen,
-        settingInputRequests
+        settingInputRequests,
+        config,
+        geminiClient.getChat,
+        historyManager.history.length, // Check both committed history and pending items for errors
+        // (API errors go to pendingGeminiHistoryItems, not historyManager.history)
+        historyManager.history[historyManager.history.length - 1]?.type,
+        pendingGeminiHistoryItems.some,
+        settings.merged.fastModel,
+        settings.merged.ui?.enableCacheSharing,
+        settings.merged.ui?.enableSpeculation
     ]);
 
     // Abort speculation when promptSuggestion is cleared (new turn, feature toggle, or
@@ -1366,7 +1378,7 @@ export const AppContainer = (props: AppContainerProps) => {
         return () => {
             clearTimeout(handler);
         };
-    }, [terminalWidth, refreshStatic]);
+    }, [refreshStatic]);
 
     useEffect(() => {
         const unsubscribe = ideContextStore.subscribe(setIdeContextState);
@@ -1563,11 +1575,7 @@ export const AppContainer = (props: AppContainerProps) => {
             }
 
             // 3. Cancel in-flight btw side-question
-            if (
-                btwItem &&
-                btwItem.btw.isPending &&
-                !dialogsVisibleRef.current
-            ) {
+            if (btwItem?.btw.isPending && !dialogsVisibleRef.current) {
                 cancelBtw();
                 return; // Btw cancelled, end processing
             }
@@ -1632,11 +1640,7 @@ export const AppContainer = (props: AppContainerProps) => {
                 return;
             } else if (keyMatchers[Command.EXIT](key)) {
                 // Cancel in-flight btw even when buffer has text (Ctrl+D)
-                if (
-                    btwItem &&
-                    btwItem.btw.isPending &&
-                    !dialogsVisibleRef.current
-                ) {
+                if (btwItem?.btw.isPending && !dialogsVisibleRef.current) {
                     cancelBtw();
                     return;
                 }
@@ -1748,21 +1752,13 @@ export const AppContainer = (props: AppContainerProps) => {
         },
         [
             constrainHeight,
-            setConstrainHeight,
             showToolDescriptions,
-            setShowToolDescriptions,
             config,
             ideContextState,
             handleExit,
             ctrlCPressedOnce,
-            setCtrlCPressedOnce,
-            ctrlCTimerRef,
             ctrlDPressedOnce,
-            setCtrlDPressedOnce,
-            ctrlDTimerRef,
             escapePressedOnce,
-            setEscapePressedOnce,
-            escapeTimerRef,
             streamingState,
             cancelOngoingRequest,
             buffer,
@@ -1785,8 +1781,9 @@ export const AppContainer = (props: AppContainerProps) => {
         if (
             !settings.merged.ui?.showStatusInTitle ||
             settings.merged.ui?.hideWindowTitle
-        )
+        ) {
             return;
+        }
 
         let title;
         if (streamingState === StreamingState.Idle) {
@@ -2043,7 +2040,6 @@ export const AppContainer = (props: AppContainerProps) => {
             availableTerminalHeight,
             mainAreaWidth,
             staticAreaMaxItemHeight,
-            staticExtraHeight,
             dialogsVisible,
             pendingHistoryItems,
             btwItem,
@@ -2054,7 +2050,6 @@ export const AppContainer = (props: AppContainerProps) => {
             sessionStats,
             terminalWidth,
             terminalHeight,
-            mainControlsRef,
             currentIDE,
             updateInfo,
             showIdeRestartPrompt,
@@ -2169,12 +2164,10 @@ export const AppContainer = (props: AppContainerProps) => {
             dismissCodingPlanUpdate,
             closeTrustDialog,
             closePermissionsDialog,
-            setShellModeActive,
             vimHandleInput,
             handleIdePromptComplete,
             handleCommandMigrationComplete,
             handleFolderTrustSelect,
-            setConstrainHeight,
             handleEscapePromptChange,
             refreshStatic,
             handleFinalSubmit,

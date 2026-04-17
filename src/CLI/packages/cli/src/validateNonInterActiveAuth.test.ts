@@ -57,20 +57,20 @@ describe('validateNonInterActiveAuth', () => {
     let mockSettings: LoadedSettings;
 
     beforeEach(() => {
-        originalEnvGeminiApiKey = process.env['GEMINI_API_KEY'];
-        originalEnvVertexAi = process.env['GOOGLE_GENAI_USE_VERTEXAI'];
-        originalEnvGcp = process.env['GOOGLE_GENAI_USE_GCA'];
-        originalEnvOpenAiApiKey = process.env['OPENAI_API_KEY'];
-        originalEnvaetherOAuth = process.env['AETHER_OAUTH'];
-        originalEnvGoogleApiKey = process.env['GOOGLE_API_KEY'];
-        originalEnvAnthropicApiKey = process.env['ANTHROPIC_API_KEY'];
-        delete process.env['GEMINI_API_KEY'];
-        delete process.env['GOOGLE_GENAI_USE_VERTEXAI'];
-        delete process.env['GOOGLE_GENAI_USE_GCA'];
-        delete process.env['OPENAI_API_KEY'];
-        delete process.env['AETHER_OAUTH'];
-        delete process.env['GOOGLE_API_KEY'];
-        delete process.env['ANTHROPIC_API_KEY'];
+        originalEnvGeminiApiKey = process.env.GEMINI_API_KEY;
+        originalEnvVertexAi = process.env.GOOGLE_GENAI_USE_VERTEXAI;
+        originalEnvGcp = process.env.GOOGLE_GENAI_USE_GCA;
+        originalEnvOpenAiApiKey = process.env.OPENAI_API_KEY;
+        originalEnvaetherOAuth = process.env.AETHER_OAUTH;
+        originalEnvGoogleApiKey = process.env.GOOGLE_API_KEY;
+        originalEnvAnthropicApiKey = process.env.ANTHROPIC_API_KEY;
+        delete process.env.GEMINI_API_KEY;
+        delete process.env.GOOGLE_GENAI_USE_VERTEXAI;
+        delete process.env.GOOGLE_GENAI_USE_GCA;
+        delete process.env.OPENAI_API_KEY;
+        delete process.env.AETHER_OAUTH;
+        delete process.env.GOOGLE_API_KEY;
+        delete process.env.ANTHROPIC_API_KEY;
         mockWriteStderrLine.mockClear();
         processExitSpy = vi
             .spyOn(process, 'exit')
@@ -101,39 +101,39 @@ describe('validateNonInterActiveAuth', () => {
 
     afterEach(() => {
         if (originalEnvGeminiApiKey !== undefined) {
-            process.env['GEMINI_API_KEY'] = originalEnvGeminiApiKey;
+            process.env.GEMINI_API_KEY = originalEnvGeminiApiKey;
         } else {
-            delete process.env['GEMINI_API_KEY'];
+            delete process.env.GEMINI_API_KEY;
         }
         if (originalEnvVertexAi !== undefined) {
-            process.env['GOOGLE_GENAI_USE_VERTEXAI'] = originalEnvVertexAi;
+            process.env.GOOGLE_GENAI_USE_VERTEXAI = originalEnvVertexAi;
         } else {
-            delete process.env['GOOGLE_GENAI_USE_VERTEXAI'];
+            delete process.env.GOOGLE_GENAI_USE_VERTEXAI;
         }
         if (originalEnvGcp !== undefined) {
-            process.env['GOOGLE_GENAI_USE_GCA'] = originalEnvGcp;
+            process.env.GOOGLE_GENAI_USE_GCA = originalEnvGcp;
         } else {
-            delete process.env['GOOGLE_GENAI_USE_GCA'];
+            delete process.env.GOOGLE_GENAI_USE_GCA;
         }
         if (originalEnvOpenAiApiKey !== undefined) {
-            process.env['OPENAI_API_KEY'] = originalEnvOpenAiApiKey;
+            process.env.OPENAI_API_KEY = originalEnvOpenAiApiKey;
         } else {
-            delete process.env['OPENAI_API_KEY'];
+            delete process.env.OPENAI_API_KEY;
         }
         if (originalEnvaetherOAuth !== undefined) {
-            process.env['AETHER_OAUTH'] = originalEnvaetherOAuth;
+            process.env.AETHER_OAUTH = originalEnvaetherOAuth;
         } else {
-            delete process.env['AETHER_OAUTH'];
+            delete process.env.AETHER_OAUTH;
         }
         if (originalEnvGoogleApiKey !== undefined) {
-            process.env['GOOGLE_API_KEY'] = originalEnvGoogleApiKey;
+            process.env.GOOGLE_API_KEY = originalEnvGoogleApiKey;
         } else {
-            delete process.env['GOOGLE_API_KEY'];
+            delete process.env.GOOGLE_API_KEY;
         }
         if (originalEnvAnthropicApiKey !== undefined) {
-            process.env['ANTHROPIC_API_KEY'] = originalEnvAnthropicApiKey;
+            process.env.ANTHROPIC_API_KEY = originalEnvAnthropicApiKey;
         } else {
-            delete process.env['ANTHROPIC_API_KEY'];
+            delete process.env.ANTHROPIC_API_KEY;
         }
         vi.restoreAllMocks();
     });
@@ -169,7 +169,7 @@ describe('validateNonInterActiveAuth', () => {
     });
 
     it('uses USE_OPENAI if OPENAI_API_KEY is set', async () => {
-        process.env['OPENAI_API_KEY'] = 'fake-openai-key';
+        process.env.OPENAI_API_KEY = 'fake-openai-key';
         const nonInteractiveConfig = createMockConfig({
             refreshAuth: refreshAuthMock,
             getModelsConfig: vi.fn().mockReturnValue({
@@ -248,10 +248,10 @@ describe('validateNonInterActiveAuth', () => {
     });
 
     it('uses enforcedAuthType if provided', async () => {
-        mockSettings.merged.security!.auth!.enforcedType = AuthType.USE_OPENAI;
-        mockSettings.merged.security!.auth!.selectedType = AuthType.USE_OPENAI;
+        mockSettings.merged.security?.auth!.enforcedType = AuthType.USE_OPENAI;
+        mockSettings.merged.security?.auth!.selectedType = AuthType.USE_OPENAI;
         // Set required env var for USE_OPENAI to ensure enforcedAuthType takes precedence
-        process.env['OPENAI_API_KEY'] = 'fake-key';
+        process.env.OPENAI_API_KEY = 'fake-key';
         const nonInteractiveConfig = createMockConfig({
             refreshAuth: refreshAuthMock,
             getModelsConfig: vi.fn().mockReturnValue({
@@ -268,9 +268,9 @@ describe('validateNonInterActiveAuth', () => {
     });
 
     it('exits if currentAuthType does not match enforcedAuthType', async () => {
-        mockSettings.merged.security!.auth!.enforcedType =
+        mockSettings.merged.security?.auth!.enforcedType =
             AuthType.AETHER_OAUTH;
-        process.env['OPENAI_API_KEY'] = 'fake-key';
+        process.env.OPENAI_API_KEY = 'fake-key';
         const nonInteractiveConfig = createMockConfig({
             refreshAuth: refreshAuthMock,
             getModelsConfig: vi.fn().mockReturnValue({
@@ -357,9 +357,9 @@ describe('validateNonInterActiveAuth', () => {
         });
 
         it('emits error result and exits when enforced auth mismatches current auth', async () => {
-            mockSettings.merged.security!.auth!.enforcedType =
+            mockSettings.merged.security?.auth!.enforcedType =
                 AuthType.AETHER_OAUTH;
-            process.env['OPENAI_API_KEY'] = 'fake-key';
+            process.env.OPENAI_API_KEY = 'fake-key';
 
             const nonInteractiveConfig = createMockConfig({
                 refreshAuth: refreshAuthMock,
@@ -402,7 +402,7 @@ describe('validateNonInterActiveAuth', () => {
 
         it('emits error result and exits when API key validation fails', async () => {
             vi.spyOn(auth, 'validateAuthMethod').mockReturnValue('Auth error!');
-            process.env['OPENAI_API_KEY'] = 'fake-key';
+            process.env.OPENAI_API_KEY = 'fake-key';
 
             const nonInteractiveConfig = createMockConfig({
                 refreshAuth: refreshAuthMock,
@@ -508,9 +508,9 @@ describe('validateNonInterActiveAuth', () => {
         });
 
         it('emits error result and exits when enforced auth mismatches current auth', async () => {
-            mockSettings.merged.security!.auth!.enforcedType =
+            mockSettings.merged.security?.auth!.enforcedType =
                 AuthType.AETHER_OAUTH;
-            process.env['OPENAI_API_KEY'] = 'fake-key';
+            process.env.OPENAI_API_KEY = 'fake-key';
 
             const nonInteractiveConfig = createMockConfig({
                 refreshAuth: refreshAuthMock,
@@ -556,7 +556,7 @@ describe('validateNonInterActiveAuth', () => {
 
         it('emits error result and exits when API key validation fails', async () => {
             vi.spyOn(auth, 'validateAuthMethod').mockReturnValue('Auth error!');
-            process.env['OPENAI_API_KEY'] = 'fake-key';
+            process.env.OPENAI_API_KEY = 'fake-key';
 
             const nonInteractiveConfig = createMockConfig({
                 refreshAuth: refreshAuthMock,

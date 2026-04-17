@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@aetherai/aether-core';
 import type { CLIAssistantMessage, CLIMessage } from '../types.js';
 import {
     BaseJsonOutputAdapter,
@@ -22,10 +21,6 @@ export class JsonOutputAdapter
     implements JsonOutputAdapterInterface
 {
     private readonly messages: CLIMessage[] = [];
-
-    constructor(config: Config) {
-        super(config);
-    }
 
     /**
      * Emits message to the messages array (batch mode).

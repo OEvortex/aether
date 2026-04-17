@@ -57,8 +57,11 @@ export class AgentStatistics {
         lastError?: string
     ) {
         this.totalToolCalls += 1;
-        if (success) this.successfulToolCalls += 1;
-        else this.failedToolCalls += 1;
+        if (success) {
+            this.successfulToolCalls += 1;
+        } else {
+            this.failedToolCalls += 1;
+        }
 
         const tu = this.toolUsage.get(name) || {
             name,
@@ -70,9 +73,14 @@ export class AgentStatistics {
             averageDurationMs: 0
         };
         tu.count += 1;
-        if (success) tu.success += 1;
-        else tu.failure += 1;
-        if (lastError) tu.lastError = lastError;
+        if (success) {
+            tu.success += 1;
+        } else {
+            tu.failure += 1;
+        }
+        if (lastError) {
+            tu.lastError = lastError;
+        }
         tu.totalDurationMs += Math.max(0, durationMs || 0);
         tu.averageDurationMs = tu.count > 0 ? tu.totalDurationMs / tu.count : 0;
         this.toolUsage.set(name, tu);
@@ -157,16 +165,24 @@ export class AgentStatistics {
         );
         // Quality indicator
         let quality = 'Poor execution';
-        if (sr >= 95) quality = 'Excellent execution';
-        else if (sr >= 85) quality = 'Good execution';
-        else if (sr >= 70) quality = 'Fair execution';
+        if (sr >= 95) {
+            quality = 'Excellent execution';
+        } else if (sr >= 85) {
+            quality = 'Good execution';
+        } else if (sr >= 70) {
+            quality = 'Fair execution';
+        }
         lines.push(`✅ Quality: ${quality} (${sr.toFixed(1)}% tool success)`);
         // Speed category
         const d = stats.totalDurationMs;
         let speed = 'Long execution - consider breaking down tasks';
-        if (d < 10_000) speed = 'Fast completion - under 10 seconds';
-        else if (d < 60_000) speed = 'Good speed - under a minute';
-        else if (d < 300_000) speed = 'Moderate duration - a few minutes';
+        if (d < 10_000) {
+            speed = 'Fast completion - under 10 seconds';
+        } else if (d < 60_000) {
+            speed = 'Good speed - under a minute';
+        } else if (d < 300_000) {
+            speed = 'Moderate duration - a few minutes';
+        }
         lines.push(`🚀 Speed: ${speed}`);
         lines.push(
             `🔧 Tools: ${stats.totalToolCalls} calls, ${sr.toFixed(1)}% success (${stats.successfulToolCalls} ok, ${stats.failedToolCalls} failed)`
@@ -180,7 +196,7 @@ export class AgentStatistics {
                 `🔢 Tokens: ${stats.totalTokens.toLocaleString()} (${parts.join(', ')})`
             );
         }
-        if (stats.toolUsage && stats.toolUsage.length) {
+        if (stats.toolUsage?.length) {
             const sorted = [...stats.toolUsage]
                 .sort((a, b) => b.count - a.count)
                 .slice(0, 5);
@@ -198,14 +214,20 @@ export class AgentStatistics {
         const tips = this.generatePerformanceTips(stats);
         if (tips.length) {
             lines.push('\n💡 Performance Insights:');
-            for (const tip of tips.slice(0, 3)) lines.push(` - ${tip}`);
+            for (const tip of tips.slice(0, 3)) {
+                lines.push(` - ${tip}`);
+            }
         }
         return lines.join('\n');
     }
 
     private fmtDuration(ms: number): string {
-        if (ms < 1000) return `${Math.round(ms)}ms`;
-        if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+        if (ms < 1000) {
+            return `${Math.round(ms)}ms`;
+        }
+        if (ms < 60000) {
+            return `${(ms / 1000).toFixed(1)}s`;
+        }
         if (ms < 3600000) {
             const m = Math.floor(ms / 60000);
             const s = Math.floor((ms % 60000) / 1000);
@@ -226,16 +248,18 @@ export class AgentStatistics {
                 : 0;
 
         // High failure rate
-        if (sr < 80)
+        if (sr < 80) {
             tips.push(
                 'Low tool success rate - review inputs and error messages'
             );
+        }
 
         // Long duration
-        if (stats.totalDurationMs > 60_000)
+        if (stats.totalDurationMs > 60_000) {
             tips.push(
                 'Long execution time - consider breaking down complex tasks'
             );
+        }
 
         // Token usage
         if (
@@ -248,10 +272,11 @@ export class AgentStatistics {
         }
         if (typeof stats.totalTokens === 'number' && totalCalls > 0) {
             const avgTokPerCall = stats.totalTokens / totalCalls;
-            if (avgTokPerCall > 5_000)
+            if (avgTokPerCall > 5_000) {
                 tips.push(
                     `High token usage per tool call (~${Math.round(avgTokPerCall)} tokens/call)`
                 );
+            }
         }
 
         // Network failures
@@ -262,10 +287,11 @@ export class AgentStatistics {
                 t.lastError &&
                 /timeout|network/i.test(t.lastError)
         );
-        if (hadNetworkFailure)
+        if (hadNetworkFailure) {
             tips.push(
                 'Network operations had failures - consider increasing timeout or checking connectivity'
             );
+        }
 
         // Slow tools
         const slow = (stats.toolUsage || [])
@@ -274,10 +300,11 @@ export class AgentStatistics {
                 (a, b) =>
                     (b.averageDurationMs ?? 0) - (a.averageDurationMs ?? 0)
             );
-        if (slow.length)
+        if (slow.length) {
             tips.push(
                 `Consider optimizing ${slow[0].name} operations (avg ${this.fmtDuration(Math.round(slow[0].averageDurationMs!))})`
             );
+        }
 
         return tips;
     }

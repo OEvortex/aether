@@ -12,7 +12,9 @@ vi.mock('node:fs', () => {
     const mock = {
         existsSync: (p: string) => p in fsStore,
         readFileSync: (p: string) => {
-            if (!(p in fsStore)) throw new Error('ENOENT');
+            if (!(p in fsStore)) {
+                throw new Error('ENOENT');
+            }
             return fsStore[p];
         },
         writeFileSync: (p: string, data: string) => {
@@ -42,7 +44,9 @@ function getPidFilePath() {
 }
 
 beforeEach(() => {
-    for (const k of Object.keys(fsStore)) delete fsStore[k];
+    for (const k of Object.keys(fsStore)) {
+        delete fsStore[k];
+    }
 });
 
 afterEach(() => {
@@ -59,9 +63,9 @@ describe('writeServiceInfo + readServiceInfo', () => {
         const info = readServiceInfo();
 
         expect(info).not.toBeNull();
-        expect(info!.pid).toBe(process.pid);
-        expect(info!.channels).toEqual(['telegram', 'dingtalk']);
-        expect(info!.startedAt).toBeTruthy();
+        expect(info?.pid).toBe(process.pid);
+        expect(info?.channels).toEqual(['telegram', 'dingtalk']);
+        expect(info?.startedAt).toBeTruthy();
     });
 
     it('returns null when no PID file exists', () => {
@@ -152,7 +156,9 @@ describe('waitForExit', () => {
         let alive = true;
 
         process.kill = vi.fn(() => {
-            if (!alive) throw new Error('ESRCH');
+            if (!alive) {
+                throw new Error('ESRCH');
+            }
             return true;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as any;

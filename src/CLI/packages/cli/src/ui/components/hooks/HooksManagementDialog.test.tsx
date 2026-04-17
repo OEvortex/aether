@@ -198,7 +198,7 @@ describe('HooksManagementDialog', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
 
             expect(keypressHandler).not.toBeNull();
-            keypressHandler!(createKey('escape', '\x1b'));
+            keypressHandler?.(createKey('escape', '\x1b'));
 
             expect(mockOnClose).toHaveBeenCalledTimes(1);
         });
@@ -211,9 +211,9 @@ describe('HooksManagementDialog', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
 
             // Press up multiple times from first item
-            keypressHandler!(createKey('up'));
-            keypressHandler!(createKey('up'));
-            keypressHandler!(createKey('up'));
+            keypressHandler?.(createKey('up'));
+            keypressHandler?.(createKey('up'));
+            keypressHandler?.(createKey('up'));
 
             // Should still be at first item (no crash)
             unmount();
@@ -259,7 +259,7 @@ describe('HooksManagementDialog', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
 
             expect(keypressHandler).not.toBeNull();
-            keypressHandler!(createKey('escape', '\x1b'));
+            keypressHandler?.(createKey('escape', '\x1b'));
 
             expect(mockOnClose).toHaveBeenCalledTimes(1);
         });
@@ -273,7 +273,7 @@ describe('HooksManagementDialog', () => {
 
             // Don't wait for loading to complete
             expect(keypressHandler).not.toBeNull();
-            keypressHandler!(createKey('escape', '\x1b'));
+            keypressHandler?.(createKey('escape', '\x1b'));
 
             expect(mockOnClose).toHaveBeenCalledTimes(1);
         });

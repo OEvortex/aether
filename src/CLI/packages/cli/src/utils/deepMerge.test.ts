@@ -139,9 +139,15 @@ describe('customDeepMerge', () => {
         };
         const getMergeStrategy = (path: string[]) => {
             const p = path.join('.');
-            if (p === 'level1.arr1') return MergeStrategy.CONCAT;
-            if (p === 'level1.arr2') return MergeStrategy.UNION;
-            if (p === 'level1.obj1') return MergeStrategy.SHALLOW_MERGE;
+            if (p === 'level1.arr1') {
+                return MergeStrategy.CONCAT;
+            }
+            if (p === 'level1.arr2') {
+                return MergeStrategy.UNION;
+            }
+            if (p === 'level1.obj1') {
+                return MergeStrategy.SHALLOW_MERGE;
+            }
             return undefined;
         };
 

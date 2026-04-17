@@ -155,9 +155,12 @@ describe('MCPOAuthProvider', () => {
 
         // Mock crypto functions
         vi.mocked(crypto.randomBytes).mockImplementation((size: number) => {
-            if (size === 32)
+            if (size === 32) {
                 return Buffer.from('code_verifier_mock_32_bytes_long');
-            if (size === 16) return Buffer.from('state_mock_16_by');
+            }
+            if (size === 16) {
+                return Buffer.from('state_mock_16_by');
+            }
             return Buffer.alloc(size);
         });
 
@@ -195,7 +198,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 // Simulate OAuth callback
                 setTimeout(() => {
@@ -302,7 +305,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -380,7 +383,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -468,7 +471,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -578,7 +581,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -629,7 +632,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -659,7 +662,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -689,7 +692,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -728,7 +731,7 @@ describe('MCPOAuthProvider', () => {
                 () => mockHttpServer as unknown as http.Server
             );
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 // Don't trigger callback - simulate timeout
             });
@@ -1003,7 +1006,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -1053,7 +1056,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -1120,7 +1123,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -1140,7 +1143,7 @@ describe('MCPOAuthProvider', () => {
             // Capture the token exchange request to verify resource param there too
             let capturedTokenBody: string | undefined;
             mockFetch.mockImplementation(
-                (url: string, options?: { body?: string }) => {
+                (_url: string, options?: { body?: string }) => {
                     if (options?.body) {
                         capturedTokenBody = options.body;
                     }
@@ -1200,7 +1203,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {
@@ -1258,7 +1261,7 @@ describe('MCPOAuthProvider', () => {
                 return mockHttpServer as unknown as http.Server;
             });
 
-            mockHttpServer.listen.mockImplementation((port, callback) => {
+            mockHttpServer.listen.mockImplementation((_port, callback) => {
                 callback?.();
                 setTimeout(() => {
                     const mockReq = {

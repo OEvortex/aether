@@ -84,7 +84,9 @@ const findEnclosingCodeBlockStart = (
                 return blockStartIndex;
             }
         }
-        if (blockEndIndex === -1) break;
+        if (blockEndIndex === -1) {
+            break;
+        }
         currentSearchPos = blockEndIndex + 3;
     }
     return -1;

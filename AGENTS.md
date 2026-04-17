@@ -324,6 +324,57 @@ npm run aether:build   # Aether CLI build</code_block>
         </section>
     </section>
 
+    <section name="BUILDING_AND_PUBLISHING">
+        <title>Building and Publishing Aether CLI</title>
+        <description>The Aether CLI is a monorepo workspace containing multiple packages. We use a synchronized versioning scheme for all @aetherai/* packages.</description>
+
+        <section name="Build_Process">
+            <title>Building the CLI</title>
+            <step_list>
+                <step order="1">
+                    <title>Standard Build</title>
+                    <code_block language="bash">npm run aether:build</code_block>
+                    <description>This runs the build in the src/CLI directory, which compiles all workspace packages.</description>
+                </step>
+                <step order="2">
+                    <title>Bundling</title>
+                    <code_block language="bash">npm run bundle --prefix src/CLI</code_block>
+                    <description>This uses esbuild to create a single, optimized executable file at `src/CLI/dist/cli.mjs`.</description>
+                </step>
+            </step_list>
+        </section>
+
+        <section name="Publishing_to_NPM">
+            <title>Publishing to NPM</title>
+            <warning>You MUST be logged into npm with appropriate permissions for the @aetherai scope.</warning>
+            <step_list>
+                <step order="1">
+                    <title>Automatic Sync and Publish</title>
+                    <code_block language="bash">npm --prefix src/CLI run publish:all</code_block>
+                    <description>This automated script (scripts/publish_all.js) performs several critical steps:</description>
+                    <list>
+                        <item>Synchronizes all package versions in the workspace to the latest target version.</item>
+                        <item>Updates cross-package dependencies to point to the new versions.</item>
+                        <item>Builds all packages and generates the CLI bundle.</item>
+                        <item>Copies the `cli.mjs` bundle into the `packages/cli/dist` folder.</item>
+                        <item>Publishes all @aetherai/* packages to npm in the correct dependency order.</item>
+                    </list>
+                </step>
+                <step order="2">
+                    <title>Version Bumping</title>
+                    <description>You can optionally bump the version automatically during publish:</description>
+                    <code_block language="bash">npm --prefix src/CLI run publish:all:patch
+npm --prefix src/CLI run publish:all:minor</code_block>
+                </step>
+                <step order="3">
+                    <title>Dry Run (Safety First)</title>
+                    <code_block language="bash">npm --prefix src/CLI run publish:all:dry</code_block>
+                    <description>Always perform a dry run before a real publish to verify version sync and build integrity.</description>
+                </step>
+            </step_list>
+        </section>
+    </section>
+
     <section name="COMMANDS">
         <code_block language="bash">npm run compile          # Build extension to dist/
 npm run compile:dev      # Build in development mode
@@ -335,9 +386,12 @@ npm run package          # Create .vsix package
 npm run publish          # Publish to VS Code marketplace
 
 # Aether CLI commands
-npm run aether:build     # Build Aether CLI
-npm run aether:start     # Start Aether CLI
-npm run aether:dev       # Build and start Aether CLI (dev mode)</code_block>
+npm run aether:build                       # Build Aether CLI workspace
+npm run bundle --prefix src/CLI            # Generate optimized CLI bundle
+npm --prefix src/CLI run publish:all       # Synchronize and publish all packages
+npm --prefix src/CLI run publish:all:dry   # Dry run publication
+npm run aether:start                       # Start Aether CLI
+npm run aether:dev                         # Build and start Aether CLI (dev mode)</code_block>
     </section>
 
     <section name="RULES">

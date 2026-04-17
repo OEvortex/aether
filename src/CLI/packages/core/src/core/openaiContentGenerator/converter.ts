@@ -173,7 +173,10 @@ export class OpenAIContentConverter {
                     key === 'multipleOf'
                 ) {
                     // Ensure numeric constraints are actual numbers, not strings
-                    if (typeof value === 'string' && !isNaN(Number(value))) {
+                    if (
+                        typeof value === 'string' &&
+                        !Number.isNaN(Number(value))
+                    ) {
                         result[key] = Number(value);
                     } else {
                         result[key] = value;
@@ -185,7 +188,10 @@ export class OpenAIContentConverter {
                     key === 'maxItems'
                 ) {
                     // Ensure length constraints are integers, not strings
-                    if (typeof value === 'string' && !isNaN(Number(value))) {
+                    if (
+                        typeof value === 'string' &&
+                        !Number.isNaN(Number(value))
+                    ) {
                         result[key] = parseInt(value, 10);
                     } else {
                         result[key] = value;
@@ -400,7 +406,9 @@ export class OpenAIContentConverter {
         request: GenerateContentParameters,
         messages: OpenAI.Chat.ChatCompletionMessageParam[]
     ): void {
-        if (!request.config?.systemInstruction) return;
+        if (!request.config?.systemInstruction) {
+            return;
+        }
 
         const systemText = this.extractTextFromContentUnion(
             request.config.systemInstruction
@@ -442,7 +450,9 @@ export class OpenAIContentConverter {
             return;
         }
 
-        if (!this.isContentObject(content)) return;
+        if (!this.isContentObject(content)) {
+            return;
+        }
         const parts = content.parts || [];
         const role = content.role === 'model' ? 'assistant' : 'user';
 
@@ -558,12 +568,12 @@ export class OpenAIContentConverter {
 
         if (typeof response === 'object') {
             const responseObject = response as Record<string, unknown>;
-            const output = responseObject['output'];
+            const output = responseObject.output;
             if (typeof output === 'string') {
                 return output;
             }
 
-            const error = responseObject['error'];
+            const error = responseObject.error;
             if (typeof error === 'string') {
                 return error;
             }
@@ -793,9 +803,15 @@ export class OpenAIContentConverter {
     private getMediaType(
         mimeType: string
     ): 'image' | 'audio' | 'video' | 'file' {
-        if (mimeType.startsWith('image/')) return 'image';
-        if (mimeType.startsWith('audio/')) return 'audio';
-        if (mimeType.startsWith('video/')) return 'video';
+        if (mimeType.startsWith('image/')) {
+            return 'image';
+        }
+        if (mimeType.startsWith('audio/')) {
+            return 'audio';
+        }
+        if (mimeType.startsWith('video/')) {
+            return 'video';
+        }
         return 'file';
     }
 
@@ -803,8 +819,12 @@ export class OpenAIContentConverter {
      * Convert MIME type to OpenAI audio format
      */
     private getAudioFormat(mimeType: string): 'wav' | 'mp3' | null {
-        if (mimeType.includes('wav')) return 'wav';
-        if (mimeType.includes('mp3') || mimeType.includes('mpeg')) return 'mp3';
+        if (mimeType.includes('wav')) {
+            return 'wav';
+        }
+        if (mimeType.includes('mp3') || mimeType.includes('mpeg')) {
+            return 'mp3';
+        }
         return null;
     }
 
@@ -819,7 +839,7 @@ export class OpenAIContentConverter {
             content !== null &&
             'role' in content &&
             'parts' in content &&
-            Array.isArray((content as Record<string, unknown>)['parts'])
+            Array.isArray((content as Record<string, unknown>).parts)
         );
     }
 
@@ -844,8 +864,12 @@ export class OpenAIContentConverter {
                 return (
                     content.parts
                         ?.map((part: Part) => {
-                            if (typeof part === 'string') return part;
-                            if ('text' in part) return part.text || '';
+                            if (typeof part === 'string') {
+                                return part;
+                            }
+                            if ('text' in part) {
+                                return part.text || '';
+                            }
                             return '';
                         })
                         .filter(Boolean)
@@ -926,7 +950,7 @@ export class OpenAIContentConverter {
         response.responseId = openaiResponse.id;
         response.createTime = openaiResponse.created
             ? openaiResponse.created.toString()
-            : new Date().getTime().toString();
+            : Date.now().toString();
 
         response.modelVersion = this.model;
         response.promptFeedback = { safetyRatings: [] };
@@ -1086,7 +1110,7 @@ export class OpenAIContentConverter {
         response.responseId = chunk.id;
         response.createTime = chunk.created
             ? chunk.created.toString()
-            : new Date().getTime().toString();
+            : Date.now().toString();
 
         response.modelVersion = this.model;
         response.promptFeedback = { safetyRatings: [] };
@@ -1141,7 +1165,9 @@ export class OpenAIContentConverter {
     private mapOpenAIFinishReasonToGemini(
         openaiReason: string | null
     ): FinishReason {
-        if (!openaiReason) return FinishReason.FINISH_REASON_UNSPECIFIED;
+        if (!openaiReason) {
+            return FinishReason.FINISH_REASON_UNSPECIFIED;
+        }
         const mapping: Record<string, FinishReason> = {
             stop: FinishReason.STOP,
             length: FinishReason.MAX_TOKENS,

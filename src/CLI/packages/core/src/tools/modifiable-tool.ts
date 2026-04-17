@@ -99,14 +99,18 @@ function getUpdatedParams<ToolParams>(
     try {
         oldContent = fs.readFileSync(tmpOldPath, 'utf8');
     } catch (err) {
-        if (!isNodeError(err) || err.code !== 'ENOENT') throw err;
+        if (!isNodeError(err) || err.code !== 'ENOENT') {
+            throw err;
+        }
         oldContent = '';
     }
 
     try {
         newContent = fs.readFileSync(tempNewPath, 'utf8');
     } catch (err) {
-        if (!isNodeError(err) || err.code !== 'ENOENT') throw err;
+        if (!isNodeError(err) || err.code !== 'ENOENT') {
+            throw err;
+        }
         newContent = '';
     }
 

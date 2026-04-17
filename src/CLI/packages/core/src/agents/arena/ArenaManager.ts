@@ -616,7 +616,9 @@ export class ArenaManager {
         status: ArenaSessionEndedStatus,
         winnerModelId?: string
     ): void {
-        if (this.sessionEndedLogged) return;
+        if (this.sessionEndedLogged) {
+            return;
+        }
         this.sessionEndedLogged = true;
 
         const agents = Array.from(this.agents.values());
@@ -652,7 +654,9 @@ export class ArenaManager {
         message: string,
         type: 'info' | 'warning' | 'success' = 'info'
     ): void {
-        if (!this.sessionId) return;
+        if (!this.sessionId) {
+            return;
+        }
         this.eventEmitter.emit(ArenaEventType.SESSION_UPDATE, {
             sessionId: this.sessionId,
             type,
@@ -693,7 +697,7 @@ export class ArenaManager {
         const uniqueSafeIds = new Set(safeIds);
         if (uniqueSafeIds.size !== safeIds.length) {
             const collisions = modelIds.filter(
-                (id, i) => safeIds.indexOf(safeIds[i]!) !== i
+                (_id, i) => safeIds.indexOf(safeIds[i]!) !== i
             );
             throw new Error(
                 `Arena model IDs collide after path normalization: ${collisions.join(', ')}. ` +
@@ -1044,10 +1048,10 @@ export class ArenaManager {
 
         // If the model has auth overrides, pass them via env
         if (model.apiKey) {
-            env['QWEN_API_KEY'] = model.apiKey;
+            env.QWEN_API_KEY = model.apiKey;
         }
         if (model.baseUrl) {
-            env['QWEN_BASE_URL'] = model.baseUrl;
+            env.QWEN_BASE_URL = model.baseUrl;
         }
 
         const spawnConfig: AgentSpawnConfig = {
@@ -1105,7 +1109,9 @@ export class ArenaManager {
         current: AgentStatus,
         incoming: AgentStatus
     ): AgentStatus | null {
-        if (current === incoming) return null;
+        if (current === incoming) {
+            return null;
+        }
         if (isTerminalStatus(current)) {
             // Allow revival: COMPLETED → RUNNING (agent received new input)
             if (
@@ -1299,7 +1305,9 @@ export class ArenaManager {
             const pollHandle = setInterval(() => {
                 if (checkSettled()) {
                     clearInterval(pollHandle);
-                    if (timeoutHandle) clearTimeout(timeoutHandle);
+                    if (timeoutHandle) {
+                        clearTimeout(timeoutHandle);
+                    }
                     resolve(true);
                 }
             }, ARENA_POLL_INTERVAL_MS);
@@ -1339,10 +1347,14 @@ export class ArenaManager {
     private setupInProcessEventBridge(backend: InProcessBackend): void {
         for (const agent of this.agents.values()) {
             const interactive = backend.getAgent(agent.agentId);
-            if (!interactive) continue;
+            if (!interactive) {
+                continue;
+            }
 
             const emitter = interactive.getEventEmitter();
-            if (!emitter) continue;
+            if (!emitter) {
+                continue;
+            }
 
             // AgentInteractive emits canonical AgentStatus values — no mapping needed.
 
@@ -1362,7 +1374,9 @@ export class ArenaManager {
                 options?: { roundCancelledByUser?: boolean }
             ) => {
                 const resolved = this.resolveTransition(agent.status, incoming);
-                if (!resolved) return;
+                if (!resolved) {
+                    return;
+                }
                 if (resolved === AgentStatus.FAILED) {
                     agent.error =
                         interactive.getLastRoundError() ||

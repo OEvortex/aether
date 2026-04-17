@@ -52,7 +52,9 @@ export function ExtensionsManagerDialog({
 
     // Load extensions
     const loadExtensions = useCallback(async () => {
-        if (!config) return;
+        if (!config) {
+            return;
+        }
 
         const extensionManager = config.getExtensionManager();
         if (!extensionManager) {
@@ -85,7 +87,9 @@ export function ExtensionsManagerDialog({
 
     // Check if update is available for selected extension
     const hasUpdateAvailable = useMemo(() => {
-        if (!selectedExtension) return false;
+        if (!selectedExtension) {
+            return false;
+        }
         const state = extensionsUpdateState.get(selectedExtension.name);
         return state === ExtensionUpdateState.UPDATE_AVAILABLE;
     }, [selectedExtension, extensionsUpdateState]);
@@ -124,7 +128,9 @@ export function ExtensionsManagerDialog({
     }, []);
 
     const handleUpdateExtension = useCallback(async () => {
-        if (!config || !selectedExtension) return;
+        if (!config || !selectedExtension) {
+            return;
+        }
 
         setUpdateInProgress(true);
         setUpdateError(null);
@@ -220,7 +226,9 @@ export function ExtensionsManagerDialog({
     // Unified handler for toggling extension state (enable/disable)
     const handleToggleExtensionState = useCallback(
         async (scope: 'user' | 'workspace', newState: boolean) => {
-            if (!config || !selectedExtension) return;
+            if (!config || !selectedExtension) {
+                return;
+            }
 
             try {
                 const extensionManager = config.getExtensionManager();
@@ -299,7 +307,9 @@ export function ExtensionsManagerDialog({
 
     const handleUninstallExtension = useCallback(
         async (extension: Extension) => {
-            if (!config) return;
+            if (!config) {
+                return;
+            }
 
             try {
                 const extensionManager = config.getExtensionManager();

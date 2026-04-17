@@ -390,7 +390,7 @@ describe('UiTelemetryService', () => {
             expect(tools.totalFail).toBe(0);
             expect(tools.totalDurationMs).toBe(150);
             expect(tools.totalDecisions[ToolCallDecision.ACCEPT]).toBe(1);
-            expect(tools.byName['test_tool']).toEqual({
+            expect(tools.byName.test_tool).toEqual({
                 count: 1,
                 success: 1,
                 fail: 0,
@@ -424,7 +424,7 @@ describe('UiTelemetryService', () => {
             expect(tools.totalFail).toBe(1);
             expect(tools.totalDurationMs).toBe(200);
             expect(tools.totalDecisions[ToolCallDecision.REJECT]).toBe(1);
-            expect(tools.byName['test_tool']).toEqual({
+            expect(tools.byName.test_tool).toEqual({
                 count: 1,
                 success: 0,
                 fail: 1,
@@ -458,7 +458,7 @@ describe('UiTelemetryService', () => {
             expect(tools.totalFail).toBe(1);
             expect(tools.totalDurationMs).toBe(180);
             expect(tools.totalDecisions[ToolCallDecision.REJECT]).toBe(1);
-            expect(tools.byName['test_tool']).toEqual({
+            expect(tools.byName.test_tool).toEqual({
                 count: 1,
                 success: 0,
                 fail: 1,
@@ -489,7 +489,7 @@ describe('UiTelemetryService', () => {
 
             expect(tools.totalDecisions[ToolCallDecision.MODIFY]).toBe(1);
             expect(
-                tools.byName['test_tool'].decisions[ToolCallDecision.MODIFY]
+                tools.byName.test_tool.decisions[ToolCallDecision.MODIFY]
             ).toBe(1);
         });
 
@@ -513,7 +513,7 @@ describe('UiTelemetryService', () => {
                 [ToolCallDecision.MODIFY]: 0,
                 [ToolCallDecision.AUTO_ACCEPT]: 0
             });
-            expect(tools.byName['test_tool'].decisions).toEqual({
+            expect(tools.byName.test_tool.decisions).toEqual({
                 [ToolCallDecision.ACCEPT]: 0,
                 [ToolCallDecision.REJECT]: 0,
                 [ToolCallDecision.MODIFY]: 0,
@@ -553,7 +553,7 @@ describe('UiTelemetryService', () => {
             expect(tools.totalDurationMs).toBe(250);
             expect(tools.totalDecisions[ToolCallDecision.ACCEPT]).toBe(1);
             expect(tools.totalDecisions[ToolCallDecision.REJECT]).toBe(1);
-            expect(tools.byName['test_tool']).toEqual({
+            expect(tools.byName.test_tool).toEqual({
                 count: 2,
                 success: 1,
                 fail: 1,
@@ -585,10 +585,10 @@ describe('UiTelemetryService', () => {
             expect(tools.totalCalls).toBe(2);
             expect(tools.totalSuccess).toBe(1);
             expect(tools.totalFail).toBe(1);
-            expect(tools.byName['tool_A']).toBeDefined();
-            expect(tools.byName['tool_B']).toBeDefined();
-            expect(tools.byName['tool_A'].count).toBe(1);
-            expect(tools.byName['tool_B'].count).toBe(1);
+            expect(tools.byName.tool_A).toBeDefined();
+            expect(tools.byName.tool_B).toBeDefined();
+            expect(tools.byName.tool_A.count).toBe(1);
+            expect(tools.byName.tool_B.count).toBe(1);
         });
     });
 

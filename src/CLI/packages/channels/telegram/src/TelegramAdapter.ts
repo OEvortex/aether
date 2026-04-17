@@ -1,21 +1,7 @@
-import type {
-    AcpBridge,
-    ChannelBaseOptions,
-    ChannelConfig,
-    Envelope
-} from '../../base/src/index.js';
+import type { Envelope } from '../../base/src/index.js';
 import { ChannelBase } from '../../base/src/index.js';
 
 export class TelegramChannel extends ChannelBase {
-    public constructor(
-        name: string,
-        config: ChannelConfig,
-        bridge: AcpBridge,
-        options?: ChannelBaseOptions
-    ) {
-        super(name, config, bridge, options);
-    }
-
     public async connect(): Promise<void> {}
 
     public async sendMessage(_chatId: string, _text: string): Promise<void> {}

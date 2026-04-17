@@ -97,7 +97,9 @@ export async function runAcpAgent(
     // causing the ACP process to ignore termination signals.
     let shuttingDown = false;
     const shutdownHandler = () => {
-        if (shuttingDown) return;
+        if (shuttingDown) {
+            return;
+        }
         shuttingDown = true;
         debugLogger.debug('[ACP] Shutdown signal received, closing streams');
         try {
@@ -151,7 +153,7 @@ class QwenAgent implements Agent {
     async initialize(args: InitializeRequest): Promise<InitializeResponse> {
         this.clientCapabilities = args.clientCapabilities;
         const authMethods = buildAuthMethods();
-        const version = process.env['CLI_VERSION'] || process.version;
+        const version = process.env.CLI_VERSION || process.version;
 
         return {
             protocolVersion: PROTOCOL_VERSION,
@@ -301,7 +303,7 @@ class QwenAgent implements Agent {
 
     async setSessionMode(
         params: SetSessionModeRequest
-    ): Promise<SetSessionModeResponse | void> {
+    ): Promise<SetSessionModeResponse | undefined> {
         const session = this.sessions.get(params.sessionId);
         if (!session) {
             throw RequestError.invalidParams(
@@ -314,7 +316,7 @@ class QwenAgent implements Agent {
 
     async unstable_setSessionModel(
         params: SetSessionModelRequest
-    ): Promise<SetSessionModelResponse | void> {
+    ): Promise<SetSessionModelResponse | undefined> {
         const session = this.sessions.get(params.sessionId);
         if (!session) {
             throw RequestError.invalidParams(
@@ -401,7 +403,9 @@ class QwenAgent implements Agent {
 
         for (const server of mcpServers) {
             const stdioServer = toStdioServer(server);
-            if (!stdioServer) continue;
+            if (!stdioServer) {
+                continue;
+            }
 
             const env: Record<string, string> = {};
             for (const { name: envName, value } of stdioServer.env) {
@@ -450,7 +454,7 @@ class QwenAgent implements Agent {
                         e
                     )
                 },
-                'Authentication failed: ' + (e as Error).message
+                `Authentication failed: ${(e as Error).message}`
             );
         }
     }
@@ -480,7 +484,9 @@ class QwenAgent implements Agent {
     }
 
     private extractErrorMessage(error?: unknown): string | undefined {
-        if (error instanceof Error) return error.message;
+        if (error instanceof Error) {
+            return error.message;
+        }
         if (
             typeof error === 'object' &&
             error != null &&
@@ -489,12 +495,16 @@ class QwenAgent implements Agent {
         ) {
             return error.message;
         }
-        if (typeof error === 'string') return error;
+        if (typeof error === 'string') {
+            return error;
+        }
         return undefined;
     }
 
     private setupFileSystem(config: Config): void {
-        if (!this.clientCapabilities?.fs) return;
+        if (!this.clientCapabilities?.fs) {
+            return;
+        }
 
         const acpFileSystemService = new AcpFileSystemService(
             this.connection,
@@ -531,7 +541,7 @@ class QwenAgent implements Agent {
             await session.sendAvailableCommandsUpdate();
         }, 0);
 
-        if (conversation && conversation.messages) {
+        if (conversation?.messages) {
             await session.replayHistory(conversation.messages);
         }
 
@@ -661,7 +671,9 @@ class QwenAgent implements Agent {
         baseModelId: string,
         authType?: AuthType
     ): string {
-        if (!baseModelId) return baseModelId;
+        if (!baseModelId) {
+            return baseModelId;
+        }
         return authType ? formatAcpModelId(baseModelId, authType) : baseModelId;
     }
 }

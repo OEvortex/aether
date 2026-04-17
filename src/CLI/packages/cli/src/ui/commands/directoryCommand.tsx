@@ -39,7 +39,9 @@ export function getDirPathCompletions(partialArg: string): string[] {
             : partialArg;
 
     const trimmed = partial.trim();
-    if (!trimmed) return [];
+    if (!trimmed) {
+        return [];
+    }
 
     const expanded = trimmed.startsWith('~')
         ? trimmed.replace(/^~/, os.homedir())
@@ -213,7 +215,7 @@ export const directoryCommand: SlashCommand = {
                         Date.now()
                     );
                 }
-                return;
+                return undefined;
             }
         },
         {
@@ -235,7 +237,7 @@ export const directoryCommand: SlashCommand = {
                         },
                         Date.now()
                     );
-                    return;
+                    return undefined;
                 }
                 const workspaceContext = config.getWorkspaceContext();
                 const directories = workspaceContext.getDirectories();
@@ -254,6 +256,8 @@ export const directoryCommand: SlashCommand = {
                     },
                     Date.now()
                 );
+
+                return undefined;
             }
         }
     ]

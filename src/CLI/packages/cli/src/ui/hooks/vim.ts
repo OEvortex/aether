@@ -305,7 +305,7 @@ export function useVim(buffer: TextBuffer, onSubmit?: (value: string) => void) {
             buffer.handleInput(normalizedKey);
             return true; // Handled by vim
         },
-        [buffer, dispatch, updateMode, onSubmit]
+        [buffer, updateMode, onSubmit]
     );
 
     /**
@@ -351,7 +351,7 @@ export function useVim(buffer: TextBuffer, onSubmit?: (value: string) => void) {
             dispatch({ type: 'SET_PENDING_OPERATOR', operator: null });
             return true;
         },
-        [getCurrentCount, dispatch, buffer, updateMode]
+        [getCurrentCount, buffer, updateMode]
     );
 
     /**
@@ -389,7 +389,7 @@ export function useVim(buffer: TextBuffer, onSubmit?: (value: string) => void) {
 
             return true;
         },
-        [getCurrentCount, executeCommand, dispatch]
+        [getCurrentCount, executeCommand]
     );
 
     const handleInput = useCallback(
@@ -817,7 +817,6 @@ export function useVim(buffer: TextBuffer, onSubmit?: (value: string) => void) {
             state.count,
             state.pendingOperator,
             state.lastCommand,
-            dispatch,
             getCurrentCount,
             handleChangeMovement,
             handleOperatorMotion,

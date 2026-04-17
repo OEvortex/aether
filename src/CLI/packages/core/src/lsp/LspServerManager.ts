@@ -6,9 +6,9 @@
 
 import { type ChildProcess, spawn } from 'node:child_process';
 import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { globSync } from 'glob';
-import * as path from 'path';
-import { pathToFileURL } from 'url';
 import type { Config as CoreConfig } from '../config/config.js';
 import type { FileDiscoveryService } from '../services/fileDiscoveryService.js';
 import { createDebugLogger } from '../utils/debugLogger.js';

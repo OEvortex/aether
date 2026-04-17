@@ -381,7 +381,9 @@ export class ToolRegistry {
             let stderrByteLength = 0;
 
             proc.stdout.on('data', (data) => {
-                if (sizeLimitExceeded) return;
+                if (sizeLimitExceeded) {
+                    return;
+                }
                 if (stdoutByteLength + data.length > MAX_STDOUT_SIZE) {
                     sizeLimitExceeded = true;
                     proc.kill();
@@ -392,7 +394,9 @@ export class ToolRegistry {
             });
 
             proc.stderr.on('data', (data) => {
-                if (sizeLimitExceeded) return;
+                if (sizeLimitExceeded) {
+                    return;
+                }
                 if (stderrByteLength + data.length > MAX_STDERR_SIZE) {
                     sizeLimitExceeded = true;
                     proc.kill();
@@ -443,11 +447,11 @@ export class ToolRegistry {
 
             for (const tool of discoveredItems) {
                 if (tool && typeof tool === 'object') {
-                    if (Array.isArray(tool['function_declarations'])) {
-                        functions.push(...tool['function_declarations']);
-                    } else if (Array.isArray(tool['functionDeclarations'])) {
-                        functions.push(...tool['functionDeclarations']);
-                    } else if (tool['name']) {
+                    if (Array.isArray(tool.function_declarations)) {
+                        functions.push(...tool.function_declarations);
+                    } else if (Array.isArray(tool.functionDeclarations)) {
+                        functions.push(...tool.functionDeclarations);
+                    } else if (tool.name) {
                         functions.push(tool as FunctionDeclaration);
                     }
                 }

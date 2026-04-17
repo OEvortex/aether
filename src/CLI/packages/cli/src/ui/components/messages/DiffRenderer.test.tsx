@@ -151,7 +151,7 @@ index 0000001..0000002 100644
             expect.anything()
         );
         const output = lastFrame();
-        const lines = output!.split('\n');
+        const lines = output?.split('\n');
         expect(lines[0]).toBe('1 - old line');
         expect(lines[1]).toBe('1 + new line');
     });

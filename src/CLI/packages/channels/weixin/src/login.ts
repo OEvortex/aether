@@ -57,7 +57,9 @@ export async function waitForLogin(params: {
                 }
             );
             clearTimeout(timeout);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}`);
+            }
             const data = (await resp.json()) as {
                 status?: string;
                 bot_token?: string;

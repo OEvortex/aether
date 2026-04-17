@@ -50,9 +50,9 @@ export class ArenaAgentClient {
      * and ARENA_SESSION_DIR env vars are present, null otherwise.
      */
     static create(): ArenaAgentClient | null {
-        const agentId = process.env['ARENA_AGENT_ID'];
-        const sessionId = process.env['ARENA_SESSION_ID'];
-        const sessionDir = process.env['ARENA_SESSION_DIR'];
+        const agentId = process.env.ARENA_AGENT_ID;
+        const sessionId = process.env.ARENA_SESSION_ID;
+        const sessionDir = process.env.ARENA_SESSION_DIR;
 
         if (!agentId || !sessionId || !sessionDir) {
             return null;

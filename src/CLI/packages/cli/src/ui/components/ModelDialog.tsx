@@ -24,13 +24,25 @@ import { theme } from '../semantic-colors.js';
 import { DescriptiveRadioButtonSelect } from './shared/DescriptiveRadioButtonSelect.js';
 
 function formatModalities(modalities?: InputModalities): string {
-    if (!modalities) return t('text-only');
+    if (!modalities) {
+        return t('text-only');
+    }
     const parts: string[] = [];
-    if (modalities.image) parts.push(t('image'));
-    if (modalities.pdf) parts.push(t('pdf'));
-    if (modalities.audio) parts.push(t('audio'));
-    if (modalities.video) parts.push(t('video'));
-    if (parts.length === 0) return t('text-only');
+    if (modalities.image) {
+        parts.push(t('image'));
+    }
+    if (modalities.pdf) {
+        parts.push(t('pdf'));
+    }
+    if (modalities.audio) {
+        parts.push(t('audio'));
+    }
+    if (modalities.video) {
+        parts.push(t('video'));
+    }
+    if (parts.length === 0) {
+        return t('text-only');
+    }
     return `${t('text')} · ${parts.join(' · ')}`;
 }
 
@@ -40,10 +52,16 @@ interface ModelDialogProps {
 }
 
 function maskApiKey(apiKey: string | undefined): string {
-    if (!apiKey) return `(${t('not set')})`;
+    if (!apiKey) {
+        return `(${t('not set')})`;
+    }
     const trimmed = apiKey.trim();
-    if (trimmed.length === 0) return `(${t('not set')})`;
-    if (trimmed.length <= 6) return '***';
+    if (trimmed.length === 0) {
+        return `(${t('not set')})`;
+    }
+    if (trimmed.length <= 6) {
+        return '***';
+    }
     const head = trimmed.slice(0, 3);
     const tail = trimmed.slice(-4);
     return `${head}…${tail}`;
@@ -108,12 +126,16 @@ function handleModelSwitchSuccess({
 }
 
 function formatContextWindow(size?: number): string {
-    if (!size) return `(${t('unknown')})`;
+    if (!size) {
+        return `(${t('unknown')})`;
+    }
     return `${size.toLocaleString('en-US')} tokens`;
 }
 
 function fuzzyMatch(query: string, text: string): boolean {
-    if (!query) return true;
+    if (!query) {
+        return true;
+    }
     const lowerQuery = query.toLowerCase();
     const lowerText = text.toLowerCase();
 
@@ -197,7 +219,9 @@ export function ModelDialog({
         () =>
             availableModelEntries
                 .filter((model) => {
-                    if (!searchQuery) return true;
+                    if (!searchQuery) {
+                        return true;
+                    }
                     const searchText = `${model.label} ${model.description || ''}`;
                     return fuzzyMatch(searchQuery, searchText);
                 })
@@ -237,7 +261,7 @@ export function ModelDialog({
                         key: value
                     };
                 }),
-        [availableModelEntries]
+        [availableModelEntries, searchQuery]
     );
 
     // In fast model mode, default to the currently configured fast model
@@ -367,15 +391,7 @@ export function ModelDialog({
             });
             onClose();
         },
-        [
-            authType,
-            config,
-            onClose,
-            settings,
-            uiState,
-            setErrorMessage,
-            isFastModelMode
-        ]
+        [authType, config, onClose, settings, uiState, isFastModelMode]
     );
 
     const hasModels = MODEL_OPTIONS.length > 0;

@@ -72,7 +72,7 @@ export const modelCommand: SlashCommand = {
             return {
                 type: 'message',
                 messageType: 'info',
-                content: t('Fast Model') + ': ' + modelName
+                content: `${t('Fast Model')}: ${modelName}`
             };
         }
 

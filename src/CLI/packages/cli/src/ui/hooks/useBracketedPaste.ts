@@ -33,5 +33,5 @@ export const useBracketedPaste = () => {
             process.removeListener('SIGINT', cleanup);
             process.removeListener('SIGTERM', cleanup);
         };
-    }, []);
+    }, [cleanup]);
 };

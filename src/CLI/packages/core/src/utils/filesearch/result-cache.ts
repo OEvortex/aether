@@ -10,8 +10,8 @@
  */
 export class ResultCache {
     private readonly cache: Map<string, string[]>;
-    private hits = 0;
-    private misses = 0;
+    public hits = 0;
+    public misses = 0;
 
     constructor(private readonly allFiles: string[]) {
         this.cache = new Map();

@@ -5,47 +5,51 @@
 
 import * as vscode from 'vscode';
 
+let _version: string | null = null;
+
 /**
- * Version Manager
+ * Get extension version number
  */
-export class VersionManager {
-    private static _version: string | null = null;
-
-    /**
-     * Get extension version number
-     */
-    static getVersion(): string {
-        if (VersionManager._version === null) {
-            const extension = vscode.extensions.getExtension(
-                'vicanent.copilot-helper-pro'
-            );
-            VersionManager._version =
-                extension?.packageJSON?.version || '0.4.0';
-        }
-        return VersionManager._version!;
+export function getVersion(): string {
+    if (_version === null) {
+        const extension = vscode.extensions.getExtension(
+            'vicanent.copilot-helper-pro'
+        );
+        _version = extension?.packageJSON?.version || '0.4.0';
     }
-
-    /**
-     * Get user agent string
-     */
-    static getUserAgent(component: string): string {
-        return `CHP-${component}/${VersionManager.getVersion()}`;
-    }
-
-    /**
-     * Get client information
-     */
-    static getClientInfo(): { name: string; version: string } {
-        return {
-            name: 'Aether',
-            version: VersionManager.getVersion()
-        };
-    }
-
-    /**
-     * Reset cache (mainly for testing)
-     */
-    static resetCache(): void {
-        VersionManager._version = null;
-    }
+    return _version ?? '0.4.0';
 }
+
+/**
+ * Get user agent string
+ */
+export function getUserAgent(component: string): string {
+    return `CHP-${component}/${getVersion()}`;
+}
+
+/**
+ * Get client information
+ */
+export function getClientInfo(): { name: string; version: string } {
+    return {
+        name: 'Aether',
+        version: getVersion()
+    };
+}
+
+/**
+ * Reset cache (mainly for testing)
+ */
+export function resetCache(): void {
+    _version = null;
+}
+
+/**
+ * Version Manager (deprecated class-like interface for backward compatibility)
+ */
+export const VersionManager = {
+    getVersion,
+    getUserAgent,
+    getClientInfo,
+    resetCache
+};

@@ -5,8 +5,8 @@
  */
 
 import { promises as fs } from 'node:fs';
+import * as os from 'node:os';
 import * as path from 'node:path';
-import * as os from 'os';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { OpenAILogger } from './openaiLogger.js';
 
@@ -19,8 +19,8 @@ describe('OpenAILogger', () => {
 
     beforeEach(() => {
         originalCwd = process.cwd();
-        originalHome = process.env['HOME'];
-        process.env['HOME'] = testHomeDir;
+        originalHome = process.env.HOME;
+        process.env.HOME = testHomeDir;
         testTempDir = path.join(
             os.tmpdir(),
             `openai-logger-test-${Date.now()}`
@@ -49,9 +49,9 @@ describe('OpenAILogger', () => {
         await Promise.all(cleanupPromises);
         process.chdir(originalCwd);
         if (originalHome === undefined) {
-            delete process.env['HOME'];
+            delete process.env.HOME;
         } else {
-            process.env['HOME'] = originalHome;
+            process.env.HOME = originalHome;
         }
     });
 

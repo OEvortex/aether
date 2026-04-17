@@ -70,10 +70,14 @@ export const AgentChatView = ({ agentId }: AgentChatViewProps) => {
     }, []);
 
     useEffect(() => {
-        if (!agent) return;
+        if (!agent) {
+            return;
+        }
 
         const emitter = agent.interactiveAgent.getEventEmitter();
-        if (!emitter) return;
+        if (!emitter) {
+            return;
+        }
 
         const onStatusChange = (_event: AgentStatusChangeEvent) =>
             forceRender();
@@ -130,7 +134,9 @@ export const AgentChatView = ({ agentId }: AgentChatViewProps) => {
 
     // Reset focus when the shell exits (activePtyId disappears).
     useEffect(() => {
-        if (!activePtyId) setEmbeddedShellFocusedLocal(false);
+        if (!activePtyId) {
+            setEmbeddedShellFocusedLocal(false);
+        }
     }, [activePtyId]);
 
     // Ctrl+F: toggle shell input focus when a PTY is active.
@@ -159,12 +165,14 @@ export const AgentChatView = ({ agentId }: AgentChatViewProps) => {
             ),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
-            agentId,
             messages.length,
             pendingApprovals?.size,
             liveOutputs?.size,
             shellPids?.size,
-            tickRef.current
+            pendingApprovals,
+            shellPids,
+            liveOutputs,
+            messages
         ]
     );
 
@@ -199,7 +207,7 @@ export const AgentChatView = ({ agentId }: AgentChatViewProps) => {
     const agentGitBranch = useMemo(
         () => (agentWorkingDir ? getGitBranch(agentWorkingDir) : ''),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [agentId]
+        [agentWorkingDir]
     );
 
     if (!agent || !interactiveAgent || !core) {

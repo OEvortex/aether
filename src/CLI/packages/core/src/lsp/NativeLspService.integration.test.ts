@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'node:events';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Config as CoreConfig } from '../config/config.js';
 import type { IdeContextStore } from '../ide/ideContext.js';
@@ -363,7 +363,7 @@ class MockWorkspaceContext {
     }
 
     resolvePath(relativePath: string): string {
-        return this.rootPath + '/' + relativePath;
+        return `${this.rootPath}/${relativePath}`;
     }
 
     isPathWithinWorkspace(_path: string): boolean {

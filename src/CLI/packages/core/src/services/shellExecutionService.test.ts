@@ -131,8 +131,8 @@ const setupConflictingPathEnv = () => {
 };
 
 const expectNormalizedWindowsPathEnv = (env: NodeJS.ProcessEnv) => {
-    expect(env['PATH']).toBe(EXPECTED_MERGED_WINDOWS_PATH);
-    expect(env['Path']).toBeUndefined();
+    expect(env.PATH).toBe(EXPECTED_MERGED_WINDOWS_PATH);
+    expect(env.Path).toBeUndefined();
 };
 
 describe('ShellExecutionService', () => {
@@ -393,10 +393,7 @@ describe('ShellExecutionService', () => {
 
     describe('pty interaction', () => {
         beforeEach(() => {
-            vi.spyOn(
-                ShellExecutionService['activePtys'],
-                'get'
-            ).mockReturnValue({
+            vi.spyOn(ShellExecutionService.activePtys, 'get').mockReturnValue({
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ptyProcess: mockPtyProcess as any,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

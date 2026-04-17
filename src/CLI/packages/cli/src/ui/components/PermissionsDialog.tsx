@@ -107,8 +107,10 @@ function getTabs(): Tab[] {
 
 function describeRule(raw: string): string {
     const match = raw.match(/^([^(]+?)(?:\((.+)\))?$/);
-    if (!match) return raw;
-    const toolName = match[1]!.trim();
+    if (!match) {
+        return raw;
+    }
+    const toolName = match[1]?.trim();
     const specifier = match[2]?.trim();
     if (!specifier) {
         return t('Any use of the {{tool}} tool', { tool: toolName });
@@ -204,7 +206,9 @@ export function PermissionsDialog({
     // Filesystem completions based on current input
     const dirCompletions = useMemo(() => {
         const trimmed = newDirInput.trim();
-        if (!trimmed) return [];
+        if (!trimmed) {
+            return [];
+        }
         const expanded = trimmed.startsWith('~')
             ? trimmed.replace(/^~/, os.homedir())
             : trimmed;
@@ -231,7 +235,9 @@ export function PermissionsDialog({
     const handleDirInputChange = useCallback(
         (text: string) => {
             setNewDirInput(text);
-            if (dirInputError) setDirInputError('');
+            if (dirInputError) {
+                setDirInputError('');
+            }
         },
         [dirInputError]
     );
@@ -239,25 +245,29 @@ export function PermissionsDialog({
     // Reset selection to first item whenever the completions list changes
     useEffect(() => {
         setCompletionIndex(0);
-    }, [dirCompletions]);
+    }, []);
 
     const handleDirTabComplete = useCallback(() => {
         const selected = dirCompletions[completionIndex] ?? dirCompletions[0];
         if (selected) {
-            setNewDirInput(selected + '/');
+            setNewDirInput(`${selected}/`);
             setDirInputRemountKey((k) => k + 1);
         }
     }, [dirCompletions, completionIndex]);
 
     const handleDirCompletionUp = useCallback(() => {
-        if (dirCompletions.length === 0) return;
+        if (dirCompletions.length === 0) {
+            return;
+        }
         setCompletionIndex(
             (prev) => (prev - 1 + dirCompletions.length) % dirCompletions.length
         );
     }, [dirCompletions.length]);
 
     const handleDirCompletionDown = useCallback(() => {
-        if (dirCompletions.length === 0) return;
+        if (dirCompletions.length === 0) {
+            return;
+        }
         setCompletionIndex((prev) => (prev + 1) % dirCompletions.length);
     }, [dirCompletions.length]);
 
@@ -304,7 +314,9 @@ export function PermissionsDialog({
 
     const handleAddDirSubmit = useCallback(() => {
         const trimmed = newDirInput.trim();
-        if (!trimmed) return;
+        if (!trimmed) {
+            return;
+        }
 
         const expanded = trimmed.startsWith('~')
             ? trimmed.replace(/^~/, os.homedir())
@@ -356,10 +368,9 @@ export function PermissionsDialog({
 
         // Persist directly to project (Workspace) settings
         const key = 'context.includeDirectories';
-        const currentDirs = (settings.merged as Record<string, unknown>)[
-            'context'
-        ] as Record<string, string[]> | undefined;
-        const existingDirs = currentDirs?.['includeDirectories'] ?? [];
+        const currentDirs = (settings.merged as Record<string, unknown>)
+            .context as Record<string, string[]> | undefined;
+        const existingDirs = currentDirs?.includeDirectories ?? [];
         if (!existingDirs.includes(resolved)) {
             settings.setValue(SettingScope.Workspace, key, [
                 ...existingDirs,
@@ -373,7 +384,9 @@ export function PermissionsDialog({
     }, [newDirInput, directories, workspaceContext, settings]);
 
     const handleRemoveDirConfirm = useCallback(() => {
-        if (!removeDirTarget) return;
+        if (!removeDirTarget) {
+            return;
+        }
 
         // Remove from workspace context
         workspaceContext.removeDirectory(removeDirTarget);
@@ -381,10 +394,9 @@ export function PermissionsDialog({
         // Remove from settings (try both scopes)
         for (const scope of [SettingScope.User, SettingScope.Workspace]) {
             const scopeSettings = settings.forScope(scope).settings;
-            const contextSection = (scopeSettings as Record<string, unknown>)[
-                'context'
-            ] as Record<string, string[]> | undefined;
-            const scopeDirs = contextSection?.['includeDirectories'];
+            const contextSection = (scopeSettings as Record<string, unknown>)
+                .context as Record<string, string[]> | undefined;
+            const scopeDirs = contextSection?.includeDirectories;
             if (scopeDirs?.includes(removeDirTarget)) {
                 const updated = scopeDirs.filter(
                     (d: string) => d !== removeDirTarget
@@ -401,13 +413,17 @@ export function PermissionsDialog({
 
     // Filter rules for current tab
     const currentTabRules = useMemo(() => {
-        if (activeTab.id === 'workspace') return [];
+        if (activeTab.id === 'workspace') {
+            return [];
+        }
         return allRules.filter((r) => r.type === activeTab.id);
     }, [allRules, activeTab.id]);
 
     // Search-filtered rules
     const filteredRules = useMemo(() => {
-        if (!searchQuery.trim()) return currentTabRules;
+        if (!searchQuery.trim()) {
+            return currentTabRules;
+        }
         const q = searchQuery.toLowerCase();
         return currentTabRules.filter(
             (r) =>
@@ -475,14 +491,18 @@ export function PermissionsDialog({
 
     const handleAddRuleSubmit = useCallback(() => {
         const trimmed = newRuleInput.trim();
-        if (!trimmed) return;
+        if (!trimmed) {
+            return;
+        }
         setPendingRuleText(trimmed);
         setView('add-rule-scope');
     }, [newRuleInput]);
 
     const handleScopeSelect = useCallback(
         (scope: SettingScope) => {
-            if (!pm || activeTab.id === 'workspace') return;
+            if (!pm || activeTab.id === 'workspace') {
+                return;
+            }
             const ruleType = activeTab.id as RuleType;
 
             // Add to PermissionManager in-memory
@@ -490,9 +510,8 @@ export function PermissionsDialog({
 
             // Persist to settings file (with dedup)
             const key = `permissions.${ruleType}`;
-            const perms = (settings.merged as Record<string, unknown>)[
-                'permissions'
-            ] as Record<string, string[]> | undefined;
+            const perms = (settings.merged as Record<string, unknown>)
+                .permissions as Record<string, string[]> | undefined;
             const currentRules = perms?.[ruleType] ?? [];
             if (!currentRules.includes(pendingRuleText)) {
                 settings.setValue(scope, key, [
@@ -510,7 +529,9 @@ export function PermissionsDialog({
     );
 
     const handleDeleteConfirm = useCallback(() => {
-        if (!pm || !deleteTarget) return;
+        if (!pm || !deleteTarget) {
+            return;
+        }
         const ruleType = deleteTarget.type;
 
         // Remove from PermissionManager in-memory
@@ -520,9 +541,8 @@ export function PermissionsDialog({
         // We try both User and Workspace scopes
         for (const scope of [SettingScope.User, SettingScope.Workspace]) {
             const scopeSettings = settings.forScope(scope).settings;
-            const perms = (scopeSettings as Record<string, unknown>)[
-                'permissions'
-            ] as Record<string, string[]> | undefined;
+            const perms = (scopeSettings as Record<string, unknown>)
+                .permissions as Record<string, string[]> | undefined;
             const scopeRules = perms?.[ruleType];
             if (scopeRules?.includes(deleteTarget.rule.raw)) {
                 const updated = scopeRules.filter(
@@ -1007,7 +1027,9 @@ function TabBar({
 }
 
 function FooterHint({ view }: { view: DialogView }): React.JSX.Element {
-    if (view !== 'rule-list' && view !== 'ws-dir-list') return <></>;
+    if (view !== 'rule-list' && view !== 'ws-dir-list') {
+        return <></>;
+    }
     return (
         <Box marginTop={1}>
             <Text color={theme.text.secondary}>

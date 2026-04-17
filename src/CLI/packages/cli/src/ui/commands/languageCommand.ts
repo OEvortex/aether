@@ -53,7 +53,9 @@ function getCurrentOutputLanguage(context?: CommandContext): {
  */
 function parseUiLanguageArg(input: string): SupportedLanguage | null {
     const lowered = input.trim().toLowerCase();
-    if (!lowered) return null;
+    if (!lowered) {
+        return null;
+    }
 
     for (const lang of SUPPORTED_LANGUAGES) {
         if (
@@ -72,7 +74,9 @@ function parseUiLanguageArg(input: string): SupportedLanguage | null {
  */
 function formatUiLanguageDisplay(lang: SupportedLanguage): string {
     const option = SUPPORTED_LANGUAGES.find((o) => o.code === lang);
-    if (!option) return lang;
+    if (!option) {
+        return lang;
+    }
     return option.nativeName && option.nativeName !== option.fullName
         ? `${option.nativeName} (${option.fullName}) [${option.id}]`
         : `${option.fullName} [${option.id}]`;

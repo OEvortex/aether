@@ -43,5 +43,5 @@ export const useInitializationAuthError = (
             hasHandled.current = true;
             onAuthErrorRef.current(authErrorRef.current);
         }
-    }, [authError, onAuthError]);
+    }, []);
 };

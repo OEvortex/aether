@@ -547,7 +547,7 @@ describe('LoopDetectionService', () => {
                 }
 
                 // Reset should occur with list item - add newline to ensure it starts at beginning
-                service.addAndCheck(createContentEvent('\n' + listFormat));
+                service.addAndCheck(createContentEvent(`\n${listFormat}`));
 
                 // Should not trigger loop after reset - use different content to avoid any cached state issues
                 const newRepeatedContent = createRepetitiveContent(
@@ -587,7 +587,7 @@ describe('LoopDetectionService', () => {
                 }
 
                 // Reset should occur with table format - add newline to ensure it starts at beginning
-                service.addAndCheck(createContentEvent('\n' + tableFormat));
+                service.addAndCheck(createContentEvent(`\n${tableFormat}`));
 
                 // Should not trigger loop after reset - use different content to avoid any cached state issues
                 const newRepeatedContent = createRepetitiveContent(
@@ -629,7 +629,7 @@ describe('LoopDetectionService', () => {
                 }
 
                 // Reset should occur with heading - add newline to ensure it starts at beginning
-                service.addAndCheck(createContentEvent('\n' + headingFormat));
+                service.addAndCheck(createContentEvent(`\n${headingFormat}`));
 
                 // Should not trigger loop after reset - use different content to avoid any cached state issues
                 const newRepeatedContent = createRepetitiveContent(

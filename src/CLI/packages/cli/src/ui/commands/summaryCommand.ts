@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as fsPromises from 'node:fs/promises';
+import path from 'node:path';
 import { getProjectSummaryPrompt } from '@aetherai/aether-core';
-import * as fsPromises from 'fs/promises';
-import path from 'path';
 import { t } from '../../i18n/index.js';
 import type { HistoryItemSummary } from '../types.js';
 import {

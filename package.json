@@ -1622,7 +1622,7 @@
         "aether:start": "npm --prefix src/CLI run start",
         "aether:dev": "npm --prefix src/CLI run dev",
         "lint": "biome check",
-        "lint:fix": "biome check --apply",
+        "lint:fix": "biome check --write --unsafe",
         "format": "biome format",
         "format:check": "biome format --check",
         "watch": "node esbuild.config.js --watch --dev",

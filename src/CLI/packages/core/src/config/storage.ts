@@ -105,7 +105,7 @@ export class Storage {
      * @returns Absolute path to the runtime output base directory
      */
     static getRuntimeBaseDir(): string {
-        const envDir = process.env['AETHER_RUNTIME_DIR'];
+        const envDir = process.env.AETHER_RUNTIME_DIR;
         if (envDir) {
             return (
                 Storage.resolveRuntimeBaseDir(envDir) ??

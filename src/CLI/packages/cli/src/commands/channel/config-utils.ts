@@ -28,11 +28,11 @@ export function parseChannelConfig(
     name: string,
     rawConfig: Record<string, unknown>
 ): ChannelConfig & Record<string, unknown> {
-    if (!rawConfig['type']) {
+    if (!rawConfig.type) {
         throw new Error(`Channel "${name}" is missing required field "type".`);
     }
 
-    const channelType = rawConfig['type'] as string;
+    const channelType = rawConfig.type as string;
     const plugin = getPlugin(channelType);
     if (!plugin) {
         throw new Error(
@@ -50,14 +50,14 @@ export function parseChannelConfig(
     }
 
     // Resolve env vars for known credential fields
-    const token = rawConfig['token']
-        ? resolveEnvVars(rawConfig['token'] as string)
+    const token = rawConfig.token
+        ? resolveEnvVars(rawConfig.token as string)
         : '';
-    const clientId = rawConfig['clientId']
-        ? resolveEnvVars(rawConfig['clientId'] as string)
+    const clientId = rawConfig.clientId
+        ? resolveEnvVars(rawConfig.clientId as string)
         : undefined;
-    const clientSecret = rawConfig['clientSecret']
-        ? resolveEnvVars(rawConfig['clientSecret'] as string)
+    const clientSecret = rawConfig.clientSecret
+        ? resolveEnvVars(rawConfig.clientSecret as string)
         : undefined;
 
     return {
@@ -67,19 +67,18 @@ export function parseChannelConfig(
         clientId,
         clientSecret,
         senderPolicy:
-            (rawConfig['senderPolicy'] as ChannelConfig['senderPolicy']) ||
+            (rawConfig.senderPolicy as ChannelConfig['senderPolicy']) ||
             'allowlist',
-        allowedUsers: (rawConfig['allowedUsers'] as string[]) || [],
+        allowedUsers: (rawConfig.allowedUsers as string[]) || [],
         sessionScope:
-            (rawConfig['sessionScope'] as ChannelConfig['sessionScope']) ||
-            'user',
-        cwd: (rawConfig['cwd'] as string) || process.cwd(),
-        approvalMode: rawConfig['approvalMode'] as string | undefined,
-        instructions: rawConfig['instructions'] as string | undefined,
-        model: rawConfig['model'] as string | undefined,
+            (rawConfig.sessionScope as ChannelConfig['sessionScope']) || 'user',
+        cwd: (rawConfig.cwd as string) || process.cwd(),
+        approvalMode: rawConfig.approvalMode as string | undefined,
+        instructions: rawConfig.instructions as string | undefined,
+        model: rawConfig.model as string | undefined,
         groupPolicy:
-            (rawConfig['groupPolicy'] as ChannelConfig['groupPolicy']) ||
+            (rawConfig.groupPolicy as ChannelConfig['groupPolicy']) ||
             'disabled',
-        groups: (rawConfig['groups'] as ChannelConfig['groups']) || {}
+        groups: (rawConfig.groups as ChannelConfig['groups']) || {}
     };
 }

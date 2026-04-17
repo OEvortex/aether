@@ -42,7 +42,7 @@ async function findProjectRoot(startDir: string): Promise<string | null> {
             // Only log unexpected errors in non-test environments
             // process.env['NODE_ENV'] === 'test' or VITEST are common test indicators
             const isTestEnv =
-                process.env['NODE_ENV'] === 'test' || process.env['VITEST'];
+                process.env.NODE_ENV === 'test' || process.env.VITEST;
 
             if (!isENOENT && !isTestEnv) {
                 if (
@@ -123,7 +123,7 @@ async function getGeminiMdFilePathsInternal(
 async function getGeminiMdFilePathsInternalForEachDir(
     dir: string,
     userHomePath: string,
-    fileService: FileDiscoveryService,
+    _fileService: FileDiscoveryService,
     extensionContextFilePaths: string[] = [],
     folderTrust: boolean
 ): Promise<string[]> {
@@ -254,8 +254,7 @@ async function readGeminiMdFiles(
                     return { filePath, content: processedResult.content };
                 } catch (error: unknown) {
                     const isTestEnv =
-                        process.env['NODE_ENV'] === 'test' ||
-                        process.env['VITEST'];
+                        process.env.NODE_ENV === 'test' || process.env.VITEST;
                     if (!isTestEnv) {
                         const message =
                             error instanceof Error

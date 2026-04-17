@@ -1,23 +1,9 @@
-import type {
-    AcpBridge,
-    ChannelBaseOptions,
-    ChannelConfig,
-    Envelope
-} from '../../base/src/index.js';
+import type { Envelope } from '../../base/src/index.js';
 import { ChannelBase } from '../../base/src/index.js';
 import { extractTitle, normalizeDingTalkMarkdown } from './markdown.js';
 import { downloadMedia } from './media.js';
 
 export class DingtalkChannel extends ChannelBase {
-    public constructor(
-        name: string,
-        config: ChannelConfig,
-        bridge: AcpBridge,
-        options?: ChannelBaseOptions
-    ) {
-        super(name, config, bridge, options);
-    }
-
     public async connect(): Promise<void> {}
 
     public async sendMessage(_chatId: string, _text: string): Promise<void> {

@@ -52,7 +52,7 @@ let cachedHealth: RipgrepHealth | null = null;
 let macSigningAttempted = false;
 
 function wslTimeout(): number {
-    return process.platform === 'linux' && process.env['WSL_INTEROP']
+    return process.platform === 'linux' && process.env.WSL_INTEROP
         ? RIPGREP_WSL_TIMEOUT_MS
         : RIPGREP_RUN_TIMEOUT_MS;
 }
@@ -132,7 +132,9 @@ export function getBuiltinRipgrep(): string | null {
 export async function resolveRipgrep(
     useBuiltin: boolean = true
 ): Promise<RipgrepSelection | null> {
-    if (cachedSelection) return cachedSelection;
+    if (cachedSelection) {
+        return cachedSelection;
+    }
 
     if (useBuiltin) {
         // Try bundled ripgrep first
@@ -169,8 +171,9 @@ export async function ensureRipgrepHealthy(
         cachedHealth &&
         cachedHealth.selection.command === selection.command &&
         cachedHealth.working
-    )
+    ) {
         return;
+    }
 
     try {
         const { stdout, code } = await execCommand(
@@ -191,11 +194,17 @@ export async function ensureRipgrepHealthy(
 export async function ensureMacBinarySigned(
     selection: RipgrepSelection
 ): Promise<void> {
-    if (process.platform !== 'darwin') return;
-    if (macSigningAttempted) return;
+    if (process.platform !== 'darwin') {
+        return;
+    }
+    if (macSigningAttempted) {
+        return;
+    }
     macSigningAttempted = true;
 
-    if (selection.mode !== 'builtin') return;
+    if (selection.mode !== 'builtin') {
+        return;
+    }
     const binaryPath = selection.command;
 
     const inspect = await execCommand('codesign', ['-vv', '-d', binaryPath], {
@@ -205,7 +214,9 @@ export async function ensureMacBinarySigned(
         inspect.stdout
             ?.split('\n')
             .some((line) => line.includes('linker-signed')) ?? false;
-    if (!alreadySigned) return;
+    if (!alreadySigned) {
+        return;
+    }
 
     await execCommand('codesign', [
         '--sign',

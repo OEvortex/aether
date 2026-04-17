@@ -38,7 +38,7 @@ export function useGitBranchName(cwd: string): string | undefined {
         } catch (_error) {
             setBranchName(undefined);
         }
-    }, [cwd, setBranchName]);
+    }, [cwd]);
 
     useEffect(() => {
         fetchBranchName(); // Initial fetch

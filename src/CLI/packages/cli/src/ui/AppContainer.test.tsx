@@ -161,7 +161,7 @@ describe('AppContainer State Management', () => {
             computeWindowTitle: vi.fn(
                 (folderName: string) =>
                     // Default behavior: return "Gemini - {folderName}" unless CLI_TITLE is set
-                    process.env['CLI_TITLE'] || `Gemini - ${folderName}`
+                    process.env.CLI_TITLE || `Gemini - ${folderName}`
             )
         }));
 
@@ -827,7 +827,7 @@ describe('AppContainer State Management', () => {
             expect(calledWith).toContain(shortTitle);
             expect(calledWith).toContain('\x1b]2;');
             expect(calledWith).toContain('\x07');
-            expect(calledWith).toBe('\x1b]2;' + expectedTitle + '\x07');
+            expect(calledWith).toBe(`\x1b]2;${expectedTitle}\x07`);
             unmount();
         });
 

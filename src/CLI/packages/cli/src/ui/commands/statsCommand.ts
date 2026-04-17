@@ -34,7 +34,7 @@ export const statsCommand: SlashCommand = {
                 },
                 Date.now()
             );
-            return;
+            return undefined;
         }
         const wallDuration = now.getTime() - sessionStartTime.getTime();
 
@@ -44,6 +44,8 @@ export const statsCommand: SlashCommand = {
         };
 
         context.ui.addItem(statsItem, Date.now());
+
+        return undefined;
     },
     subCommands: [
         {
@@ -59,6 +61,8 @@ export const statsCommand: SlashCommand = {
                     },
                     Date.now()
                 );
+
+                return undefined;
             }
         },
         {
@@ -74,6 +78,8 @@ export const statsCommand: SlashCommand = {
                     },
                     Date.now()
                 );
+
+                return undefined;
             }
         }
     ]

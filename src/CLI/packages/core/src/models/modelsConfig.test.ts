@@ -12,8 +12,12 @@ import type { ModelProvidersConfig } from './types.js';
 
 describe('ModelsConfig', () => {
     function deepClone<T>(value: T): T {
-        if (value === null || typeof value !== 'object') return value;
-        if (Array.isArray(value)) return value.map((v) => deepClone(v)) as T;
+        if (value === null || typeof value !== 'object') {
+            return value;
+        }
+        if (Array.isArray(value)) {
+            return value.map((v) => deepClone(v)) as T;
+        }
         const out: Record<string, unknown> = {};
         for (const key of Object.keys(value as Record<string, unknown>)) {
             out[key] = deepClone((value as Record<string, unknown>)[key]);
@@ -361,11 +365,11 @@ describe('ModelsConfig', () => {
 
         // Verify sources are from modelProviders
         let sources = modelsConfig.getGenerationConfigSources();
-        expect(sources['model']?.kind).toBe('modelProviders');
-        expect(sources['baseUrl']?.kind).toBe('modelProviders');
-        expect(sources['samplingParams']?.kind).toBe('modelProviders');
-        expect(sources['timeout']?.kind).toBe('modelProviders');
-        expect(sources['maxRetries']?.kind).toBe('modelProviders');
+        expect(sources.model?.kind).toBe('modelProviders');
+        expect(sources.baseUrl?.kind).toBe('modelProviders');
+        expect(sources.samplingParams?.kind).toBe('modelProviders');
+        expect(sources.timeout?.kind).toBe('modelProviders');
+        expect(sources.maxRetries?.kind).toBe('modelProviders');
 
         // Step 2: User manually sets credentials via updateCredentials
         // This should clear all provider-sourced config
@@ -385,12 +389,12 @@ describe('ModelsConfig', () => {
 
         // Verify sources are updated
         sources = modelsConfig.getGenerationConfigSources();
-        expect(sources['model']?.kind).toBe('programmatic');
-        expect(sources['apiKey']?.kind).toBe('programmatic');
-        expect(sources['baseUrl']).toBeUndefined(); // Source cleared
-        expect(sources['samplingParams']).toBeUndefined(); // Source cleared
-        expect(sources['timeout']).toBeUndefined(); // Source cleared
-        expect(sources['maxRetries']).toBeUndefined(); // Source cleared
+        expect(sources.model?.kind).toBe('programmatic');
+        expect(sources.apiKey?.kind).toBe('programmatic');
+        expect(sources.baseUrl).toBeUndefined(); // Source cleared
+        expect(sources.samplingParams).toBeUndefined(); // Source cleared
+        expect(sources.timeout).toBeUndefined(); // Source cleared
+        expect(sources.maxRetries).toBeUndefined(); // Source cleared
     });
 
     it('should preserve non-provider config when updateCredentials clears provider config', async () => {
@@ -505,8 +509,8 @@ describe('ModelsConfig', () => {
         expect(gc.customHeaders).toEqual({ 'X-Custom-Header': 'header-value' });
 
         const sources = modelsConfig.getGenerationConfigSources();
-        expect(sources['extra_body']?.kind).toBe('modelProviders');
-        expect(sources['customHeaders']?.kind).toBe('modelProviders');
+        expect(sources.extra_body?.kind).toBe('modelProviders');
+        expect(sources.customHeaders?.kind).toBe('modelProviders');
     });
 
     it('should apply Aether OAuth apiKey placeholder during syncAfterAuthRefresh for fresh users', () => {
@@ -1056,7 +1060,7 @@ describe('ModelsConfig', () => {
 
             // Create a separate snapshot for the original runtime model
             // (simulate having multiple runtime models available)
-            modelsConfig['runtimeModelSnapshots'].set(
+            modelsConfig.runtimeModelSnapshots.set(
                 '$runtime|openai|runtime-model',
                 {
                     id: '$runtime|openai|runtime-model',
@@ -1251,7 +1255,7 @@ describe('ModelsConfig', () => {
 
             // Switch to Anthropic via switchToRuntimeModel
             // First create an Anthropic snapshot manually
-            modelsConfig['runtimeModelSnapshots'].set(
+            modelsConfig.runtimeModelSnapshots.set(
                 '$runtime|anthropic|anthropic-model',
                 {
                     id: '$runtime|anthropic|anthropic-model',
@@ -1603,7 +1607,7 @@ describe('ModelsConfig', () => {
             expect(gc.samplingParams?.max_tokens).toBeUndefined();
 
             const sources = modelsConfig.getGenerationConfigSources();
-            expect(sources['samplingParams']?.kind).toBe('modelProviders');
+            expect(sources.samplingParams?.kind).toBe('modelProviders');
         });
 
         it('should not override existing max_tokens from modelProviders', async () => {
@@ -1636,7 +1640,7 @@ describe('ModelsConfig', () => {
             expect(gc.samplingParams?.max_tokens).toBe(4096);
 
             const sources = modelsConfig.getGenerationConfigSources();
-            expect(sources['samplingParams']?.kind).toBe('modelProviders');
+            expect(sources.samplingParams?.kind).toBe('modelProviders');
         });
 
         it('should not auto-fill max_tokens for different model families', async () => {

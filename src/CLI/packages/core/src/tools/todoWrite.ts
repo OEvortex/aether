@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as fsSync from 'node:fs';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import type { FunctionDeclaration } from '@google/genai';
-import * as fsSync from 'fs';
-import * as fs from 'fs/promises';
-import * as path from 'path';
 import type { Config } from '../config/config.js';
 import { Storage } from '../config/storage.js';
 import { createDebugLogger } from '../utils/debugLogger.js';

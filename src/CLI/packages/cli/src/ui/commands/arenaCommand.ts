@@ -67,7 +67,7 @@ function parseArenaArgs(args: string): {
     let task = args;
 
     if (modelsMatch) {
-        const modelStrings = modelsMatch[1]!.split(',').filter(Boolean);
+        const modelStrings = modelsMatch[1]?.split(',').filter(Boolean);
         models = modelStrings.map((str) => {
             // Check for authType:modelId format
             const colonIndex = str.indexOf(':');
@@ -167,7 +167,9 @@ function buildArenaExecutionInput(
 function recordArenaItem(config: Config, item: HistoryItemWithoutId): void {
     try {
         const chatRecorder = config.getChatRecordingService();
-        if (!chatRecorder) return;
+        if (!chatRecorder) {
+            return;
+        }
         chatRecorder.recordSlashCommand({
             phase: 'result',
             rawCommand: '/arena',
@@ -397,7 +399,9 @@ export const arenaCommand: SlashCommand = {
             action: async (
                 context: CommandContext,
                 args: string
-            ): Promise<void | MessageActionReturn | OpenDialogActionReturn> => {
+            ): Promise<
+                undefined | MessageActionReturn | OpenDialogActionReturn
+            > => {
                 const executionMode = context.executionMode ?? 'interactive';
                 if (executionMode !== 'interactive') {
                     return {
@@ -444,6 +448,8 @@ export const arenaCommand: SlashCommand = {
                 }
 
                 executeArenaCommand(config, ui, executionInput);
+
+                return undefined;
             }
         },
         {
@@ -452,7 +458,7 @@ export const arenaCommand: SlashCommand = {
             kind: CommandKind.BUILT_IN,
             action: async (
                 context: CommandContext
-            ): Promise<void | SlashCommandActionReturn> => {
+            ): Promise<undefined | SlashCommandActionReturn> => {
                 const executionMode = context.executionMode ?? 'interactive';
                 if (executionMode !== 'interactive') {
                     return {
@@ -493,7 +499,7 @@ export const arenaCommand: SlashCommand = {
             kind: CommandKind.BUILT_IN,
             action: async (
                 context: CommandContext
-            ): Promise<void | SlashCommandActionReturn> => {
+            ): Promise<undefined | SlashCommandActionReturn> => {
                 const executionMode = context.executionMode ?? 'interactive';
                 if (executionMode !== 'interactive') {
                     return {
@@ -539,7 +545,7 @@ export const arenaCommand: SlashCommand = {
                 context: CommandContext,
                 args: string
             ): Promise<
-                | void
+                | undefined
                 | MessageActionReturn
                 | OpenDialogActionReturn
                 | ConfirmActionReturn

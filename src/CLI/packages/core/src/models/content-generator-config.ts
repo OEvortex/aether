@@ -148,10 +148,14 @@ function applyResolvedModelConfig(
 export function resolveCredentialField(
     explicitValue: string | undefined,
     inheritedValue: string | undefined,
-    authType: string,
-    field: 'apiKey' | 'baseUrl'
+    _authType: string,
+    _field: 'apiKey' | 'baseUrl'
 ): string | undefined {
-    if (explicitValue) return explicitValue;
-    if (inheritedValue) return inheritedValue;
+    if (explicitValue) {
+        return explicitValue;
+    }
+    if (inheritedValue) {
+        return inheritedValue;
+    }
     return undefined;
 }

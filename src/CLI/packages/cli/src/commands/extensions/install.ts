@@ -143,12 +143,12 @@ export const installCommand: CommandModule = {
             }),
     handler: async (argv) => {
         await handleInstall({
-            source: argv['source'] as string,
-            ref: argv['ref'] as string | undefined,
+            source: argv.source as string,
+            ref: argv.ref as string | undefined,
             autoUpdate: argv['auto-update'] as boolean | undefined,
             allowPreRelease: argv['pre-release'] as boolean | undefined,
-            consent: argv['consent'] as boolean | undefined,
-            registry: argv['registry'] as string | undefined
+            consent: argv.consent as boolean | undefined,
+            registry: argv.registry as string | undefined
         });
     }
 };

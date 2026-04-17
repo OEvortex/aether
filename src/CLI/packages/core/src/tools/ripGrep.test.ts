@@ -329,7 +329,7 @@ describe('RipGrepTool', () => {
         });
 
         it('should truncate llm content when exceeding maximum length', async () => {
-            const longMatch = 'fileA.txt:1:' + 'a'.repeat(30_000);
+            const longMatch = `fileA.txt:1:${'a'.repeat(30_000)}`;
 
             (runRipgrep as Mock).mockResolvedValue({
                 stdout: `${longMatch}${EOL}`,
@@ -568,7 +568,7 @@ describe('RipGrepTool', () => {
             // Verify both .aetherignore files were passed
             const rgArgs = (runRipgrep as Mock).mock.calls[0][0] as string[];
             const ignoreFileArgs = rgArgs.filter(
-                (a: string, i: number) =>
+                (_a: string, i: number) =>
                     i > 0 && rgArgs[i - 1] === '--ignore-file'
             );
             expect(ignoreFileArgs).toContain(

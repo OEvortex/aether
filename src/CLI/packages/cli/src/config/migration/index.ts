@@ -84,7 +84,7 @@ export function needsMigration(settings: unknown): boolean {
     }
 
     const s = settings as Record<string, unknown>;
-    const version = s['$version'];
+    const version = s.$version;
     const hasApplicableMigration = ALL_MIGRATIONS.some((migration) =>
         migration.shouldMigrate(settings)
     );

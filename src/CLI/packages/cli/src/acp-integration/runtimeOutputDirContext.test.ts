@@ -7,12 +7,12 @@ import { runWithAcpRuntimeOutputDir } from './runtimeOutputDirContext.js';
 describe('runWithAcpRuntimeOutputDir', () => {
     beforeEach(() => {
         Storage.setRuntimeBaseDir(null);
-        delete process.env['AETHER_RUNTIME_DIR'];
+        delete process.env.AETHER_RUNTIME_DIR;
     });
 
     afterEach(() => {
         Storage.setRuntimeBaseDir(null);
-        delete process.env['AETHER_RUNTIME_DIR'];
+        delete process.env.AETHER_RUNTIME_DIR;
     });
 
     it('uses the merged runtimeOutputDir relative to cwd within the async context', async () => {

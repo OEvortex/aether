@@ -482,7 +482,7 @@ export async function showAuthStatus(): Promise<void> {
                 if (codingPlanVersion) {
                     writeStdoutLine(
                         t('  Config Version: {{version}}', {
-                            version: codingPlanVersion.substring(0, 8) + '...'
+                            version: `${codingPlanVersion.substring(0, 8)}...`
                         })
                     );
                 }

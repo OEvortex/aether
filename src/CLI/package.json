@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/aether-workspace",
-    "version": "0.0.5",
+    "version": "0.0.12",
     "private": true,
     "engines": {
         "node": ">=20.0.0"
@@ -14,7 +14,7 @@
         "url": "git+https://github.com/OEvortex/copilot-helper.git"
     },
     "config": {
-        "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.5"
+        "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.12"
     },
     "scripts": {
         "start": "cross-env node scripts/start.js",

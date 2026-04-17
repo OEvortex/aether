@@ -144,10 +144,18 @@ export function stringify(
  * Parses a value string into appropriate JavaScript type.
  */
 function parseValue(value: string): unknown {
-    if (value === 'true') return true;
-    if (value === 'false') return false;
-    if (value === 'null') return null;
-    if (value === '') return '';
+    if (value === 'true') {
+        return true;
+    }
+    if (value === 'false') {
+        return false;
+    }
+    if (value === 'null') {
+        return null;
+    }
+    if (value === '') {
+        return '';
+    }
 
     // Handle quoted strings
     if (value.startsWith('"') && value.endsWith('"') && value.length >= 2) {
@@ -158,7 +166,7 @@ function parseValue(value: string): unknown {
 
     // Try to parse as number
     const num = Number(value);
-    if (!isNaN(num) && isFinite(num)) {
+    if (!Number.isNaN(num) && Number.isFinite(num)) {
         return num;
     }
 

@@ -145,7 +145,9 @@ export async function handleAtCommand({
     );
 
     const addToolGroup = (result: HandleAtCommandResult): void => {
-        if (!addItem) return;
+        if (!addItem) {
+            return;
+        }
         if (result.toolDisplays && result.toolDisplays.length > 0) {
             const toolGroupItem: HistoryItemToolGroup = {
                 type: 'tool_group',
@@ -325,23 +327,23 @@ export async function handleAtCommand({
 
     // Inform user about ignored paths
     const totalIgnored =
-        ignoredByReason['git'].length +
-        ignoredByReason['aether'].length +
-        ignoredByReason['both'].length;
+        ignoredByReason.git.length +
+        ignoredByReason.aether.length +
+        ignoredByReason.both.length;
 
     if (totalIgnored > 0) {
         const messages = [];
-        if (ignoredByReason['git'].length) {
-            messages.push(`Git-ignored: ${ignoredByReason['git'].join(', ')}`);
+        if (ignoredByReason.git.length) {
+            messages.push(`Git-ignored: ${ignoredByReason.git.join(', ')}`);
         }
-        if (ignoredByReason['aether'].length) {
+        if (ignoredByReason.aether.length) {
             messages.push(
-                `aether-ignored: ${ignoredByReason['aether'].join(', ')}`
+                `aether-ignored: ${ignoredByReason.aether.join(', ')}`
             );
         }
-        if (ignoredByReason['both'].length) {
+        if (ignoredByReason.both.length) {
             messages.push(
-                `Ignored by both: ${ignoredByReason['both'].join(', ')}`
+                `Ignored by both: ${ignoredByReason.both.join(', ')}`
             );
         }
 

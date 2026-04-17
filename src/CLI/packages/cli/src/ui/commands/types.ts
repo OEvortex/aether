@@ -253,9 +253,9 @@ export interface SlashCommand {
         context: CommandContext,
         args: string // TODO: Remove args. CommandContext now contains the complete invocation.
     ) =>
-        | void
+        | undefined
         | SlashCommandActionReturn
-        | Promise<void | SlashCommandActionReturn>;
+        | Promise<undefined | SlashCommandActionReturn>;
 
     // Provides argument completion
     completion?: (

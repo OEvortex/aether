@@ -83,10 +83,10 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['ui']).toEqual({ theme: 'dark', hideTips: false });
-            expect(result['model']).toEqual({ name: 'gemini' });
-            expect(result['tools']).toEqual({ autoAccept: true });
+            expect(result.$version).toBe(2);
+            expect(result.ui).toEqual({ theme: 'dark', hideTips: false });
+            expect(result.model).toEqual({ name: 'gemini' });
+            expect(result.tools).toEqual({ autoAccept: true });
         });
 
         it('should migrate disable* keys to nested V2 paths without inversion', () => {
@@ -104,9 +104,9 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['general']).toEqual({ disableAutoUpdate: true });
-            expect(result['ui']).toEqual({
+            expect(result.$version).toBe(2);
+            expect(result.general).toEqual({ disableAutoUpdate: true });
+            expect(result.ui).toEqual({
                 theme: 'light',
                 accessibility: { disableLoadingPhrases: false }
             });
@@ -127,8 +127,8 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['general']).toEqual({
+            expect(result.$version).toBe(2);
+            expect(result.general).toEqual({
                 disableAutoUpdate: false,
                 disableUpdateNag: false
             });
@@ -149,16 +149,15 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
+            expect(result.$version).toBe(2);
             expect(
-                (result['ui'] as Record<string, unknown>)?.['accessibility']
+                (result.ui as Record<string, unknown>)?.accessibility
             ).toBeUndefined();
             expect(
                 (
-                    (result['context'] as Record<string, unknown>)?.[
-                        'fileFiltering'
-                    ] as Record<string, unknown>
-                )?.['disableFuzzySearch']
+                    (result.context as Record<string, unknown>)
+                        ?.fileFiltering as Record<string, unknown>
+                )?.disableFuzzySearch
             ).toBeUndefined();
         });
 
@@ -178,8 +177,8 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['mcpServers']).toEqual({
+            expect(result.$version).toBe(2);
+            expect(result.mcpServers).toEqual({
                 myServer: { command: 'node', args: ['server.js'] }
             });
         });
@@ -199,9 +198,9 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['myCustomSetting']).toBe('value');
-            expect(result['anotherCustom']).toBe(123);
+            expect(result.$version).toBe(2);
+            expect(result.myCustomSetting).toBe('value');
+            expect(result.anotherCustom).toBe(123);
         });
 
         it('should preserve non-object parent path values on collision', () => {
@@ -220,9 +219,9 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['ui']).toBe('legacy-ui-string');
-            expect(result['general']).toBe('legacy-general-string');
+            expect(result.$version).toBe(2);
+            expect(result.ui).toBe('legacy-ui-string');
+            expect(result.general).toBe('legacy-general-string');
         });
 
         it('should not modify the input object', () => {
@@ -265,8 +264,8 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
-            expect(result['ui']).toEqual({ theme: 'dark' });
+            expect(result.$version).toBe(2);
+            expect(result.ui).toEqual({ theme: 'dark' });
         });
 
         it('should correctly handle all V1 indicator keys', () => {
@@ -291,7 +290,7 @@ describe('V1ToV2Migration', () => {
                 warnings: unknown[];
             };
 
-            expect(result['$version']).toBe(2);
+            expect(result.$version).toBe(2);
         });
     });
 

@@ -8,7 +8,8 @@ import type { MCPServerConfig } from '@aetherai/aether-core';
 import {
     createTransport,
     ExtensionManager,
-    MCPServerStatus
+    MCPServerStatus,
+    type Transport
 } from '@aetherai/aether-core';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 // File for 'aether mcp list' command
@@ -60,7 +61,7 @@ async function testMCPConnection(
         version: '0.0.1'
     });
 
-    let transport;
+    let transport: Transport | undefined;
     try {
         // Use the same transport creation logic as core
         transport = await createTransport(serverName, config, false);
@@ -110,16 +111,15 @@ export async function listMcpServers(): Promise<void> {
         let statusText = '';
         switch (status) {
             case MCPServerStatus.CONNECTED:
-                statusIndicator = COLOR_GREEN + '✓' + RESET_COLOR;
+                statusIndicator = `${COLOR_GREEN}✓${RESET_COLOR}`;
                 statusText = 'Connected';
                 break;
             case MCPServerStatus.CONNECTING:
-                statusIndicator = COLOR_YELLOW + '…' + RESET_COLOR;
+                statusIndicator = `${COLOR_YELLOW}…${RESET_COLOR}`;
                 statusText = 'Connecting';
                 break;
-            case MCPServerStatus.DISCONNECTED:
             default:
-                statusIndicator = COLOR_RED + '✗' + RESET_COLOR;
+                statusIndicator = `${COLOR_RED}✗${RESET_COLOR}`;
                 statusText = 'Disconnected';
                 break;
         }

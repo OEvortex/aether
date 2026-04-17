@@ -96,10 +96,7 @@ export async function retryWithBackoff<T>(
         try {
             const result = await fn();
 
-            if (
-                shouldRetryOnContent &&
-                shouldRetryOnContent(result as GenerateContentResponse)
-            ) {
+            if (shouldRetryOnContent?.(result as GenerateContentResponse)) {
                 const jitter = currentDelay * 0.3 * (Math.random() * 2 - 1);
                 const delayWithJitter = Math.max(0, currentDelay + jitter);
                 await delay(delayWithJitter);
@@ -182,12 +179,12 @@ function getRetryAfterDelayMs(error: unknown): number {
                 const retryAfterHeader = headers['retry-after'];
                 if (typeof retryAfterHeader === 'string') {
                     const retryAfterSeconds = parseInt(retryAfterHeader, 10);
-                    if (!isNaN(retryAfterSeconds)) {
+                    if (!Number.isNaN(retryAfterSeconds)) {
                         return retryAfterSeconds * 1000;
                     }
                     // It might be an HTTP date
                     const retryAfterDate = new Date(retryAfterHeader);
-                    if (!isNaN(retryAfterDate.getTime())) {
+                    if (!Number.isNaN(retryAfterDate.getTime())) {
                         return Math.max(
                             0,
                             retryAfterDate.getTime() - Date.now()

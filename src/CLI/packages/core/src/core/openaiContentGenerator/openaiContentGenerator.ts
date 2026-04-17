@@ -116,7 +116,9 @@ export class OpenAIContentGenerator implements ContentGenerator {
         if (Array.isArray(request.contents)) {
             text = request.contents
                 .map((content) => {
-                    if (typeof content === 'string') return content;
+                    if (typeof content === 'string') {
+                        return content;
+                    }
                     if ('parts' in content && content.parts) {
                         return content.parts
                             .map((part) =>

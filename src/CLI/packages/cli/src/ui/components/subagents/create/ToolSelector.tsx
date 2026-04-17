@@ -121,7 +121,9 @@ export function ToolSelector({
         } else {
             // Try to match tools array to a category
             const matchingCategory = toolCategories.find((category) => {
-                if (category.id === 'all') return false;
+                if (category.id === 'all') {
+                    return false;
+                }
 
                 // Check if the tools array exactly matches this category's tools
                 const categoryToolsSet = new Set(category.tools);

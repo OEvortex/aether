@@ -1,5 +1,5 @@
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import { createDebugLogger } from '../utils/debugLogger.js';
 import { normalizeContent } from '../utils/textUtils.js';
 import { parse as parseYaml } from '../utils/yaml-parser.js';
@@ -80,8 +80,8 @@ export function parseSkillContent(
     const frontmatter = parseYaml(frontmatterYaml) as Record<string, unknown>;
 
     // Extract required fields
-    const nameRaw = frontmatter['name'];
-    const descriptionRaw = frontmatter['description'];
+    const nameRaw = frontmatter.name;
+    const descriptionRaw = frontmatter.description;
 
     if (nameRaw == null || nameRaw === '') {
         throw new Error('Missing "name" in frontmatter');
@@ -96,9 +96,7 @@ export function parseSkillContent(
     const description = String(descriptionRaw);
 
     // Extract optional fields
-    const allowedToolsRaw = frontmatter['allowedTools'] as
-        | unknown[]
-        | undefined;
+    const allowedToolsRaw = frontmatter.allowedTools as unknown[] | undefined;
     let allowedTools: string[] | undefined;
 
     if (allowedToolsRaw !== undefined) {

@@ -1,9 +1,9 @@
-﻿import type { EditorType } from '@aetherai/aether-core';
+﻿import { spawnSync } from 'node:child_process';
+import type { EditorType } from '@aetherai/aether-core';
 import {
     commandExists as coreCommandExists,
     editorCommands
 } from '@aetherai/aether-core';
-import { spawnSync } from 'child_process';
 import { useStdin } from 'ink';
 import { useCallback } from 'react';
 import { useSettings } from '../contexts/SettingsContext.js';
@@ -64,7 +64,7 @@ function getEditorCommand(preferredEditor?: EditorType): string {
         case 'win32':
             return 'notepad';
         default:
-            return process.env['VISUAL'] || process.env['EDITOR'] || 'vi';
+            return process.env.VISUAL || process.env.EDITOR || 'vi';
     }
 }
 
@@ -113,12 +113,16 @@ export function useLaunchEditor() {
                     shell: needsShell
                 });
 
-                if (error) throw error;
+                if (error) {
+                    throw error;
+                }
                 if (typeof status === 'number' && status !== 0) {
                     throw new Error(`Editor exited with status ${status}`);
                 }
             } finally {
-                if (wasRaw) setRawMode?.(true);
+                if (wasRaw) {
+                    setRawMode?.(true);
+                }
             }
         },
         [settings.merged.general?.preferredEditor, setRawMode, stdin]

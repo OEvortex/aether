@@ -62,8 +62,9 @@ describe('extensionsCommand', () => {
 
     describe('default action (manage)', () => {
         it('should open extensions manager dialog when extensions exist', async () => {
-            if (!extensionsCommand.action)
+            if (!extensionsCommand.action) {
                 throw new Error('Action not defined');
+            }
             mockGetExtensions.mockReturnValue([
                 { name: 'test-ext', isActive: true }
             ]);
@@ -76,8 +77,9 @@ describe('extensionsCommand', () => {
         });
 
         it('should open extensions manager dialog when no extensions installed', async () => {
-            if (!extensionsCommand.action)
+            if (!extensionsCommand.action) {
                 throw new Error('Action not defined');
+            }
             mockGetExtensions.mockReturnValue([]);
             const result = await extensionsCommand.action(mockContext, '');
 

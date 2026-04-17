@@ -62,7 +62,7 @@ describe('arenaCommand stop subcommand', () => {
 
     it('returns an error when no arena session is running', async () => {
         const stopCommand = getArenaSubCommand('stop');
-        const result = await stopCommand.action!(mockContext, '');
+        const result = await stopCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -78,7 +78,7 @@ describe('arenaCommand stop subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const stopCommand = getArenaSubCommand('stop');
-        const result = (await stopCommand.action!(
+        const result = (await stopCommand.action?.(
             mockContext,
             ''
         )) as OpenDialogActionReturn;
@@ -96,7 +96,7 @@ describe('arenaCommand stop subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const stopCommand = getArenaSubCommand('stop');
-        const result = (await stopCommand.action!(
+        const result = (await stopCommand.action?.(
             mockContext,
             ''
         )) as OpenDialogActionReturn;
@@ -134,7 +134,7 @@ describe('arenaCommand status subcommand', () => {
 
     it('returns an error when no arena session exists', async () => {
         const statusCommand = getArenaSubCommand('status');
-        const result = await statusCommand.action!(mockContext, '');
+        const result = await statusCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -150,7 +150,7 @@ describe('arenaCommand status subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const statusCommand = getArenaSubCommand('status');
-        const result = (await statusCommand.action!(
+        const result = (await statusCommand.action?.(
             mockContext,
             ''
         )) as OpenDialogActionReturn;
@@ -168,7 +168,7 @@ describe('arenaCommand status subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const statusCommand = getArenaSubCommand('status');
-        const result = (await statusCommand.action!(
+        const result = (await statusCommand.action?.(
             mockContext,
             ''
         )) as OpenDialogActionReturn;
@@ -212,7 +212,7 @@ describe('arenaCommand select subcommand', () => {
 
     it('returns error when no arena session exists', async () => {
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, '');
+        const result = await selectCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -228,7 +228,7 @@ describe('arenaCommand select subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, '');
+        const result = await selectCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -252,7 +252,7 @@ describe('arenaCommand select subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, '');
+        const result = await selectCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'message',
@@ -282,7 +282,7 @@ describe('arenaCommand select subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, '');
+        const result = await selectCommand.action?.(mockContext, '');
 
         expect(result).toEqual({
             type: 'dialog',
@@ -314,7 +314,7 @@ describe('arenaCommand select subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, 'gpt-4o');
+        const result = await selectCommand.action?.(mockContext, 'gpt-4o');
 
         expect(mockManager.applyAgentResult).toHaveBeenCalledWith('agent-1');
         expect(mockConfig.cleanupArenaRuntime).toHaveBeenCalled();
@@ -340,7 +340,7 @@ describe('arenaCommand select subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, 'nonexistent');
+        const result = await selectCommand.action?.(mockContext, 'nonexistent');
 
         expect(result).toEqual({
             type: 'message',
@@ -363,7 +363,7 @@ describe('arenaCommand select subcommand', () => {
         mockConfig.getArenaManager = vi.fn(() => mockManager);
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, '--discard');
+        const result = await selectCommand.action?.(mockContext, '--discard');
 
         expect(result).toEqual({
             type: 'confirm_action',
@@ -388,7 +388,7 @@ describe('arenaCommand select subcommand', () => {
         mockContext.overwriteConfirmed = true;
 
         const selectCommand = getArenaSubCommand('select');
-        const result = await selectCommand.action!(mockContext, '--discard');
+        const result = await selectCommand.action?.(mockContext, '--discard');
 
         expect(mockConfig.cleanupArenaRuntime).toHaveBeenCalled();
         expect(result).toEqual({

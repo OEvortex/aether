@@ -1448,12 +1448,9 @@ describe('OpenAIContentConverter', () => {
 
             const result =
                 converter.convertGeminiToolParametersToOpenAI(params);
-            const properties = result?.['properties'] as Record<
-                string,
-                unknown
-            >;
+            const properties = result?.properties as Record<string, unknown>;
 
-            expect(properties?.['value']).toEqual({
+            expect(properties?.value).toEqual({
                 type: 'number',
                 minimum: 0,
                 maximum: 100,
@@ -1480,17 +1477,14 @@ describe('OpenAIContentConverter', () => {
 
             const result =
                 converter.convertGeminiToolParametersToOpenAI(params);
-            const properties = result?.['properties'] as Record<
-                string,
-                unknown
-            >;
+            const properties = result?.properties as Record<string, unknown>;
 
-            expect(properties?.['text']).toEqual({
+            expect(properties?.text).toEqual({
                 type: 'string',
                 minLength: 1,
                 maxLength: 100
             });
-            expect(properties?.['items']).toEqual({
+            expect(properties?.items).toEqual({
                 type: 'array',
                 minItems: 0,
                 maxItems: 10
@@ -1515,17 +1509,14 @@ describe('OpenAIContentConverter', () => {
 
             const result =
                 converter.convertGeminiToolParametersToOpenAI(params);
-            const properties = result?.['properties'] as Record<
-                string,
-                unknown
-            >;
-            const nested = properties?.['nested'] as Record<string, unknown>;
-            const nestedProperties = nested?.['properties'] as Record<
+            const properties = result?.properties as Record<string, unknown>;
+            const nested = properties?.nested as Record<string, unknown>;
+            const nestedProperties = nested?.properties as Record<
                 string,
                 unknown
             >;
 
-            expect(nestedProperties?.['deep']).toEqual({
+            expect(nestedProperties?.deep).toEqual({
                 type: 'integer',
                 minimum: 0
             });

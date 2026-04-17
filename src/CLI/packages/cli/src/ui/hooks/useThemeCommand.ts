@@ -35,7 +35,7 @@ export const useThemeCommand = (
     >(themeManager.getActiveTheme().name);
 
     const openThemeDialog = useCallback(() => {
-        if (process.env['NO_COLOR']) {
+        if (process.env.NO_COLOR) {
             addItem(
                 {
                     type: MessageType.INFO,

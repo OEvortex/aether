@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/aether",
-    "version": "0.0.10",
+    "version": "0.0.12",
     "description": "Aether",
     "repository": {
         "type": "git",
@@ -10,7 +10,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "bin": {
-        "aether": "dist/index.js"
+        "aether": "dist/cli.mjs"
     },
     "exports": {
         ".": {
@@ -19,9 +19,8 @@
         }
     },
     "scripts": {
-        "build": "node ../../scripts/build_package.js",
-        "prepack": "npm run build && copy package.json dist\\package.json",
-        "start": "node dist/index.js",
+        "build": "echo 'Skipping tsc build for cli, using bundle instead'",
+        "start": "node dist/cli.mjs",
         "debug": "node --inspect-brk dist/index.js",
         "lint": "eslint . --ext .ts,.tsx",
         "format": "prettier --write .",
@@ -35,14 +34,14 @@
         "README.md"
     ],
     "config": {
-        "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.5"
+        "sandboxImageUri": "ghcr.io/oewortex/aether:0.0.11"
     },
     "dependencies": {
         "@agentclientprotocol/sdk": "^0.14.1",
         "@google/genai": "1.30.0",
         "@iarna/toml": "^2.2.5",
         "@modelcontextprotocol/sdk": "^1.25.1",
-        "@aetherai/aether-core": "^0.0.5",
+        "@aetherai/aether-core": "^0.0.12",
         "@types/update-notifier": "^6.0.8",
         "ansi-regex": "^6.2.2",
         "command-exists": "^1.2.9",
@@ -76,7 +75,7 @@
     },
     "devDependencies": {
         "@babel/runtime": "^7.27.6",
-        "@aetherai/aether-test-utils": "workspace:^0.0.5",
+        "@aetherai/aether-test-utils": "^0.0.12",
         "@testing-library/react": "^16.3.0",
         "@types/archiver": "^6.0.3",
         "@types/command-exists": "^1.2.3",

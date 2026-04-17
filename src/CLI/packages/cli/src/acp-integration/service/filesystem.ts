@@ -82,8 +82,8 @@ export class AcpFileSystemService implements FileSystemService {
             return this.fallback.writeTextFile(params);
         }
 
-        const finalContent = params._meta?.['bom']
-            ? '\uFEFF' + params.content
+        const finalContent = params._meta?.bom
+            ? `\uFEFF${params.content}`
             : params.content;
 
         await this.connection.writeTextFile({

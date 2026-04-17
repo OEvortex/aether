@@ -383,7 +383,7 @@ describe('WriteFileTool', () => {
                 expect(confirmation.onConfirm).toBeDefined();
 
                 // Call `onConfirm` to trigger the logic that updates the content
-                await confirmation.onConfirm!(
+                await confirmation.onConfirm?.(
                     ToolConfirmationOutcome.ProceedOnce
                 );
 

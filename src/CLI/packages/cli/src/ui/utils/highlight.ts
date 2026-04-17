@@ -71,7 +71,9 @@ export function buildSegmentsForVisualSlice(
     sliceStart: number,
     sliceEnd: number
 ): readonly HighlightToken[] {
-    if (sliceStart >= sliceEnd) return [];
+    if (sliceStart >= sliceEnd) {
+        return [];
+    }
 
     const segments: HighlightToken[] = [];
     let tokenCpStart = 0;

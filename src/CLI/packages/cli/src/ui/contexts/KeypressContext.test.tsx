@@ -1303,7 +1303,7 @@ describe('KeypressContext - Kitty Protocol', () => {
             });
 
             // Send an invalid long sequence to trigger overflow - should not crash
-            const longInvalidSequence = '\x1b[' + 'x'.repeat(100);
+            const longInvalidSequence = `\x1b[${'x'.repeat(100)}`;
             expect(() => {
                 act(() => {
                     stdin.sendKittySequence(longInvalidSequence);

@@ -35,7 +35,7 @@ describe('hooksCommand', () => {
 
     describe('basic functionality', () => {
         it('should open hooks management dialog in interactive mode', async () => {
-            const result = await hooksCommand.action!(mockContext, '');
+            const result = await hooksCommand.action?.(mockContext, '');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -50,7 +50,10 @@ describe('hooksCommand', () => {
                 }
             });
 
-            const result = await hooksCommand.action!(contextWithoutConfig, '');
+            const result = await hooksCommand.action?.(
+                contextWithoutConfig,
+                ''
+            );
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -61,7 +64,7 @@ describe('hooksCommand', () => {
         it('should open hooks management dialog even if hook system is not available', async () => {
             mockConfig.getHookSystem = vi.fn().mockReturnValue(null);
 
-            const result = await hooksCommand.action!(mockContext, '');
+            const result = await hooksCommand.action?.(mockContext, '');
 
             expect(result).toEqual({
                 type: 'dialog',
@@ -79,7 +82,7 @@ describe('hooksCommand', () => {
                 executionMode: 'non_interactive'
             });
 
-            const result = await hooksCommand.action!(
+            const result = await hooksCommand.action?.(
                 nonInteractiveContext,
                 ''
             );

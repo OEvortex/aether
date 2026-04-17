@@ -230,7 +230,7 @@ describe('FileCommandLoader', () => {
         const loader = new FileCommandLoader(mockConfig);
         const commands = await loader.loadCommands(signal);
         expect(commands).toHaveLength(1);
-        expect(commands[0]!.name).toBe('gcp:pipelines:run');
+        expect(commands[0]?.name).toBe('gcp:pipelines:run');
     });
 
     it('creates namespaces from nested directories', async () => {
@@ -826,7 +826,7 @@ describe('FileCommandLoader', () => {
             expect(nestedCmd?.extensionName).toBe('a');
             expect(nestedCmd?.description).toMatch(/^\[a\]/);
             expect(nestedCmd).toBeDefined();
-            const result = await nestedCmd!.action?.(
+            const result = await nestedCmd?.action?.(
                 createMockCommandContext({
                     invocation: {
                         raw: '/a.b:c',
@@ -861,7 +861,7 @@ describe('FileCommandLoader', () => {
             const command = commands.find((c) => c.name === 'shorthand');
             expect(command).toBeDefined();
 
-            const result = await command!.action?.(
+            const result = await command?.action?.(
                 createMockCommandContext({
                     invocation: {
                         raw: '/shorthand do something cool',
@@ -895,7 +895,7 @@ describe('FileCommandLoader', () => {
             const command = commands.find((c) => c.name === 'model_led');
             expect(command).toBeDefined();
 
-            const result = await command!.action?.(
+            const result = await command?.action?.(
                 createMockCommandContext({
                     invocation: {
                         raw: '/model_led 1.2.0 added "a feature"',
@@ -970,7 +970,7 @@ describe('FileCommandLoader', () => {
             const command = commands.find((c) => c.name === 'shell');
             expect(command).toBeDefined();
 
-            const result = await command!.action!(
+            const result = await command?.action?.(
                 createMockCommandContext({
                     invocation: { raw: '/shell', name: 'shell', args: '' }
                 }),
@@ -1003,7 +1003,7 @@ describe('FileCommandLoader', () => {
             const command = commands.find((c) => c.name === 'shell');
             expect(command).toBeDefined();
 
-            const result = await command!.action!(
+            const result = await command?.action?.(
                 createMockCommandContext({
                     invocation: {
                         raw: rawInvocation,
@@ -1038,7 +1038,7 @@ describe('FileCommandLoader', () => {
             expect(command).toBeDefined();
 
             await expect(
-                command!.action!(
+                command?.action?.(
                     createMockCommandContext({
                         invocation: { raw: '/shell', name: 'shell', args: '' }
                     }),
@@ -1096,7 +1096,7 @@ describe('FileCommandLoader', () => {
             const command = commands.find((c) => c.name === 'pipeline');
             expect(command).toBeDefined();
 
-            const result = await command!.action!(
+            const result = await command?.action?.(
                 createMockCommandContext({
                     invocation: {
                         raw: '/pipeline baz',
@@ -1200,7 +1200,7 @@ describe('FileCommandLoader', () => {
             const command = commands.find((c) => c.name === 'at-file');
             expect(command).toBeDefined();
 
-            const result = await command!.action?.(
+            const result = await command?.action?.(
                 createMockCommandContext({
                     invocation: {
                         raw: '/at-file',

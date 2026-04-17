@@ -69,13 +69,17 @@ export function TextInput({
     });
 
     const handleSubmit = () => {
-        if (!onSubmit) return;
+        if (!onSubmit) {
+            return;
+        }
         onSubmit();
     };
 
     useKeypress(
         (key: Key) => {
-            if (!buffer || !isActive) return;
+            if (!buffer || !isActive) {
+                return;
+            }
 
             // Tab completion: delegate to caller instead of inserting a tab character
             if (key.name === 'tab') {
@@ -130,7 +134,9 @@ export function TextInput({
             }
 
             if (keyMatchers[Command.CLEAR_INPUT](key)) {
-                if (buffer.text.length > 0) buffer.setText('');
+                if (buffer.text.length > 0) {
+                    buffer.setText('');
+                }
                 return;
             }
             if (keyMatchers[Command.KILL_LINE_RIGHT](key)) {
@@ -152,7 +158,9 @@ export function TextInput({
         { isActive }
     );
 
-    if (!buffer) return null;
+    if (!buffer) {
+        return null;
+    }
 
     const linesToRender = buffer.viewportVisualLines;
     const [cursorVisualRowAbsolute, cursorVisualColAbsolute] =

@@ -106,7 +106,7 @@ describe('useAetherAuth', () => {
         );
 
         act(() => {
-            handleDeviceAuth!(mockDeviceAuth);
+            handleDeviceAuth?.(mockDeviceAuth);
         });
 
         expect(result.current.aetherAuthState.deviceAuth).toEqual(
@@ -133,7 +133,7 @@ describe('useAetherAuth', () => {
         );
 
         act(() => {
-            handleAuthProgress!('success', 'Authentication successful!');
+            handleAuthProgress?.('success', 'Authentication successful!');
         });
 
         expect(result.current.aetherAuthState.authStatus).toBe('success');
@@ -160,7 +160,7 @@ describe('useAetherAuth', () => {
         );
 
         act(() => {
-            handleAuthProgress!('error', 'Authentication failed');
+            handleAuthProgress?.('error', 'Authentication failed');
         });
 
         expect(result.current.aetherAuthState.authStatus).toBe('error');
@@ -187,7 +187,10 @@ describe('useAetherAuth', () => {
         );
 
         act(() => {
-            handleAuthProgress!('polling', 'Waiting for user authorization...');
+            handleAuthProgress?.(
+                'polling',
+                'Waiting for user authorization...'
+            );
         });
 
         expect(result.current.aetherAuthState.authStatus).toBe('polling');
@@ -214,7 +217,7 @@ describe('useAetherAuth', () => {
         );
 
         act(() => {
-            handleAuthProgress!(
+            handleAuthProgress?.(
                 'rate_limit',
                 'Too many requests. The server is rate limiting our requests. Please select a different authentication method or try again later.'
             );
@@ -244,7 +247,7 @@ describe('useAetherAuth', () => {
         );
 
         act(() => {
-            handleAuthProgress!('success');
+            handleAuthProgress?.('success');
         });
 
         expect(result.current.aetherAuthState.authStatus).toBe('success');
@@ -339,7 +342,7 @@ describe('useAetherAuth', () => {
 
         // Simulate device auth
         act(() => {
-            handleDeviceAuth!(mockDeviceAuth);
+            handleDeviceAuth?.(mockDeviceAuth);
         });
 
         expect(result.current.aetherAuthState.deviceAuth).toEqual(
@@ -376,7 +379,7 @@ describe('useAetherAuth', () => {
 
         // Simulate device auth
         act(() => {
-            handleDeviceAuth!(mockDeviceAuth);
+            handleDeviceAuth?.(mockDeviceAuth);
         });
 
         expect(result.current.aetherAuthState.deviceAuth).toEqual(
@@ -408,7 +411,7 @@ describe('useAetherAuth', () => {
 
         // Set up some state
         act(() => {
-            handleDeviceAuth!(mockDeviceAuth);
+            handleDeviceAuth?.(mockDeviceAuth);
         });
 
         expect(result.current.aetherAuthState.deviceAuth).toEqual(

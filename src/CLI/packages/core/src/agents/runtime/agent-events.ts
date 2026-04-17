@@ -13,8 +13,8 @@
  * - Lifecycle hooks (pre/post tool use, stop) for synchronous callbacks
  */
 
+import { EventEmitter } from 'node:events';
 import type { GenerateContentResponseUsageMetadata, Part } from '@google/genai';
-import { EventEmitter } from 'events';
 import type {
     ToolCallConfirmationDetails,
     ToolConfirmationOutcome,

@@ -506,7 +506,7 @@ export class LoggingContentGenerator implements ContentGenerator {
             const thoughtText = `[Thought: ${part.thought}]`;
 
             const newPart = { ...part };
-            delete (newPart as Record<string, unknown>)['thought'];
+            delete (newPart as Record<string, unknown>).thought;
 
             const hasApiContent =
                 'functionCall' in newPart ||

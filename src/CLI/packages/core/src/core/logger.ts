@@ -129,7 +129,9 @@ export class Logger {
     }
 
     private async _backupCorruptedLogFile(reason: string): Promise<void> {
-        if (!this.logFilePath) return;
+        if (!this.logFilePath) {
+            return;
+        }
         const backupPath = `${this.logFilePath}.${reason}.${Date.now()}.bak`;
         try {
             await fs.rename(this.logFilePath, backupPath);
@@ -245,7 +247,9 @@ export class Logger {
     }
 
     async getPreviousUserMessages(): Promise<string[]> {
-        if (!this.initialized) return [];
+        if (!this.initialized) {
+            return [];
+        }
         return this.logs
             .filter((entry) => entry.type === MessageSenderType.USER)
             .sort((a, b) => {

@@ -31,8 +31,10 @@ let globalSession: DebugLogSession | null = null;
 const sessionContext = new AsyncLocalStorage<DebugLogSession>();
 
 function isDebugLogFileEnabled(): boolean {
-    const value = process.env['AETHER_DEBUG_LOG_FILE'];
-    if (!value) return true;
+    const value = process.env.AETHER_DEBUG_LOG_FILE;
+    if (!value) {
+        return true;
+    }
     const normalized = value.trim().toLowerCase();
     return !['0', 'false', 'off', 'no'].includes(normalized);
 }
@@ -183,22 +185,30 @@ export function createDebugLogger(tag?: string): DebugLogger {
     return {
         debug: (...args: unknown[]) => {
             const session = getActiveSession();
-            if (!session) return;
+            if (!session) {
+                return;
+            }
             writeLog(session, 'DEBUG', tag, args);
         },
         info: (...args: unknown[]) => {
             const session = getActiveSession();
-            if (!session) return;
+            if (!session) {
+                return;
+            }
             writeLog(session, 'INFO', tag, args);
         },
         warn: (...args: unknown[]) => {
             const session = getActiveSession();
-            if (!session) return;
+            if (!session) {
+                return;
+            }
             writeLog(session, 'WARN', tag, args);
         },
         error: (...args: unknown[]) => {
             const session = getActiveSession();
-            if (!session) return;
+            if (!session) {
+                return;
+            }
             writeLog(session, 'ERROR', tag, args);
         }
     };

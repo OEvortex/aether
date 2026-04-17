@@ -18,7 +18,9 @@ export function buildContentWithSources(
     content: string,
     sources: Array<{ title: string; url: string }>
 ): string {
-    if (!sources.length) return content;
+    if (!sources.length) {
+        return content;
+    }
     const sourceList = sources
         .map((s, i) => `[${i + 1}] ${s.title || 'Untitled'} (${s.url})`)
         .join('\n');

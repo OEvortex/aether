@@ -86,9 +86,9 @@ function getErrorCode(error: unknown): string | undefined {
 
     if (
         'code' in error &&
-        typeof (error as Record<string, unknown>)['code'] === 'string'
+        typeof (error as Record<string, unknown>).code === 'string'
     ) {
-        return (error as Record<string, string>)['code'];
+        return (error as Record<string, string>).code;
     }
 
     return undefined;
@@ -115,7 +115,7 @@ function formatUnknownErrorMessage(error: unknown): string | undefined {
         return undefined;
     }
 
-    const message = (error as Record<string, unknown>)['message'];
+    const message = (error as Record<string, unknown>).message;
     if (typeof message === 'string') {
         return message;
     }

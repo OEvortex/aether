@@ -191,7 +191,7 @@ describe('AgentInteractive', () => {
             (m) =>
                 m.role === 'info' &&
                 m.content.includes('Model error') &&
-                m.metadata?.['level'] === 'error'
+                m.metadata?.level === 'error'
         );
         expect(errorMsg).toBeDefined();
 
@@ -237,7 +237,7 @@ describe('AgentInteractive', () => {
         });
 
         agent.cancelCurrentRound();
-        resolveLoop!();
+        resolveLoop?.();
 
         await vi.waitFor(() => {
             expect(agent.getStatus()).toBe('idle');
@@ -476,11 +476,11 @@ describe('AgentInteractive', () => {
         const toolResult = messages.find((m) => m.role === 'tool_result');
 
         expect(toolCall).toBeDefined();
-        expect(toolCall?.metadata?.['toolName']).toBe('read_file');
-        expect(toolCall?.metadata?.['callId']).toBe('call-1');
+        expect(toolCall?.metadata?.toolName).toBe('read_file');
+        expect(toolCall?.metadata?.callId).toBe('call-1');
 
         expect(toolResult).toBeDefined();
-        expect(toolResult?.metadata?.['success']).toBe(true);
+        expect(toolResult?.metadata?.success).toBe(true);
 
         await agent.shutdown();
     });

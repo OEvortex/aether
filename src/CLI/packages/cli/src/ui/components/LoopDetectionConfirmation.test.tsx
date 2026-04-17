@@ -22,7 +22,7 @@ describe('LoopDetectionConfirmation', () => {
         const { lastFrame } = renderWithProviders(
             <LoopDetectionConfirmation onComplete={onComplete} />
         );
-        const output = lastFrame()!.toString();
+        const output = lastFrame()?.toString();
 
         expect(output).toContain('A potential loop was detected');
         expect(output).toContain('Keep loop detection enabled (esc)');

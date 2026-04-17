@@ -165,7 +165,7 @@ export function resolveModelConfig(
         defaultModel,
         defaultSource(defaultModel)
     );
-    sources['model'] = modelResult.source;
+    sources.model = modelResult.source;
 
     // ---- API Key ----
     const apiKeyLayers: Array<ConfigLayer<string>> = [];
@@ -201,7 +201,7 @@ export function resolveModelConfig(
 
     const apiKeyResult = resolveOptionalField(apiKeyLayers);
     if (apiKeyResult) {
-        sources['apiKey'] = apiKeyResult.source;
+        sources.apiKey = apiKeyResult.source;
     }
 
     // ---- Base URL ----
@@ -229,14 +229,14 @@ export function resolveModelConfig(
 
     const baseUrlResult = resolveOptionalField(baseUrlLayers);
     if (baseUrlResult) {
-        sources['baseUrl'] = baseUrlResult.source;
+        sources.baseUrl = baseUrlResult.source;
     }
 
     // ---- API Key Env Key (for error messages) ----
     let apiKeyEnvKey: string | undefined;
     if (authType && modelProvider?.envKey) {
         apiKeyEnvKey = modelProvider.envKey;
-        sources['apiKeyEnvKey'] = modelProvidersSource(
+        sources.apiKeyEnvKey = modelProvidersSource(
             authType,
             modelProvider.id,
             'envKey'
@@ -265,11 +265,11 @@ export function resolveModelConfig(
 
     // Add proxy source
     if (proxy) {
-        sources['proxy'] = computedSource('Config.getProxy()');
+        sources.proxy = computedSource('Config.getProxy()');
     }
 
     // Add authType source
-    sources['authType'] = computedSource('provided by caller');
+    sources.authType = computedSource('provided by caller');
 
     return { config, sources, warnings };
 }
@@ -314,12 +314,12 @@ function resolveaetherOAuthConfig(
         modelSource = defaultSource(`fallback to '${DEFAULT_AETHER_MODEL}'`);
     }
 
-    sources['model'] = modelSource;
-    sources['apiKey'] = computedSource('Aether OAuth dynamic token');
-    sources['authType'] = computedSource('provided by caller');
+    sources.model = modelSource;
+    sources.apiKey = computedSource('Aether OAuth dynamic token');
+    sources.authType = computedSource('provided by caller');
 
     if (proxy) {
-        sources['proxy'] = computedSource('Config.getProxy()');
+        sources.proxy = computedSource('Config.getProxy()');
     }
 
     // Resolve generation config from settings and modelProvider

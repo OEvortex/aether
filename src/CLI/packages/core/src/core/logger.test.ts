@@ -54,7 +54,9 @@ const setTestPaths = () => {
 
 async function cleanupLogAndCheckpointFiles() {
     try {
-        if (!testGeminiDir) return;
+        if (!testGeminiDir) {
+            return;
+        }
         await fs.rm(testGeminiDir, { recursive: true, force: true });
     } catch (_error) {
         // Ignore errors, as the directory may not exist, which is fine.
@@ -99,8 +101,8 @@ describe('Logger', () => {
         vi.resetAllMocks();
         vi.useFakeTimers();
         vi.setSystemTime(new Date('2025-01-01T12:00:00.000Z'));
-        originalHome = process.env['HOME'];
-        process.env['HOME'] = TEST_HOME_DIR;
+        originalHome = process.env.HOME;
+        process.env.HOME = TEST_HOME_DIR;
         setTestPaths();
         // Clean up before the test
         await cleanupLogAndCheckpointFiles();
@@ -119,9 +121,9 @@ describe('Logger', () => {
         vi.useRealTimers();
         vi.restoreAllMocks();
         if (originalHome === undefined) {
-            delete process.env['HOME'];
+            delete process.env.HOME;
         } else {
-            process.env['HOME'] = originalHome;
+            process.env.HOME = originalHome;
         }
     });
 
@@ -189,8 +191,8 @@ describe('Logger', () => {
                 new Storage(process.cwd())
             );
             await newLogger.initialize();
-            expect(newLogger['messageId']).toBe(2);
-            expect(newLogger['logs']).toEqual(existingLogs);
+            expect(newLogger.messageId).toBe(2);
+            expect(newLogger.logs).toEqual(existingLogs);
             newLogger.close();
         });
 
@@ -213,19 +215,19 @@ describe('Logger', () => {
                 new Storage(process.cwd())
             );
             await newLogger.initialize();
-            expect(newLogger['messageId']).toBe(0);
+            expect(newLogger.messageId).toBe(0);
             newLogger.close();
         });
 
         it('should be idempotent', async () => {
             await logger.logMessage(MessageSenderType.USER, 'test message');
-            const initialMessageId = logger['messageId'];
-            const initialLogCount = logger['logs'].length;
+            const initialMessageId = logger.messageId;
+            const initialLogCount = logger.logs.length;
 
             await logger.initialize(); // Second call should not change state
 
-            expect(logger['messageId']).toBe(initialMessageId);
-            expect(logger['logs'].length).toBe(initialLogCount);
+            expect(logger.messageId).toBe(initialMessageId);
+            expect(logger.logs.length).toBe(initialLogCount);
             const logsFromFile = await readLogFile();
             expect(logsFromFile.length).toBe(1);
         });
@@ -245,7 +247,7 @@ describe('Logger', () => {
             expect(
                 dirContents.some(
                     (f) =>
-                        f.startsWith(LOG_FILE_NAME + '.invalid_json') &&
+                        f.startsWith(`${LOG_FILE_NAME}.invalid_json`) &&
                         f.endsWith('.bak')
                 )
             ).toBe(true);
@@ -270,7 +272,7 @@ describe('Logger', () => {
             expect(
                 dirContents.some(
                     (f) =>
-                        f.startsWith(LOG_FILE_NAME + '.malformed_array') &&
+                        f.startsWith(`${LOG_FILE_NAME}.malformed_array`) &&
                         f.endsWith('.bak')
                 )
             ).toBe(true);
@@ -290,9 +292,9 @@ describe('Logger', () => {
                 message: 'Hello, world!',
                 timestamp: new Date('2025-01-01T12:00:00.000Z').toISOString()
             });
-            expect(logger['logs'].length).toBe(1);
-            expect(logger['logs'][0]).toEqual(logsFromFile[0]);
-            expect(logger['messageId']).toBe(1);
+            expect(logger.logs.length).toBe(1);
+            expect(logger.logs[0]).toEqual(logsFromFile[0]);
+            expect(logger.messageId).toBe(1);
         });
 
         it('should correctly increment messageId for subsequent messages in the same session', async () => {
@@ -304,7 +306,7 @@ describe('Logger', () => {
             expect(logs[0].messageId).toBe(0);
             expect(logs[1].messageId).toBe(1);
             expect(logs[1].timestamp).not.toBe(logs[0].timestamp);
-            expect(logger['messageId']).toBe(2);
+            expect(logger.messageId).toBe(2);
         });
 
         it('should handle logger not initialized', async () => {
@@ -334,7 +336,7 @@ describe('Logger', () => {
                 new Storage(process.cwd())
             );
             await logger2.initialize();
-            expect(logger2['sessionId']).toEqual(logger1['sessionId']);
+            expect(logger2.sessionId).toEqual(logger1.sessionId);
 
             await logger1.logMessage(MessageSenderType.USER, 'L1M1');
             vi.advanceTimersByTime(10);
@@ -357,8 +359,8 @@ describe('Logger', () => {
             expect(messagesInFile).toEqual(['L1M1', 'L2M1', 'L1M2', 'L2M2']);
 
             // Check internal state (next messageId each logger would use for that session)
-            expect(logger1['messageId']).toBe(3);
-            expect(logger2['messageId']).toBe(4);
+            expect(logger1.messageId).toBe(3);
+            expect(logger2.messageId).toBe(4);
 
             logger1.close();
             logger2.close();
@@ -368,13 +370,13 @@ describe('Logger', () => {
             vi.spyOn(fs, 'writeFile').mockRejectedValueOnce(
                 new Error('Disk full')
             );
-            const initialMessageId = logger['messageId'];
-            const initialLogCount = logger['logs'].length;
+            const initialMessageId = logger.messageId;
+            const initialLogCount = logger.logs.length;
 
             await logger.logMessage(MessageSenderType.USER, 'test fail write');
 
-            expect(logger['messageId']).toBe(initialMessageId); // Not incremented
-            expect(logger['logs'].length).toBe(initialLogCount); // Log not added to in-memory cache
+            expect(logger.messageId).toBe(initialMessageId); // Not incremented
+            expect(logger.logs.length).toBe(initialLogCount); // Log not added to in-memory cache
         });
     });
 
@@ -620,7 +622,7 @@ describe('Logger', () => {
                 testGeminiDir,
                 `checkpoint-${oldTag}.json`
             );
-            const newStylePath = logger['_checkpointPath'](oldTag);
+            const newStylePath = logger._checkpointPath(oldTag);
 
             // Create both files
             await fs.writeFile(oldStylePath, '{}');
@@ -750,11 +752,11 @@ describe('Logger', () => {
             await logger.logMessage(MessageSenderType.USER, 'Another message');
             const messages = await logger.getPreviousUserMessages();
             expect(messages).toEqual([]);
-            expect(logger['initialized']).toBe(false);
-            expect(logger['logFilePath']).toBeUndefined();
-            expect(logger['logs']).toEqual([]);
-            expect(logger['sessionId']).toBeUndefined();
-            expect(logger['messageId']).toBe(0);
+            expect(logger.initialized).toBe(false);
+            expect(logger.logFilePath).toBeUndefined();
+            expect(logger.logs).toEqual([]);
+            expect(logger.sessionId).toBeUndefined();
+            expect(logger.messageId).toBe(0);
         });
     });
 });

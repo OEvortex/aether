@@ -65,7 +65,9 @@ export function useInputHistoryStore(): UseInputHistoryStoreReturn {
      */
     const initializeFromLogger = useCallback(
         async (logger: Logger | null) => {
-            if (isInitialized || !logger) return;
+            if (isInitialized || !logger) {
+                return;
+            }
 
             try {
                 const pastMessages =
@@ -94,7 +96,9 @@ export function useInputHistoryStore(): UseInputHistoryStoreReturn {
     const addInput = useCallback(
         (input: string) => {
             const trimmedInput = input.trim();
-            if (!trimmedInput) return; // Filter empty/whitespace-only inputs
+            if (!trimmedInput) {
+                return; // Filter empty/whitespace-only inputs
+            }
 
             setCurrentSessionMessages((prevCurrent) => {
                 const newCurrentSession = [...prevCurrent, trimmedInput];

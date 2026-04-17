@@ -198,8 +198,7 @@ const StringResultRenderer: React.FC<{
 
     // Truncate if too long
     if (displayData.length > MAXIMUM_RESULT_DISPLAY_CHARACTERS) {
-        displayData =
-            '...' + displayData.slice(-MAXIMUM_RESULT_DISPLAY_CHARACTERS);
+        displayData = `...${displayData.slice(-MAXIMUM_RESULT_DISPLAY_CHARACTERS)}`;
     }
 
     if (renderAsMarkdown) {

@@ -156,8 +156,8 @@ export const updateCommand: CommandModule = {
             }),
     handler: async (argv) => {
         await handleUpdate({
-            name: argv['name'] as string | undefined,
-            all: argv['all'] as boolean | undefined
+            name: argv.name as string | undefined,
+            all: argv.all as boolean | undefined
         });
     }
 };

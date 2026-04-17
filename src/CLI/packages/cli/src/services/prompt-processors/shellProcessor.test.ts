@@ -20,8 +20,8 @@ import type { PromptPipelineContent } from './types.js';
 function getExpectedEscapedArgForPlatform(arg: string): string {
     if (os.platform() === 'win32') {
         // Detect Git Bash / MSYS2 / MinTTY environments (same logic as getShellConfiguration)
-        const msystem = process.env['MSYSTEM'];
-        const term = process.env['TERM'] || '';
+        const msystem = process.env.MSYSTEM;
+        const term = process.env.TERM || '';
         const isGitBash =
             msystem?.startsWith('MINGW') ||
             msystem?.startsWith('MSYS') ||
@@ -32,7 +32,7 @@ function getExpectedEscapedArgForPlatform(arg: string): string {
             return quote([arg]);
         }
 
-        const comSpec = (process.env['ComSpec'] || 'cmd.exe').toLowerCase();
+        const comSpec = (process.env.ComSpec || 'cmd.exe').toLowerCase();
         const isPowerShell =
             comSpec.endsWith('powershell.exe') || comSpec.endsWith('pwsh.exe');
 
@@ -448,7 +448,7 @@ describe('ShellProcessor', () => {
             'Files: !{  ls {{args}} -l  }'
         );
 
-        const rawArgs = context.invocation!.args;
+        const rawArgs = context.invocation?.args;
 
         const expectedEscapedArgs = getExpectedEscapedArgForPlatform(rawArgs);
 

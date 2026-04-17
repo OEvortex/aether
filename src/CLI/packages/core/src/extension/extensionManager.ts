@@ -187,10 +187,10 @@ export interface ExtensionManagerOptions {
 function ensureLeadingAndTrailingSlash(dirPath: string): string {
     let result = dirPath.replace(/\\/g, '/');
     if (result.charAt(0) !== '/') {
-        result = '/' + result;
+        result = `/${result}`;
     }
     if (result.charAt(result.length - 1) !== '/') {
-        result = result + '/';
+        result = `${result}/`;
     }
     return result;
 }
@@ -368,7 +368,9 @@ export class ExtensionManager {
      */
     validateExtensionOverrides(extensions: Extension[]): void {
         for (const name of this.enabledExtensionNamesOverride) {
-            if (name === 'none') continue;
+            if (name === 'none') {
+                continue;
+            }
             if (
                 !extensions.some(
                     (ext) =>
@@ -557,7 +559,7 @@ export class ExtensionManager {
         this.extensionCache = new Map<string, Extension>();
         const extensions = await this.loadExtensionsFromDir(os.homedir());
         extensions.forEach((extension) => {
-            this.extensionCache!.set(extension.name, extension);
+            this.extensionCache?.set(extension.name, extension);
         });
     }
 
@@ -565,7 +567,7 @@ export class ExtensionManager {
         if (!this.extensionCache) {
             return [];
         }
-        return [...this.extensionCache!.values()];
+        return [...this.extensionCache?.values()];
     }
 
     // ==========================================================================
@@ -1138,7 +1140,7 @@ export class ExtensionManager {
                         telemetryConfig,
                         new ExtensionInstallEvent(
                             newExtensionConfig.name,
-                            newExtensionConfig!.version,
+                            newExtensionConfig?.version,
                             installMetadata.source,
                             'success'
                         )
@@ -1248,7 +1250,9 @@ export class ExtensionManager {
             this.extensionCache.delete(extension.name);
         }
 
-        if (isUpdate) return;
+        if (isUpdate) {
+            return;
+        }
 
         this.removeEnablementConfig(extension.name);
         await this.refreshTools();
@@ -1405,7 +1409,9 @@ export class ExtensionManager {
     }
 
     async refreshMemory(): Promise<void> {
-        if (!this.config) return;
+        if (!this.config) {
+            return;
+        }
         // refresh mcp servers
         await this.config.getToolRegistry().restartMcpServers();
         // refresh skills
@@ -1417,7 +1423,9 @@ export class ExtensionManager {
     }
 
     async refreshTools(): Promise<void> {
-        if (!this.config) return;
+        if (!this.config) {
+            return;
+        }
         // FIXME: restart all mcp servers now, this can be optimized by only restarting changed ones at here
         await this.refreshMemory();
     }

@@ -824,14 +824,18 @@ describe('fileUtils', () => {
     describe('processSingleFileContent', () => {
         beforeEach(() => {
             // Ensure files exist for statSync checks before readFile might be mocked
-            if (actualNodeFs.existsSync(testTextFilePath))
+            if (actualNodeFs.existsSync(testTextFilePath)) {
                 actualNodeFs.unlinkSync(testTextFilePath);
-            if (actualNodeFs.existsSync(testImageFilePath))
+            }
+            if (actualNodeFs.existsSync(testImageFilePath)) {
                 actualNodeFs.unlinkSync(testImageFilePath);
-            if (actualNodeFs.existsSync(testPdfFilePath))
+            }
+            if (actualNodeFs.existsSync(testPdfFilePath)) {
                 actualNodeFs.unlinkSync(testPdfFilePath);
-            if (actualNodeFs.existsSync(testBinaryFilePath))
+            }
+            if (actualNodeFs.existsSync(testBinaryFilePath)) {
                 actualNodeFs.unlinkSync(testBinaryFilePath);
+            }
         });
 
         it('should read a text file successfully', async () => {
@@ -1108,7 +1112,7 @@ describe('fileUtils', () => {
 
             expect(result.llmContent).toContain('Short line');
             expect(result.llmContent).toContain(
-                longLine.substring(0, 2000) + '... [truncated]'
+                `${longLine.substring(0, 2000)}... [truncated]`
             );
             expect(result.llmContent).not.toContain('Another short line');
             expect(result.returnDisplay).toBe(

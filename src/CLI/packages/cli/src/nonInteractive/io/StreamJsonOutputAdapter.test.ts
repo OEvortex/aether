@@ -89,7 +89,7 @@ describe('StreamJsonOutputAdapter', () => {
                 });
 
                 expect(deltaEventCall).toBeDefined();
-                const parsed = JSON.parse(deltaEventCall![0] as string);
+                const parsed = JSON.parse(deltaEventCall?.[0] as string);
                 expect(parsed.event.type).toBe('content_block_delta');
                 expect(parsed.event.delta).toMatchObject({
                     type: 'text_delta',

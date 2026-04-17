@@ -66,7 +66,7 @@ const BUILTIN_SEATBELT_PROFILES = [
  * @returns {Promise<boolean>} A promise that resolves to true if the current user's UID/GID should be used, false otherwise.
  */
 async function shouldUseCurrentUserInSandbox(): Promise<boolean> {
-    const envVar = process.env['SANDBOX_SET_UID_GID']?.toLowerCase().trim();
+    const envVar = process.env.SANDBOX_SET_UID_GID?.toLowerCase().trim();
 
     if (envVar === '1' || envVar === 'true') {
         return true;
@@ -76,7 +76,7 @@ async function shouldUseCurrentUserInSandbox(): Promise<boolean> {
     }
 
     if (os.platform() === 'linux') {
-        const debugEnv = [process.env['DEBUG'], process.env['DEBUG_MODE']].some(
+        const debugEnv = [process.env.DEBUG, process.env.DEBUG_MODE].some(
             (v) => v === 'true' || v === '1'
         );
         if (debugEnv) {
@@ -100,7 +100,7 @@ function parseImageName(image: string): string {
 }
 
 function ports(): string[] {
-    return (process.env['SANDBOX_PORTS'] ?? '')
+    return (process.env.SANDBOX_PORTS ?? '')
         .split(',')
         .filter((p) => p.trim())
         .map((p) => p.trim());
@@ -113,8 +113,8 @@ function entrypoint(workdir: string, cliArgs: string[]): string[] {
     const pathSeparator = isWindows ? ';' : ':';
 
     let pathSuffix = '';
-    if (process.env['PATH']) {
-        const paths = process.env['PATH'].split(pathSeparator);
+    if (process.env.PATH) {
+        const paths = process.env.PATH.split(pathSeparator);
         for (const p of paths) {
             const containerPath = getContainerPath(p);
             if (
@@ -131,8 +131,8 @@ function entrypoint(workdir: string, cliArgs: string[]): string[] {
     }
 
     let pythonPathSuffix = '';
-    if (process.env['PYTHONPATH']) {
-        const paths = process.env['PYTHONPATH'].split(pathSeparator);
+    if (process.env.PYTHONPATH) {
+        const paths = process.env.PYTHONPATH.split(pathSeparator);
         for (const p of paths) {
             const containerPath = getContainerPath(p);
             if (
@@ -164,12 +164,12 @@ function entrypoint(workdir: string, cliArgs: string[]): string[] {
 
     const quotedCliArgs = cliArgs.slice(2).map((arg) => quote([arg]));
     const cliCmd =
-        process.env['NODE_ENV'] === 'development'
-            ? process.env['DEBUG']
+        process.env.NODE_ENV === 'development'
+            ? process.env.DEBUG
                 ? 'npm run debug --'
                 : 'npm rebuild && npm run start --'
-            : process.env['DEBUG']
-              ? `node --inspect-brk=0.0.0.0:${process.env['DEBUG_PORT'] || '9229'} $(which aether)`
+            : process.env.DEBUG
+              ? `node --inspect-brk=0.0.0.0:${process.env.DEBUG_PORT || '9229'} $(which aether)`
               : 'aether';
 
     const args = [...shellCmds, cliCmd, ...quotedCliArgs];
@@ -184,13 +184,13 @@ export async function start_sandbox(
 ): Promise<number> {
     if (config.command === 'sandbox-exec') {
         // disallow BUILD_SANDBOX
-        if (process.env['BUILD_SANDBOX']) {
+        if (process.env.BUILD_SANDBOX) {
             throw new FatalSandboxError(
                 'Cannot BUILD_SANDBOX when using macOS Seatbelt'
             );
         }
 
-        const profile = (process.env['SEATBELT_PROFILE'] ??= 'permissive-open');
+        const profile = (process.env.SEATBELT_PROFILE ??= 'permissive-open');
         let profileFile = fileURLToPath(
             new URL(`sandbox-macos-${profile}.sb`, import.meta.url)
         );
@@ -210,7 +210,7 @@ export async function start_sandbox(
         writeStderrLine(`using macos seatbelt (profile: ${profile}) ...`);
         // if DEBUG is set, convert to --inspect-brk in NODE_OPTIONS
         const nodeOptions = [
-            ...(process.env['DEBUG'] ? ['--inspect-brk'] : []),
+            ...(process.env.DEBUG ? ['--inspect-brk'] : []),
             ...nodeArgs
         ].join(' ');
 
@@ -268,25 +268,25 @@ export async function start_sandbox(
             ].join(' ')
         );
         // start and set up proxy if AETHER_SANDBOX_PROXY_COMMAND is set
-        const proxyCommand = process.env['AETHER_SANDBOX_PROXY_COMMAND'];
+        const proxyCommand = process.env.AETHER_SANDBOX_PROXY_COMMAND;
         let proxyProcess: ChildProcess | undefined;
         let sandboxProcess: ChildProcess | undefined;
         const sandboxEnv = { ...process.env };
         if (proxyCommand) {
             const proxy =
-                process.env['HTTPS_PROXY'] ||
-                process.env['https_proxy'] ||
-                process.env['HTTP_PROXY'] ||
-                process.env['http_proxy'] ||
+                process.env.HTTPS_PROXY ||
+                process.env.https_proxy ||
+                process.env.HTTP_PROXY ||
+                process.env.http_proxy ||
                 'http://localhost:8877';
-            sandboxEnv['HTTPS_PROXY'] = proxy;
-            sandboxEnv['https_proxy'] = proxy; // lower-case can be required, e.g. for curl
-            sandboxEnv['HTTP_PROXY'] = proxy;
-            sandboxEnv['http_proxy'] = proxy;
-            const noProxy = process.env['NO_PROXY'] || process.env['no_proxy'];
+            sandboxEnv.HTTPS_PROXY = proxy;
+            sandboxEnv.https_proxy = proxy; // lower-case can be required, e.g. for curl
+            sandboxEnv.HTTP_PROXY = proxy;
+            sandboxEnv.http_proxy = proxy;
+            const noProxy = process.env.NO_PROXY || process.env.no_proxy;
             if (noProxy) {
-                sandboxEnv['NO_PROXY'] = noProxy;
-                sandboxEnv['no_proxy'] = noProxy;
+                sandboxEnv.NO_PROXY = noProxy;
+                sandboxEnv.no_proxy = noProxy;
             }
             // Note: CodeQL flags this as js/shell-command-injection-from-environment.
             // This is intentional - CLI tool executes user-provided proxy commands.
@@ -357,7 +357,7 @@ export async function start_sandbox(
     // if BUILD_SANDBOX is set, then call scripts/build_sandbox.js under aether repo
     //
     // note this can only be done with binary linked from aether repo
-    if (process.env['BUILD_SANDBOX']) {
+    if (process.env.BUILD_SANDBOX) {
         if (!gcPath.includes('aether/packages/')) {
             throw new FatalSandboxError(
                 'Cannot build sandbox using installed Aether binary; ' +
@@ -407,8 +407,8 @@ export async function start_sandbox(
     const args = ['run', '-i', '--rm', '--init', '--workdir', containerWorkdir];
 
     // add custom flags from SANDBOX_FLAGS
-    if (process.env['SANDBOX_FLAGS']) {
-        const flags = parse(process.env['SANDBOX_FLAGS'], process.env).filter(
+    if (process.env.SANDBOX_FLAGS) {
+        const flags = parse(process.env.SANDBOX_FLAGS, process.env).filter(
             (f): f is string => typeof f === 'string'
         );
         args.push(...flags);
@@ -458,8 +458,8 @@ export async function start_sandbox(
     }
 
     // mount ADC file if GOOGLE_APPLICATION_CREDENTIALS is set
-    if (process.env['GOOGLE_APPLICATION_CREDENTIALS']) {
-        const adcFile = process.env['GOOGLE_APPLICATION_CREDENTIALS'];
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        const adcFile = process.env.GOOGLE_APPLICATION_CREDENTIALS;
         if (fs.existsSync(adcFile)) {
             args.push('--volume', `${adcFile}:${getContainerPath(adcFile)}:ro`);
             args.push(
@@ -470,8 +470,8 @@ export async function start_sandbox(
     }
 
     // mount paths listed in SANDBOX_MOUNTS
-    if (process.env['SANDBOX_MOUNTS']) {
-        for (let mount of process.env['SANDBOX_MOUNTS'].split(',')) {
+    if (process.env.SANDBOX_MOUNTS) {
+        for (let mount of process.env.SANDBOX_MOUNTS.split(',')) {
             if (mount.trim()) {
                 // parse mount as from:to:opts
                 let [from, to, opts] = mount.trim().split(':');
@@ -500,22 +500,22 @@ export async function start_sandbox(
     ports().forEach((p) => args.push('--publish', `${p}:${p}`));
 
     // if DEBUG is set, expose debugging port
-    if (process.env['DEBUG']) {
-        const debugPort = process.env['DEBUG_PORT'] || '9229';
+    if (process.env.DEBUG) {
+        const debugPort = process.env.DEBUG_PORT || '9229';
         args.push(`--publish`, `${debugPort}:${debugPort}`);
     }
 
     // copy proxy environment variables, replacing localhost with SANDBOX_PROXY_NAME
     // copy as both upper-case and lower-case as is required by some utilities
     // AETHER_SANDBOX_PROXY_COMMAND implies HTTPS_PROXY unless HTTP_PROXY is set
-    const proxyCommand = process.env['AETHER_SANDBOX_PROXY_COMMAND'];
+    const proxyCommand = process.env.AETHER_SANDBOX_PROXY_COMMAND;
 
     if (proxyCommand) {
         let proxy =
-            process.env['HTTPS_PROXY'] ||
-            process.env['https_proxy'] ||
-            process.env['HTTP_PROXY'] ||
-            process.env['http_proxy'] ||
+            process.env.HTTPS_PROXY ||
+            process.env.https_proxy ||
+            process.env.HTTP_PROXY ||
+            process.env.http_proxy ||
             'http://localhost:8877';
         proxy = proxy.replace('localhost', SANDBOX_PROXY_NAME);
         if (proxy) {
@@ -524,7 +524,7 @@ export async function start_sandbox(
             args.push('--env', `HTTP_PROXY=${proxy}`);
             args.push('--env', `http_proxy=${proxy}`);
         }
-        const noProxy = process.env['NO_PROXY'] || process.env['no_proxy'];
+        const noProxy = process.env.NO_PROXY || process.env.no_proxy;
         if (noProxy) {
             args.push('--env', `NO_PROXY=${noProxy}`);
             args.push('--env', `no_proxy=${noProxy}`);
@@ -550,7 +550,7 @@ export async function start_sandbox(
     // name container after image, plus random suffix to avoid conflicts
     const imageName = parseImageName(image);
     const isIntegrationTest =
-        process.env['aether_cli_INTEGRATION_TEST'] === 'true';
+        process.env.aether_cli_INTEGRATION_TEST === 'true';
     let containerName;
     if (isIntegrationTest) {
         containerName = `aether-integration-test-${randomBytes(4).toString(
@@ -573,79 +573,79 @@ export async function start_sandbox(
     args.push('--name', containerName, '--hostname', containerName);
 
     // copy aether_cli_TEST_VAR for integration tests
-    if (process.env['aether_cli_TEST_VAR']) {
+    if (process.env.aether_cli_TEST_VAR) {
         args.push(
             '--env',
-            `aether_cli_TEST_VAR=${process.env['aether_cli_TEST_VAR']}`
+            `aether_cli_TEST_VAR=${process.env.aether_cli_TEST_VAR}`
         );
     }
 
     // copy GEMINI_API_KEY(s)
-    if (process.env['GEMINI_API_KEY']) {
-        args.push('--env', `GEMINI_API_KEY=${process.env['GEMINI_API_KEY']}`);
+    if (process.env.GEMINI_API_KEY) {
+        args.push('--env', `GEMINI_API_KEY=${process.env.GEMINI_API_KEY}`);
     }
-    if (process.env['GOOGLE_API_KEY']) {
-        args.push('--env', `GOOGLE_API_KEY=${process.env['GOOGLE_API_KEY']}`);
+    if (process.env.GOOGLE_API_KEY) {
+        args.push('--env', `GOOGLE_API_KEY=${process.env.GOOGLE_API_KEY}`);
     }
 
     // copy OPENAI_API_KEY and related env vars for Aether
-    if (process.env['OPENAI_API_KEY']) {
-        args.push('--env', `OPENAI_API_KEY=${process.env['OPENAI_API_KEY']}`);
+    if (process.env.OPENAI_API_KEY) {
+        args.push('--env', `OPENAI_API_KEY=${process.env.OPENAI_API_KEY}`);
     }
     // copy TAVILY_API_KEY for web search tool
-    if (process.env['TAVILY_API_KEY']) {
-        args.push('--env', `TAVILY_API_KEY=${process.env['TAVILY_API_KEY']}`);
+    if (process.env.TAVILY_API_KEY) {
+        args.push('--env', `TAVILY_API_KEY=${process.env.TAVILY_API_KEY}`);
     }
-    if (process.env['OPENAI_BASE_URL']) {
-        args.push('--env', `OPENAI_BASE_URL=${process.env['OPENAI_BASE_URL']}`);
+    if (process.env.OPENAI_BASE_URL) {
+        args.push('--env', `OPENAI_BASE_URL=${process.env.OPENAI_BASE_URL}`);
     }
-    if (process.env['OPENAI_MODEL']) {
-        args.push('--env', `OPENAI_MODEL=${process.env['OPENAI_MODEL']}`);
+    if (process.env.OPENAI_MODEL) {
+        args.push('--env', `OPENAI_MODEL=${process.env.OPENAI_MODEL}`);
     }
 
     // copy GOOGLE_GENAI_USE_VERTEXAI
-    if (process.env['GOOGLE_GENAI_USE_VERTEXAI']) {
+    if (process.env.GOOGLE_GENAI_USE_VERTEXAI) {
         args.push(
             '--env',
-            `GOOGLE_GENAI_USE_VERTEXAI=${process.env['GOOGLE_GENAI_USE_VERTEXAI']}`
+            `GOOGLE_GENAI_USE_VERTEXAI=${process.env.GOOGLE_GENAI_USE_VERTEXAI}`
         );
     }
 
     // copy GOOGLE_GENAI_USE_GCA
-    if (process.env['GOOGLE_GENAI_USE_GCA']) {
+    if (process.env.GOOGLE_GENAI_USE_GCA) {
         args.push(
             '--env',
-            `GOOGLE_GENAI_USE_GCA=${process.env['GOOGLE_GENAI_USE_GCA']}`
+            `GOOGLE_GENAI_USE_GCA=${process.env.GOOGLE_GENAI_USE_GCA}`
         );
     }
 
     // copy GOOGLE_CLOUD_PROJECT
-    if (process.env['GOOGLE_CLOUD_PROJECT']) {
+    if (process.env.GOOGLE_CLOUD_PROJECT) {
         args.push(
             '--env',
-            `GOOGLE_CLOUD_PROJECT=${process.env['GOOGLE_CLOUD_PROJECT']}`
+            `GOOGLE_CLOUD_PROJECT=${process.env.GOOGLE_CLOUD_PROJECT}`
         );
     }
 
     // copy GOOGLE_CLOUD_LOCATION
-    if (process.env['GOOGLE_CLOUD_LOCATION']) {
+    if (process.env.GOOGLE_CLOUD_LOCATION) {
         args.push(
             '--env',
-            `GOOGLE_CLOUD_LOCATION=${process.env['GOOGLE_CLOUD_LOCATION']}`
+            `GOOGLE_CLOUD_LOCATION=${process.env.GOOGLE_CLOUD_LOCATION}`
         );
     }
 
     // copy GEMINI_MODEL
-    if (process.env['GEMINI_MODEL']) {
-        args.push('--env', `GEMINI_MODEL=${process.env['GEMINI_MODEL']}`);
+    if (process.env.GEMINI_MODEL) {
+        args.push('--env', `GEMINI_MODEL=${process.env.GEMINI_MODEL}`);
     }
 
     // copy TERM and COLORTERM to try to maintain terminal setup
-    if (process.env['TERM']) {
-        args.push('--env', `TERM=${process.env['TERM']}`);
+    if (process.env.TERM) {
+        args.push('--env', `TERM=${process.env.TERM}`);
     }
-    if (process.env['COLORTERM']) {
-        args.push('--env', `COLORTERM=${process.env['COLORTERM']}`);
+    if (process.env.COLORTERM) {
+        args.push('--env', `COLORTERM=${process.env.COLORTERM}`);
     }
 
     // Pass through IDE mode environment variables
@@ -664,9 +664,7 @@ export async function start_sandbox(
     // sandbox can then set up this new VIRTUAL_ENV directory using sandbox.bashrc (see below)
     // directory will be empty if not set up, which is still preferable to having host binaries
     if (
-        process.env['VIRTUAL_ENV']
-            ?.toLowerCase()
-            .startsWith(workdir.toLowerCase())
+        process.env.VIRTUAL_ENV?.toLowerCase().startsWith(workdir.toLowerCase())
     ) {
         const sandboxVenvPath = path.resolve(
             SETTINGS_DIRECTORY_NAME,
@@ -677,17 +675,17 @@ export async function start_sandbox(
         }
         args.push(
             '--volume',
-            `${sandboxVenvPath}:${getContainerPath(process.env['VIRTUAL_ENV'])}`
+            `${sandboxVenvPath}:${getContainerPath(process.env.VIRTUAL_ENV)}`
         );
         args.push(
             '--env',
-            `VIRTUAL_ENV=${getContainerPath(process.env['VIRTUAL_ENV'])}`
+            `VIRTUAL_ENV=${getContainerPath(process.env.VIRTUAL_ENV)}`
         );
     }
 
     // copy additional environment variables from SANDBOX_ENV
-    if (process.env['SANDBOX_ENV']) {
-        for (let env of process.env['SANDBOX_ENV'].split(',')) {
+    if (process.env.SANDBOX_ENV) {
+        for (let env of process.env.SANDBOX_ENV.split(',')) {
             if ((env = env.trim())) {
                 if (env.includes('=')) {
                     writeStderrLine(`SANDBOX_ENV: ${env}`);
@@ -702,7 +700,7 @@ export async function start_sandbox(
     }
 
     // copy NODE_OPTIONS
-    const existingNodeOptions = process.env['NODE_OPTIONS'] || '';
+    const existingNodeOptions = process.env.NODE_OPTIONS || '';
     const allNodeOptions = [
         ...(existingNodeOptions ? [existingNodeOptions] : []),
         ...nodeArgs

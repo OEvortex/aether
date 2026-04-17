@@ -125,7 +125,7 @@ export function useAtCompletion(props: UseAtCompletionProps): void {
 
     useEffect(() => {
         dispatch({ type: 'RESET' });
-    }, [cwd, config]);
+    }, []);
 
     // Reacts to user input (`pattern`) ONLY.
     useEffect(() => {

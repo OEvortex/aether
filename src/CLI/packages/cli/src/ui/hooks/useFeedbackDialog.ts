@@ -183,7 +183,6 @@ export const useFeedbackDialog = ({
         streamingState,
         history,
         sessionStats,
-        isFeedbackDialogOpen,
         isFeedbackDismissedTemporarily,
         openFeedbackDialog,
         settings.merged.ui?.enableUserFeedback,

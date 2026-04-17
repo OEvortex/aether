@@ -191,7 +191,7 @@ async function fetchRuntimeModelsForConfig(
 
     const apiKey = resolveApiKey(model, env, fallbackApiKey);
     if (apiKey) {
-        headers['Authorization'] = `Bearer ${apiKey}`;
+        headers.Authorization = `Bearer ${apiKey}`;
     }
 
     try {

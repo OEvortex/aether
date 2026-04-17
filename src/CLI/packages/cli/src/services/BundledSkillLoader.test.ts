@@ -76,7 +76,7 @@ describe('BundledSkillLoader', () => {
 
         const loader = new BundledSkillLoader(mockConfig);
         const commands = await loader.loadCommands(signal);
-        const result = await commands[0].action!(
+        const result = await commands[0].action?.(
             { invocation: { raw: '/review', args: '' } } as never,
             ''
         );
@@ -93,7 +93,7 @@ describe('BundledSkillLoader', () => {
 
         const loader = new BundledSkillLoader(mockConfig);
         const commands = await loader.loadCommands(signal);
-        const result = await commands[0].action!(
+        const result = await commands[0].action?.(
             { invocation: { raw: '/review 123', args: '123' } } as never,
             '123'
         );

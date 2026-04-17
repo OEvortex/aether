@@ -169,7 +169,7 @@ export class IdeClient {
         }
         const workspacePath =
             this.connectionConfig?.workspacePath ??
-            process.env['AETHER_CODE_IDE_WORKSPACE_PATH'];
+            process.env.AETHER_CODE_IDE_WORKSPACE_PATH;
 
         const { isValid, error } = IdeClient.validateWorkspacePath(
             workspacePath,
@@ -566,7 +566,7 @@ export class IdeClient {
     }
 
     private getPortFromEnv(): string | undefined {
-        const port = process.env['AETHER_CODE_IDE_SERVER_PORT'];
+        const port = process.env.AETHER_CODE_IDE_SERVER_PORT;
         if (!port) {
             return undefined;
         }
@@ -574,12 +574,12 @@ export class IdeClient {
     }
 
     private getStdioConfigFromEnv(): StdioConfig | undefined {
-        const command = process.env['AETHER_CODE_IDE_SERVER_STDIO_COMMAND'];
+        const command = process.env.AETHER_CODE_IDE_SERVER_STDIO_COMMAND;
         if (!command) {
             return undefined;
         }
 
-        const argsStr = process.env['AETHER_CODE_IDE_SERVER_STDIO_ARGS'];
+        const argsStr = process.env.AETHER_CODE_IDE_SERVER_STDIO_ARGS;
         let args: string[] = [];
         if (argsStr) {
             try {
@@ -841,7 +841,7 @@ export class IdeClient {
     private createProxyAwareFetch(ideHost: string) {
         // Ignore proxy for IDE server host to allow connecting to the ide mcp
         // server even when HTTP_PROXY is set
-        const existingNoProxy = process.env['NO_PROXY'] || '';
+        const existingNoProxy = process.env.NO_PROXY || '';
         const noProxyHosts = [existingNoProxy, ideHost];
         const agent = new EnvHttpProxyAgent({
             noProxy: noProxyHosts.filter(Boolean).join(',')
@@ -1087,14 +1087,18 @@ async function isHostResolvable(hostname: string): Promise<boolean> {
     return new Promise((resolve) => {
         let settled = false;
         const timeout = setTimeout(() => {
-            if (settled) return;
+            if (settled) {
+                return;
+            }
             settled = true;
             resolve(false);
         }, DNS_LOOKUP_TIMEOUT_MS);
         timeout.unref?.();
 
         dns.lookup(hostname, (err) => {
-            if (settled) return;
+            if (settled) {
+                return;
+            }
             settled = true;
             clearTimeout(timeout);
             resolve(!err);

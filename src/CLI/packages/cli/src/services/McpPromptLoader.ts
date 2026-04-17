@@ -87,7 +87,7 @@ export class McpPromptLoader implements ICommandLoader {
                         }
                     ],
                     action: async (
-                        context: CommandContext,
+                        _context: CommandContext,
                         args: string
                     ): Promise<SlashCommandActionReturn> => {
                         if (!this.config) {
@@ -123,11 +123,11 @@ export class McpPromptLoader implements ICommandLoader {
                             }
                             const result = await prompt.invoke(promptInputs);
 
-                            if (result['error']) {
+                            if (result.error) {
                                 return {
                                     type: 'message',
                                     messageType: 'error',
-                                    content: `Error invoking prompt: ${result['error']}`
+                                    content: `Error invoking prompt: ${result.error}`
                                 };
                             }
 

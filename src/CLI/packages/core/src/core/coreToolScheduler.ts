@@ -247,12 +247,10 @@ export function convertToFunctionResponse(
 
     // After this point, contentToProcess is a single Part object.
     if (contentToProcess.functionResponse) {
-        if (contentToProcess.functionResponse.response?.['content']) {
+        if (contentToProcess.functionResponse.response?.content) {
             const stringifiedOutput =
                 getResponseTextFromParts(
-                    contentToProcess.functionResponse.response[
-                        'content'
-                    ] as Part[]
+                    contentToProcess.functionResponse.response.content as Part[]
                 ) || '';
             return [
                 createFunctionResponsePart(callId, toolName, stringifiedOutput)
@@ -1056,19 +1054,27 @@ export class CoreToolScheduler {
                                                 reqInfo.callId &&
                                             c.status === 'awaiting_approval'
                                     );
-                                    if (!still) return;
+                                    if (!still) {
+                                        return;
+                                    }
 
-                                    if (resolution.status === 'accepted') {
+                                    if (
+                                        resolution.status === 'accepted' &&
+                                        confirmationDetails?.onConfirm
+                                    ) {
                                         this.handleConfirmationResponse(
                                             reqInfo.callId,
-                                            confirmationDetails!.onConfirm,
+                                            confirmationDetails.onConfirm,
                                             ToolConfirmationOutcome.ProceedOnce,
                                             signal
                                         );
-                                    } else {
+                                    } else if (
+                                        resolution.status === 'rejected' &&
+                                        confirmationDetails?.onConfirm
+                                    ) {
                                         this.handleConfirmationResponse(
                                             reqInfo.callId,
-                                            confirmationDetails!.onConfirm,
+                                            confirmationDetails.onConfirm,
                                             ToolConfirmationOutcome.Cancel,
                                             signal
                                         );
@@ -1240,7 +1246,9 @@ export class CoreToolScheduler {
         // Guard: if the tool is no longer awaiting approval (already handled by
         // another confirmation path, e.g. IDE vs CLI race), skip to avoid double
         // processing and potential re-execution.
-        if (!toolCall) return;
+        if (!toolCall) {
+            return;
+        }
 
         await originalOnConfirm(outcome, payload);
 
@@ -1403,7 +1411,9 @@ export class CoreToolScheduler {
         toolCall: ToolCall,
         signal: AbortSignal
     ): Promise<void> {
-        if (toolCall.status !== 'scheduled') return;
+        if (toolCall.status !== 'scheduled') {
+            return;
+        }
 
         const scheduledCall = toolCall;
         const { callId, name: toolName } = scheduledCall.request;
@@ -1718,14 +1728,18 @@ export class CoreToolScheduler {
      * enriched metadata (for UI recovery).
      */
     private recordToolResults(completedCalls: CompletedToolCall[]): void {
-        if (!this.chatRecordingService) return;
+        if (!this.chatRecordingService) {
+            return;
+        }
 
         // Collect all response parts from completed calls
         const responseParts: Part[] = completedCalls.flatMap(
             (call) => call.response.responseParts
         );
 
-        if (responseParts.length === 0) return;
+        if (responseParts.length === 0) {
+            return;
+        }
 
         // Record each tool result individually
         for (const call of completedCalls) {
@@ -1753,7 +1767,9 @@ export class CoreToolScheduler {
         outcome: ToolConfirmationOutcome
     ) {
         this.toolCalls = this.toolCalls.map((call) => {
-            if (call.request.callId !== callId) return call;
+            if (call.request.callId !== callId) {
+                return call;
+            }
             return {
                 ...call,
                 outcome
@@ -1762,7 +1778,7 @@ export class CoreToolScheduler {
     }
 
     private async autoApproveCompatiblePendingTools(
-        signal: AbortSignal,
+        _signal: AbortSignal,
         triggeringCallId: string
     ): Promise<void> {
         const pendingTools = this.toolCalls.filter(

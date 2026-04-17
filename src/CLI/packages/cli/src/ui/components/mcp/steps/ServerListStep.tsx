@@ -28,7 +28,9 @@ export const ServerListStep: React.FC<ServerListStepProps> = ({
     );
 
     const serverNameWidth = useMemo(() => {
-        if (servers.length === 0) return 20;
+        if (servers.length === 0) {
+            return 20;
+        }
         const maxLength = Math.max(...servers.map((s) => s.name.length));
         // 最小 20，最大 35，留一些余量
         return Math.min(Math.max(maxLength + 2, 20), 35);

@@ -130,14 +130,14 @@ export function extractUsageFromGeminiClient(
             }
         ).getDebugResponses();
         for (let i = responses.length - 1; i >= 0; i--) {
-            const metadata = responses[i]?.['usageMetadata'] as
+            const metadata = responses[i]?.usageMetadata as
                 | Record<string, unknown>
                 | undefined;
             if (metadata) {
-                const promptTokens = metadata['promptTokenCount'];
-                const completionTokens = metadata['candidatesTokenCount'];
-                const totalTokens = metadata['totalTokenCount'];
-                const cachedTokens = metadata['cachedContentTokenCount'];
+                const promptTokens = metadata.promptTokenCount;
+                const completionTokens = metadata.candidatesTokenCount;
+                const totalTokens = metadata.totalTokenCount;
+                const cachedTokens = metadata.cachedContentTokenCount;
 
                 return {
                     input_tokens:
@@ -648,8 +648,7 @@ export function functionResponsePartsToString(parts: Part[]): string {
     return parts
         .map((part) => {
             if ('functionResponse' in part) {
-                const content =
-                    part.functionResponse?.response?.['output'] ?? '';
+                const content = part.functionResponse?.response?.output ?? '';
                 return content;
             }
             return JSON.stringify(part);

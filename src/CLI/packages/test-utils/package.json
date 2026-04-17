@@ -1,6 +1,6 @@
 {
     "name": "@aetherai/aether-test-utils",
-    "version": "0.0.5",
+    "version": "0.0.12",
     "description": "Shared test utilities for Aether packages",
     "type": "module",
     "main": "dist/index.js",

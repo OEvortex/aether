@@ -121,12 +121,14 @@ export class TmuxBackend implements Backend {
     /** Queue to serialize spawn operations (prevents race conditions) */
     private spawnQueue: Promise<void> = Promise.resolve();
     async init(): Promise<void> {
-        if (this.initialized) return;
+        if (this.initialized) {
+            return;
+        }
 
         // Verify tmux is available and version is sufficient
         await verifyTmux();
 
-        this.insideTmux = Boolean(process.env['TMUX']);
+        this.insideTmux = Boolean(process.env.TMUX);
 
         if (this.insideTmux) {
             // Get the current pane ID (this is where the main process runs)
@@ -255,7 +257,9 @@ export class TmuxBackend implements Backend {
      * Uses multiple methods to ensure Ink picks up the new terminal size.
      */
     private triggerMainProcessRedraw(): void {
-        if (!this.insideTmux) return;
+        if (!this.insideTmux) {
+            return;
+        }
         // Small delay to let tmux finish the resize operation
         setTimeout(() => {
             try {
@@ -278,7 +282,9 @@ export class TmuxBackend implements Backend {
 
     stopAgent(agentId: string): void {
         const pane = this.panes.get(agentId);
-        if (!pane || pane.status !== 'running') return;
+        if (!pane || pane.status !== 'running') {
+            return;
+        }
         // Kill the pane outright — a single Ctrl-C only cancels the current
         // turn in interactive CLI agents and does not reliably exit the process.
         if (pane.paneId) {
@@ -348,7 +354,9 @@ export class TmuxBackend implements Backend {
     }
 
     async waitForAll(timeoutMs?: number): Promise<boolean> {
-        if (this.allExited() || this.cleanedUp) return this.allExited();
+        if (this.allExited() || this.cleanedUp) {
+            return this.allExited();
+        }
 
         return new Promise<boolean>((resolve) => {
             let timeoutHandle: NodeJS.Timeout | undefined;
@@ -356,7 +364,9 @@ export class TmuxBackend implements Backend {
             const checkInterval = setInterval(() => {
                 if (this.allExited() || this.cleanedUp) {
                     clearInterval(checkInterval);
-                    if (timeoutHandle) clearTimeout(timeoutHandle);
+                    if (timeoutHandle) {
+                        clearTimeout(timeoutHandle);
+                    }
                     resolve(this.allExited());
                 }
             }, EXIT_POLL_INTERVAL_MS);
@@ -382,14 +392,18 @@ export class TmuxBackend implements Backend {
     }
 
     switchToNext(): void {
-        if (this.agentOrder.length <= 1) return;
+        if (this.agentOrder.length <= 1) {
+            return;
+        }
         const currentIndex = this.agentOrder.indexOf(this.activeAgentId ?? '');
         const nextIndex = (currentIndex + 1) % this.agentOrder.length;
         this.switchTo(this.agentOrder[nextIndex]!);
     }
 
     switchToPrevious(): void {
-        if (this.agentOrder.length <= 1) return;
+        if (this.agentOrder.length <= 1) {
+            return;
+        }
         const currentIndex = this.agentOrder.indexOf(this.activeAgentId ?? '');
         const prevIndex =
             (currentIndex - 1 + this.agentOrder.length) %
@@ -404,12 +418,14 @@ export class TmuxBackend implements Backend {
     // ─── Screen Capture ─────────────────────────────────────────
 
     getActiveSnapshot(): AnsiOutput | null {
-        if (!this.activeAgentId) return null;
+        if (!this.activeAgentId) {
+            return null;
+        }
         return this.getAgentSnapshot(this.activeAgentId);
     }
 
     getAgentSnapshot(
-        agentId: string,
+        _agentId: string,
         _scrollOffset: number = 0
     ): AnsiOutput | null {
         // tmux panes are rendered by tmux itself. capture-pane is available
@@ -427,13 +443,17 @@ export class TmuxBackend implements Backend {
     // ─── Input ──────────────────────────────────────────────────
 
     forwardInput(data: string): boolean {
-        if (!this.activeAgentId) return false;
+        if (!this.activeAgentId) {
+            return false;
+        }
         return this.writeToAgent(this.activeAgentId, data);
     }
 
     writeToAgent(agentId: string, data: string): boolean {
         const pane = this.panes.get(agentId);
-        if (!pane || pane.status !== 'running') return false;
+        if (!pane || pane.status !== 'running') {
+            return false;
+        }
         void tmuxSendKeys(
             pane.paneId,
             data,
@@ -629,7 +649,9 @@ export class TmuxBackend implements Backend {
         options: ResolvedTmuxOptions,
         serverName?: string
     ): Promise<void> {
-        if (!this.windowTarget) return;
+        if (!this.windowTarget) {
+            return;
+        }
 
         if (options.paneBorderStatus) {
             await tmuxSetOption(
@@ -678,7 +700,9 @@ export class TmuxBackend implements Backend {
     private async applyInsideLayout(
         options: ResolvedTmuxOptions
     ): Promise<void> {
-        if (!this.windowTarget || !this.mainPaneId) return;
+        if (!this.windowTarget || !this.mainPaneId) {
+            return;
+        }
         await tmuxSelectLayout(this.windowTarget, 'main-vertical');
         await tmuxResizePane(this.mainPaneId, {
             width: `${options.leaderPaneWidthPercent}%`
@@ -686,7 +710,9 @@ export class TmuxBackend implements Backend {
     }
 
     private async applyExternalLayout(serverName?: string): Promise<void> {
-        if (!this.windowTarget) return;
+        if (!this.windowTarget) {
+            return;
+        }
         await tmuxSelectLayout(this.windowTarget, 'tiled', serverName);
     }
 
@@ -727,16 +753,24 @@ export class TmuxBackend implements Backend {
     }
 
     private allExited(): boolean {
-        if (this.pendingSpawns > 0) return false;
-        if (this.panes.size === 0) return true;
+        if (this.pendingSpawns > 0) {
+            return false;
+        }
+        if (this.panes.size === 0) {
+            return true;
+        }
         for (const pane of this.panes.values()) {
-            if (pane.status === 'running') return false;
+            if (pane.status === 'running') {
+                return false;
+            }
         }
         return true;
     }
 
     private startExitPolling(): void {
-        if (this.exitPollTimer) return;
+        if (this.exitPollTimer) {
+            return;
+        }
 
         this.exitPollTimer = setInterval(() => {
             void this.pollPaneStatus();
@@ -754,7 +788,9 @@ export class TmuxBackend implements Backend {
         let paneInfos: TmuxPaneInfo[];
         const serverName = this.getServerName();
         try {
-            if (!this.windowTarget) return;
+            if (!this.windowTarget) {
+                return;
+            }
             // List panes in the active window
             paneInfos = await tmuxListPanes(this.windowTarget, serverName);
         } catch (err) {
@@ -790,7 +826,9 @@ export class TmuxBackend implements Backend {
         }
 
         for (const agent of this.panes.values()) {
-            if (agent.status !== 'running') continue;
+            if (agent.status !== 'running') {
+                continue;
+            }
 
             const info = paneMap.get(agent.paneId);
             if (!info) {

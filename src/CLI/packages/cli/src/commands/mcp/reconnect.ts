@@ -170,7 +170,7 @@ export const reconnectCommand: CommandModule = {
             .conflicts('server-name', 'all')
             .check((argv) => {
                 const serverName = argv['server-name'];
-                const all = argv['all'];
+                const all = argv.all;
                 if (!serverName && !all) {
                     throw new Error(
                         'Please specify a server name or use --all to reconnect all servers.'
@@ -180,7 +180,7 @@ export const reconnectCommand: CommandModule = {
             }),
     handler: async (argv) => {
         const serverName = argv['server-name'] as string | undefined;
-        const all = argv['all'] as boolean;
+        const all = argv.all as boolean;
 
         try {
             if (all) {

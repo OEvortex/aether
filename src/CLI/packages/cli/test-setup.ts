@@ -5,14 +5,14 @@
  */
 
 // Unset NO_COLOR environment variable to ensure consistent theme behavior between local and CI test runs
-if (process.env['NO_COLOR'] !== undefined) {
-    delete process.env['NO_COLOR'];
+if (process.env.NO_COLOR !== undefined) {
+    delete process.env.NO_COLOR;
 }
 
 // Avoid writing per-session debug log files during CLI tests.
 // Individual tests can still opt in by overriding this env var explicitly.
-if (process.env['AETHER_DEBUG_LOG_FILE'] === undefined) {
-    process.env['AETHER_DEBUG_LOG_FILE'] = '0';
+if (process.env.AETHER_DEBUG_LOG_FILE === undefined) {
+    process.env.AETHER_DEBUG_LOG_FILE = '0';
 }
 
 import './src/test-utils/customMatchers.js';

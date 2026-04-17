@@ -35,8 +35,12 @@ describe('readStdin', () => {
         // Capture event handlers
         mockStdin.on.mockImplementation(
             (event: string, handler: () => void) => {
-                if (event === 'readable') onReadableHandler = handler;
-                if (event === 'end') onEndHandler = handler;
+                if (event === 'readable') {
+                    onReadableHandler = handler;
+                }
+                if (event === 'end') {
+                    onEndHandler = handler;
+                }
             }
         );
     });

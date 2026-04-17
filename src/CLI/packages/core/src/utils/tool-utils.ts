@@ -81,9 +81,7 @@ const sanitizePatternIdentifier = (value: string): string => {
 };
 
 const filterList = (list?: string[]): string[] =>
-    (list ?? []).filter((entry): entry is string =>
-        Boolean(entry && entry.trim())
-    );
+    (list ?? []).filter((entry): entry is string => Boolean(entry?.trim()));
 
 export function isToolEnabled(
     toolName: ToolName,
@@ -175,7 +173,7 @@ export function doesToolInvocationMatch(
             );
             if (
                 argValue === argPattern ||
-                argValue.startsWith(argPattern + ' ')
+                argValue.startsWith(`${argPattern} `)
             ) {
                 return true;
             }

@@ -292,7 +292,7 @@ describe('ContentGenerationPipeline', () => {
             ).toHaveBeenCalledWith('test-model');
             expect(
                 mockConverter.convertGeminiToolsToOpenAI
-            ).toHaveBeenCalledWith(request.config!.tools);
+            ).toHaveBeenCalledWith(request.config?.tools);
             expect(mockClient.chat.completions.create).toHaveBeenCalledWith(
                 expect.objectContaining({
                     tools: mockTools

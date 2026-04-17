@@ -76,7 +76,9 @@ export class EnhancedErrorHandler implements ErrorHandler {
     }
 
     private isTimeoutError(error: unknown): boolean {
-        if (!error) return false;
+        if (!error) {
+            return false;
+        }
 
         const errorMessage =
             error instanceof Error

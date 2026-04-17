@@ -1483,12 +1483,12 @@ describe('Model Switching and Config Updates', () => {
 
         // Initialize with first model
         const initialConfig: ContentGeneratorConfig = {
-            ['model']: 'aether3-coder-plus',
-            ['authType']: AuthType.AETHER_OAUTH,
-            ['apiKey']: 'test-key',
-            ['contextWindowSize']: 1_000_000,
-            ['samplingParams']: { temperature: 0.7 },
-            ['enableCacheControl']: true
+            model: 'aether3-coder-plus',
+            authType: AuthType.AETHER_OAUTH,
+            apiKey: 'test-key',
+            contextWindowSize: 1_000_000,
+            samplingParams: { temperature: 0.7 },
+            enableCacheControl: true
         };
 
         vi.mocked(resolveContentGeneratorConfigWithSources).mockReturnValue({
@@ -1503,17 +1503,17 @@ describe('Model Switching and Config Updates', () => {
 
         // Verify initial config
         const contentGenConfig = config.getContentGeneratorConfig();
-        expect(contentGenConfig['model']).toBe('aether3-coder-plus');
-        expect(contentGenConfig['contextWindowSize']).toBe(1_000_000);
+        expect(contentGenConfig.model).toBe('aether3-coder-plus');
+        expect(contentGenConfig.contextWindowSize).toBe(1_000_000);
 
         // Switch to a different model with different token limits
         const newConfig: ContentGeneratorConfig = {
-            ['model']: 'qwen-max',
-            ['authType']: AuthType.AETHER_OAUTH,
-            ['apiKey']: 'test-key',
-            ['contextWindowSize']: 128_000,
-            ['samplingParams']: { temperature: 0.8 },
-            ['enableCacheControl']: false
+            model: 'qwen-max',
+            authType: AuthType.AETHER_OAUTH,
+            apiKey: 'test-key',
+            contextWindowSize: 128_000,
+            samplingParams: { temperature: 0.8 },
+            enableCacheControl: false
         };
 
         vi.mocked(resolveContentGeneratorConfigWithSources).mockReturnValue({
@@ -1538,19 +1538,19 @@ describe('Model Switching and Config Updates', () => {
 
         // Verify all fields are updated
         const updatedConfig = config.getContentGeneratorConfig();
-        expect(updatedConfig['model']).toBe('aether-max');
-        expect(updatedConfig['contextWindowSize']).toBe(128_000);
-        expect(updatedConfig['samplingParams']?.temperature).toBe(0.8);
-        expect(updatedConfig['enableCacheControl']).toBe(false);
+        expect(updatedConfig.model).toBe('aether-max');
+        expect(updatedConfig.contextWindowSize).toBe(128_000);
+        expect(updatedConfig.samplingParams?.temperature).toBe(0.8);
+        expect(updatedConfig.enableCacheControl).toBe(false);
 
         // Verify sources are also updated
         const sources = config.getContentGeneratorConfigSources();
-        expect(sources['model']?.kind).toBe('programmatic');
-        expect(sources['model']?.detail).toBe('user');
-        expect(sources['contextWindowSize']?.kind).toBe('computed');
-        expect(sources['contextWindowSize']?.detail).toBe('auto');
-        expect(sources['samplingParams']?.kind).toBe('settings');
-        expect(sources['enableCacheControl']?.kind).toBe('settings');
+        expect(sources.model?.kind).toBe('programmatic');
+        expect(sources.model?.detail).toBe('user');
+        expect(sources.contextWindowSize?.kind).toBe('computed');
+        expect(sources.contextWindowSize?.detail).toBe('auto');
+        expect(sources.samplingParams?.kind).toBe('settings');
+        expect(sources.enableCacheControl?.kind).toBe('settings');
     });
 
     it('should trigger full refresh when switching to non-aether-oauth provider', async () => {
@@ -1558,10 +1558,10 @@ describe('Model Switching and Config Updates', () => {
 
         // Initialize with aether-oauth
         const initialConfig: ContentGeneratorConfig = {
-            ['model']: 'aether3-coder-plus',
-            ['authType']: AuthType.AETHER_OAUTH,
-            ['apiKey']: 'test-key',
-            ['contextWindowSize']: 1_000_000
+            model: 'aether3-coder-plus',
+            authType: AuthType.AETHER_OAUTH,
+            apiKey: 'test-key',
+            contextWindowSize: 1_000_000
         };
 
         vi.mocked(resolveContentGeneratorConfigWithSources).mockReturnValue({
@@ -1573,10 +1573,10 @@ describe('Model Switching and Config Updates', () => {
 
         // Switch to different auth type (should trigger full refresh)
         const newConfig: ContentGeneratorConfig = {
-            ['model']: 'gemini-flash',
-            ['authType']: AuthType.USE_GEMINI,
-            ['apiKey']: 'gemini-key',
-            ['contextWindowSize']: 32_000
+            model: 'gemini-flash',
+            authType: AuthType.USE_GEMINI,
+            apiKey: 'gemini-key',
+            contextWindowSize: 32_000
         };
 
         vi.mocked(resolveContentGeneratorConfigWithSources).mockReturnValue({
@@ -1610,10 +1610,10 @@ describe('Model Switching and Config Updates', () => {
 
         // Initialize with config that has undefined token limits
         const initialConfig: ContentGeneratorConfig = {
-            ['model']: 'aether3-coder-plus',
-            ['authType']: AuthType.AETHER_OAUTH,
-            ['apiKey']: 'test-key',
-            ['contextWindowSize']: undefined
+            model: 'aether3-coder-plus',
+            authType: AuthType.AETHER_OAUTH,
+            apiKey: 'test-key',
+            contextWindowSize: undefined
         };
 
         vi.mocked(resolveContentGeneratorConfigWithSources).mockReturnValue({
@@ -1625,10 +1625,10 @@ describe('Model Switching and Config Updates', () => {
 
         // Switch to model with defined limits
         const newConfig: ContentGeneratorConfig = {
-            ['model']: 'qwen-max',
-            ['authType']: AuthType.AETHER_OAUTH,
-            ['apiKey']: 'test-key',
-            ['contextWindowSize']: 128_000
+            model: 'qwen-max',
+            authType: AuthType.AETHER_OAUTH,
+            apiKey: 'test-key',
+            contextWindowSize: 128_000
         };
 
         vi.mocked(resolveContentGeneratorConfigWithSources).mockReturnValue({
@@ -1647,7 +1647,7 @@ describe('Model Switching and Config Updates', () => {
 
         // Verify limits are now defined
         const updatedConfig = config.getContentGeneratorConfig();
-        expect(updatedConfig['contextWindowSize']).toBe(128_000);
+        expect(updatedConfig.contextWindowSize).toBe(128_000);
     });
 
     describe('hasHooksForEvent', () => {
@@ -1663,7 +1663,7 @@ describe('Model Switching and Config Updates', () => {
                 hasHooksForEvent: mockHasHooksForEvent
             };
             // @ts-expect-error - accessing private for testing
-            config['hookSystem'] = mockHookSystem;
+            config.hookSystem = mockHookSystem;
 
             expect(config.hasHooksForEvent('UserPromptSubmit')).toBe(true);
             expect(mockHasHooksForEvent).toHaveBeenCalledWith(
@@ -1678,7 +1678,7 @@ describe('Model Switching and Config Updates', () => {
                 hasHooksForEvent: mockHasHooksForEvent
             };
             // @ts-expect-error - accessing private for testing
-            config['hookSystem'] = mockHookSystem;
+            config.hookSystem = mockHookSystem;
 
             expect(config.hasHooksForEvent('Stop')).toBe(false);
             expect(mockHasHooksForEvent).toHaveBeenCalledWith('Stop');

@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { randomUUID } from 'node:crypto';
+import crypto, { randomUUID } from 'node:crypto';
+import { EventEmitter } from 'node:events';
 import { promises as fs } from 'node:fs';
+import * as os from 'node:os';
 import path from 'node:path';
-import crypto from 'crypto';
-import { EventEmitter } from 'events';
 import open from 'open';
-import * as os from 'os';
 import type { Config } from '../config/config.js';
 import { createDebugLogger } from '../utils/debugLogger.js';
 import { formatFetchErrorForUser } from '../utils/fetch.js';
@@ -563,7 +562,6 @@ export async function getaetherOAuthClient(
                             return 'Aether OAuth authentication was cancelled by user';
                         case 'rate_limit':
                             return 'Too many request for Aether OAuth authentication, please try again later.';
-                        case 'error':
                         default:
                             return 'Aether OAuth authentication failed';
                     }
@@ -628,7 +626,7 @@ function showFallbackMessage(verificationUriComplete: string): void {
 
     // Build the box borders with title centered in top border
     // Format: +--- Title ---+
-    const titleWithSpaces = ' ' + title + ' ';
+    const titleWithSpaces = ` ${title} `;
     const totalDashes = boxWidth - 2 - titleWithSpaces.length; // Subtract corners and title
     const leftDashes = Math.floor(totalDashes / 2);
     const rightDashes = totalDashes - leftDashes;
@@ -638,8 +636,8 @@ function showFallbackMessage(verificationUriComplete: string): void {
         titleWithSpaces +
         '-'.repeat(rightDashes) +
         '+';
-    const emptyLine = '|' + ' '.repeat(boxWidth - 2) + '|';
-    const bottomBorder = '+' + '-'.repeat(boxWidth - 2) + '+';
+    const emptyLine = `|${' '.repeat(boxWidth - 2)}|`;
+    const bottomBorder = `+${'-'.repeat(boxWidth - 2)}+`;
 
     // Build content lines
     const instructionLines = wrapText(
@@ -650,26 +648,26 @@ function showFallbackMessage(verificationUriComplete: string): void {
     const waitingLine = 'Waiting for authorization to complete...';
 
     // Write the box
-    process.stderr.write('\n' + topBorder + '\n');
-    process.stderr.write(emptyLine + '\n');
+    process.stderr.write(`\n${topBorder}\n`);
+    process.stderr.write(`${emptyLine}\n`);
 
     // Write instructions
     for (const line of instructionLines) {
         process.stderr.write(
-            '| ' + line + ' '.repeat(contentWidth - line.length) + ' |\n'
+            `| ${line}${' '.repeat(contentWidth - line.length)} |\n`
         );
     }
 
-    process.stderr.write(emptyLine + '\n');
+    process.stderr.write(`${emptyLine}\n`);
 
     // Write URL
     for (const line of urlLines) {
         process.stderr.write(
-            '| ' + line + ' '.repeat(contentWidth - line.length) + ' |\n'
+            `| ${line}${' '.repeat(contentWidth - line.length)} |\n`
         );
     }
 
-    process.stderr.write(emptyLine + '\n');
+    process.stderr.write(`${emptyLine}\n`);
 
     // Write waiting message
     process.stderr.write(
@@ -679,8 +677,8 @@ function showFallbackMessage(verificationUriComplete: string): void {
             ' |\n'
     );
 
-    process.stderr.write(emptyLine + '\n');
-    process.stderr.write(bottomBorder + '\n\n');
+    process.stderr.write(`${emptyLine}\n`);
+    process.stderr.write(`${bottomBorder}\n\n`);
 }
 
 async function authWithQwenDeviceFlow(
@@ -701,7 +699,7 @@ async function authWithQwenDeviceFlow(
             return null;
         }
         const message = 'Authentication cancelled by user.';
-        debugLogger.debug('\n' + message);
+        debugLogger.debug(`\n${message}`);
         aetherOAuth2Events.emit(
             AetherOAuth2Event.AuthProgress,
             'error',

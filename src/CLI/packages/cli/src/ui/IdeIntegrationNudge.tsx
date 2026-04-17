@@ -38,11 +38,11 @@ export function IdeIntegrationNudge({
     );
 
     const { displayName: ideName } = ide;
-    const isInSandbox = !!process.env['SANDBOX'];
+    const isInSandbox = !!process.env.SANDBOX;
     // Assume extension is already installed if the env variables are set.
     const isExtensionPreInstalled =
-        !!process.env['aether_cli_IDE_SERVER_PORT'] &&
-        !!process.env['aether_cli_IDE_WORKSPACE_PATH'];
+        !!process.env.aether_cli_IDE_SERVER_PORT &&
+        !!process.env.aether_cli_IDE_WORKSPACE_PATH;
 
     const OPTIONS: Array<RadioSelectItem<IdeIntegrationNudgeResult>> = [
         {

@@ -223,7 +223,9 @@ export async function runForkedQuery(
     };
 
     for await (const event of stream) {
-        if (event.type !== StreamEventType.CHUNK) continue;
+        if (event.type !== StreamEventType.CHUNK) {
+            continue;
+        }
         const response = event.value;
         // Extract text from candidates
         const text = response.candidates?.[0]?.content?.parts

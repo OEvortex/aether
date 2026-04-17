@@ -206,7 +206,7 @@ export function validateAuthMethod(
                 'Anthropic provider missing required baseUrl in providers[].baseUrl.'
             );
         }
-        if (!modelConfig && !process.env['ANTHROPIC_BASE_URL']) {
+        if (!modelConfig && !process.env.ANTHROPIC_BASE_URL) {
             return t('ANTHROPIC_BASE_URL environment variable not found.');
         }
 
@@ -227,7 +227,7 @@ export function validateAuthMethod(
             return apiKeyError;
         }
 
-        process.env['GOOGLE_GENAI_USE_VERTEXAI'] = 'true';
+        process.env.GOOGLE_GENAI_USE_VERTEXAI = 'true';
         return null;
     }
 

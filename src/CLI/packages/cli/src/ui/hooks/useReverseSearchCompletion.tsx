@@ -68,7 +68,7 @@ export function useReverseSearchCompletion(
     useEffect(() => {
         prevQueryRef.current = '';
         prevMatchesRef.current = [];
-    }, [history]);
+    }, []);
 
     const searchHistory = useCallback(
         (query: string, items: readonly string[]) => {
@@ -86,13 +86,16 @@ export function useReverseSearchCompletion(
     );
 
     const matches = useMemo<Suggestion[]>(() => {
-        if (!reverseSearchActive) return [];
-        if (debouncedQuery.length === 0)
+        if (!reverseSearchActive) {
+            return [];
+        }
+        if (debouncedQuery.length === 0) {
             return history.map((cmd) => ({
                 label: cmd,
                 value: cmd,
                 matchedIndex: -1
             }));
+        }
 
         const query = debouncedQuery.toLowerCase();
         const canUseCache =
@@ -134,7 +137,9 @@ export function useReverseSearchCompletion(
 
     const handleAutocomplete = useCallback(
         (i: number) => {
-            if (i < 0 || i >= suggestions.length) return;
+            if (i < 0 || i >= suggestions.length) {
+                return;
+            }
             buffer.setText(suggestions[i].value);
             resetCompletionState();
         },

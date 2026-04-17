@@ -95,7 +95,7 @@ export class ToolCallEmitter extends BaseEmitter {
             // This ensures the UI is updated even when all todos are removed
             if (todos && todos.length > 0) {
                 await this.planEmitter.emitPlan(todos);
-            } else if (params.args && Array.isArray(params.args['todos'])) {
+            } else if (params.args && Array.isArray(params.args.todos)) {
                 // Send empty plan when args had todos but result has none
                 await this.planEmitter.emitPlan([]);
             }
@@ -139,7 +139,7 @@ export class ToolCallEmitter extends BaseEmitter {
 
         // Add rawOutput from resultDisplay
         if (params.resultDisplay !== undefined) {
-            (update as Record<string, unknown>)['rawOutput'] =
+            (update as Record<string, unknown>).rawOutput =
                 params.resultDisplay;
         }
 
@@ -226,8 +226,8 @@ export class ToolCallEmitter extends BaseEmitter {
                 kind = this.mapToolKind(tool.kind, toolName);
             } catch {
                 // Fallback: use the description arg directly if available
-                if (typeof args['description'] === 'string') {
-                    title = `${title}: ${args['description']}`;
+                if (typeof args.description === 'string') {
+                    title = `${title}: ${args.description}`;
                 }
                 if (tool.kind) {
                     kind = this.mapToolKind(tool.kind, toolName);
@@ -271,7 +271,9 @@ export class ToolCallEmitter extends BaseEmitter {
      * Returns null if not a diff.
      */
     private extractDiffContent(resultDisplay: unknown): ToolCallContent | null {
-        if (!resultDisplay || typeof resultDisplay !== 'object') return null;
+        if (!resultDisplay || typeof resultDisplay !== 'object') {
+            return null;
+        }
 
         const obj = resultDisplay as Record<string, unknown>;
 
@@ -279,9 +281,9 @@ export class ToolCallEmitter extends BaseEmitter {
         if ('fileName' in obj && 'newContent' in obj) {
             return {
                 type: 'diff',
-                path: obj['fileName'] as string,
-                oldText: (obj['originalContent'] as string) ?? '',
-                newText: obj['newContent'] as string
+                path: obj.fileName as string,
+                oldText: (obj.originalContent as string) ?? '',
+                newText: obj.newContent as string
             };
         }
 
@@ -311,8 +313,8 @@ export class ToolCallEmitter extends BaseEmitter {
                         string,
                         unknown
                     >;
-                    const outputField = resp['output'];
-                    const errorField = resp['error'];
+                    const outputField = resp.output;
+                    const errorField = resp.error;
                     const responseText =
                         typeof outputField === 'string'
                             ? outputField

@@ -1042,7 +1042,7 @@ describe('DiscoveredMCPTool', () => {
             const inlineDataParts = (result.llmContent as Part[]).filter(
                 (p: Part) => p.inlineData
             );
-            expect(inlineDataParts[0].inlineData!.data).toBe('x'.repeat(5000));
+            expect(inlineDataParts[0].inlineData?.data).toBe('x'.repeat(5000));
         });
 
         it('should truncate only text parts in mixed content', async () => {
@@ -1082,11 +1082,11 @@ describe('DiscoveredMCPTool', () => {
             const textPart = parts.find(
                 (p: Part) => p.text && !p.text.startsWith('[Tool')
             );
-            expect(textPart!.text!.length).toBeLessThan(largeText.length);
-            expect(textPart!.text).toContain('CONTENT TRUNCATED');
+            expect(textPart?.text?.length).toBeLessThan(largeText.length);
+            expect(textPart?.text).toContain('CONTENT TRUNCATED');
             // Image should be preserved
             const imagePart = parts.find((p: Part) => p.inlineData);
-            expect(imagePart!.inlineData!.data).toBe('IMAGE_DATA');
+            expect(imagePart?.inlineData?.data).toBe('IMAGE_DATA');
         });
 
         it('should not truncate when config is not provided', async () => {
@@ -1459,11 +1459,9 @@ describe('DiscoveredMCPTool', () => {
                 };
 
                 const newMockMcpClient: McpDirectClient = {
-                    callTool: vi
-                        .fn()
-                        .mockResolvedValueOnce({
-                            content: [{ type: 'text', text: 'OK' }]
-                        })
+                    callTool: vi.fn().mockResolvedValueOnce({
+                        content: [{ type: 'text', text: 'OK' }]
+                    })
                 };
 
                 const newTool = new DiscoveredMCPTool(
@@ -1521,11 +1519,9 @@ describe('DiscoveredMCPTool', () => {
             };
 
             const newMockMcpClient: McpDirectClient = {
-                callTool: vi
-                    .fn()
-                    .mockResolvedValueOnce({
-                        content: [{ type: 'text', text: 'OK' }]
-                    })
+                callTool: vi.fn().mockResolvedValueOnce({
+                    content: [{ type: 'text', text: 'OK' }]
+                })
             };
 
             const newTool = new DiscoveredMCPTool(

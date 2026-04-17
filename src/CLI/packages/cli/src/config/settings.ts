@@ -82,21 +82,24 @@ export const SETTINGS_VERSION_KEY = '$version';
 export function migrateLegacyPermissions(
     settings: Record<string, unknown>
 ): Record<string, unknown> | null {
-    const tools = settings['tools'] as Record<string, unknown> | undefined;
-    if (!tools) return null;
+    const tools = settings.tools as Record<string, unknown> | undefined;
+    if (!tools) {
+        return null;
+    }
 
     const hasLegacy =
-        Array.isArray(tools['core']) ||
-        Array.isArray(tools['allowed']) ||
-        Array.isArray(tools['exclude']);
+        Array.isArray(tools.core) ||
+        Array.isArray(tools.allowed) ||
+        Array.isArray(tools.exclude);
 
-    if (!hasLegacy) return null;
+    if (!hasLegacy) {
+        return null;
+    }
 
     const result = structuredClone(settings) as Record<string, unknown>;
-    const resultTools = result['tools'] as Record<string, unknown>;
-    const permissions =
-        (result['permissions'] as Record<string, unknown>) ?? {};
-    result['permissions'] = permissions;
+    const resultTools = result.tools as Record<string, unknown>;
+    const permissions = (result.permissions as Record<string, unknown>) ?? {};
+    result.permissions = permissions;
 
     const mergeInto = (key: string, items: string[]) => {
         const existing = Array.isArray(permissions[key])
@@ -107,15 +110,15 @@ export function migrateLegacyPermissions(
     };
 
     // tools.allowed → permissions.allow
-    if (Array.isArray(resultTools['allowed'])) {
-        mergeInto('allow', resultTools['allowed'] as string[]);
-        delete resultTools['allowed'];
+    if (Array.isArray(resultTools.allowed)) {
+        mergeInto('allow', resultTools.allowed as string[]);
+        delete resultTools.allowed;
     }
 
     // tools.exclude → permissions.deny
-    if (Array.isArray(resultTools['exclude'])) {
-        mergeInto('deny', resultTools['exclude'] as string[]);
-        delete resultTools['exclude'];
+    if (Array.isArray(resultTools.exclude)) {
+        mergeInto('deny', resultTools.exclude as string[]);
+        delete resultTools.exclude;
     }
 
     // tools.core → permissions.allow (explicit enables)
@@ -128,17 +131,17 @@ export function migrateLegacyPermissions(
     // Instead we just migrate to allow (auto-approve) and let the coreTools
     // semantics continue to work through the Config.getCoreTools() path until
     // the old API is fully removed.
-    if (Array.isArray(resultTools['core'])) {
-        mergeInto('allow', resultTools['core'] as string[]);
-        delete resultTools['core'];
+    if (Array.isArray(resultTools.core)) {
+        mergeInto('allow', resultTools.core as string[]);
+        delete resultTools.core;
     }
 
     return result;
 }
 
 export function getSystemSettingsPath(): string {
-    if (process.env['aether_cli_SYSTEM_SETTINGS_PATH']) {
-        return process.env['aether_cli_SYSTEM_SETTINGS_PATH'];
+    if (process.env.aether_cli_SYSTEM_SETTINGS_PATH) {
+        return process.env.aether_cli_SYSTEM_SETTINGS_PATH;
     }
     if (platform() === 'darwin') {
         return '/Library/Application Support/AetherCli/settings.json';
@@ -150,8 +153,8 @@ export function getSystemSettingsPath(): string {
 }
 
 export function getSystemDefaultsPath(): string {
-    if (process.env['aether_cli_SYSTEM_DEFAULTS_PATH']) {
-        return process.env['aether_cli_SYSTEM_DEFAULTS_PATH'];
+    if (process.env.aether_cli_SYSTEM_DEFAULTS_PATH) {
+        return process.env.aether_cli_SYSTEM_DEFAULTS_PATH;
     }
     return path.join(
         path.dirname(getSystemSettingsPath()),
@@ -460,17 +463,16 @@ export function setUpCloudShellEnvironment(envFilePath: string | null): void {
     if (envFilePath && fs.existsSync(envFilePath)) {
         const envFileContent = fs.readFileSync(envFilePath);
         const parsedEnv = dotenv.parse(envFileContent);
-        if (parsedEnv['GOOGLE_CLOUD_PROJECT']) {
+        if (parsedEnv.GOOGLE_CLOUD_PROJECT) {
             // .env file takes precedence in Cloud Shell
-            process.env['GOOGLE_CLOUD_PROJECT'] =
-                parsedEnv['GOOGLE_CLOUD_PROJECT'];
+            process.env.GOOGLE_CLOUD_PROJECT = parsedEnv.GOOGLE_CLOUD_PROJECT;
         } else {
             // If not in .env, set to default and override global
-            process.env['GOOGLE_CLOUD_PROJECT'] = 'cloudshell-gca';
+            process.env.GOOGLE_CLOUD_PROJECT = 'cloudshell-gca';
         }
     } else {
         // If no .env file, set to default and override global
-        process.env['GOOGLE_CLOUD_PROJECT'] = 'cloudshell-gca';
+        process.env.GOOGLE_CLOUD_PROJECT = 'cloudshell-gca';
     }
 }
 /**
@@ -487,7 +489,7 @@ export function loadEnvironment(settings: Settings): void {
     const envFilePath = findEnvFile(settings, process.cwd());
 
     // Cloud Shell environment variable handling
-    if (process.env['CLOUD_SHELL'] === 'true') {
+    if (process.env.CLOUD_SHELL === 'true') {
         setUpCloudShellEnvironment(envFilePath);
     }
 

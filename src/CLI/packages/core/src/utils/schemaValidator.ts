@@ -91,7 +91,7 @@ export class SchemaValidator {
             // Skip validation rather than blocking tool usage.
             debugLogger.warn(
                 `Failed to compile schema (${
-                    (schema as Record<string, unknown>)?.['$schema'] ??
+                    (schema as Record<string, unknown>)?.$schema ??
                     '<no $schema>'
                 }): ${error instanceof Error ? error.message : String(error)}. ` +
                     'Skipping parameter validation.'
@@ -126,7 +126,9 @@ export class SchemaValidator {
  */
 function fixBooleanValues(data: Record<string, unknown>) {
     for (const key of Object.keys(data)) {
-        if (!(key in data)) continue;
+        if (!(key in data)) {
+            continue;
+        }
         const value = data[key];
 
         if (typeof value === 'object' && value !== null) {

@@ -93,5 +93,7 @@ export const clearCommand: SlashCommand = {
             );
             context.ui.clear();
         }
+
+        return undefined;
     }
 };

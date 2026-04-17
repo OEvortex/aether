@@ -218,17 +218,17 @@ export class StandardFileSystemService implements FileSystemService {
         params: Omit<WriteTextFileRequest, 'sessionId'>
     ): Promise<WriteTextFileResponse> {
         const { path: filePath, _meta } = params;
-        const lineEnding = _meta?.['lineEnding'] as string | undefined;
+        const lineEnding = _meta?.lineEnding as string | undefined;
         // Convert LF to CRLF when:
         // 1. The file type requires it (e.g. .bat, .cmd on Windows), OR
         // 2. The original file used CRLF line endings (preserve original style)
         const shouldUseCrlf =
             needsCrlfLineEndings(filePath) || lineEnding === 'crlf';
         const content = shouldUseCrlf
-            ? ensureCrlfLineEndings(params['content'])
-            : params['content'];
-        const bom = _meta?.['bom'] ?? (false as boolean);
-        const encoding = _meta?.['encoding'] as string | undefined;
+            ? ensureCrlfLineEndings(params.content)
+            : params.content;
+        const bom = _meta?.bom ?? (false as boolean);
+        const encoding = _meta?.encoding as string | undefined;
 
         // Check if a non-UTF-8 encoding is specified and supported by iconv-lite
         const isNonUtf8Encoding =

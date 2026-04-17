@@ -82,7 +82,7 @@ export function AgentCreationWizard({
             onCancel: handleCancel,
             config
         }),
-        [state, dispatch, handleNext, handlePrevious, handleCancel, config]
+        [state, handleNext, handlePrevious, handleCancel, config]
     );
 
     const renderStepHeader = useCallback(() => {
@@ -315,7 +315,7 @@ export function AgentCreationWizard({
                     </Box>
                 );
         }
-    }, [stepProps, state, config, handleNext, dispatch]);
+    }, [stepProps, state, config, handleNext]);
 
     return (
         <Box flexDirection="column">

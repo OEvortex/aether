@@ -149,7 +149,9 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
             const match = placeholder.match(
                 /^\[Pasted Content (\d+) chars\](?: #(\d+))?$/
             );
-            if (!match) return null;
+            if (!match) {
+                return null;
+            }
             const charCount = parseInt(match[1], 10);
             const id = match[2] ? parseInt(match[2], 10) : 1;
             return { charCount, id };
@@ -365,7 +367,7 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
             buffer.setText(newText);
             setJustNavigatedHistory(true);
         },
-        [buffer, setJustNavigatedHistory]
+        [buffer]
     );
 
     const inputHistory = useInputHistory({
@@ -400,9 +402,7 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
         }
     }, [
         justNavigatedHistory,
-        buffer.text,
         resetCompletionState,
-        setJustNavigatedHistory,
         resetReverseSearchCompletionState,
         resetCommandSearchCompletionState
     ]);
@@ -529,7 +529,7 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
                 return true;
             }
 
-            if (vimHandleInput && vimHandleInput(key)) {
+            if (vimHandleInput?.(key)) {
                 return true;
             }
 
@@ -911,12 +911,16 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
                 // Shell History Navigation
                 if (keyMatchers[Command.NAVIGATION_UP](key)) {
                     const prevCommand = shellHistory.getPreviousCommand();
-                    if (prevCommand !== null) buffer.setText(prevCommand);
+                    if (prevCommand !== null) {
+                        buffer.setText(prevCommand);
+                    }
                     return true;
                 }
                 if (keyMatchers[Command.NAVIGATION_DOWN](key)) {
                     const nextCommand = shellHistory.getNextCommand();
-                    if (nextCommand !== null) buffer.setText(nextCommand);
+                    if (nextCommand !== null) {
+                        buffer.setText(nextCommand);
+                    }
                     return true;
                 }
             }
@@ -1155,7 +1159,7 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
                 renderedLine.push(
                     <Text key={`cursor-end-${cursorVisualColAbsolute}`}>
                         {showCursorOpt
-                            ? chalk.inverse(' ') + '\u200B'
+                            ? `${chalk.inverse(' ')}\u200B`
                             : ' \u200B'}
                     </Text>
                 );
@@ -1167,8 +1171,12 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
     );
 
     const getActiveCompletion = () => {
-        if (commandSearchActive) return commandSearchCompletion;
-        if (reverseSearchActive) return reverseSearchCompletion;
+        if (commandSearchActive) {
+            return commandSearchCompletion;
+        }
+        if (reverseSearchActive) {
+            return reverseSearchCompletion;
+        }
         return completion;
     };
 
@@ -1186,7 +1194,7 @@ export const InputPrompt: React.FC<InputPromptProps> = ({
     useEffect(() => {
         followup.setSuggestion(promptSuggestion ?? null);
         // eslint-disable-next-line react-hooks/exhaustive-deps -- only trigger on prop change
-    }, [promptSuggestion]);
+    }, [promptSuggestion, followup.setSuggestion]);
 
     const showAutoAcceptStyling =
         !shellModeActive && approvalMode === ApprovalMode.AUTO_EDIT;

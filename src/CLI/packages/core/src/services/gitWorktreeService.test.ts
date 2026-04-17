@@ -440,7 +440,7 @@ describe('GitWorktreeService', () => {
                     call[0][1] === 'apply'
             );
             expect(stashApplyCalls).toHaveLength(2);
-            expect(stashApplyCalls[0]![0]).toEqual([
+            expect(stashApplyCalls[0]?.[0]).toEqual([
                 'stash',
                 'apply',
                 'snapshot-sha'

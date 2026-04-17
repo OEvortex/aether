@@ -107,7 +107,9 @@ export class RequestTokenizer {
      * Calculate tokens for text contents
      */
     private async calculateTextTokens(textContents: string[]): Promise<number> {
-        if (textContents.length === 0) return 0;
+        if (textContents.length === 0) {
+            return 0;
+        }
 
         try {
             // Avoid per-part rounding inflation by estimating once on the combined text.
@@ -128,7 +130,9 @@ export class RequestTokenizer {
     private async calculateImageTokens(
         imageContents: Array<{ data: string; mimeType: string }>
     ): Promise<number> {
-        if (imageContents.length === 0) return 0;
+        if (imageContents.length === 0) {
+            return 0;
+        }
 
         try {
             const tokenCounts =
@@ -148,7 +152,9 @@ export class RequestTokenizer {
     private async calculateAudioTokens(
         audioContents: Array<{ data: string; mimeType: string }>
     ): Promise<number> {
-        if (audioContents.length === 0) return 0;
+        if (audioContents.length === 0) {
+            return 0;
+        }
 
         // Placeholder implementation - audio token calculation would depend on
         // the specific model's audio processing capabilities
@@ -175,7 +181,9 @@ export class RequestTokenizer {
     private async calculateOtherTokens(
         otherContents: string[]
     ): Promise<number> {
-        if (otherContents.length === 0) return 0;
+        if (otherContents.length === 0) {
+            return 0;
+        }
 
         try {
             // Treat other content as text, and avoid per-item rounding inflation.
@@ -308,11 +316,11 @@ export class RequestTokenizer {
 
         if ('inlineData' in part && part.inlineData) {
             const { data, mimeType } = part.inlineData;
-            if (mimeType && mimeType.startsWith('image/')) {
+            if (mimeType?.startsWith('image/')) {
                 imageContents.push({ data: data || '', mimeType });
                 return;
             }
-            if (mimeType && mimeType.startsWith('audio/')) {
+            if (mimeType?.startsWith('audio/')) {
                 audioContents.push({ data: data || '', mimeType });
                 return;
             }

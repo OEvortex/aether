@@ -155,13 +155,13 @@ describe('agentMessagesToHistoryItems — tool grouping', () => {
             noApprovals
         );
         expect(items).toHaveLength(1);
-        expect(items[0]!.type).toBe('tool_group');
+        expect(items[0]?.type).toBe('tool_group');
         const group = items[0] as Extract<
             (typeof items)[0],
             { type: 'tool_group' }
         >;
         expect(group.tools).toHaveLength(1);
-        expect(group.tools[0]!.name).toBe('read_file');
+        expect(group.tools[0]?.name).toBe('read_file');
     });
 
     it('merges multiple parallel tool calls into one tool_group', () => {
@@ -180,8 +180,8 @@ describe('agentMessagesToHistoryItems — tool grouping', () => {
             { type: 'tool_group' }
         >;
         expect(group.tools).toHaveLength(2);
-        expect(group.tools[0]!.name).toBe('read_file');
-        expect(group.tools[1]!.name).toBe('write_file');
+        expect(group.tools[0]?.name).toBe('read_file');
+        expect(group.tools[1]?.name).toBe('write_file');
     });
 
     it('preserves tool call order by first appearance', () => {
@@ -198,8 +198,8 @@ describe('agentMessagesToHistoryItems — tool grouping', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.name).toBe('second');
-        expect(group.tools[1]!.name).toBe('first');
+        expect(group.tools[0]?.name).toBe('second');
+        expect(group.tools[1]?.name).toBe('first');
     });
 
     it('breaks tool groups at non-tool messages', () => {
@@ -214,9 +214,9 @@ describe('agentMessagesToHistoryItems — tool grouping', () => {
             noApprovals
         );
         expect(items).toHaveLength(3);
-        expect(items[0]!.type).toBe('tool_group');
-        expect(items[1]!.type).toBe('gemini');
-        expect(items[2]!.type).toBe('tool_group');
+        expect(items[0]?.type).toBe('tool_group');
+        expect(items[1]?.type).toBe('gemini');
+        expect(items[2]?.type).toBe('tool_group');
     });
 
     it('handles tool_result arriving without a prior tool_call gracefully', () => {
@@ -234,8 +234,8 @@ describe('agentMessagesToHistoryItems — tool grouping', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.callId).toBe('c1');
-        expect(group.tools[0]!.status).toBe(ToolCallStatus.Success);
+        expect(group.tools[0]?.callId).toBe('c1');
+        expect(group.tools[0]?.status).toBe(ToolCallStatus.Success);
     });
 });
 
@@ -251,7 +251,7 @@ describe('agentMessagesToHistoryItems — tool status', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.status).toBe(ToolCallStatus.Executing);
+        expect(group.tools[0]?.status).toBe(ToolCallStatus.Executing);
     });
 
     it('Success: tool_result with success=true', () => {
@@ -266,7 +266,7 @@ describe('agentMessagesToHistoryItems — tool status', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.status).toBe(ToolCallStatus.Success);
+        expect(group.tools[0]?.status).toBe(ToolCallStatus.Success);
     });
 
     it('Error: tool_result with success=false', () => {
@@ -281,7 +281,7 @@ describe('agentMessagesToHistoryItems — tool status', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.status).toBe(ToolCallStatus.Error);
+        expect(group.tools[0]?.status).toBe(ToolCallStatus.Error);
     });
 
     it('Confirming: tool_call present in pendingApprovals', () => {
@@ -295,8 +295,8 @@ describe('agentMessagesToHistoryItems — tool status', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.status).toBe(ToolCallStatus.Confirming);
-        expect(group.tools[0]!.confirmationDetails).toBe(fakeApproval);
+        expect(group.tools[0]?.status).toBe(ToolCallStatus.Confirming);
+        expect(group.tools[0]?.confirmationDetails).toBe(fakeApproval);
     });
 
     it('Confirming takes priority over Executing', () => {
@@ -310,7 +310,7 @@ describe('agentMessagesToHistoryItems — tool status', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.status).toBe(ToolCallStatus.Confirming);
+        expect(group.tools[0]?.status).toBe(ToolCallStatus.Confirming);
     });
 });
 
@@ -332,7 +332,7 @@ describe('agentMessagesToHistoryItems — tool metadata', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.resultDisplay).toBe('file contents');
+        expect(group.tools[0]?.resultDisplay).toBe('file contents');
     });
 
     it('forwards renderOutputAsMarkdown from tool_call', () => {
@@ -349,7 +349,7 @@ describe('agentMessagesToHistoryItems — tool metadata', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.renderOutputAsMarkdown).toBe(true);
+        expect(group.tools[0]?.renderOutputAsMarkdown).toBe(true);
     });
 
     it('forwards description from tool_call', () => {
@@ -365,7 +365,7 @@ describe('agentMessagesToHistoryItems — tool metadata', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.description).toBe('reading src/index.ts');
+        expect(group.tools[0]?.description).toBe('reading src/index.ts');
     });
 });
 
@@ -383,7 +383,7 @@ describe('agentMessagesToHistoryItems — liveOutputs', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.resultDisplay).toBe('live stdout so far');
+        expect(group.tools[0]?.resultDisplay).toBe('live stdout so far');
     });
 
     it('ignores liveOutput for completed tools', () => {
@@ -403,7 +403,7 @@ describe('agentMessagesToHistoryItems — liveOutputs', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.resultDisplay).toBe('final output');
+        expect(group.tools[0]?.resultDisplay).toBe('final output');
     });
 
     it('falls back to entry resultDisplay when no liveOutput for callId', () => {
@@ -417,7 +417,7 @@ describe('agentMessagesToHistoryItems — liveOutputs', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.resultDisplay).toBeUndefined();
+        expect(group.tools[0]?.resultDisplay).toBeUndefined();
     });
 });
 
@@ -436,7 +436,7 @@ describe('agentMessagesToHistoryItems — shellPids', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.ptyId).toBe(12345);
+        expect(group.tools[0]?.ptyId).toBe(12345);
     });
 
     it('does not set ptyId for completed tools', () => {
@@ -454,7 +454,7 @@ describe('agentMessagesToHistoryItems — shellPids', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.ptyId).toBeUndefined();
+        expect(group.tools[0]?.ptyId).toBeUndefined();
     });
 
     it('does not set ptyId when shellPids is not provided', () => {
@@ -466,7 +466,7 @@ describe('agentMessagesToHistoryItems — shellPids', () => {
             (typeof items)[0],
             { type: 'tool_group' }
         >;
-        expect(group.tools[0]!.ptyId).toBeUndefined();
+        expect(group.tools[0]?.ptyId).toBeUndefined();
     });
 });
 
@@ -513,8 +513,8 @@ describe('agentMessagesToHistoryItems — ID stability', () => {
             noApprovals
         );
 
-        expect(after[0]!.id).toBe(before[0]!.id);
-        expect(after[1]!.id).toBe(before[1]!.id);
-        expect(after[2]!.id).toBe(2);
+        expect(after[0]?.id).toBe(before[0]?.id);
+        expect(after[1]?.id).toBe(before[1]?.id);
+        expect(after[2]?.id).toBe(2);
     });
 });

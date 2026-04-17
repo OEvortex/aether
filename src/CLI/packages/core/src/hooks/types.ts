@@ -193,7 +193,7 @@ export class DefaultHookOutput implements HookOutput {
             this.hookSpecificOutput &&
             'additionalContext' in this.hookSpecificOutput
         ) {
-            const context = this.hookSpecificOutput['additionalContext'];
+            const context = this.hookSpecificOutput.additionalContext;
             if (typeof context !== 'string') {
                 return undefined;
             }
@@ -238,7 +238,7 @@ export class PreToolUseHookOutput extends DefaultHookOutput {
             this.hookSpecificOutput &&
             'permissionDecision' in this.hookSpecificOutput
         ) {
-            const decision = this.hookSpecificOutput['permissionDecision'];
+            const decision = this.hookSpecificOutput.permissionDecision;
             if (
                 decision === 'allow' ||
                 decision === 'deny' ||
@@ -268,7 +268,7 @@ export class PreToolUseHookOutput extends DefaultHookOutput {
             this.hookSpecificOutput &&
             'permissionDecisionReason' in this.hookSpecificOutput
         ) {
-            const reason = this.hookSpecificOutput['permissionDecisionReason'];
+            const reason = this.hookSpecificOutput.permissionDecisionReason;
             if (typeof reason === 'string') {
                 return reason;
             }
@@ -400,7 +400,7 @@ export class PermissionRequestHookOutput extends DefaultHookOutput {
      */
     getPermissionDecision(): PermissionRequestDecision | undefined {
         if (this.hookSpecificOutput && 'decision' in this.hookSpecificOutput) {
-            const decision = this.hookSpecificOutput['decision'];
+            const decision = this.hookSpecificOutput.decision;
             if (
                 typeof decision === 'object' &&
                 decision !== null &&

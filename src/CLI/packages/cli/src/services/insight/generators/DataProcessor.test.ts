@@ -38,8 +38,8 @@ vi.mock('fs/promises', () => ({
     }
 }));
 
+import fs from 'node:fs/promises';
 import { read as readJsonlFile } from '@aetherai/aether-core';
-import fs from 'fs/promises';
 
 const mockedFs = vi.mocked(fs);
 const mockedReadJsonlFile = vi.mocked(readJsonlFile);
@@ -477,7 +477,7 @@ describe('DataProcessor', () => {
                 correct_code_edits: 1,
                 good_explanations: 1
             });
-            expect(result.primarySuccessAgg['none']).toBeUndefined();
+            expect(result.primarySuccessAgg.none).toBeUndefined();
         });
 
         it('should aggregate outcomes', () => {
@@ -858,7 +858,7 @@ describe('DataProcessor', () => {
                 if (pathStr.endsWith('chat1.jsonl')) {
                     return Promise.reject(new Error('Stat failed'));
                 }
-                throw new Error('Unexpected path: ' + pathStr);
+                throw new Error(`Unexpected path: ${pathStr}`);
             });
 
             mockedFs.readdir.mockImplementation((path) => {
@@ -1232,10 +1232,10 @@ describe('DataProcessor', () => {
             ).generateQualitativeInsights(mockMetrics, mockFacets);
 
             expect(result).toBeDefined();
-            expect(result!.impressiveWorkflows).toBeDefined();
-            expect(result!.projectAreas).toBeUndefined();
-            expect(result!.futureOpportunities).toBeDefined();
-            expect(result!.frictionPoints).toBeUndefined();
+            expect(result?.impressiveWorkflows).toBeDefined();
+            expect(result?.projectAreas).toBeUndefined();
+            expect(result?.futureOpportunities).toBeDefined();
+            expect(result?.frictionPoints).toBeUndefined();
         });
 
         it('should return undefined when facets are empty', async () => {

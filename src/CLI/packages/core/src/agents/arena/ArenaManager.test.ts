@@ -38,12 +38,12 @@ vi.mock('../../services/gitWorktreeService.js', () => {
         applyWorktreeChanges: hoistedMockApplyWorktreeChanges
     }));
     // Static methods called by ArenaManager
-    (MockClass as unknown as Record<string, unknown>)['getBaseDir'] = () =>
+    (MockClass as unknown as Record<string, unknown>).getBaseDir = () =>
         path.join(os.tmpdir(), 'arena-mock');
-    (MockClass as unknown as Record<string, unknown>)['getSessionDir'] = (
+    (MockClass as unknown as Record<string, unknown>).getSessionDir = (
         sessionId: string
     ) => path.join(os.tmpdir(), 'arena-mock', sessionId);
-    (MockClass as unknown as Record<string, unknown>)['getWorktreesDir'] = (
+    (MockClass as unknown as Record<string, unknown>).getWorktreesDir = (
         sessionId: string
     ) => path.join(os.tmpdir(), 'arena-mock', sessionId, 'worktrees');
     return { GitWorktreeService: MockClass };

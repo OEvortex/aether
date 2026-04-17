@@ -37,8 +37,8 @@ const codePlanCommand = {
                 type: 'string'
             }),
     handler: async (argv: { region?: string; key?: string }) => {
-        const region = argv['region'] as string | undefined;
-        const key = argv['key'] as string | undefined;
+        const region = argv.region as string | undefined;
+        const key = argv.key as string | undefined;
 
         // If region and key are provided, use them directly
         if (region && key) {

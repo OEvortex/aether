@@ -253,7 +253,7 @@ export class ShellToolInvocation extends BaseToolInvocation<
                 shouldRunInBackground &&
                 !finalCommand.trim().endsWith('&')
             ) {
-                finalCommand = finalCommand.trim() + ' &';
+                finalCommand = `${finalCommand.trim()} &`;
             }
 
             // On Windows, we rely on the race logic below to handle background tasks.
@@ -268,7 +268,9 @@ export class ShellToolInvocation extends BaseToolInvocation<
                 !isWindows && shouldRunInBackground
                     ? (() => {
                           let command = finalCommand.trim();
-                          if (!command.endsWith('&')) command += ';';
+                          if (!command.endsWith('&')) {
+                              command += ';';
+                          }
                           return `{ ${command} }; __code=$?; pgrep -g 0 >${tempFilePath} 2>&1; exit $__code;`;
                       })()
                     : finalCommand;
@@ -288,7 +290,9 @@ export class ShellToolInvocation extends BaseToolInvocation<
 
                         switch (event.type) {
                             case 'data':
-                                if (isBinaryStream) break;
+                                if (isBinaryStream) {
+                                    break;
+                                }
                                 cumulativeOutput = event.chunk;
                                 shouldUpdate = true;
                                 break;
@@ -715,7 +719,7 @@ export class ShellTool extends BaseDeclarativeTool<
                 .getWorkspaceContext()
                 .getDirectories();
             const isWithinWorkspace = workspaceDirs.some((wsDir) =>
-                params.directory!.startsWith(wsDir)
+                params.directory?.startsWith(wsDir)
             );
 
             if (!isWithinWorkspace) {

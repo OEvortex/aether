@@ -50,9 +50,25 @@ const askUserQuestionToolDescription = `Use this tool when you need to ask the u
 4. Offer choices to the user about what direction to take.
 
 Usage notes:
-- Users will always be able to select "Other" to provide custom text input
-- Use multiSelect: true to allow multiple answers to be selected for a question
-- If you recommend a specific option, make that the first option in the list and add "(Recommended)" at the end of the label
+- Users will always be able to select "Other" to provide custom text input.
+- CRITICAL: You can ask multiple questions at once (up to 4) by providing an array of questions.
+- CRITICAL: Use "multiSelect: true" to allow the user to select multiple options for a question. This is ideal for "Choose all that apply" scenarios.
+- If you recommend a specific option, make that the first option in the list and add "(Recommended)" at the end of the label.
+
+Example of multi-select call:
+{
+  "questions": [
+    {
+      "question": "Which features should I implement?",
+      "header": "Features",
+      "options": [
+        { "label": "Auth", "description": "User authentication" },
+        { "label": "API", "description": "REST API endpoints" }
+      ],
+      "multiSelect": true
+    }
+  ]
+}
 
 Plan mode note: In plan mode, use this tool to clarify requirements or choose between approaches BEFORE finalizing your plan. Do NOT use this tool to ask "Is this plan ready?" or "Should I proceed?" - use ExitPlanMode for plan approval.
 `;
@@ -61,7 +77,6 @@ const askUserQuestionToolSchemaData: FunctionDeclaration = {
     name: 'ask_user_question',
     description: askUserQuestionToolDescription,
     parametersJsonSchema: {
-        $schema: 'https://json-schema.org/draft/2020-12/schema',
         type: 'object',
         properties: {
             questions: {
@@ -79,7 +94,7 @@ const askUserQuestionToolSchemaData: FunctionDeclaration = {
                         },
                         header: {
                             description:
-                                'Very short label displayed as a chip/tag (max 12 chars). Examples: "Auth method", "Library", "Approach".',
+                                'Very short label displayed as a chip/tag (max 20 chars). Examples: "Auth method", "Library", "Approach".',
                             type: 'string'
                         },
                         options: {
@@ -102,19 +117,16 @@ const askUserQuestionToolSchemaData: FunctionDeclaration = {
                                         type: 'string'
                                     }
                                 },
-                                required: ['label', 'description'],
-                                additionalProperties: false
+                                required: ['label', 'description']
                             }
                         },
                         multiSelect: {
                             description:
                                 'Set to true to allow the user to select multiple options instead of just one. Use when choices are not mutually exclusive.',
-                            default: false,
                             type: 'boolean'
                         }
                     },
-                    required: ['question', 'header', 'options', 'multiSelect'],
-                    additionalProperties: false
+                    required: ['question', 'header', 'options', 'multiSelect']
                 }
             },
             metadata: {
@@ -127,12 +139,10 @@ const askUserQuestionToolSchemaData: FunctionDeclaration = {
                             'Optional identifier for the source of this question (e.g., "remember" for /remember command). Used for analytics tracking.',
                         type: 'string'
                     }
-                },
-                additionalProperties: false
+                }
             }
         },
-        required: ['questions'],
-        additionalProperties: false
+        required: ['questions']
     }
 };
 
@@ -313,8 +323,8 @@ export class AskUserQuestionTool extends BaseDeclarativeTool<
                 return `Question ${i + 1}: "header" must be a non-empty string.`;
             }
 
-            if (question.header.length > 12) {
-                return `Question ${i + 1}: "header" must be 12 characters or less.`;
+            if (question.header.length > 20) {
+                return `Question ${i + 1}: "header" must be 20 characters or less.`;
             }
 
             if (!Array.isArray(question.options)) {

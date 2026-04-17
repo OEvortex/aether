@@ -390,8 +390,7 @@ describe('ReadFileTool', () => {
         it('should handle large SVG file', async () => {
             const svgPath = path.join(tempRootDir, 'large.svg');
             // Create SVG content larger than 1MB
-            const largeContent =
-                '<svg>' + 'x'.repeat(1024 * 1024 + 1) + '</svg>';
+            const largeContent = `<svg>${'x'.repeat(1024 * 1024 + 1)}</svg>`;
             await fsp.writeFile(svgPath, largeContent, 'utf-8');
             const params: ReadFileToolParams = { file_path: svgPath };
             const invocation = tool.build(params) as ToolInvocation<

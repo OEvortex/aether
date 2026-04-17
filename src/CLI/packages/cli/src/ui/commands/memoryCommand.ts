@@ -53,7 +53,7 @@ export const memoryCommand: SlashCommand = {
                 return t('Show the current memory contents.');
             },
             kind: CommandKind.BUILT_IN,
-            action: async (context) => {
+            action: async (context): Promise<undefined> => {
                 const memoryContent =
                     context.services.config?.getUserMemory() || '';
                 const fileCount =
@@ -71,6 +71,8 @@ export const memoryCommand: SlashCommand = {
                     },
                     Date.now()
                 );
+
+                return undefined;
             },
             subCommands: [
                 {
@@ -79,7 +81,7 @@ export const memoryCommand: SlashCommand = {
                         return t('Show project-level memory contents.');
                     },
                     kind: CommandKind.BUILT_IN,
-                    action: async (context) => {
+                    action: async (context): Promise<undefined> => {
                         const workingDir =
                             context.services.config?.getWorkingDir?.() ??
                             process.cwd();
@@ -113,6 +115,8 @@ export const memoryCommand: SlashCommand = {
                                 Date.now()
                             );
                         }
+
+                        return undefined;
                     }
                 },
                 {
@@ -121,7 +125,7 @@ export const memoryCommand: SlashCommand = {
                         return t('Show global memory contents.');
                     },
                     kind: CommandKind.BUILT_IN,
-                    action: async (context) => {
+                    action: async (context): Promise<undefined> => {
                         const globalDir = path.join(os.homedir(), AETHER_DIR);
                         const results =
                             await findAllExistingMemoryFiles(globalDir);
@@ -155,6 +159,8 @@ export const memoryCommand: SlashCommand = {
                                 Date.now()
                             );
                         }
+
+                        return undefined;
                     }
                 }
             ]
@@ -167,7 +173,7 @@ export const memoryCommand: SlashCommand = {
                 );
             },
             kind: CommandKind.BUILT_IN,
-            action: (context, args): SlashCommandActionReturn | void => {
+            action: (context, args): SlashCommandActionReturn | undefined => {
                 if (!args || args.trim() === '') {
                     return {
                         type: 'message',
@@ -247,7 +253,7 @@ export const memoryCommand: SlashCommand = {
                     action: (
                         context,
                         args
-                    ): SlashCommandActionReturn | void => {
+                    ): SlashCommandActionReturn | undefined => {
                         if (!args || args.trim() === '') {
                             return {
                                 type: 'message',
@@ -287,7 +293,7 @@ export const memoryCommand: SlashCommand = {
                     action: (
                         context,
                         args
-                    ): SlashCommandActionReturn | void => {
+                    ): SlashCommandActionReturn | undefined => {
                         if (!args || args.trim() === '') {
                             return {
                                 type: 'message',
@@ -378,6 +384,8 @@ export const memoryCommand: SlashCommand = {
                         Date.now()
                     );
                 }
+
+                return undefined;
             }
         }
     ]

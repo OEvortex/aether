@@ -115,7 +115,7 @@ const RenderInlineInternal: React.FC<RenderInlineProps> = ({
                 fullMatch.length > INLINE_CODE_MARKER_LENGTH
             ) {
                 const codeMatch = fullMatch.match(/^(`+)(.+?)\1$/s);
-                if (codeMatch && codeMatch[2]) {
+                if (codeMatch?.[2]) {
                     renderedNode = (
                         <Text key={key} color={theme.text.code}>
                             {codeMatch[2]}

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { type Config, Storage } from '@aetherai/aether-core';
-import fs from 'fs/promises';
-import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StaticInsightGenerator } from './StaticInsightGenerator.js';
 

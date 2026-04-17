@@ -89,8 +89,8 @@ describe('configResolver', () => {
             ]);
 
             expect(result).toBeDefined();
-            expect(result!.value).toBe('found');
-            expect(result!.source.kind).toBe('env');
+            expect(result?.value).toBe('found');
+            expect(result?.source.kind).toBe('env');
         });
     });
 

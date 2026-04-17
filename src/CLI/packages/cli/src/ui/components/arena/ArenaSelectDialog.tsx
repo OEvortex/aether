@@ -243,7 +243,7 @@ export function ArenaSelectDialog({
                     <Text color={theme.text.secondary}>Task: </Text>
                     <Text
                         color={theme.text.primary}
-                    >{`"${task.length > 60 ? task.slice(0, 59) + '…' : task}"`}</Text>
+                    >{`"${task.length > 60 ? `${task.slice(0, 59)}…` : task}"`}</Text>
                 </Text>
             </Box>
 

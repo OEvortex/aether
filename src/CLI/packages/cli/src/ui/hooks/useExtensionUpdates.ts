@@ -68,7 +68,7 @@ export const useConfirmUpdateRequests = () => {
                 request: wrappedRequest
             });
         },
-        [dispatchConfirmUpdateExtensionRequests]
+        []
     );
     return {
         addConfirmUpdateExtensionRequest,
@@ -136,7 +136,7 @@ export const useSettingInputRequests = () => {
                 request: wrappedRequest
             });
         },
-        [dispatchSettingInputRequests]
+        []
     );
     return {
         addSettingInputRequest,
@@ -201,7 +201,7 @@ export const usePluginChoiceRequests = () => {
                 request: wrappedRequest
             });
         },
-        [dispatchPluginChoiceRequests]
+        []
     );
     return {
         addPluginChoiceRequest,
@@ -213,7 +213,7 @@ export const usePluginChoiceRequests = () => {
 export const useExtensionUpdates = (
     extensionManager: ExtensionManager,
     addItem: UseHistoryManagerReturn['addItem'],
-    cwd: string
+    _cwd: string
 ) => {
     const [extensionsUpdateState, dispatchExtensionStateUpdate] = useReducer(
         extensionUpdatesReducer,
@@ -226,14 +226,18 @@ export const useExtensionUpdates = (
             const extensionsToCheck = extensions.filter((extension) => {
                 const currentStatus =
                     extensionsUpdateState.extensionStatuses.get(extension.name);
-                if (!currentStatus) return true;
+                if (!currentStatus) {
+                    return true;
+                }
                 const currentState = currentStatus.status;
                 return (
                     !currentState ||
                     currentState === ExtensionUpdateState.UNKNOWN
                 );
             });
-            if (extensionsToCheck.length === 0) return;
+            if (extensionsToCheck.length === 0) {
+                return;
+            }
             dispatchExtensionStateUpdate({ type: 'BATCH_CHECK_START' });
             await extensionManager.checkForAllExtensionUpdates(
                 (extensionName: string, state: ExtensionUpdateState) => {
@@ -245,12 +249,7 @@ export const useExtensionUpdates = (
             );
             dispatchExtensionStateUpdate({ type: 'BATCH_CHECK_END' });
         })();
-    }, [
-        extensions,
-        extensionManager,
-        extensionsUpdateState.extensionStatuses,
-        dispatchExtensionStateUpdate
-    ]);
+    }, [extensions, extensionManager, extensionsUpdateState.extensionStatuses]);
 
     useEffect(() => {
         if (extensionsUpdateState.batchChecksInProgress > 0) {
@@ -289,7 +288,9 @@ export const useExtensionUpdates = (
                         }
                     )
                     .then((result) => {
-                        if (!result) return;
+                        if (!result) {
+                            return;
+                        }
                         addItem(
                             {
                                 type: MessageType.INFO,
@@ -321,7 +322,7 @@ export const useExtensionUpdates = (
                 Date.now()
             );
         }
-    }, [extensions, extensionManager, extensionsUpdateState, addItem, cwd]);
+    }, [extensions, extensionManager, extensionsUpdateState, addItem]);
 
     const extensionsUpdateStateComputed = useMemo(() => {
         const result = new Map<string, ExtensionUpdateState>();

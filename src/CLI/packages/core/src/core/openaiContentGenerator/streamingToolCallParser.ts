@@ -143,8 +143,12 @@ export class StreamingToolCallParser {
 
         // Update metadata
         const meta = this.toolCallMeta.get(actualIndex)!;
-        if (id) meta.id = id;
-        if (name) meta.name = name;
+        if (id) {
+            meta.id = id;
+        }
+        if (name) {
+            meta.name = name;
+        }
 
         // Get current state for the actual index
         const currentBuffer = this.buffers.get(actualIndex)!;
@@ -163,8 +167,11 @@ export class StreamingToolCallParser {
 
         for (const char of chunk) {
             if (!inString) {
-                if (char === '{' || char === '[') depth++;
-                else if (char === '}' || char === ']') depth--;
+                if (char === '{' || char === '[') {
+                    depth++;
+                } else if (char === '}' || char === ']') {
+                    depth--;
+                }
             }
 
             // Track string boundaries - toggle inString state on unescaped quotes
@@ -190,7 +197,7 @@ export class StreamingToolCallParser {
                 // Intelligent repair: try auto-closing unclosed strings
                 if (inString) {
                     try {
-                        const repaired = JSON.parse(newBuffer + '"');
+                        const repaired = JSON.parse(`${newBuffer}"`);
                         return {
                             complete: true,
                             value: repaired,
@@ -260,7 +267,7 @@ export class StreamingToolCallParser {
                     const inString = this.inStrings.get(index);
                     if (inString) {
                         try {
-                            args = JSON.parse(buffer + '"');
+                            args = JSON.parse(`${buffer}"`);
                         } catch {
                             // If all parsing fails, use safeJsonParse as fallback
                             args = safeJsonParse(buffer, {});
@@ -430,7 +437,9 @@ export class StreamingToolCallParser {
     hasIncompleteToolCalls(): boolean {
         for (const [index] of this.buffers.entries()) {
             const meta = this.toolCallMeta.get(index);
-            if (!meta?.name) continue;
+            if (!meta?.name) {
+                continue;
+            }
 
             const depth = this.depths.get(index) || 0;
             const inString = this.inStrings.get(index) || false;

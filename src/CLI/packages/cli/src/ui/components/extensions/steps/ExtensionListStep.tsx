@@ -88,7 +88,9 @@ export const ExtensionListStep = ({
     }
 
     const getUpdateStateColor = (state: string | undefined): string => {
-        if (!state) return theme.text.secondary;
+        if (!state) {
+            return theme.text.secondary;
+        }
 
         switch (state) {
             case ExtensionUpdateState.CHECKING_FOR_UPDATES:
@@ -109,7 +111,9 @@ export const ExtensionListStep = ({
     };
 
     const getLocalizedUpdateState = (state: string | undefined): string => {
-        if (!state) return '';
+        if (!state) {
+            return '';
+        }
         // Map internal state values to translation keys
         const stateMap: Record<string, string> = {
             'up to date': t('up to date'),
@@ -123,7 +127,7 @@ export const ExtensionListStep = ({
 
     const renderExtensionItem = (
         extension: Extension,
-        index: number,
+        _index: number,
         isSelected: boolean
     ) => {
         const isActive = extension.isActive;

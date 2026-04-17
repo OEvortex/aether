@@ -58,14 +58,18 @@ export function useMessageQueue({
 
     // Get all queued messages as a single text string
     const getQueuedMessagesText = useCallback(() => {
-        if (messageQueue.length === 0) return '';
+        if (messageQueue.length === 0) {
+            return '';
+        }
         return messageQueue.join('\n\n');
     }, [messageQueue]);
 
     // Atomically drain all queued messages (synchronous, safe from callbacks).
     const drainQueue = useCallback((): string[] => {
         const drained = queueRef.current;
-        if (drained.length === 0) return [];
+        if (drained.length === 0) {
+            return [];
+        }
         queueRef.current = [];
         setMessageQueue([]);
         return drained;

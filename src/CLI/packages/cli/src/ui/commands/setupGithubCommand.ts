@@ -69,7 +69,7 @@ export async function updateGitignore(gitRepoRoot: string): Promise<void> {
 
         if (!fileExists) {
             // Create new .gitignore file with the entries
-            const contentToWrite = gitignoreEntries.join('\n') + '\n';
+            const contentToWrite = `${gitignoreEntries.join('\n')}\n`;
             await fs.promises.writeFile(gitignorePath, contentToWrite);
         } else {
             // Check which entries are missing
@@ -81,7 +81,7 @@ export async function updateGitignore(gitRepoRoot: string): Promise<void> {
             );
 
             if (missingEntries.length > 0) {
-                const contentToAdd = '\n' + missingEntries.join('\n') + '\n';
+                const contentToAdd = `\n${missingEntries.join('\n')}\n`;
                 await fs.promises.appendFile(gitignorePath, contentToAdd);
             }
         }

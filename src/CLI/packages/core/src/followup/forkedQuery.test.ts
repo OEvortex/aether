@@ -28,9 +28,9 @@ describe('CacheSafeParams', () => {
 
             const params = getCacheSafeParams();
             expect(params).not.toBeNull();
-            expect(params!.model).toBe('aether-max');
-            expect(params!.history).toEqual([]);
-            expect(params!.version).toBeGreaterThan(0);
+            expect(params?.model).toBe('aether-max');
+            expect(params?.history).toEqual([]);
+            expect(params?.version).toBeGreaterThan(0);
         });
 
         it('deep clones generationConfig', () => {
@@ -43,11 +43,11 @@ describe('CacheSafeParams', () => {
 
             // Mutate original — should not affect saved params
             (
-                config.tools![0] as { functionDeclarations: unknown[] }
+                config.tools?.[0] as { functionDeclarations: unknown[] }
             ).functionDeclarations.push({ name: 'tool2' });
 
             const params = getCacheSafeParams();
-            const savedTools = params!.generationConfig.tools as Array<{
+            const savedTools = params?.generationConfig.tools as Array<{
                 functionDeclarations: unknown[];
             }>;
             expect(savedTools[0].functionDeclarations).toHaveLength(1);
@@ -67,10 +67,10 @@ describe('CacheSafeParams', () => {
     describe('version detection', () => {
         it('increments version when systemInstruction changes', () => {
             saveCacheSafeParams({ systemInstruction: 'version1' }, [], 'model');
-            const v1 = getCacheSafeParams()!.version;
+            const v1 = getCacheSafeParams()?.version;
 
             saveCacheSafeParams({ systemInstruction: 'version2' }, [], 'model');
-            const v2 = getCacheSafeParams()!.version;
+            const v2 = getCacheSafeParams()?.version;
 
             expect(v2).toBeGreaterThan(v1);
         });
@@ -81,7 +81,7 @@ describe('CacheSafeParams', () => {
                 [],
                 'model'
             );
-            const v1 = getCacheSafeParams()!.version;
+            const v1 = getCacheSafeParams()?.version;
 
             saveCacheSafeParams(
                 {
@@ -92,7 +92,7 @@ describe('CacheSafeParams', () => {
                 [],
                 'model'
             );
-            const v2 = getCacheSafeParams()!.version;
+            const v2 = getCacheSafeParams()?.version;
 
             expect(v2).toBeGreaterThan(v1);
         });
@@ -104,14 +104,14 @@ describe('CacheSafeParams', () => {
             };
 
             saveCacheSafeParams(config, [], 'model');
-            const v1 = getCacheSafeParams()!.version;
+            const v1 = getCacheSafeParams()?.version;
 
             saveCacheSafeParams(
                 config,
                 [{ role: 'user', parts: [{ text: 'hi' }] }],
                 'model'
             );
-            const v2 = getCacheSafeParams()!.version;
+            const v2 = getCacheSafeParams()?.version;
 
             expect(v2).toBe(v1);
         });

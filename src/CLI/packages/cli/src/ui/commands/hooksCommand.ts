@@ -89,7 +89,7 @@ const listCommand: SlashCommand = {
             if (!hooksByEvent.has(eventName)) {
                 hooksByEvent.set(eventName, []);
             }
-            hooksByEvent.get(eventName)!.push(hook);
+            hooksByEvent.get(eventName)?.push(hook);
         }
 
         let output = `**Configured Hooks (${allHooks.length} total)**\n\n`;

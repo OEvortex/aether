@@ -58,7 +58,9 @@ async function tryInstallIt2(
     command: string,
     args: string[]
 ): Promise<boolean> {
-    if (!isCommandAvailable(command).available) return false;
+    if (!isCommandAvailable(command).available) {
+        return false;
+    }
     const result = await execCommand(command, args, {
         preserveOutputOnError: true
     });
@@ -66,7 +68,9 @@ async function tryInstallIt2(
 }
 
 export async function ensureIt2Installed(): Promise<void> {
-    if (isIt2Available()) return;
+    if (isIt2Available()) {
+        return;
+    }
 
     const installers: Array<{ cmd: string; args: string[] }> = [
         { cmd: 'uv', args: ['tool', 'install', 'it2'] },
@@ -76,7 +80,9 @@ export async function ensureIt2Installed(): Promise<void> {
 
     for (const installer of installers) {
         const installed = await tryInstallIt2(installer.cmd, installer.args);
-        if (installed && isIt2Available()) return;
+        if (installed && isIt2Available()) {
+            return;
+        }
     }
 
     throw new Error(
@@ -88,7 +94,9 @@ export async function verifyITerm(): Promise<void> {
     await ensureIt2Installed();
 
     const result = await it2Result(['session', 'list']);
-    if (result.code === 0) return;
+    if (result.code === 0) {
+        return;
+    }
 
     const combined = `${result.stdout}\n${result.stderr}`.toLowerCase();
     if (

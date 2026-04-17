@@ -126,7 +126,7 @@ function formatMessageContent(message: ExportMessage): string {
 
     const processedText = text.replace(
         /--- Content from referenced files ---\n([\s\S]*?)\n--- End of content ---/g,
-        (match, content) =>
+        (_match, content) =>
             `\n> **Referenced Files:**\n\n${createCodeBlock(content)}\n`
     );
 
@@ -134,7 +134,9 @@ function formatMessageContent(message: ExportMessage): string {
 }
 
 function formatToolCall(message: ExportMessage): string {
-    if (!message.toolCall) return '';
+    if (!message.toolCall) {
+        return '';
+    }
 
     const lines: string[] = [];
     const { title, status, rawInput, content, locations } = message.toolCall;
@@ -170,8 +172,8 @@ function formatToolCall(message: ExportMessage): string {
         lines.push('**Output:**');
 
         for (const item of content) {
-            if (item.type === 'content' && item['content']) {
-                const contentData = item['content'] as {
+            if (item.type === 'content' && item.content) {
+                const contentData = item.content as {
                     type: string;
                     text?: string;
                 };
@@ -190,8 +192,8 @@ function formatToolCall(message: ExportMessage): string {
                     lines.push(createCodeBlock(contentData.text, language));
                 }
             } else if (item.type === 'diff') {
-                const path = item['path'] as string;
-                const diffText = item['newText'] as string;
+                const path = item.path as string;
+                const diffText = item.newText as string;
                 lines.push(`\n*Diff for \`${sanitizeText(path)}\`:*`);
                 lines.push(createCodeBlock(diffText, 'diff'));
             }
@@ -205,7 +207,9 @@ function formatToolCall(message: ExportMessage): string {
  * Extracts text content from an export message.
  */
 function extractTextFromMessage(message: ExportMessage): string {
-    if (!message.message?.parts) return '';
+    if (!message.message?.parts) {
+        return '';
+    }
 
     const textParts: string[] = [];
     for (const part of message.message.parts) {

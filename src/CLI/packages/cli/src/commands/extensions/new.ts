@@ -105,8 +105,8 @@ export const newCommand: CommandModule = {
     },
     handler: async (args) => {
         await handleNew({
-            path: args['path'] as string,
-            template: args['template'] as string | undefined
+            path: args.path as string,
+            template: args.template as string | undefined
         });
     }
 };

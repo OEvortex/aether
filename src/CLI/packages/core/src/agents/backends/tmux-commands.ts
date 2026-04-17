@@ -73,14 +73,18 @@ async function tmux(args: string[], serverName?: string): Promise<string> {
 function parseVersion(versionStr: string): number[] {
     // "tmux 3.4" → [3, 4]
     const match = versionStr.match(/(\d+)\.(\d+)/);
-    if (!match) return [0, 0];
+    if (!match) {
+        return [0, 0];
+    }
     return [parseInt(match[1]!, 10), parseInt(match[2]!, 10)];
 }
 
 function isVersionAtLeast(current: string, minimum: string): boolean {
     const [curMajor = 0, curMinor = 0] = parseVersion(current);
     const [minMajor = 0, minMinor = 0] = parseVersion(minimum);
-    if (curMajor !== minMajor) return curMajor > minMajor;
+    if (curMajor !== minMajor) {
+        return curMajor > minMajor;
+    }
     return curMinor >= minMinor;
 }
 
@@ -179,9 +183,13 @@ export async function tmuxListWindows(
     );
     const windows: TmuxWindowInfo[] = [];
     for (const line of output.trim().split('\n')) {
-        if (!line.trim()) continue;
+        if (!line.trim()) {
+            continue;
+        }
         const [name, id] = line.trim().split(/\s+/, 2);
-        if (!name || !id) continue;
+        if (!name || !id) {
+            continue;
+        }
         windows.push({ name, id });
     }
     return windows;
@@ -208,9 +216,15 @@ export async function tmuxNewSession(
     serverName?: string
 ): Promise<void> {
     const args = ['new-session', '-d', '-s', name];
-    if (opts?.windowName) args.push('-n', opts.windowName);
-    if (opts?.cols) args.push('-x', String(opts.cols));
-    if (opts?.rows) args.push('-y', String(opts.rows));
+    if (opts?.windowName) {
+        args.push('-n', opts.windowName);
+    }
+    if (opts?.cols) {
+        args.push('-x', String(opts.cols));
+    }
+    if (opts?.rows) {
+        args.push('-y', String(opts.rows));
+    }
     await tmux(args, serverName);
 }
 
@@ -374,9 +388,13 @@ export async function tmuxListPanes(
 export function parseTmuxListPanes(output: string): TmuxPaneInfo[] {
     const panes: TmuxPaneInfo[] = [];
     for (const line of output.trim().split('\n')) {
-        if (!line.trim()) continue;
+        if (!line.trim()) {
+            continue;
+        }
         const parts = line.trim().split(/\s+/);
-        if (parts.length < 2) continue;
+        if (parts.length < 2) {
+            continue;
+        }
         panes.push({
             paneId: parts[0]!,
             dead: parts[1] === '1',

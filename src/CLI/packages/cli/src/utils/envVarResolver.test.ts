@@ -22,7 +22,7 @@ describe('resolveEnvVarsInString', () => {
     });
 
     it('should resolve $VAR_NAME format', () => {
-        process.env['TEST_VAR'] = 'test-value';
+        process.env.TEST_VAR = 'test-value';
 
         const result = resolveEnvVarsInString('Value is $TEST_VAR');
 
@@ -30,7 +30,7 @@ describe('resolveEnvVarsInString', () => {
     });
 
     it('should resolve ${VAR_NAME} format', () => {
-        process.env['TEST_VAR'] = 'test-value';
+        process.env.TEST_VAR = 'test-value';
 
         const result = resolveEnvVarsInString('Value is ${TEST_VAR}');
 
@@ -38,8 +38,8 @@ describe('resolveEnvVarsInString', () => {
     });
 
     it('should resolve multiple variables in the same string', () => {
-        process.env['HOST'] = 'localhost';
-        process.env['PORT'] = '3000';
+        process.env.HOST = 'localhost';
+        process.env.PORT = '3000';
 
         const result = resolveEnvVarsInString('URL: http://$HOST:${PORT}/api');
 
@@ -71,7 +71,7 @@ describe('resolveEnvVarsInString', () => {
     });
 
     it('should handle mixed defined and undefined variables', () => {
-        process.env['DEFINED'] = 'value';
+        process.env.DEFINED = 'value';
 
         const result = resolveEnvVarsInString('$DEFINED and $UNDEFINED mixed');
 
@@ -91,8 +91,8 @@ describe('resolveEnvVarsInObject', () => {
     });
 
     it('should resolve variables in nested objects', () => {
-        process.env['API_KEY'] = 'secret-123';
-        process.env['DB_URL'] = 'postgresql://localhost/test';
+        process.env.API_KEY = 'secret-123';
+        process.env.DB_URL = 'postgresql://localhost/test';
 
         const config = {
             server: {
@@ -118,8 +118,8 @@ describe('resolveEnvVarsInObject', () => {
     });
 
     it('should resolve variables in arrays', () => {
-        process.env['ENV'] = 'production';
-        process.env['VERSION'] = '1.0.0';
+        process.env.ENV = 'production';
+        process.env.VERSION = '1.0.0';
 
         const config = {
             tags: ['$ENV', 'app', '${VERSION}'],
@@ -153,8 +153,8 @@ describe('resolveEnvVarsInObject', () => {
     });
 
     it('should handle MCP server config structure', () => {
-        process.env['API_TOKEN'] = 'token-123';
-        process.env['SERVER_PORT'] = '8080';
+        process.env.API_TOKEN = 'token-123';
+        process.env.SERVER_PORT = '8080';
 
         const extensionConfig = {
             name: 'test-extension',
@@ -206,7 +206,7 @@ describe('resolveEnvVarsInObject', () => {
     });
 
     it('should handle circular references in objects without infinite recursion', () => {
-        process.env['TEST_VAR'] = 'resolved-value';
+        process.env.TEST_VAR = 'resolved-value';
 
         type ConfigWithCircularRef = {
             name: string;
@@ -233,7 +233,7 @@ describe('resolveEnvVarsInObject', () => {
     });
 
     it('should handle circular references in arrays without infinite recursion', () => {
-        process.env['ARRAY_VAR'] = 'array-value';
+        process.env.ARRAY_VAR = 'array-value';
 
         type ArrayWithCircularRef = Array<
             string | number | ArrayWithCircularRef
@@ -255,7 +255,7 @@ describe('resolveEnvVarsInObject', () => {
     });
 
     it('should handle complex nested circular references', () => {
-        process.env['NESTED_VAR'] = 'nested-resolved';
+        process.env.NESTED_VAR = 'nested-resolved';
 
         type ObjWithRef = {
             name: string;

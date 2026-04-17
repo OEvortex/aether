@@ -52,7 +52,9 @@ function accountPath(): string {
 
 export function loadAccount(): AccountData | null {
     const p = accountPath();
-    if (!existsSync(p)) return null;
+    if (!existsSync(p)) {
+        return null;
+    }
     try {
         return JSON.parse(readFileSync(p, 'utf-8')) as AccountData;
     } catch {

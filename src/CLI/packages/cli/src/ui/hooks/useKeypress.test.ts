@@ -83,7 +83,7 @@ class MockStdin extends EventEmitter {
     // Helper to simulate the start of a paste, without the end.
     startPaste(text: string) {
         if (this.isLegacy) {
-            this.emit('data', Buffer.from('\x1B[200~' + text));
+            this.emit('data', Buffer.from(`\x1B[200~${text}`));
         } else {
             this.emit('keypress', null, { name: 'paste-start' });
             this.emit('keypress', null, { sequence: text });

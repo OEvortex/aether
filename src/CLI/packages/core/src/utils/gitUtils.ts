@@ -134,7 +134,7 @@ export const getGitRepoName = (cwd: string): string | undefined => {
                 const match = remoteUrl.match(
                     /[:/]([^/]+)\/([^/]+?)(?:\.git)?$/
                 );
-                if (match && match[1] && match[2]) {
+                if (match?.[1] && match[2]) {
                     return `${match[1]}/${match[2]}`;
                 }
             }

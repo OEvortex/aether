@@ -49,7 +49,9 @@ export async function truncateAndSaveToFile(
     let headChars = 0;
     for (let i = 0; i < Math.min(headCount, lines.length); i++) {
         const remaining = headBudget - headChars;
-        if (remaining <= 0) break;
+        if (remaining <= 0) {
+            break;
+        }
         if (lines[i].length + 1 > remaining) {
             const sliceLen = Math.max(remaining - ellipsis.length, 0);
             beginning.push(lines[i].slice(0, sliceLen) + ellipsis);
@@ -68,7 +70,9 @@ export async function truncateAndSaveToFile(
     const tailStart = Math.max(lines.length - tailCount, beginning.length);
     for (let i = lines.length - 1; i >= tailStart; i--) {
         const remaining = tailBudget - tailChars;
-        if (remaining <= 0) break;
+        if (remaining <= 0) {
+            break;
+        }
         if (lines[i].length + 1 > remaining) {
             const sliceLen = Math.max(remaining - ellipsis.length, 0);
             end.unshift(ellipsis + lines[i].slice(-sliceLen));

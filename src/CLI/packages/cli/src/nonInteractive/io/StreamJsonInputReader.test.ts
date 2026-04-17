@@ -55,7 +55,7 @@ describe('StreamJsonInputReader', () => {
             ];
 
             for (const msg of messages) {
-                input.write(JSON.stringify(msg) + '\n');
+                input.write(`${JSON.stringify(msg)}\n`);
             }
             input.end();
 
@@ -88,8 +88,8 @@ describe('StreamJsonInputReader', () => {
                 parent_tool_use_id: null
             };
 
-            input.write(JSON.stringify(message1) + '\n');
-            input.write(JSON.stringify(message2) + '\n');
+            input.write(`${JSON.stringify(message1)}\n`);
+            input.write(`${JSON.stringify(message2)}\n`);
             input.end();
 
             const messages: StreamJsonInputMessage[] = [];
@@ -117,7 +117,7 @@ describe('StreamJsonInputReader', () => {
             };
 
             input.write('\n');
-            input.write('  ' + JSON.stringify(message) + '  \n');
+            input.write(`  ${JSON.stringify(message)}  \n`);
             input.write('  \n');
             input.write('\t\n');
             input.end();
@@ -142,11 +142,10 @@ describe('StreamJsonInputReader', () => {
             },
             {
                 name: 'missing type field',
-                input:
-                    JSON.stringify({
-                        session_id: 'test-session',
-                        message: 'hello'
-                    }) + '\n',
+                input: `${JSON.stringify({
+                    session_id: 'test-session',
+                    message: 'hello'
+                })}\n`,
                 expectedError: 'Missing required "type" field'
             },
             {

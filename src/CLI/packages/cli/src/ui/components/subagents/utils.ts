@@ -28,8 +28,12 @@ export function sanitizeInput(input: string): string {
 }
 
 export function fmtDuration(ms: number): string {
-    if (ms < 1000) return `${Math.round(ms)}ms`;
-    if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+    if (ms < 1000) {
+        return `${Math.round(ms)}ms`;
+    }
+    if (ms < 60000) {
+        return `${(ms / 1000).toFixed(1)}s`;
+    }
     if (ms < 3600000) {
         const m = Math.floor(ms / 60000);
         const s = Math.floor((ms % 60000) / 1000);

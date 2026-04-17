@@ -153,7 +153,7 @@ async function fetchGitHubMarketplaceConfig(
     owner: string,
     repo: string
 ): Promise<ClaudeMarketplaceConfig | null> {
-    const token = process.env['GITHUB_TOKEN'];
+    const token = process.env.GITHUB_TOKEN;
 
     // Primary: GitHub API (works for private repos, but has rate limits)
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/.claude-plugin/marketplace.json`;
@@ -162,7 +162,7 @@ async function fetchGitHubMarketplaceConfig(
         Accept: 'application/vnd.github.v3.raw'
     };
     if (token) {
-        apiHeaders['Authorization'] = `token ${token}`;
+        apiHeaders.Authorization = `token ${token}`;
     }
 
     let content = await fetchUrl(apiUrl, apiHeaders);

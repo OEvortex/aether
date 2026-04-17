@@ -58,7 +58,9 @@ export class InteractiveSelector<T> {
             stdin.setEncoding('utf8');
 
             const onData = (chunk: string) => {
-                if (!this.isListening) return;
+                if (!this.isListening) {
+                    return;
+                }
 
                 for (const char of chunk) {
                     switch (char) {

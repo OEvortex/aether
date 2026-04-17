@@ -102,7 +102,7 @@ export class SdkMcpController extends BaseController {
 
         // Extract MCP response from control response
         const responsePayload = response.response as Record<string, unknown>;
-        const mcpResponse = responsePayload?.['mcp_response'] as JSONRPCMessage;
+        const mcpResponse = responsePayload?.mcp_response as JSONRPCMessage;
 
         if (!mcpResponse) {
             throw new Error(

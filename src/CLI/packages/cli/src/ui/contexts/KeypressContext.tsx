@@ -316,7 +316,9 @@ export function KeypressProvider({
                     S: 'f4'
                 };
                 const name = symbolToName[sym] || '';
-                if (!name) return null;
+                if (!name) {
+                    return null;
+                }
                 return {
                     key: {
                         name,
@@ -847,7 +849,9 @@ export function KeypressProvider({
                         }
                         break;
                     }
-                    if (bufferedInputHandled) return;
+                    if (bufferedInputHandled) {
+                        return;
+                    }
 
                     if (config?.getDebugMode() || debugKeystrokeLogging) {
                         const codes = Array.from(

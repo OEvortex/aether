@@ -49,8 +49,12 @@ export function useInputHistory({
     );
 
     const navigateUp = useCallback(() => {
-        if (!isActive) return false;
-        if (userMessages.length === 0) return false;
+        if (!isActive) {
+            return false;
+        }
+        if (userMessages.length === 0) {
+            return false;
+        }
 
         let nextIndex = historyIndex;
         if (historyIndex === -1) {
@@ -70,19 +74,15 @@ export function useInputHistory({
             return true;
         }
         return false;
-    }, [
-        historyIndex,
-        setHistoryIndex,
-        onChange,
-        userMessages,
-        isActive,
-        currentQuery, // Use currentQuery from props
-        setOriginalQueryBeforeNav
-    ]);
+    }, [historyIndex, onChange, userMessages, isActive, currentQuery]);
 
     const navigateDown = useCallback(() => {
-        if (!isActive) return false;
-        if (historyIndex === -1) return false; // Not currently navigating history
+        if (!isActive) {
+            return false;
+        }
+        if (historyIndex === -1) {
+            return false; // Not currently navigating history
+        }
 
         const nextIndex = historyIndex - 1;
         setHistoryIndex(nextIndex);
@@ -97,7 +97,6 @@ export function useInputHistory({
         return true;
     }, [
         historyIndex,
-        setHistoryIndex,
         originalQueryBeforeNav,
         onChange,
         userMessages,

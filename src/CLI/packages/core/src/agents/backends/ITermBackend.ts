@@ -72,7 +72,9 @@ export class ITermBackend implements Backend {
     }
 
     async init(): Promise<void> {
-        if (this.initialized) return;
+        if (this.initialized) {
+            return;
+        }
 
         await verifyITerm();
 
@@ -116,7 +118,7 @@ export class ITermBackend implements Backend {
             if (this.sessions.size === 0) {
                 // First agent: split from ITERM_SESSION_ID if present, else active session
                 const leaderSessionId =
-                    process.env['ITERM_SESSION_ID'] || undefined;
+                    process.env.ITERM_SESSION_ID || undefined;
                 sessionId = await itermSplitPane(leaderSessionId);
                 await itermRunCommand(sessionId, cmd);
             } else {
@@ -166,7 +168,9 @@ export class ITermBackend implements Backend {
 
     stopAgent(agentId: string): void {
         const session = this.sessions.get(agentId);
-        if (!session || session.status !== 'running') return;
+        if (!session || session.status !== 'running') {
+            return;
+        }
         itermCloseSession(session.sessionId).catch((e) =>
             debugLogger.error(
                 `Failed to close session for agent "${agentId}": ${e}`
@@ -199,7 +203,9 @@ export class ITermBackend implements Backend {
 
         // Close all iTerm2 sessions we created
         for (const session of this.sessions.values()) {
-            if (!session.sessionId) continue;
+            if (!session.sessionId) {
+                continue;
+            }
             try {
                 await itermCloseSession(session.sessionId);
             } catch (error) {
@@ -228,7 +234,9 @@ export class ITermBackend implements Backend {
     }
 
     async waitForAll(timeoutMs?: number): Promise<boolean> {
-        if (this.allExited()) return true;
+        if (this.allExited()) {
+            return true;
+        }
 
         return new Promise<boolean>((resolve) => {
             let timeoutHandle: NodeJS.Timeout | undefined;
@@ -236,7 +244,9 @@ export class ITermBackend implements Backend {
             const checkInterval = setInterval(() => {
                 if (this.allExited()) {
                     clearInterval(checkInterval);
-                    if (timeoutHandle) clearTimeout(timeoutHandle);
+                    if (timeoutHandle) {
+                        clearTimeout(timeoutHandle);
+                    }
                     resolve(true);
                 }
             }, EXIT_POLL_INTERVAL_MS);
@@ -266,14 +276,18 @@ export class ITermBackend implements Backend {
     }
 
     switchToNext(): void {
-        if (this.agentOrder.length <= 1) return;
+        if (this.agentOrder.length <= 1) {
+            return;
+        }
         const currentIndex = this.agentOrder.indexOf(this.activeAgentId ?? '');
         const nextIndex = (currentIndex + 1) % this.agentOrder.length;
         this.switchTo(this.agentOrder[nextIndex]!);
     }
 
     switchToPrevious(): void {
-        if (this.agentOrder.length <= 1) return;
+        if (this.agentOrder.length <= 1) {
+            return;
+        }
         const currentIndex = this.agentOrder.indexOf(this.activeAgentId ?? '');
         const prevIndex =
             (currentIndex - 1 + this.agentOrder.length) %
@@ -306,13 +320,17 @@ export class ITermBackend implements Backend {
     // ─── Input ──────────────────────────────────────────────────
 
     forwardInput(data: string): boolean {
-        if (!this.activeAgentId) return false;
+        if (!this.activeAgentId) {
+            return false;
+        }
         return this.writeToAgent(this.activeAgentId, data);
     }
 
     writeToAgent(agentId: string, data: string): boolean {
         const session = this.sessions.get(agentId);
-        if (!session || session.status !== 'running') return false;
+        if (!session || session.status !== 'running') {
+            return false;
+        }
         itermSendText(session.sessionId, data).catch((e) =>
             debugLogger.error(`Failed to send text to agent "${agentId}": ${e}`)
         );
@@ -373,22 +391,30 @@ export class ITermBackend implements Backend {
         // Write exit code to a temp file first, then atomically rename it
         // to the marker path. This prevents the polling loop from reading
         // a partially-written file.
-        const tmpMarker = shellQuote(exitMarkerPath + '.tmp');
+        const tmpMarker = shellQuote(`${exitMarkerPath}.tmp`);
         const finalMarker = shellQuote(exitMarkerPath);
         return `${mainCmd}; echo $? > ${tmpMarker} && mv ${tmpMarker} ${finalMarker}`;
     }
 
     private allExited(): boolean {
-        if (this.pendingSpawns > 0) return false;
-        if (this.sessions.size === 0) return true;
+        if (this.pendingSpawns > 0) {
+            return false;
+        }
+        if (this.sessions.size === 0) {
+            return true;
+        }
         for (const session of this.sessions.values()) {
-            if (session.status === 'running') return false;
+            if (session.status === 'running') {
+                return false;
+            }
         }
         return true;
     }
 
     private startExitPolling(): void {
-        if (this.exitPollTimer) return;
+        if (this.exitPollTimer) {
+            return;
+        }
 
         this.exitPollTimer = setInterval(() => {
             void this.pollExitStatus();
@@ -405,13 +431,15 @@ export class ITermBackend implements Backend {
 
     private async pollExitStatus(): Promise<void> {
         for (const agent of this.sessions.values()) {
-            if (agent.status !== 'running') continue;
+            if (agent.status !== 'running') {
+                continue;
+            }
 
             try {
                 const content = await fs.readFile(agent.exitMarkerPath, 'utf8');
                 const exitCode = parseInt(content.trim(), 10);
                 agent.status = 'exited';
-                agent.exitCode = isNaN(exitCode) ? 1 : exitCode;
+                agent.exitCode = Number.isNaN(exitCode) ? 1 : exitCode;
 
                 debugLogger.info(
                     `Agent "${agent.agentId}" exited with code ${agent.exitCode}`

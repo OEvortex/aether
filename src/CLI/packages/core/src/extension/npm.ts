@@ -124,7 +124,7 @@ export function resolveNpmRegistry(
  * 2. Registry-specific _authToken from .npmrc
  */
 function getNpmAuthToken(registryUrl: string): string | undefined {
-    const envToken = process.env['NPM_TOKEN'];
+    const envToken = process.env.NPM_TOKEN;
     if (envToken) {
         return envToken;
     }
@@ -186,7 +186,7 @@ function fetchNpmJson<T>(url: string, authToken?: string): Promise<T> {
         Accept: 'application/json'
     };
     if (authToken) {
-        headers['Authorization'] = `Bearer ${authToken}`;
+        headers.Authorization = `Bearer ${authToken}`;
     }
 
     const client = url.startsWith('https://') ? https : http;
@@ -246,7 +246,7 @@ function downloadNpmFile(
 ): Promise<void> {
     const headers: Record<string, string> = {};
     if (authToken) {
-        headers['Authorization'] = `Bearer ${authToken}`;
+        headers.Authorization = `Bearer ${authToken}`;
     }
 
     const client = url.startsWith('https://') ? https : http;
@@ -330,7 +330,7 @@ export async function downloadFromNpmRegistry(
             );
         }
     } else {
-        resolvedVersion = metadata['dist-tags']['latest'];
+        resolvedVersion = metadata['dist-tags'].latest;
         if (!resolvedVersion) {
             throw new Error(`No "latest" dist-tag found for package ${name}`);
         }

@@ -55,17 +55,21 @@ const getLocalePath = (
 
 // Language detection
 export function detectSystemLanguage(): SupportedLanguage {
-    const envLang = process.env['aether_cli_LANG'] || process.env['LANG'];
+    const envLang = process.env.aether_cli_LANG || process.env.LANG;
     if (envLang) {
         for (const lang of SUPPORTED_LANGUAGES) {
-            if (envLang.startsWith(lang.code)) return lang.code;
+            if (envLang.startsWith(lang.code)) {
+                return lang.code;
+            }
         }
     }
 
     try {
         const locale = Intl.DateTimeFormat().resolvedOptions().locale;
         for (const lang of SUPPORTED_LANGUAGES) {
-            if (locale.startsWith(lang.code)) return lang.code;
+            if (locale.startsWith(lang.code)) {
+                return lang.code;
+            }
         }
     } catch {
         // Fallback to default
@@ -182,7 +186,9 @@ function interpolate(
     template: string,
     params?: Record<string, string>
 ): string {
-    if (!params) return template;
+    if (!params) {
+        return template;
+    }
     return template.replace(
         /\{\{(\w+)\}\}/g,
         (match, key) => params[key] ?? match

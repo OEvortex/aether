@@ -291,7 +291,9 @@ export class Turn {
 
                 // Assuming other events are chunks with a `value` property
                 const resp = streamEvent.value as GenerateContentResponse;
-                if (!resp) continue; // Skip if there's no response body
+                if (!resp) {
+                    continue; // Skip if there's no response body
+                }
 
                 this.debugResponses.push(resp);
 

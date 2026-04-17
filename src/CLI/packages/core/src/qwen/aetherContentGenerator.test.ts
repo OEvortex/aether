@@ -46,9 +46,7 @@ vi.mock('openai', () => ({
 
 // Mock DashScope provider
 vi.mock('../core/openaiContentGenerator/provider/dashscope.js', () => ({
-    DashScopeOpenAICompatibleProvider: class {
-        constructor(_config: unknown, _cliConfig: unknown) {}
-    }
+    DashScopeOpenAICompatibleProvider: class {}
 }));
 
 // Mock ContentGenerationPipeline
@@ -188,7 +186,7 @@ vi.mock('./sharedTokenManager.js', () => ({
             }
 
             // Return mock credentials only if they're set
-            if (this.mockCredentials && this.mockCredentials.access_token) {
+            if (this.mockCredentials?.access_token) {
                 return this.mockCredentials;
             }
 

@@ -9,12 +9,10 @@ import { Box, Text } from 'ink';
 import { useEffect, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { appEvents } from './../../utils/events.js';
-import { useConfig } from '../contexts/ConfigContext.js';
 import { theme } from '../semantic-colors.js';
 import { GeminiSpinner } from './GeminiRespondingSpinner.js';
 
 export const ConfigInitDisplay = () => {
-    const config = useConfig();
     const [message, setMessage] = useState(t('Initializing...'));
 
     useEffect(() => {
@@ -41,7 +39,7 @@ export const ConfigInitDisplay = () => {
         return () => {
             appEvents.off('mcp-client-update', onChange);
         };
-    }, [config]);
+    }, []);
 
     return (
         <Box marginTop={1}>

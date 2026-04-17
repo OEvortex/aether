@@ -27,7 +27,9 @@ export function setMaxSizedBoxDebugging(value: boolean) {
 }
 
 function debugReportError(message: string, element: React.ReactNode) {
-    if (!enableDebugLog) return;
+    if (!enableDebugLog) {
+        return;
+    }
 
     if (!React.isValidElement(element)) {
         debugLogger.error(
@@ -334,7 +336,7 @@ function visitBoxRow(element: React.ReactNode): Row {
             const segment: StyledText = { text, props: parentProps ?? {} };
 
             // Check the 'wrap' property from the merged props to decide the segment type.
-            if (parentProps === undefined || parentProps['wrap'] === 'wrap') {
+            if (parentProps === undefined || parentProps.wrap === 'wrap') {
                 hasSeenWrapped = true;
                 row.segments.push(segment);
             } else {
@@ -589,7 +591,9 @@ function layoutInkElementAsStyledText(
             const words = lineText.split(/(\s+)/); // Split by whitespace
 
             words.forEach((word) => {
-                if (!word) return;
+                if (!word) {
+                    return;
+                }
                 const wordWidth = stringWidth(word);
 
                 if (

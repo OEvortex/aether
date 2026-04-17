@@ -92,7 +92,9 @@ export class AnthropicContentConverter {
 
             for (const func of actualTool.functionDeclarations) {
                 // Skip functions without name or description (required by Anthropic API)
-                if (!func.name || !func.description) continue;
+                if (!func.name || !func.description) {
+                    continue;
+                }
 
                 let inputSchema: Record<string, unknown> | undefined;
                 if (func.parametersJsonSchema) {
@@ -111,8 +113,8 @@ export class AnthropicContentConverter {
                 }
 
                 inputSchema = convertSchema(inputSchema, this.schemaCompliance);
-                if (typeof inputSchema['type'] !== 'string') {
-                    inputSchema['type'] = 'object';
+                if (typeof inputSchema.type !== 'string') {
+                    inputSchema.type = 'object';
                 }
 
                 tools.push({
@@ -142,9 +144,7 @@ export class AnthropicContentConverter {
         const parts: Part[] = [];
 
         for (const block of response.content || []) {
-            const blockType = String(
-                (block as { type?: string })['type'] || ''
-            );
+            const blockType = String((block as { type?: string }).type || '');
             if (blockType === 'text') {
                 const text =
                     typeof (block as { text?: string }).text === 'string'
@@ -256,7 +256,9 @@ export class AnthropicContentConverter {
             return;
         }
 
-        if (!this.isContentObject(content)) return;
+        if (!this.isContentObject(content)) {
+            return;
+        }
         const parts = content.parts || [];
         const role = content.role === 'model' ? 'assistant' : 'user';
         const contentBlocks: AnthropicContentBlockParam[] = [];
@@ -474,8 +476,12 @@ export class AnthropicContentConverter {
                 return (
                     content.parts
                         ?.map((part: Part) => {
-                            if (typeof part === 'string') return part;
-                            if ('text' in part) return part.text || '';
+                            if (typeof part === 'string') {
+                                return part;
+                            }
+                            if ('text' in part) {
+                                return part.text || '';
+                            }
                             return '';
                         })
                         .filter(Boolean)
@@ -498,12 +504,12 @@ export class AnthropicContentConverter {
 
         if (typeof response === 'object') {
             const responseObject = response as Record<string, unknown>;
-            const output = responseObject['output'];
+            const output = responseObject.output;
             if (typeof output === 'string') {
                 return output;
             }
 
-            const error = responseObject['error'];
+            const error = responseObject.error;
             if (typeof error === 'string') {
                 return error;
             }
@@ -530,7 +536,9 @@ export class AnthropicContentConverter {
     mapAnthropicFinishReasonToGemini(
         reason?: string | null
     ): FinishReason | undefined {
-        if (!reason) return undefined;
+        if (!reason) {
+            return undefined;
+        }
         const mapping: Record<string, FinishReason> = {
             end_turn: FinishReason.STOP,
             stop_sequence: FinishReason.STOP,
@@ -549,7 +557,7 @@ export class AnthropicContentConverter {
             content !== null &&
             'role' in content &&
             'parts' in content &&
-            Array.isArray((content as Record<string, unknown>)['parts'])
+            Array.isArray((content as Record<string, unknown>).parts)
         );
     }
 

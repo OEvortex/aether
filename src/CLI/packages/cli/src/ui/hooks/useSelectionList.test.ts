@@ -284,7 +284,9 @@ describe('useSelectionList', () => {
             );
 
             // Simulate rapid inputs with separate act blocks to allow effects to run
-            if (!activeKeypressHandler) throw new Error('Handler not active');
+            if (!activeKeypressHandler) {
+                throw new Error('Handler not active');
+            }
 
             const handler = activeKeypressHandler;
 
@@ -335,8 +337,9 @@ describe('useSelectionList', () => {
 
             // Simulate ultra-rapid inputs where all keypresses happen faster than React can re-render
             act(() => {
-                if (!activeKeypressHandler)
+                if (!activeKeypressHandler) {
                     throw new Error('Handler not active');
+                }
 
                 const handler = activeKeypressHandler;
 

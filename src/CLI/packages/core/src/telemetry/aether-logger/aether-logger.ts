@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Buffer } from 'node:buffer';
 import fs from 'node:fs';
+import * as https from 'node:https';
 import * as os from 'node:os';
 import path from 'node:path';
-import { Buffer } from 'buffer';
-import * as https from 'https';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { FixedDeque } from 'mnemonist';
 import type { Config } from '../../config/config.js';
@@ -165,8 +165,9 @@ export class AetherLogger {
     }
 
     static getInstance(config?: Config): AetherLogger | undefined {
-        if (config === undefined || !config?.getUsageStatisticsEnabled())
+        if (config === undefined || !config?.getUsageStatisticsEnabled()) {
             return undefined;
+        }
         if (!AetherLogger.instance) {
             AetherLogger.instance = new AetherLogger(config);
         }
@@ -261,7 +262,7 @@ export class AetherLogger {
         return {
             app: {
                 id: RUN_APP_ID,
-                env: process.env['DEBUG'] ? 'dev' : 'prod',
+                env: process.env.DEBUG ? 'dev' : 'prod',
                 version: version || 'unknown',
                 type: 'cli',
                 channel: this.sourceInfo || undefined
@@ -1068,7 +1069,7 @@ export class AetherLogger {
         };
 
         if (event.error && this.config?.getTelemetryLogPromptsEnabled()) {
-            properties['error'] = event.error;
+            properties.error = event.error;
         }
 
         const rumEvent = this.createActionEvent(
@@ -1083,7 +1084,9 @@ export class AetherLogger {
 
     getProxyAgent() {
         const proxyUrl = this.config?.getProxy();
-        if (!proxyUrl) return undefined;
+        if (!proxyUrl) {
+            return undefined;
+        }
         // undici which is widely used in the repo can only support http & https proxy protocol,
         // https://github.com/nodejs/undici/issues/2224
         if (proxyUrl.startsWith('http')) {

@@ -198,7 +198,7 @@ describe('useCodingPlanUpdates', () => {
             });
 
             // Confirm the update
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             // Wait for async update to complete
             await waitFor(() => {
@@ -270,7 +270,7 @@ describe('useCodingPlanUpdates', () => {
             });
 
             // Confirm the update
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             // Wait for async update to complete
             await waitFor(() => {
@@ -326,7 +326,7 @@ describe('useCodingPlanUpdates', () => {
             });
 
             // Decline the update
-            await result.current.codingPlanUpdateRequest!.onConfirm(false);
+            await result.current.codingPlanUpdateRequest?.onConfirm(false);
 
             // Should not update anything
             expect(mockSettings.setValue).not.toHaveBeenCalled();
@@ -378,7 +378,7 @@ describe('useCodingPlanUpdates', () => {
                 expect(result.current.codingPlanUpdateRequest).toBeDefined();
             });
 
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             // Wait for async update to complete
             await waitFor(() => {
@@ -392,7 +392,7 @@ describe('useCodingPlanUpdates', () => {
             );
 
             expect(modelProvidersCall).toBeDefined();
-            const updatedConfigs = modelProvidersCall![2] as Array<
+            const updatedConfigs = modelProvidersCall?.[2] as Array<
                 Record<string, unknown>
             >;
 
@@ -405,21 +405,21 @@ describe('useCodingPlanUpdates', () => {
             expect(
                 updatedConfigs.some(
                     (c: Record<string, unknown>) =>
-                        c['baseUrl'] === globalConfig.baseUrl
+                        c.baseUrl === globalConfig.baseUrl
                 )
             ).toBe(false);
 
             // Should contain the custom config
             expect(
                 updatedConfigs.some(
-                    (c: Record<string, unknown>) => c['id'] === 'custom-model'
+                    (c: Record<string, unknown>) => c.id === 'custom-model'
                 )
             ).toBe(true);
 
             // All configs should use the unified env key
             updatedConfigs.forEach((config) => {
-                if (config['envKey'] === CODING_PLAN_ENV_KEY) {
-                    expect(config['baseUrl']).toBe(chinaConfig.baseUrl);
+                if (config.envKey === CODING_PLAN_ENV_KEY) {
+                    expect(config.baseUrl).toBe(chinaConfig.baseUrl);
                 }
             });
 
@@ -464,7 +464,7 @@ describe('useCodingPlanUpdates', () => {
                 expect(result.current.codingPlanUpdateRequest).toBeDefined();
             });
 
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             // Wait for async update to complete
             await waitFor(() => {
@@ -480,12 +480,12 @@ describe('useCodingPlanUpdates', () => {
 
             // Should preserve custom config
             expect(modelProvidersCall).toBeDefined();
-            const updatedConfigs = modelProvidersCall![2] as Array<
+            const updatedConfigs = modelProvidersCall?.[2] as Array<
                 Record<string, unknown>
             >;
             expect(
                 updatedConfigs.some(
-                    (c: Record<string, unknown>) => c['id'] === 'custom-model'
+                    (c: Record<string, unknown>) => c.id === 'custom-model'
                 )
             ).toBe(true);
         });
@@ -520,7 +520,7 @@ describe('useCodingPlanUpdates', () => {
                 expect(result.current.codingPlanUpdateRequest).toBeDefined();
             });
 
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             await waitFor(() => {
                 expect(mockSettings.setValue).toHaveBeenCalled();
@@ -576,7 +576,7 @@ describe('useCodingPlanUpdates', () => {
                 expect(result.current.codingPlanUpdateRequest).toBeDefined();
             });
 
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             await waitFor(() => {
                 expect(mockSettings.setValue).toHaveBeenCalled();
@@ -626,7 +626,7 @@ describe('useCodingPlanUpdates', () => {
                 expect(result.current.codingPlanUpdateRequest).toBeDefined();
             });
 
-            await result.current.codingPlanUpdateRequest!.onConfirm(true);
+            await result.current.codingPlanUpdateRequest?.onConfirm(true);
 
             // Should show error message
             await waitFor(() => {

@@ -97,17 +97,25 @@ export function stripUnsafeCharacters(str: string): string {
     return toCodePoints(strippedVT)
         .filter((char) => {
             const code = char.codePointAt(0);
-            if (code === undefined) return false;
+            if (code === undefined) {
+                return false;
+            }
 
             // Preserve CR/LF for line handling
-            if (code === 0x0a || code === 0x0d) return true;
+            if (code === 0x0a || code === 0x0d) {
+                return true;
+            }
 
             // Remove C0 control chars (except CR/LF) that can break display
             // Examples: BELL(0x07) makes noise, BS(0x08) moves cursor, VT(0x0B), FF(0x0C)
-            if (code >= 0x00 && code <= 0x1f) return false;
+            if (code >= 0x00 && code <= 0x1f) {
+                return false;
+            }
 
             // Remove C1 control chars (0x80-0x9f) - legacy 8-bit control codes
-            if (code >= 0x80 && code <= 0x9f) return false;
+            if (code >= 0x80 && code <= 0x9f) {
+                return false;
+            }
 
             // Preserve DEL (0x7f) - it's handled functionally by applyOperations as backspace
             // and doesn't cause rendering issues when displayed
@@ -283,7 +291,7 @@ export function sanitizeSensitiveText(
         if (maxLength <= 3) {
             return result.slice(0, maxLength);
         }
-        return result.slice(0, maxLength - 3) + '...';
+        return `${result.slice(0, maxLength - 3)}...`;
     }
 
     return result;

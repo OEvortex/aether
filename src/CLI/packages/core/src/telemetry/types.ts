@@ -524,7 +524,7 @@ export class ConversationFinishedEvent {
     turnCount: number;
 
     constructor(approvalMode: ApprovalMode, turnCount: number) {
-        this['event_name'] = 'conversation_finished';
+        this.event_name = 'conversation_finished';
         this['event.timestamp'] = new Date().toISOString();
         this.approvalMode = approvalMode;
         this.turnCount = turnCount;

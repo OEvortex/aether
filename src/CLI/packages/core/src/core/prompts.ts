@@ -125,9 +125,7 @@ export function getCoreSystemPrompt(
     // The default path for the system prompt file. This can be overridden.
     let systemMdPath = path.resolve(path.join(AETHER_CONFIG_DIR, 'system.md'));
     // Resolve the environment variable to get either a path or a switch value.
-    const systemMdResolution = resolvePathFromEnv(
-        process.env['AETHER_SYSTEM_MD']
-    );
+    const systemMdResolution = resolvePathFromEnv(process.env.AETHER_SYSTEM_MD);
 
     // Proceed only if the environment variable is set and is not disabled.
     if (systemMdResolution.value && !systemMdResolution.isDisabled) {
@@ -280,8 +278,8 @@ IMPORTANT: Always use the ${ToolNames.TODO_WRITE} tool to plan and track tasks t
 
 ${(() => {
     // Determine sandbox status based on environment variables
-    const isSandboxExec = process.env['SANDBOX'] === 'sandbox-exec';
-    const isGenericSandbox = !!process.env['SANDBOX']; // Check if SANDBOX is set to any non-empty value
+    const isSandboxExec = process.env.SANDBOX === 'sandbox-exec';
+    const isGenericSandbox = !!process.env.SANDBOX; // Check if SANDBOX is set to any non-empty value
 
     if (isSandboxExec) {
         return `
@@ -333,7 +331,7 @@ Your core function is efficient and safe assistance. Balance extreme conciseness
 
     // if QWEN_WRITE_SYSTEM_MD is set (and not 0|false), write base system prompt to file
     const writeSystemMdResolution = resolvePathFromEnv(
-        process.env['QWEN_WRITE_SYSTEM_MD']
+        process.env.QWEN_WRITE_SYSTEM_MD
     );
 
     // Check if the feature is enabled. This proceeds only if the environment
@@ -806,7 +804,7 @@ To help you check their settings, I can read their contents. Which one would you
 
 function getToolCallExamples(model?: string): string {
     // Check for environment variable override first
-    const toolCallStyle = process.env['aether_cli_TOOL_CALL_STYLE'];
+    const toolCallStyle = process.env.aether_cli_TOOL_CALL_STYLE;
     if (toolCallStyle) {
         switch (toolCallStyle.toLowerCase()) {
             case 'aether-clir':

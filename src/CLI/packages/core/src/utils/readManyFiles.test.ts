@@ -283,10 +283,10 @@ describe('readManyFiles', () => {
             const dirEntry = result.files.find((f) => f.isDirectory);
 
             expect(fileEntry).toBeDefined();
-            expect(fileEntry!.filePath).toBe(file.absolutePath);
+            expect(fileEntry?.filePath).toBe(file.absolutePath);
 
             expect(dirEntry).toBeDefined();
-            expect(dirEntry!.filePath).toContain('mydir');
+            expect(dirEntry?.filePath).toContain('mydir');
         });
 
         it('should return empty files array when no files found', async () => {

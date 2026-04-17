@@ -14,16 +14,19 @@
  */
 
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, copyFileSync, mkdirSync } from 'node:fs';
+import * as fs from 'node:fs';
 import { dirname, join } from 'node:path';
+import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 
-const PACKAGES_DIR = join(rootDir, 'packages');
+const _PACKAGES_DIR = join(rootDir, 'packages');
 const WORKSPACE_PACKAGES = [
     { path: 'packages/core', name: '@aetherai/aether-core' },
+    { path: 'packages/test-utils', name: '@aetherai/aether-test-utils' },
     { path: 'packages/channels/base', name: '@aetherai/channel-base' },
     { path: 'packages/channels/telegram', name: '@aetherai/channel-telegram' },
     { path: 'packages/channels/weixin', name: '@aetherai/channel-weixin' },
@@ -45,7 +48,7 @@ function run(cmd, opts = {}) {
             cwd: opts.cwd || rootDir,
             env: { ...process.env, ...opts.env }
         });
-    } catch (err) {
+    } catch (_err) {
         if (!opts.ignoreError) {
             process.exit(1);
         }
@@ -68,7 +71,7 @@ function readPackageJson(pkgPath) {
 
 function writePackageJson(pkgPath, pkgJson) {
     const fullPath = join(rootDir, pkgPath, 'package.json');
-    writeFileSync(fullPath, JSON.stringify(pkgJson, null, 4) + '\n');
+    writeFileSync(fullPath, `${JSON.stringify(pkgJson, null, 4)}\n`);
 }
 
 function bumpVersion(pkgJson, bumpType) {
@@ -94,13 +97,15 @@ function syncVersions(bumpType) {
     log('Synchronizing versions across all packages');
 
     // Default version if no bump
-    const defaultVersion = '0.0.5';
+    const defaultVersion = '0.0.12';
 
     // First, build to get current versions
     const versions = new Map();
     for (const pkg of WORKSPACE_PACKAGES) {
         const pkgJson = readPackageJson(pkg.path);
-        if (!pkgJson) continue;
+        if (!pkgJson) {
+            continue;
+        }
 
         // If no bump type, set to default version
         if (!bumpType) {
@@ -116,7 +121,9 @@ function syncVersions(bumpType) {
     // Update cross-package dependencies to use synced versions
     for (const pkg of WORKSPACE_PACKAGES) {
         const pkgJson = readPackageJson(pkg.path);
-        if (!pkgJson) continue;
+        if (!pkgJson) {
+            continue;
+        }
 
         let changed = false;
 
@@ -127,7 +134,9 @@ function syncVersions(bumpType) {
             'peerDependencies'
         ];
         for (const depType of depTypes) {
-            if (!pkgJson[depType]) continue;
+            if (!pkgJson[depType]) {
+                continue;
+            }
             for (const [depName, depVersion] of Object.entries(
                 pkgJson[depType]
             )) {
@@ -158,13 +167,19 @@ function buildAll() {
 
 function publishPackage(pkgPath, tag, dryRun) {
     const pkgJson = readPackageJson(pkgPath);
-    if (!pkgJson) return false;
+    if (!pkgJson) {
+        return false;
+    }
 
     log(`Publishing ${pkgJson.name}@${pkgJson.version}`);
 
     const args = ['npm', 'publish'];
-    if (tag) args.push('--tag', tag);
-    if (dryRun) args.push('--dry-run');
+    if (tag) {
+        args.push('--tag', tag);
+    }
+    if (dryRun) {
+        args.push('--dry-run');
+    }
     args.push('--access', 'public');
 
     run(args.join(' '), { cwd: join(rootDir, pkgPath) });
@@ -188,10 +203,31 @@ async function main() {
     // Step 2: Build
     buildAll();
 
+    // Step 2.1: Copy bundled CLI to packages/cli/dist for publishing
+    log('Copying bundled CLI to packages/cli/dist');
+    const cliBundleSrc = join(rootDir, 'dist', 'cli.mjs');
+    const cliBundleDest = join(rootDir, 'packages', 'cli', 'dist', 'cli.mjs');
+
+    // Ensure dist directory exists
+    if (!existsSync(dirname(cliBundleDest))) {
+        mkdirSync(dirname(cliBundleDest), { recursive: true });
+    }
+
+    if (existsSync(cliBundleSrc)) {
+        copyFileSync(cliBundleSrc, cliBundleDest);
+        log(`Copied ${cliBundleSrc} to ${cliBundleDest}`);
+    } else {
+        console.error(`\n  ❌ CLI bundle not found at ${cliBundleSrc}`);
+        if (!dryRun) {
+            process.exit(1);
+        }
+    }
+
     // Step 3: Publish in dependency order (core first, cli last)
     log('Publishing packages');
     const publishOrder = [
         'packages/core',
+        'packages/test-utils',
         'packages/channels/base',
         'packages/channels/telegram',
         'packages/channels/weixin',

@@ -181,7 +181,7 @@ describe('HookAggregator', () => {
                 HookEventName.PreToolUse
             );
             expect(
-                result.finalOutput?.hookSpecificOutput?.['additionalContext']
+                result.finalOutput?.hookSpecificOutput?.additionalContext
             ).toBe('context 1\ncontext 2');
         });
 
@@ -218,7 +218,7 @@ describe('HookAggregator', () => {
                 HookEventName.PostToolUse
             );
             expect(
-                result.finalOutput?.hookSpecificOutput?.['additionalContext']
+                result.finalOutput?.hookSpecificOutput?.additionalContext
             ).toBe('ctx\nctx2');
         });
     });
@@ -497,11 +497,11 @@ describe('HookAggregator', () => {
             );
             // mergeSimple concatenates additionalContext with newlines
             expect(
-                result.finalOutput?.hookSpecificOutput?.['additionalContext']
+                result.finalOutput?.hookSpecificOutput?.additionalContext
             ).toBe('ctx1\nctx2');
             // otherField is overwritten (later value wins since it's not special-cased)
             expect(
-                result.finalOutput?.hookSpecificOutput?.['otherField']
+                result.finalOutput?.hookSpecificOutput?.otherField
             ).toBeUndefined();
         });
     });
@@ -732,7 +732,7 @@ describe('HookAggregator', () => {
                 HookEventName.SubagentStop
             );
             expect(
-                result.finalOutput?.hookSpecificOutput?.['additionalContext']
+                result.finalOutput?.hookSpecificOutput?.additionalContext
             ).toBe('context from hook 1\ncontext from hook 2');
         });
 

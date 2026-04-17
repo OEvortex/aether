@@ -253,7 +253,7 @@ describe('InProcessBackend', () => {
         // Trigger a graceful shutdown to make it complete.
         const agent = backend.getAgent('agent-1');
         expect(agent).toBeDefined();
-        await agent!.shutdown();
+        await agent?.shutdown();
 
         // Wait for the exit callback to fire
         await vi.waitFor(() => {
@@ -281,7 +281,7 @@ describe('InProcessBackend', () => {
         expect(lastCall).toBeDefined();
 
         // Second arg is the runtime context (Config)
-        const agentContext = lastCall![1] as {
+        const agentContext = lastCall?.[1] as {
             getWorkingDir: () => string;
             getTargetDir: () => string;
             getToolRegistry: () => unknown;
@@ -295,7 +295,7 @@ describe('InProcessBackend', () => {
         await backend.init();
 
         const config = createSpawnConfig('agent-1');
-        config.inProcess!.runtimeConfig.runConfig = {
+        config.inProcess?.runtimeConfig.runConfig = {
             max_turns: 5,
             max_time_minutes: 10
         };
@@ -304,22 +304,22 @@ describe('InProcessBackend', () => {
 
         const agent = backend.getAgent('agent-1');
         expect(agent).toBeDefined();
-        expect(agent!.config.maxTurnsPerMessage).toBe(5);
-        expect(agent!.config.maxTimeMinutesPerMessage).toBe(10);
+        expect(agent?.config.maxTurnsPerMessage).toBe(5);
+        expect(agent?.config.maxTimeMinutesPerMessage).toBe(10);
     });
 
     it('should default limits to undefined when runConfig omits them', async () => {
         await backend.init();
 
         const config = createSpawnConfig('agent-1');
-        config.inProcess!.runtimeConfig.runConfig = {};
+        config.inProcess?.runtimeConfig.runConfig = {};
 
         await backend.spawnAgent(config);
 
         const agent = backend.getAgent('agent-1');
         expect(agent).toBeDefined();
-        expect(agent!.config.maxTurnsPerMessage).toBeUndefined();
-        expect(agent!.config.maxTimeMinutesPerMessage).toBeUndefined();
+        expect(agent?.config.maxTurnsPerMessage).toBeUndefined();
+        expect(agent?.config.maxTimeMinutesPerMessage).toBeUndefined();
     });
 
     it('should give each agent its own cwd even when sharing a backend', async () => {
@@ -336,11 +336,11 @@ describe('InProcessBackend', () => {
         const MockAgentCore = AgentCore as unknown as ReturnType<typeof vi.fn>;
         const calls = MockAgentCore.mock.calls;
 
-        const ctx1 = calls.at(-2)![1] as {
+        const ctx1 = calls.at(-2)?.[1] as {
             getWorkingDir: () => string;
             getTargetDir: () => string;
         };
-        const ctx2 = calls.at(-1)![1] as {
+        const ctx2 = calls.at(-1)?.[1] as {
             getWorkingDir: () => string;
             getTargetDir: () => string;
         };
@@ -425,7 +425,7 @@ describe('InProcessBackend', () => {
 
             const agent = backend.getAgent('agent-1');
             expect(agent).toBeDefined();
-            expect(agent!.config.chatHistory).toEqual(chatHistory);
+            expect(agent?.config.chatHistory).toEqual(chatHistory);
         });
 
         it('should leave chatHistory undefined when not provided', async () => {
@@ -434,7 +434,7 @@ describe('InProcessBackend', () => {
 
             const agent = backend.getAgent('agent-1');
             expect(agent).toBeDefined();
-            expect(agent!.config.chatHistory).toBeUndefined();
+            expect(agent?.config.chatHistory).toBeUndefined();
         });
     });
 
@@ -486,7 +486,7 @@ describe('InProcessBackend', () => {
                 typeof vi.fn
             >;
             const lastCall = MockAgentCore.mock.calls.at(-1);
-            const agentContext = lastCall![1] as {
+            const agentContext = lastCall?.[1] as {
                 getContentGenerator: () => unknown;
                 getAuthType: () => string | undefined;
                 getModel: () => string;
@@ -529,7 +529,7 @@ describe('InProcessBackend', () => {
                 typeof vi.fn
             >;
             const lastCall = MockAgentCore.mock.calls.at(-1);
-            const agentContext = lastCall![1] as {
+            const agentContext = lastCall?.[1] as {
                 getContentGenerator: () => unknown;
             };
 
@@ -570,10 +570,10 @@ describe('InProcessBackend', () => {
             >;
             const calls = MockAgentCore.mock.calls;
 
-            const ctx1 = calls.at(-2)![1] as {
+            const ctx1 = calls.at(-2)?.[1] as {
                 getContentGenerator: () => unknown;
             };
-            const ctx2 = calls.at(-1)![1] as {
+            const ctx2 = calls.at(-1)?.[1] as {
                 getContentGenerator: () => unknown;
             };
 

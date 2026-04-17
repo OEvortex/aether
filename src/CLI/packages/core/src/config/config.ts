@@ -40,6 +40,7 @@ import {
     ExtensionManager
 } from '../extension/extensionManager.js';
 import { createHookOutput, HookSystem } from '../hooks/index.js';
+import type { DefaultHookOutput } from '../hooks/types.js';
 import {
     NotificationType,
     PermissionMode,
@@ -456,8 +457,6 @@ function normalizeConfigOutputFormat(
         case 'json':
         case OutputFormat.JSON:
             return OutputFormat.JSON;
-        case 'text':
-        case OutputFormat.TEXT:
         default:
             return OutputFormat.TEXT;
     }
@@ -835,7 +834,7 @@ export class Config {
                         }
 
                         // Execute the appropriate hook based on eventName
-                        let result;
+                        let result: DefaultHookOutput | undefined;
                         let stopHookCount: number | undefined;
                         const input = request.input || {};
                         const signal = request.signal;
@@ -843,19 +842,17 @@ export class Config {
                             case 'UserPromptSubmit':
                                 result =
                                     await hookSystem.fireUserPromptSubmitEvent(
-                                        (input['prompt'] as string) || '',
+                                        (input.prompt as string) || '',
                                         signal
                                     );
                                 break;
                             case 'Stop': {
                                 const stopResult =
                                     await hookSystem.fireStopEvent(
-                                        (input[
-                                            'stop_hook_active'
-                                        ] as boolean) || false,
-                                        (input[
-                                            'last_assistant_message'
-                                        ] as string) || '',
+                                        (input.stop_hook_active as boolean) ||
+                                            false,
+                                        (input.last_assistant_message as string) ||
+                                            '',
                                         signal
                                     );
                                 result = stopResult.finalOutput
@@ -869,13 +866,13 @@ export class Config {
                             }
                             case 'PreToolUse': {
                                 result = await hookSystem.firePreToolUseEvent(
-                                    (input['tool_name'] as string) || '',
-                                    (input['tool_input'] as Record<
+                                    (input.tool_name as string) || '',
+                                    (input.tool_input as Record<
                                         string,
                                         unknown
                                     >) || {},
-                                    (input['tool_use_id'] as string) || '',
-                                    (input['permission_mode'] as
+                                    (input.tool_use_id as string) || '',
+                                    (input.permission_mode as
                                         | PermissionMode
                                         | undefined) ?? PermissionMode.Default,
                                     signal
@@ -884,65 +881,59 @@ export class Config {
                             }
                             case 'PostToolUse':
                                 result = await hookSystem.firePostToolUseEvent(
-                                    (input['tool_name'] as string) || '',
-                                    (input['tool_input'] as Record<
+                                    (input.tool_name as string) || '',
+                                    (input.tool_input as Record<
                                         string,
                                         unknown
                                     >) || {},
-                                    (input['tool_response'] as Record<
+                                    (input.tool_response as Record<
                                         string,
                                         unknown
                                     >) || {},
-                                    (input['tool_use_id'] as string) || '',
-                                    (input[
-                                        'permission_mode'
-                                    ] as PermissionMode) || 'default',
+                                    (input.tool_use_id as string) || '',
+                                    (input.permission_mode as PermissionMode) ||
+                                        'default',
                                     signal
                                 );
                                 break;
                             case 'PostToolUseFailure':
                                 result =
                                     await hookSystem.firePostToolUseFailureEvent(
-                                        (input['tool_use_id'] as string) || '',
-                                        (input['tool_name'] as string) || '',
-                                        (input['tool_input'] as Record<
+                                        (input.tool_use_id as string) || '',
+                                        (input.tool_name as string) || '',
+                                        (input.tool_input as Record<
                                             string,
                                             unknown
                                         >) || {},
-                                        (input['error'] as string) || '',
-                                        input['is_interrupt'] as
+                                        (input.error as string) || '',
+                                        input.is_interrupt as
                                             | boolean
                                             | undefined,
-                                        (input[
-                                            'permission_mode'
-                                        ] as PermissionMode) || 'default',
+                                        (input.permission_mode as PermissionMode) ||
+                                            'default',
                                         signal
                                     );
                                 break;
                             case 'Notification':
                                 result = await hookSystem.fireNotificationEvent(
-                                    (input['message'] as string) || '',
-                                    (input[
-                                        'notification_type'
-                                    ] as NotificationType) ||
+                                    (input.message as string) || '',
+                                    (input.notification_type as NotificationType) ||
                                         'permission_prompt',
-                                    (input['title'] as string) || undefined,
+                                    (input.title as string) || undefined,
                                     signal
                                 );
                                 break;
                             case 'PermissionRequest':
                                 result =
                                     await hookSystem.firePermissionRequestEvent(
-                                        (input['tool_name'] as string) || '',
-                                        (input['tool_input'] as Record<
+                                        (input.tool_name as string) || '',
+                                        (input.tool_input as Record<
                                             string,
                                             unknown
                                         >) || {},
-                                        (input[
-                                            'permission_mode'
-                                        ] as PermissionMode) ||
+                                        (input.permission_mode as PermissionMode) ||
                                             PermissionMode.Default,
-                                        (input['permission_suggestions'] as
+                                        (input.permission_suggestions as
                                             | PermissionSuggestion[]
                                             | undefined) || undefined,
                                         signal
@@ -951,30 +942,24 @@ export class Config {
                             case 'SubagentStart':
                                 result =
                                     await hookSystem.fireSubagentStartEvent(
-                                        (input['agent_id'] as string) || '',
-                                        (input['agent_type'] as string) || '',
-                                        (input[
-                                            'permission_mode'
-                                        ] as PermissionMode) ||
+                                        (input.agent_id as string) || '',
+                                        (input.agent_type as string) || '',
+                                        (input.permission_mode as PermissionMode) ||
                                             PermissionMode.Default,
                                         signal
                                     );
                                 break;
                             case 'SubagentStop':
                                 result = await hookSystem.fireSubagentStopEvent(
-                                    (input['agent_id'] as string) || '',
-                                    (input['agent_type'] as string) || '',
-                                    (input[
-                                        'agent_transcript_path'
-                                    ] as string) || '',
-                                    (input[
-                                        'last_assistant_message'
-                                    ] as string) || '',
-                                    (input['stop_hook_active'] as boolean) ||
+                                    (input.agent_id as string) || '',
+                                    (input.agent_type as string) || '',
+                                    (input.agent_transcript_path as string) ||
+                                        '',
+                                    (input.last_assistant_message as string) ||
+                                        '',
+                                    (input.stop_hook_active as boolean) ||
                                         false,
-                                    (input[
-                                        'permission_mode'
-                                    ] as PermissionMode) ||
+                                    (input.permission_mode as PermissionMode) ||
                                         PermissionMode.Default,
                                     signal
                                 );
@@ -1319,19 +1304,19 @@ export class Config {
                 config.enableCacheControl;
 
             if ('model' in sources) {
-                this.contentGeneratorConfigSources['model'] = sources['model'];
+                this.contentGeneratorConfigSources.model = sources.model;
             }
             if ('samplingParams' in sources) {
-                this.contentGeneratorConfigSources['samplingParams'] =
-                    sources['samplingParams'];
+                this.contentGeneratorConfigSources.samplingParams =
+                    sources.samplingParams;
             }
             if ('enableCacheControl' in sources) {
-                this.contentGeneratorConfigSources['enableCacheControl'] =
-                    sources['enableCacheControl'];
+                this.contentGeneratorConfigSources.enableCacheControl =
+                    sources.enableCacheControl;
             }
             if ('contextWindowSize' in sources) {
-                this.contentGeneratorConfigSources['contextWindowSize'] =
-                    sources['contextWindowSize'];
+                this.contentGeneratorConfigSources.contextWindowSize =
+                    sources.contextWindowSize;
             }
             return;
         }
@@ -1410,7 +1395,7 @@ export class Config {
 
     isRestrictiveSandbox(): boolean {
         const sandboxConfig = this.getSandbox();
-        const seatbeltProfile = process.env['SEATBELT_PROFILE'];
+        const seatbeltProfile = process.env.SEATBELT_PROFILE;
         return (
             !!sandboxConfig &&
             sandboxConfig.command === 'sandbox-exec' &&
@@ -1507,10 +1492,14 @@ export class Config {
     getPermissionsAllow(): string[] {
         const base = this.permissionsAllow ?? [];
         const sdkAllow = [...(this.allowedTools ?? [])];
-        if (sdkAllow.length === 0) return base.length > 0 ? base : [];
+        if (sdkAllow.length === 0) {
+            return base.length > 0 ? base : [];
+        }
         const merged = [...base];
         for (const t of sdkAllow) {
-            if (t && !merged.includes(t)) merged.push(t);
+            if (t && !merged.includes(t)) {
+                merged.push(t);
+            }
         }
         return merged;
     }
@@ -1531,10 +1520,14 @@ export class Config {
     getPermissionsDeny(): string[] {
         const base = this.permissionsDeny ?? [];
         const sdkDeny = this.excludeTools ?? [];
-        if (sdkDeny.length === 0) return base.length > 0 ? base : [];
+        if (sdkDeny.length === 0) {
+            return base.length > 0 ? base : [];
+        }
         const merged = [...base];
         for (const t of sdkDeny) {
-            if (t && !merged.includes(t)) merged.push(t);
+            if (t && !merged.includes(t)) {
+                merged.push(t);
+            }
         }
         return merged;
     }
@@ -1557,7 +1550,9 @@ export class Config {
         for (const extension of extensions) {
             Object.entries(extension.config.mcpServers || {}).forEach(
                 ([key, server]) => {
-                    if (mcpServers[key]) return;
+                    if (mcpServers[key]) {
+                        return;
+                    }
                     mcpServers[key] = {
                         ...server,
                         extensionName: extension.config.name
@@ -1773,7 +1768,9 @@ export class Config {
 
     isCronEnabled(): boolean {
         // Cron is experimental and opt-in: enabled via settings or env var
-        if (process.env['AETHER_CODE_ENABLE_CRON'] === '1') return true;
+        if (process.env.AETHER_CODE_ENABLE_CRON === '1') {
+            return true;
+        }
         return this.cronEnabled;
     }
 
@@ -1947,7 +1944,9 @@ export class Config {
         for (const extension of extensions) {
             Object.entries(extension.config.mcpServers || {}).forEach(
                 ([key, server]) => {
-                    if (mcpServers[key]) return;
+                    if (mcpServers[key]) {
+                        return;
+                    }
                     mcpServers[key] = {
                         ...server,
                         extensionName: extension.config.name

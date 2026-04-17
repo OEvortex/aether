@@ -85,8 +85,9 @@ describe('Trusted Folders Loading', () => {
                 (p) => p === getTrustedFoldersPath()
             );
             (fs.readFileSync as Mock).mockImplementation((p) => {
-                if (p === getTrustedFoldersPath())
+                if (p === getTrustedFoldersPath()) {
                     return JSON.stringify(config);
+                }
                 return '{}';
             });
 
@@ -137,7 +138,9 @@ describe('Trusted Folders Loading', () => {
             '/user/folder': TrustLevel.TRUST_FOLDER
         };
         (fs.readFileSync as Mock).mockImplementation((p) => {
-            if (p === userPath) return JSON.stringify(userContent);
+            if (p === userPath) {
+                return JSON.stringify(userContent);
+            }
             return '{}';
         });
 
@@ -152,7 +155,9 @@ describe('Trusted Folders Loading', () => {
         const userPath = getTrustedFoldersPath();
         (mockFsExistsSync as Mock).mockImplementation((p) => p === userPath);
         (fs.readFileSync as Mock).mockImplementation((p) => {
-            if (p === userPath) return 'invalid json';
+            if (p === userPath) {
+                return 'invalid json';
+            }
             return '{}';
         });
 
@@ -165,14 +170,16 @@ describe('Trusted Folders Loading', () => {
 
     it('should use aether_cli_TRUSTED_FOLDERS_PATH env var if set', () => {
         const customPath = '/custom/path/to/trusted_folders.json';
-        process.env['aether_cli_TRUSTED_FOLDERS_PATH'] = customPath;
+        process.env.aether_cli_TRUSTED_FOLDERS_PATH = customPath;
 
         (mockFsExistsSync as Mock).mockImplementation((p) => p === customPath);
         const userContent = {
             '/user/folder/from/env': TrustLevel.TRUST_FOLDER
         };
         (fs.readFileSync as Mock).mockImplementation((p) => {
-            if (p === customPath) return JSON.stringify(userContent);
+            if (p === customPath) {
+                return JSON.stringify(userContent);
+            }
             return '{}';
         });
 
@@ -185,7 +192,7 @@ describe('Trusted Folders Loading', () => {
         ]);
         expect(errors).toEqual([]);
 
-        delete process.env['aether_cli_TRUSTED_FOLDERS_PATH'];
+        delete process.env.aether_cli_TRUSTED_FOLDERS_PATH;
     });
 
     it('setValue should update the user config and save it', () => {
@@ -231,7 +238,9 @@ describe('isWorkspaceTrusted', () => {
     afterEach(() => {
         vi.restoreAllMocks();
         // Clear the object
-        Object.keys(mockRules).forEach((key) => delete mockRules[key]);
+        Object.keys(mockRules).forEach((key) => {
+            delete mockRules[key];
+        });
     });
 
     it('should throw a fatal error if the config is malformed', () => {

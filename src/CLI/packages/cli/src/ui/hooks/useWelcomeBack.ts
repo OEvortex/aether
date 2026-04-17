@@ -29,7 +29,7 @@ export interface WelcomeBackActions {
 
 export function useWelcomeBack(
     config: Config,
-    submitQuery: (query: string) => void,
+    _submitQuery: (query: string) => void,
     buffer: { setText: (text: string) => void },
     settings: Settings
 ): WelcomeBackState & WelcomeBackActions {

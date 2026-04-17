@@ -18,8 +18,8 @@ const renderParameter = (
     param: Record<string, unknown>,
     isRequired: boolean
 ): React.ReactNode => {
-    const type = (param['type'] as string) || 'any';
-    const description = (param['description'] as string) || '';
+    const type = (param.type as string) || 'any';
+    const description = (param.description as string) || '';
     // const defaultValue = param['default'];
     // const enumValues = param['enum'] as string[] | undefined;
     const text = `• ${name}${isRequired ? t('required') : ''}: ${type} ${description ? `- ${description}` : ''}`;
@@ -65,8 +65,8 @@ const ParametersList: React.FC<{
  */
 const SchemaSummary: React.FC<{ schema: object }> = ({ schema }) => {
     const obj = schema as Record<string, unknown>;
-    const properties = obj['properties'] as Record<string, unknown> | undefined;
-    const required = (obj['required'] as string[]) || [];
+    const properties = obj.properties as Record<string, unknown> | undefined;
+    const required = (obj.required as string[]) || [];
 
     return (
         <Box flexDirection="column">

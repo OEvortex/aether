@@ -36,23 +36,31 @@ async function readHistoryFile(filePath: string): Promise<string[]> {
         let cur = '';
 
         for (const raw of text.split(/\r?\n/)) {
-            if (!raw.trim()) continue;
+            if (!raw.trim()) {
+                continue;
+            }
             const line = raw;
 
             const m = cur.match(/(\\+)$/);
             if (m && m[1].length % 2) {
                 // odd number of trailing '\'
-                cur = cur.slice(0, -1) + ' ' + line;
+                cur = `${cur.slice(0, -1)} ${line}`;
             } else {
-                if (cur) result.push(cur);
+                if (cur) {
+                    result.push(cur);
+                }
                 cur = line;
             }
         }
 
-        if (cur) result.push(cur);
+        if (cur) {
+            result.push(cur);
+        }
         return result;
     } catch (err) {
-        if (isNodeError(err) && err.code === 'ENOENT') return [];
+        if (isNodeError(err) && err.code === 'ENOENT') {
+            return [];
+        }
         debugLogger.error('Error reading history:', err);
         return [];
     }

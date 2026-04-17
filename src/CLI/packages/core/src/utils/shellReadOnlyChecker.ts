@@ -260,8 +260,8 @@ function evaluateGitBranchArgs(args: string[]): boolean {
 
 function evaluateGitCommand(tokens: string[]): boolean {
     let index = 1;
-    while (index < tokens.length && tokens[index]!.startsWith('-')) {
-        const flag = tokens[index]!.toLowerCase();
+    while (index < tokens.length && tokens[index]?.startsWith('-')) {
+        const flag = tokens[index]?.toLowerCase();
         if (flag === '--version' || flag === '--help') {
             return true;
         }
@@ -272,7 +272,7 @@ function evaluateGitCommand(tokens: string[]): boolean {
         return true;
     }
 
-    const subcommand = tokens[index]!.toLowerCase();
+    const subcommand = tokens[index]?.toLowerCase();
     if (!READ_ONLY_GIT_SUBCOMMANDS.has(subcommand)) {
         return false;
     }

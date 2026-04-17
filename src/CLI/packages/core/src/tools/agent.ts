@@ -221,7 +221,7 @@ assistant: "I'm going to use the ${ToolNames.AGENT} tool to launch the greeting-
                 };
             };
         };
-        if (schema.properties && schema.properties.subagent_type) {
+        if (schema.properties?.subagent_type) {
             if (subagentNames.length > 0) {
                 schema.properties.subagent_type.enum = subagentNames;
             } else {
@@ -303,7 +303,9 @@ class AgentToolInvocation extends BaseToolInvocation<AgentParams, ToolResult> {
         updates: Partial<AgentResultDisplay>,
         updateOutput?: (output: ToolResultDisplay) => void
     ): void {
-        if (!this.currentDisplay) return;
+        if (!this.currentDisplay) {
+            return;
+        }
 
         this.currentDisplay = {
             ...this.currentDisplay,
@@ -336,7 +338,7 @@ class AgentToolInvocation extends BaseToolInvocation<AgentParams, ToolResult> {
                 args: event.args,
                 description: event.description
             };
-            this.currentToolCalls!.push(newToolCall);
+            this.currentToolCalls?.push(newToolCall);
 
             this.updateDisplay(
                 {
@@ -350,10 +352,10 @@ class AgentToolInvocation extends BaseToolInvocation<AgentParams, ToolResult> {
             AgentEventType.TOOL_RESULT,
             (...args: unknown[]) => {
                 const event = args[0] as AgentToolResultEvent;
-                const toolCallIndex = this.currentToolCalls!.findIndex(
+                const toolCallIndex = this.currentToolCalls?.findIndex(
                     (call) => call.callId === event.callId
                 );
-                if (toolCallIndex >= 0) {
+                if (toolCallIndex !== undefined && toolCallIndex >= 0) {
                     this.currentToolCalls![toolCallIndex] = {
                         ...this.currentToolCalls![toolCallIndex],
                         status: event.success ? 'success' : 'failed',
@@ -414,16 +416,16 @@ class AgentToolInvocation extends BaseToolInvocation<AgentParams, ToolResult> {
             AgentEventType.TOOL_WAITING_APPROVAL,
             (...args: unknown[]) => {
                 const event = args[0] as AgentApprovalRequestEvent;
-                const idx = this.currentToolCalls!.findIndex(
+                const idx = this.currentToolCalls?.findIndex(
                     (c) => c.callId === event.callId
                 );
-                if (idx >= 0) {
+                if (idx !== undefined && idx >= 0) {
                     this.currentToolCalls![idx] = {
                         ...this.currentToolCalls![idx],
                         status: 'awaiting_approval'
                     };
                 } else {
-                    this.currentToolCalls!.push({
+                    this.currentToolCalls?.push({
                         callId: event.callId,
                         name: event.name,
                         status: 'awaiting_approval',
@@ -456,10 +458,10 @@ class AgentToolInvocation extends BaseToolInvocation<AgentParams, ToolResult> {
                             ]);
 
                         if (proceedOutcomes.has(outcome)) {
-                            const idx2 = this.currentToolCalls!.findIndex(
+                            const idx2 = this.currentToolCalls?.findIndex(
                                 (c) => c.callId === event.callId
                             );
-                            if (idx2 >= 0) {
+                            if (idx2 !== undefined && idx2 >= 0) {
                                 this.currentToolCalls![idx2] = {
                                     ...this.currentToolCalls![idx2],
                                     status: 'executing'

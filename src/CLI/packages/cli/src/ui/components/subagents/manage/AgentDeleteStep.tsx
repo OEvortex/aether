@@ -25,7 +25,9 @@ export function AgentDeleteStep({
 }: AgentDeleteStepProps) {
     useKeypress(
         async (key) => {
-            if (!selectedAgent) return;
+            if (!selectedAgent) {
+                return;
+            }
 
             if (key.name === 'y' || key.name === 'return') {
                 try {

@@ -88,7 +88,6 @@ async function addMcpServer(
                 excludeTools
             };
             break;
-        case 'stdio':
         default:
             newServer = {
                 command: commandOrUrl,
@@ -213,42 +212,39 @@ export const addCommand: CommandModule = {
                 // Handle -- separator args as server args if present
                 if (argv['--']) {
                     const existingArgs =
-                        (argv['args'] as Array<string | number>) || [];
-                    argv['args'] = [
-                        ...existingArgs,
-                        ...(argv['--'] as string[])
-                    ];
+                        (argv.args as Array<string | number>) || [];
+                    argv.args = [...existingArgs, ...(argv['--'] as string[])];
                 }
 
                 // Auto-detect transport from URL if not explicitly specified
-                if (!argv['transport']) {
-                    const commandOrUrl = argv['commandOrUrl'] as string;
+                if (!argv.transport) {
+                    const commandOrUrl = argv.commandOrUrl as string;
                     if (
                         commandOrUrl &&
                         (commandOrUrl.startsWith('http://') ||
                             commandOrUrl.startsWith('https://'))
                     ) {
-                        argv['transport'] = 'http';
+                        argv.transport = 'http';
                     } else {
-                        argv['transport'] = 'stdio';
+                        argv.transport = 'stdio';
                     }
                 }
             }),
     handler: async (argv) => {
         await addMcpServer(
-            argv['name'] as string,
-            argv['commandOrUrl'] as string,
-            argv['args'] as Array<string | number>,
+            argv.name as string,
+            argv.commandOrUrl as string,
+            argv.args as Array<string | number>,
             {
-                scope: argv['scope'] as string,
-                transport: argv['transport'] as string,
-                env: argv['env'] as string[],
-                header: argv['header'] as string[],
-                timeout: argv['timeout'] as number | undefined,
-                trust: argv['trust'] as boolean | undefined,
-                description: argv['description'] as string | undefined,
-                includeTools: argv['includeTools'] as string[] | undefined,
-                excludeTools: argv['excludeTools'] as string[] | undefined
+                scope: argv.scope as string,
+                transport: argv.transport as string,
+                env: argv.env as string[],
+                header: argv.header as string[],
+                timeout: argv.timeout as number | undefined,
+                trust: argv.trust as boolean | undefined,
+                description: argv.description as string | undefined,
+                includeTools: argv.includeTools as string[] | undefined,
+                excludeTools: argv.excludeTools as string[] | undefined
             }
         );
     }

@@ -1064,10 +1064,6 @@ class MockEditToolInvocation extends BaseToolInvocation<
     Record<string, unknown>,
     ToolResult
 > {
-    constructor(params: Record<string, unknown>) {
-        super(params);
-    }
-
     getDescription(): string {
         return 'A mock edit tool invocation';
     }
@@ -1349,7 +1345,9 @@ describe('CoreToolScheduler cancellation during executing with live output', () 
                 updateOutput?.('hello');
                 // Wait until aborted to emulate a long-running task
                 await new Promise<void>((resolve) => {
-                    if (signal.aborted) return resolve();
+                    if (signal.aborted) {
+                        return resolve();
+                    }
                     const onAbort = () => {
                         signal.removeEventListener('abort', onAbort);
                         resolve();
@@ -1567,7 +1565,7 @@ describe('CoreToolScheduler request queueing', () => {
         expect(executeFn).toHaveBeenCalledWith({ a: 1 });
 
         // Complete the first tool call.
-        resolveFirstCall!({
+        resolveFirstCall?.({
             llmContent: 'First call complete',
             returnDisplay: 'First call complete'
         });
@@ -1582,7 +1580,7 @@ describe('CoreToolScheduler request queueing', () => {
         };
         // Since the mock is shared, we need to resolve the current promise.
         // In a real scenario, a new promise would be created for the second call.
-        resolveFirstCall!(secondCallResult);
+        resolveFirstCall?.(secondCallResult);
 
         await vi.waitFor(() => {
             // Now the second tool call should have been executed.

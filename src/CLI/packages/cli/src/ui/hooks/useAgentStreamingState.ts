@@ -72,10 +72,14 @@ export function useAgentStreamingState(
     const subscribedEvents = events ?? DEFAULT_EVENTS;
 
     useEffect(() => {
-        if (!interactiveAgent) return;
+        if (!interactiveAgent) {
+            return;
+        }
         const emitter: AgentEventEmitter | undefined =
             interactiveAgent.getEventEmitter();
-        if (!emitter) return;
+        if (!emitter) {
+            return;
+        }
 
         const handler = () => forceRender();
         for (const evt of subscribedEvents) {

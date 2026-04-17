@@ -23,9 +23,9 @@
  * Usage: npx tsx packages/core/src/lsp/__e2e__/lsp-e2e-test.ts
  */
 
-import { EventEmitter } from 'events';
-import * as path from 'path';
-import { pathToFileURL } from 'url';
+import { EventEmitter } from 'node:events';
+import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { NativeLspService } from '../NativeLspService.js';
 
 /* ------------------------------------------------------------------ */
@@ -173,7 +173,9 @@ async function testLanguage(cfg: LanguageTestConfig): Promise<void> {
         let anyReady = false;
         for (const [name, s] of serverStatuses) {
             console.log(`  Server "${name}": ${s}`);
-            if (s === 'READY') anyReady = true;
+            if (s === 'READY') {
+                anyReady = true;
+            }
         }
         if (!anyReady) {
             record('startup', langName, false, 'No server reached READY');
@@ -342,7 +344,7 @@ async function testLanguage(cfg: LanguageTestConfig): Promise<void> {
                     'prepareCallHierarchy',
                     langName,
                     true,
-                    `${callItems.length} item(s): ${callItems[0]!.name}`
+                    `${callItems.length} item(s): ${callItems[0]?.name}`
                 );
 
                 try {

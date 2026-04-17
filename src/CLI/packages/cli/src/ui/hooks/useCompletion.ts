@@ -47,7 +47,9 @@ export function useCompletion(): UseCompletionReturn {
     }, []);
 
     const navigateUp = useCallback(() => {
-        if (suggestions.length === 0) return;
+        if (suggestions.length === 0) {
+            return;
+        }
 
         setActiveSuggestionIndex((prevActiveIndex) => {
             // Calculate new active index, handling wrap-around
@@ -81,7 +83,9 @@ export function useCompletion(): UseCompletionReturn {
     }, [suggestions.length]);
 
     const navigateDown = useCallback(() => {
-        if (suggestions.length === 0) return;
+        if (suggestions.length === 0) {
+            return;
+        }
 
         setActiveSuggestionIndex((prevActiveIndex) => {
             // Calculate new active index, handling wrap-around

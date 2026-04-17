@@ -115,7 +115,7 @@ export class V2ToV3Migration implements SettingsMigration {
         const s = settings as Record<string, unknown>;
 
         // Migrate if $version is 2
-        return s['$version'] === 2;
+        return s.$version === 2;
     }
 
     /**
@@ -218,7 +218,7 @@ export class V2ToV3Migration implements SettingsMigration {
         }
 
         // Step 3: Always update version to 3
-        result['$version'] = 3;
+        result.$version = 3;
 
         return { settings: result, warnings };
     }

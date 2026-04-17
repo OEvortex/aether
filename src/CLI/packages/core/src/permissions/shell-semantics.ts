@@ -108,7 +108,9 @@ function tokenize(command: string): string[] {
         }
         current += ch;
     }
-    if (current) tokens.push(current);
+    if (current) {
+        tokens.push(current);
+    }
     return tokens;
 }
 
@@ -148,17 +150,29 @@ function resolvePath(p: string, cwd: string): string {
  * opposed to a flag, shell variable, number, or script expression.
  */
 function looksLikePath(s: string): boolean {
-    if (!s) return false;
+    if (!s) {
+        return false;
+    }
     // Shell variable references
-    if (s.startsWith('$')) return false;
+    if (s.startsWith('$')) {
+        return false;
+    }
     // Flags
-    if (s.startsWith('-')) return false;
+    if (s.startsWith('-')) {
+        return false;
+    }
     // Pure integers — likely a count/size/mode argument (e.g. -n 10, chmod 755)
-    if (/^\d+$/.test(s)) return false;
+    if (/^\d+$/.test(s)) {
+        return false;
+    }
     // Script-like expressions (awk/sed programs, brace expansions)
-    if (s.includes('{') || s.includes('}')) return false;
+    if (s.includes('{') || s.includes('}')) {
+        return false;
+    }
     // URLs are handled separately by the web-fetch handlers
-    if (s.includes('://')) return false;
+    if (s.includes('://')) {
+        return false;
+    }
     return true;
 }
 
@@ -323,8 +337,9 @@ function listOps(
     flagsWithValue?: ReadonlySet<string>
 ): ShellOperation[] {
     const dirs = getPositionalArgs(args, flagsWithValue).filter(looksLikePath);
-    if (dirs.length === 0)
+    if (dirs.length === 0) {
         return [{ virtualTool: 'list_directory', filePath: cwd }];
+    }
     return dirs.map((p) => ({
         virtualTool: 'list_directory' as const,
         filePath: resolvePath(p, cwd)
@@ -783,10 +798,10 @@ const COMMANDS: Readonly<Record<string, CommandHandler>> = {
             filePath: resolvePath(p, cwd)
         }));
     },
-    egrep: (a, d) => (COMMANDS['grep'] as CommandHandler)(a, d),
-    fgrep: (a, d) => (COMMANDS['grep'] as CommandHandler)(a, d),
-    zgrep: (a, d) => (COMMANDS['grep'] as CommandHandler)(a, d),
-    bzgrep: (a, d) => (COMMANDS['grep'] as CommandHandler)(a, d),
+    egrep: (a, d) => (COMMANDS.grep as CommandHandler)(a, d),
+    fgrep: (a, d) => (COMMANDS.grep as CommandHandler)(a, d),
+    zgrep: (a, d) => (COMMANDS.grep as CommandHandler)(a, d),
+    bzgrep: (a, d) => (COMMANDS.grep as CommandHandler)(a, d),
 
     rg: (args, cwd) => {
         // ripgrep: recursive by default; first non-flag positional = pattern
@@ -982,9 +997,12 @@ const COMMANDS: Readonly<Record<string, CommandHandler>> = {
                 arg === '(' ||
                 arg === ')' ||
                 expressionKeywords.has(arg)
-            )
+            ) {
                 break;
-            if (looksLikePath(arg)) startingPoints.push(resolvePath(arg, cwd));
+            }
+            if (looksLikePath(arg)) {
+                startingPoints.push(resolvePath(arg, cwd));
+            }
         }
         if (startingPoints.length === 0) {
             return [{ virtualTool: 'list_directory', filePath: cwd }];
@@ -1091,7 +1109,9 @@ const COMMANDS: Readonly<Record<string, CommandHandler>> = {
         const positional = getPositionalArgs(args, flagsWithValue).filter(
             looksLikePath
         );
-        if (positional.length === 0) return [];
+        if (positional.length === 0) {
+            return [];
+        }
         if (positional.length === 1) {
             return [
                 {
@@ -1127,7 +1147,9 @@ const COMMANDS: Readonly<Record<string, CommandHandler>> = {
         const positional = getPositionalArgs(args, flagsWithValue).filter(
             looksLikePath
         );
-        if (positional.length < 2) return [];
+        if (positional.length < 2) {
+            return [];
+        }
         const srcs = positional.slice(0, -1);
         const dst = positional[positional.length - 1]!;
         return [
@@ -1165,7 +1187,9 @@ const COMMANDS: Readonly<Record<string, CommandHandler>> = {
         const positional = getPositionalArgs(args, flagsWithValue).filter(
             looksLikePath
         );
-        if (positional.length < 2) return [];
+        if (positional.length < 2) {
+            return [];
+        }
         const dst = positional[positional.length - 1]!;
         return [{ virtualTool: 'write_file', filePath: resolvePath(dst, cwd) }];
     },
@@ -1208,7 +1232,9 @@ const COMMANDS: Readonly<Record<string, CommandHandler>> = {
                 '--backup'
             ])
         ).filter(looksLikePath);
-        if (positional.length < 2) return [];
+        if (positional.length < 2) {
+            return [];
+        }
         const linkname = positional[positional.length - 1]!;
         return [
             { virtualTool: 'write_file', filePath: resolvePath(linkname, cwd) }
@@ -1645,10 +1671,14 @@ export function extractShellOperations(
     simpleCommand: string,
     cwd: string
 ): ShellOperation[] {
-    if (!simpleCommand.trim()) return [];
+    if (!simpleCommand.trim()) {
+        return [];
+    }
 
     const tokens = tokenize(simpleCommand);
-    if (tokens.length === 0) return [];
+    if (tokens.length === 0) {
+        return [];
+    }
 
     // Extract I/O redirections before dispatching to the command handler.
     // This mutates `tokens` in-place by removing redirect tokens.
@@ -1671,7 +1701,9 @@ export function extractShellOperations(
     }
 
     // Skip pure environment variable assignments: `FOO=bar`, `FOO=bar BAR=baz`
-    if (cmdName.includes('=')) return [];
+    if (cmdName.includes('=')) {
+        return [];
+    }
 
     const ops: ShellOperation[] = [];
 
@@ -1691,7 +1723,7 @@ export function extractShellOperations(
                 if (
                     flagsWithVal?.has(t) &&
                     startIdx < tokens.length &&
-                    !tokens[startIdx]!.startsWith('-')
+                    !tokens[startIdx]?.startsWith('-')
                 ) {
                     startIdx++;
                 }
