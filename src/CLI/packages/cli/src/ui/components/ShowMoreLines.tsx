@@ -7,34 +7,34 @@
 import { Box, Text } from 'ink';
 import { useOverflowState } from '../contexts/OverflowContext.js';
 import { useStreamingContext } from '../contexts/StreamingContext.js';
-import { StreamingState } from '../types.js';
 import { theme } from '../semantic-colors.js';
+import { StreamingState } from '../types.js';
 
 interface ShowMoreLinesProps {
-  constrainHeight: boolean;
+    constrainHeight: boolean;
 }
 
 export const ShowMoreLines = ({ constrainHeight }: ShowMoreLinesProps) => {
-  const overflowState = useOverflowState();
-  const streamingState = useStreamingContext();
+    const overflowState = useOverflowState();
+    const streamingState = useStreamingContext();
 
-  if (
-    overflowState === undefined ||
-    overflowState.overflowingIds.size === 0 ||
-    !constrainHeight ||
-    !(
-      streamingState === StreamingState.Idle ||
-      streamingState === StreamingState.WaitingForConfirmation
-    )
-  ) {
-    return null;
-  }
+    if (
+        overflowState === undefined ||
+        overflowState.overflowingIds.size === 0 ||
+        !constrainHeight ||
+        !(
+            streamingState === StreamingState.Idle ||
+            streamingState === StreamingState.WaitingForConfirmation
+        )
+    ) {
+        return null;
+    }
 
-  return (
-    <Box>
-      <Text color={theme.text.secondary} wrap="truncate">
-        Press ctrl-s to show more lines
-      </Text>
-    </Box>
-  );
+    return (
+        <Box>
+            <Text color={theme.text.secondary} wrap="truncate">
+                Press ctrl-s to show more lines
+            </Text>
+        </Box>
+    );
 };

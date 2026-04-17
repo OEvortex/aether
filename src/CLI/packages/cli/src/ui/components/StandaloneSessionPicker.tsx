@@ -4,61 +4,61 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
-import { render, Box, useApp } from 'ink';
 import { getGitBranch, SessionService } from '@aetherai/aether-core';
+import { Box, render, useApp } from 'ink';
+import { useState } from 'react';
+import { writeStdoutLine } from '../../utils/stdioHelpers.js';
 import { KeypressProvider } from '../contexts/KeypressContext.js';
 import { SessionPicker } from './SessionPicker.js';
-import { writeStdoutLine } from '../../utils/stdioHelpers.js';
 
 interface StandalonePickerScreenProps {
-  sessionService: SessionService;
-  onSelect: (sessionId: string) => void;
-  onCancel: () => void;
-  currentBranch?: string;
+    sessionService: SessionService;
+    onSelect: (sessionId: string) => void;
+    onCancel: () => void;
+    currentBranch?: string;
 }
 
 function StandalonePickerScreen({
-  sessionService,
-  onSelect,
-  onCancel,
-  currentBranch,
+    sessionService,
+    onSelect,
+    onCancel,
+    currentBranch
 }: StandalonePickerScreenProps): React.JSX.Element {
-  const { exit } = useApp();
-  const [isExiting, setIsExiting] = useState(false);
-  const handleExit = () => {
-    setIsExiting(true);
-    exit();
-  };
+    const { exit } = useApp();
+    const [isExiting, setIsExiting] = useState(false);
+    const handleExit = () => {
+        setIsExiting(true);
+        exit();
+    };
 
-  // Return empty while exiting to prevent visual glitches
-  if (isExiting) {
-    return <Box />;
-  }
+    // Return empty while exiting to prevent visual glitches
+    if (isExiting) {
+        return <Box />;
+    }
 
-  return (
-    <SessionPicker
-      sessionService={sessionService}
-      onSelect={(id) => {
-        onSelect(id);
-        handleExit();
-      }}
-      onCancel={() => {
-        onCancel();
-        handleExit();
-      }}
-      currentBranch={currentBranch}
-      centerSelection={true}
-    />
-  );
+    return (
+        <SessionPicker
+            sessionService={sessionService}
+            onSelect={(id) => {
+                onSelect(id);
+                handleExit();
+            }}
+            onCancel={() => {
+                onCancel();
+                handleExit();
+            }}
+            currentBranch={currentBranch}
+            centerSelection={true}
+        />
+    );
 }
 
 /**
  * Clears the terminal screen.
  */
 function clearScreen(): void {
-  // Move cursor to home position and clear screen
-  process.stdout.write('\x1b[2J\x1b[H');
+    // Move cursor to home position and clear screen
+    process.stdout.write('\x1b[2J\x1b[H');
 }
 
 /**
@@ -66,64 +66,66 @@ function clearScreen(): void {
  * Returns undefined if the user cancels or no sessions are available.
  */
 export async function showResumeSessionPicker(
-  cwd: string = process.cwd(),
+    cwd: string = process.cwd()
 ): Promise<string | undefined> {
-  const sessionService = new SessionService(cwd);
-  const hasSession = await sessionService.loadLastSession();
-  if (!hasSession) {
-    writeStdoutLine('No sessions found. Start a new session with `aether`.');
-    return undefined;
-  }
+    const sessionService = new SessionService(cwd);
+    const hasSession = await sessionService.loadLastSession();
+    if (!hasSession) {
+        writeStdoutLine(
+            'No sessions found. Start a new session with `aether`.'
+        );
+        return undefined;
+    }
 
-  // Clear the screen before showing the picker for a clean fullscreen experience
-  clearScreen();
+    // Clear the screen before showing the picker for a clean fullscreen experience
+    clearScreen();
 
-  // Enable raw mode for keyboard input if not already enabled
-  const wasRaw = process.stdin.isRaw;
-  if (process.stdin.isTTY && !wasRaw) {
-    process.stdin.setRawMode(true);
-  }
+    // Enable raw mode for keyboard input if not already enabled
+    const wasRaw = process.stdin.isRaw;
+    if (process.stdin.isTTY && !wasRaw) {
+        process.stdin.setRawMode(true);
+    }
 
-  return new Promise<string | undefined>((resolve) => {
-    let selectedId: string | undefined;
+    return new Promise<string | undefined>((resolve) => {
+        let selectedId: string | undefined;
 
-    const { unmount, waitUntilExit } = render(
-      <KeypressProvider
-        kittyProtocolEnabled={false}
-        pasteWorkaround={
-          process.platform === 'win32' ||
-          parseInt(process.versions.node.split('.')[0], 10) < 20
-        }
-      >
-        <StandalonePickerScreen
-          sessionService={sessionService}
-          onSelect={(id) => {
-            selectedId = id;
-          }}
-          onCancel={() => {
-            selectedId = undefined;
-          }}
-          currentBranch={getGitBranch(cwd)}
-        />
-      </KeypressProvider>,
-      {
-        exitOnCtrlC: false,
-      },
-    );
+        const { unmount, waitUntilExit } = render(
+            <KeypressProvider
+                kittyProtocolEnabled={false}
+                pasteWorkaround={
+                    process.platform === 'win32' ||
+                    parseInt(process.versions.node.split('.')[0], 10) < 20
+                }
+            >
+                <StandalonePickerScreen
+                    sessionService={sessionService}
+                    onSelect={(id) => {
+                        selectedId = id;
+                    }}
+                    onCancel={() => {
+                        selectedId = undefined;
+                    }}
+                    currentBranch={getGitBranch(cwd)}
+                />
+            </KeypressProvider>,
+            {
+                exitOnCtrlC: false
+            }
+        );
 
-    waitUntilExit().then(() => {
-      unmount();
+        waitUntilExit().then(() => {
+            unmount();
 
-      // Clear the screen after the picker closes for a clean fullscreen experience
-      clearScreen();
+            // Clear the screen after the picker closes for a clean fullscreen experience
+            clearScreen();
 
-      // Restore raw mode state only if we changed it and user cancelled
-      // (if user selected a session, main app will handle raw mode)
-      if (process.stdin.isTTY && !wasRaw && !selectedId) {
-        process.stdin.setRawMode(false);
-      }
+            // Restore raw mode state only if we changed it and user cancelled
+            // (if user selected a session, main app will handle raw mode)
+            if (process.stdin.isTTY && !wasRaw && !selectedId) {
+                process.stdin.setRawMode(false);
+            }
 
-      resolve(selectedId);
+            resolve(selectedId);
+        });
     });
-  });
 }

@@ -4,24 +4,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Mock } from 'vitest';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { memoryCommand } from './memoryCommand.js';
-import type { SlashCommand, CommandContext } from './types.js';
-import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
-import { MessageType } from '../types.js';
-import type { LoadedSettings } from '../../config/settings.js';
 import { readFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {
-  getErrorMessage,
-  loadServerHierarchicalMemory,
   AETHER_DIR,
-  setGeminiMdFilename,
   type FileDiscoveryService,
+  getErrorMessage,
   type LoadServerHierarchicalMemoryResponse,
+  loadServerHierarchicalMemory,
+  setGeminiMdFilename,
 } from '@aetherai/aether-core';
+import type { Mock } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { LoadedSettings } from '../../config/settings.js';
+import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
+import { MessageType } from '../types.js';
+import { memoryCommand } from './memoryCommand.js';
+import type { CommandContext, SlashCommand } from './types.js';
 
 vi.mock('@aetherai/aether-core', async (importOriginal) => {
   const original =

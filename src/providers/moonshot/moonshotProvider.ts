@@ -14,18 +14,18 @@ import type {
     ProvideLanguageModelChatResponseOptions
 } from 'vscode';
 import * as vscode from 'vscode';
+import type { ProviderConfig } from '../../types/sharedTypes';
 import { ApiKeyManager } from '../../utils/apiKeyManager';
 import { ConfigManager } from '../../utils/configManager';
-import { Logger } from '../../utils/logger';
-import { RateLimiter } from '../../utils/rateLimiter';
 import {
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
 import { getProviderRateLimit } from '../../utils/knownProviders';
+import { Logger } from '../../utils/logger';
+import { RateLimiter } from '../../utils/rateLimiter';
 import { GenericModelProvider } from '../common/genericModelProvider';
 import { MoonshotWizard } from './moonshotWizard';
-import type { ProviderConfig } from '../../types/sharedTypes';
 
 const CODING_PLAN_BASE_URL = 'https://api.kimi.com/coding/v1';
 const NORMAL_PLAN_BASE_URL = 'https://api.moonshot.ai/v1';

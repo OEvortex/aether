@@ -7,17 +7,17 @@
 import type { Content } from '@google/genai';
 
 export function isFunctionResponse(content: Content): boolean {
-  return (
-    content.role === 'user' &&
-    !!content.parts &&
-    content.parts.every((part) => !!part.functionResponse)
-  );
+    return (
+        content.role === 'user' &&
+        !!content.parts &&
+        content.parts.every((part) => !!part.functionResponse)
+    );
 }
 
 export function isFunctionCall(content: Content): boolean {
-  return (
-    content.role === 'model' &&
-    !!content.parts &&
-    content.parts.every((part) => !!part.functionCall)
-  );
+    return (
+        content.role === 'model' &&
+        !!content.parts &&
+        content.parts.every((part) => !!part.functionCall)
+    );
 }

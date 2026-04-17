@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type React from 'react';
+import { shortenPath, tildeifyPath } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
 import Gradient from 'ink-gradient';
-import { shortenPath, tildeifyPath } from '@aetherai/aether-core';
-import { theme } from '../semantic-colors.js';
-import { shortAsciiLogo } from './AsciiArt.js';
-import { getAsciiArtWidth, getCachedStringWidth } from '../utils/textUtils.js';
+import type React from 'react';
 import { useTerminalSize } from '../hooks/useTerminalSize.js';
+import { theme } from '../semantic-colors.js';
+import { getAsciiArtWidth, getCachedStringWidth } from '../utils/textUtils.js';
+import { shortAsciiLogo } from './AsciiArt.js';
 
 /**
  * Auth display type for the Header component.
@@ -21,7 +21,7 @@ export enum AuthDisplayType {
     AETHER_OAUTH = 'Aether OAuth',
     CODING_PLAN = 'Coding Plan',
     API_KEY = 'API Key',
-    UNKNOWN = 'Unknown',
+    UNKNOWN = 'Unknown'
 }
 
 interface HeaderProps {
@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
 
     const availableTerminalWidth = Math.max(
         0,
-        terminalWidth - containerMarginX * 2,
+        terminalWidth - containerMarginX * 2
     );
 
     // Check if we have enough space for logo + gap + minimum info panel
@@ -70,18 +70,21 @@ export const Header: React.FC<HeaderProps> = ({
     // Cap at 60 when in two-column layout (with logo)
     const maxInfoPanelWidth = 60;
     const availableInfoPanelWidth = showLogo
-        ? Math.min(availableTerminalWidth - logoWidth - logoGap, maxInfoPanelWidth)
+        ? Math.min(
+              availableTerminalWidth - logoWidth - logoGap,
+              maxInfoPanelWidth
+          )
         : availableTerminalWidth;
 
     // Calculate max path lengths (subtract padding/borders from available space)
     const maxPathLength = Math.max(
         0,
-        availableInfoPanelWidth - infoPanelChromeWidth,
+        availableInfoPanelWidth - infoPanelChromeWidth
     );
 
     const infoPanelContentWidth = Math.max(
         0,
-        availableInfoPanelWidth - infoPanelChromeWidth,
+        availableInfoPanelWidth - infoPanelChromeWidth
     );
 
     // Compose provider display
@@ -91,23 +94,26 @@ export const Header: React.FC<HeaderProps> = ({
     const showModelHint =
         infoPanelContentWidth > 0 &&
         getCachedStringWidth(authModelText + modelHintText) <=
-        infoPanelContentWidth;
+            infoPanelContentWidth;
 
     // Now shorten the path to fit the available space
     const tildeifiedPath = tildeifyPath(workingDirectory);
-    const shortenedPath = shortenPath(tildeifiedPath, Math.max(3, maxPathLength));
+    const shortenedPath = shortenPath(
+        tildeifiedPath,
+        Math.max(3, maxPathLength)
+    );
     const displayPath =
         maxPathLength <= 0
             ? ''
             : shortenedPath.length > maxPathLength
-                ? shortenedPath.slice(0, maxPathLength)
-                : shortenedPath;
+              ? shortenedPath.slice(0, maxPathLength)
+              : shortenedPath;
 
     // Use theme gradient colors if available, otherwise use text colors (excluding primary)
     const gradientColors = theme.ui.gradient || [
         theme.text.secondary,
         theme.text.link,
-        theme.text.accent,
+        theme.text.accent
     ];
 
     return (
@@ -152,7 +158,9 @@ export const Header: React.FC<HeaderProps> = ({
                 <Text>
                     <Text color={theme.text.secondary}>{authModelText}</Text>
                     {showModelHint && (
-                        <Text color={theme.text.secondary}>{modelHintText}</Text>
+                        <Text color={theme.text.secondary}>
+                            {modelHintText}
+                        </Text>
                     )}
                 </Text>
                 {/* Directory line */}

@@ -8,27 +8,27 @@ import { Text } from 'ink';
 import { theme } from '../semantic-colors.js';
 
 export const ContextUsageDisplay = ({
-  promptTokenCount,
-  terminalWidth,
-  contextWindowSize,
+    promptTokenCount,
+    terminalWidth,
+    contextWindowSize
 }: {
-  promptTokenCount: number;
-  terminalWidth: number;
-  contextWindowSize: number;
+    promptTokenCount: number;
+    terminalWidth: number;
+    contextWindowSize: number;
 }) => {
-  if (promptTokenCount === 0) {
-    return null;
-  }
+    if (promptTokenCount === 0) {
+        return null;
+    }
 
-  const percentage = promptTokenCount / contextWindowSize;
-  const percentageUsed = (percentage * 100).toFixed(1);
+    const percentage = promptTokenCount / contextWindowSize;
+    const percentageUsed = (percentage * 100).toFixed(1);
 
-  const label = terminalWidth < 100 ? '% used' : '% context used';
+    const label = terminalWidth < 100 ? '% used' : '% context used';
 
-  return (
-    <Text color={theme.text.secondary}>
-      {percentageUsed}
-      {label}
-    </Text>
-  );
+    return (
+        <Text color={theme.text.secondary}>
+            {percentageUsed}
+            {label}
+        </Text>
+    );
 };

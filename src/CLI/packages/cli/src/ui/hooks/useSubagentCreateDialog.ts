@@ -4,23 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export function useSubagentCreateDialog() {
-  const [isSubagentCreateDialogOpen, setIsSubagentCreateDialogOpen] =
-    useState(false);
+    const [isSubagentCreateDialogOpen, setIsSubagentCreateDialogOpen] =
+        useState(false);
 
-  const openSubagentCreateDialog = useCallback(() => {
-    setIsSubagentCreateDialogOpen(true);
-  }, []);
+    const openSubagentCreateDialog = useCallback(() => {
+        setIsSubagentCreateDialogOpen(true);
+    }, []);
 
-  const closeSubagentCreateDialog = useCallback(() => {
-    setIsSubagentCreateDialogOpen(false);
-  }, []);
+    const closeSubagentCreateDialog = useCallback(() => {
+        setIsSubagentCreateDialogOpen(false);
+    }, []);
 
-  return {
-    isSubagentCreateDialogOpen,
-    openSubagentCreateDialog,
-    closeSubagentCreateDialog,
-  };
+    return {
+        isSubagentCreateDialogOpen,
+        openSubagentCreateDialog,
+        closeSubagentCreateDialog
+    };
 }

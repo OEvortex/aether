@@ -12,14 +12,14 @@ import type { SubagentConfig } from './types.js';
  * These agents are embedded in the codebase and cannot be modified or deleted.
  */
 export class BuiltinAgentRegistry {
-  private static readonly BUILTIN_AGENTS: Array<
-    Omit<SubagentConfig, 'level' | 'filePath'>
-  > = [
-    {
-      name: 'general-purpose',
-      description:
-        'General-purpose agent for researching complex questions, searching for code, and executing multi-step tasks. When you are searching for a keyword or file and are not confident that you will find the right match in the first few tries use this agent to perform the search for you.',
-      systemPrompt: `You are a general-purpose agent. Given the user's message, you should use the tools available to complete the task. Do what has been asked; nothing more, nothing less. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.
+    private static readonly BUILTIN_AGENTS: Array<
+        Omit<SubagentConfig, 'level' | 'filePath'>
+    > = [
+        {
+            name: 'general-purpose',
+            description:
+                'General-purpose agent for researching complex questions, searching for code, and executing multi-step tasks. When you are searching for a keyword or file and are not confident that you will find the right match in the first few tries use this agent to perform the search for you.',
+            systemPrompt: `You are a general-purpose agent. Given the user's message, you should use the tools available to complete the task. Do what has been asked; nothing more, nothing less. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.
 
 Your strengths:
 - Searching for code, configurations, and patterns across large codebases
@@ -39,13 +39,13 @@ Guidelines:
 Notes:
 - Agent threads always have their cwd reset between bash calls, as a result please only use absolute file paths.
 - In your final response, share file paths (always absolute, never relative) that are relevant to the task. Include code snippets only when the exact text is load-bearing (e.g., a bug you found, a function signature the caller asked for) — do not recap code you merely read.
-- For clear communication with the user the assistant MUST avoid using emojis.`,
-    },
-    {
-      name: 'Explore',
-      description:
-        'Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.',
-      systemPrompt: `You are a file search specialist agent. You excel at thoroughly navigating and exploring codebases.
+- For clear communication with the user the assistant MUST avoid using emojis.`
+        },
+        {
+            name: 'Explore',
+            description:
+                'Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.',
+            systemPrompt: `You are a file search specialist agent. You excel at thoroughly navigating and exploring codebases.
 
 === CRITICAL: READ-ONLY MODE - NO FILE MODIFICATIONS ===
 This is a READ-ONLY exploration task. You are STRICTLY PROHIBITED from:
@@ -85,75 +85,75 @@ Notes:
 - Agent threads always have their cwd reset between bash calls, as a result please only use absolute file paths.
 - In your final response, share file paths (always absolute, never relative) that are relevant to the task. Include code snippets only when the exact text is load-bearing (e.g., a bug you found, a function signature the caller asked for) — do not recap code you merely read.
 - For clear communication with the user the assistant MUST avoid using emojis.`,
-      tools: [
-        ToolNames.READ_FILE,
-        ToolNames.GREP,
-        ToolNames.GLOB,
-        ToolNames.SHELL,
-        ToolNames.LS,
-        ToolNames.WEB_FETCH,
-        ToolNames.WEB_SEARCH,
-        ToolNames.TODO_WRITE,
-        ToolNames.MEMORY,
-        ToolNames.SKILL,
-        ToolNames.LSP,
-        ToolNames.ASK_USER_QUESTION,
-      ],
-    },
-  ];
+            tools: [
+                ToolNames.READ_FILE,
+                ToolNames.GREP,
+                ToolNames.GLOB,
+                ToolNames.SHELL,
+                ToolNames.LS,
+                ToolNames.WEB_FETCH,
+                ToolNames.WEB_SEARCH,
+                ToolNames.TODO_WRITE,
+                ToolNames.MEMORY,
+                ToolNames.SKILL,
+                ToolNames.LSP,
+                ToolNames.ASK_USER_QUESTION
+            ]
+        }
+    ];
 
-  /**
-   * Gets all built-in agent configurations.
-   * @returns Array of built-in subagent configurations
-   */
-  static getBuiltinAgents(): SubagentConfig[] {
-    return this.BUILTIN_AGENTS.map((agent) => ({
-      ...agent,
-      level: 'builtin' as const,
-      filePath: `<builtin:${agent.name}>`,
-      isBuiltin: true,
-    }));
-  }
-
-  /**
-   * Gets a specific built-in agent by name.
-   * @param name - Name of the built-in agent
-   * @returns Built-in agent configuration or null if not found
-   */
-  static getBuiltinAgent(name: string): SubagentConfig | null {
-    const lowerName = name.toLowerCase();
-    const agent = this.BUILTIN_AGENTS.find(
-      (a) => a.name.toLowerCase() === lowerName,
-    );
-    if (!agent) {
-      return null;
+    /**
+     * Gets all built-in agent configurations.
+     * @returns Array of built-in subagent configurations
+     */
+    static getBuiltinAgents(): SubagentConfig[] {
+        return BuiltinAgentRegistry.BUILTIN_AGENTS.map((agent) => ({
+            ...agent,
+            level: 'builtin' as const,
+            filePath: `<builtin:${agent.name}>`,
+            isBuiltin: true
+        }));
     }
 
-    return {
-      ...agent,
-      level: 'builtin' as const,
-      filePath: `<builtin:${agent.name}>`,
-      isBuiltin: true,
-    };
-  }
+    /**
+     * Gets a specific built-in agent by name.
+     * @param name - Name of the built-in agent
+     * @returns Built-in agent configuration or null if not found
+     */
+    static getBuiltinAgent(name: string): SubagentConfig | null {
+        const lowerName = name.toLowerCase();
+        const agent = BuiltinAgentRegistry.BUILTIN_AGENTS.find(
+            (a) => a.name.toLowerCase() === lowerName
+        );
+        if (!agent) {
+            return null;
+        }
 
-  /**
-   * Checks if an agent name corresponds to a built-in agent.
-   * @param name - Agent name to check
-   * @returns True if the name is a built-in agent
-   */
-  static isBuiltinAgent(name: string): boolean {
-    const lowerName = name.toLowerCase();
-    return this.BUILTIN_AGENTS.some(
-      (agent) => agent.name.toLowerCase() === lowerName,
-    );
-  }
+        return {
+            ...agent,
+            level: 'builtin' as const,
+            filePath: `<builtin:${agent.name}>`,
+            isBuiltin: true
+        };
+    }
 
-  /**
-   * Gets the names of all built-in agents.
-   * @returns Array of built-in agent names
-   */
-  static getBuiltinAgentNames(): string[] {
-    return this.BUILTIN_AGENTS.map((agent) => agent.name);
-  }
+    /**
+     * Checks if an agent name corresponds to a built-in agent.
+     * @param name - Agent name to check
+     * @returns True if the name is a built-in agent
+     */
+    static isBuiltinAgent(name: string): boolean {
+        const lowerName = name.toLowerCase();
+        return BuiltinAgentRegistry.BUILTIN_AGENTS.some(
+            (agent) => agent.name.toLowerCase() === lowerName
+        );
+    }
+
+    /**
+     * Gets the names of all built-in agents.
+     * @returns Array of built-in agent names
+     */
+    static getBuiltinAgentNames(): string[] {
+        return BuiltinAgentRegistry.BUILTIN_AGENTS.map((agent) => agent.name);
+    }
 }

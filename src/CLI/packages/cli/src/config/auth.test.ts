@@ -12,21 +12,21 @@ import * as settings from './settings.js';
 vi.mock('./settings.js', () => ({
     loadEnvironment: vi.fn(),
     loadSettings: vi.fn().mockReturnValue({
-        merged: {},
-    }),
+        merged: {}
+    })
 }));
 
 function mockSettings(merged: Record<string, unknown>) {
     vi.mocked(settings.loadSettings).mockReturnValue({
-        merged,
+        merged
     } as ReturnType<typeof settings.loadSettings>);
 }
 
 function createConfig(modelId: string) {
     return {
         getModelsConfig: vi.fn().mockReturnValue({
-            getModel: vi.fn().mockReturnValue(modelId),
-        }),
+            getModel: vi.fn().mockReturnValue(modelId)
+        })
     } as unknown as import('@aetherai/aether-core').Config;
 }
 
@@ -58,7 +58,7 @@ describe('validateAuthMethod', () => {
 
     it('falls back to settings.security.auth.apiKey for USE_OPENAI when env is missing', () => {
         mockSettings({
-            security: { auth: { apiKey: 'fallback-key' } },
+            security: { auth: { apiKey: 'fallback-key' } }
         });
         expect(validateAuthMethod(AuthType.USE_OPENAI)).toBeNull();
     });
@@ -68,10 +68,10 @@ describe('validateAuthMethod', () => {
             model: { name: 'custom-model' },
             providers: {
                 openai: {
-                    models: [{ id: 'custom-model', envKey: 'CUSTOM_API_KEY' }],
-                },
+                    models: [{ id: 'custom-model', envKey: 'CUSTOM_API_KEY' }]
+                }
             },
-            security: { auth: { apiKey: 'fallback-key' } },
+            security: { auth: { apiKey: 'fallback-key' } }
         });
 
         const result = validateAuthMethod(AuthType.USE_OPENAI);
@@ -83,9 +83,9 @@ describe('validateAuthMethod', () => {
             model: { name: 'custom-model' },
             providers: {
                 openai: {
-                    models: [{ id: 'custom-model', envKey: 'CUSTOM_API_KEY' }],
-                },
-            },
+                    models: [{ id: 'custom-model', envKey: 'CUSTOM_API_KEY' }]
+                }
+            }
         });
         process.env['CUSTOM_API_KEY'] = 'custom-key';
 
@@ -98,7 +98,7 @@ describe('validateAuthMethod', () => {
 
     it('returns an error message for an invalid auth method', () => {
         expect(validateAuthMethod('invalid-method')).toBe(
-            'Invalid auth method selected.',
+            'Invalid auth method selected.'
         );
     });
 
@@ -112,11 +112,11 @@ describe('validateAuthMethod', () => {
                         {
                             id: 'claude-3',
                             envKey: 'ANTHROPIC_API_KEY',
-                            baseUrl: 'https://api.anthropic.com',
-                        },
-                    ],
-                },
-            },
+                            baseUrl: 'https://api.anthropic.com'
+                        }
+                    ]
+                }
+            }
         });
         process.env['ANTHROPIC_API_KEY'] = 'custom-anthropic-key';
 
@@ -129,9 +129,9 @@ describe('validateAuthMethod', () => {
             providers: {
                 anthropic: {
                     sdkMode: 'anthropic',
-                    models: [{ id: 'claude-3', envKey: 'ANTHROPIC_API_KEY' }],
-                },
-            },
+                    models: [{ id: 'claude-3', envKey: 'ANTHROPIC_API_KEY' }]
+                }
+            }
         });
         process.env['ANTHROPIC_API_KEY'] = 'custom-key';
         process.env['ANTHROPIC_BASE_URL'] = 'https://example.com';
@@ -142,7 +142,7 @@ describe('validateAuthMethod', () => {
 
     it('returns null for USE_ANTHROPIC when ANTHROPIC_BASE_URL is set and no provider model exists', () => {
         mockSettings({
-            model: { name: 'claude-3' },
+            model: { name: 'claude-3' }
         });
         process.env['ANTHROPIC_API_KEY'] = 'custom-key';
         process.env['ANTHROPIC_BASE_URL'] = 'https://env-base-url';
@@ -164,10 +164,10 @@ describe('validateAuthMethod', () => {
                 openai: {
                     models: [
                         { id: 'settings-model', envKey: 'SETTINGS_API_KEY' },
-                        { id: 'cli-model', envKey: 'CLI_API_KEY' },
-                    ],
-                },
-            },
+                        { id: 'cli-model', envKey: 'CLI_API_KEY' }
+                    ]
+                }
+            }
         });
 
         const config = createConfig('cli-model');

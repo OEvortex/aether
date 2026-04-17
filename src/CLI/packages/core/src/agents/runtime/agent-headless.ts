@@ -15,27 +15,27 @@
  */
 
 import type { Config } from '../../config/config.js';
+import { DEFAULT_AETHER_MODEL } from '../../config/models.js';
+import { logSubagentExecution } from '../../telemetry/loggers.js';
+import { SubagentExecutionEvent } from '../../telemetry/types.js';
 import { createDebugLogger } from '../../utils/debugLogger.js';
+import { AgentCore } from './agent-core.js';
 import type {
-  AgentEventEmitter,
-  AgentStartEvent,
-  AgentErrorEvent,
-  AgentFinishEvent,
-  AgentHooks,
+    AgentErrorEvent,
+    AgentEventEmitter,
+    AgentFinishEvent,
+    AgentHooks,
+    AgentStartEvent
 } from './agent-events.js';
 import { AgentEventType } from './agent-events.js';
 import type { AgentStatsSummary } from './agent-statistics.js';
 import type {
-  PromptConfig,
-  ModelConfig,
-  RunConfig,
-  ToolConfig,
+    ModelConfig,
+    PromptConfig,
+    RunConfig,
+    ToolConfig
 } from './agent-types.js';
 import { AgentTerminateMode } from './agent-types.js';
-import { logSubagentExecution } from '../../telemetry/loggers.js';
-import { SubagentExecutionEvent } from '../../telemetry/types.js';
-import { AgentCore } from './agent-core.js';
-import { DEFAULT_AETHER_MODEL } from '../../config/models.js';
 
 const debugLogger = createDebugLogger('SUBAGENT');
 
@@ -48,36 +48,36 @@ const debugLogger = createDebugLogger('SUBAGENT');
  * during its execution.
  */
 export class ContextState {
-  private state: Record<string, unknown> = {};
+    private state: Record<string, unknown> = {};
 
-  /**
-   * Retrieves a value from the context state.
-   *
-   * @param key - The key of the value to retrieve.
-   * @returns The value associated with the key, or undefined if the key is not found.
-   */
-  get(key: string): unknown {
-    return this.state[key];
-  }
+    /**
+     * Retrieves a value from the context state.
+     *
+     * @param key - The key of the value to retrieve.
+     * @returns The value associated with the key, or undefined if the key is not found.
+     */
+    get(key: string): unknown {
+        return this.state[key];
+    }
 
-  /**
-   * Sets a value in the context state.
-   *
-   * @param key - The key to set the value under.
-   * @param value - The value to set.
-   */
-  set(key: string, value: unknown): void {
-    this.state[key] = value;
-  }
+    /**
+     * Sets a value in the context state.
+     *
+     * @param key - The key to set the value under.
+     * @param value - The value to set.
+     */
+    set(key: string, value: unknown): void {
+        this.state[key] = value;
+    }
 
-  /**
-   * Retrieves all keys in the context state.
-   *
-   * @returns An array of all keys in the context state.
-   */
-  get_keys(): string[] {
-    return Object.keys(this.state);
-  }
+    /**
+     * Retrieves all keys in the context state.
+     *
+     * @returns An array of all keys in the context state.
+     */
+    get_keys(): string[] {
+        return Object.keys(this.state);
+    }
 }
 
 /**
@@ -92,34 +92,34 @@ export class ContextState {
  * @throws {Error} if any placeholder key is not found in the context.
  */
 export function templateString(
-  template: string,
-  context: ContextState,
+    template: string,
+    context: ContextState
 ): string {
-  const placeholderRegex = /\$\{(\w+)\}/g;
+    const placeholderRegex = /\$\{(\w+)\}/g;
 
-  // First, find all unique keys required by the template.
-  const requiredKeys = new Set(
-    Array.from(template.matchAll(placeholderRegex), (match) => match[1]),
-  );
-
-  // Check if all required keys exist in the context.
-  const contextKeys = new Set(context.get_keys());
-  const missingKeys = Array.from(requiredKeys).filter(
-    (key) => !contextKeys.has(key),
-  );
-
-  if (missingKeys.length > 0) {
-    throw new Error(
-      `Missing context values for the following keys: ${missingKeys.join(
-        ', ',
-      )}`,
+    // First, find all unique keys required by the template.
+    const requiredKeys = new Set(
+        Array.from(template.matchAll(placeholderRegex), (match) => match[1])
     );
-  }
 
-  // Perform the replacement using a replacer function.
-  return template.replace(placeholderRegex, (_match, key) =>
-    String(context.get(key)),
-  );
+    // Check if all required keys exist in the context.
+    const contextKeys = new Set(context.get_keys());
+    const missingKeys = Array.from(requiredKeys).filter(
+        (key) => !contextKeys.has(key)
+    );
+
+    if (missingKeys.length > 0) {
+        throw new Error(
+            `Missing context values for the following keys: ${missingKeys.join(
+                ', '
+            )}`
+        );
+    }
+
+    // Perform the replacement using a replacer function.
+    return template.replace(placeholderRegex, (_match, key) =>
+        String(context.get(key))
+    );
 }
 
 // ─── AgentHeadless ──────────────────────────────────────────
@@ -133,228 +133,234 @@ export function templateString(
  * Lifecycle: Born → execute() → die.
  */
 export class AgentHeadless {
-  private readonly core: AgentCore;
-  private finalText: string = '';
-  private terminateMode: AgentTerminateMode = AgentTerminateMode.ERROR;
+    private readonly core: AgentCore;
+    private finalText: string = '';
+    private terminateMode: AgentTerminateMode = AgentTerminateMode.ERROR;
 
-  private constructor(core: AgentCore) {
-    this.core = core;
-  }
-
-  /**
-   * Creates a new AgentHeadless instance.
-   *
-   * @param name - The name for the subagent, used for logging and identification.
-   * @param runtimeContext - The shared runtime configuration and services.
-   * @param promptConfig - Configuration for the subagent's prompt and behavior.
-   * @param modelConfig - Configuration for the generative model parameters.
-   * @param runConfig - Configuration for the subagent's execution environment.
-   * @param toolConfig - Optional configuration for tools available to the subagent.
-   * @param eventEmitter - Optional event emitter for streaming events to UI.
-   * @param hooks - Optional lifecycle hooks.
-   */
-  static async create(
-    name: string,
-    runtimeContext: Config,
-    promptConfig: PromptConfig,
-    modelConfig: ModelConfig,
-    runConfig: RunConfig,
-    toolConfig?: ToolConfig,
-    eventEmitter?: AgentEventEmitter,
-    hooks?: AgentHooks,
-  ): Promise<AgentHeadless> {
-    const core = new AgentCore(
-      name,
-      runtimeContext,
-      promptConfig,
-      modelConfig,
-      runConfig,
-      toolConfig,
-      eventEmitter,
-      hooks,
-    );
-    return new AgentHeadless(core);
-  }
-
-  /**
-   * Executes the task in headless mode.
-   *
-   * This method orchestrates the subagent's execution lifecycle:
-   * 1. Creates a chat session
-   * 2. Prepares tools
-   * 3. Runs the reasoning loop until completion/termination
-   * 4. Emits start/finish/error events
-   * 5. Records telemetry
-   *
-   * @param context - The current context state containing variables for prompt templating.
-   * @param externalSignal - Optional abort signal for external cancellation.
-   */
-  async execute(
-    context: ContextState,
-    externalSignal?: AbortSignal,
-  ): Promise<void> {
-    const chat = await this.core.createChat(context);
-
-    if (!chat) {
-      this.terminateMode = AgentTerminateMode.ERROR;
-      return;
+    private constructor(core: AgentCore) {
+        this.core = core;
     }
 
-    // Set up abort signal propagation
-    const abortController = new AbortController();
-    const onExternalAbort = () => {
-      abortController.abort();
-    };
-    if (externalSignal) {
-      externalSignal.addEventListener('abort', onExternalAbort);
+    /**
+     * Creates a new AgentHeadless instance.
+     *
+     * @param name - The name for the subagent, used for logging and identification.
+     * @param runtimeContext - The shared runtime configuration and services.
+     * @param promptConfig - Configuration for the subagent's prompt and behavior.
+     * @param modelConfig - Configuration for the generative model parameters.
+     * @param runConfig - Configuration for the subagent's execution environment.
+     * @param toolConfig - Optional configuration for tools available to the subagent.
+     * @param eventEmitter - Optional event emitter for streaming events to UI.
+     * @param hooks - Optional lifecycle hooks.
+     */
+    static async create(
+        name: string,
+        runtimeContext: Config,
+        promptConfig: PromptConfig,
+        modelConfig: ModelConfig,
+        runConfig: RunConfig,
+        toolConfig?: ToolConfig,
+        eventEmitter?: AgentEventEmitter,
+        hooks?: AgentHooks
+    ): Promise<AgentHeadless> {
+        const core = new AgentCore(
+            name,
+            runtimeContext,
+            promptConfig,
+            modelConfig,
+            runConfig,
+            toolConfig,
+            eventEmitter,
+            hooks
+        );
+        return new AgentHeadless(core);
     }
-    if (externalSignal?.aborted) {
-      abortController.abort();
+
+    /**
+     * Executes the task in headless mode.
+     *
+     * This method orchestrates the subagent's execution lifecycle:
+     * 1. Creates a chat session
+     * 2. Prepares tools
+     * 3. Runs the reasoning loop until completion/termination
+     * 4. Emits start/finish/error events
+     * 5. Records telemetry
+     *
+     * @param context - The current context state containing variables for prompt templating.
+     * @param externalSignal - Optional abort signal for external cancellation.
+     */
+    async execute(
+        context: ContextState,
+        externalSignal?: AbortSignal
+    ): Promise<void> {
+        const chat = await this.core.createChat(context);
+
+        if (!chat) {
+            this.terminateMode = AgentTerminateMode.ERROR;
+            return;
+        }
+
+        // Set up abort signal propagation
+        const abortController = new AbortController();
+        const onExternalAbort = () => {
+            abortController.abort();
+        };
+        if (externalSignal) {
+            externalSignal.addEventListener('abort', onExternalAbort);
+        }
+        if (externalSignal?.aborted) {
+            abortController.abort();
+        }
+
+        const toolsList = this.core.prepareTools();
+
+        const initialTaskText = String(
+            (context.get('task_prompt') as string) ?? 'Get Started!'
+        );
+        const initialMessages = [
+            { role: 'user' as const, parts: [{ text: initialTaskText }] }
+        ];
+
+        const startTime = Date.now();
+        this.core.executionStats.startTimeMs = startTime;
+        this.core.stats.start(startTime);
+
+        try {
+            // Emit start event
+            this.core.eventEmitter?.emit(AgentEventType.START, {
+                subagentId: this.core.subagentId,
+                name: this.core.name,
+                model:
+                    this.core.modelConfig.model ||
+                    this.core.runtimeContext.getModel() ||
+                    DEFAULT_AETHER_MODEL,
+                tools: (this.core.toolConfig?.tools || ['*']).map((t) =>
+                    typeof t === 'string' ? t : t.name
+                ),
+                timestamp: Date.now()
+            } as AgentStartEvent);
+
+            // Log telemetry for subagent start
+            const startEvent = new SubagentExecutionEvent(
+                this.core.name,
+                'started'
+            );
+            logSubagentExecution(this.core.runtimeContext, startEvent);
+
+            // Delegate to AgentCore's reasoning loop
+            const result = await this.core.runReasoningLoop(
+                chat,
+                initialMessages,
+                toolsList,
+                abortController,
+                {
+                    maxTurns: this.core.runConfig.max_turns,
+                    maxTimeMinutes: this.core.runConfig.max_time_minutes,
+                    startTimeMs: startTime
+                }
+            );
+
+            this.finalText = result.text;
+            this.terminateMode =
+                result.terminateMode ?? AgentTerminateMode.GOAL;
+        } catch (error) {
+            debugLogger.error('Error during subagent execution:', error);
+            this.terminateMode = AgentTerminateMode.ERROR;
+            this.core.eventEmitter?.emit(AgentEventType.ERROR, {
+                subagentId: this.core.subagentId,
+                error: error instanceof Error ? error.message : String(error),
+                timestamp: Date.now()
+            } as AgentErrorEvent);
+
+            throw error;
+        } finally {
+            if (externalSignal) {
+                externalSignal.removeEventListener('abort', onExternalAbort);
+            }
+            this.core.executionStats.totalDurationMs = Date.now() - startTime;
+            const summary = this.core.stats.getSummary(Date.now());
+            this.core.eventEmitter?.emit(AgentEventType.FINISH, {
+                subagentId: this.core.subagentId,
+                terminateReason: this.terminateMode,
+                timestamp: Date.now(),
+                rounds: summary.rounds,
+                totalDurationMs: summary.totalDurationMs,
+                totalToolCalls: summary.totalToolCalls,
+                successfulToolCalls: summary.successfulToolCalls,
+                failedToolCalls: summary.failedToolCalls,
+                inputTokens: summary.inputTokens,
+                outputTokens: summary.outputTokens,
+                totalTokens: summary.totalTokens
+            } as AgentFinishEvent);
+
+            const completionEvent = new SubagentExecutionEvent(
+                this.core.name,
+                this.terminateMode === AgentTerminateMode.GOAL
+                    ? 'completed'
+                    : 'failed',
+                {
+                    terminate_reason: this.terminateMode,
+                    result: this.finalText,
+                    execution_summary: this.core.stats.formatCompact(
+                        'Subagent execution completed'
+                    )
+                }
+            );
+            logSubagentExecution(this.core.runtimeContext, completionEvent);
+
+            await this.core.hooks?.onStop?.({
+                subagentId: this.core.subagentId,
+                name: this.core.name,
+                terminateReason: this.terminateMode,
+                summary: summary as unknown as Record<string, unknown>,
+                timestamp: Date.now()
+            });
+        }
     }
 
-    const toolsList = this.core.prepareTools();
+    // ─── Accessors ─────────────────────────────────────────────
 
-    const initialTaskText = String(
-      (context.get('task_prompt') as string) ?? 'Get Started!',
-    );
-    const initialMessages = [
-      { role: 'user' as const, parts: [{ text: initialTaskText }] },
-    ];
-
-    const startTime = Date.now();
-    this.core.executionStats.startTimeMs = startTime;
-    this.core.stats.start(startTime);
-
-    try {
-      // Emit start event
-      this.core.eventEmitter?.emit(AgentEventType.START, {
-        subagentId: this.core.subagentId,
-        name: this.core.name,
-        model:
-          this.core.modelConfig.model ||
-          this.core.runtimeContext.getModel() ||
-          DEFAULT_AETHER_MODEL,
-        tools: (this.core.toolConfig?.tools || ['*']).map((t) =>
-          typeof t === 'string' ? t : t.name,
-        ),
-        timestamp: Date.now(),
-      } as AgentStartEvent);
-
-      // Log telemetry for subagent start
-      const startEvent = new SubagentExecutionEvent(this.core.name, 'started');
-      logSubagentExecution(this.core.runtimeContext, startEvent);
-
-      // Delegate to AgentCore's reasoning loop
-      const result = await this.core.runReasoningLoop(
-        chat,
-        initialMessages,
-        toolsList,
-        abortController,
-        {
-          maxTurns: this.core.runConfig.max_turns,
-          maxTimeMinutes: this.core.runConfig.max_time_minutes,
-          startTimeMs: startTime,
-        },
-      );
-
-      this.finalText = result.text;
-      this.terminateMode = result.terminateMode ?? AgentTerminateMode.GOAL;
-    } catch (error) {
-      debugLogger.error('Error during subagent execution:', error);
-      this.terminateMode = AgentTerminateMode.ERROR;
-      this.core.eventEmitter?.emit(AgentEventType.ERROR, {
-        subagentId: this.core.subagentId,
-        error: error instanceof Error ? error.message : String(error),
-        timestamp: Date.now(),
-      } as AgentErrorEvent);
-
-      throw error;
-    } finally {
-      if (externalSignal) {
-        externalSignal.removeEventListener('abort', onExternalAbort);
-      }
-      this.core.executionStats.totalDurationMs = Date.now() - startTime;
-      const summary = this.core.stats.getSummary(Date.now());
-      this.core.eventEmitter?.emit(AgentEventType.FINISH, {
-        subagentId: this.core.subagentId,
-        terminateReason: this.terminateMode,
-        timestamp: Date.now(),
-        rounds: summary.rounds,
-        totalDurationMs: summary.totalDurationMs,
-        totalToolCalls: summary.totalToolCalls,
-        successfulToolCalls: summary.successfulToolCalls,
-        failedToolCalls: summary.failedToolCalls,
-        inputTokens: summary.inputTokens,
-        outputTokens: summary.outputTokens,
-        totalTokens: summary.totalTokens,
-      } as AgentFinishEvent);
-
-      const completionEvent = new SubagentExecutionEvent(
-        this.core.name,
-        this.terminateMode === AgentTerminateMode.GOAL ? 'completed' : 'failed',
-        {
-          terminate_reason: this.terminateMode,
-          result: this.finalText,
-          execution_summary: this.core.stats.formatCompact(
-            'Subagent execution completed',
-          ),
-        },
-      );
-      logSubagentExecution(this.core.runtimeContext, completionEvent);
-
-      await this.core.hooks?.onStop?.({
-        subagentId: this.core.subagentId,
-        name: this.core.name,
-        terminateReason: this.terminateMode,
-        summary: summary as unknown as Record<string, unknown>,
-        timestamp: Date.now(),
-      });
+    /**
+     * Provides access to the underlying AgentCore for advanced use cases.
+     * Used by AgentInteractive and InProcessBackend.
+     */
+    getCore(): AgentCore {
+        return this.core;
     }
-  }
 
-  // ─── Accessors ─────────────────────────────────────────────
+    get executionStats() {
+        return this.core.executionStats;
+    }
 
-  /**
-   * Provides access to the underlying AgentCore for advanced use cases.
-   * Used by AgentInteractive and InProcessBackend.
-   */
-  getCore(): AgentCore {
-    return this.core;
-  }
+    set executionStats(value) {
+        this.core.executionStats = value;
+    }
 
-  get executionStats() {
-    return this.core.executionStats;
-  }
+    getEventEmitter() {
+        return this.core.getEventEmitter();
+    }
 
-  set executionStats(value) {
-    this.core.executionStats = value;
-  }
+    getStatistics() {
+        return this.core.getStatistics();
+    }
 
-  getEventEmitter() {
-    return this.core.getEventEmitter();
-  }
+    getExecutionSummary(): AgentStatsSummary {
+        return this.core.getExecutionSummary();
+    }
 
-  getStatistics() {
-    return this.core.getStatistics();
-  }
+    getFinalText(): string {
+        return this.finalText;
+    }
 
-  getExecutionSummary(): AgentStatsSummary {
-    return this.core.getExecutionSummary();
-  }
+    getTerminateMode(): AgentTerminateMode {
+        return this.terminateMode;
+    }
 
-  getFinalText(): string {
-    return this.finalText;
-  }
+    get name(): string {
+        return this.core.name;
+    }
 
-  getTerminateMode(): AgentTerminateMode {
-    return this.terminateMode;
-  }
-
-  get name(): string {
-    return this.core.name;
-  }
-
-  get runtimeContext(): Config {
-    return this.core.runtimeContext;
-  }
+    get runtimeContext(): Config {
+        return this.core.runtimeContext;
+    }
 }

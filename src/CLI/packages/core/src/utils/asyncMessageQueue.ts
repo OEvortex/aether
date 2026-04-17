@@ -20,35 +20,35 @@
  * - `drain()` signals that no more items will be enqueued.
  */
 export class AsyncMessageQueue<T> {
-  private items: T[] = [];
-  private drained = false;
+    private items: T[] = [];
+    private drained = false;
 
-  /** Add an item to the queue. Dropped silently after drain. */
-  enqueue(item: T): void {
-    if (this.drained) return;
-    this.items.push(item);
-  }
-
-  /** Remove and return the next item, or null if empty. */
-  dequeue(): T | null {
-    if (this.items.length > 0) {
-      return this.items.shift()!;
+    /** Add an item to the queue. Dropped silently after drain. */
+    enqueue(item: T): void {
+        if (this.drained) return;
+        this.items.push(item);
     }
-    return null;
-  }
 
-  /** Signal that no more items will be enqueued. */
-  drain(): void {
-    this.drained = true;
-  }
+    /** Remove and return the next item, or null if empty. */
+    dequeue(): T | null {
+        if (this.items.length > 0) {
+            return this.items.shift()!;
+        }
+        return null;
+    }
 
-  /** Number of items currently in the queue. */
-  get size(): number {
-    return this.items.length;
-  }
+    /** Signal that no more items will be enqueued. */
+    drain(): void {
+        this.drained = true;
+    }
 
-  /** Whether `drain()` has been called. */
-  get isDrained(): boolean {
-    return this.drained;
-  }
+    /** Number of items currently in the queue. */
+    get size(): number {
+        return this.items.length;
+    }
+
+    /** Whether `drain()` has been called. */
+    get isDrained(): boolean {
+        return this.drained;
+    }
 }

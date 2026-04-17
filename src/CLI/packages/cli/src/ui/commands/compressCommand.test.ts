@@ -5,130 +5,130 @@
  */
 
 import {
-  CompressionStatus,
-  type ChatCompressionInfo,
-  type GeminiClient,
+    type ChatCompressionInfo,
+    CompressionStatus,
+    type GeminiClient
 } from '@aetherai/aether-core';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { compressCommand } from './compressCommand.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
 import { MessageType } from '../types.js';
+import { compressCommand } from './compressCommand.js';
 
 describe('compressCommand', () => {
-  let context: ReturnType<typeof createMockCommandContext>;
-  let mockTryCompressChat: ReturnType<typeof vi.fn>;
+    let context: ReturnType<typeof createMockCommandContext>;
+    let mockTryCompressChat: ReturnType<typeof vi.fn>;
 
-  beforeEach(() => {
-    mockTryCompressChat = vi.fn();
-    context = createMockCommandContext({
-      services: {
-        config: {
-          getGeminiClient: () =>
-            ({
-              tryCompressChat: mockTryCompressChat,
-            }) as unknown as GeminiClient,
-        },
-      },
-    });
-  });
-
-  it('should do nothing if a compression is already pending', async () => {
-    context.ui.pendingItem = {
-      type: MessageType.COMPRESSION,
-      compression: {
-        isPending: true,
-        originalTokenCount: null,
-        newTokenCount: null,
-        compressionStatus: null,
-      },
-    };
-    await compressCommand.action!(context, '');
-    expect(context.ui.addItem).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: MessageType.ERROR,
-        text: 'Already compressing, wait for previous request to complete',
-      }),
-      expect.any(Number),
-    );
-    expect(context.ui.setPendingItem).not.toHaveBeenCalled();
-    expect(mockTryCompressChat).not.toHaveBeenCalled();
-  });
-
-  it('should set pending item, call tryCompressChat, and add result on success', async () => {
-    const compressedResult: ChatCompressionInfo = {
-      originalTokenCount: 200,
-      compressionStatus: CompressionStatus.COMPRESSED,
-      newTokenCount: 100,
-    };
-    mockTryCompressChat.mockResolvedValue(compressedResult);
-
-    await compressCommand.action!(context, '');
-
-    expect(context.ui.setPendingItem).toHaveBeenNthCalledWith(1, {
-      type: MessageType.COMPRESSION,
-      compression: {
-        isPending: true,
-        compressionStatus: null,
-        originalTokenCount: null,
-        newTokenCount: null,
-      },
+    beforeEach(() => {
+        mockTryCompressChat = vi.fn();
+        context = createMockCommandContext({
+            services: {
+                config: {
+                    getGeminiClient: () =>
+                        ({
+                            tryCompressChat: mockTryCompressChat
+                        }) as unknown as GeminiClient
+                }
+            }
+        });
     });
 
-    expect(mockTryCompressChat).toHaveBeenCalledWith(
-      expect.stringMatching(/^compress-\d+$/),
-      true,
-    );
+    it('should do nothing if a compression is already pending', async () => {
+        context.ui.pendingItem = {
+            type: MessageType.COMPRESSION,
+            compression: {
+                isPending: true,
+                originalTokenCount: null,
+                newTokenCount: null,
+                compressionStatus: null
+            }
+        };
+        await compressCommand.action!(context, '');
+        expect(context.ui.addItem).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: MessageType.ERROR,
+                text: 'Already compressing, wait for previous request to complete'
+            }),
+            expect.any(Number)
+        );
+        expect(context.ui.setPendingItem).not.toHaveBeenCalled();
+        expect(mockTryCompressChat).not.toHaveBeenCalled();
+    });
 
-    expect(context.ui.addItem).toHaveBeenCalledWith(
-      {
-        type: MessageType.COMPRESSION,
-        compression: {
-          isPending: false,
-          compressionStatus: CompressionStatus.COMPRESSED,
-          originalTokenCount: 200,
-          newTokenCount: 100,
-        },
-      },
-      expect.any(Number),
-    );
+    it('should set pending item, call tryCompressChat, and add result on success', async () => {
+        const compressedResult: ChatCompressionInfo = {
+            originalTokenCount: 200,
+            compressionStatus: CompressionStatus.COMPRESSED,
+            newTokenCount: 100
+        };
+        mockTryCompressChat.mockResolvedValue(compressedResult);
 
-    expect(context.ui.setPendingItem).toHaveBeenNthCalledWith(2, null);
-  });
+        await compressCommand.action!(context, '');
 
-  it('should add an error message if tryCompressChat returns falsy', async () => {
-    mockTryCompressChat.mockResolvedValue(null);
+        expect(context.ui.setPendingItem).toHaveBeenNthCalledWith(1, {
+            type: MessageType.COMPRESSION,
+            compression: {
+                isPending: true,
+                compressionStatus: null,
+                originalTokenCount: null,
+                newTokenCount: null
+            }
+        });
 
-    await compressCommand.action!(context, '');
+        expect(mockTryCompressChat).toHaveBeenCalledWith(
+            expect.stringMatching(/^compress-\d+$/),
+            true
+        );
 
-    expect(context.ui.addItem).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: MessageType.ERROR,
-        text: 'Failed to compress chat history.',
-      }),
-      expect.any(Number),
-    );
-    expect(context.ui.setPendingItem).toHaveBeenCalledWith(null);
-  });
+        expect(context.ui.addItem).toHaveBeenCalledWith(
+            {
+                type: MessageType.COMPRESSION,
+                compression: {
+                    isPending: false,
+                    compressionStatus: CompressionStatus.COMPRESSED,
+                    originalTokenCount: 200,
+                    newTokenCount: 100
+                }
+            },
+            expect.any(Number)
+        );
 
-  it('should add an error message if tryCompressChat throws', async () => {
-    const error = new Error('Compression failed');
-    mockTryCompressChat.mockRejectedValue(error);
+        expect(context.ui.setPendingItem).toHaveBeenNthCalledWith(2, null);
+    });
 
-    await compressCommand.action!(context, '');
+    it('should add an error message if tryCompressChat returns falsy', async () => {
+        mockTryCompressChat.mockResolvedValue(null);
 
-    expect(context.ui.addItem).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: MessageType.ERROR,
-        text: `Failed to compress chat history: ${error.message}`,
-      }),
-      expect.any(Number),
-    );
-    expect(context.ui.setPendingItem).toHaveBeenCalledWith(null);
-  });
+        await compressCommand.action!(context, '');
 
-  it('should clear the pending item in a finally block', async () => {
-    mockTryCompressChat.mockRejectedValue(new Error('some error'));
-    await compressCommand.action!(context, '');
-    expect(context.ui.setPendingItem).toHaveBeenCalledWith(null);
-  });
+        expect(context.ui.addItem).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: MessageType.ERROR,
+                text: 'Failed to compress chat history.'
+            }),
+            expect.any(Number)
+        );
+        expect(context.ui.setPendingItem).toHaveBeenCalledWith(null);
+    });
+
+    it('should add an error message if tryCompressChat throws', async () => {
+        const error = new Error('Compression failed');
+        mockTryCompressChat.mockRejectedValue(error);
+
+        await compressCommand.action!(context, '');
+
+        expect(context.ui.addItem).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: MessageType.ERROR,
+                text: `Failed to compress chat history: ${error.message}`
+            }),
+            expect.any(Number)
+        );
+        expect(context.ui.setPendingItem).toHaveBeenCalledWith(null);
+    });
+
+    it('should clear the pending item in a finally block', async () => {
+        mockTryCompressChat.mockRejectedValue(new Error('some error'));
+        await compressCommand.action!(context, '');
+        expect(context.ui.setPendingItem).toHaveBeenCalledWith(null);
+    });
 });

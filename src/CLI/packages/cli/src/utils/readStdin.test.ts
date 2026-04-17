@@ -4,109 +4,111 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { vi, describe, expect, it, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readStdin } from './readStdin.js';
 
 // Mock process.stdin
 const mockStdin = {
-  setEncoding: vi.fn(),
-  read: vi.fn(),
-  on: vi.fn(),
-  removeListener: vi.fn(),
-  destroy: vi.fn(),
+    setEncoding: vi.fn(),
+    read: vi.fn(),
+    on: vi.fn(),
+    removeListener: vi.fn(),
+    destroy: vi.fn()
 };
 
 describe('readStdin', () => {
-  let originalStdin: typeof process.stdin;
-  let onReadableHandler: () => void;
-  let onEndHandler: () => void;
+    let originalStdin: typeof process.stdin;
+    let onReadableHandler: () => void;
+    let onEndHandler: () => void;
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-    originalStdin = process.stdin;
+    beforeEach(() => {
+        vi.clearAllMocks();
+        originalStdin = process.stdin;
 
-    // Replace process.stdin with our mock
-    Object.defineProperty(process, 'stdin', {
-      value: mockStdin,
-      writable: true,
-      configurable: true,
+        // Replace process.stdin with our mock
+        Object.defineProperty(process, 'stdin', {
+            value: mockStdin,
+            writable: true,
+            configurable: true
+        });
+
+        // Capture event handlers
+        mockStdin.on.mockImplementation(
+            (event: string, handler: () => void) => {
+                if (event === 'readable') onReadableHandler = handler;
+                if (event === 'end') onEndHandler = handler;
+            }
+        );
     });
 
-    // Capture event handlers
-    mockStdin.on.mockImplementation((event: string, handler: () => void) => {
-      if (event === 'readable') onReadableHandler = handler;
-      if (event === 'end') onEndHandler = handler;
+    afterEach(() => {
+        vi.restoreAllMocks();
+        Object.defineProperty(process, 'stdin', {
+            value: originalStdin,
+            writable: true,
+            configurable: true
+        });
     });
-  });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-    Object.defineProperty(process, 'stdin', {
-      value: originalStdin,
-      writable: true,
-      configurable: true,
+    it('should read and accumulate data from stdin', async () => {
+        mockStdin.read
+            .mockReturnValueOnce('I love ')
+            .mockReturnValueOnce('Gemini!')
+            .mockReturnValueOnce(null);
+
+        const promise = readStdin();
+
+        // Trigger readable event
+        onReadableHandler();
+
+        // Trigger end to resolve
+        onEndHandler();
+
+        await expect(promise).resolves.toBe('I love Gemini!');
     });
-  });
 
-  it('should read and accumulate data from stdin', async () => {
-    mockStdin.read
-      .mockReturnValueOnce('I love ')
-      .mockReturnValueOnce('Gemini!')
-      .mockReturnValueOnce(null);
+    it('should handle empty stdin input', async () => {
+        mockStdin.read.mockReturnValue(null);
 
-    const promise = readStdin();
+        const promise = readStdin();
 
-    // Trigger readable event
-    onReadableHandler();
+        // Trigger end immediately
+        onEndHandler();
 
-    // Trigger end to resolve
-    onEndHandler();
+        await expect(promise).resolves.toBe('');
+    });
 
-    await expect(promise).resolves.toBe('I love Gemini!');
-  });
+    // Emulate terminals where stdin is not TTY (eg: git bash)
+    it('should timeout and resolve with empty string when no input is available', async () => {
+        vi.useFakeTimers();
 
-  it('should handle empty stdin input', async () => {
-    mockStdin.read.mockReturnValue(null);
+        const promise = readStdin();
 
-    const promise = readStdin();
+        // Fast-forward past the timeout (to run test faster)
+        vi.advanceTimersByTime(500);
 
-    // Trigger end immediately
-    onEndHandler();
+        await expect(promise).resolves.toBe('');
 
-    await expect(promise).resolves.toBe('');
-  });
+        vi.useRealTimers();
+    });
 
-  // Emulate terminals where stdin is not TTY (eg: git bash)
-  it('should timeout and resolve with empty string when no input is available', async () => {
-    vi.useFakeTimers();
+    it('should clear timeout once when data is received and resolve with data', async () => {
+        const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+        mockStdin.read
+            .mockReturnValueOnce('chunk1')
+            .mockReturnValueOnce('chunk2')
+            .mockReturnValueOnce(null);
 
-    const promise = readStdin();
+        const promise = readStdin();
 
-    // Fast-forward past the timeout (to run test faster)
-    vi.advanceTimersByTime(500);
+        // Trigger readable event
+        onReadableHandler();
 
-    await expect(promise).resolves.toBe('');
+        expect(clearTimeoutSpy).toHaveBeenCalledOnce();
 
-    vi.useRealTimers();
-  });
+        // Trigger end to resolve
+        onEndHandler();
 
-  it('should clear timeout once when data is received and resolve with data', async () => {
-    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
-    mockStdin.read
-      .mockReturnValueOnce('chunk1')
-      .mockReturnValueOnce('chunk2')
-      .mockReturnValueOnce(null);
-
-    const promise = readStdin();
-
-    // Trigger readable event
-    onReadableHandler();
-
-    expect(clearTimeoutSpy).toHaveBeenCalledOnce();
-
-    // Trigger end to resolve
-    onEndHandler();
-
-    await expect(promise).resolves.toBe('chunk1chunk2');
-  });
+        await expect(promise).resolves.toBe('chunk1chunk2');
+    });
 });

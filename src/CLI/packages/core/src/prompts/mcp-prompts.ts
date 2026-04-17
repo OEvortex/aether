@@ -8,12 +8,12 @@ import type { Config } from '../config/config.js';
 import type { DiscoveredMCPPrompt } from '../tools/mcp-client.js';
 
 export function getMCPServerPrompts(
-  config: Config,
-  serverName: string,
+    config: Config,
+    serverName: string
 ): DiscoveredMCPPrompt[] {
-  const promptRegistry = config.getPromptRegistry();
-  if (!promptRegistry) {
-    return [];
-  }
-  return promptRegistry.getPromptsByServer(serverName);
+    const promptRegistry = config.getPromptRegistry();
+    if (!promptRegistry) {
+        return [];
+    }
+    return promptRegistry.getPromptsByServer(serverName);
 }

@@ -1,5 +1,10 @@
-import type { AcpBridge, ChannelConfig, Envelope, ToolCallEvent } from './types.js';
-import type { ChannelBaseOptions } from './types.js';
+import type {
+    AcpBridge,
+    ChannelBaseOptions,
+    ChannelConfig,
+    Envelope,
+    ToolCallEvent
+} from './types.js';
 
 export abstract class ChannelBase {
     protected bridge: AcpBridge;
@@ -8,7 +13,7 @@ export abstract class ChannelBase {
         public readonly name: string,
         protected readonly config: ChannelConfig,
         bridge: AcpBridge,
-        protected readonly options?: ChannelBaseOptions,
+        protected readonly options?: ChannelBaseOptions
     ) {
         this.bridge = bridge;
     }
@@ -25,9 +30,17 @@ export abstract class ChannelBase {
 
     public onToolCall(_chatId: string, _event: ToolCallEvent): void {}
 
-    protected onPromptStart(_chatId: string, _sessionId?: string, _messageId?: string): void {}
+    protected onPromptStart(
+        _chatId: string,
+        _sessionId?: string,
+        _messageId?: string
+    ): void {}
 
-    protected onPromptEnd(_chatId: string, _sessionId?: string, _messageId?: string): void {}
+    protected onPromptEnd(
+        _chatId: string,
+        _sessionId?: string,
+        _messageId?: string
+    ): void {}
 
     public abstract sendMessage(chatId: string, text: string): Promise<void>;
 }

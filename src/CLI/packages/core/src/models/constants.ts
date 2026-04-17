@@ -4,13 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DEFAULT_AETHER_MODEL, MAINLINE_CODER_MODEL } from '../config/models.js';
+import {
+    DEFAULT_AETHER_MODEL,
+    MAINLINE_CODER_MODEL
+} from '../config/models.js';
 
 import type { ModelConfig } from './types.js';
 
 type AuthType = import('../core/contentGenerator.js').AuthType;
 type ContentGeneratorConfig =
-  import('../core/contentGenerator.js').ContentGeneratorConfig;
+    import('../core/contentGenerator.js').ContentGeneratorConfig;
 
 /**
  * Field keys for model-scoped generation config.
@@ -19,17 +22,17 @@ type ContentGeneratorConfig =
  * usage is type-only and does not emit runtime imports.
  */
 export const MODEL_GENERATION_CONFIG_FIELDS = [
-  'samplingParams',
-  'timeout',
-  'maxRetries',
-  'retryErrorCodes',
-  'enableCacheControl',
-  'schemaCompliance',
-  'reasoning',
-  'contextWindowSize',
-  'customHeaders',
-  'extra_body',
-  'modalities',
+    'samplingParams',
+    'timeout',
+    'maxRetries',
+    'retryErrorCodes',
+    'enableCacheControl',
+    'schemaCompliance',
+    'reasoning',
+    'contextWindowSize',
+    'customHeaders',
+    'extra_body',
+    'modalities'
 ] as const satisfies ReadonlyArray<keyof ContentGeneratorConfig>;
 
 /**
@@ -37,10 +40,10 @@ export const MODEL_GENERATION_CONFIG_FIELDS = [
  * but not ModelGenerationConfig.
  */
 export const CREDENTIAL_FIELDS = [
-  'model',
-  'apiKey',
-  'apiKeyEnvKey',
-  'baseUrl',
+    'model',
+    'apiKey',
+    'apiKeyEnvKey',
+    'baseUrl'
 ] as const satisfies ReadonlyArray<keyof ContentGeneratorConfig>;
 
 /**
@@ -48,50 +51,50 @@ export const CREDENTIAL_FIELDS = [
  * and cleared when switching from provider to manual credentials.
  */
 export const PROVIDER_SOURCED_FIELDS = [
-  ...CREDENTIAL_FIELDS,
-  ...MODEL_GENERATION_CONFIG_FIELDS,
+    ...CREDENTIAL_FIELDS,
+    ...MODEL_GENERATION_CONFIG_FIELDS
 ] as const;
 
 /**
  * Environment variable mappings per authType.
  */
 export interface AuthEnvMapping {
-  apiKey: string[];
-  baseUrl: string[];
-  model: string[];
+    apiKey: string[];
+    baseUrl: string[];
+    model: string[];
 }
 
 export const AUTH_ENV_MAPPINGS = {
-  openai: {
-    apiKey: ['OPENAI_API_KEY'],
-    baseUrl: ['OPENAI_BASE_URL'],
-    model: ['OPENAI_MODEL', 'QWEN_MODEL'],
-  },
-  anthropic: {
-    apiKey: ['ANTHROPIC_API_KEY'],
-    baseUrl: ['ANTHROPIC_BASE_URL'],
-    model: ['ANTHROPIC_MODEL'],
-  },
-  gemini: {
-    apiKey: ['GEMINI_API_KEY'],
-    baseUrl: [],
-    model: ['GEMINI_MODEL'],
-  },
-  'vertex-ai': {
-    apiKey: ['GOOGLE_API_KEY'],
-    baseUrl: [],
-    model: ['GOOGLE_MODEL'],
-  },
-  'aether-oauth': {
-    apiKey: [],
-    baseUrl: [],
-    model: [],
-  },
+    openai: {
+        apiKey: ['OPENAI_API_KEY'],
+        baseUrl: ['OPENAI_BASE_URL'],
+        model: ['OPENAI_MODEL', 'QWEN_MODEL']
+    },
+    anthropic: {
+        apiKey: ['ANTHROPIC_API_KEY'],
+        baseUrl: ['ANTHROPIC_BASE_URL'],
+        model: ['ANTHROPIC_MODEL']
+    },
+    gemini: {
+        apiKey: ['GEMINI_API_KEY'],
+        baseUrl: [],
+        model: ['GEMINI_MODEL']
+    },
+    'vertex-ai': {
+        apiKey: ['GOOGLE_API_KEY'],
+        baseUrl: [],
+        model: ['GOOGLE_MODEL']
+    },
+    'aether-oauth': {
+        apiKey: [],
+        baseUrl: [],
+        model: []
+    }
 } as const satisfies Record<AuthType, AuthEnvMapping>;
 
 export const DEFAULT_MODELS = {
-  openai: MAINLINE_CODER_MODEL,
-  'aether-oauth': DEFAULT_AETHER_MODEL,
+    openai: MAINLINE_CODER_MODEL,
+    'aether-oauth': DEFAULT_AETHER_MODEL
 } as Partial<Record<AuthType, string>>;
 
 /**
@@ -99,13 +102,13 @@ export const DEFAULT_MODELS = {
  * These cannot be overridden by user configuration.
  */
 export const AETHER_OAUTH_MODELS: ModelConfig[] = [
-  {
-    id: 'coder-model',
-    name: 'coder-model',
-    description:
-      'Qwen 3.6 Plus — efficient hybrid model with leading coding performance',
-    capabilities: { vision: true },
-  },
+    {
+        id: 'coder-model',
+        name: 'coder-model',
+        description:
+            'Qwen 3.6 Plus — efficient hybrid model with leading coding performance',
+        capabilities: { vision: true }
+    }
 ];
 
 /**
@@ -113,5 +116,5 @@ export const AETHER_OAUTH_MODELS: ModelConfig[] = [
  * This ensures single source of truth (SSOT).
  */
 export const AETHER_OAUTH_ALLOWED_MODELS = AETHER_OAUTH_MODELS.map(
-  (model) => model.id,
+    (model) => model.id
 ) as readonly string[];

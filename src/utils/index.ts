@@ -55,9 +55,9 @@ export { Logger } from './logger';
 export { MCPWebSearchClient } from './mcpWebSearchClient';
 export { ModelInfoCache } from './modelInfoCache';
 export {
+    type ModelInfo,
     ModelSelector,
-    type ParsedModelId,
-    type ModelInfo
+    type ParsedModelId
 } from './modelSelector';
 export {
     buildOpenClaudeProfile,

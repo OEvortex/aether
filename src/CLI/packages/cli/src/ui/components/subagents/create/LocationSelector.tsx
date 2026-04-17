@@ -5,54 +5,54 @@
  */
 
 import { Box } from 'ink';
+import { t } from '../../../../i18n/index.js';
 import { RadioButtonSelect } from '../../shared/RadioButtonSelect.js';
 import type { WizardStepProps } from '../types.js';
-import { t } from '../../../../i18n/index.js';
 
 interface LocationOption {
-  label: string;
-  value: 'project' | 'user';
+    label: string;
+    value: 'project' | 'user';
 }
 
 const locationOptions: LocationOption[] = [
-  {
-    get label() {
-      return t('Project Level (.aether/agents/)');
+    {
+        get label() {
+            return t('Project Level (.aether/agents/)');
+        },
+        value: 'project'
     },
-    value: 'project',
-  },
-  {
-    get label() {
-      return t('User Level (~/.aether/agents/)');
-    },
-    value: 'user',
-  },
+    {
+        get label() {
+            return t('User Level (~/.aether/agents/)');
+        },
+        value: 'user'
+    }
 ];
 
 /**
  * Step 1: Location selection for subagent storage.
  */
 export function LocationSelector({ state, dispatch, onNext }: WizardStepProps) {
-  const handleSelect = (selectedValue: string) => {
-    const location = selectedValue as 'project' | 'user';
-    dispatch({ type: 'SET_LOCATION', location });
-    onNext();
-  };
+    const handleSelect = (selectedValue: string) => {
+        const location = selectedValue as 'project' | 'user';
+        dispatch({ type: 'SET_LOCATION', location });
+        onNext();
+    };
 
-  return (
-    <Box flexDirection="column">
-      <RadioButtonSelect
-        items={locationOptions.map((option) => ({
-          key: option.value,
-          label: option.label,
-          value: option.value,
-        }))}
-        initialIndex={locationOptions.findIndex(
-          (opt) => opt.value === state.location,
-        )}
-        onSelect={handleSelect}
-        isFocused={true}
-      />
-    </Box>
-  );
+    return (
+        <Box flexDirection="column">
+            <RadioButtonSelect
+                items={locationOptions.map((option) => ({
+                    key: option.value,
+                    label: option.label,
+                    value: option.value
+                }))}
+                initialIndex={locationOptions.findIndex(
+                    (opt) => opt.value === state.location
+                )}
+                onSelect={handleSelect}
+                isFocused={true}
+            />
+        </Box>
+    );
 }

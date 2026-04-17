@@ -4,35 +4,35 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import { authCommand } from './authCommand.js';
-import { type CommandContext } from './types.js';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
+import { authCommand } from './authCommand.js';
+import type { CommandContext } from './types.js';
 
 describe('authCommand', () => {
-  let mockContext: CommandContext;
+    let mockContext: CommandContext;
 
-  beforeEach(() => {
-    mockContext = createMockCommandContext();
-  });
-
-  it('should return a dialog action to open the auth dialog', () => {
-    if (!authCommand.action) {
-      throw new Error('The auth command must have an action.');
-    }
-
-    const result = authCommand.action(mockContext, '');
-
-    expect(result).toEqual({
-      type: 'dialog',
-      dialog: 'auth',
+    beforeEach(() => {
+        mockContext = createMockCommandContext();
     });
-  });
 
-  it('should have the correct name and description', () => {
-    expect(authCommand.name).toBe('auth');
-    expect(authCommand.description).toBe(
-      'Configure authentication information for login',
-    );
-  });
+    it('should return a dialog action to open the auth dialog', () => {
+        if (!authCommand.action) {
+            throw new Error('The auth command must have an action.');
+        }
+
+        const result = authCommand.action(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'dialog',
+            dialog: 'auth'
+        });
+    });
+
+    it('should have the correct name and description', () => {
+        expect(authCommand.name).toBe('auth');
+        expect(authCommand.description).toBe(
+            'Configure authentication information for login'
+        );
+    });
 });

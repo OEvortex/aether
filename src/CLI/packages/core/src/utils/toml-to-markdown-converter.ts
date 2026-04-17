@@ -11,8 +11,8 @@
 import toml from '@iarna/toml';
 
 export interface TomlCommandFormat {
-  prompt: string;
-  description?: string;
+    prompt: string;
+    description?: string;
 }
 
 /**
@@ -22,41 +22,41 @@ export interface TomlCommandFormat {
  * @throws Error if TOML parsing fails
  */
 export function convertTomlToMarkdown(tomlContent: string): string {
-  let parsed: unknown;
-  try {
-    parsed = toml.parse(tomlContent);
-  } catch (error) {
-    throw new Error(
-      `Failed to parse TOML: ${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
+    let parsed: unknown;
+    try {
+        parsed = toml.parse(tomlContent);
+    } catch (error) {
+        throw new Error(
+            `Failed to parse TOML: ${error instanceof Error ? error.message : String(error)}`
+        );
+    }
 
-  if (typeof parsed !== 'object' || parsed === null) {
-    throw new Error('TOML content must be an object');
-  }
+    if (typeof parsed !== 'object' || parsed === null) {
+        throw new Error('TOML content must be an object');
+    }
 
-  const obj = parsed as Record<string, unknown>;
+    const obj = parsed as Record<string, unknown>;
 
-  if (typeof obj['prompt'] !== 'string') {
-    throw new Error('TOML must contain a "prompt" field');
-  }
+    if (typeof obj['prompt'] !== 'string') {
+        throw new Error('TOML must contain a "prompt" field');
+    }
 
-  const prompt = obj['prompt'];
-  const description =
-    typeof obj['description'] === 'string' ? obj['description'] : undefined;
+    const prompt = obj['prompt'];
+    const description =
+        typeof obj['description'] === 'string' ? obj['description'] : undefined;
 
-  // Generate Markdown
-  if (description) {
-    return `---
+    // Generate Markdown
+    if (description) {
+        return `---
 description: ${description}
 ---
 
 ${prompt}
 `;
-  } else {
-    // No frontmatter if no description
-    return `${prompt}\n`;
-  }
+    } else {
+        // No frontmatter if no description
+        return `${prompt}\n`;
+    }
 }
 
 /**
@@ -65,10 +65,10 @@ ${prompt}
  * @returns true if content is valid TOML
  */
 export function isTomlFormat(content: string): boolean {
-  try {
-    toml.parse(content);
-    return true;
-  } catch {
-    return false;
-  }
+    try {
+        toml.parse(content);
+        return true;
+    } catch {
+        return false;
+    }
 }

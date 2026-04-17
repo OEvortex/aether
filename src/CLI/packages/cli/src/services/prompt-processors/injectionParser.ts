@@ -8,12 +8,12 @@
  * Represents a single detected injection site in a prompt string.
  */
 export interface Injection {
-  /** The content extracted from within the braces (e.g., the command or path), trimmed. */
-  content: string;
-  /** The starting index of the injection (inclusive, points to the start of the trigger). */
-  startIndex: number;
-  /** The ending index of the injection (exclusive, points after the closing '}'). */
-  endIndex: number;
+    /** The content extracted from within the braces (e.g., the command or path), trimmed. */
+    content: string;
+    /** The starting index of the injection (inclusive, points to the start of the trigger). */
+    startIndex: number;
+    /** The ending index of the injection (exclusive, points after the closing '}'). */
+    endIndex: number;
 }
 
 /**
@@ -29,61 +29,63 @@ export interface Injection {
  * @throws Error if an unclosed injection is found.
  */
 export function extractInjections(
-  prompt: string,
-  trigger: string,
-  contextName?: string,
+    prompt: string,
+    trigger: string,
+    contextName?: string
 ): Injection[] {
-  const injections: Injection[] = [];
-  let index = 0;
+    const injections: Injection[] = [];
+    let index = 0;
 
-  while (index < prompt.length) {
-    const startIndex = prompt.indexOf(trigger, index);
+    while (index < prompt.length) {
+        const startIndex = prompt.indexOf(trigger, index);
 
-    if (startIndex === -1) {
-      break;
-    }
-
-    let currentIndex = startIndex + trigger.length;
-    let braceCount = 1;
-    let foundEnd = false;
-
-    while (currentIndex < prompt.length) {
-      const char = prompt[currentIndex];
-
-      if (char === '{') {
-        braceCount++;
-      } else if (char === '}') {
-        braceCount--;
-        if (braceCount === 0) {
-          const injectionContent = prompt.substring(
-            startIndex + trigger.length,
-            currentIndex,
-          );
-          const endIndex = currentIndex + 1;
-
-          injections.push({
-            content: injectionContent.trim(),
-            startIndex,
-            endIndex,
-          });
-
-          index = endIndex;
-          foundEnd = true;
-          break;
+        if (startIndex === -1) {
+            break;
         }
-      }
-      currentIndex++;
+
+        let currentIndex = startIndex + trigger.length;
+        let braceCount = 1;
+        let foundEnd = false;
+
+        while (currentIndex < prompt.length) {
+            const char = prompt[currentIndex];
+
+            if (char === '{') {
+                braceCount++;
+            } else if (char === '}') {
+                braceCount--;
+                if (braceCount === 0) {
+                    const injectionContent = prompt.substring(
+                        startIndex + trigger.length,
+                        currentIndex
+                    );
+                    const endIndex = currentIndex + 1;
+
+                    injections.push({
+                        content: injectionContent.trim(),
+                        startIndex,
+                        endIndex
+                    });
+
+                    index = endIndex;
+                    foundEnd = true;
+                    break;
+                }
+            }
+            currentIndex++;
+        }
+
+        // Check if the inner loop finished without finding the closing brace.
+        if (!foundEnd) {
+            const contextInfo = contextName
+                ? ` in command '${contextName}'`
+                : '';
+            // Enforce strict parsing (Comment 1) and clarify limitations (Comment 2).
+            throw new Error(
+                `Invalid syntax${contextInfo}: Unclosed injection starting at index ${startIndex} ('${trigger}'). Ensure braces are balanced. Paths or commands with unbalanced braces are not supported directly.`
+            );
+        }
     }
 
-    // Check if the inner loop finished without finding the closing brace.
-    if (!foundEnd) {
-      const contextInfo = contextName ? ` in command '${contextName}'` : '';
-      // Enforce strict parsing (Comment 1) and clarify limitations (Comment 2).
-      throw new Error(
-        `Invalid syntax${contextInfo}: Unclosed injection starting at index ${startIndex} ('${trigger}'). Ensure braces are balanced. Paths or commands with unbalanced braces are not supported directly.`,
-      );
-    }
-  }
-
-  return injections;
+    return injections;
 }

@@ -1,21 +1,21 @@
 {
-  "name": "@aetherai/aether-test-utils",
-  "version": "0.0.5",
-  "description": "Shared test utilities for Aether packages",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "echo 'No build step required'",
-    "test": "echo 'No tests'"
-  },
-  "files": [
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": ">=20"
-  }
+    "name": "@aetherai/aether-test-utils",
+    "version": "0.0.5",
+    "description": "Shared test utilities for Aether packages",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "echo 'No build step required'",
+        "test": "echo 'No tests'"
+    },
+    "files": [
+        "dist"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=20"
+    }
 }

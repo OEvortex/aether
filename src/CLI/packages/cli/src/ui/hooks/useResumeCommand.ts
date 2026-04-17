@@ -4,97 +4,102 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback } from 'react';
 import {
-  SessionService,
-  type Config,
-  SessionStartSource,
-  type PermissionMode,
+    type Config,
+    type PermissionMode,
+    SessionService,
+    SessionStartSource
 } from '@aetherai/aether-core';
+import { useCallback, useState } from 'react';
 import { buildResumedHistoryItems } from '../utils/resumeHistoryUtils.js';
 import type { UseHistoryManagerReturn } from './useHistoryManager.js';
 
 export interface UseResumeCommandOptions {
-  config: Config | null;
-  historyManager: Pick<UseHistoryManagerReturn, 'clearItems' | 'loadHistory'>;
-  startNewSession: (sessionId: string) => void;
-  remount?: () => void;
+    config: Config | null;
+    historyManager: Pick<UseHistoryManagerReturn, 'clearItems' | 'loadHistory'>;
+    startNewSession: (sessionId: string) => void;
+    remount?: () => void;
 }
 
 export interface UseResumeCommandResult {
-  isResumeDialogOpen: boolean;
-  openResumeDialog: () => void;
-  closeResumeDialog: () => void;
-  handleResume: (sessionId: string) => void;
+    isResumeDialogOpen: boolean;
+    openResumeDialog: () => void;
+    closeResumeDialog: () => void;
+    handleResume: (sessionId: string) => void;
 }
 
 export function useResumeCommand(
-  options?: UseResumeCommandOptions,
+    options?: UseResumeCommandOptions
 ): UseResumeCommandResult {
-  const [isResumeDialogOpen, setIsResumeDialogOpen] = useState(false);
+    const [isResumeDialogOpen, setIsResumeDialogOpen] = useState(false);
 
-  const openResumeDialog = useCallback(() => {
-    setIsResumeDialogOpen(true);
-  }, []);
+    const openResumeDialog = useCallback(() => {
+        setIsResumeDialogOpen(true);
+    }, []);
 
-  const closeResumeDialog = useCallback(() => {
-    setIsResumeDialogOpen(false);
-  }, []);
+    const closeResumeDialog = useCallback(() => {
+        setIsResumeDialogOpen(false);
+    }, []);
 
-  const { config, historyManager, startNewSession, remount } = options ?? {};
+    const { config, historyManager, startNewSession, remount } = options ?? {};
 
-  const handleResume = useCallback(
-    async (sessionId: string) => {
-      if (!config || !historyManager || !startNewSession) {
-        return;
-      }
+    const handleResume = useCallback(
+        async (sessionId: string) => {
+            if (!config || !historyManager || !startNewSession) {
+                return;
+            }
 
-      // Close dialog immediately to prevent input capture during async operations.
-      closeResumeDialog();
+            // Close dialog immediately to prevent input capture during async operations.
+            closeResumeDialog();
 
-      const cwd = config.getTargetDir();
-      const sessionService = new SessionService(cwd);
-      const sessionData = await sessionService.loadSession(sessionId);
+            const cwd = config.getTargetDir();
+            const sessionService = new SessionService(cwd);
+            const sessionData = await sessionService.loadSession(sessionId);
 
-      if (!sessionData) {
-        return;
-      }
+            if (!sessionData) {
+                return;
+            }
 
-      // Start new session in UI context.
-      startNewSession(sessionId);
+            // Start new session in UI context.
+            startNewSession(sessionId);
 
-      // Reset UI history.
-      const uiHistoryItems = buildResumedHistoryItems(sessionData, config);
-      historyManager.clearItems();
-      historyManager.loadHistory(uiHistoryItems);
+            // Reset UI history.
+            const uiHistoryItems = buildResumedHistoryItems(
+                sessionData,
+                config
+            );
+            historyManager.clearItems();
+            historyManager.loadHistory(uiHistoryItems);
 
-      // Update session history core.
-      config.startNewSession(sessionId, sessionData);
-      await config.getGeminiClient()?.initialize?.();
+            // Update session history core.
+            config.startNewSession(sessionId, sessionData);
+            await config.getGeminiClient()?.initialize?.();
 
-      // Fire SessionStart event after resuming session
-      try {
-        await config
-          .getHookSystem()
-          ?.fireSessionStartEvent(
-            SessionStartSource.Resume,
-            config.getModel() ?? '',
-            String(config.getApprovalMode()) as PermissionMode,
-          );
-      } catch (err) {
-        config.getDebugLogger().warn(`SessionStart hook failed: ${err}`);
-      }
+            // Fire SessionStart event after resuming session
+            try {
+                await config
+                    .getHookSystem()
+                    ?.fireSessionStartEvent(
+                        SessionStartSource.Resume,
+                        config.getModel() ?? '',
+                        String(config.getApprovalMode()) as PermissionMode
+                    );
+            } catch (err) {
+                config
+                    .getDebugLogger()
+                    .warn(`SessionStart hook failed: ${err}`);
+            }
 
-      // Refresh terminal UI.
-      remount?.();
-    },
-    [closeResumeDialog, config, historyManager, startNewSession, remount],
-  );
+            // Refresh terminal UI.
+            remount?.();
+        },
+        [closeResumeDialog, config, historyManager, startNewSession, remount]
+    );
 
-  return {
-    isResumeDialogOpen,
-    openResumeDialog,
-    closeResumeDialog,
-    handleResume,
-  };
+    return {
+        isResumeDialogOpen,
+        openResumeDialog,
+        closeResumeDialog,
+        handleResume
+    };
 }

@@ -4,50 +4,51 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect, useState } from 'react';
-import { appEvents } from './../../utils/events.js';
+import { MCPServerStatus, type McpClient } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
-import { useConfig } from '../contexts/ConfigContext.js';
-import { type McpClient, MCPServerStatus } from '@aetherai/aether-core';
-import { GeminiSpinner } from './GeminiRespondingSpinner.js';
-import { theme } from '../semantic-colors.js';
+import { useEffect, useState } from 'react';
 import { t } from '../../i18n/index.js';
+import { appEvents } from './../../utils/events.js';
+import { useConfig } from '../contexts/ConfigContext.js';
+import { theme } from '../semantic-colors.js';
+import { GeminiSpinner } from './GeminiRespondingSpinner.js';
 
 export const ConfigInitDisplay = () => {
-  const config = useConfig();
-  const [message, setMessage] = useState(t('Initializing...'));
+    const config = useConfig();
+    const [message, setMessage] = useState(t('Initializing...'));
 
-  useEffect(() => {
-    const onChange = (clients?: Map<string, McpClient>) => {
-      if (!clients || clients.size === 0) {
-        setMessage(t('Initializing...'));
-        return;
-      }
-      let connected = 0;
-      for (const client of clients.values()) {
-        if (client.getStatus() === MCPServerStatus.CONNECTED) {
-          connected++;
-        }
-      }
-      setMessage(
-        t('Connecting to MCP servers... ({{connected}}/{{total}})', {
-          connected: String(connected),
-          total: String(clients.size),
-        }),
-      );
-    };
+    useEffect(() => {
+        const onChange = (clients?: Map<string, McpClient>) => {
+            if (!clients || clients.size === 0) {
+                setMessage(t('Initializing...'));
+                return;
+            }
+            let connected = 0;
+            for (const client of clients.values()) {
+                if (client.getStatus() === MCPServerStatus.CONNECTED) {
+                    connected++;
+                }
+            }
+            setMessage(
+                t('Connecting to MCP servers... ({{connected}}/{{total}})', {
+                    connected: String(connected),
+                    total: String(clients.size)
+                })
+            );
+        };
 
-    appEvents.on('mcp-client-update', onChange);
-    return () => {
-      appEvents.off('mcp-client-update', onChange);
-    };
-  }, [config]);
+        appEvents.on('mcp-client-update', onChange);
+        return () => {
+            appEvents.off('mcp-client-update', onChange);
+        };
+    }, [config]);
 
-  return (
-    <Box marginTop={1}>
-      <Text>
-        <GeminiSpinner /> <Text color={theme.text.primary}>{message}</Text>
-      </Text>
-    </Box>
-  );
+    return (
+        <Box marginTop={1}>
+            <Text>
+                <GeminiSpinner />{' '}
+                <Text color={theme.text.primary}>{message}</Text>
+            </Text>
+        </Box>
+    );
 };

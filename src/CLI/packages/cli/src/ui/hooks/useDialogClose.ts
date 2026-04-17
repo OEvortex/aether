@@ -4,56 +4,57 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { ApprovalMode, AuthType } from '@aetherai/aether-core';
 import { useCallback } from 'react';
 import { SettingScope } from '../../config/settings.js';
-import type { AuthType, ApprovalMode } from '@aetherai/aether-core';
 import type { ArenaDialogType } from './useArenaCommand.js';
+
 // OpenAICredentials type (previously imported from OpenAIKeyPrompt)
 interface OpenAICredentials {
-  apiKey?: string;
-  baseUrl?: string;
-  model?: string;
-  providerId?: string;
+    apiKey?: string;
+    baseUrl?: string;
+    model?: string;
+    providerId?: string;
 }
 
 export interface DialogCloseOptions {
-  // Theme dialog
-  isThemeDialogOpen: boolean;
-  handleThemeSelect: (theme: string | undefined, scope: SettingScope) => void;
+    // Theme dialog
+    isThemeDialogOpen: boolean;
+    handleThemeSelect: (theme: string | undefined, scope: SettingScope) => void;
 
-  // Approval mode dialog
-  isApprovalModeDialogOpen: boolean;
-  handleApprovalModeSelect: (
-    mode: ApprovalMode | undefined,
-    scope: SettingScope,
-  ) => void;
+    // Approval mode dialog
+    isApprovalModeDialogOpen: boolean;
+    handleApprovalModeSelect: (
+        mode: ApprovalMode | undefined,
+        scope: SettingScope
+    ) => void;
 
-  // Auth dialog
-  isAuthDialogOpen: boolean;
-  handleAuthSelect: (
-    authType: AuthType | undefined,
-    credentials?: OpenAICredentials,
-  ) => Promise<void>;
-  pendingAuthType: AuthType | undefined;
+    // Auth dialog
+    isAuthDialogOpen: boolean;
+    handleAuthSelect: (
+        authType: AuthType | undefined,
+        credentials?: OpenAICredentials
+    ) => Promise<void>;
+    pendingAuthType: AuthType | undefined;
 
-  // Editor dialog
-  isEditorDialogOpen: boolean;
-  exitEditorDialog: () => void;
+    // Editor dialog
+    isEditorDialogOpen: boolean;
+    exitEditorDialog: () => void;
 
-  // Settings dialog
-  isSettingsDialogOpen: boolean;
-  closeSettingsDialog: () => void;
+    // Settings dialog
+    isSettingsDialogOpen: boolean;
+    closeSettingsDialog: () => void;
 
-  // Arena dialogs
-  activeArenaDialog: ArenaDialogType;
-  closeArenaDialog: () => void;
+    // Arena dialogs
+    activeArenaDialog: ArenaDialogType;
+    closeArenaDialog: () => void;
 
-  // Folder trust dialog
-  isFolderTrustDialogOpen: boolean;
+    // Folder trust dialog
+    isFolderTrustDialogOpen: boolean;
 
-  // Welcome back dialog
-  showWelcomeBackDialog: boolean;
-  handleWelcomeBackClose: () => void;
+    // Welcome back dialog
+    showWelcomeBackDialog: boolean;
+    handleWelcomeBackClose: () => void;
 }
 
 /**
@@ -62,53 +63,53 @@ export interface DialogCloseOptions {
  * Returns true if a dialog was closed, false if no dialogs were open.
  */
 export function useDialogClose(options: DialogCloseOptions) {
-  const closeAnyOpenDialog = useCallback((): boolean => {
-    // Check each dialog in priority order and close using the same logic as ESC key
+    const closeAnyOpenDialog = useCallback((): boolean => {
+        // Check each dialog in priority order and close using the same logic as ESC key
 
-    if (options.isThemeDialogOpen) {
-      // Mimic ESC behavior: onSelect(undefined, selectedScope) - keeps current theme
-      options.handleThemeSelect(undefined, SettingScope.User);
-      return true;
-    }
+        if (options.isThemeDialogOpen) {
+            // Mimic ESC behavior: onSelect(undefined, selectedScope) - keeps current theme
+            options.handleThemeSelect(undefined, SettingScope.User);
+            return true;
+        }
 
-    if (options.isApprovalModeDialogOpen) {
-      // Mimic ESC behavior: onSelect(undefined, selectedScope) - keeps current mode
-      options.handleApprovalModeSelect(undefined, SettingScope.User);
-      return true;
-    }
+        if (options.isApprovalModeDialogOpen) {
+            // Mimic ESC behavior: onSelect(undefined, selectedScope) - keeps current mode
+            options.handleApprovalModeSelect(undefined, SettingScope.User);
+            return true;
+        }
 
-    if (options.isEditorDialogOpen) {
-      // Mimic ESC behavior: call onExit() directly
-      options.exitEditorDialog();
-      return true;
-    }
+        if (options.isEditorDialogOpen) {
+            // Mimic ESC behavior: call onExit() directly
+            options.exitEditorDialog();
+            return true;
+        }
 
-    if (options.isSettingsDialogOpen) {
-      // Mimic ESC behavior: onSelect(undefined, selectedScope)
-      options.closeSettingsDialog();
-      return true;
-    }
+        if (options.isSettingsDialogOpen) {
+            // Mimic ESC behavior: onSelect(undefined, selectedScope)
+            options.closeSettingsDialog();
+            return true;
+        }
 
-    if (options.activeArenaDialog !== null) {
-      options.closeArenaDialog();
-      return true;
-    }
+        if (options.activeArenaDialog !== null) {
+            options.closeArenaDialog();
+            return true;
+        }
 
-    if (options.isFolderTrustDialogOpen) {
-      // FolderTrustDialog doesn't expose close function, but ESC would prevent exit
-      // We follow the same pattern - prevent exit behavior
-      return true;
-    }
+        if (options.isFolderTrustDialogOpen) {
+            // FolderTrustDialog doesn't expose close function, but ESC would prevent exit
+            // We follow the same pattern - prevent exit behavior
+            return true;
+        }
 
-    if (options.showWelcomeBackDialog) {
-      // WelcomeBack has its own close handler
-      options.handleWelcomeBackClose();
-      return true;
-    }
+        if (options.showWelcomeBackDialog) {
+            // WelcomeBack has its own close handler
+            options.handleWelcomeBackClose();
+            return true;
+        }
 
-    // No dialog was open
-    return false;
-  }, [options]);
+        // No dialog was open
+        return false;
+    }, [options]);
 
-  return { closeAnyOpenDialog };
+    return { closeAnyOpenDialog };
 }

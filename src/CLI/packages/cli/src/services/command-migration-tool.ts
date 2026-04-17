@@ -10,23 +10,23 @@
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import { glob } from 'glob';
 import { convertTomlToMarkdown } from '@aetherai/aether-core';
+import { glob } from 'glob';
 import { t } from '../i18n/index.js';
 
 export interface MigrationResult {
-  success: boolean;
-  convertedFiles: string[];
-  failedFiles: Array<{ file: string; error: string }>;
+    success: boolean;
+    convertedFiles: string[];
+    failedFiles: Array<{ file: string; error: string }>;
 }
 
 export interface MigrationOptions {
-  /** Directory containing command files */
-  commandDir: string;
-  /** Whether to create backups (default: true) */
-  createBackup?: boolean;
-  /** Whether to delete original TOML files after migration (default: false) */
-  deleteOriginal?: boolean;
+    /** Directory containing command files */
+    commandDir: string;
+    /** Whether to create backups (default: true) */
+    createBackup?: boolean;
+    /** Whether to delete original TOML files after migration (default: false) */
+    deleteOriginal?: boolean;
 }
 
 /**
@@ -35,22 +35,22 @@ export interface MigrationOptions {
  * @returns Array of TOML file paths (relative to commandDir)
  */
 export async function detectTomlCommands(
-  commandDir: string,
+    commandDir: string
 ): Promise<string[]> {
-  try {
-    await fs.access(commandDir);
-  } catch {
-    // Directory doesn't exist
-    return [];
-  }
+    try {
+        await fs.access(commandDir);
+    } catch {
+        // Directory doesn't exist
+        return [];
+    }
 
-  const tomlFiles = await glob('**/*.toml', {
-    cwd: commandDir,
-    nodir: true,
-    dot: false,
-  });
+    const tomlFiles = await glob('**/*.toml', {
+        cwd: commandDir,
+        nodir: true,
+        dot: false
+    });
 
-  return tomlFiles;
+    return tomlFiles;
 }
 
 /**
@@ -59,75 +59,75 @@ export async function detectTomlCommands(
  * @returns Migration result with details
  */
 export async function migrateTomlCommands(
-  options: MigrationOptions,
+    options: MigrationOptions
 ): Promise<MigrationResult> {
-  const { commandDir, createBackup = true, deleteOriginal = false } = options;
+    const { commandDir, createBackup = true, deleteOriginal = false } = options;
 
-  const result: MigrationResult = {
-    success: true,
-    convertedFiles: [],
-    failedFiles: [],
-  };
+    const result: MigrationResult = {
+        success: true,
+        convertedFiles: [],
+        failedFiles: []
+    };
 
-  // Detect TOML files
-  const tomlFiles = await detectTomlCommands(commandDir);
+    // Detect TOML files
+    const tomlFiles = await detectTomlCommands(commandDir);
 
-  if (tomlFiles.length === 0) {
-    return result;
-  }
-
-  // Process each TOML file
-  for (const relativeFile of tomlFiles) {
-    const tomlPath = path.join(commandDir, relativeFile);
-
-    try {
-      // Read TOML file
-      const tomlContent = await fs.readFile(tomlPath, 'utf-8');
-
-      // Convert to Markdown
-      const markdownContent = convertTomlToMarkdown(tomlContent);
-
-      // Generate Markdown file path (same location, .md extension)
-      const markdownPath = tomlPath.replace(/\.toml$/, '.md');
-
-      // Check if Markdown file already exists
-      try {
-        await fs.access(markdownPath);
-        throw new Error(
-          t('Markdown file already exists: {{filename}}', {
-            filename: path.basename(markdownPath),
-          }),
-        );
-      } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
-          throw error;
-        }
-        // File doesn't exist, continue
-      }
-
-      // Write Markdown file
-      await fs.writeFile(markdownPath, markdownContent, 'utf-8');
-
-      // Backup original if requested (rename to .toml.backup)
-      if (createBackup) {
-        const backupPath = `${tomlPath}.backup`;
-        await fs.rename(tomlPath, backupPath);
-      } else if (deleteOriginal) {
-        // Delete original if requested and no backup
-        await fs.unlink(tomlPath);
-      }
-
-      result.convertedFiles.push(relativeFile);
-    } catch (error) {
-      result.success = false;
-      result.failedFiles.push({
-        file: relativeFile,
-        error: error instanceof Error ? error.message : String(error),
-      });
+    if (tomlFiles.length === 0) {
+        return result;
     }
-  }
 
-  return result;
+    // Process each TOML file
+    for (const relativeFile of tomlFiles) {
+        const tomlPath = path.join(commandDir, relativeFile);
+
+        try {
+            // Read TOML file
+            const tomlContent = await fs.readFile(tomlPath, 'utf-8');
+
+            // Convert to Markdown
+            const markdownContent = convertTomlToMarkdown(tomlContent);
+
+            // Generate Markdown file path (same location, .md extension)
+            const markdownPath = tomlPath.replace(/\.toml$/, '.md');
+
+            // Check if Markdown file already exists
+            try {
+                await fs.access(markdownPath);
+                throw new Error(
+                    t('Markdown file already exists: {{filename}}', {
+                        filename: path.basename(markdownPath)
+                    })
+                );
+            } catch (error) {
+                if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+                    throw error;
+                }
+                // File doesn't exist, continue
+            }
+
+            // Write Markdown file
+            await fs.writeFile(markdownPath, markdownContent, 'utf-8');
+
+            // Backup original if requested (rename to .toml.backup)
+            if (createBackup) {
+                const backupPath = `${tomlPath}.backup`;
+                await fs.rename(tomlPath, backupPath);
+            } else if (deleteOriginal) {
+                // Delete original if requested and no backup
+                await fs.unlink(tomlPath);
+            }
+
+            result.convertedFiles.push(relativeFile);
+        } catch (error) {
+            result.success = false;
+            result.failedFiles.push({
+                file: relativeFile,
+                error: error instanceof Error ? error.message : String(error)
+            });
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -136,18 +136,18 @@ export async function migrateTomlCommands(
  * @returns Human-readable migration prompt message
  */
 export function generateMigrationPrompt(tomlFiles: string[]): string {
-  if (tomlFiles.length === 0) {
-    return '';
-  }
+    if (tomlFiles.length === 0) {
+        return '';
+    }
 
-  const count = tomlFiles.length;
-  const moreCount = tomlFiles.length - 3;
-  const fileList =
-    tomlFiles.length <= 5
-      ? tomlFiles.map((f) => `  - ${f}`).join('\n')
-      : `  - ${tomlFiles.slice(0, 3).join('\n  - ')}\n  - ${t('... and {{count}} more', { count: String(moreCount) })}`;
+    const count = tomlFiles.length;
+    const moreCount = tomlFiles.length - 3;
+    const fileList =
+        tomlFiles.length <= 5
+            ? tomlFiles.map((f) => `  - ${f}`).join('\n')
+            : `  - ${tomlFiles.slice(0, 3).join('\n  - ')}\n  - ${t('... and {{count}} more', { count: String(moreCount) })}`;
 
-  return `
+    return `
 ⚠️  ${t('TOML Command Format Deprecation Notice')}
 
 ${t('Found {{count}} command file(s) in TOML format:', { count: String(count) })}

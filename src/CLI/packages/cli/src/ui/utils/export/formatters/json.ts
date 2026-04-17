@@ -11,5 +11,5 @@ import type { ExportSessionData } from '../types.js';
  * Outputs a single JSON object containing the entire session.
  */
 export function toJson(sessionData: ExportSessionData): string {
-  return JSON.stringify(sessionData, null, 2);
+    return JSON.stringify(sessionData, null, 2);
 }

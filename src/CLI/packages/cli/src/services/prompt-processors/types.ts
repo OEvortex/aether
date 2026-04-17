@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { CommandContext } from '../../ui/commands/types.js';
 import type { PartUnion } from '@google/genai';
+import type { CommandContext } from '../../ui/commands/types.js';
 
 /**
  * Defines the input/output type for prompt processors.
@@ -18,22 +18,22 @@ export type PromptPipelineContent = PartUnion[];
  * together to create a processing pipeline.
  */
 export interface IPromptProcessor {
-  /**
-   * Processes a prompt input (which may contain text and multi-modal parts),
-   * applying a specific transformation as part of a pipeline.
-   *
-   * @param prompt The current state of the prompt string. This may have been
-   *   modified by previous processors in the pipeline.
-   * @param context The full command context, providing access to invocation
-   *   details (like `context.invocation.raw` and `context.invocation.args`),
-   *   application services, and UI handlers.
-   * @returns A promise that resolves to the transformed prompt string, which
-   *   will be passed to the next processor or, if it's the last one, sent to the model.
-   */
-  process(
-    prompt: PromptPipelineContent,
-    context: CommandContext,
-  ): Promise<PromptPipelineContent>;
+    /**
+     * Processes a prompt input (which may contain text and multi-modal parts),
+     * applying a specific transformation as part of a pipeline.
+     *
+     * @param prompt The current state of the prompt string. This may have been
+     *   modified by previous processors in the pipeline.
+     * @param context The full command context, providing access to invocation
+     *   details (like `context.invocation.raw` and `context.invocation.args`),
+     *   application services, and UI handlers.
+     * @returns A promise that resolves to the transformed prompt string, which
+     *   will be passed to the next processor or, if it's the last one, sent to the model.
+     */
+    process(
+        prompt: PromptPipelineContent,
+        context: CommandContext
+    ): Promise<PromptPipelineContent>;
 }
 
 /**

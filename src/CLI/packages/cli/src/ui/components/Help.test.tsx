@@ -7,77 +7,77 @@
 /** @vitest-environment jsdom */
 
 import { render } from 'ink-testing-library';
-import { describe, it, expect } from 'vitest';
-import { Help } from './Help.js';
+import { describe, expect, it } from 'vitest';
 import type { SlashCommand } from '../commands/types.js';
 import { CommandKind } from '../commands/types.js';
+import { Help } from './Help.js';
 
 const mockCommands: readonly SlashCommand[] = [
-  {
-    name: 'test',
-    description: 'A test command',
-    kind: CommandKind.BUILT_IN,
-    altNames: ['alias-one', 'alias-two'],
-  },
-  {
-    name: 'hidden',
-    description: 'A hidden command',
-    hidden: true,
-    kind: CommandKind.BUILT_IN,
-  },
-  {
-    name: 'parent',
-    description: 'A parent command',
-    kind: CommandKind.BUILT_IN,
-    subCommands: [
-      {
-        name: 'visible-child',
-        description: 'A visible child command',
+    {
+        name: 'test',
+        description: 'A test command',
         kind: CommandKind.BUILT_IN,
-      },
-      {
-        name: 'hidden-child',
-        description: 'A hidden child command',
+        altNames: ['alias-one', 'alias-two']
+    },
+    {
+        name: 'hidden',
+        description: 'A hidden command',
         hidden: true,
+        kind: CommandKind.BUILT_IN
+    },
+    {
+        name: 'parent',
+        description: 'A parent command',
         kind: CommandKind.BUILT_IN,
-      },
-    ],
-  },
+        subCommands: [
+            {
+                name: 'visible-child',
+                description: 'A visible child command',
+                kind: CommandKind.BUILT_IN
+            },
+            {
+                name: 'hidden-child',
+                description: 'A hidden child command',
+                hidden: true,
+                kind: CommandKind.BUILT_IN
+            }
+        ]
+    }
 ];
 
 describe('Help Component', () => {
-  it('should render platform-specific keyboard shortcuts', () => {
-    const { lastFrame } = render(<Help commands={mockCommands} />);
-    const output = lastFrame();
+    it('should render platform-specific keyboard shortcuts', () => {
+        const { lastFrame } = render(<Help commands={mockCommands} />);
+        const output = lastFrame();
 
-    if (process.platform === 'win32') {
-      expect(output).toContain('Tab');
-      expect(output).not.toContain('Shift+Tab');
-    } else {
-      expect(output).toContain('Shift+Tab');
-    }
-  });
+        if (process.platform === 'win32') {
+            expect(output).toContain('Tab');
+            expect(output).not.toContain('Shift+Tab');
+        } else {
+            expect(output).toContain('Shift+Tab');
+        }
+    });
 
-  it('should not render hidden commands', () => {
-    const { lastFrame } = render(<Help commands={mockCommands} />);
-    const output = lastFrame();
+    it('should not render hidden commands', () => {
+        const { lastFrame } = render(<Help commands={mockCommands} />);
+        const output = lastFrame();
 
-    expect(output).toContain('/test');
-    expect(output).not.toContain('/hidden');
-  });
+        expect(output).toContain('/test');
+        expect(output).not.toContain('/hidden');
+    });
 
-  it('should not render hidden subcommands', () => {
-    const { lastFrame } = render(<Help commands={mockCommands} />);
-    const output = lastFrame();
+    it('should not render hidden subcommands', () => {
+        const { lastFrame } = render(<Help commands={mockCommands} />);
+        const output = lastFrame();
 
-    expect(output).toContain('visible-child');
-    expect(output).not.toContain('hidden-child');
-  });
+        expect(output).toContain('visible-child');
+        expect(output).not.toContain('hidden-child');
+    });
 
-  it('should render alt names for commands when available', () => {
-    const { lastFrame } = render(<Help commands={mockCommands} />);
-    const output = lastFrame();
+    it('should render alt names for commands when available', () => {
+        const { lastFrame } = render(<Help commands={mockCommands} />);
+        const output = lastFrame();
 
-    expect(output).toContain('/test (alias-one, alias-two)');
-  });
+        expect(output).toContain('/test (alias-one, alias-two)');
+    });
 });

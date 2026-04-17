@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   AuthType,
-  resolveModelConfig,
   type ProviderModelConfig,
+  resolveModelConfig,
 } from '@aetherai/aether-core';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Settings } from '../config/settings.js';
 import {
   getAuthTypeFromEnv,
   resolveCliGenerationConfig,
 } from './modelConfigUtils.js';
-import type { Settings } from '../config/settings.js';
 
 const mockWriteStderrLine = vi.hoisted(() => vi.fn());
 

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import path from 'node:path';
 import os from 'node:os';
+import path from 'node:path';
 import picomatch from 'picomatch';
 
 /**
@@ -20,12 +20,13 @@ import picomatch from 'picomatch';
  *   toPosixPath('/home/user/project') → '/home/user/project' (no-op on POSIX)
  */
 function toPosixPath(p: string): string {
-  return p.replace(/\\/g, '/');
+    return p.replace(/\\/g, '/');
 }
+
 import type {
-  PermissionCheckContext,
-  PermissionRule,
-  SpecifierKind,
+    PermissionCheckContext,
+    PermissionRule,
+    SpecifierKind
 } from './types.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -37,95 +38,95 @@ import type {
  * Covers all built-in tools plus common aliases (including Claude Code's "Bash").
  */
 export const TOOL_NAME_ALIASES: Readonly<Record<string, string>> = {
-  // Shell tool
-  run_shell_command: 'run_shell_command',
-  Shell: 'run_shell_command',
-  ShellTool: 'run_shell_command',
-  Bash: 'run_shell_command', // Claude Code compatibility
+    // Shell tool
+    run_shell_command: 'run_shell_command',
+    Shell: 'run_shell_command',
+    ShellTool: 'run_shell_command',
+    Bash: 'run_shell_command', // Claude Code compatibility
 
-  // Edit tool — "Edit" is also a meta-category covering edit + write_file
-  edit: 'edit',
-  Edit: 'edit',
-  EditTool: 'edit',
+    // Edit tool — "Edit" is also a meta-category covering edit + write_file
+    edit: 'edit',
+    Edit: 'edit',
+    EditTool: 'edit',
 
-  // Write File tool — also matched by "Edit" meta-category rules
-  write_file: 'write_file',
-  WriteFile: 'write_file',
-  WriteFileTool: 'write_file',
-  Write: 'write_file',
+    // Write File tool — also matched by "Edit" meta-category rules
+    write_file: 'write_file',
+    WriteFile: 'write_file',
+    WriteFileTool: 'write_file',
+    Write: 'write_file',
 
-  // Read File tool — "Read" is also a meta-category covering read_file + grep + glob + list_directory
-  read_file: 'read_file',
-  ReadFile: 'read_file',
-  ReadFileTool: 'read_file',
-  Read: 'read_file',
+    // Read File tool — "Read" is also a meta-category covering read_file + grep + glob + list_directory
+    read_file: 'read_file',
+    ReadFile: 'read_file',
+    ReadFileTool: 'read_file',
+    Read: 'read_file',
 
-  // Grep tool — also matched by "Read" meta-category rules
-  grep_search: 'grep_search',
-  Grep: 'grep_search',
-  GrepTool: 'grep_search',
-  search_file_content: 'grep_search', // legacy
-  SearchFiles: 'grep_search', // legacy display name
+    // Grep tool — also matched by "Read" meta-category rules
+    grep_search: 'grep_search',
+    Grep: 'grep_search',
+    GrepTool: 'grep_search',
+    search_file_content: 'grep_search', // legacy
+    SearchFiles: 'grep_search', // legacy display name
 
-  // Glob tool — also matched by "Read" meta-category rules
-  glob: 'glob',
-  Glob: 'glob',
-  GlobTool: 'glob',
-  FindFiles: 'glob', // legacy display name
+    // Glob tool — also matched by "Read" meta-category rules
+    glob: 'glob',
+    Glob: 'glob',
+    GlobTool: 'glob',
+    FindFiles: 'glob', // legacy display name
 
-  // List Directory tool — also matched by "Read" meta-category rules
-  list_directory: 'list_directory',
-  ListFiles: 'list_directory',
-  ListFilesTool: 'list_directory',
-  ReadFolder: 'list_directory', // legacy display name
+    // List Directory tool — also matched by "Read" meta-category rules
+    list_directory: 'list_directory',
+    ListFiles: 'list_directory',
+    ListFilesTool: 'list_directory',
+    ReadFolder: 'list_directory', // legacy display name
 
-  // Memory tool
-  save_memory: 'save_memory',
-  SaveMemory: 'save_memory',
-  SaveMemoryTool: 'save_memory',
+    // Memory tool
+    save_memory: 'save_memory',
+    SaveMemory: 'save_memory',
+    SaveMemoryTool: 'save_memory',
 
-  // TodoWrite tool
-  todo_write: 'todo_write',
-  TodoWrite: 'todo_write',
-  TodoWriteTool: 'todo_write',
+    // TodoWrite tool
+    todo_write: 'todo_write',
+    TodoWrite: 'todo_write',
+    TodoWriteTool: 'todo_write',
 
-  // WebFetch tool
-  web_fetch: 'web_fetch',
-  WebFetch: 'web_fetch',
-  WebFetchTool: 'web_fetch',
+    // WebFetch tool
+    web_fetch: 'web_fetch',
+    WebFetch: 'web_fetch',
+    WebFetchTool: 'web_fetch',
 
-  // WebSearch tool
-  web_search: 'web_search',
-  WebSearch: 'web_search',
-  WebSearchTool: 'web_search',
+    // WebSearch tool
+    web_search: 'web_search',
+    WebSearch: 'web_search',
+    WebSearchTool: 'web_search',
 
-  // Agent (subagent) tool
-  agent: 'agent',
-  Agent: 'agent',
-  AgentTool: 'agent',
+    // Agent (subagent) tool
+    agent: 'agent',
+    Agent: 'agent',
+    AgentTool: 'agent',
 
-  // Legacy aliases for the agent tool (renamed from "task")
-  task: 'agent',
-  Task: 'agent',
-  TaskTool: 'agent',
+    // Legacy aliases for the agent tool (renamed from "task")
+    task: 'agent',
+    Task: 'agent',
+    TaskTool: 'agent',
 
-  // Skill tool
-  skill: 'skill',
-  Skill: 'skill',
-  SkillTool: 'skill',
+    // Skill tool
+    skill: 'skill',
+    Skill: 'skill',
+    SkillTool: 'skill',
 
-  // ExitPlanMode tool
-  exit_plan_mode: 'exit_plan_mode',
-  ExitPlanMode: 'exit_plan_mode',
-  ExitPlanModeTool: 'exit_plan_mode',
+    // ExitPlanMode tool
+    exit_plan_mode: 'exit_plan_mode',
+    ExitPlanMode: 'exit_plan_mode',
+    ExitPlanModeTool: 'exit_plan_mode',
 
-  // LSP tool
-  lsp: 'lsp',
-  Lsp: 'lsp',
-  LspTool: 'lsp',
+    // LSP tool
+    lsp: 'lsp',
+    Lsp: 'lsp',
+    LspTool: 'lsp',
 
-  // Legacy edit tool name
-  replace: 'edit',
+    // Legacy edit tool name
+    replace: 'edit'
 };
 
 /**
@@ -140,10 +141,10 @@ const SHELL_TOOL_NAMES = new Set(['run_shell_command']);
  * to all built-in tools that read files like Grep and Glob."
  */
 const READ_TOOLS = new Set([
-  'read_file',
-  'grep_search',
-  'glob',
-  'list_directory',
+    'read_file',
+    'grep_search',
+    'glob',
+    'list_directory'
 ]);
 
 /**
@@ -168,7 +169,7 @@ const WEBFETCH_TOOLS = new Set(['web_fetch']);
  * (e.g. MCP tool names are kept as-is).
  */
 export function resolveToolName(rawName: string): string {
-  return TOOL_NAME_ALIASES[rawName] ?? rawName;
+    return TOOL_NAME_ALIASES[rawName] ?? rawName;
 }
 
 /**
@@ -176,16 +177,19 @@ export function resolveToolName(rawName: string): string {
  * This tells the matching engine which algorithm to use for the specifier.
  */
 export function getSpecifierKind(canonicalToolName: string): SpecifierKind {
-  if (SHELL_TOOL_NAMES.has(canonicalToolName)) {
-    return 'command';
-  }
-  if (READ_TOOLS.has(canonicalToolName) || EDIT_TOOLS.has(canonicalToolName)) {
-    return 'path';
-  }
-  if (WEBFETCH_TOOLS.has(canonicalToolName)) {
-    return 'domain';
-  }
-  return 'literal';
+    if (SHELL_TOOL_NAMES.has(canonicalToolName)) {
+        return 'command';
+    }
+    if (
+        READ_TOOLS.has(canonicalToolName) ||
+        EDIT_TOOLS.has(canonicalToolName)
+    ) {
+        return 'path';
+    }
+    if (WEBFETCH_TOOLS.has(canonicalToolName)) {
+        return 'domain';
+    }
+    return 'literal';
 }
 
 /**
@@ -196,21 +200,21 @@ export function getSpecifierKind(canonicalToolName: string): SpecifierKind {
  * "Edit" → resolves to "edit", but also covers write_file
  */
 export function toolMatchesRuleToolName(
-  ruleToolName: string,
-  contextToolName: string,
+    ruleToolName: string,
+    contextToolName: string
 ): boolean {
-  if (ruleToolName === contextToolName) {
-    return true;
-  }
-  // "Read" → covers all READ_TOOLS
-  if (ruleToolName === 'read_file' && READ_TOOLS.has(contextToolName)) {
-    return true;
-  }
-  // "Edit" → covers all EDIT_TOOLS
-  if (ruleToolName === 'edit' && EDIT_TOOLS.has(contextToolName)) {
-    return true;
-  }
-  return false;
+    if (ruleToolName === contextToolName) {
+        return true;
+    }
+    // "Read" → covers all READ_TOOLS
+    if (ruleToolName === 'read_file' && READ_TOOLS.has(contextToolName)) {
+        return true;
+    }
+    // "Edit" → covers all EDIT_TOOLS
+    if (ruleToolName === 'edit' && EDIT_TOOLS.has(contextToolName)) {
+        return true;
+    }
+    return false;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -233,37 +237,39 @@ export function toolMatchesRuleToolName(
  *   "mcp__server__tool"         → MCP tool (no specifier needed)
  */
 export function parseRule(raw: string): PermissionRule {
-  const trimmed = raw.trim();
+    const trimmed = raw.trim();
 
-  // Handle legacy `:*` suffix (deprecated, equivalent to ` *`)
-  // e.g. "Bash(git:*)" → "Bash(git *)"
-  const normalized = trimmed.replace(/:(\*)/, ' $1');
+    // Handle legacy `:*` suffix (deprecated, equivalent to ` *`)
+    // e.g. "Bash(git:*)" → "Bash(git *)"
+    const normalized = trimmed.replace(/:(\*)/, ' $1');
 
-  const openParen = normalized.indexOf('(');
+    const openParen = normalized.indexOf('(');
 
-  if (openParen === -1) {
-    // Simple tool name rule (no specifier)
-    const canonicalName = resolveToolName(normalized);
+    if (openParen === -1) {
+        // Simple tool name rule (no specifier)
+        const canonicalName = resolveToolName(normalized);
+        return {
+            raw: trimmed,
+            toolName: canonicalName
+        };
+    }
+
+    const toolPart = normalized.substring(0, openParen).trim();
+    const specifier = normalized.endsWith(')')
+        ? normalized.substring(openParen + 1, normalized.length - 1)
+        : undefined;
+
+    const canonicalName = resolveToolName(toolPart);
+    const specifierKind = specifier
+        ? getSpecifierKind(canonicalName)
+        : undefined;
+
     return {
-      raw: trimmed,
-      toolName: canonicalName,
+        raw: trimmed,
+        toolName: canonicalName,
+        specifier,
+        specifierKind
     };
-  }
-
-  const toolPart = normalized.substring(0, openParen).trim();
-  const specifier = normalized.endsWith(')')
-    ? normalized.substring(openParen + 1, normalized.length - 1)
-    : undefined;
-
-  const canonicalName = resolveToolName(toolPart);
-  const specifierKind = specifier ? getSpecifierKind(canonicalName) : undefined;
-
-  return {
-    raw: trimmed,
-    toolName: canonicalName,
-    specifier,
-    specifierKind,
-  };
 }
 
 /**
@@ -271,7 +277,7 @@ export function parseRule(raw: string): PermissionRule {
  * silently skipping any empty entries.
  */
 export function parseRules(raws: string[]): PermissionRule[] {
-  return raws.filter((r) => r && r.trim()).map(parseRule);
+    return raws.filter((r) => r && r.trim()).map(parseRule);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -288,27 +294,27 @@ export function parseRules(raws: string[]): PermissionRule[] {
  * Other tools use their individual display alias.
  */
 const CANONICAL_TO_RULE_DISPLAY: Readonly<Record<string, string>> = {
-  // Read meta-category
-  read_file: 'Read',
-  grep_search: 'Read',
-  glob: 'Read',
-  list_directory: 'Read',
-  // Edit meta-category
-  edit: 'Edit',
-  write_file: 'Edit',
-  // Shell
-  run_shell_command: 'Bash',
-  // Web
-  web_fetch: 'WebFetch',
-  web_search: 'WebSearch',
-  // Agent / Skill
-  agent: 'Agent',
-  skill: 'Skill',
-  // Others
-  save_memory: 'SaveMemory',
-  todo_write: 'TodoWrite',
-  lsp: 'Lsp',
-  exit_plan_mode: 'ExitPlanMode',
+    // Read meta-category
+    read_file: 'Read',
+    grep_search: 'Read',
+    glob: 'Read',
+    list_directory: 'Read',
+    // Edit meta-category
+    edit: 'Edit',
+    write_file: 'Edit',
+    // Shell
+    run_shell_command: 'Bash',
+    // Web
+    web_fetch: 'WebFetch',
+    web_search: 'WebSearch',
+    // Agent / Skill
+    agent: 'Agent',
+    skill: 'Skill',
+    // Others
+    save_memory: 'SaveMemory',
+    todo_write: 'TodoWrite',
+    lsp: 'Lsp',
+    exit_plan_mode: 'ExitPlanMode'
 };
 
 /**
@@ -318,7 +324,7 @@ const CANONICAL_TO_RULE_DISPLAY: Readonly<Record<string, string>> = {
  * Falls back to the canonical name itself for unknown tools (e.g. MCP tools).
  */
 export function getRuleDisplayName(canonicalToolName: string): string {
-  return CANONICAL_TO_RULE_DISPLAY[canonicalToolName] ?? canonicalToolName;
+    return CANONICAL_TO_RULE_DISPLAY[canonicalToolName] ?? canonicalToolName;
 }
 
 /**
@@ -359,50 +365,50 @@ const FILE_TARGETED_TOOLS = new Set(['read_file', 'edit', 'write_file']);
  * @returns Array of rule strings (usually a single element).
  */
 export function buildPermissionRules(ctx: PermissionCheckContext): string[] {
-  const canonicalName = resolveToolName(ctx.toolName);
-  const displayName = getRuleDisplayName(canonicalName);
-  const kind = getSpecifierKind(canonicalName);
+    const canonicalName = resolveToolName(ctx.toolName);
+    const displayName = getRuleDisplayName(canonicalName);
+    const kind = getSpecifierKind(canonicalName);
 
-  switch (kind) {
-    case 'command':
-      // Shell commands — fallback only; shell.ts provides its own rules via
-      // extractCommandRules which are more granular (per-simple-command).
-      if (ctx.command) {
-        return [`${displayName}(${ctx.command})`];
-      }
-      return [displayName];
+    switch (kind) {
+        case 'command':
+            // Shell commands — fallback only; shell.ts provides its own rules via
+            // extractCommandRules which are more granular (per-simple-command).
+            if (ctx.command) {
+                return [`${displayName}(${ctx.command})`];
+            }
+            return [displayName];
 
-    case 'path':
-      if (ctx.filePath) {
-        // For file-targeted tools, scope to the containing directory;
-        // for directory-targeted tools the path is already a directory.
-        const dirPath = FILE_TARGETED_TOOLS.has(canonicalName)
-          ? path.dirname(ctx.filePath)
-          : ctx.filePath;
-        // Use the `//` prefix for absolute filesystem paths in rule grammar.
-        // Append `/**` so the gitignore-style glob matches all files in the
-        // directory recursively (picomatch uses `**` for recursive descent).
-        // resolvePathPattern("//foo/**") → "/foo/**" — round-trips correctly.
-        const specifier = dirPath.startsWith('/')
-          ? `/${dirPath}/**`
-          : `${dirPath}/**`;
-        return [`${displayName}(${specifier})`];
-      }
-      return [displayName];
+        case 'path':
+            if (ctx.filePath) {
+                // For file-targeted tools, scope to the containing directory;
+                // for directory-targeted tools the path is already a directory.
+                const dirPath = FILE_TARGETED_TOOLS.has(canonicalName)
+                    ? path.dirname(ctx.filePath)
+                    : ctx.filePath;
+                // Use the `//` prefix for absolute filesystem paths in rule grammar.
+                // Append `/**` so the gitignore-style glob matches all files in the
+                // directory recursively (picomatch uses `**` for recursive descent).
+                // resolvePathPattern("//foo/**") → "/foo/**" — round-trips correctly.
+                const specifier = dirPath.startsWith('/')
+                    ? `/${dirPath}/**`
+                    : `${dirPath}/**`;
+                return [`${displayName}(${specifier})`];
+            }
+            return [displayName];
 
-    case 'domain':
-      if (ctx.domain) {
-        return [`${displayName}(${ctx.domain})`];
-      }
-      return [displayName];
+        case 'domain':
+            if (ctx.domain) {
+                return [`${displayName}(${ctx.domain})`];
+            }
+            return [displayName];
 
-    case 'literal':
-    default:
-      if (ctx.specifier) {
-        return [`${displayName}(${ctx.specifier})`];
-      }
-      return [displayName];
-  }
+        case 'literal':
+        default:
+            if (ctx.specifier) {
+                return [`${displayName}(${ctx.specifier})`];
+            }
+            return [displayName];
+    }
 }
 
 /**
@@ -410,17 +416,17 @@ export function buildPermissionRules(ctx: PermissionCheckContext): string[] {
  * Maps display name → verb phrase for use in "Always allow [verb phrase] in this project".
  */
 const DISPLAY_NAME_TO_VERB: Readonly<Record<string, string>> = {
-  Read: 'read files',
-  Edit: 'edit files',
-  Bash: 'run commands',
-  WebFetch: 'fetch from',
-  WebSearch: 'search the web',
-  Agent: 'use agent',
-  Skill: 'use skill',
-  SaveMemory: 'save memory',
-  TodoWrite: 'write todos',
-  Lsp: 'use LSP',
-  ExitPlanMode: 'exit plan mode',
+    Read: 'read files',
+    Edit: 'edit files',
+    Bash: 'run commands',
+    WebFetch: 'fetch from',
+    WebSearch: 'search the web',
+    Agent: 'use agent',
+    Skill: 'use skill',
+    SaveMemory: 'save memory',
+    TodoWrite: 'write todos',
+    Lsp: 'use LSP',
+    ExitPlanMode: 'exit plan mode'
 };
 
 /**
@@ -431,18 +437,18 @@ const DISPLAY_NAME_TO_VERB: Readonly<Record<string, string>> = {
  * `/src/**`                → `src/`
  */
 function cleanPathSpecifier(specifier: string): string {
-  let cleaned = specifier;
-  // Remove trailing glob patterns like /** or /*
-  cleaned = cleaned.replace(/\/\*\*$/, '/').replace(/\/\*$/, '/');
-  // Convert rule grammar `//absolute` → `/absolute`
-  if (cleaned.startsWith('//')) {
-    cleaned = cleaned.substring(1);
-  }
-  // Ensure trailing slash for directories
-  if (!cleaned.endsWith('/')) {
-    cleaned += '/';
-  }
-  return cleaned;
+    let cleaned = specifier;
+    // Remove trailing glob patterns like /** or /*
+    cleaned = cleaned.replace(/\/\*\*$/, '/').replace(/\/\*$/, '/');
+    // Convert rule grammar `//absolute` → `/absolute`
+    if (cleaned.startsWith('//')) {
+        cleaned = cleaned.substring(1);
+    }
+    // Ensure trailing slash for directories
+    if (!cleaned.endsWith('/')) {
+        cleaned += '/';
+    }
+    return cleaned;
 }
 
 /**
@@ -461,48 +467,51 @@ function cleanPathSpecifier(specifier: string): string {
  * @returns A human-readable description string
  */
 export function buildHumanReadableRuleLabel(rules: string[]): string {
-  if (!rules.length) return '';
+    if (!rules.length) return '';
 
-  const parts: string[] = [];
-  for (const rule of rules) {
-    // Parse "DisplayName(specifier)" or bare "DisplayName"
-    const parenIdx = rule.indexOf('(');
-    if (parenIdx === -1) {
-      // Bare rule like "Read" or "Bash"
-      const verb = DISPLAY_NAME_TO_VERB[rule] ?? rule.toLowerCase();
-      parts.push(verb);
-      continue;
+    const parts: string[] = [];
+    for (const rule of rules) {
+        // Parse "DisplayName(specifier)" or bare "DisplayName"
+        const parenIdx = rule.indexOf('(');
+        if (parenIdx === -1) {
+            // Bare rule like "Read" or "Bash"
+            const verb = DISPLAY_NAME_TO_VERB[rule] ?? rule.toLowerCase();
+            parts.push(verb);
+            continue;
+        }
+
+        const displayName = rule.substring(0, parenIdx);
+        const specifier = rule.substring(parenIdx + 1, rule.length - 1); // strip parens
+        const verb =
+            DISPLAY_NAME_TO_VERB[displayName] ?? displayName.toLowerCase();
+
+        const canonicalName = Object.entries(CANONICAL_TO_RULE_DISPLAY).find(
+            ([, v]) => v === displayName
+        )?.[0];
+        const kind = canonicalName
+            ? getSpecifierKind(canonicalName)
+            : 'literal';
+
+        switch (kind) {
+            case 'path': {
+                const cleanPath = cleanPathSpecifier(specifier);
+                parts.push(`${verb} in ${cleanPath}`);
+                break;
+            }
+            case 'command':
+                parts.push(`run '${specifier}' commands`);
+                break;
+            case 'domain':
+                parts.push(`${verb} ${specifier}`);
+                break;
+            case 'literal':
+            default:
+                parts.push(`${verb} "${specifier}"`);
+                break;
+        }
     }
 
-    const displayName = rule.substring(0, parenIdx);
-    const specifier = rule.substring(parenIdx + 1, rule.length - 1); // strip parens
-    const verb = DISPLAY_NAME_TO_VERB[displayName] ?? displayName.toLowerCase();
-
-    const canonicalName = Object.entries(CANONICAL_TO_RULE_DISPLAY).find(
-      ([, v]) => v === displayName,
-    )?.[0];
-    const kind = canonicalName ? getSpecifierKind(canonicalName) : 'literal';
-
-    switch (kind) {
-      case 'path': {
-        const cleanPath = cleanPathSpecifier(specifier);
-        parts.push(`${verb} in ${cleanPath}`);
-        break;
-      }
-      case 'command':
-        parts.push(`run '${specifier}' commands`);
-        break;
-      case 'domain':
-        parts.push(`${verb} ${specifier}`);
-        break;
-      case 'literal':
-      default:
-        parts.push(`${verb} "${specifier}"`);
-        break;
-    }
-  }
-
-  return parts.join(', ');
+    return parts.join(', ');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -529,56 +538,56 @@ const SHELL_OPERATORS = ['&&', '||', ';;', '|&', '|', ';'];
  *   "a && b || c"            → ["a", "b", "c"]
  */
 export function splitCompoundCommand(command: string): string[] {
-  const commands: string[] = [];
-  let inSingle = false;
-  let inDouble = false;
-  let escaped = false;
-  let lastSplit = 0;
+    const commands: string[] = [];
+    let inSingle = false;
+    let inDouble = false;
+    let escaped = false;
+    let lastSplit = 0;
 
-  for (let i = 0; i < command.length; i++) {
-    const ch = command[i]!;
+    for (let i = 0; i < command.length; i++) {
+        const ch = command[i]!;
 
-    if (escaped) {
-      escaped = false;
-      continue;
-    }
-    if (ch === '\\') {
-      escaped = true;
-      continue;
-    }
-    if (ch === "'" && !inDouble) {
-      inSingle = !inSingle;
-      continue;
-    }
-    if (ch === '"' && !inSingle) {
-      inDouble = !inDouble;
-      continue;
-    }
-    if (inSingle || inDouble) {
-      continue;
-    }
-
-    // Check for shell operators (longest match first)
-    for (const op of SHELL_OPERATORS) {
-      if (command.substring(i, i + op.length) === op) {
-        const segment = command.substring(lastSplit, i).trim();
-        if (segment) {
-          commands.push(segment);
+        if (escaped) {
+            escaped = false;
+            continue;
         }
-        lastSplit = i + op.length;
-        i = lastSplit - 1; // -1 because the loop will i++
-        break;
-      }
+        if (ch === '\\') {
+            escaped = true;
+            continue;
+        }
+        if (ch === "'" && !inDouble) {
+            inSingle = !inSingle;
+            continue;
+        }
+        if (ch === '"' && !inSingle) {
+            inDouble = !inDouble;
+            continue;
+        }
+        if (inSingle || inDouble) {
+            continue;
+        }
+
+        // Check for shell operators (longest match first)
+        for (const op of SHELL_OPERATORS) {
+            if (command.substring(i, i + op.length) === op) {
+                const segment = command.substring(lastSplit, i).trim();
+                if (segment) {
+                    commands.push(segment);
+                }
+                lastSplit = i + op.length;
+                i = lastSplit - 1; // -1 because the loop will i++
+                break;
+            }
+        }
     }
-  }
 
-  // Add the last segment
-  const lastSegment = command.substring(lastSplit).trim();
-  if (lastSegment) {
-    commands.push(lastSegment);
-  }
+    // Add the last segment
+    const lastSegment = command.substring(lastSplit).trim();
+    if (lastSegment) {
+        commands.push(lastSegment);
+    }
 
-  return commands.length > 0 ? commands : [command];
+    return commands.length > 0 ? commands : [command];
 }
 
 /**
@@ -601,81 +610,81 @@ export function splitCompoundCommand(command: string): string[] {
  * 5. `Bash(*)` is equivalent to `Bash` and matches any command.
  */
 export function matchesCommandPattern(
-  pattern: string,
-  command: string,
+    pattern: string,
+    command: string
 ): boolean {
-  // This function matches a single pattern against a single simple command.
-  // Compound command splitting is handled by the caller (PermissionManager).
+    // This function matches a single pattern against a single simple command.
+    // Compound command splitting is handled by the caller (PermissionManager).
 
-  // Special case: lone `*` matches any single command
-  if (pattern === '*') {
-    return true;
-  }
-
-  if (!pattern.includes('*')) {
-    // No wildcards: prefix matching (backward compat).
-    // "git commit" matches "git commit" and "git commit -m test"
-    // but NOT "gitcommit".
-    return command === pattern || command.startsWith(pattern + ' ');
-  }
-
-  // Build regex from glob pattern with word-boundary semantics.
-  //
-  // We walk through the pattern character by character, building a regex.
-  // When we encounter `*`:
-  //   - If preceded by a space: the space acts as a word boundary before `.*`
-  //   - If preceded by non-space (or at start): `.*` with no boundary constraint
-
-  let regex = '^';
-  let pos = 0;
-
-  while (pos < pattern.length) {
-    const starIdx = pattern.indexOf('*', pos);
-    if (starIdx === -1) {
-      // No more wildcards; rest is literal, then allow trailing args
-      regex += escapeRegex(pattern.substring(pos));
-      break;
+    // Special case: lone `*` matches any single command
+    if (pattern === '*') {
+        return true;
     }
 
-    // Add literal part before the `*`
-    const literalBefore = pattern.substring(pos, starIdx);
-
-    if (starIdx > 0 && pattern[starIdx - 1] === ' ') {
-      // Word-boundary wildcard: "ls *"
-      // The literal includes the trailing space. The `*` matches
-      // anything after that space (including empty = just "ls").
-      // But the key insight: "ls " was already committed, so
-      // `ls` alone without a trailing space should also match.
-      //
-      // Rewrite: literal without trailing space + (space + anything | end)
-      const literalWithoutTrailingSpace = literalBefore.slice(0, -1);
-      regex += escapeRegex(literalWithoutTrailingSpace);
-      regex += '( .*)?';
-    } else {
-      // No word boundary: "ls*" → `ls` followed by anything
-      regex += escapeRegex(literalBefore);
-      regex += '.*';
+    if (!pattern.includes('*')) {
+        // No wildcards: prefix matching (backward compat).
+        // "git commit" matches "git commit" and "git commit -m test"
+        // but NOT "gitcommit".
+        return command === pattern || command.startsWith(pattern + ' ');
     }
 
-    pos = starIdx + 1;
-  }
+    // Build regex from glob pattern with word-boundary semantics.
+    //
+    // We walk through the pattern character by character, building a regex.
+    // When we encounter `*`:
+    //   - If preceded by a space: the space acts as a word boundary before `.*`
+    //   - If preceded by non-space (or at start): `.*` with no boundary constraint
 
-  // If the pattern does NOT end with `*`, the regex already matches exactly.
-  // If it does end with `*`, the trailing `.*` handles it.
-  regex += '$';
+    let regex = '^';
+    let pos = 0;
 
-  try {
-    return new RegExp(regex).test(command);
-  } catch {
-    return command === pattern;
-  }
+    while (pos < pattern.length) {
+        const starIdx = pattern.indexOf('*', pos);
+        if (starIdx === -1) {
+            // No more wildcards; rest is literal, then allow trailing args
+            regex += escapeRegex(pattern.substring(pos));
+            break;
+        }
+
+        // Add literal part before the `*`
+        const literalBefore = pattern.substring(pos, starIdx);
+
+        if (starIdx > 0 && pattern[starIdx - 1] === ' ') {
+            // Word-boundary wildcard: "ls *"
+            // The literal includes the trailing space. The `*` matches
+            // anything after that space (including empty = just "ls").
+            // But the key insight: "ls " was already committed, so
+            // `ls` alone without a trailing space should also match.
+            //
+            // Rewrite: literal without trailing space + (space + anything | end)
+            const literalWithoutTrailingSpace = literalBefore.slice(0, -1);
+            regex += escapeRegex(literalWithoutTrailingSpace);
+            regex += '( .*)?';
+        } else {
+            // No word boundary: "ls*" → `ls` followed by anything
+            regex += escapeRegex(literalBefore);
+            regex += '.*';
+        }
+
+        pos = starIdx + 1;
+    }
+
+    // If the pattern does NOT end with `*`, the regex already matches exactly.
+    // If it does end with `*`, the trailing `.*` handles it.
+    regex += '$';
+
+    try {
+        return new RegExp(regex).test(command);
+    } catch {
+        return command === pattern;
+    }
 }
 
 /**
  * Escape special regex characters.
  */
 function escapeRegex(s: string): string {
-  return s.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+    return s.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -700,33 +709,33 @@ function escapeRegex(s: string): string {
  * the project root. Use `//Users/alice/file` for absolute paths.
  */
 export function resolvePathPattern(
-  specifier: string,
-  projectRoot: string,
-  cwd: string,
+    specifier: string,
+    projectRoot: string,
+    cwd: string
 ): string {
-  if (specifier.startsWith('//')) {
-    // Absolute path from filesystem root: `//path` → `/path`
-    return specifier.substring(1);
-  }
+    if (specifier.startsWith('//')) {
+        // Absolute path from filesystem root: `//path` → `/path`
+        return specifier.substring(1);
+    }
 
-  if (specifier.startsWith('~/')) {
-    // Relative to home directory
-    // Normalize homedir to forward slashes for cross-platform picomatch compatibility
-    return toPosixPath(path.join(os.homedir(), specifier.substring(2)));
-  }
+    if (specifier.startsWith('~/')) {
+        // Relative to home directory
+        // Normalize homedir to forward slashes for cross-platform picomatch compatibility
+        return toPosixPath(path.join(os.homedir(), specifier.substring(2)));
+    }
 
-  if (specifier.startsWith('/')) {
-    // Relative to project root (NOT absolute!)
-    return toPosixPath(path.join(projectRoot, specifier.substring(1)));
-  }
+    if (specifier.startsWith('/')) {
+        // Relative to project root (NOT absolute!)
+        return toPosixPath(path.join(projectRoot, specifier.substring(1)));
+    }
 
-  if (specifier.startsWith('./')) {
-    // Relative to current working directory
-    return toPosixPath(path.join(cwd, specifier.substring(2)));
-  }
+    if (specifier.startsWith('./')) {
+        // Relative to current working directory
+        return toPosixPath(path.join(cwd, specifier.substring(2)));
+    }
 
-  // No prefix: relative to current working directory
-  return toPosixPath(path.join(cwd, specifier));
+    // No prefix: relative to current working directory
+    return toPosixPath(path.join(cwd, specifier));
 }
 
 /**
@@ -743,26 +752,26 @@ export function resolvePathPattern(
  * @returns True if the file path matches the pattern
  */
 export function matchesPathPattern(
-  specifier: string,
-  filePath: string,
-  projectRoot: string,
-  cwd: string,
+    specifier: string,
+    filePath: string,
+    projectRoot: string,
+    cwd: string
 ): boolean {
-  const resolvedPattern = resolvePathPattern(specifier, projectRoot, cwd);
+    const resolvedPattern = resolvePathPattern(specifier, projectRoot, cwd);
 
-  // Normalize filePath to forward slashes for cross-platform picomatch compatibility.
-  // On Windows, incoming paths may use backslashes; picomatch expects forward slashes.
-  const normalizedFilePath = toPosixPath(filePath);
+    // Normalize filePath to forward slashes for cross-platform picomatch compatibility.
+    // On Windows, incoming paths may use backslashes; picomatch expects forward slashes.
+    const normalizedFilePath = toPosixPath(filePath);
 
-  // Use picomatch for gitignore-style matching
-  const isMatch = picomatch(resolvedPattern, {
-    dot: true, // Match dotfiles (e.g. .env)
-    nocase: false, // Case-sensitive (filesystem convention)
-    // Note: do NOT set bash: true — it makes `*` match across directories.
-    // Default picomatch behavior is gitignore-style: `*` = single dir, `**` = recursive.
-  });
+    // Use picomatch for gitignore-style matching
+    const isMatch = picomatch(resolvedPattern, {
+        dot: true, // Match dotfiles (e.g. .env)
+        nocase: false // Case-sensitive (filesystem convention)
+        // Note: do NOT set bash: true — it makes `*` match across directories.
+        // Default picomatch behavior is gitignore-style: `*` = single dir, `**` = recursive.
+    });
 
-  return isMatch(normalizedFilePath);
+    return isMatch(normalizedFilePath);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -781,32 +790,32 @@ export function matchesPathPattern(
  *   matchesDomainPattern("domain:example.com", "notexample.com")   → false
  */
 export function matchesDomainPattern(
-  specifier: string,
-  domain: string,
+    specifier: string,
+    domain: string
 ): boolean {
-  // Strip the "domain:" prefix if present
-  const pattern = specifier.startsWith('domain:')
-    ? specifier.substring(7).trim()
-    : specifier.trim();
+    // Strip the "domain:" prefix if present
+    const pattern = specifier.startsWith('domain:')
+        ? specifier.substring(7).trim()
+        : specifier.trim();
 
-  if (!pattern || !domain) {
+    if (!pattern || !domain) {
+        return false;
+    }
+
+    const normalizedDomain = domain.toLowerCase();
+    const normalizedPattern = pattern.toLowerCase();
+
+    // Exact match
+    if (normalizedDomain === normalizedPattern) {
+        return true;
+    }
+
+    // Subdomain match: "sub.example.com" matches "example.com"
+    if (normalizedDomain.endsWith('.' + normalizedPattern)) {
+        return true;
+    }
+
     return false;
-  }
-
-  const normalizedDomain = domain.toLowerCase();
-  const normalizedPattern = pattern.toLowerCase();
-
-  // Exact match
-  if (normalizedDomain === normalizedPattern) {
-    return true;
-  }
-
-  // Subdomain match: "sub.example.com" matches "example.com"
-  if (normalizedDomain.endsWith('.' + normalizedPattern)) {
-    return true;
-  }
-
-  return false;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -822,32 +831,32 @@ export function matchesDomainPattern(
  *   "mcp__puppeteer__puppeteer_navigate" matches only that exact tool
  */
 function matchesMcpPattern(pattern: string, toolName: string): boolean {
-  if (pattern === toolName) {
-    return true;
-  }
+    if (pattern === toolName) {
+        return true;
+    }
 
-  // Wildcard: patterns ending with "*" match by prefix.
-  // e.g. "mcp__server__*" matches all tools from that server,
-  //      "mcp__chrome__use_*" matches all "use_*" tools from chrome.
-  if (pattern.endsWith('*')) {
-    const prefix = pattern.slice(0, -1); // strip trailing "*"
-    return toolName.startsWith(prefix);
-  }
+    // Wildcard: patterns ending with "*" match by prefix.
+    // e.g. "mcp__server__*" matches all tools from that server,
+    //      "mcp__chrome__use_*" matches all "use_*" tools from chrome.
+    if (pattern.endsWith('*')) {
+        const prefix = pattern.slice(0, -1); // strip trailing "*"
+        return toolName.startsWith(prefix);
+    }
 
-  // Server-level match: "mcp__puppeteer" matches "mcp__puppeteer__anything"
-  // Only when the pattern has exactly 2 parts (mcp + server) and the tool has 3+
-  const patternParts = pattern.split('__');
-  const toolParts = toolName.split('__');
-  if (
-    patternParts.length === 2 &&
-    toolParts.length >= 3 &&
-    patternParts[0] === toolParts[0] &&
-    patternParts[1] === toolParts[1]
-  ) {
-    return true;
-  }
+    // Server-level match: "mcp__puppeteer" matches "mcp__puppeteer__anything"
+    // Only when the pattern has exactly 2 parts (mcp + server) and the tool has 3+
+    const patternParts = pattern.split('__');
+    const toolParts = toolName.split('__');
+    if (
+        patternParts.length === 2 &&
+        toolParts.length >= 3 &&
+        patternParts[0] === toolParts[0] &&
+        patternParts[1] === toolParts[1]
+    ) {
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -859,10 +868,10 @@ function matchesMcpPattern(pattern: string, toolName: string): boolean {
  * to resolve relative path patterns.
  */
 export interface PathMatchContext {
-  /** The project root directory (absolute path). */
-  projectRoot: string;
-  /** The current working directory (absolute path). */
-  cwd: string;
+    /** The project root directory (absolute path). */
+    projectRoot: string;
+    /** The current working directory (absolute path). */
+    cwd: string;
 }
 
 /**
@@ -891,76 +900,76 @@ export interface PathMatchContext {
  * @param pathContext - Project root and cwd for resolving relative path patterns
  */
 export function matchesRule(
-  rule: PermissionRule,
-  toolName: string,
-  command?: string,
-  filePath?: string,
-  domain?: string,
-  pathContext?: PathMatchContext,
-  specifier?: string,
+    rule: PermissionRule,
+    toolName: string,
+    command?: string,
+    filePath?: string,
+    domain?: string,
+    pathContext?: PathMatchContext,
+    specifier?: string
 ): boolean {
-  const canonicalCtxToolName = resolveToolName(toolName);
+    const canonicalCtxToolName = resolveToolName(toolName);
 
-  // ── MCP tool matching ────────────────────────────────────────────────
-  if (
-    rule.toolName.startsWith('mcp__') ||
-    canonicalCtxToolName.startsWith('mcp__')
-  ) {
-    return matchesMcpPattern(rule.toolName, canonicalCtxToolName);
-  }
+    // ── MCP tool matching ────────────────────────────────────────────────
+    if (
+        rule.toolName.startsWith('mcp__') ||
+        canonicalCtxToolName.startsWith('mcp__')
+    ) {
+        return matchesMcpPattern(rule.toolName, canonicalCtxToolName);
+    }
 
-  // ── Standard tool name matching (with meta-category support) ─────────
-  if (!toolMatchesRuleToolName(rule.toolName, canonicalCtxToolName)) {
-    return false;
-  }
-
-  // ── No specifier → match any invocation of the tool ──────────────────
-  if (!rule.specifier) {
-    return true;
-  }
-
-  // ── Specifier matching (kind-dependent) ──────────────────────────────
-  const kind = rule.specifierKind ?? getSpecifierKind(rule.toolName);
-
-  switch (kind) {
-    case 'command': {
-      if (command === undefined) {
+    // ── Standard tool name matching (with meta-category support) ─────────
+    if (!toolMatchesRuleToolName(rule.toolName, canonicalCtxToolName)) {
         return false;
-      }
-      return matchesCommandPattern(rule.specifier, command);
     }
 
-    case 'path': {
-      if (filePath === undefined) {
-        return false;
-      }
-      const ctx = pathContext ?? {
-        projectRoot: process.cwd(),
-        cwd: process.cwd(),
-      };
-      return matchesPathPattern(
-        rule.specifier,
-        filePath,
-        ctx.projectRoot,
-        ctx.cwd,
-      );
+    // ── No specifier → match any invocation of the tool ──────────────────
+    if (!rule.specifier) {
+        return true;
     }
 
-    case 'domain': {
-      if (domain === undefined) {
-        return false;
-      }
-      return matchesDomainPattern(rule.specifier, domain);
-    }
+    // ── Specifier matching (kind-dependent) ──────────────────────────────
+    const kind = rule.specifierKind ?? getSpecifierKind(rule.toolName);
 
-    case 'literal':
-    default: {
-      // Literal/exact matching (for Skill names, Agent subagent types, etc.)
-      const value = command ?? specifier;
-      if (value !== undefined) {
-        return value === rule.specifier;
-      }
-      return false;
+    switch (kind) {
+        case 'command': {
+            if (command === undefined) {
+                return false;
+            }
+            return matchesCommandPattern(rule.specifier, command);
+        }
+
+        case 'path': {
+            if (filePath === undefined) {
+                return false;
+            }
+            const ctx = pathContext ?? {
+                projectRoot: process.cwd(),
+                cwd: process.cwd()
+            };
+            return matchesPathPattern(
+                rule.specifier,
+                filePath,
+                ctx.projectRoot,
+                ctx.cwd
+            );
+        }
+
+        case 'domain': {
+            if (domain === undefined) {
+                return false;
+            }
+            return matchesDomainPattern(rule.specifier, domain);
+        }
+
+        case 'literal':
+        default: {
+            // Literal/exact matching (for Skill names, Agent subagent types, etc.)
+            const value = command ?? specifier;
+            if (value !== undefined) {
+                return value === rule.specifier;
+            }
+            return false;
+        }
     }
-  }
 }

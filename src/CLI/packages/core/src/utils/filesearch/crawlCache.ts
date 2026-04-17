@@ -15,17 +15,17 @@ const cacheTimers = new Map<string, NodeJS.Timeout>();
  * or ignore rules change.
  */
 export const getCacheKey = (
-  directory: string,
-  ignoreContent: string,
-  maxDepth?: number,
+    directory: string,
+    ignoreContent: string,
+    maxDepth?: number
 ): string => {
-  const hash = crypto.createHash('sha256');
-  hash.update(directory);
-  hash.update(ignoreContent);
-  if (maxDepth !== undefined) {
-    hash.update(String(maxDepth));
-  }
-  return hash.digest('hex');
+    const hash = crypto.createHash('sha256');
+    hash.update(directory);
+    hash.update(ignoreContent);
+    if (maxDepth !== undefined) {
+        hash.update(String(maxDepth));
+    }
+    return hash.digest('hex');
 };
 
 /**
@@ -38,22 +38,22 @@ export const read = (key: string): string[] | undefined => crawlCache.get(key);
  * Writes data to the in-memory cache and sets a timer to evict it after the TTL.
  */
 export const write = (key: string, results: string[], ttlMs: number): void => {
-  // Clear any existing timer for this key to prevent premature deletion
-  if (cacheTimers.has(key)) {
-    clearTimeout(cacheTimers.get(key)!);
-  }
+    // Clear any existing timer for this key to prevent premature deletion
+    if (cacheTimers.has(key)) {
+        clearTimeout(cacheTimers.get(key)!);
+    }
 
-  // Store the new data
-  crawlCache.set(key, results);
+    // Store the new data
+    crawlCache.set(key, results);
 
-  // Set a timer to automatically delete the cache entry after the TTL
-  const timerId = setTimeout(() => {
-    crawlCache.delete(key);
-    cacheTimers.delete(key);
-  }, ttlMs);
+    // Set a timer to automatically delete the cache entry after the TTL
+    const timerId = setTimeout(() => {
+        crawlCache.delete(key);
+        cacheTimers.delete(key);
+    }, ttlMs);
 
-  // Store the timer handle so we can clear it if the entry is updated
-  cacheTimers.set(key, timerId);
+    // Store the timer handle so we can clear it if the entry is updated
+    cacheTimers.set(key, timerId);
 };
 
 /**
@@ -61,9 +61,9 @@ export const write = (key: string, results: string[], ttlMs: number): void => {
  * Primarily used for testing.
  */
 export const clear = (): void => {
-  for (const timerId of cacheTimers.values()) {
-    clearTimeout(timerId);
-  }
-  crawlCache.clear();
-  cacheTimers.clear();
+    for (const timerId of cacheTimers.values()) {
+        clearTimeout(timerId);
+    }
+    crawlCache.clear();
+    cacheTimers.clear();
 };

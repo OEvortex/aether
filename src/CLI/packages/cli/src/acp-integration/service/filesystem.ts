@@ -5,95 +5,97 @@
  */
 
 import type {
-  AgentSideConnection,
-  FileSystemCapability,
-  ReadTextFileRequest,
-  WriteTextFileRequest,
-  WriteTextFileResponse,
+    FileSystemService,
+    ReadTextFileResponse
+} from '@aetherai/aether-core';
+import type {
+    AgentSideConnection,
+    FileSystemCapability,
+    ReadTextFileRequest,
+    WriteTextFileRequest,
+    WriteTextFileResponse
 } from '@agentclientprotocol/sdk';
 import { RequestError } from '@agentclientprotocol/sdk';
-import type {
-  FileSystemService,
-  ReadTextFileResponse,
-} from '@aetherai/aether-core';
 
 const RESOURCE_NOT_FOUND_CODE = -32002;
 
 function getErrorCode(error: unknown): unknown {
-  if (error instanceof RequestError) {
-    return error.code;
-  }
+    if (error instanceof RequestError) {
+        return error.code;
+    }
 
-  if (typeof error === 'object' && error !== null && 'code' in error) {
-    return (error as { code?: unknown }).code;
-  }
+    if (typeof error === 'object' && error !== null && 'code' in error) {
+        return (error as { code?: unknown }).code;
+    }
 
-  return undefined;
+    return undefined;
 }
 
 function createEnoentError(filePath: string): NodeJS.ErrnoException {
-  const err = new Error(`File not found: ${filePath}`) as NodeJS.ErrnoException;
-  err.code = 'ENOENT';
-  err.errno = -2;
-  err.path = filePath;
-  return err;
+    const err = new Error(
+        `File not found: ${filePath}`
+    ) as NodeJS.ErrnoException;
+    err.code = 'ENOENT';
+    err.errno = -2;
+    err.path = filePath;
+    return err;
 }
 
 export class AcpFileSystemService implements FileSystemService {
-  constructor(
-    private readonly connection: AgentSideConnection,
-    private readonly sessionId: string,
-    private readonly capabilities: FileSystemCapability,
-    private readonly fallback: FileSystemService,
-  ) {}
+    constructor(
+        private readonly connection: AgentSideConnection,
+        private readonly sessionId: string,
+        private readonly capabilities: FileSystemCapability,
+        private readonly fallback: FileSystemService
+    ) {}
 
-  async readTextFile(
-    params: Omit<ReadTextFileRequest, 'sessionId'>,
-  ): Promise<ReadTextFileResponse> {
-    if (!this.capabilities.readTextFile) {
-      return this.fallback.readTextFile(params);
+    async readTextFile(
+        params: Omit<ReadTextFileRequest, 'sessionId'>
+    ): Promise<ReadTextFileResponse> {
+        if (!this.capabilities.readTextFile) {
+            return this.fallback.readTextFile(params);
+        }
+
+        let response: ReadTextFileResponse;
+        try {
+            response = await this.connection.readTextFile({
+                ...params,
+                sessionId: this.sessionId
+            });
+        } catch (error) {
+            const errorCode = getErrorCode(error);
+
+            if (errorCode === RESOURCE_NOT_FOUND_CODE) {
+                throw createEnoentError(params.path);
+            }
+
+            throw error;
+        }
+
+        return response;
     }
 
-    let response: ReadTextFileResponse;
-    try {
-      response = await this.connection.readTextFile({
-        ...params,
-        sessionId: this.sessionId,
-      });
-    } catch (error) {
-      const errorCode = getErrorCode(error);
+    async writeTextFile(
+        params: Omit<WriteTextFileRequest, 'sessionId'>
+    ): Promise<WriteTextFileResponse> {
+        if (!this.capabilities.writeTextFile) {
+            return this.fallback.writeTextFile(params);
+        }
 
-      if (errorCode === RESOURCE_NOT_FOUND_CODE) {
-        throw createEnoentError(params.path);
-      }
+        const finalContent = params._meta?.['bom']
+            ? '\uFEFF' + params.content
+            : params.content;
 
-      throw error;
+        await this.connection.writeTextFile({
+            ...params,
+            content: finalContent,
+            sessionId: this.sessionId
+        });
+
+        return { _meta: params._meta };
     }
 
-    return response;
-  }
-
-  async writeTextFile(
-    params: Omit<WriteTextFileRequest, 'sessionId'>,
-  ): Promise<WriteTextFileResponse> {
-    if (!this.capabilities.writeTextFile) {
-      return this.fallback.writeTextFile(params);
+    findFiles(fileName: string, searchPaths: readonly string[]): string[] {
+        return this.fallback.findFiles(fileName, searchPaths);
     }
-
-    const finalContent = params._meta?.['bom']
-      ? '\uFEFF' + params.content
-      : params.content;
-
-    await this.connection.writeTextFile({
-      ...params,
-      content: finalContent,
-      sessionId: this.sessionId,
-    });
-
-    return { _meta: params._meta };
-  }
-
-  findFiles(fileName: string, searchPaths: readonly string[]): string[] {
-    return this.fallback.findFiles(fileName, searchPaths);
-  }
 }

@@ -9,20 +9,20 @@
  * Escapes $ characters to prevent template interpretation.
  */
 export function safeLiteralReplace(
-  str: string,
-  oldString: string,
-  newString: string,
+    str: string,
+    oldString: string,
+    newString: string
 ): string {
-  if (oldString === '' || !str.includes(oldString)) {
-    return str;
-  }
+    if (oldString === '' || !str.includes(oldString)) {
+        return str;
+    }
 
-  if (!newString.includes('$')) {
-    return str.replaceAll(oldString, newString);
-  }
+    if (!newString.includes('$')) {
+        return str.replaceAll(oldString, newString);
+    }
 
-  const escapedNewString = newString.replaceAll('$', '$$$$');
-  return str.replaceAll(oldString, escapedNewString);
+    const escapedNewString = newString.replaceAll('$', '$$$$');
+    return str.replaceAll(oldString, escapedNewString);
 }
 
 /**
@@ -33,25 +33,26 @@ export function safeLiteralReplace(
  * @returns True if a NULL byte is found, false otherwise.
  */
 export function isBinary(
-  data: Buffer | null | undefined,
-  sampleSize = 512,
+    data: Buffer | null | undefined,
+    sampleSize = 512
 ): boolean {
-  if (!data) {
-    return false;
-  }
-
-  const sample = data.length > sampleSize ? data.subarray(0, sampleSize) : data;
-
-  for (const byte of sample) {
-    // The presence of a NULL byte (0x00) is one of the most reliable
-    // indicators of a binary file. Text files should not contain them.
-    if (byte === 0) {
-      return true;
+    if (!data) {
+        return false;
     }
-  }
 
-  // If no NULL bytes were found in the sample, we assume it's text.
-  return false;
+    const sample =
+        data.length > sampleSize ? data.subarray(0, sampleSize) : data;
+
+    for (const byte of sample) {
+        // The presence of a NULL byte (0x00) is one of the most reliable
+        // indicators of a binary file. Text files should not contain them.
+        if (byte === 0) {
+            return true;
+        }
+    }
+
+    // If no NULL bytes were found in the sample, we assume it's text.
+    return false;
 }
 
 /**
@@ -65,11 +66,11 @@ export function isBinary(
  * @returns The normalized string with uniform \n line endings
  */
 export function normalizeContent(content: string): string {
-  // Strip UTF-8 BOM to ensure string processing starts at the first real character.
-  let normalized = content.replace(/^\uFEFF/, '');
+    // Strip UTF-8 BOM to ensure string processing starts at the first real character.
+    let normalized = content.replace(/^\uFEFF/, '');
 
-  // Normalize line endings to LF (\n).
-  normalized = normalized.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    // Normalize line endings to LF (\n).
+    normalized = normalized.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
-  return normalized;
+    return normalized;
 }

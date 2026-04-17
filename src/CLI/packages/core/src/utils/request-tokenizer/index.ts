@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export { ImageTokenizer } from './imageTokenizer.js';
 export { RequestTokenizer as RequestTokenEstimator } from './requestTokenizer.js';
 export { TextTokenizer } from './textTokenizer.js';
-export { ImageTokenizer } from './imageTokenizer.js';
 
-export type { TokenCalculationResult, ImageMetadata } from './types.js';
+export type { ImageMetadata, TokenCalculationResult } from './types.js';

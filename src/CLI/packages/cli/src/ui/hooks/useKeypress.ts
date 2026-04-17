@@ -5,7 +5,7 @@
  */
 
 import { useEffect } from 'react';
-import type { KeypressHandler, Key } from '../contexts/KeypressContext.js';
+import type { Key, KeypressHandler } from '../contexts/KeypressContext.js';
 import { useKeypressContext } from '../contexts/KeypressContext.js';
 
 export type { Key };
@@ -18,19 +18,19 @@ export type { Key };
  * @param options.isActive - Whether the hook should be actively listening for input.
  */
 export function useKeypress(
-  onKeypress: KeypressHandler,
-  { isActive }: { isActive: boolean },
+    onKeypress: KeypressHandler,
+    { isActive }: { isActive: boolean }
 ) {
-  const { subscribe, unsubscribe } = useKeypressContext();
+    const { subscribe, unsubscribe } = useKeypressContext();
 
-  useEffect(() => {
-    if (!isActive) {
-      return;
-    }
+    useEffect(() => {
+        if (!isActive) {
+            return;
+        }
 
-    subscribe(onKeypress);
-    return () => {
-      unsubscribe(onKeypress);
-    };
-  }, [isActive, onKeypress, subscribe, unsubscribe]);
+        subscribe(onKeypress);
+        return () => {
+            unsubscribe(onKeypress);
+        };
+    }, [isActive, onKeypress, subscribe, unsubscribe]);
 }

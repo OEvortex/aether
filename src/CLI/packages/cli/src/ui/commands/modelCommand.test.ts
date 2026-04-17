@@ -4,137 +4,141 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { modelCommand } from './modelCommand.js';
-import { type CommandContext } from './types.js';
-import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
 import {
-  AuthType,
-  type ContentGeneratorConfig,
-  type Config,
+    AuthType,
+    type Config,
+    type ContentGeneratorConfig
 } from '@aetherai/aether-core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
+import { modelCommand } from './modelCommand.js';
+import type { CommandContext } from './types.js';
 
 // Helper function to create a mock config
 function createMockConfig(
-  contentGeneratorConfig: ContentGeneratorConfig | null,
+    contentGeneratorConfig: ContentGeneratorConfig | null
 ): Partial<Config> {
-  return {
-    getContentGeneratorConfig: vi.fn().mockReturnValue(contentGeneratorConfig),
-  };
+    return {
+        getContentGeneratorConfig: vi
+            .fn()
+            .mockReturnValue(contentGeneratorConfig)
+    };
 }
 
 describe('modelCommand', () => {
-  let mockContext: CommandContext;
+    let mockContext: CommandContext;
 
-  beforeEach(() => {
-    mockContext = createMockCommandContext();
-    vi.clearAllMocks();
-  });
-
-  it('should have the correct name and description', () => {
-    expect(modelCommand.name).toBe('model');
-    expect(modelCommand.description).toBe('Switch the model for this session');
-  });
-
-  it('should return error when config is not available', async () => {
-    mockContext.services.config = null;
-
-    const result = await modelCommand.action!(mockContext, '');
-
-    expect(result).toEqual({
-      type: 'message',
-      messageType: 'error',
-      content: 'Configuration not available.',
+    beforeEach(() => {
+        mockContext = createMockCommandContext();
+        vi.clearAllMocks();
     });
-  });
 
-  it('should return error when content generator config is not available', async () => {
-    const mockConfig = createMockConfig(null);
-    mockContext.services.config = mockConfig as Config;
-
-    const result = await modelCommand.action!(mockContext, '');
-
-    expect(result).toEqual({
-      type: 'message',
-      messageType: 'error',
-      content: 'Content generator configuration not available.',
+    it('should have the correct name and description', () => {
+        expect(modelCommand.name).toBe('model');
+        expect(modelCommand.description).toBe(
+            'Switch the model for this session'
+        );
     });
-  });
 
-  it('should return error when auth type is not available', async () => {
-    const mockConfig = createMockConfig({
-      model: 'test-model',
-      authType: undefined,
+    it('should return error when config is not available', async () => {
+        mockContext.services.config = null;
+
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'message',
+            messageType: 'error',
+            content: 'Configuration not available.'
+        });
     });
-    mockContext.services.config = mockConfig as Config;
 
-    const result = await modelCommand.action!(mockContext, '');
+    it('should return error when content generator config is not available', async () => {
+        const mockConfig = createMockConfig(null);
+        mockContext.services.config = mockConfig as Config;
 
-    expect(result).toEqual({
-      type: 'message',
-      messageType: 'error',
-      content: 'Authentication type not available.',
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'message',
+            messageType: 'error',
+            content: 'Content generator configuration not available.'
+        });
     });
-  });
 
-  it('should return dialog action for AETHER_OAUTH auth type', async () => {
-    const mockConfig = createMockConfig({
-      model: 'test-model',
-      authType: AuthType.AETHER_OAUTH,
+    it('should return error when auth type is not available', async () => {
+        const mockConfig = createMockConfig({
+            model: 'test-model',
+            authType: undefined
+        });
+        mockContext.services.config = mockConfig as Config;
+
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'message',
+            messageType: 'error',
+            content: 'Authentication type not available.'
+        });
     });
-    mockContext.services.config = mockConfig as Config;
 
-    const result = await modelCommand.action!(mockContext, '');
+    it('should return dialog action for AETHER_OAUTH auth type', async () => {
+        const mockConfig = createMockConfig({
+            model: 'test-model',
+            authType: AuthType.AETHER_OAUTH
+        });
+        mockContext.services.config = mockConfig as Config;
 
-    expect(result).toEqual({
-      type: 'dialog',
-      dialog: 'model',
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'dialog',
+            dialog: 'model'
+        });
     });
-  });
 
-  it('should return dialog action for USE_OPENAI auth type', async () => {
-    const mockConfig = createMockConfig({
-      model: 'test-model',
-      authType: AuthType.USE_OPENAI,
+    it('should return dialog action for USE_OPENAI auth type', async () => {
+        const mockConfig = createMockConfig({
+            model: 'test-model',
+            authType: AuthType.USE_OPENAI
+        });
+        mockContext.services.config = mockConfig as Config;
+
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'dialog',
+            dialog: 'model'
+        });
     });
-    mockContext.services.config = mockConfig as Config;
 
-    const result = await modelCommand.action!(mockContext, '');
+    it('should return dialog action for unsupported auth types', async () => {
+        const mockConfig = createMockConfig({
+            model: 'test-model',
+            authType: 'UNSUPPORTED_AUTH_TYPE' as AuthType
+        });
+        mockContext.services.config = mockConfig as Config;
 
-    expect(result).toEqual({
-      type: 'dialog',
-      dialog: 'model',
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'dialog',
+            dialog: 'model'
+        });
     });
-  });
 
-  it('should return dialog action for unsupported auth types', async () => {
-    const mockConfig = createMockConfig({
-      model: 'test-model',
-      authType: 'UNSUPPORTED_AUTH_TYPE' as AuthType,
+    it('should handle undefined auth type', async () => {
+        const mockConfig = createMockConfig({
+            model: 'test-model',
+            authType: undefined
+        });
+        mockContext.services.config = mockConfig as Config;
+
+        const result = await modelCommand.action!(mockContext, '');
+
+        expect(result).toEqual({
+            type: 'message',
+            messageType: 'error',
+            content: 'Authentication type not available.'
+        });
     });
-    mockContext.services.config = mockConfig as Config;
-
-    const result = await modelCommand.action!(mockContext, '');
-
-    expect(result).toEqual({
-      type: 'dialog',
-      dialog: 'model',
-    });
-  });
-
-  it('should handle undefined auth type', async () => {
-    const mockConfig = createMockConfig({
-      model: 'test-model',
-      authType: undefined,
-    });
-    mockContext.services.config = mockConfig as Config;
-
-    const result = await modelCommand.action!(mockContext, '');
-
-    expect(result).toEqual({
-      type: 'message',
-      messageType: 'error',
-      content: 'Authentication type not available.',
-    });
-  });
 });

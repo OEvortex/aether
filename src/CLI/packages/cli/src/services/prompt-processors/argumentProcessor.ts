@@ -5,8 +5,8 @@
  */
 
 import { appendToLastTextPart } from '@aetherai/aether-core';
-import type { IPromptProcessor, PromptPipelineContent } from './types.js';
 import type { CommandContext } from '../../ui/commands/types.js';
+import type { IPromptProcessor, PromptPipelineContent } from './types.js';
 
 /**
  * Appends the user's full command invocation to the prompt if arguments are
@@ -15,13 +15,13 @@ import type { CommandContext } from '../../ui/commands/types.js';
  * This processor is only used if the prompt does NOT contain {{args}}.
  */
 export class DefaultArgumentProcessor implements IPromptProcessor {
-  async process(
-    prompt: PromptPipelineContent,
-    context: CommandContext,
-  ): Promise<PromptPipelineContent> {
-    if (context.invocation?.args) {
-      return appendToLastTextPart(prompt, context.invocation.raw);
+    async process(
+        prompt: PromptPipelineContent,
+        context: CommandContext
+    ): Promise<PromptPipelineContent> {
+        if (context.invocation?.args) {
+            return appendToLastTextPart(prompt, context.invocation.raw);
+        }
+        return prompt;
     }
-    return prompt;
-  }
 }

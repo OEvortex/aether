@@ -12,8 +12,8 @@ import { ConfigManager } from '../../utils/configManager';
 import { KnownProviders } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
-import { getUserAgent } from '../../utils/userAgent';
 import { RetryManager } from '../../utils/retryManager';
+import { getUserAgent } from '../../utils/userAgent';
 import { OpenAIHandler } from '../openai/openaiHandler';
 import {
     apiMessageToAnthropicMessage,

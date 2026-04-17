@@ -74,7 +74,7 @@ export interface ChannelPlugin {
         name: string,
         config: ChannelConfig,
         bridge: AcpBridge,
-        options?: ChannelBaseOptions,
+        options?: ChannelBaseOptions
     ) => import('./ChannelBase.js').ChannelBase;
 }
 

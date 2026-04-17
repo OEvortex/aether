@@ -13,22 +13,22 @@ import type { ExtensionUpdateAction } from '../state/extensions.js';
  * are not applicable.
  */
 export function createNonInteractiveUI(): CommandContext['ui'] {
-  return {
-    addItem: (_item, _timestamp) => 0,
-    clear: () => {},
-    setDebugMessage: (_message) => {},
-    loadHistory: (_newHistory) => {},
-    pendingItem: null,
-    setPendingItem: (_item) => {},
-    btwItem: null,
-    setBtwItem: (_item) => {},
-    cancelBtw: () => {},
-    btwAbortControllerRef: { current: null },
-    toggleVimEnabled: async () => false,
-    setGeminiMdFileCount: (_count) => {},
-    reloadCommands: () => {},
-    extensionsUpdateState: new Map(),
-    dispatchExtensionStateUpdate: (_action: ExtensionUpdateAction) => {},
-    addConfirmUpdateExtensionRequest: (_request) => {},
-  };
+    return {
+        addItem: (_item, _timestamp) => 0,
+        clear: () => {},
+        setDebugMessage: (_message) => {},
+        loadHistory: (_newHistory) => {},
+        pendingItem: null,
+        setPendingItem: (_item) => {},
+        btwItem: null,
+        setBtwItem: (_item) => {},
+        cancelBtw: () => {},
+        btwAbortControllerRef: { current: null },
+        toggleVimEnabled: async () => false,
+        setGeminiMdFileCount: (_count) => {},
+        reloadCommands: () => {},
+        extensionsUpdateState: new Map(),
+        dispatchExtensionStateUpdate: (_action: ExtensionUpdateAction) => {},
+        addConfirmUpdateExtensionRequest: (_request) => {}
+    };
 }

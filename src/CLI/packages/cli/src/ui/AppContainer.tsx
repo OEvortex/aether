@@ -4,129 +4,129 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-    useMemo,
-    useState,
-    useCallback,
-    useEffect,
-    useRef,
-    useLayoutEffect,
-} from 'react';
-import { type DOMElement, measureElement } from 'ink';
-import { App } from './App.js';
-import { AppContext } from './contexts/AppContext.js';
-import { UIStateContext, type UIState } from './contexts/UIStateContext.js';
-import {
-    UIActionsContext,
-    type UIActions,
-} from './contexts/UIActionsContext.js';
-import { ConfigContext } from './contexts/ConfigContext.js';
-import {
-    type HistoryItem,
-    ToolCallStatus,
-    type HistoryItemWithoutId,
-} from './types.js';
-import { MessageType, StreamingState } from './types.js';
-import {
-    type EditorType,
-    type Config,
-    type IdeInfo,
-    type IdeContext,
-    IdeClient,
-    ideContextStore,
-    createDebugLogger,
-    getErrorMessage,
-    getAllGeminiMdFilenames,
-    ShellExecutionService,
-    Storage,
-    SessionEndReason,
-    SessionStartSource,
-    generatePromptSuggestion,
-    logPromptSuggestion,
-    PromptSuggestionEvent,
-    logSpeculation,
-    SpeculationEvent,
-    startSpeculation,
-    acceptSpeculation,
-    abortSpeculation,
-    type SpeculationState,
-    IDLE_SPECULATION,
-    ApprovalMode,
-    type PermissionMode,
-} from '@aetherai/aether-core';
-import { buildResumedHistoryItems } from './utils/resumeHistoryUtils.js';
-import { validateAuthMethod } from '../config/auth.js';
-import { loadHierarchicalGeminiMemory } from '../config/config.js';
-import process from 'node:process';
-import { useHistory } from './hooks/useHistoryManager.js';
-import { useMemoryMonitor } from './hooks/useMemoryMonitor.js';
-import { useThemeCommand } from './hooks/useThemeCommand.js';
-import { useFeedbackDialog } from './hooks/useFeedbackDialog.js';
-import { useAuthCommand } from './auth/useAuth.js';
-import { useEditorSettings } from './hooks/useEditorSettings.js';
-import { useSettingsCommand } from './hooks/useSettingsCommand.js';
-import { useModelCommand } from './hooks/useModelCommand.js';
-import { useArenaCommand } from './hooks/useArenaCommand.js';
-import { useApprovalModeCommand } from './hooks/useApprovalModeCommand.js';
-import { useResumeCommand } from './hooks/useResumeCommand.js';
-import { useSlashCommandProcessor } from './hooks/slashCommandProcessor.js';
-import { useVimMode } from './contexts/VimModeContext.js';
-import { useTerminalSize } from './hooks/useTerminalSize.js';
-import { calculatePromptWidths } from './components/InputPrompt.js';
-import { useStdin, useStdout } from 'ink';
-import ansiEscapes from 'ansi-escapes';
 import * as fs from 'node:fs';
 import { basename } from 'node:path';
-import { computeWindowTitle } from '../utils/windowTitle.js';
-import { clearScreen } from '../utils/stdioHelpers.js';
-import { useTextBuffer } from './components/shared/text-buffer.js';
-import { useLogger } from './hooks/useLogger.js';
-import { useGeminiStream } from './hooks/useGeminiStream.js';
-import { useVim } from './hooks/vim.js';
-import { isBtwCommand } from './utils/commandUtils.js';
-import { type LoadedSettings, SettingScope } from '../config/settings.js';
-import { type InitializationResult } from '../core/initializer.js';
-import { useFocus } from './hooks/useFocus.js';
-import { useBracketedPaste } from './hooks/useBracketedPaste.js';
-import { useKeypress, type Key } from './hooks/useKeypress.js';
-import { keyMatchers, Command } from './keyMatchers.js';
-import { useLoadingIndicator } from './hooks/useLoadingIndicator.js';
-import { useFolderTrust } from './hooks/useFolderTrust.js';
-import { useIdeTrustListener } from './hooks/useIdeTrustListener.js';
-import { type IdeIntegrationNudgeResult } from './IdeIntegrationNudge.js';
-import { type CommandMigrationNudgeResult } from './CommandFormatMigrationNudge.js';
-import { useCommandMigration } from './hooks/useCommandMigration.js';
-import { migrateTomlCommands } from '../services/command-migration-tool.js';
-import { type UpdateObject } from './utils/updateCheck.js';
-import { setUpdateHandler } from '../utils/handleAutoUpdate.js';
-import { registerCleanup, runExitCleanup } from '../utils/cleanup.js';
-import { useMessageQueue } from './hooks/useMessageQueue.js';
-import { useAutoAcceptIndicator } from './hooks/useAutoAcceptIndicator.js';
-import { useSessionStats } from './contexts/SessionContext.js';
-import { useGitBranchName } from './hooks/useGitBranchName.js';
+import process from 'node:process';
 import {
-    useExtensionUpdates,
-    useConfirmUpdateRequests,
-    useSettingInputRequests,
-    usePluginChoiceRequests,
-} from './hooks/useExtensionUpdates.js';
-import { useCodingPlanUpdates } from './hooks/useCodingPlanUpdates.js';
-import { ShellFocusContext } from './contexts/ShellFocusContext.js';
-import { useAgentViewState } from './contexts/AgentViewContext.js';
-import { t } from '../i18n/index.js';
-import { useWelcomeBack } from './hooks/useWelcomeBack.js';
-import { useDialogClose } from './hooks/useDialogClose.js';
-import { useInitializationAuthError } from './hooks/useInitializationAuthError.js';
-import { useSubagentCreateDialog } from './hooks/useSubagentCreateDialog.js';
-import { useAgentsManagerDialog } from './hooks/useAgentsManagerDialog.js';
-import { useExtensionsManagerDialog } from './hooks/useExtensionsManagerDialog.js';
-import { useMcpDialog } from './hooks/useMcpDialog.js';
-import { useHooksDialog } from './hooks/useHooksDialog.js';
-import { useAttentionNotifications } from './hooks/useAttentionNotifications.js';
+    ApprovalMode,
+    abortSpeculation,
+    acceptSpeculation,
+    type Config,
+    createDebugLogger,
+    type EditorType,
+    generatePromptSuggestion,
+    getAllGeminiMdFilenames,
+    getErrorMessage,
+    IDLE_SPECULATION,
+    IdeClient,
+    type IdeContext,
+    type IdeInfo,
+    ideContextStore,
+    logPromptSuggestion,
+    logSpeculation,
+    type PermissionMode,
+    PromptSuggestionEvent,
+    SessionEndReason,
+    SessionStartSource,
+    ShellExecutionService,
+    SpeculationEvent,
+    type SpeculationState,
+    Storage,
+    startSpeculation
+} from '@aetherai/aether-core';
+import ansiEscapes from 'ansi-escapes';
+import { type DOMElement, measureElement, useStdin, useStdout } from 'ink';
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState
+} from 'react';
 import {
     requestConsentInteractive,
-    requestConsentOrFail,
+    requestConsentOrFail
 } from '../commands/extensions/consent.js';
+import { validateAuthMethod } from '../config/auth.js';
+import { loadHierarchicalGeminiMemory } from '../config/config.js';
+import { type LoadedSettings, SettingScope } from '../config/settings.js';
+import type { InitializationResult } from '../core/initializer.js';
+import { t } from '../i18n/index.js';
+import { migrateTomlCommands } from '../services/command-migration-tool.js';
+import { registerCleanup, runExitCleanup } from '../utils/cleanup.js';
+import { setUpdateHandler } from '../utils/handleAutoUpdate.js';
+import { clearScreen } from '../utils/stdioHelpers.js';
+import { computeWindowTitle } from '../utils/windowTitle.js';
+import { App } from './App.js';
+import { useAuthCommand } from './auth/useAuth.js';
+import type { CommandMigrationNudgeResult } from './CommandFormatMigrationNudge.js';
+import { calculatePromptWidths } from './components/InputPrompt.js';
+import { useTextBuffer } from './components/shared/text-buffer.js';
+import { useAgentViewState } from './contexts/AgentViewContext.js';
+import { AppContext } from './contexts/AppContext.js';
+import { ConfigContext } from './contexts/ConfigContext.js';
+import { useSessionStats } from './contexts/SessionContext.js';
+import { ShellFocusContext } from './contexts/ShellFocusContext.js';
+import {
+    type UIActions,
+    UIActionsContext
+} from './contexts/UIActionsContext.js';
+import { type UIState, UIStateContext } from './contexts/UIStateContext.js';
+import { useVimMode } from './contexts/VimModeContext.js';
+import { useSlashCommandProcessor } from './hooks/slashCommandProcessor.js';
+import { useAgentsManagerDialog } from './hooks/useAgentsManagerDialog.js';
+import { useApprovalModeCommand } from './hooks/useApprovalModeCommand.js';
+import { useArenaCommand } from './hooks/useArenaCommand.js';
+import { useAttentionNotifications } from './hooks/useAttentionNotifications.js';
+import { useAutoAcceptIndicator } from './hooks/useAutoAcceptIndicator.js';
+import { useBracketedPaste } from './hooks/useBracketedPaste.js';
+import { useCodingPlanUpdates } from './hooks/useCodingPlanUpdates.js';
+import { useCommandMigration } from './hooks/useCommandMigration.js';
+import { useDialogClose } from './hooks/useDialogClose.js';
+import { useEditorSettings } from './hooks/useEditorSettings.js';
+import { useExtensionsManagerDialog } from './hooks/useExtensionsManagerDialog.js';
+import {
+    useConfirmUpdateRequests,
+    useExtensionUpdates,
+    usePluginChoiceRequests,
+    useSettingInputRequests
+} from './hooks/useExtensionUpdates.js';
+import { useFeedbackDialog } from './hooks/useFeedbackDialog.js';
+import { useFocus } from './hooks/useFocus.js';
+import { useFolderTrust } from './hooks/useFolderTrust.js';
+import { useGeminiStream } from './hooks/useGeminiStream.js';
+import { useGitBranchName } from './hooks/useGitBranchName.js';
+import { useHistory } from './hooks/useHistoryManager.js';
+import { useHooksDialog } from './hooks/useHooksDialog.js';
+import { useIdeTrustListener } from './hooks/useIdeTrustListener.js';
+import { useInitializationAuthError } from './hooks/useInitializationAuthError.js';
+import { type Key, useKeypress } from './hooks/useKeypress.js';
+import { useLoadingIndicator } from './hooks/useLoadingIndicator.js';
+import { useLogger } from './hooks/useLogger.js';
+import { useMcpDialog } from './hooks/useMcpDialog.js';
+import { useMemoryMonitor } from './hooks/useMemoryMonitor.js';
+import { useMessageQueue } from './hooks/useMessageQueue.js';
+import { useModelCommand } from './hooks/useModelCommand.js';
+import { useResumeCommand } from './hooks/useResumeCommand.js';
+import { useSettingsCommand } from './hooks/useSettingsCommand.js';
+import { useSubagentCreateDialog } from './hooks/useSubagentCreateDialog.js';
+import { useTerminalSize } from './hooks/useTerminalSize.js';
+import { useThemeCommand } from './hooks/useThemeCommand.js';
+import { useWelcomeBack } from './hooks/useWelcomeBack.js';
+import { useVim } from './hooks/vim.js';
+import type { IdeIntegrationNudgeResult } from './IdeIntegrationNudge.js';
+import { Command, keyMatchers } from './keyMatchers.js';
+import {
+    type HistoryItem,
+    type HistoryItemWithoutId,
+    MessageType,
+    StreamingState,
+    ToolCallStatus
+} from './types.js';
+import { isBtwCommand } from './utils/commandUtils.js';
+import { buildResumedHistoryItems } from './utils/resumeHistoryUtils.js';
+import type { UpdateObject } from './utils/updateCheck.js';
 
 const CTRL_EXIT_PROMPT_DURATION_MS = 1000;
 const debugLogger = createDebugLogger('APP_CONTAINER');
@@ -135,7 +135,7 @@ function isToolExecuting(pendingHistoryItems: HistoryItemWithoutId[]) {
     return pendingHistoryItems.some((item) => {
         if (item && item.type === 'tool_group') {
             return item.tools.some(
-                (tool) => ToolCallStatus.Executing === tool.status,
+                (tool) => ToolCallStatus.Executing === tool.status
             );
         }
         return false;
@@ -171,13 +171,13 @@ export const AppContainer = (props: AppContainerProps) => {
         HistoryItem[] | null
     >(null);
     const [themeError, setThemeError] = useState<string | null>(
-        initializationResult.themeError,
+        initializationResult.themeError
     );
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const [embeddedShellFocused, setEmbeddedShellFocused] = useState(false);
 
     const [geminiMdFileCount, setGeminiMdFileCount] = useState<number>(
-        initializationResult.geminiMdFileCount,
+        initializationResult.geminiMdFileCount
     );
     const [shellModeActive, setShellModeActive] = useState(false);
     const [modelSwitchedFromQuotaError, setModelSwitchedFromQuotaError] =
@@ -185,7 +185,7 @@ export const AppContainer = (props: AppContainerProps) => {
     const [historyRemountKey, setHistoryRemountKey] = useState(0);
     const [updateInfo, setUpdateInfo] = useState<UpdateObject | null>(null);
     const [isTrustedFolder, setIsTrustedFolder] = useState<boolean | undefined>(
-        config.isTrustedFolder(),
+        config.isTrustedFolder()
     );
 
     const extensionManager = config.getExtensionManager();
@@ -201,8 +201,11 @@ export const AppContainer = (props: AppContainerProps) => {
 
     extensionManager.setRequestConsent(
         requestConsentOrFail.bind(null, (description) =>
-            requestConsentInteractive(description, addConfirmUpdateExtensionRequest),
-        ),
+            requestConsentInteractive(
+                description,
+                addConfirmUpdateExtensionRequest
+            )
+        )
     );
 
     extensionManager.setRequestChoicePlugin(
@@ -212,16 +215,16 @@ export const AppContainer = (props: AppContainerProps) => {
                     marketplaceName: marketplace.name,
                     plugins: marketplace.plugins.map((p) => ({
                         name: p.name,
-                        description: p.description,
+                        description: p.description
                     })),
                     onSelect: (pluginName) => {
                         resolve(pluginName);
                     },
                     onCancel: () => {
                         reject(new Error('Plugin selection cancelled'));
-                    },
+                    }
                 });
-            }),
+            })
     );
 
     extensionManager.setRequestSetting(
@@ -236,19 +239,19 @@ export const AppContainer = (props: AppContainerProps) => {
                     },
                     onCancel: () => {
                         reject(new Error('Setting input cancelled'));
-                    },
+                    }
                 });
-            }),
+            })
     );
 
     const {
         extensionsUpdateState,
         extensionsUpdateStateInternal,
-        dispatchExtensionStateUpdate,
+        dispatchExtensionStateUpdate
     } = useExtensionUpdates(
         extensionManager,
         historyManager.addItem,
-        config.getWorkingDir(),
+        config.getWorkingDir()
     );
 
     const { codingPlanUpdateRequest, dismissCodingPlanUpdate } =
@@ -261,11 +264,11 @@ export const AppContainer = (props: AppContainerProps) => {
     const [isPermissionsDialogOpen, setPermissionsDialogOpen] = useState(false);
     const openPermissionsDialog = useCallback(
         () => setPermissionsDialogOpen(true),
-        [],
+        []
     );
     const closePermissionsDialog = useCallback(
         () => setPermissionsDialogOpen(false),
-        [],
+        []
     );
 
     // Helper to determine the current model (polled, since Config has no model-change event).
@@ -290,7 +293,7 @@ export const AppContainer = (props: AppContainerProps) => {
     // Layout measurements
     const mainControlsRef = useRef<DOMElement>(null);
     const originalTitleRef = useRef(
-        computeWindowTitle(basename(config.getTargetDir())),
+        computeWindowTitle(basename(config.getTargetDir()))
     );
     const lastTitleRef = useRef<string | null>(null);
     const staticExtraHeight = 3;
@@ -307,7 +310,7 @@ export const AppContainer = (props: AppContainerProps) => {
             if (resumedSessionData) {
                 const historyItems = buildResumedHistoryItems(
                     resumedSessionData,
-                    config,
+                    config
                 );
                 historyManager.loadHistory(historyItems);
             }
@@ -324,17 +327,19 @@ export const AppContainer = (props: AppContainerProps) => {
                     .fireSessionStartEvent(
                         sessionStartSource,
                         config.getModel() ?? '',
-                        String(config.getApprovalMode()) as PermissionMode,
+                        String(config.getApprovalMode()) as PermissionMode
                     )
                     .then(() => {
-                        debugLogger.debug('SessionStart event completed successfully');
+                        debugLogger.debug(
+                            'SessionStart event completed successfully'
+                        );
                     })
                     .catch((err) => {
                         debugLogger.warn(`SessionStart hook failed: ${err}`);
                     });
             } else {
                 debugLogger.debug(
-                    'SessionStart: HookSystem not available, skipping event',
+                    'SessionStart: HookSystem not available, skipping event'
                 );
             }
         })();
@@ -360,7 +365,7 @@ export const AppContainer = (props: AppContainerProps) => {
 
     useEffect(
         () => setUpdateHandler(historyManager.addItem, setUpdateInfo),
-        [historyManager.addItem],
+        [historyManager.addItem]
     );
 
     // Watch for model changes (e.g., user switches model via /model)
@@ -402,24 +407,27 @@ export const AppContainer = (props: AppContainerProps) => {
         stdin,
         setRawMode,
         isValidPath,
-        shellModeActive,
+        shellModeActive
     });
 
     useEffect(() => {
         const fetchUserMessages = async () => {
-            const pastMessagesRaw = (await logger?.getPreviousUserMessages()) || [];
+            const pastMessagesRaw =
+                (await logger?.getPreviousUserMessages()) || [];
             const currentSessionUserMessages = historyManager.history
                 .filter(
-                    (item): item is HistoryItem & { type: 'user'; text: string } =>
+                    (
+                        item
+                    ): item is HistoryItem & { type: 'user'; text: string } =>
                         item.type === 'user' &&
                         typeof item.text === 'string' &&
-                        item.text.trim() !== '',
+                        item.text.trim() !== ''
                 )
                 .map((item) => item.text)
                 .reverse();
             const combinedMessages = [
                 ...currentSessionUserMessages,
-                ...pastMessagesRaw,
+                ...pastMessagesRaw
             ];
             const deduplicatedMessages: string[] = [];
             if (combinedMessages.length > 0) {
@@ -444,18 +452,18 @@ export const AppContainer = (props: AppContainerProps) => {
         isThemeDialogOpen,
         openThemeDialog,
         handleThemeSelect,
-        handleThemeHighlight,
+        handleThemeHighlight
     } = useThemeCommand(
         settings,
         setThemeError,
         historyManager.addItem,
-        initializationResult.themeError,
+        initializationResult.themeError
     );
 
     const {
         isApprovalModeDialogOpen,
         openApprovalModeDialog,
-        handleApprovalModeSelect,
+        handleApprovalModeSelect
     } = useApprovalModeCommand(settings, config);
 
     const {
@@ -470,7 +478,7 @@ export const AppContainer = (props: AppContainerProps) => {
         handleCodingPlanSubmit,
         handleAlibabaStandardSubmit,
         openAuthDialog,
-        cancelAuthentication,
+        cancelAuthentication
     } = useAuthCommand(settings, config, historyManager.addItem);
 
     useInitializationAuthError(initializationResult.authError, onAuthError);
@@ -497,10 +505,12 @@ export const AppContainer = (props: AppContainerProps) => {
                 t(
                     'Authentication is enforced to be {{enforcedType}}, but you are currently using {{currentType}}.',
                     {
-                        enforcedType: String(settings.merged.security?.auth.enforcedType),
-                        currentType: String(currentAuthType),
-                    },
-                ),
+                        enforcedType: String(
+                            settings.merged.security?.auth.enforcedType
+                        ),
+                        currentType: String(currentAuthType)
+                    }
+                )
             );
         } else if (!settings.merged.security?.auth?.useExternal) {
             // If no authType is selected yet, allow the auth UI flow to prompt the user.
@@ -516,7 +526,7 @@ export const AppContainer = (props: AppContainerProps) => {
         settings.merged.security?.auth?.enforcedType,
         settings.merged.security?.auth?.useExternal,
         config,
-        onAuthError,
+        onAuthError
     ]);
 
     const [editorError, setEditorError] = useState<string | null>(null);
@@ -524,7 +534,7 @@ export const AppContainer = (props: AppContainerProps) => {
         isEditorDialogOpen,
         openEditorDialog,
         handleEditorSelect,
-        exitEditorDialog,
+        exitEditorDialog
     } = useEditorSettings(settings, setEditorError, historyManager.addItem);
 
     const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
@@ -534,7 +544,7 @@ export const AppContainer = (props: AppContainerProps) => {
         isModelDialogOpen,
         isFastModelMode,
         openModelDialog,
-        closeModelDialog,
+        closeModelDialog
     } = useModelCommand();
     const { activeArenaDialog, openArenaDialog, closeArenaDialog } =
         useArenaCommand();
@@ -543,12 +553,12 @@ export const AppContainer = (props: AppContainerProps) => {
         isResumeDialogOpen,
         openResumeDialog,
         closeResumeDialog,
-        handleResume,
+        handleResume
     } = useResumeCommand({
         config,
         historyManager,
         startNewSession,
-        remount: refreshStatic,
+        remount: refreshStatic
     });
 
     const { toggleVimEnabled } = useVimMode();
@@ -556,17 +566,17 @@ export const AppContainer = (props: AppContainerProps) => {
     const {
         isSubagentCreateDialogOpen,
         openSubagentCreateDialog,
-        closeSubagentCreateDialog,
+        closeSubagentCreateDialog
     } = useSubagentCreateDialog();
     const {
         isAgentsManagerDialogOpen,
         openAgentsManagerDialog,
-        closeAgentsManagerDialog,
+        closeAgentsManagerDialog
     } = useAgentsManagerDialog();
     const {
         isExtensionsManagerDialogOpen,
         openExtensionsManagerDialog,
-        closeExtensionsManagerDialog,
+        closeExtensionsManagerDialog
     } = useExtensionsManagerDialog();
     const { isMcpDialogOpen, openMcpDialog, closeMcpDialog } = useMcpDialog();
     const { isHooksDialogOpen, openHooksDialog, closeHooksDialog } =
@@ -598,7 +608,7 @@ export const AppContainer = (props: AppContainerProps) => {
             openExtensionsManagerDialog,
             openMcpDialog,
             openHooksDialog,
-            openResumeDialog,
+            openResumeDialog
         }),
         [
             openAuthDialog,
@@ -618,8 +628,8 @@ export const AppContainer = (props: AppContainerProps) => {
             openExtensionsManagerDialog,
             openMcpDialog,
             openHooksDialog,
-            openResumeDialog,
-        ],
+            openResumeDialog
+        ]
     );
 
     const {
@@ -631,7 +641,7 @@ export const AppContainer = (props: AppContainerProps) => {
         cancelBtw,
         commandContext,
         shellConfirmationRequest,
-        confirmationRequest,
+        confirmationRequest
     } = useSlashCommandProcessor(
         config,
         settings,
@@ -646,7 +656,7 @@ export const AppContainer = (props: AppContainerProps) => {
         slashCommandActions,
         extensionsUpdateStateInternal,
         isConfigInitialized,
-        logger,
+        logger
     );
 
     // onDebugMessage should log to debug logfile, not update footer debugMessage
@@ -654,28 +664,29 @@ export const AppContainer = (props: AppContainerProps) => {
         (message: string) => {
             config.getDebugLogger().debug(message);
         },
-        [config],
+        [config]
     );
 
     const performMemoryRefresh = useCallback(async () => {
         historyManager.addItem(
             {
                 type: MessageType.INFO,
-                text: 'Refreshing hierarchical memory (AGENTS.md or other context files)...',
+                text: 'Refreshing hierarchical memory (AGENTS.md or other context files)...'
             },
-            Date.now(),
+            Date.now()
         );
         try {
-            const { memoryContent, fileCount } = await loadHierarchicalGeminiMemory(
-                process.cwd(),
-                settings.merged.context?.loadFromIncludeDirectories
-                    ? config.getWorkspaceContext().getDirectories()
-                    : [],
-                config.getFileService(),
-                config.getExtensionContextFilePaths(),
-                config.isTrustedFolder(),
-                settings.merged.context?.importFormat || 'tree', // Use setting or default to 'tree'
-            );
+            const { memoryContent, fileCount } =
+                await loadHierarchicalGeminiMemory(
+                    process.cwd(),
+                    settings.merged.context?.loadFromIncludeDirectories
+                        ? config.getWorkspaceContext().getDirectories()
+                        : [],
+                    config.getFileService(),
+                    config.getExtensionContextFilePaths(),
+                    config.isTrustedFolder(),
+                    settings.merged.context?.importFormat || 'tree' // Use setting or default to 'tree'
+                );
 
             config.setUserMemory(memoryContent);
             config.setGeminiMdFileCount(fileCount);
@@ -684,33 +695,34 @@ export const AppContainer = (props: AppContainerProps) => {
             historyManager.addItem(
                 {
                     type: MessageType.INFO,
-                    text: `Memory refreshed successfully. ${memoryContent.length > 0
+                    text: `Memory refreshed successfully. ${
+                        memoryContent.length > 0
                             ? `Loaded ${memoryContent.length} characters from ${fileCount} file(s).`
                             : 'No memory content found.'
-                        }`,
+                    }`
                 },
-                Date.now(),
+                Date.now()
             );
             debugLogger.debug(
                 `[DEBUG] Refreshed memory content in config: ${memoryContent.substring(
                     0,
-                    200,
-                )}...`,
+                    200
+                )}...`
             );
         } catch (error) {
             const errorMessage = getErrorMessage(error);
             historyManager.addItem(
                 {
                     type: MessageType.ERROR,
-                    text: `Error refreshing memory: ${errorMessage}`,
+                    text: `Error refreshing memory: ${errorMessage}`
                 },
-                Date.now(),
+                Date.now()
             );
             debugLogger.error('Error refreshing memory:', error);
         }
     }, [config, historyManager, settings.merged]);
 
-    const cancelHandlerRef = useRef<() => void>(() => { });
+    const cancelHandlerRef = useRef<() => void>(() => {});
     const midTurnDrainRef = useRef<(() => string[]) | null>(null);
 
     const {
@@ -723,7 +735,7 @@ export const AppContainer = (props: AppContainerProps) => {
         retryLastPrompt,
         handleApprovalModeChange,
         activePtyId,
-        loopDetectionConfirmationRequest,
+        loopDetectionConfirmationRequest
     } = useGeminiStream(
         config.getGeminiClient(),
         historyManager.history,
@@ -743,7 +755,7 @@ export const AppContainer = (props: AppContainerProps) => {
         setEmbeddedShellFocused,
         terminalWidth,
         terminalHeight,
-        midTurnDrainRef,
+        midTurnDrainRef
     );
 
     // Track whether suggestions are visible for Tab key handling
@@ -752,7 +764,9 @@ export const AppContainer = (props: AppContainerProps) => {
     const agentViewState = useAgentViewState();
 
     // Prompt suggestion state
-    const [promptSuggestion, setPromptSuggestion] = useState<string | null>(null);
+    const [promptSuggestion, setPromptSuggestion] = useState<string | null>(
+        null
+    );
     const prevStreamingStateRef = useRef<StreamingState>(StreamingState.Idle);
     const speculationRef = useRef<SpeculationState>(IDLE_SPECULATION);
     const suggestionAbortRef = useRef<AbortController | null>(null);
@@ -772,14 +786,14 @@ export const AppContainer = (props: AppContainerProps) => {
         addItem: historyManager.addItem,
         onApprovalModeChange: handleApprovalModeChange,
         shouldBlockTab: () => hasSuggestionsVisible,
-        disabled: agentViewState.activeView !== 'main',
+        disabled: agentViewState.activeView !== 'main'
     });
 
     const { messageQueue, addMessage, clearQueue, getQueuedMessagesText } =
         useMessageQueue({
             isConfigInitialized,
             streamingState,
-            submitQuery,
+            submitQuery
         });
 
     // Bridge message queue to mid-turn drain via ref.
@@ -799,9 +813,13 @@ export const AppContainer = (props: AppContainerProps) => {
         (submittedValue: string) => {
             // Route to active in-process agent if viewing a sub-agent tab.
             if (agentViewState.activeView !== 'main') {
-                const agent = agentViewState.agents.get(agentViewState.activeView);
+                const agent = agentViewState.agents.get(
+                    agentViewState.activeView
+                );
                 if (agent) {
-                    agent.interactiveAgent.enqueueMessage(submittedValue.trim());
+                    agent.interactiveAgent.enqueueMessage(
+                        submittedValue.trim()
+                    );
                     return;
                 }
             }
@@ -827,26 +845,32 @@ export const AppContainer = (props: AppContainerProps) => {
                             config,
                             new SpeculationEvent({
                                 outcome: 'accepted',
-                                turns_used: spec.messages.filter((m) => m.role === 'model')
-                                    .length,
+                                turns_used: spec.messages.filter(
+                                    (m) => m.role === 'model'
+                                ).length,
                                 files_written: result.filesApplied.length,
                                 tool_use_count: spec.toolUseCount,
                                 duration_ms: Date.now() - spec.startTime,
                                 boundary_type: spec.boundary?.type,
-                                had_pipelined_suggestion: !!result.nextSuggestion,
-                            }),
+                                had_pipelined_suggestion:
+                                    !!result.nextSuggestion
+                            })
                         );
                         // Speculation completed fully (no boundary) — render results in UI
                         {
                             const now = Date.now();
 
                             // Render each speculated message as the appropriate HistoryItem
-                            for (let mi = 0; mi < result.messages.length; mi++) {
+                            for (
+                                let mi = 0;
+                                mi < result.messages.length;
+                                mi++
+                            ) {
                                 const msg = result.messages[mi];
                                 if (msg.role === 'user' && msg.parts) {
                                     // Check if this is a tool result (functionResponse) or user text
                                     const hasText = msg.parts.some(
-                                        (p) => p.text && !p.functionResponse,
+                                        (p) => p.text && !p.functionResponse
                                     );
                                     if (hasText) {
                                         const text = msg.parts
@@ -856,7 +880,7 @@ export const AppContainer = (props: AppContainerProps) => {
                                         if (text) {
                                             historyManager.addItem(
                                                 { type: 'user' as const, text },
-                                                now,
+                                                now
                                             );
                                         }
                                     }
@@ -864,15 +888,22 @@ export const AppContainer = (props: AppContainerProps) => {
                                 } else if (msg.role === 'model' && msg.parts) {
                                     // Extract text and tool calls separately
                                     const textParts = msg.parts
-                                        .filter((p) => p.text && !p.functionCall)
+                                        .filter(
+                                            (p) => p.text && !p.functionCall
+                                        )
                                         .map((p) => p.text!)
                                         .join('');
-                                    const toolCalls = msg.parts.filter((p) => p.functionCall);
+                                    const toolCalls = msg.parts.filter(
+                                        (p) => p.functionCall
+                                    );
 
                                     if (textParts) {
                                         historyManager.addItem(
-                                            { type: 'gemini' as const, text: textParts },
-                                            now,
+                                            {
+                                                type: 'gemini' as const,
+                                                text: textParts
+                                            },
+                                            now
                                         );
                                     }
 
@@ -880,35 +911,56 @@ export const AppContainer = (props: AppContainerProps) => {
                                         // Find matching tool results from the next message
                                         const nextMsg = result.messages[mi + 1];
                                         const toolResults =
-                                            nextMsg?.parts?.filter((p) => p.functionResponse) ?? [];
+                                            nextMsg?.parts?.filter(
+                                                (p) => p.functionResponse
+                                            ) ?? [];
 
                                         const tools = toolCalls.map((tc, i) => {
-                                            const name = tc.functionCall?.name ?? 'unknown';
-                                            const args = tc.functionCall?.args ?? {};
-                                            const resp = toolResults[i]?.functionResponse?.response;
+                                            const name =
+                                                tc.functionCall?.name ??
+                                                'unknown';
+                                            const args =
+                                                tc.functionCall?.args ?? {};
+                                            const resp =
+                                                toolResults[i]?.functionResponse
+                                                    ?.response;
                                             const resultText =
                                                 typeof resp === 'object' && resp
-                                                    ? ((resp as Record<string, unknown>)['output'] ??
-                                                        JSON.stringify(resp))
+                                                    ? ((
+                                                          resp as Record<
+                                                              string,
+                                                              unknown
+                                                          >
+                                                      )['output'] ??
+                                                      JSON.stringify(resp))
                                                     : String(resp ?? '');
                                             return {
                                                 callId: `spec-${name}-${i}`,
                                                 name,
                                                 description:
                                                     Object.entries(args)
-                                                        .map(([k, v]) => `${k}: ${String(v).slice(0, 80)}`)
+                                                        .map(
+                                                            ([k, v]) =>
+                                                                `${k}: ${String(v).slice(0, 80)}`
+                                                        )
                                                         .join(', ') || name,
-                                                resultDisplay: String(resultText).slice(0, 500),
+                                                resultDisplay: String(
+                                                    resultText
+                                                ).slice(0, 500),
                                                 status: ToolCallStatus.Success,
-                                                confirmationDetails: undefined,
+                                                confirmationDetails: undefined
                                             };
                                         });
 
-                                        const toolGroupItem: HistoryItemWithoutId = {
-                                            type: 'tool_group' as const,
-                                            tools,
-                                        };
-                                        historyManager.addItem(toolGroupItem, now);
+                                        const toolGroupItem: HistoryItemWithoutId =
+                                            {
+                                                type: 'tool_group' as const,
+                                                tools
+                                            };
+                                        historyManager.addItem(
+                                            toolGroupItem,
+                                            now
+                                        );
                                     }
                                 }
                             }
@@ -927,7 +979,7 @@ export const AppContainer = (props: AppContainerProps) => {
 
             // Abort any running speculation since we're submitting something different
             if (spec.status === 'running') {
-                abortSpeculation(spec).catch(() => { });
+                abortSpeculation(spec).catch(() => {});
                 speculationRef.current = IDLE_SPECULATION;
             }
 
@@ -940,8 +992,8 @@ export const AppContainer = (props: AppContainerProps) => {
             submitQuery,
             config,
             geminiClient,
-            historyManager,
-        ],
+            historyManager
+        ]
     );
 
     const handleArenaModelsSelected = useCallback(
@@ -950,7 +1002,7 @@ export const AppContainer = (props: AppContainerProps) => {
             buffer.setText(`/arena start --models ${value} `);
             closeArenaDialog();
         },
-        [buffer, closeArenaDialog],
+        [buffer, closeArenaDialog]
     );
 
     // Welcome back functionality (must be after handleFinalSubmit)
@@ -959,13 +1011,13 @@ export const AppContainer = (props: AppContainerProps) => {
         showWelcomeBackDialog,
         welcomeBackChoice,
         handleWelcomeBackSelection,
-        handleWelcomeBackClose,
+        handleWelcomeBackClose
     } = useWelcomeBack(config, handleFinalSubmit, buffer, settings.merged);
 
     cancelHandlerRef.current = useCallback(() => {
         const pendingHistoryItems = [
             ...pendingSlashCommandHistoryItems,
-            ...pendingGeminiHistoryItems,
+            ...pendingGeminiHistoryItems
         ];
         if (isToolExecuting(pendingHistoryItems)) {
             buffer.setText(''); // Just clear the prompt
@@ -977,7 +1029,9 @@ export const AppContainer = (props: AppContainerProps) => {
 
         const queuedText = getQueuedMessagesText();
         if (queuedText) {
-            textToSet = textToSet ? `${textToSet}\n\n${queuedText}` : queuedText;
+            textToSet = textToSet
+                ? `${textToSet}\n\n${queuedText}`
+                : queuedText;
             clearQueue();
         }
 
@@ -990,7 +1044,7 @@ export const AppContainer = (props: AppContainerProps) => {
         getQueuedMessagesText,
         clearQueue,
         pendingSlashCommandHistoryItems,
-        pendingGeminiHistoryItems,
+        pendingGeminiHistoryItems
     ]);
 
     const handleClearScreen = useCallback(() => {
@@ -1019,7 +1073,9 @@ export const AppContainer = (props: AppContainerProps) => {
 
     useLayoutEffect(() => {
         if (mainControlsRef.current) {
-            const fullFooterMeasurement = measureElement(mainControlsRef.current);
+            const fullFooterMeasurement = measureElement(
+                mainControlsRef.current
+            );
             if (fullFooterMeasurement.height > 0) {
                 setControlsHeight(fullFooterMeasurement.height);
             }
@@ -1036,17 +1092,17 @@ export const AppContainer = (props: AppContainerProps) => {
     const tabBarHeight = agentViewState.agents.size > 0 ? 1 : 0;
     const availableTerminalHeight = Math.max(
         0,
-        terminalHeight - controlsHeight - staticExtraHeight - 2 - tabBarHeight,
+        terminalHeight - controlsHeight - staticExtraHeight - 2 - tabBarHeight
     );
 
     config.setShellExecutionConfig({
         terminalWidth: Math.floor(terminalWidth * SHELL_WIDTH_FRACTION),
         terminalHeight: Math.max(
             Math.floor(availableTerminalHeight - SHELL_HEIGHT_PADDING),
-            1,
+            1
         ),
         pager: settings.merged.tools?.shell?.pager,
-        showColor: settings.merged.tools?.shell?.showColor,
+        showColor: settings.merged.tools?.shell?.showColor
     });
 
     const isFocused = useFocus();
@@ -1070,7 +1126,10 @@ export const AppContainer = (props: AppContainerProps) => {
             ShellExecutionService.resizePty(
                 activePtyId,
                 Math.floor(terminalWidth * SHELL_WIDTH_FRACTION),
-                Math.max(Math.floor(availableTerminalHeight - SHELL_HEIGHT_PADDING), 1),
+                Math.max(
+                    Math.floor(availableTerminalHeight - SHELL_HEIGHT_PADDING),
+                    1
+                )
             );
         }
     }, [terminalWidth, availableTerminalHeight, activePtyId]);
@@ -1101,7 +1160,7 @@ export const AppContainer = (props: AppContainerProps) => {
         isEditorDialogOpen,
         showWelcomeBackDialog,
         welcomeBackChoice,
-        geminiClient,
+        geminiClient
     ]);
 
     // Generate prompt suggestions when streaming completes
@@ -1114,7 +1173,7 @@ export const AppContainer = (props: AppContainerProps) => {
             suggestionAbortRef.current?.abort();
             setPromptSuggestion(null);
             if (speculationRef.current.status === 'running') {
-                abortSpeculation(speculationRef.current).catch(() => { });
+                abortSpeculation(speculationRef.current).catch(() => {});
                 speculationRef.current = IDLE_SPECULATION;
             }
         }
@@ -1127,7 +1186,7 @@ export const AppContainer = (props: AppContainerProps) => {
             suggestionAbortRef.current?.abort();
             setPromptSuggestion(null);
             if (speculationRef.current.status !== 'idle') {
-                abortSpeculation(speculationRef.current).catch(() => { });
+                abortSpeculation(speculationRef.current).catch(() => {});
                 speculationRef.current = IDLE_SPECULATION;
             }
         }
@@ -1143,7 +1202,7 @@ export const AppContainer = (props: AppContainerProps) => {
             // Check both committed history and pending items for errors
             // (API errors go to pendingGeminiHistoryItems, not historyManager.history)
             historyManager.history[historyManager.history.length - 1]?.type !==
-            'error' &&
+                'error' &&
             !pendingGeminiHistoryItems.some((item) => item.type === 'error') &&
             !shellConfirmationRequest &&
             !confirmationRequest &&
@@ -1160,8 +1219,9 @@ export const AppContainer = (props: AppContainerProps) => {
             const conversationHistory =
                 fullHistory.length > 40 ? fullHistory.slice(-40) : fullHistory;
             generatePromptSuggestion(config, conversationHistory, ac.signal, {
-                enableCacheSharing: settings.merged.ui?.enableCacheSharing === true,
-                model: settings.merged.fastModel || undefined,
+                enableCacheSharing:
+                    settings.merged.ui?.enableCacheSharing === true,
+                model: settings.merged.fastModel || undefined
             })
                 .then((result) => {
                     if (ac.signal.aborted) return;
@@ -1169,9 +1229,15 @@ export const AppContainer = (props: AppContainerProps) => {
                         setPromptSuggestion(result.suggestion);
                         // Start speculation if enabled (runs in background)
                         if (settings.merged.ui?.enableSpeculation) {
-                            startSpeculation(config, result.suggestion, ac.signal, {
-                                model: settings.merged.fastModel || undefined,
-                            })
+                            startSpeculation(
+                                config,
+                                result.suggestion,
+                                ac.signal,
+                                {
+                                    model:
+                                        settings.merged.fastModel || undefined
+                                }
+                            )
                                 .then((state) => {
                                     speculationRef.current = state;
                                 })
@@ -1185,8 +1251,8 @@ export const AppContainer = (props: AppContainerProps) => {
                             config,
                             new PromptSuggestionEvent({
                                 outcome: 'suppressed',
-                                reason: result.filterReason,
-                            }),
+                                reason: result.filterReason
+                            })
                         );
                     }
                 })
@@ -1205,7 +1271,7 @@ export const AppContainer = (props: AppContainerProps) => {
             suggestionAbortRef.current?.abort();
             // Cleanup speculation on unmount (#21)
             if (speculationRef.current.status !== 'idle') {
-                abortSpeculation(speculationRef.current).catch(() => { });
+                abortSpeculation(speculationRef.current).catch(() => {});
                 speculationRef.current = IDLE_SPECULATION;
             }
         };
@@ -1217,7 +1283,7 @@ export const AppContainer = (props: AppContainerProps) => {
         confirmationRequest,
         loopDetectionConfirmationRequest,
         isPermissionsDialogOpen,
-        settingInputRequests,
+        settingInputRequests
     ]);
 
     // Abort speculation when promptSuggestion is cleared (new turn, feature toggle, or
@@ -1225,7 +1291,7 @@ export const AppContainer = (props: AppContainerProps) => {
     // on user input, which clears promptSuggestion, triggering this effect to abort speculation.
     useEffect(() => {
         if (!promptSuggestion && speculationRef.current.status !== 'idle') {
-            abortSpeculation(speculationRef.current).catch(() => { });
+            abortSpeculation(speculationRef.current).catch(() => {});
             speculationRef.current = IDLE_SPECULATION;
         }
     }, [promptSuggestion]);
@@ -1243,16 +1309,16 @@ export const AppContainer = (props: AppContainerProps) => {
     }, []);
     const shouldShowIdePrompt = Boolean(
         currentIDE &&
-        !config.getIdeMode() &&
-        !settings.merged.ide?.hasSeenNudge &&
-        !idePromptAnswered,
+            !config.getIdeMode() &&
+            !settings.merged.ide?.hasSeenNudge &&
+            !idePromptAnswered
     );
 
     // Command migration nudge
     const {
         showMigrationNudge: shouldShowCommandMigrationNudge,
         tomlFiles: commandMigrationTomlFiles,
-        setShowMigrationNudge: setShowCommandMigrationNudge,
+        setShowMigrationNudge: setShowCommandMigrationNudge
     } = useCommandMigration(settings, config.storage);
 
     const [showToolDescriptions, setShowToolDescriptions] =
@@ -1276,7 +1342,7 @@ export const AppContainer = (props: AppContainerProps) => {
         useFolderTrust(settings, setIsTrustedFolder);
     const {
         needsRestart: ideNeedsRestart,
-        restartReason: ideTrustRestartReason,
+        restartReason: ideTrustRestartReason
     } = useIdeTrustListener();
     const isInitialMount = useRef(true);
 
@@ -1327,7 +1393,7 @@ export const AppContainer = (props: AppContainerProps) => {
             }
             setIdePromptAnswered(true);
         },
-        [handleSlashCommand, settings],
+        [handleSlashCommand, settings]
     );
 
     const handleCommandMigrationComplete = useCallback(
@@ -1340,17 +1406,21 @@ export const AppContainer = (props: AppContainerProps) => {
                     const results = [];
 
                     // Migrate workspace commands
-                    const workspaceCommandsDir = config.storage.getProjectCommandsDir();
+                    const workspaceCommandsDir =
+                        config.storage.getProjectCommandsDir();
                     const workspaceResult = await migrateTomlCommands({
                         commandDir: workspaceCommandsDir,
                         createBackup: true,
-                        deleteOriginal: false,
+                        deleteOriginal: false
                     });
                     if (
                         workspaceResult.convertedFiles.length > 0 ||
                         workspaceResult.failedFiles.length > 0
                     ) {
-                        results.push({ level: 'workspace', result: workspaceResult });
+                        results.push({
+                            level: 'workspace',
+                            result: workspaceResult
+                        });
                     }
 
                     // Migrate user commands
@@ -1358,7 +1428,7 @@ export const AppContainer = (props: AppContainerProps) => {
                     const userResult = await migrateTomlCommands({
                         commandDir: userCommandsDir,
                         createBackup: true,
-                        deleteOriginal: false,
+                        deleteOriginal: false
                     });
                     if (
                         userResult.convertedFiles.length > 0 ||
@@ -1376,9 +1446,9 @@ export const AppContainer = (props: AppContainerProps) => {
                             historyManager.addItem(
                                 {
                                     type: MessageType.INFO,
-                                    text: `[${level}] Successfully migrated ${migrationResult.convertedFiles.length} command file${migrationResult.convertedFiles.length > 1 ? 's' : ''} to Markdown format. Original files backed up as .toml.backup`,
+                                    text: `[${level}] Successfully migrated ${migrationResult.convertedFiles.length} command file${migrationResult.convertedFiles.length > 1 ? 's' : ''} to Markdown format. Original files backed up as .toml.backup`
                                 },
-                                Date.now(),
+                                Date.now()
                             );
                         }
 
@@ -1386,9 +1456,9 @@ export const AppContainer = (props: AppContainerProps) => {
                             historyManager.addItem(
                                 {
                                     type: MessageType.ERROR,
-                                    text: `[${level}] Failed to migrate ${migrationResult.failedFiles.length} file${migrationResult.failedFiles.length > 1 ? 's' : ''}:\n${migrationResult.failedFiles.map((f) => `  • ${f.file}: ${f.error}`).join('\n')}`,
+                                    text: `[${level}] Failed to migrate ${migrationResult.failedFiles.length} file${migrationResult.failedFiles.length > 1 ? 's' : ''}:\n${migrationResult.failedFiles.map((f) => `  • ${f.file}: ${f.error}`).join('\n')}`
                                 },
-                                Date.now(),
+                                Date.now()
                             );
                         }
                     }
@@ -1397,34 +1467,34 @@ export const AppContainer = (props: AppContainerProps) => {
                         historyManager.addItem(
                             {
                                 type: MessageType.INFO,
-                                text: 'No TOML files found to migrate.',
+                                text: 'No TOML files found to migrate.'
                             },
-                            Date.now(),
+                            Date.now()
                         );
                     }
                 } catch (error) {
                     historyManager.addItem(
                         {
                             type: MessageType.ERROR,
-                            text: `❌ Migration failed: ${getErrorMessage(error)}`,
+                            text: `❌ Migration failed: ${getErrorMessage(error)}`
                         },
-                        Date.now(),
+                        Date.now()
                     );
                 }
             }
         },
-        [historyManager, setShowCommandMigrationNudge, config.storage],
+        [historyManager, setShowCommandMigrationNudge, config.storage]
     );
 
     const currentCandidatesTokens = Object.values(
-        sessionStats.metrics?.models ?? {},
+        sessionStats.metrics?.models ?? {}
     ).reduce((acc, model) => acc + (model.tokens?.candidates ?? 0), 0);
 
     const { elapsedTime, currentLoadingPhrase, taskStartTokens } =
         useLoadingIndicator(
             streamingState,
             settings.merged.ui?.customWittyPhrases,
-            currentCandidatesTokens,
+            currentCandidatesTokens
         );
 
     useAttentionNotifications({
@@ -1432,7 +1502,7 @@ export const AppContainer = (props: AppContainerProps) => {
         streamingState,
         elapsedTime,
         settings,
-        config,
+        config
     });
 
     // Dialog close functionality
@@ -1452,14 +1522,14 @@ export const AppContainer = (props: AppContainerProps) => {
         closeArenaDialog,
         isFolderTrustDialogOpen,
         showWelcomeBackDialog,
-        handleWelcomeBackClose,
+        handleWelcomeBackClose
     });
 
     const handleExit = useCallback(
         (
             pressedOnce: boolean,
             setPressedOnce: (value: boolean) => void,
-            timerRef: React.MutableRefObject<NodeJS.Timeout | null>,
+            timerRef: React.MutableRefObject<NodeJS.Timeout | null>
         ) => {
             // Fast double-press: Direct quit (preserve user habit)
             if (pressedOnce) {
@@ -1493,7 +1563,11 @@ export const AppContainer = (props: AppContainerProps) => {
             }
 
             // 3. Cancel in-flight btw side-question
-            if (btwItem && btwItem.btw.isPending && !dialogsVisibleRef.current) {
+            if (
+                btwItem &&
+                btwItem.btw.isPending &&
+                !dialogsVisibleRef.current
+            ) {
                 cancelBtw();
                 return; // Btw cancelled, end processing
             }
@@ -1524,8 +1598,8 @@ export const AppContainer = (props: AppContainerProps) => {
             cancelBtw,
             streamingState,
             cancelOngoingRequest,
-            buffer,
-        ],
+            buffer
+        ]
     );
 
     const handleGlobalKeypress = useCallback(
@@ -1550,18 +1624,30 @@ export const AppContainer = (props: AppContainerProps) => {
                     }, CTRL_EXIT_PROMPT_DURATION_MS);
                 }
 
-                handleExit(ctrlCPressedOnce, setCtrlCPressedOnce, ctrlCTimerRef);
+                handleExit(
+                    ctrlCPressedOnce,
+                    setCtrlCPressedOnce,
+                    ctrlCTimerRef
+                );
                 return;
             } else if (keyMatchers[Command.EXIT](key)) {
                 // Cancel in-flight btw even when buffer has text (Ctrl+D)
-                if (btwItem && btwItem.btw.isPending && !dialogsVisibleRef.current) {
+                if (
+                    btwItem &&
+                    btwItem.btw.isPending &&
+                    !dialogsVisibleRef.current
+                ) {
                     cancelBtw();
                     return;
                 }
                 if (buffer.text.length > 0) {
                     return;
                 }
-                handleExit(ctrlDPressedOnce, setCtrlDPressedOnce, ctrlDTimerRef);
+                handleExit(
+                    ctrlDPressedOnce,
+                    setCtrlDPressedOnce,
+                    ctrlDTimerRef
+                );
                 return;
             } else if (keyMatchers[Command.ESCAPE](key)) {
                 // Dismiss or cancel btw side-question on Escape,
@@ -1687,8 +1773,8 @@ export const AppContainer = (props: AppContainerProps) => {
             setBtwItem,
             cancelBtw,
             settings.merged.general?.debugKeystrokeLogging,
-            isAuthenticating,
-        ],
+            isAuthenticating
+        ]
     );
 
     useKeypress(handleGlobalKeypress, { isActive: true });
@@ -1726,7 +1812,7 @@ export const AppContainer = (props: AppContainerProps) => {
         thought,
         settings.merged.ui?.showStatusInTitle,
         settings.merged.ui?.hideWindowTitle,
-        stdout,
+        stdout
     ]);
 
     const nightly = props.version.includes('nightly');
@@ -1767,18 +1853,21 @@ export const AppContainer = (props: AppContainerProps) => {
         openFeedbackDialog,
         closeFeedbackDialog,
         temporaryCloseFeedbackDialog,
-        submitFeedback,
+        submitFeedback
     } = useFeedbackDialog({
         config,
         settings,
         streamingState,
         history: historyManager.history,
-        sessionStats,
+        sessionStats
     });
 
     const pendingHistoryItems = useMemo(
-        () => [...pendingSlashCommandHistoryItems, ...pendingGeminiHistoryItems],
-        [pendingSlashCommandHistoryItems, pendingGeminiHistoryItems],
+        () => [
+            ...pendingSlashCommandHistoryItems,
+            ...pendingGeminiHistoryItems
+        ],
+        [pendingSlashCommandHistoryItems, pendingGeminiHistoryItems]
     );
 
     const uiState: UIState = useMemo(
@@ -1888,7 +1977,7 @@ export const AppContainer = (props: AppContainerProps) => {
             taskStartTokens,
             // Prompt suggestion
             promptSuggestion,
-            dismissPromptSuggestion,
+            dismissPromptSuggestion
         }),
         [
             isThemeDialogOpen,
@@ -1995,8 +2084,8 @@ export const AppContainer = (props: AppContainerProps) => {
             taskStartTokens,
             // Prompt suggestion
             promptSuggestion,
-            dismissPromptSuggestion,
-        ],
+            dismissPromptSuggestion
+        ]
     );
 
     const uiActions: UIActions = useMemo(
@@ -2056,7 +2145,7 @@ export const AppContainer = (props: AppContainerProps) => {
             openFeedbackDialog,
             closeFeedbackDialog,
             temporaryCloseFeedbackDialog,
-            submitFeedback,
+            submitFeedback
         }),
         [
             openThemeDialog,
@@ -2112,8 +2201,8 @@ export const AppContainer = (props: AppContainerProps) => {
             openFeedbackDialog,
             closeFeedbackDialog,
             temporaryCloseFeedbackDialog,
-            submitFeedback,
-        ],
+            submitFeedback
+        ]
     );
 
     return (
@@ -2123,7 +2212,7 @@ export const AppContainer = (props: AppContainerProps) => {
                     <AppContext.Provider
                         value={{
                             version: props.version,
-                            startupWarnings: props.startupWarnings || [],
+                            startupWarnings: props.startupWarnings || []
                         }}
                     >
                         <ShellFocusContext.Provider value={isFocused}>

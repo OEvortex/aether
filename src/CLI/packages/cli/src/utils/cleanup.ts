@@ -11,27 +11,27 @@ import { Storage } from '@aetherai/aether-core';
 const cleanupFunctions: Array<(() => void) | (() => Promise<void>)> = [];
 
 export function registerCleanup(fn: (() => void) | (() => Promise<void>)) {
-  cleanupFunctions.push(fn);
+    cleanupFunctions.push(fn);
 }
 
 export async function runExitCleanup() {
-  for (const fn of cleanupFunctions) {
-    try {
-      await fn();
-    } catch (_) {
-      // Ignore errors during cleanup.
+    for (const fn of cleanupFunctions) {
+        try {
+            await fn();
+        } catch (_) {
+            // Ignore errors during cleanup.
+        }
     }
-  }
-  cleanupFunctions.length = 0; // Clear the array
+    cleanupFunctions.length = 0; // Clear the array
 }
 
 export async function cleanupCheckpoints() {
-  const storage = new Storage(process.cwd());
-  const tempDir = storage.getProjectTempDir();
-  const checkpointsDir = join(tempDir, 'checkpoints');
-  try {
-    await fs.rm(checkpointsDir, { recursive: true, force: true });
-  } catch {
-    // Ignore errors if the directory doesn't exist or fails to delete.
-  }
+    const storage = new Storage(process.cwd());
+    const tempDir = storage.getProjectTempDir();
+    const checkpointsDir = join(tempDir, 'checkpoints');
+    try {
+        await fs.rm(checkpointsDir, { recursive: true, force: true });
+    } catch {
+        // Ignore errors if the directory doesn't exist or fails to delete.
+    }
 }

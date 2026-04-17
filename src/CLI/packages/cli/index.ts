@@ -7,8 +7,8 @@
  */
 
 import './src/gemini.js';
-import { main } from './src/gemini.js';
 import { FatalError } from '@aetherai/aether-core';
+import { main } from './src/gemini.js';
 import { writeStderrLine } from './src/utils/stdioHelpers.js';
 
 // --- Global Entry Point ---
@@ -22,68 +22,68 @@ import { writeStderrLine } from './src/utils/stdioHelpers.js';
 // - https://github.com/microsoft/node-pty/issues/178 (EIO on macOS/Linux)
 // - https://github.com/microsoft/node-pty/issues/827 (resize on Windows)
 const getErrnoCode = (error: unknown): string | undefined => {
-  if (!error || typeof error !== 'object') {
-    return undefined;
-  }
-  const code = (error as { code?: unknown }).code;
-  return typeof code === 'string' ? code : undefined;
+    if (!error || typeof error !== 'object') {
+        return undefined;
+    }
+    const code = (error as { code?: unknown }).code;
+    return typeof code === 'string' ? code : undefined;
 };
 
 const isExpectedPtyRaceError = (error: unknown): boolean => {
-  if (!(error instanceof Error)) {
+    if (!(error instanceof Error)) {
+        return false;
+    }
+
+    const message = error.message;
+    const code = getErrnoCode(error);
+
+    // EIO: PTY read race on macOS/Linux - code + PTY context required
+    // https://github.com/microsoft/node-pty/issues/178
+    if (
+        (code === 'EIO' && message.includes('read')) ||
+        message.includes('read EIO')
+    ) {
+        return true;
+    }
+
+    // PTY-specific resize/exit race errors - require PTY context in message
+    if (
+        message.includes('ioctl(2) failed, EBADF') ||
+        message.includes('Cannot resize a pty that has already exited')
+    ) {
+        return true;
+    }
+
     return false;
-  }
-
-  const message = error.message;
-  const code = getErrnoCode(error);
-
-  // EIO: PTY read race on macOS/Linux - code + PTY context required
-  // https://github.com/microsoft/node-pty/issues/178
-  if (
-    (code === 'EIO' && message.includes('read')) ||
-    message.includes('read EIO')
-  ) {
-    return true;
-  }
-
-  // PTY-specific resize/exit race errors - require PTY context in message
-  if (
-    message.includes('ioctl(2) failed, EBADF') ||
-    message.includes('Cannot resize a pty that has already exited')
-  ) {
-    return true;
-  }
-
-  return false;
 };
 
 process.on('uncaughtException', (error) => {
-  if (isExpectedPtyRaceError(error)) {
-    return;
-  }
+    if (isExpectedPtyRaceError(error)) {
+        return;
+    }
 
-  if (error instanceof Error) {
-    writeStderrLine(error.stack ?? error.message);
-  } else {
-    writeStderrLine(String(error));
-  }
-  process.exit(1);
+    if (error instanceof Error) {
+        writeStderrLine(error.stack ?? error.message);
+    } else {
+        writeStderrLine(String(error));
+    }
+    process.exit(1);
 });
 
 main().catch((error) => {
-  if (error instanceof FatalError) {
-    let errorMessage = error.message;
-    if (!process.env['NO_COLOR']) {
-      errorMessage = `\x1b[31m${errorMessage}\x1b[0m`;
+    if (error instanceof FatalError) {
+        let errorMessage = error.message;
+        if (!process.env['NO_COLOR']) {
+            errorMessage = `\x1b[31m${errorMessage}\x1b[0m`;
+        }
+        console.error(errorMessage);
+        process.exit(error.exitCode);
     }
-    console.error(errorMessage);
-    process.exit(error.exitCode);
-  }
-  console.error('An unexpected critical error occurred:');
-  if (error instanceof Error) {
-    console.error(error.stack);
-  } else {
-    console.error(String(error));
-  }
-  process.exit(1);
+    console.error('An unexpected critical error occurred:');
+    if (error instanceof Error) {
+        console.error(error.stack);
+    } else {
+        console.error(String(error));
+    }
+    process.exit(1);
 });

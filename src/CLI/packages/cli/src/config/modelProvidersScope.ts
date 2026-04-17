@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SettingScope, type LoadedSettings } from './settings.js';
+import { type LoadedSettings, SettingScope } from './settings.js';
 
 function hasOwnProviderRegistry(settingsObj: unknown): boolean {
-  if (!settingsObj || typeof settingsObj !== 'object') {
-    return false;
-  }
-  const obj = settingsObj as Record<string, unknown>;
-  // Treat an explicitly configured empty object (providers: {}) as "owned"
-  // by this scope, which is important when mergeStrategy is SHALLOW_MERGE.
-  return Object.prototype.hasOwnProperty.call(obj, 'providers');
+    if (!settingsObj || typeof settingsObj !== 'object') {
+        return false;
+    }
+    const obj = settingsObj as Record<string, unknown>;
+    // Treat an explicitly configured empty object (providers: {}) as "owned"
+    // by this scope, which is important when mergeStrategy is SHALLOW_MERGE.
+    return Object.hasOwn(obj, 'providers');
 }
 
 /**
@@ -23,17 +23,20 @@ function hasOwnProviderRegistry(settingsObj: unknown): boolean {
  * Note: Workspace scope is only considered when the workspace is trusted.
  */
 export function getModelProvidersOwnerScope(
-  settings: LoadedSettings,
+    settings: LoadedSettings
 ): SettingScope | undefined {
-  if (settings.isTrusted && hasOwnProviderRegistry(settings.workspace.settings)) {
-    return SettingScope.Workspace;
-  }
+    if (
+        settings.isTrusted &&
+        hasOwnProviderRegistry(settings.workspace.settings)
+    ) {
+        return SettingScope.Workspace;
+    }
 
-  if (hasOwnProviderRegistry(settings.user.settings)) {
-    return SettingScope.User;
-  }
+    if (hasOwnProviderRegistry(settings.user.settings)) {
+        return SettingScope.User;
+    }
 
-  return undefined;
+    return undefined;
 }
 
 /**
@@ -42,7 +45,7 @@ export function getModelProvidersOwnerScope(
  * registry config, otherwise fall back to the legacy trust-based heuristic.
  */
 export function getPersistScopeForModelSelection(
-  settings: LoadedSettings,
+    settings: LoadedSettings
 ): SettingScope {
-  return getModelProvidersOwnerScope(settings) ?? SettingScope.User;
+    return getModelProvidersOwnerScope(settings) ?? SettingScope.User;
 }

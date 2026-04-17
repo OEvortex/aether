@@ -14,6 +14,12 @@ export function getContextToken(_chatId: string): string | undefined {
 export async function startPollLoop(_params: {
     baseUrl: string;
     token: string;
-    onMessage: (msg: { fromUserId: string; text: string; refText?: string; image?: CdnRef; file?: FileCdnRef }) => Promise<void> | void;
+    onMessage: (msg: {
+        fromUserId: string;
+        text: string;
+        refText?: string;
+        image?: CdnRef;
+        file?: FileCdnRef;
+    }) => Promise<void> | void;
     abortSignal: AbortSignal;
 }): Promise<void> {}

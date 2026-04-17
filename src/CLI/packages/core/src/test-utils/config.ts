@@ -11,12 +11,12 @@ import { Config } from '../config/config.js';
  * Default parameters used for {@link FAKE_CONFIG}
  */
 export const DEFAULT_CONFIG_PARAMETERS: ConfigParameters = {
-  usageStatisticsEnabled: true,
-  debugMode: false,
-  proxy: undefined,
-  model: 'aether-9001-super-duper',
-  targetDir: '/',
-  cwd: '/',
+    usageStatisticsEnabled: true,
+    debugMode: false,
+    proxy: undefined,
+    model: 'aether-9001-super-duper',
+    targetDir: '/',
+    cwd: '/'
 };
 
 /**
@@ -25,12 +25,12 @@ export const DEFAULT_CONFIG_PARAMETERS: ConfigParameters = {
  * override those defaults.
  */
 export function makeFakeConfig(
-  config: Partial<ConfigParameters> = {
-    ...DEFAULT_CONFIG_PARAMETERS,
-  },
+    config: Partial<ConfigParameters> = {
+        ...DEFAULT_CONFIG_PARAMETERS
+    }
 ): Config {
-  return new Config({
-    ...DEFAULT_CONFIG_PARAMETERS,
-    ...config,
-  });
+    return new Config({
+        ...DEFAULT_CONFIG_PARAMETERS,
+        ...config
+    });
 }

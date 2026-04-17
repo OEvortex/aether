@@ -1,4 +1,9 @@
-import type { AcpBridge, SessionScope, SessionTarget, SessionRouterState } from './types.js';
+import type {
+    AcpBridge,
+    SessionRouterState,
+    SessionScope,
+    SessionTarget
+} from './types.js';
 
 export class SessionRouter {
     private readonly targets = new Map<string, SessionTarget>();
@@ -8,7 +13,7 @@ export class SessionRouter {
         _bridge: AcpBridge,
         _cwd: string,
         _sessionScope: SessionScope,
-        _sessionsPath: string,
+        _sessionsPath: string
     ) {
         this.sessionScopes.set('*', _sessionScope);
     }
@@ -19,7 +24,10 @@ export class SessionRouter {
 
     public setBridge(_bridge: AcpBridge): void {}
 
-    public setChannelScope(channelName: string, sessionScope: SessionScope): void {
+    public setChannelScope(
+        channelName: string,
+        sessionScope: SessionScope
+    ): void {
         this.sessionScopes.set(channelName, sessionScope);
     }
 

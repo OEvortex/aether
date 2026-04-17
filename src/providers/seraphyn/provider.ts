@@ -3,6 +3,7 @@
  *  Dedicated fetch-based provider with custom SSE parser and handler
  *--------------------------------------------------------------------------------------------*/
 
+import * as crypto from 'node:crypto';
 import type {
     CancellationToken,
     LanguageModelChatInformation,
@@ -12,7 +13,6 @@ import type {
     ProvideLanguageModelChatResponseOptions
 } from 'vscode';
 import * as vscode from 'vscode';
-import * as crypto from 'node:crypto';
 import { AccountManager } from '../../accounts/accountManager';
 import type {
     AccountCredentials,
@@ -20,14 +20,14 @@ import type {
 } from '../../accounts/types';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
 import { ApiKeyManager, Logger, RateLimiter, RetryManager } from '../../utils';
-import { ProviderWizard } from '../../utils/providerWizard';
-import { getProviderRateLimit } from '../../utils/knownProviders';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
+import { getProviderRateLimit } from '../../utils/knownProviders';
+import { ProviderWizard } from '../../utils/providerWizard';
 import { TokenCounter } from '../../utils/tokenCounter';
 import { SeraphynHandler } from './handler';
 

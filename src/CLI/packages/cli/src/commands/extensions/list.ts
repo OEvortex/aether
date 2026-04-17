@@ -5,38 +5,42 @@
  */
 
 import type { CommandModule } from 'yargs';
-import { getErrorMessage } from '../../utils/errors.js';
-import { writeStdoutLine, writeStderrLine } from '../../utils/stdioHelpers.js';
-import { extensionToOutputString, getExtensionManager } from './utils.js';
 import { t } from '../../i18n/index.js';
+import { getErrorMessage } from '../../utils/errors.js';
+import { writeStderrLine, writeStdoutLine } from '../../utils/stdioHelpers.js';
+import { extensionToOutputString, getExtensionManager } from './utils.js';
 
 export async function handleList() {
-  try {
-    const extensionManager = await getExtensionManager();
-    const extensions = extensionManager.getLoadedExtensions();
+    try {
+        const extensionManager = await getExtensionManager();
+        const extensions = extensionManager.getLoadedExtensions();
 
-    if (!extensions || extensions.length === 0) {
-      writeStdoutLine(t('No extensions installed.'));
-      return;
+        if (!extensions || extensions.length === 0) {
+            writeStdoutLine(t('No extensions installed.'));
+            return;
+        }
+        writeStdoutLine(
+            extensions
+                .map((extension, _): string =>
+                    extensionToOutputString(
+                        extension,
+                        extensionManager,
+                        process.cwd()
+                    )
+                )
+                .join('\n\n')
+        );
+    } catch (error) {
+        writeStderrLine(getErrorMessage(error));
+        process.exit(1);
     }
-    writeStdoutLine(
-      extensions
-        .map((extension, _): string =>
-          extensionToOutputString(extension, extensionManager, process.cwd()),
-        )
-        .join('\n\n'),
-    );
-  } catch (error) {
-    writeStderrLine(getErrorMessage(error));
-    process.exit(1);
-  }
 }
 
 export const listCommand: CommandModule = {
-  command: 'list',
-  describe: t('Lists installed extensions.'),
-  builder: (yargs) => yargs,
-  handler: async () => {
-    await handleList();
-  },
+    command: 'list',
+    describe: t('Lists installed extensions.'),
+    builder: (yargs) => yargs,
+    handler: async () => {
+        await handleList();
+    }
 };

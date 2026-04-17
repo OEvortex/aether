@@ -18,12 +18,12 @@
 import { randomUUID } from 'node:crypto';
 import type { DebugLogger } from '@aetherai/aether-core';
 import { createDebugLogger } from '@aetherai/aether-core';
-import type { IControlContext } from '../ControlContext.js';
 import type {
-  ControlRequestPayload,
-  ControlResponse,
-  CLIControlRequest,
+    CLIControlRequest,
+    ControlRequestPayload,
+    ControlResponse
 } from '../../types.js';
+import type { IControlContext } from '../ControlContext.js';
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 30000; // 30 seconds
 
@@ -31,22 +31,22 @@ const DEFAULT_REQUEST_TIMEOUT_MS = 30000; // 30 seconds
  * Registry interface for controllers to register/deregister pending requests
  */
 export interface IPendingRequestRegistry {
-  registerIncomingRequest(
-    requestId: string,
-    controller: string,
-    abortController: AbortController,
-    timeoutId: NodeJS.Timeout,
-  ): void;
-  deregisterIncomingRequest(requestId: string): void;
+    registerIncomingRequest(
+        requestId: string,
+        controller: string,
+        abortController: AbortController,
+        timeoutId: NodeJS.Timeout
+    ): void;
+    deregisterIncomingRequest(requestId: string): void;
 
-  registerOutgoingRequest(
-    requestId: string,
-    controller: string,
-    resolve: (response: ControlResponse) => void,
-    reject: (error: Error) => void,
-    timeoutId: NodeJS.Timeout,
-  ): void;
-  deregisterOutgoingRequest(requestId: string): void;
+    registerOutgoingRequest(
+        requestId: string,
+        controller: string,
+        resolve: (response: ControlResponse) => void,
+        reject: (error: Error) => void,
+        timeoutId: NodeJS.Timeout
+    ): void;
+    deregisterOutgoingRequest(requestId: string): void;
 }
 
 /**
@@ -56,171 +56,171 @@ export interface IPendingRequestRegistry {
  * control request types.
  */
 export abstract class BaseController {
-  protected context: IControlContext;
-  protected registry: IPendingRequestRegistry;
-  protected controllerName: string;
-  protected debugLogger: DebugLogger;
+    protected context: IControlContext;
+    protected registry: IPendingRequestRegistry;
+    protected controllerName: string;
+    protected debugLogger: DebugLogger;
 
-  constructor(
-    context: IControlContext,
-    registry: IPendingRequestRegistry,
-    controllerName: string,
-  ) {
-    this.context = context;
-    this.registry = registry;
-    this.controllerName = controllerName;
-    this.debugLogger = createDebugLogger();
-  }
-
-  /**
-   * Handle an incoming control request
-   *
-   * Manages lifecycle: register -> process -> deregister
-   */
-  async handleRequest(
-    payload: ControlRequestPayload,
-    requestId: string,
-  ): Promise<Record<string, unknown>> {
-    const requestAbortController = new AbortController();
-
-    // Setup timeout
-    const timeoutId = setTimeout(() => {
-      requestAbortController.abort();
-      this.registry.deregisterIncomingRequest(requestId);
-      this.debugLogger.warn(
-        `[${this.controllerName}] Request timeout: ${requestId}`,
-      );
-    }, DEFAULT_REQUEST_TIMEOUT_MS);
-
-    // Register with central registry
-    this.registry.registerIncomingRequest(
-      requestId,
-      this.controllerName,
-      requestAbortController,
-      timeoutId,
-    );
-
-    try {
-      const response = await this.handleRequestPayload(
-        payload,
-        requestAbortController.signal,
-      );
-
-      // Success - deregister
-      this.registry.deregisterIncomingRequest(requestId);
-
-      return response;
-    } catch (error) {
-      // Error - deregister
-      this.registry.deregisterIncomingRequest(requestId);
-      throw error;
-    }
-  }
-
-  /**
-   * Send an outgoing control request to SDK
-   *
-   * Manages lifecycle: register -> send -> wait for response -> deregister
-   * Respects the provided AbortSignal for cancellation.
-   */
-  async sendControlRequest(
-    payload: ControlRequestPayload,
-    timeoutMs: number = DEFAULT_REQUEST_TIMEOUT_MS,
-    signal?: AbortSignal,
-  ): Promise<ControlResponse> {
-    // Check if stream is closed
-    if (this.context.inputClosed) {
-      throw new Error('Input closed');
+    constructor(
+        context: IControlContext,
+        registry: IPendingRequestRegistry,
+        controllerName: string
+    ) {
+        this.context = context;
+        this.registry = registry;
+        this.controllerName = controllerName;
+        this.debugLogger = createDebugLogger();
     }
 
-    // Check if already aborted
-    if (signal?.aborted) {
-      throw new Error('Request aborted');
-    }
+    /**
+     * Handle an incoming control request
+     *
+     * Manages lifecycle: register -> process -> deregister
+     */
+    async handleRequest(
+        payload: ControlRequestPayload,
+        requestId: string
+    ): Promise<Record<string, unknown>> {
+        const requestAbortController = new AbortController();
 
-    const requestId = randomUUID();
+        // Setup timeout
+        const timeoutId = setTimeout(() => {
+            requestAbortController.abort();
+            this.registry.deregisterIncomingRequest(requestId);
+            this.debugLogger.warn(
+                `[${this.controllerName}] Request timeout: ${requestId}`
+            );
+        }, DEFAULT_REQUEST_TIMEOUT_MS);
 
-    return new Promise<ControlResponse>((resolve, reject) => {
-      // Setup abort handler
-      const abortHandler = () => {
-        this.registry.deregisterOutgoingRequest(requestId);
-        reject(new Error('Request aborted'));
-        this.debugLogger.warn(
-          `[${this.controllerName}] Outgoing request aborted: ${requestId}`,
+        // Register with central registry
+        this.registry.registerIncomingRequest(
+            requestId,
+            this.controllerName,
+            requestAbortController,
+            timeoutId
         );
-      };
 
-      if (signal) {
-        signal.addEventListener('abort', abortHandler, { once: true });
-      }
+        try {
+            const response = await this.handleRequestPayload(
+                payload,
+                requestAbortController.signal
+            );
 
-      // Setup timeout
-      const timeoutId = setTimeout(() => {
-        if (signal) {
-          signal.removeEventListener('abort', abortHandler);
+            // Success - deregister
+            this.registry.deregisterIncomingRequest(requestId);
+
+            return response;
+        } catch (error) {
+            // Error - deregister
+            this.registry.deregisterIncomingRequest(requestId);
+            throw error;
         }
-        this.registry.deregisterOutgoingRequest(requestId);
-        reject(new Error('Control request timeout'));
-        this.debugLogger.warn(
-          `[${this.controllerName}] Outgoing request timeout: ${requestId}`,
-        );
-      }, timeoutMs);
+    }
 
-      // Wrap resolve/reject to clean up abort listener
-      const wrappedResolve = (response: ControlResponse) => {
-        if (signal) {
-          signal.removeEventListener('abort', abortHandler);
+    /**
+     * Send an outgoing control request to SDK
+     *
+     * Manages lifecycle: register -> send -> wait for response -> deregister
+     * Respects the provided AbortSignal for cancellation.
+     */
+    async sendControlRequest(
+        payload: ControlRequestPayload,
+        timeoutMs: number = DEFAULT_REQUEST_TIMEOUT_MS,
+        signal?: AbortSignal
+    ): Promise<ControlResponse> {
+        // Check if stream is closed
+        if (this.context.inputClosed) {
+            throw new Error('Input closed');
         }
-        resolve(response);
-      };
 
-      const wrappedReject = (error: Error) => {
-        if (signal) {
-          signal.removeEventListener('abort', abortHandler);
+        // Check if already aborted
+        if (signal?.aborted) {
+            throw new Error('Request aborted');
         }
-        reject(error);
-      };
 
-      // Register with central registry
-      this.registry.registerOutgoingRequest(
-        requestId,
-        this.controllerName,
-        wrappedResolve,
-        wrappedReject,
-        timeoutId,
-      );
+        const requestId = randomUUID();
 
-      // Send control request
-      const request: CLIControlRequest = {
-        type: 'control_request',
-        request_id: requestId,
-        request: payload,
-      };
+        return new Promise<ControlResponse>((resolve, reject) => {
+            // Setup abort handler
+            const abortHandler = () => {
+                this.registry.deregisterOutgoingRequest(requestId);
+                reject(new Error('Request aborted'));
+                this.debugLogger.warn(
+                    `[${this.controllerName}] Outgoing request aborted: ${requestId}`
+                );
+            };
 
-      try {
-        this.context.streamJson.send(request);
-      } catch (error) {
-        if (signal) {
-          signal.removeEventListener('abort', abortHandler);
-        }
-        this.registry.deregisterOutgoingRequest(requestId);
-        reject(error);
-      }
-    });
-  }
+            if (signal) {
+                signal.addEventListener('abort', abortHandler, { once: true });
+            }
 
-  /**
-   * Abstract method: Handle specific request payload
-   *
-   * Subclasses must implement this to process their domain-specific requests.
-   */
-  protected abstract handleRequestPayload(
-    payload: ControlRequestPayload,
-    signal: AbortSignal,
-  ): Promise<Record<string, unknown>>;
+            // Setup timeout
+            const timeoutId = setTimeout(() => {
+                if (signal) {
+                    signal.removeEventListener('abort', abortHandler);
+                }
+                this.registry.deregisterOutgoingRequest(requestId);
+                reject(new Error('Control request timeout'));
+                this.debugLogger.warn(
+                    `[${this.controllerName}] Outgoing request timeout: ${requestId}`
+                );
+            }, timeoutMs);
 
-  /**
-   * Cleanup resources
-   */
-  cleanup(): void {}
+            // Wrap resolve/reject to clean up abort listener
+            const wrappedResolve = (response: ControlResponse) => {
+                if (signal) {
+                    signal.removeEventListener('abort', abortHandler);
+                }
+                resolve(response);
+            };
+
+            const wrappedReject = (error: Error) => {
+                if (signal) {
+                    signal.removeEventListener('abort', abortHandler);
+                }
+                reject(error);
+            };
+
+            // Register with central registry
+            this.registry.registerOutgoingRequest(
+                requestId,
+                this.controllerName,
+                wrappedResolve,
+                wrappedReject,
+                timeoutId
+            );
+
+            // Send control request
+            const request: CLIControlRequest = {
+                type: 'control_request',
+                request_id: requestId,
+                request: payload
+            };
+
+            try {
+                this.context.streamJson.send(request);
+            } catch (error) {
+                if (signal) {
+                    signal.removeEventListener('abort', abortHandler);
+                }
+                this.registry.deregisterOutgoingRequest(requestId);
+                reject(error);
+            }
+        });
+    }
+
+    /**
+     * Abstract method: Handle specific request payload
+     *
+     * Subclasses must implement this to process their domain-specific requests.
+     */
+    protected abstract handleRequestPayload(
+        payload: ControlRequestPayload,
+        signal: AbortSignal
+    ): Promise<Record<string, unknown>>;
+
+    /**
+     * Cleanup resources
+     */
+    cleanup(): void {}
 }

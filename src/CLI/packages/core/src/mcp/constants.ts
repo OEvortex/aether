@@ -14,7 +14,7 @@ export const MCP_OAUTH_CLIENT_NAME = 'Aether MCP Client';
  * OAuth client name for service account impersonation provider.
  */
 export const MCP_SA_IMPERSONATION_CLIENT_NAME =
-  'Aether (Service Account Impersonation)';
+    'Aether (Service Account Impersonation)';
 
 /**
  * Port for OAuth redirect callback server.

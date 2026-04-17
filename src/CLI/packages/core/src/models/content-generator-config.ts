@@ -13,19 +13,17 @@
  */
 
 import type { Config } from '../config/config.js';
-import {
-  type AuthType,
-  type ContentGeneratorConfig,
+import type {
+    AuthType,
+    ContentGeneratorConfig
 } from '../core/contentGenerator.js';
-import {
-  MODEL_GENERATION_CONFIG_FIELDS,
-} from './constants.js';
+import { MODEL_GENERATION_CONFIG_FIELDS } from './constants.js';
 import type { ResolvedModelConfig } from './types.js';
 
 export interface AuthOverrides {
-  authType: string;
-  apiKey?: string;
-  baseUrl?: string;
+    authType: string;
+    apiKey?: string;
+    baseUrl?: string;
 }
 
 /**
@@ -39,104 +37,107 @@ export interface AuthOverrides {
  * what a PTY subprocess does during its own initialization.
  */
 export function buildAgentContentGeneratorConfig(
-  base: Config,
-  modelId: string | undefined,
-  authOverrides: AuthOverrides,
+    base: Config,
+    modelId: string | undefined,
+    authOverrides: AuthOverrides
 ): ContentGeneratorConfig {
-  const parentConfig = base.getContentGeneratorConfig();
-  const sameProvider = authOverrides.authType === parentConfig.authType;
-  const modelsConfig = base.getModelsConfig();
-  const resolvedModel = modelId
-    ? modelsConfig.getResolvedModel(authOverrides.authType as AuthType, modelId)
-    : undefined;
+    const parentConfig = base.getContentGeneratorConfig();
+    const sameProvider = authOverrides.authType === parentConfig.authType;
+    const modelsConfig = base.getModelsConfig();
+    const resolvedModel = modelId
+        ? modelsConfig.getResolvedModel(
+              authOverrides.authType as AuthType,
+              modelId
+          )
+        : undefined;
 
-  const nextConfig: ContentGeneratorConfig = {
-    ...parentConfig,
-    model: modelId ?? parentConfig.model,
-    authType: authOverrides.authType as AuthType,
-  };
+    const nextConfig: ContentGeneratorConfig = {
+        ...parentConfig,
+        model: modelId ?? parentConfig.model,
+        authType: authOverrides.authType as AuthType
+    };
 
-  // When switching providers, clear generation config fields so parent
-  // settings (samplingParams, reasoning, extra_body, etc.) don't leak.
-  if (!sameProvider) {
-    for (const field of MODEL_GENERATION_CONFIG_FIELDS) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (nextConfig as any)[field] = undefined;
+    // When switching providers, clear generation config fields so parent
+    // settings (samplingParams, reasoning, extra_body, etc.) don't leak.
+    if (!sameProvider) {
+        for (const field of MODEL_GENERATION_CONFIG_FIELDS) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (nextConfig as any)[field] = undefined;
+        }
     }
-  }
 
-  if (resolvedModel) {
-    applyResolvedModelConfig(
-      nextConfig,
-      resolvedModel,
-      parentConfig,
-      authOverrides,
+    if (resolvedModel) {
+        applyResolvedModelConfig(
+            nextConfig,
+            resolvedModel,
+            parentConfig,
+            authOverrides
+        );
+        return nextConfig;
+    }
+
+    nextConfig.apiKey = resolveCredentialField(
+        authOverrides.apiKey,
+        sameProvider ? parentConfig.apiKey : undefined,
+        authOverrides.authType,
+        'apiKey'
     );
+    nextConfig.baseUrl =
+        authOverrides.baseUrl ??
+        resolveCredentialField(
+            undefined,
+            sameProvider ? parentConfig.baseUrl : undefined,
+            authOverrides.authType,
+            'baseUrl'
+        );
+    nextConfig.apiKeyEnvKey = sameProvider
+        ? parentConfig.apiKeyEnvKey
+        : undefined;
+
     return nextConfig;
-  }
-
-  nextConfig.apiKey = resolveCredentialField(
-    authOverrides.apiKey,
-    sameProvider ? parentConfig.apiKey : undefined,
-    authOverrides.authType,
-    'apiKey',
-  );
-  nextConfig.baseUrl =
-    authOverrides.baseUrl ??
-    resolveCredentialField(
-      undefined,
-      sameProvider ? parentConfig.baseUrl : undefined,
-      authOverrides.authType,
-      'baseUrl',
-    );
-  nextConfig.apiKeyEnvKey = sameProvider
-    ? parentConfig.apiKeyEnvKey
-    : undefined;
-
-  return nextConfig;
 }
 
 function applyResolvedModelConfig(
-  targetConfig: ContentGeneratorConfig,
-  resolvedModel: ResolvedModelConfig,
-  parentConfig: ContentGeneratorConfig,
-  authOverrides: AuthOverrides,
+    targetConfig: ContentGeneratorConfig,
+    resolvedModel: ResolvedModelConfig,
+    parentConfig: ContentGeneratorConfig,
+    authOverrides: AuthOverrides
 ): void {
-  const sameProvider = authOverrides.authType === parentConfig.authType;
-  targetConfig.model = resolvedModel.id;
-  targetConfig.authType = resolvedModel.authType;
-  targetConfig.baseUrl =
-    authOverrides.baseUrl ??
-    resolvedModel.baseUrl ??
-    (sameProvider ? parentConfig.baseUrl : undefined);
+    const sameProvider = authOverrides.authType === parentConfig.authType;
+    targetConfig.model = resolvedModel.id;
+    targetConfig.authType = resolvedModel.authType;
+    targetConfig.baseUrl =
+        authOverrides.baseUrl ??
+        resolvedModel.baseUrl ??
+        (sameProvider ? parentConfig.baseUrl : undefined);
 
-  if (resolvedModel.envKey) {
-    targetConfig.apiKey =
-      authOverrides.apiKey ??
-      (sameProvider ? parentConfig.apiKey : undefined);
-    targetConfig.apiKeyEnvKey = resolvedModel.envKey;
-  } else {
-    targetConfig.apiKey = resolveCredentialField(
-      authOverrides.apiKey,
-      sameProvider ? parentConfig.apiKey : undefined,
-      authOverrides.authType,
-      'apiKey',
-    );
-    targetConfig.apiKeyEnvKey = sameProvider
-      ? parentConfig.apiKeyEnvKey
-      : undefined;
-  }
-
-  // Apply registry-defined generation config fields. Cross-provider
-  // clearing is already handled by buildAgentContentGeneratorConfig,
-  // so here we only overwrite when the registry provides a value.
-  for (const field of MODEL_GENERATION_CONFIG_FIELDS) {
-    const registryValue = resolvedModel.generationConfig[field];
-    if (registryValue !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (targetConfig as any)[field] = registryValue;
+    if (resolvedModel.envKey) {
+        targetConfig.apiKey =
+            authOverrides.apiKey ??
+            (sameProvider ? parentConfig.apiKey : undefined);
+        targetConfig.apiKeyEnvKey = resolvedModel.envKey;
+    } else {
+        targetConfig.apiKey = resolveCredentialField(
+            authOverrides.apiKey,
+            sameProvider ? parentConfig.apiKey : undefined,
+            authOverrides.authType,
+            'apiKey'
+        );
+        targetConfig.apiKeyEnvKey = sameProvider
+            ? parentConfig.apiKeyEnvKey
+            : undefined;
     }
-  }
+
+    // Apply registry-defined generation config fields. Cross-provider
+    // clearing is already handled by buildAgentContentGeneratorConfig,
+    // so here we only overwrite when the registry provides a value.
+    for (const field of MODEL_GENERATION_CONFIG_FIELDS) {
+        const registryValue = resolvedModel.generationConfig[field];
+        if (registryValue !== undefined) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (targetConfig as any)[field] = registryValue;
+        }
+    }
 }
 
 /**
@@ -145,12 +146,12 @@ function applyResolvedModelConfig(
  * Note: Environment variables are no longer used - credentials must come from settings.
  */
 export function resolveCredentialField(
-  explicitValue: string | undefined,
-  inheritedValue: string | undefined,
-  authType: string,
-  field: 'apiKey' | 'baseUrl',
+    explicitValue: string | undefined,
+    inheritedValue: string | undefined,
+    authType: string,
+    field: 'apiKey' | 'baseUrl'
 ): string | undefined {
-  if (explicitValue) return explicitValue;
-  if (inheritedValue) return inheritedValue;
-  return undefined;
+    if (explicitValue) return explicitValue;
+    if (inheritedValue) return inheritedValue;
+    return undefined;
 }

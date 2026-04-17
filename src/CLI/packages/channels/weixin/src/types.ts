@@ -1,6 +1,6 @@
 export enum TypingStatus {
     TYPING = 'typing',
-    CANCEL = 'cancel',
+    CANCEL = 'cancel'
 }
 
 export interface CdnRef {

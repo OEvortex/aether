@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import {
+    existsSync,
+    mkdirSync,
+    mkdtempSync,
+    rmSync,
+    writeFileSync
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -39,7 +45,7 @@ function writeTree(baseDir: string, tree: TmpTreeObject): void {
 }
 
 export async function createTmpDir(
-    treeOrOptions: TmpTreeObject | { prefix?: string; parent?: string } = {},
+    treeOrOptions: TmpTreeObject | { prefix?: string; parent?: string } = {}
 ): Promise<string> {
     if ('prefix' in treeOrOptions || 'parent' in treeOrOptions) {
         const options = treeOrOptions as { prefix?: string; parent?: string };

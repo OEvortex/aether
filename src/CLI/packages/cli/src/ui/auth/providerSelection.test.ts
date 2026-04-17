@@ -19,7 +19,8 @@ describe('providerSelection', () => {
             displayName: 'Apertis AI',
             family: 'Apertis AI',
             supportsApiKey: true,
-            apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            apiKeyTemplate:
+                'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             openai: {
                 baseUrl: 'https://api.apertis.ai/v1'
             },

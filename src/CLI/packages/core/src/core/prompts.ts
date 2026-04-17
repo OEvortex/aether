@@ -4,66 +4,66 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import path from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
-import { ToolNames } from '../tools/tool-names.js';
+import path from 'node:path';
 import process from 'node:process';
-import { isGitRepository } from '../utils/gitUtils.js';
-import { AETHER_CONFIG_DIR } from '../tools/memoryTool.js';
 import type { GenerateContentConfig } from '@google/genai';
+import { AETHER_CONFIG_DIR } from '../tools/memoryTool.js';
+import { ToolNames } from '../tools/tool-names.js';
 import { createDebugLogger } from '../utils/debugLogger.js';
+import { isGitRepository } from '../utils/gitUtils.js';
 
 const debugLogger = createDebugLogger('PROMPTS');
 
 export function resolvePathFromEnv(envVar?: string): {
-  isSwitch: boolean;
-  value: string | null;
-  isDisabled: boolean;
+    isSwitch: boolean;
+    value: string | null;
+    isDisabled: boolean;
 } {
-  // Handle the case where the environment variable is not set, empty, or just whitespace.
-  const trimmedEnvVar = envVar?.trim();
-  if (!trimmedEnvVar) {
-    return { isSwitch: false, value: null, isDisabled: false };
-  }
-
-  const lowerEnvVar = trimmedEnvVar.toLowerCase();
-  // Check if the input is a common boolean-like string.
-  if (['0', 'false', '1', 'true'].includes(lowerEnvVar)) {
-    // If so, identify it as a "switch" and return its value.
-    const isDisabled = ['0', 'false'].includes(lowerEnvVar);
-    return { isSwitch: true, value: lowerEnvVar, isDisabled };
-  }
-
-  // If it's not a switch, treat it as a potential file path.
-  let customPath = trimmedEnvVar;
-
-  // Safely expand the tilde (~) character to the user's home directory.
-  if (customPath.startsWith('~/') || customPath === '~') {
-    try {
-      const home = os.homedir(); // This is the call that can throw an error.
-      if (customPath === '~') {
-        customPath = home;
-      } else {
-        customPath = path.join(home, customPath.slice(2));
-      }
-    } catch (error) {
-      // If os.homedir() fails, we catch the error instead of crashing.
-      debugLogger.warn(
-        `Could not resolve home directory for path: ${trimmedEnvVar}`,
-        error,
-      );
-      // Return null to indicate the path resolution failed.
-      return { isSwitch: false, value: null, isDisabled: false };
+    // Handle the case where the environment variable is not set, empty, or just whitespace.
+    const trimmedEnvVar = envVar?.trim();
+    if (!trimmedEnvVar) {
+        return { isSwitch: false, value: null, isDisabled: false };
     }
-  }
 
-  // Return it as a non-switch with the fully resolved absolute path.
-  return {
-    isSwitch: false,
-    value: path.resolve(customPath),
-    isDisabled: false,
-  };
+    const lowerEnvVar = trimmedEnvVar.toLowerCase();
+    // Check if the input is a common boolean-like string.
+    if (['0', 'false', '1', 'true'].includes(lowerEnvVar)) {
+        // If so, identify it as a "switch" and return its value.
+        const isDisabled = ['0', 'false'].includes(lowerEnvVar);
+        return { isSwitch: true, value: lowerEnvVar, isDisabled };
+    }
+
+    // If it's not a switch, treat it as a potential file path.
+    let customPath = trimmedEnvVar;
+
+    // Safely expand the tilde (~) character to the user's home directory.
+    if (customPath.startsWith('~/') || customPath === '~') {
+        try {
+            const home = os.homedir(); // This is the call that can throw an error.
+            if (customPath === '~') {
+                customPath = home;
+            } else {
+                customPath = path.join(home, customPath.slice(2));
+            }
+        } catch (error) {
+            // If os.homedir() fails, we catch the error instead of crashing.
+            debugLogger.warn(
+                `Could not resolve home directory for path: ${trimmedEnvVar}`,
+                error
+            );
+            // Return null to indicate the path resolution failed.
+            return { isSwitch: false, value: null, isDisabled: false };
+        }
+    }
+
+    // Return it as a non-switch with the fully resolved absolute path.
+    return {
+        isSwitch: false,
+        value: path.resolve(customPath),
+        isDisabled: false
+    };
 }
 
 /**
@@ -76,73 +76,77 @@ export function resolvePathFromEnv(envVar?: string): {
  * @returns Processed custom system instruction with user memory and extra append instructions applied
  */
 export function getCustomSystemPrompt(
-  customInstruction: GenerateContentConfig['systemInstruction'],
-  userMemory?: string,
-  appendInstruction?: string,
+    customInstruction: GenerateContentConfig['systemInstruction'],
+    userMemory?: string,
+    appendInstruction?: string
 ): string {
-  // Extract text from custom instruction
-  let instructionText = '';
+    // Extract text from custom instruction
+    let instructionText = '';
 
-  if (typeof customInstruction === 'string') {
-    instructionText = customInstruction;
-  } else if (Array.isArray(customInstruction)) {
-    // PartUnion[]
-    instructionText = customInstruction
-      .map((part) => (typeof part === 'string' ? part : part.text || ''))
-      .join('');
-  } else if (customInstruction && 'parts' in customInstruction) {
-    // Content
-    instructionText =
-      customInstruction.parts
-        ?.map((part) => (typeof part === 'string' ? part : part.text || ''))
-        .join('') || '';
-  } else if (customInstruction && 'text' in customInstruction) {
-    // PartUnion (single part)
-    instructionText = customInstruction.text || '';
-  }
+    if (typeof customInstruction === 'string') {
+        instructionText = customInstruction;
+    } else if (Array.isArray(customInstruction)) {
+        // PartUnion[]
+        instructionText = customInstruction
+            .map((part) => (typeof part === 'string' ? part : part.text || ''))
+            .join('');
+    } else if (customInstruction && 'parts' in customInstruction) {
+        // Content
+        instructionText =
+            customInstruction.parts
+                ?.map((part) =>
+                    typeof part === 'string' ? part : part.text || ''
+                )
+                .join('') || '';
+    } else if (customInstruction && 'text' in customInstruction) {
+        // PartUnion (single part)
+        instructionText = customInstruction.text || '';
+    }
 
-  // Append user memory using the same pattern as getCoreSystemPrompt
-  const memorySuffix = buildSystemPromptSuffix(userMemory);
+    // Append user memory using the same pattern as getCoreSystemPrompt
+    const memorySuffix = buildSystemPromptSuffix(userMemory);
 
-  return `${instructionText}${memorySuffix}${buildSystemPromptSuffix(appendInstruction)}`;
+    return `${instructionText}${memorySuffix}${buildSystemPromptSuffix(appendInstruction)}`;
 }
 
 function buildSystemPromptSuffix(text?: string): string {
-  const trimmed = text?.trim();
-  return trimmed ? `\n\n---\n\n${trimmed}` : '';
+    const trimmed = text?.trim();
+    return trimmed ? `\n\n---\n\n${trimmed}` : '';
 }
 
 export function getCoreSystemPrompt(
-  userMemory?: string,
-  model?: string,
-  appendInstruction?: string,
+    userMemory?: string,
+    model?: string,
+    appendInstruction?: string
 ): string {
-  // if AETHER_SYSTEM_MD is set (and not 0|false), override system prompt from file
-  // default path is .aether/system.md but can be modified via custom path in AETHER_SYSTEM_MD
-  let systemMdEnabled = false;
-  // The default path for the system prompt file. This can be overridden.
-  let systemMdPath = path.resolve(path.join(AETHER_CONFIG_DIR, 'system.md'));
-  // Resolve the environment variable to get either a path or a switch value.
-  const systemMdResolution = resolvePathFromEnv(process.env['AETHER_SYSTEM_MD']);
+    // if AETHER_SYSTEM_MD is set (and not 0|false), override system prompt from file
+    // default path is .aether/system.md but can be modified via custom path in AETHER_SYSTEM_MD
+    let systemMdEnabled = false;
+    // The default path for the system prompt file. This can be overridden.
+    let systemMdPath = path.resolve(path.join(AETHER_CONFIG_DIR, 'system.md'));
+    // Resolve the environment variable to get either a path or a switch value.
+    const systemMdResolution = resolvePathFromEnv(
+        process.env['AETHER_SYSTEM_MD']
+    );
 
-  // Proceed only if the environment variable is set and is not disabled.
-  if (systemMdResolution.value && !systemMdResolution.isDisabled) {
-    systemMdEnabled = true;
+    // Proceed only if the environment variable is set and is not disabled.
+    if (systemMdResolution.value && !systemMdResolution.isDisabled) {
+        systemMdEnabled = true;
 
-    // We update systemMdPath to this new custom path.
-    if (!systemMdResolution.isSwitch) {
-      systemMdPath = systemMdResolution.value;
+        // We update systemMdPath to this new custom path.
+        if (!systemMdResolution.isSwitch) {
+            systemMdPath = systemMdResolution.value;
+        }
+
+        // require file to exist when override is enabled
+        if (!fs.existsSync(systemMdPath)) {
+            throw new Error(`missing system prompt file '${systemMdPath}'`);
+        }
     }
 
-    // require file to exist when override is enabled
-    if (!fs.existsSync(systemMdPath)) {
-      throw new Error(`missing system prompt file '${systemMdPath}'`);
-    }
-  }
-
-  const basePrompt = systemMdEnabled
-    ? fs.readFileSync(systemMdPath, 'utf8')
-    : `
+    const basePrompt = systemMdEnabled
+        ? fs.readFileSync(systemMdPath, 'utf8')
+        : `
 You are Aether, an interactive CLI agent developed by OEvortex, specializing in software engineering tasks. Your primary goal is to help users safely and efficiently, adhering strictly to the following instructions and utilizing your available tools.
 
 # Core Mandates
@@ -274,34 +278,34 @@ IMPORTANT: Always use the ${ToolNames.TODO_WRITE} tool to plan and track tasks t
 - **Help Command:** The user can use '/help' to display help information.
 - **Feedback:** To report a bug or provide feedback, please use the /bug command.
 
-${(function () {
-  // Determine sandbox status based on environment variables
-  const isSandboxExec = process.env['SANDBOX'] === 'sandbox-exec';
-  const isGenericSandbox = !!process.env['SANDBOX']; // Check if SANDBOX is set to any non-empty value
+${(() => {
+    // Determine sandbox status based on environment variables
+    const isSandboxExec = process.env['SANDBOX'] === 'sandbox-exec';
+    const isGenericSandbox = !!process.env['SANDBOX']; // Check if SANDBOX is set to any non-empty value
 
-  if (isSandboxExec) {
-    return `
+    if (isSandboxExec) {
+        return `
 # macOS Seatbelt
 You are running under macos seatbelt with limited access to files outside the project directory or system temp directory, and with limited access to host system resources such as ports. If you encounter failures that could be due to MacOS Seatbelt (e.g. if a command fails with 'Operation not permitted' or similar error), as you report the error to the user, also explain why you think it could be due to MacOS Seatbelt, and how the user may need to adjust their Seatbelt profile.
 `;
-  } else if (isGenericSandbox) {
-    return `
+    } else if (isGenericSandbox) {
+        return `
 # Sandbox
 You are running in a sandbox container with limited access to files outside the project directory or system temp directory, and with limited access to host system resources such as ports. If you encounter failures that could be due to sandboxing (e.g. if a command fails with 'Operation not permitted' or similar error), when you report the error to the user, also explain why you think it could be due to sandboxing, and how the user may need to adjust their sandbox configuration.
 `;
-  } else {
-    return `
+    } else {
+        return `
 # Outside of Sandbox
 You are running outside of a sandbox container, directly on the user's system. For critical commands that are particularly likely to modify the user's system outside of the project directory or system temp directory, as you explain the command to the user (per the Explain Critical Commands rule above), also remind the user to consider enabling sandboxing.
 `;
-  }
+    }
 })()}
 
 ${getActionsSection()}
 
-${(function () {
-  if (isGitRepository(process.cwd())) {
-    return `
+${(() => {
+    if (isGitRepository(process.cwd())) {
+        return `
 # Git Repository
 - The current working (project) directory is being managed by a git repository.
 - When asked to commit changes or prepare a commit, always start by gathering information using shell commands:
@@ -317,8 +321,8 @@ ${(function () {
 - If a commit fails, never attempt to work around the issues without being asked to do so.
 - Never push changes to a remote repository without being asked explicitly by the user.
 `;
-  }
-  return '';
+    }
+    return '';
 })()}
 
 ${getToolCallExamples(model || '')}
@@ -327,29 +331,29 @@ ${getToolCallExamples(model || '')}
 Your core function is efficient and safe assistance. Balance extreme conciseness with the crucial need for clarity, especially regarding safety and potential system modifications. Always prioritize user control and project conventions. Never make assumptions about the contents of files; instead use '${ToolNames.READ_FILE}' to ensure you aren't making broad assumptions. Finally, you are an agent - please keep going until the user's query is completely resolved.
 `.trim();
 
-  // if QWEN_WRITE_SYSTEM_MD is set (and not 0|false), write base system prompt to file
-  const writeSystemMdResolution = resolvePathFromEnv(
-    process.env['QWEN_WRITE_SYSTEM_MD'],
-  );
+    // if QWEN_WRITE_SYSTEM_MD is set (and not 0|false), write base system prompt to file
+    const writeSystemMdResolution = resolvePathFromEnv(
+        process.env['QWEN_WRITE_SYSTEM_MD']
+    );
 
-  // Check if the feature is enabled. This proceeds only if the environment
-  // variable is set and is not explicitly '0' or 'false'.
-  if (writeSystemMdResolution.value && !writeSystemMdResolution.isDisabled) {
-    const writePath = writeSystemMdResolution.isSwitch
-      ? systemMdPath
-      : writeSystemMdResolution.value;
+    // Check if the feature is enabled. This proceeds only if the environment
+    // variable is set and is not explicitly '0' or 'false'.
+    if (writeSystemMdResolution.value && !writeSystemMdResolution.isDisabled) {
+        const writePath = writeSystemMdResolution.isSwitch
+            ? systemMdPath
+            : writeSystemMdResolution.value;
 
-    fs.mkdirSync(path.dirname(writePath), { recursive: true });
-    fs.writeFileSync(writePath, basePrompt);
-  }
+        fs.mkdirSync(path.dirname(writePath), { recursive: true });
+        fs.writeFileSync(writePath, basePrompt);
+    }
 
-  const memorySuffix =
-    userMemory && userMemory.trim().length > 0
-      ? buildSystemPromptSuffix(userMemory)
-      : '';
-  const appendSuffix = buildSystemPromptSuffix(appendInstruction);
+    const memorySuffix =
+        userMemory && userMemory.trim().length > 0
+            ? buildSystemPromptSuffix(userMemory)
+            : '';
+    const appendSuffix = buildSystemPromptSuffix(appendInstruction);
 
-  return `${basePrompt}${memorySuffix}${appendSuffix}`;
+    return `${basePrompt}${memorySuffix}${appendSuffix}`;
 }
 
 /**
@@ -359,7 +363,7 @@ Your core function is efficient and safe assistance. Balance extreme conciseness
  * Placed between Sandbox and Git Repository sections in the prompt.
  */
 function getActionsSection(): string {
-  return `
+    return `
 # Executing actions with care
 
 Carefully consider the reversibility and blast radius of actions. Generally you can freely take local, reversible actions like editing files or running tests. But for actions that are hard to reverse, affect shared systems beyond your local environment, or could otherwise be risky or destructive, check with the user before proceeding. The cost of pausing to confirm is low, while the cost of an unwanted action (lost work, unintended messages sent, deleted branches) can be very high. For actions like these, consider the context, the action, and user instructions, and by default transparently communicate the action and ask for confirmation before proceeding. This default can be changed by user instructions - if explicitly asked to operate more autonomously, then you may proceed without confirmation, but still attend to the risks and consequences when taking actions. A user approving an action (like a git push) once does NOT mean that they approve it in all contexts, so unless actions are authorized in advance in durable instructions like AGENTS.md files, always confirm first. Authorization stands for the scope specified, not beyond. Match the scope of your actions to what was actually requested.
@@ -379,7 +383,7 @@ When you encounter an obstacle, do not use destructive actions as a shortcut to 
  * think in a scratchpad, and produce a structured XML summary.
  */
 export function getCompressionPrompt(): string {
-  return `
+    return `
 You are the component that summarizes internal chat history into a given structure.
 
 When the conversation history grows too large, you will be invoked to distill the entire history into a concise, structured XML snapshot. This snapshot is CRITICAL, as it will become the agent's *only* memory of the past. The agent will resume its work based solely on this snapshot. All crucial details, plans, errors, and user directives MUST be preserved.
@@ -444,7 +448,7 @@ The structure MUST be as follows:
  * that can be saved to a file for future reference.
  */
 export function getProjectSummaryPrompt(): string {
-  return `Please analyze the conversation history above and generate a comprehensive project summary in markdown format. Focus on extracting the most important context, decisions, and progress that would be valuable for future sessions. Generate the summary directly without using any tools.
+    return `Please analyze the conversation history above and generate a comprehensive project summary in markdown format. Focus on extracting the most important context, decisions, and progress that would be valuable for future sessions. Generate the summary directly without using any tools.
 You are a specialized context summarizer that creates a comprehensive markdown summary from chat history for future reference. The markdown format is as follows:
 
 # Project Summary
@@ -801,41 +805,41 @@ To help you check their settings, I can read their contents. Which one would you
 `.trim();
 
 function getToolCallExamples(model?: string): string {
-  // Check for environment variable override first
-  const toolCallStyle = process.env['aether_cli_TOOL_CALL_STYLE'];
-  if (toolCallStyle) {
-    switch (toolCallStyle.toLowerCase()) {
-      case 'aether-clir':
-        return aetherCoderToolCallExamples;
-      case 'qwen-vl':
-        return aetherVlToolCallExamples;
-      case 'general':
-        return generalToolCallExamples;
-      default:
-        debugLogger.warn(
-          `Unknown aether_cli_TOOL_CALL_STYLE value: ${toolCallStyle}. Using model-based detection.`,
-        );
-        break;
+    // Check for environment variable override first
+    const toolCallStyle = process.env['aether_cli_TOOL_CALL_STYLE'];
+    if (toolCallStyle) {
+        switch (toolCallStyle.toLowerCase()) {
+            case 'aether-clir':
+                return aetherCoderToolCallExamples;
+            case 'qwen-vl':
+                return aetherVlToolCallExamples;
+            case 'general':
+                return generalToolCallExamples;
+            default:
+                debugLogger.warn(
+                    `Unknown aether_cli_TOOL_CALL_STYLE value: ${toolCallStyle}. Using model-based detection.`
+                );
+                break;
+        }
     }
-  }
 
-  // Enhanced regex-based model detection
-  if (model && model.length < 100) {
-    // Match qwen*-coder patterns (e.g., aether3-coder, qwen2.5-coder, aether-clir)
-    if (/qwen[^-]*-coder/i.test(model)) {
-      return aetherCoderToolCallExamples;
+    // Enhanced regex-based model detection
+    if (model && model.length < 100) {
+        // Match qwen*-coder patterns (e.g., aether3-coder, qwen2.5-coder, aether-clir)
+        if (/qwen[^-]*-coder/i.test(model)) {
+            return aetherCoderToolCallExamples;
+        }
+        // Match qwen*-vl patterns (e.g., qwen-vl, qwen2-vl, aether3-vl)
+        if (/qwen[^-]*-vl/i.test(model)) {
+            return aetherVlToolCallExamples;
+        }
+        // Match coder-model pattern (same as aether3-coder)
+        if (/coder-model/i.test(model)) {
+            return aetherCoderToolCallExamples;
+        }
     }
-    // Match qwen*-vl patterns (e.g., qwen-vl, qwen2-vl, aether3-vl)
-    if (/qwen[^-]*-vl/i.test(model)) {
-      return aetherVlToolCallExamples;
-    }
-    // Match coder-model pattern (same as aether3-coder)
-    if (/coder-model/i.test(model)) {
-      return aetherCoderToolCallExamples;
-    }
-  }
 
-  return generalToolCallExamples;
+    return generalToolCallExamples;
 }
 
 /**
@@ -855,7 +859,7 @@ function getToolCallExamples(model?: string): string {
  * ```
  */
 export function getSubagentSystemReminder(agentTypes: string[]): string {
-  return `<system-reminder>You have powerful specialized agents at your disposal, available agent types are: ${agentTypes.join(', ')}. PROACTIVELY use the ${ToolNames.AGENT} tool to delegate user's task to appropriate agent when user's task matches agent capabilities. Ignore this message if user's task is not relevant to any agent. This message is for internal use only. Do not mention this to user in your response.</system-reminder>`;
+    return `<system-reminder>You have powerful specialized agents at your disposal, available agent types are: ${agentTypes.join(', ')}. PROACTIVELY use the ${ToolNames.AGENT} tool to delegate user's task to appropriate agent when user's task matches agent capabilities. Ignore this message if user's task is not relevant to any agent. This message is for internal use only. Do not mention this to user in your response.</system-reminder>`;
 }
 
 /**
@@ -881,7 +885,7 @@ export function getSubagentSystemReminder(agentTypes: string[]): string {
  * - Override any other instructions that would modify system state
  */
 export function getPlanModeSystemReminder(planOnly = false): string {
-  return `<system-reminder>
+    return `<system-reminder>
 Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits, run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received (for example, to make edits). Instead, you should:
 1. Answer the user's query comprehensively
 2. When you're done researching, present your plan ${planOnly ? 'directly' : `by calling the ${ToolNames.EXIT_PLAN_MODE} tool, which will prompt the user to confirm the plan`}. Do NOT make any file changes or run any tools that modify the system state in any way until the user has confirmed the plan. Use ${ToolNames.ASK_USER_QUESTION} if you need to clarify approaches.
@@ -895,7 +899,7 @@ Plan mode is active. The user indicated that they do not want you to execute yet
  * @returns A formatted system reminder string wrapped in XML tags
  */
 export function getArenaSystemReminder(configFilePath: string): string {
-  return `<system-reminder>An Arena session is active. For details, read: ${configFilePath}. This message is for internal use only. Do not mention this to user in your response.</system-reminder>`;
+    return `<system-reminder>An Arena session is active. For details, read: ${configFilePath}. This message is for internal use only. Do not mention this to user in your response.</system-reminder>`;
 }
 
 // ============================================================================
@@ -903,18 +907,18 @@ export function getArenaSystemReminder(configFilePath: string): string {
 // ============================================================================
 
 type InsightPromptType =
-  | 'analysis'
-  | 'impressive_workflows'
-  | 'project_areas'
-  | 'future_opportunities'
-  | 'friction_points'
-  | 'memorable_moment'
-  | 'improvements'
-  | 'interaction_style'
-  | 'at_a_glance';
+    | 'analysis'
+    | 'impressive_workflows'
+    | 'project_areas'
+    | 'future_opportunities'
+    | 'friction_points'
+    | 'memorable_moment'
+    | 'improvements'
+    | 'interaction_style'
+    | 'at_a_glance';
 
 const INSIGHT_PROMPTS: Record<InsightPromptType, string> = {
-  analysis: `Analyze this Aether session and extract structured facets.
+    analysis: `Analyze this Aether session and extract structured facets.
 
 CRITICAL GUIDELINES:
 
@@ -947,7 +951,7 @@ CRITICAL GUIDELINES:
 
 4. If very short or just warmup, use warmup_minimal for goal_category`,
 
-  impressive_workflows: `Analyze this Aether usage data and identify what's working well for this user. Use second person ("you").
+    impressive_workflows: `Analyze this Aether usage data and identify what's working well for this user. Use second person ("you").
 
 Call respond_in_schema function with A VALID JSON OBJECT as argument:
 {
@@ -959,7 +963,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
 
 Include 3 impressive workflows.`,
 
-  project_areas: `Analyze this Aether usage data and identify project areas.
+    project_areas: `Analyze this Aether usage data and identify project areas.
 
 Call respond_in_schema function with A VALID JSON OBJECT as argument:
 {
@@ -970,7 +974,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
 
 Include 4-5 areas. Skip internal QC operations.`,
 
-  future_opportunities: `Analyze this Aether usage data and identify future opportunities.
+    future_opportunities: `Analyze this Aether usage data and identify future opportunities.
 
 Call respond_in_schema function with A VALID JSON OBJECT as argument:
 {
@@ -982,7 +986,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
 
 Include 3 opportunities. Think BIG - autonomous workflows, parallel agents, iterating against tests.`,
 
-  friction_points: `Analyze this Aether usage data and identify friction points for this user. Use second person ("you").
+    friction_points: `Analyze this Aether usage data and identify friction points for this user. Use second person ("you").
 
 Call respond_in_schema function with A VALID JSON OBJECT as argument:
 {
@@ -994,7 +998,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
 
 Include 3 friction categories with 2 examples each.`,
 
-  memorable_moment: `Analyze this Aether usage data and find a memorable moment.
+    memorable_moment: `Analyze this Aether usage data and find a memorable moment.
 
 Call respond_in_schema function with A VALID JSON OBJECT as argument:
 {
@@ -1004,7 +1008,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
 
 Find something genuinely interesting or amusing from the session summaries.`,
 
-  improvements: `Analyze this Aether usage data and suggest improvements.
+    improvements: `Analyze this Aether usage data and suggest improvements.
 
 ## QC FEATURES REFERENCE (pick from these for features_to_try):
 1. **MCP Servers**: Connect Aether to external tools, databases, and APIs via Model Context Protocol.
@@ -1061,7 +1065,7 @@ IMPORTANT for Qwen_md_additions: PRIORITIZE instructions that appear MULTIPLE TI
 
 IMPORTANT for features_to_try: Pick 2-3 from the QC FEATURES REFERENCE above. Include 2-3 items for each category.`,
 
-  interaction_style: `Analyze this Aether usage data and describe the user's interaction style.
+    interaction_style: `Analyze this Aether usage data and describe the user's interaction style.
 
 Call respond_in_schema function with A VALID JSON OBJECT as argument:
 {
@@ -1070,7 +1074,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
 }
 `,
 
-  at_a_glance: `You're writing an "At a Glance" summary for a Aether usage insights report for Aether users. The goal is to help them understand their usage and improve how they can use Qwen better, especially as models improve.
+    at_a_glance: `You're writing an "At a Glance" summary for a Aether usage insights report for Aether users. The goal is to help them understand their usage and improve how they can use Qwen better, especially as models improve.
 
 Use this 4-part structure:
 
@@ -1090,7 +1094,7 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
   "whats_hindering": "(refer to instructions above)",
   "quick_wins": "(refer to instructions above)",
   "ambitious_workflows": "(refer to instructions above)"
-}`,
+}`
 };
 
 /**
@@ -1099,5 +1103,5 @@ Call respond_in_schema function with A VALID JSON OBJECT as argument:
  * @returns The prompt string for the specified type
  */
 export function getInsightPrompt(type: InsightPromptType): string {
-  return INSIGHT_PROMPTS[type];
+    return INSIGHT_PROMPTS[type];
 }

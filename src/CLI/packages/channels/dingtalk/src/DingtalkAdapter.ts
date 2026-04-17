@@ -1,5 +1,10 @@
+import type {
+    AcpBridge,
+    ChannelBaseOptions,
+    ChannelConfig,
+    Envelope
+} from '../../base/src/index.js';
 import { ChannelBase } from '../../base/src/index.js';
-import type { AcpBridge, ChannelBaseOptions, ChannelConfig, Envelope } from '../../base/src/index.js';
 import { extractTitle, normalizeDingTalkMarkdown } from './markdown.js';
 import { downloadMedia } from './media.js';
 
@@ -8,7 +13,7 @@ export class DingtalkChannel extends ChannelBase {
         name: string,
         config: ChannelConfig,
         bridge: AcpBridge,
-        options?: ChannelBaseOptions,
+        options?: ChannelBaseOptions
     ) {
         super(name, config, bridge, options);
     }

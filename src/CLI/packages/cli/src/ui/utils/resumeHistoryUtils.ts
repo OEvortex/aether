@@ -5,20 +5,20 @@
  */
 
 import * as path from 'node:path';
-import type { Part, FunctionCall } from '@google/genai';
 import type {
-  ResumedSessionData,
-  ConversationRecord,
-  Config,
-  AnyDeclarativeTool,
-  ToolResultDisplay,
-  SlashCommandRecordPayload,
-  AtCommandRecordPayload,
+    AnyDeclarativeTool,
+    AtCommandRecordPayload,
+    Config,
+    ConversationRecord,
+    ResumedSessionData,
+    SlashCommandRecordPayload,
+    ToolResultDisplay
 } from '@aetherai/aether-core';
+import type { FunctionCall, Part } from '@google/genai';
 import type {
-  HistoryItem,
-  HistoryItemWithoutId,
-  IndividualToolCallDisplay,
+    HistoryItem,
+    HistoryItemWithoutId,
+    IndividualToolCallDisplay
 } from '../types.js';
 import { ToolCallStatus } from '../types.js';
 
@@ -26,18 +26,18 @@ import { ToolCallStatus } from '../types.js';
  * Extracts text content from a Content object's parts (excluding thought parts).
  */
 function extractTextFromParts(parts: Part[] | undefined): string {
-  if (!parts) return '';
+    if (!parts) return '';
 
-  const textParts: string[] = [];
-  for (const part of parts) {
-    if ('text' in part && part.text) {
-      // Skip thought parts - they have a 'thought' property
-      if (!('thought' in part && part.thought)) {
-        textParts.push(part.text);
-      }
+    const textParts: string[] = [];
+    for (const part of parts) {
+        if ('text' in part && part.text) {
+            // Skip thought parts - they have a 'thought' property
+            if (!('thought' in part && part.thought)) {
+                textParts.push(part.text);
+            }
+        }
     }
-  }
-  return textParts.join('\n');
+    return textParts.join('\n');
 }
 
 /**
@@ -45,46 +45,46 @@ function extractTextFromParts(parts: Part[] | undefined): string {
  * Thought parts are identified by having `thought: true`.
  */
 function extractThoughtTextFromParts(parts: Part[] | undefined): string {
-  if (!parts) return '';
+    if (!parts) return '';
 
-  const thoughtParts: string[] = [];
-  for (const part of parts) {
-    if ('text' in part && part.text && 'thought' in part && part.thought) {
-      thoughtParts.push(part.text);
+    const thoughtParts: string[] = [];
+    for (const part of parts) {
+        if ('text' in part && part.text && 'thought' in part && part.thought) {
+            thoughtParts.push(part.text);
+        }
     }
-  }
-  return thoughtParts.join('\n');
+    return thoughtParts.join('\n');
 }
 
 /**
  * Extracts function calls from a Content object's parts.
  */
 function extractFunctionCalls(
-  parts: Part[] | undefined,
+    parts: Part[] | undefined
 ): Array<{ id: string; name: string; args: Record<string, unknown> }> {
-  if (!parts) return [];
+    if (!parts) return [];
 
-  const calls: Array<{
-    id: string;
-    name: string;
-    args: Record<string, unknown>;
-  }> = [];
-  for (const part of parts) {
-    if ('functionCall' in part && part.functionCall) {
-      const fc = part.functionCall as FunctionCall;
-      calls.push({
-        id: fc.id || `call-${calls.length}`,
-        name: fc.name || 'unknown',
-        args: (fc.args as Record<string, unknown>) || {},
-      });
+    const calls: Array<{
+        id: string;
+        name: string;
+        args: Record<string, unknown>;
+    }> = [];
+    for (const part of parts) {
+        if ('functionCall' in part && part.functionCall) {
+            const fc = part.functionCall as FunctionCall;
+            calls.push({
+                id: fc.id || `call-${calls.length}`,
+                name: fc.name || 'unknown',
+                args: (fc.args as Record<string, unknown>) || {}
+            });
+        }
     }
-  }
-  return calls;
+    return calls;
 }
 
 function getTool(config: Config, name: string): AnyDeclarativeTool | undefined {
-  const toolRegistry = config.getToolRegistry();
-  return toolRegistry.getTool(name);
+    const toolRegistry = config.getToolRegistry();
+    return toolRegistry.getTool(name);
 }
 
 /**
@@ -92,20 +92,20 @@ function getTool(config: Config, name: string): AnyDeclarativeTool | undefined {
  * This ensures we get the exact same descriptions as during normal operation.
  */
 function formatToolDescription(
-  tool: AnyDeclarativeTool,
-  args: Record<string, unknown>,
+    tool: AnyDeclarativeTool,
+    args: Record<string, unknown>
 ): string {
-  try {
-    // Create tool invocation instance and get description
-    const invocation = tool.build(args);
-    return invocation.getDescription();
-  } catch {
-    // Fallback: use the description arg directly if available
-    if (typeof args['description'] === 'string') {
-      return args['description'];
+    try {
+        // Create tool invocation instance and get description
+        const invocation = tool.build(args);
+        return invocation.getDescription();
+    } catch {
+        // Fallback: use the description arg directly if available
+        if (typeof args['description'] === 'string') {
+            return args['description'];
+        }
+        return '';
     }
-    return '';
-  }
 }
 
 /**
@@ -113,23 +113,23 @@ function formatToolDescription(
  * SlashCommandRecordPayload.outputHistoryItems.
  */
 function restoreHistoryItem(raw: unknown): HistoryItemWithoutId | undefined {
-  if (!raw || typeof raw !== 'object') {
-    return;
-  }
-
-  const clone = { ...(raw as Record<string, unknown>) };
-  if ('timestamp' in clone) {
-    const ts = clone['timestamp'];
-    if (typeof ts === 'string' || typeof ts === 'number') {
-      clone['timestamp'] = new Date(ts);
+    if (!raw || typeof raw !== 'object') {
+        return;
     }
-  }
 
-  if (typeof clone['type'] !== 'string') {
-    return;
-  }
+    const clone = { ...(raw as Record<string, unknown>) };
+    if ('timestamp' in clone) {
+        const ts = clone['timestamp'];
+        if (typeof ts === 'string' || typeof ts === 'number') {
+            clone['timestamp'] = new Date(ts);
+        }
+    }
 
-  return clone as unknown as HistoryItemWithoutId;
+    if (typeof clone['type'] !== 'string') {
+        return;
+    }
+
+    return clone as unknown as HistoryItemWithoutId;
 }
 
 /**
@@ -143,286 +143,296 @@ function restoreHistoryItem(raw: unknown): HistoryItemWithoutId | undefined {
  * @returns Array of history items for UI display
  */
 function convertToHistoryItems(
-  conversation: ConversationRecord,
-  config: Config,
+    conversation: ConversationRecord,
+    config: Config
 ): HistoryItemWithoutId[] {
-  const items: HistoryItemWithoutId[] = [];
-  const pendingAtCommands: AtCommandRecordPayload[] = [];
-  let atCommandCounter = 0;
+    const items: HistoryItemWithoutId[] = [];
+    const pendingAtCommands: AtCommandRecordPayload[] = [];
+    let atCommandCounter = 0;
 
-  // Track pending tool calls for grouping with results
-  const pendingToolCalls = new Map<
-    string,
-    { name: string; args: Record<string, unknown> }
-  >();
-  let currentToolGroup: Array<{
-    callId: string;
-    name: string;
-    description: string;
-    resultDisplay: ToolResultDisplay | undefined;
-    status: ToolCallStatus;
-    confirmationDetails: undefined;
-  }> = [];
+    // Track pending tool calls for grouping with results
+    const pendingToolCalls = new Map<
+        string,
+        { name: string; args: Record<string, unknown> }
+    >();
+    let currentToolGroup: Array<{
+        callId: string;
+        name: string;
+        description: string;
+        resultDisplay: ToolResultDisplay | undefined;
+        status: ToolCallStatus;
+        confirmationDetails: undefined;
+    }> = [];
 
-  const buildAtCommandDisplays = (
-    payload: AtCommandRecordPayload,
-  ): IndividualToolCallDisplay[] => {
-    // Error case: single "Read File(s)" with error message
-    if (payload.status === 'error') {
-      atCommandCounter += 1;
-      const filesLabel = payload.filesRead?.length
-        ? payload.filesRead.join(', ')
-        : 'files';
-      return [
-        {
-          callId: `at-command-${atCommandCounter}`,
-          name: 'Read File(s)',
-          description: 'Error attempting to read files',
-          status: ToolCallStatus.Error,
-          resultDisplay:
-            payload.message || `Error reading files (${filesLabel})`,
-          confirmationDetails: undefined,
-        },
-      ];
-    }
-
-    // Success case: individual tool calls for each file
-    if (!payload.filesRead?.length) {
-      atCommandCounter += 1;
-      return [
-        {
-          callId: `at-command-${atCommandCounter}`,
-          name: 'Read File',
-          description: 'Read File(s)',
-          status: ToolCallStatus.Success,
-          resultDisplay: undefined,
-          confirmationDetails: undefined,
-        },
-      ];
-    }
-
-    return payload.filesRead.map((filePath) => {
-      atCommandCounter += 1;
-      const isDir = filePath.endsWith('/');
-      return {
-        callId: `at-command-${atCommandCounter}`,
-        name: isDir ? 'Read Directory' : 'Read File',
-        description: isDir
-          ? `Read directory ${path.basename(filePath)}`
-          : `Read file ${path.basename(filePath)}`,
-        status: ToolCallStatus.Success,
-        resultDisplay: undefined,
-        confirmationDetails: undefined,
-      };
-    });
-  };
-
-  for (const record of conversation.messages) {
-    if (record.type === 'system') {
-      if (record.subtype === 'slash_command') {
-        // Flush any pending tool group to avoid mixing contexts.
-        if (currentToolGroup.length > 0) {
-          items.push({
-            type: 'tool_group',
-            tools: [...currentToolGroup],
-          });
-          currentToolGroup = [];
+    const buildAtCommandDisplays = (
+        payload: AtCommandRecordPayload
+    ): IndividualToolCallDisplay[] => {
+        // Error case: single "Read File(s)" with error message
+        if (payload.status === 'error') {
+            atCommandCounter += 1;
+            const filesLabel = payload.filesRead?.length
+                ? payload.filesRead.join(', ')
+                : 'files';
+            return [
+                {
+                    callId: `at-command-${atCommandCounter}`,
+                    name: 'Read File(s)',
+                    description: 'Error attempting to read files',
+                    status: ToolCallStatus.Error,
+                    resultDisplay:
+                        payload.message ||
+                        `Error reading files (${filesLabel})`,
+                    confirmationDetails: undefined
+                }
+            ];
         }
-        const payload = record.systemPayload as
-          | SlashCommandRecordPayload
-          | undefined;
-        if (!payload) continue;
-        if (payload.phase === 'invocation' && payload.rawCommand) {
-          items.push({ type: 'user', text: payload.rawCommand });
+
+        // Success case: individual tool calls for each file
+        if (!payload.filesRead?.length) {
+            atCommandCounter += 1;
+            return [
+                {
+                    callId: `at-command-${atCommandCounter}`,
+                    name: 'Read File',
+                    description: 'Read File(s)',
+                    status: ToolCallStatus.Success,
+                    resultDisplay: undefined,
+                    confirmationDetails: undefined
+                }
+            ];
         }
-        if (payload.phase === 'result') {
-          const outputs = payload.outputHistoryItems ?? [];
-          for (const raw of outputs) {
-            const restored = restoreHistoryItem(raw);
-            if (restored) {
-              items.push(restored);
+
+        return payload.filesRead.map((filePath) => {
+            atCommandCounter += 1;
+            const isDir = filePath.endsWith('/');
+            return {
+                callId: `at-command-${atCommandCounter}`,
+                name: isDir ? 'Read Directory' : 'Read File',
+                description: isDir
+                    ? `Read directory ${path.basename(filePath)}`
+                    : `Read file ${path.basename(filePath)}`,
+                status: ToolCallStatus.Success,
+                resultDisplay: undefined,
+                confirmationDetails: undefined
+            };
+        });
+    };
+
+    for (const record of conversation.messages) {
+        if (record.type === 'system') {
+            if (record.subtype === 'slash_command') {
+                // Flush any pending tool group to avoid mixing contexts.
+                if (currentToolGroup.length > 0) {
+                    items.push({
+                        type: 'tool_group',
+                        tools: [...currentToolGroup]
+                    });
+                    currentToolGroup = [];
+                }
+                const payload = record.systemPayload as
+                    | SlashCommandRecordPayload
+                    | undefined;
+                if (!payload) continue;
+                if (payload.phase === 'invocation' && payload.rawCommand) {
+                    items.push({ type: 'user', text: payload.rawCommand });
+                }
+                if (payload.phase === 'result') {
+                    const outputs = payload.outputHistoryItems ?? [];
+                    for (const raw of outputs) {
+                        const restored = restoreHistoryItem(raw);
+                        if (restored) {
+                            items.push(restored);
+                        }
+                    }
+                }
             }
-          }
+            if (record.subtype === 'at_command') {
+                const payload = record.systemPayload as
+                    | AtCommandRecordPayload
+                    | undefined;
+                if (!payload) continue;
+                pendingAtCommands.push(payload);
+            }
+            continue;
         }
-      }
-      if (record.subtype === 'at_command') {
-        const payload = record.systemPayload as
-          | AtCommandRecordPayload
-          | undefined;
-        if (!payload) continue;
-        pendingAtCommands.push(payload);
-      }
-      continue;
+        switch (record.type) {
+            case 'user': {
+                if (pendingAtCommands.length > 0) {
+                    // Flush any pending tool group before user message
+                    if (currentToolGroup.length > 0) {
+                        items.push({
+                            type: 'tool_group',
+                            tools: [...currentToolGroup]
+                        });
+                        currentToolGroup = [];
+                    }
+
+                    const payload = pendingAtCommands.shift()!;
+                    const text =
+                        payload.userText ||
+                        extractTextFromParts(record.message?.parts as Part[]);
+                    if (text) {
+                        items.push({ type: 'user', text });
+                    }
+
+                    const toolDisplays = buildAtCommandDisplays(payload);
+                    if (toolDisplays.length > 0) {
+                        items.push({
+                            type: 'tool_group',
+                            tools: toolDisplays
+                        });
+                    }
+                    break;
+                }
+                // Flush any pending tool group before user message
+                if (currentToolGroup.length > 0) {
+                    items.push({
+                        type: 'tool_group',
+                        tools: [...currentToolGroup]
+                    });
+                    currentToolGroup = [];
+                }
+
+                const text = extractTextFromParts(
+                    record.message?.parts as Part[]
+                );
+                if (text) {
+                    items.push({ type: 'user', text });
+                }
+                break;
+            }
+
+            case 'assistant': {
+                const parts = record.message?.parts as Part[] | undefined;
+
+                // Extract thought content
+                const thoughtText = !config
+                    .getContentGenerator()
+                    .useSummarizedThinking()
+                    ? extractThoughtTextFromParts(parts)
+                    : '';
+
+                // Extract text content (non-function-call, non-thought)
+                const text = extractTextFromParts(parts);
+
+                // Extract function calls
+                const functionCalls = extractFunctionCalls(parts);
+
+                // If there's thought content, add it as a gemini_thought message
+                if (thoughtText) {
+                    // Flush any pending tool group before thought
+                    if (currentToolGroup.length > 0) {
+                        items.push({
+                            type: 'tool_group',
+                            tools: [...currentToolGroup]
+                        });
+                        currentToolGroup = [];
+                    }
+                    items.push({ type: 'gemini_thought', text: thoughtText });
+                }
+
+                // If there's text content, add it as a gemini message
+                if (text) {
+                    // Flush any pending tool group before text
+                    if (currentToolGroup.length > 0) {
+                        items.push({
+                            type: 'tool_group',
+                            tools: [...currentToolGroup]
+                        });
+                        currentToolGroup = [];
+                    }
+                    items.push({ type: 'gemini', text });
+                }
+
+                // Track function calls for pairing with results
+                for (const fc of functionCalls) {
+                    const tool = getTool(config, fc.name);
+
+                    pendingToolCalls.set(fc.id, {
+                        name: fc.name,
+                        args: fc.args
+                    });
+
+                    // Add placeholder tool call to current group
+                    currentToolGroup.push({
+                        callId: fc.id,
+                        name: tool?.displayName || fc.name,
+                        description: tool
+                            ? formatToolDescription(tool, fc.args)
+                            : '',
+                        resultDisplay: undefined,
+                        status: ToolCallStatus.Success, // Will be updated by tool_result
+                        confirmationDetails: undefined
+                    });
+                }
+                break;
+            }
+
+            case 'tool_result': {
+                // Update the corresponding tool call in the current group
+                if (record.toolCallResult) {
+                    const callId = record.toolCallResult.callId;
+                    const toolCall = currentToolGroup.find(
+                        (t) => t.callId === callId
+                    );
+                    if (toolCall) {
+                        // Preserve the resultDisplay as-is - it can be a string or structured object
+                        const rawDisplay = record.toolCallResult.resultDisplay;
+                        toolCall.resultDisplay = rawDisplay;
+                        // Check if status exists and use it
+                        const rawStatus = (
+                            record.toolCallResult as Record<string, unknown>
+                        )['status'] as string | undefined;
+                        toolCall.status =
+                            rawStatus === 'error'
+                                ? ToolCallStatus.Error
+                                : ToolCallStatus.Success;
+                    }
+                    pendingToolCalls.delete(callId || '');
+                }
+                break;
+            }
+
+            default:
+                // Skip unknown record types
+                break;
+        }
     }
-    switch (record.type) {
-      case 'user': {
-        if (pendingAtCommands.length > 0) {
-          // Flush any pending tool group before user message
-          if (currentToolGroup.length > 0) {
-            items.push({
-              type: 'tool_group',
-              tools: [...currentToolGroup],
-            });
-            currentToolGroup = [];
-          }
 
-          const payload = pendingAtCommands.shift()!;
-          const text =
-            payload.userText ||
-            extractTextFromParts(record.message?.parts as Part[]);
-          if (text) {
-            items.push({ type: 'user', text });
-          }
+    if (pendingAtCommands.length > 0) {
+        for (const payload of pendingAtCommands) {
+            // Flush any pending tool group before standalone @-command
+            if (currentToolGroup.length > 0) {
+                items.push({
+                    type: 'tool_group',
+                    tools: [...currentToolGroup]
+                });
+                currentToolGroup = [];
+            }
 
-          const toolDisplays = buildAtCommandDisplays(payload);
-          if (toolDisplays.length > 0) {
-            items.push({
-              type: 'tool_group',
-              tools: toolDisplays,
-            });
-          }
-          break;
+            const text = payload.userText;
+            if (text) {
+                items.push({ type: 'user', text });
+            }
+            const toolDisplays = buildAtCommandDisplays(payload);
+            if (toolDisplays.length > 0) {
+                items.push({
+                    type: 'tool_group',
+                    tools: toolDisplays
+                });
+            }
         }
-        // Flush any pending tool group before user message
-        if (currentToolGroup.length > 0) {
-          items.push({
+    }
+
+    // Flush any remaining tool group
+    if (currentToolGroup.length > 0) {
+        items.push({
             type: 'tool_group',
-            tools: [...currentToolGroup],
-          });
-          currentToolGroup = [];
-        }
-
-        const text = extractTextFromParts(record.message?.parts as Part[]);
-        if (text) {
-          items.push({ type: 'user', text });
-        }
-        break;
-      }
-
-      case 'assistant': {
-        const parts = record.message?.parts as Part[] | undefined;
-
-        // Extract thought content
-        const thoughtText = !config
-          .getContentGenerator()
-          .useSummarizedThinking()
-          ? extractThoughtTextFromParts(parts)
-          : '';
-
-        // Extract text content (non-function-call, non-thought)
-        const text = extractTextFromParts(parts);
-
-        // Extract function calls
-        const functionCalls = extractFunctionCalls(parts);
-
-        // If there's thought content, add it as a gemini_thought message
-        if (thoughtText) {
-          // Flush any pending tool group before thought
-          if (currentToolGroup.length > 0) {
-            items.push({
-              type: 'tool_group',
-              tools: [...currentToolGroup],
-            });
-            currentToolGroup = [];
-          }
-          items.push({ type: 'gemini_thought', text: thoughtText });
-        }
-
-        // If there's text content, add it as a gemini message
-        if (text) {
-          // Flush any pending tool group before text
-          if (currentToolGroup.length > 0) {
-            items.push({
-              type: 'tool_group',
-              tools: [...currentToolGroup],
-            });
-            currentToolGroup = [];
-          }
-          items.push({ type: 'gemini', text });
-        }
-
-        // Track function calls for pairing with results
-        for (const fc of functionCalls) {
-          const tool = getTool(config, fc.name);
-
-          pendingToolCalls.set(fc.id, { name: fc.name, args: fc.args });
-
-          // Add placeholder tool call to current group
-          currentToolGroup.push({
-            callId: fc.id,
-            name: tool?.displayName || fc.name,
-            description: tool ? formatToolDescription(tool, fc.args) : '',
-            resultDisplay: undefined,
-            status: ToolCallStatus.Success, // Will be updated by tool_result
-            confirmationDetails: undefined,
-          });
-        }
-        break;
-      }
-
-      case 'tool_result': {
-        // Update the corresponding tool call in the current group
-        if (record.toolCallResult) {
-          const callId = record.toolCallResult.callId;
-          const toolCall = currentToolGroup.find((t) => t.callId === callId);
-          if (toolCall) {
-            // Preserve the resultDisplay as-is - it can be a string or structured object
-            const rawDisplay = record.toolCallResult.resultDisplay;
-            toolCall.resultDisplay = rawDisplay;
-            // Check if status exists and use it
-            const rawStatus = (
-              record.toolCallResult as Record<string, unknown>
-            )['status'] as string | undefined;
-            toolCall.status =
-              rawStatus === 'error'
-                ? ToolCallStatus.Error
-                : ToolCallStatus.Success;
-          }
-          pendingToolCalls.delete(callId || '');
-        }
-        break;
-      }
-
-      default:
-        // Skip unknown record types
-        break;
-    }
-  }
-
-  if (pendingAtCommands.length > 0) {
-    for (const payload of pendingAtCommands) {
-      // Flush any pending tool group before standalone @-command
-      if (currentToolGroup.length > 0) {
-        items.push({
-          type: 'tool_group',
-          tools: [...currentToolGroup],
+            tools: currentToolGroup
         });
-        currentToolGroup = [];
-      }
-
-      const text = payload.userText;
-      if (text) {
-        items.push({ type: 'user', text });
-      }
-      const toolDisplays = buildAtCommandDisplays(payload);
-      if (toolDisplays.length > 0) {
-        items.push({
-          type: 'tool_group',
-          tools: toolDisplays,
-        });
-      }
     }
-  }
 
-  // Flush any remaining tool group
-  if (currentToolGroup.length > 0) {
-    items.push({
-      type: 'tool_group',
-      tools: currentToolGroup,
-    });
-  }
-
-  return items;
+    return items;
 }
 
 /**
@@ -437,23 +447,26 @@ function convertToHistoryItems(
  * @returns Array of HistoryItem with proper IDs
  */
 export function buildResumedHistoryItems(
-  sessionData: ResumedSessionData,
-  config: Config,
-  baseTimestamp: number = Date.now(),
+    sessionData: ResumedSessionData,
+    config: Config,
+    baseTimestamp: number = Date.now()
 ): HistoryItem[] {
-  const items: HistoryItem[] = [];
-  let idCounter = 1;
+    const items: HistoryItem[] = [];
+    let idCounter = 1;
 
-  const getNextId = (): number => baseTimestamp + idCounter++;
+    const getNextId = (): number => baseTimestamp + idCounter++;
 
-  // Convert conversation directly to history items
-  const historyItems = convertToHistoryItems(sessionData.conversation, config);
-  for (const item of historyItems) {
-    items.push({
-      ...item,
-      id: getNextId(),
-    } as HistoryItem);
-  }
+    // Convert conversation directly to history items
+    const historyItems = convertToHistoryItems(
+        sessionData.conversation,
+        config
+    );
+    for (const item of historyItems) {
+        items.push({
+            ...item,
+            id: getNextId()
+        } as HistoryItem);
+    }
 
-  return items;
+    return items;
 }

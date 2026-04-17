@@ -10,57 +10,57 @@
  * main-agent-specific concerns (vim mode, shell mode, exit prompts, etc.).
  */
 
-import type React from 'react';
-import { Box, Text } from 'ink';
 import { ApprovalMode } from '@aetherai/aether-core';
+import { Box, Text } from 'ink';
+import type React from 'react';
+import { theme } from '../../semantic-colors.js';
 import { AutoAcceptIndicator } from '../AutoAcceptIndicator.js';
 import { ContextUsageDisplay } from '../ContextUsageDisplay.js';
-import { theme } from '../../semantic-colors.js';
 
 interface AgentFooterProps {
-  approvalMode: ApprovalMode | undefined;
-  promptTokenCount: number;
-  contextWindowSize: number | undefined;
-  terminalWidth: number;
+    approvalMode: ApprovalMode | undefined;
+    promptTokenCount: number;
+    contextWindowSize: number | undefined;
+    terminalWidth: number;
 }
 
 export const AgentFooter: React.FC<AgentFooterProps> = ({
-  approvalMode,
-  promptTokenCount,
-  contextWindowSize,
-  terminalWidth,
+    approvalMode,
+    promptTokenCount,
+    contextWindowSize,
+    terminalWidth
 }) => {
-  const showApproval =
-    approvalMode !== undefined && approvalMode !== ApprovalMode.DEFAULT;
-  const showContext = promptTokenCount > 0 && contextWindowSize !== undefined;
+    const showApproval =
+        approvalMode !== undefined && approvalMode !== ApprovalMode.DEFAULT;
+    const showContext = promptTokenCount > 0 && contextWindowSize !== undefined;
 
-  if (!showApproval && !showContext) {
-    return null;
-  }
+    if (!showApproval && !showContext) {
+        return null;
+    }
 
-  return (
-    <Box
-      justifyContent="space-between"
-      width="100%"
-      flexDirection="row"
-      alignItems="center"
-    >
-      <Box marginLeft={2}>
-        {showApproval ? (
-          <AutoAcceptIndicator approvalMode={approvalMode} />
-        ) : null}
-      </Box>
-      <Box marginRight={2}>
-        {showContext && (
-          <Text color={theme.text.accent}>
-            <ContextUsageDisplay
-              promptTokenCount={promptTokenCount}
-              terminalWidth={terminalWidth}
-              contextWindowSize={contextWindowSize!}
-            />
-          </Text>
-        )}
-      </Box>
-    </Box>
-  );
+    return (
+        <Box
+            justifyContent="space-between"
+            width="100%"
+            flexDirection="row"
+            alignItems="center"
+        >
+            <Box marginLeft={2}>
+                {showApproval ? (
+                    <AutoAcceptIndicator approvalMode={approvalMode} />
+                ) : null}
+            </Box>
+            <Box marginRight={2}>
+                {showContext && (
+                    <Text color={theme.text.accent}>
+                        <ContextUsageDisplay
+                            promptTokenCount={promptTokenCount}
+                            terminalWidth={terminalWidth}
+                            contextWindowSize={contextWindowSize!}
+                        />
+                    </Text>
+                )}
+            </Box>
+        </Box>
+    );
 };

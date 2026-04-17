@@ -4,66 +4,67 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useEffect, useRef, useState } from 'react';
 import { StreamingState } from '../types.js';
-import { useTimer } from './useTimer.js';
 import { usePhraseCycler } from './usePhraseCycler.js';
-import { useState, useEffect, useRef } from 'react';
+import { useTimer } from './useTimer.js';
 
 export const useLoadingIndicator = (
-  streamingState: StreamingState,
-  customWittyPhrases?: string[],
-  currentCandidatesTokens?: number,
+    streamingState: StreamingState,
+    customWittyPhrases?: string[],
+    currentCandidatesTokens?: number
 ) => {
-  const [timerResetKey, setTimerResetKey] = useState(0);
-  const isTimerActive = streamingState === StreamingState.Responding;
+    const [timerResetKey, setTimerResetKey] = useState(0);
+    const isTimerActive = streamingState === StreamingState.Responding;
 
-  const elapsedTimeFromTimer = useTimer(isTimerActive, timerResetKey);
+    const elapsedTimeFromTimer = useTimer(isTimerActive, timerResetKey);
 
-  const isPhraseCyclingActive = streamingState === StreamingState.Responding;
-  const isWaiting = streamingState === StreamingState.WaitingForConfirmation;
-  const currentLoadingPhrase = usePhraseCycler(
-    isPhraseCyclingActive,
-    isWaiting,
-    customWittyPhrases,
-  );
+    const isPhraseCyclingActive = streamingState === StreamingState.Responding;
+    const isWaiting = streamingState === StreamingState.WaitingForConfirmation;
+    const currentLoadingPhrase = usePhraseCycler(
+        isPhraseCyclingActive,
+        isWaiting,
+        customWittyPhrases
+    );
 
-  const [retainedElapsedTime, setRetainedElapsedTime] = useState(0);
-  const [taskStartTokens, setTaskStartTokens] = useState(0);
-  const prevStreamingStateRef = useRef<StreamingState | null>(null);
+    const [retainedElapsedTime, setRetainedElapsedTime] = useState(0);
+    const [taskStartTokens, setTaskStartTokens] = useState(0);
+    const prevStreamingStateRef = useRef<StreamingState | null>(null);
 
-  useEffect(() => {
-    if (
-      prevStreamingStateRef.current === StreamingState.WaitingForConfirmation &&
-      streamingState === StreamingState.Responding
-    ) {
-      setTimerResetKey((prevKey) => prevKey + 1);
-      setRetainedElapsedTime(0);
-      setTaskStartTokens(currentCandidatesTokens ?? 0);
-    } else if (
-      streamingState === StreamingState.Idle &&
-      prevStreamingStateRef.current === StreamingState.Responding
-    ) {
-      setTimerResetKey((prevKey) => prevKey + 1);
-      setRetainedElapsedTime(0);
-      setTaskStartTokens(0);
-    } else if (
-      streamingState === StreamingState.Responding &&
-      prevStreamingStateRef.current !== StreamingState.Responding
-    ) {
-      setTaskStartTokens(currentCandidatesTokens ?? 0);
-    } else if (streamingState === StreamingState.WaitingForConfirmation) {
-      setRetainedElapsedTime(elapsedTimeFromTimer);
-    }
+    useEffect(() => {
+        if (
+            prevStreamingStateRef.current ===
+                StreamingState.WaitingForConfirmation &&
+            streamingState === StreamingState.Responding
+        ) {
+            setTimerResetKey((prevKey) => prevKey + 1);
+            setRetainedElapsedTime(0);
+            setTaskStartTokens(currentCandidatesTokens ?? 0);
+        } else if (
+            streamingState === StreamingState.Idle &&
+            prevStreamingStateRef.current === StreamingState.Responding
+        ) {
+            setTimerResetKey((prevKey) => prevKey + 1);
+            setRetainedElapsedTime(0);
+            setTaskStartTokens(0);
+        } else if (
+            streamingState === StreamingState.Responding &&
+            prevStreamingStateRef.current !== StreamingState.Responding
+        ) {
+            setTaskStartTokens(currentCandidatesTokens ?? 0);
+        } else if (streamingState === StreamingState.WaitingForConfirmation) {
+            setRetainedElapsedTime(elapsedTimeFromTimer);
+        }
 
-    prevStreamingStateRef.current = streamingState;
-  }, [streamingState, elapsedTimeFromTimer, currentCandidatesTokens]);
+        prevStreamingStateRef.current = streamingState;
+    }, [streamingState, elapsedTimeFromTimer, currentCandidatesTokens]);
 
-  return {
-    elapsedTime:
-      streamingState === StreamingState.WaitingForConfirmation
-        ? retainedElapsedTime
-        : elapsedTimeFromTimer,
-    currentLoadingPhrase,
-    taskStartTokens,
-  };
+    return {
+        elapsedTime:
+            streamingState === StreamingState.WaitingForConfirmation
+                ? retainedElapsedTime
+                : elapsedTimeFromTimer,
+        currentLoadingPhrase,
+        taskStartTokens
+    };
 };

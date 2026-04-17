@@ -6,34 +6,36 @@
 
 import { Box } from 'ink';
 import { useUIState } from '../contexts/UIStateContext.js';
-import { HistoryItemDisplay } from './HistoryItemDisplay.js';
 import { useTerminalSize } from '../hooks/useTerminalSize.js';
+import { HistoryItemDisplay } from './HistoryItemDisplay.js';
 
 export const QuittingDisplay = () => {
-  const uiState = useUIState();
-  const { rows: terminalHeight, columns: terminalWidth } = useTerminalSize();
+    const uiState = useUIState();
+    const { rows: terminalHeight, columns: terminalWidth } = useTerminalSize();
 
-  const availableTerminalHeight = terminalHeight;
-  const { mainAreaWidth } = uiState;
+    const availableTerminalHeight = terminalHeight;
+    const { mainAreaWidth } = uiState;
 
-  if (!uiState.quittingMessages) {
-    return null;
-  }
+    if (!uiState.quittingMessages) {
+        return null;
+    }
 
-  return (
-    <Box flexDirection="column" marginBottom={1}>
-      {uiState.quittingMessages.map((item) => (
-        <HistoryItemDisplay
-          key={item.id}
-          availableTerminalHeight={
-            uiState.constrainHeight ? availableTerminalHeight : undefined
-          }
-          terminalWidth={terminalWidth}
-          mainAreaWidth={mainAreaWidth}
-          item={item}
-          isPending={false}
-        />
-      ))}
-    </Box>
-  );
+    return (
+        <Box flexDirection="column" marginBottom={1}>
+            {uiState.quittingMessages.map((item) => (
+                <HistoryItemDisplay
+                    key={item.id}
+                    availableTerminalHeight={
+                        uiState.constrainHeight
+                            ? availableTerminalHeight
+                            : undefined
+                    }
+                    terminalWidth={terminalWidth}
+                    mainAreaWidth={mainAreaWidth}
+                    item={item}
+                    isPending={false}
+                />
+            ))}
+        </Box>
+    );
 };

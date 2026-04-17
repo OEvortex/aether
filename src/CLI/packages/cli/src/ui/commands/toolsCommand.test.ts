@@ -4,111 +4,111 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect } from 'vitest';
-import { toolsCommand } from './toolsCommand.js';
+import type { Tool } from '@aetherai/aether-core';
+import { describe, expect, it } from 'vitest';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
 import { MessageType } from '../types.js';
-import type { Tool } from '@aetherai/aether-core';
+import { toolsCommand } from './toolsCommand.js';
 
 // Mock tools for testing
 const mockTools = [
-  {
-    name: 'file-reader',
-    displayName: 'File Reader',
-    description: 'Reads files from the local system.',
-    schema: {},
-  },
-  {
-    name: 'code-editor',
-    displayName: 'Code Editor',
-    description: 'Edits code files.',
-    schema: {},
-  },
+    {
+        name: 'file-reader',
+        displayName: 'File Reader',
+        description: 'Reads files from the local system.',
+        schema: {}
+    },
+    {
+        name: 'code-editor',
+        displayName: 'Code Editor',
+        description: 'Edits code files.',
+        schema: {}
+    }
 ] as Tool[];
 
 describe('toolsCommand', () => {
-  it('should display an error if the tool registry is unavailable', async () => {
-    const mockContext = createMockCommandContext({
-      services: {
-        config: {
-          getToolRegistry: () => undefined,
-        },
-      },
+    it('should display an error if the tool registry is unavailable', async () => {
+        const mockContext = createMockCommandContext({
+            services: {
+                config: {
+                    getToolRegistry: () => undefined
+                }
+            }
+        });
+
+        if (!toolsCommand.action) throw new Error('Action not defined');
+        await toolsCommand.action(mockContext, '');
+
+        expect(mockContext.ui.addItem).toHaveBeenCalledWith(
+            {
+                type: MessageType.ERROR,
+                text: 'Could not retrieve tool registry.'
+            },
+            expect.any(Number)
+        );
     });
 
-    if (!toolsCommand.action) throw new Error('Action not defined');
-    await toolsCommand.action(mockContext, '');
+    it('should display "No tools available" when none are found', async () => {
+        const mockContext = createMockCommandContext({
+            services: {
+                config: {
+                    getToolRegistry: () => ({ getAllTools: () => [] as Tool[] })
+                }
+            }
+        });
 
-    expect(mockContext.ui.addItem).toHaveBeenCalledWith(
-      {
-        type: MessageType.ERROR,
-        text: 'Could not retrieve tool registry.',
-      },
-      expect.any(Number),
-    );
-  });
+        if (!toolsCommand.action) throw new Error('Action not defined');
+        await toolsCommand.action(mockContext, '');
 
-  it('should display "No tools available" when none are found', async () => {
-    const mockContext = createMockCommandContext({
-      services: {
-        config: {
-          getToolRegistry: () => ({ getAllTools: () => [] as Tool[] }),
-        },
-      },
+        expect(mockContext.ui.addItem).toHaveBeenCalledWith(
+            {
+                type: MessageType.TOOLS_LIST,
+                tools: [],
+                showDescriptions: false
+            },
+            expect.any(Number)
+        );
     });
 
-    if (!toolsCommand.action) throw new Error('Action not defined');
-    await toolsCommand.action(mockContext, '');
+    it('should list tools without descriptions by default', async () => {
+        const mockContext = createMockCommandContext({
+            services: {
+                config: {
+                    getToolRegistry: () => ({ getAllTools: () => mockTools })
+                }
+            }
+        });
 
-    expect(mockContext.ui.addItem).toHaveBeenCalledWith(
-      {
-        type: MessageType.TOOLS_LIST,
-        tools: [],
-        showDescriptions: false,
-      },
-      expect.any(Number),
-    );
-  });
+        if (!toolsCommand.action) throw new Error('Action not defined');
+        await toolsCommand.action(mockContext, '');
 
-  it('should list tools without descriptions by default', async () => {
-    const mockContext = createMockCommandContext({
-      services: {
-        config: {
-          getToolRegistry: () => ({ getAllTools: () => mockTools }),
-        },
-      },
+        const [message] = (mockContext.ui.addItem as vi.Mock).mock.calls[0];
+        expect(message.type).toBe(MessageType.TOOLS_LIST);
+        expect(message.showDescriptions).toBe(false);
+        expect(message.tools).toHaveLength(2);
+        expect(message.tools[0].displayName).toBe('File Reader');
+        expect(message.tools[1].displayName).toBe('Code Editor');
     });
 
-    if (!toolsCommand.action) throw new Error('Action not defined');
-    await toolsCommand.action(mockContext, '');
+    it('should list tools with descriptions when "desc" arg is passed', async () => {
+        const mockContext = createMockCommandContext({
+            services: {
+                config: {
+                    getToolRegistry: () => ({ getAllTools: () => mockTools })
+                }
+            }
+        });
 
-    const [message] = (mockContext.ui.addItem as vi.Mock).mock.calls[0];
-    expect(message.type).toBe(MessageType.TOOLS_LIST);
-    expect(message.showDescriptions).toBe(false);
-    expect(message.tools).toHaveLength(2);
-    expect(message.tools[0].displayName).toBe('File Reader');
-    expect(message.tools[1].displayName).toBe('Code Editor');
-  });
+        if (!toolsCommand.action) throw new Error('Action not defined');
+        await toolsCommand.action(mockContext, 'desc');
 
-  it('should list tools with descriptions when "desc" arg is passed', async () => {
-    const mockContext = createMockCommandContext({
-      services: {
-        config: {
-          getToolRegistry: () => ({ getAllTools: () => mockTools }),
-        },
-      },
+        const [message] = (mockContext.ui.addItem as vi.Mock).mock.calls[0];
+        expect(message.type).toBe(MessageType.TOOLS_LIST);
+        expect(message.showDescriptions).toBe(true);
+        expect(message.tools).toHaveLength(2);
+        expect(message.tools[0].description).toBe(
+            'Reads files from the local system.'
+        );
+        expect(message.tools[1].description).toBe('Edits code files.');
     });
-
-    if (!toolsCommand.action) throw new Error('Action not defined');
-    await toolsCommand.action(mockContext, 'desc');
-
-    const [message] = (mockContext.ui.addItem as vi.Mock).mock.calls[0];
-    expect(message.type).toBe(MessageType.TOOLS_LIST);
-    expect(message.showDescriptions).toBe(true);
-    expect(message.tools).toHaveLength(2);
-    expect(message.tools[0].description).toBe(
-      'Reads files from the local system.',
-    );
-    expect(message.tools[1].description).toBe('Edits code files.');
-  });
 });

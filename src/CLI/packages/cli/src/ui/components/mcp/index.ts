@@ -6,24 +6,23 @@
 
 // Main Dialog
 export { MCPManagementDialog } from './MCPManagementDialog.js';
-
+export { ServerDetailStep } from './steps/ServerDetailStep.js';
 // Steps
 export { ServerListStep } from './steps/ServerListStep.js';
-export { ServerDetailStep } from './steps/ServerDetailStep.js';
-export { ToolListStep } from './steps/ToolListStep.js';
 export { ToolDetailStep } from './steps/ToolDetailStep.js';
+export { ToolListStep } from './steps/ToolListStep.js';
 
 // Types
 export type {
-  MCPManagementDialogProps,
-  MCPServerDisplayInfo,
-  MCPToolDisplayInfo,
-  MCPPromptDisplayInfo,
-  ServerListStepProps,
-  ServerDetailStepProps,
-  ToolListStepProps,
-  ToolDetailStepProps,
-  MCPManagementStep,
+    MCPManagementDialogProps,
+    MCPManagementStep,
+    MCPPromptDisplayInfo,
+    MCPServerDisplayInfo,
+    MCPToolDisplayInfo,
+    ServerDetailStepProps,
+    ServerListStepProps,
+    ToolDetailStepProps,
+    ToolListStepProps
 } from './types.js';
 
 // Constants

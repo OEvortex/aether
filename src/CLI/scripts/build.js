@@ -7,7 +7,7 @@ const root = join(__dirname, '..');
 
 execSync('npm run generate', {
     stdio: 'inherit',
-    cwd: root,
+    cwd: root
 });
 
 for (const workspace of [
@@ -16,10 +16,10 @@ for (const workspace of [
     'packages/channels/weixin',
     'packages/channels/dingtalk',
     'packages/core',
-    'packages/cli',
+    'packages/cli'
 ]) {
     execSync('npm run build', {
         stdio: 'inherit',
-        cwd: join(root, workspace),
+        cwd: join(root, workspace)
     });
 }

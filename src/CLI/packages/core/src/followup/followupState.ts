@@ -13,19 +13,19 @@
  * State for prompt suggestion display.
  */
 export interface FollowupState {
-  /** Current suggestion text */
-  suggestion: string | null;
-  /** Whether to show suggestion */
-  isVisible: boolean;
-  /** Timestamp when suggestion was shown (for telemetry) */
-  shownAt: number;
+    /** Current suggestion text */
+    suggestion: string | null;
+    /** Whether to show suggestion */
+    isVisible: boolean;
+    /** Timestamp when suggestion was shown (for telemetry) */
+    shownAt: number;
 }
 
 /** Initial empty state */
 export const INITIAL_FOLLOWUP_STATE: Readonly<FollowupState> = Object.freeze({
-  suggestion: null,
-  isVisible: false,
-  shownAt: 0,
+    suggestion: null,
+    isVisible: false,
+    shownAt: 0
 });
 
 // ---------------------------------------------------------------------------
@@ -41,27 +41,27 @@ const ACCEPT_DEBOUNCE_MS = 100;
  * Options for creating a followup controller
  */
 export interface FollowupControllerOptions {
-  /** Whether the feature is enabled (checked when setting suggestion) */
-  enabled?: boolean;
-  /** Called whenever the internal state changes */
-  onStateChange: (state: FollowupState) => void;
-  /**
-   * Returns the current onAccept callback.
-   * A getter is used so the controller always invokes the latest callback
-   * without requiring re-creation when the callback reference changes.
-   */
-  getOnAccept?: () => ((text: string) => void) | undefined;
-  /**
-   * Called when a suggestion outcome is determined (accepted or ignored).
-   * Used for telemetry. Note: 'suppressed' outcomes are logged separately
-   * at the generation site, not through this callback.
-   */
-  onOutcome?: (params: {
-    outcome: 'accepted' | 'ignored';
-    accept_method?: 'tab' | 'enter' | 'right';
-    time_ms: number;
-    suggestion_length: number;
-  }) => void;
+    /** Whether the feature is enabled (checked when setting suggestion) */
+    enabled?: boolean;
+    /** Called whenever the internal state changes */
+    onStateChange: (state: FollowupState) => void;
+    /**
+     * Returns the current onAccept callback.
+     * A getter is used so the controller always invokes the latest callback
+     * without requiring re-creation when the callback reference changes.
+     */
+    getOnAccept?: () => ((text: string) => void) | undefined;
+    /**
+     * Called when a suggestion outcome is determined (accepted or ignored).
+     * Used for telemetry. Note: 'suppressed' outcomes are logged separately
+     * at the generation site, not through this callback.
+     */
+    onOutcome?: (params: {
+        outcome: 'accepted' | 'ignored';
+        accept_method?: 'tab' | 'enter' | 'right';
+        time_ms: number;
+        suggestion_length: number;
+    }) => void;
 }
 
 /**
@@ -69,16 +69,16 @@ export interface FollowupControllerOptions {
  * These are stable (never change identity) and safe to call from any context.
  */
 export interface FollowupControllerActions {
-  /** Set suggestion text (with delayed show). Null clears immediately. */
-  setSuggestion: (text: string | null) => void;
-  /** Accept the current suggestion and invoke onAccept callback */
-  accept: (method?: 'tab' | 'enter' | 'right') => void;
-  /** Dismiss/clear suggestion */
-  dismiss: () => void;
-  /** Hard-clear all state and timers */
-  clear: () => void;
-  /** Clean up timers — call on unmount */
-  cleanup: () => void;
+    /** Set suggestion text (with delayed show). Null clears immediately. */
+    setSuggestion: (text: string | null) => void;
+    /** Accept the current suggestion and invoke onAccept callback */
+    accept: (method?: 'tab' | 'enter' | 'right') => void;
+    /** Dismiss/clear suggestion */
+    dismiss: () => void;
+    /** Hard-clear all state and timers */
+    clear: () => void;
+    /** Clean up timers — call on unmount */
+    cleanup: () => void;
 }
 
 /**
@@ -89,141 +89,147 @@ export interface FollowupControllerActions {
  * `useState` + this controller.
  */
 export function createFollowupController(
-  options: FollowupControllerOptions,
+    options: FollowupControllerOptions
 ): FollowupControllerActions {
-  const { enabled = true, onStateChange, getOnAccept, onOutcome } = options;
+    const { enabled = true, onStateChange, getOnAccept, onOutcome } = options;
 
-  let currentState: FollowupState = INITIAL_FOLLOWUP_STATE;
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  let accepting = false;
-  let acceptTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    let currentState: FollowupState = INITIAL_FOLLOWUP_STATE;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let accepting = false;
+    let acceptTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  function applyState(next: FollowupState): void {
-    currentState = next;
-    onStateChange(next);
-  }
-
-  function clearTimers(): void {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-    if (acceptTimeoutId) {
-      clearTimeout(acceptTimeoutId);
-      acceptTimeoutId = null;
-    }
-  }
-
-  const setSuggestion = (text: string | null): void => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
+    function applyState(next: FollowupState): void {
+        currentState = next;
+        onStateChange(next);
     }
 
-    if (!text) {
-      applyState(INITIAL_FOLLOWUP_STATE);
-      return;
-    }
-
-    // Only schedule new suggestions when enabled
-    if (!enabled) {
-      return;
-    }
-
-    timeoutId = setTimeout(() => {
-      applyState({ suggestion: text, isVisible: true, shownAt: Date.now() });
-    }, SUGGESTION_DELAY_MS);
-  };
-
-  const accept = (method?: 'tab' | 'enter' | 'right'): void => {
-    if (accepting) {
-      return;
-    }
-
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-
-    accepting = true;
-
-    const text = currentState.suggestion;
-    const { shownAt } = currentState;
-    if (!text) {
-      accepting = false;
-      return;
-    }
-
-    try {
-      onOutcome?.({
-        outcome: 'accepted',
-        accept_method: method,
-        time_ms: shownAt > 0 ? Date.now() - shownAt : 0,
-        suggestion_length: text.length,
-      });
-    } catch (e: unknown) {
-      // eslint-disable-next-line no-console
-      console.error('[followup] onOutcome callback threw:', e);
-    }
-
-    applyState(INITIAL_FOLLOWUP_STATE);
-
-    queueMicrotask(() => {
-      try {
-        getOnAccept?.()?.(text);
-      } catch (error: unknown) {
-        // eslint-disable-next-line no-console
-        console.error('[followup] onAccept callback threw:', error);
-      } finally {
-        if (acceptTimeoutId) {
-          clearTimeout(acceptTimeoutId);
+    function clearTimers(): void {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
         }
-        acceptTimeoutId = setTimeout(() => {
-          accepting = false;
-        }, ACCEPT_DEBOUNCE_MS);
-      }
-    });
-  };
-
-  const dismiss = (): void => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
+        if (acceptTimeoutId) {
+            clearTimeout(acceptTimeoutId);
+            acceptTimeoutId = null;
+        }
     }
 
-    // Skip if already cleared (e.g., accept already ran)
-    if (!currentState.isVisible && !currentState.suggestion) {
-      return;
-    }
+    const setSuggestion = (text: string | null): void => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
 
-    // Log ignored outcome if a suggestion was visible
-    if (currentState.isVisible && currentState.suggestion) {
-      try {
-        onOutcome?.({
-          outcome: 'ignored',
-          time_ms:
-            currentState.shownAt > 0 ? Date.now() - currentState.shownAt : 0,
-          suggestion_length: currentState.suggestion.length,
+        if (!text) {
+            applyState(INITIAL_FOLLOWUP_STATE);
+            return;
+        }
+
+        // Only schedule new suggestions when enabled
+        if (!enabled) {
+            return;
+        }
+
+        timeoutId = setTimeout(() => {
+            applyState({
+                suggestion: text,
+                isVisible: true,
+                shownAt: Date.now()
+            });
+        }, SUGGESTION_DELAY_MS);
+    };
+
+    const accept = (method?: 'tab' | 'enter' | 'right'): void => {
+        if (accepting) {
+            return;
+        }
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+
+        accepting = true;
+
+        const text = currentState.suggestion;
+        const { shownAt } = currentState;
+        if (!text) {
+            accepting = false;
+            return;
+        }
+
+        try {
+            onOutcome?.({
+                outcome: 'accepted',
+                accept_method: method,
+                time_ms: shownAt > 0 ? Date.now() - shownAt : 0,
+                suggestion_length: text.length
+            });
+        } catch (e: unknown) {
+            // eslint-disable-next-line no-console
+            console.error('[followup] onOutcome callback threw:', e);
+        }
+
+        applyState(INITIAL_FOLLOWUP_STATE);
+
+        queueMicrotask(() => {
+            try {
+                getOnAccept?.()?.(text);
+            } catch (error: unknown) {
+                // eslint-disable-next-line no-console
+                console.error('[followup] onAccept callback threw:', error);
+            } finally {
+                if (acceptTimeoutId) {
+                    clearTimeout(acceptTimeoutId);
+                }
+                acceptTimeoutId = setTimeout(() => {
+                    accepting = false;
+                }, ACCEPT_DEBOUNCE_MS);
+            }
         });
-      } catch (e: unknown) {
-        // eslint-disable-next-line no-console
-        console.error('[followup] onOutcome callback threw:', e);
-      }
-    }
+    };
 
-    applyState(INITIAL_FOLLOWUP_STATE);
-  };
+    const dismiss = (): void => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
 
-  const clear = (): void => {
-    clearTimers();
-    accepting = false;
-    applyState(INITIAL_FOLLOWUP_STATE);
-  };
+        // Skip if already cleared (e.g., accept already ran)
+        if (!currentState.isVisible && !currentState.suggestion) {
+            return;
+        }
 
-  const cleanup = (): void => {
-    clearTimers();
-    accepting = false;
-  };
+        // Log ignored outcome if a suggestion was visible
+        if (currentState.isVisible && currentState.suggestion) {
+            try {
+                onOutcome?.({
+                    outcome: 'ignored',
+                    time_ms:
+                        currentState.shownAt > 0
+                            ? Date.now() - currentState.shownAt
+                            : 0,
+                    suggestion_length: currentState.suggestion.length
+                });
+            } catch (e: unknown) {
+                // eslint-disable-next-line no-console
+                console.error('[followup] onOutcome callback threw:', e);
+            }
+        }
 
-  return { setSuggestion, accept, dismiss, clear, cleanup };
+        applyState(INITIAL_FOLLOWUP_STATE);
+    };
+
+    const clear = (): void => {
+        clearTimers();
+        accepting = false;
+        applyState(INITIAL_FOLLOWUP_STATE);
+    };
+
+    const cleanup = (): void => {
+        clearTimers();
+        accepting = false;
+    };
+
+    return { setSuggestion, accept, dismiss, clear, cleanup };
 }

@@ -15,10 +15,10 @@ import type { SlashCommand } from '../ui/commands/types.js';
  * constructor.
  */
 export interface ICommandLoader {
-  /**
-   * Discovers and returns a list of slash commands from the loader's source.
-   * @param signal An AbortSignal to allow cancellation.
-   * @returns A promise that resolves to an array of SlashCommand objects.
-   */
-  loadCommands(signal: AbortSignal): Promise<SlashCommand[]>;
+    /**
+     * Discovers and returns a list of slash commands from the loader's source.
+     * @param signal An AbortSignal to allow cancellation.
+     * @returns A promise that resolves to an array of SlashCommand objects.
+     */
+    loadCommands(signal: AbortSignal): Promise<SlashCommand[]>;
 }

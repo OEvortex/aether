@@ -4,65 +4,64 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ToolResult } from './tools.js';
-import { BaseDeclarativeTool, BaseToolInvocation, Kind } from './tools.js';
 import type { FunctionDeclaration } from '@google/genai';
-import * as fs from 'fs/promises';
 import * as fsSync from 'fs';
+import * as fs from 'fs/promises';
 import * as path from 'path';
-
 import type { Config } from '../config/config.js';
 import { Storage } from '../config/storage.js';
-import { ToolDisplayNames, ToolNames } from './tool-names.js';
 import { createDebugLogger } from '../utils/debugLogger.js';
+import { ToolDisplayNames, ToolNames } from './tool-names.js';
+import type { ToolResult } from './tools.js';
+import { BaseDeclarativeTool, BaseToolInvocation, Kind } from './tools.js';
 
 const debugLogger = createDebugLogger('TODO_WRITE');
 
 export interface TodoItem {
-  id: string;
-  content: string;
-  status: 'pending' | 'in_progress' | 'completed';
+    id: string;
+    content: string;
+    status: 'pending' | 'in_progress' | 'completed';
 }
 
 export interface TodoWriteParams {
-  todos: TodoItem[];
-  modified_by_user?: boolean;
-  modified_content?: string;
+    todos: TodoItem[];
+    modified_by_user?: boolean;
+    modified_content?: string;
 }
 
 const todoWriteToolSchemaData: FunctionDeclaration = {
-  name: 'todo_write',
-  description:
-    'Creates and manages a structured task list for your current coding session. This helps track progress, organize complex tasks, and demonstrate thoroughness.',
-  parametersJsonSchema: {
-    type: 'object',
-    properties: {
-      todos: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            content: {
-              type: 'string',
-              minLength: 1,
-            },
-            status: {
-              type: 'string',
-              enum: ['pending', 'in_progress', 'completed'],
-            },
-            id: {
-              type: 'string',
-            },
-          },
-          required: ['content', 'status', 'id'],
-          additionalProperties: false,
+    name: 'todo_write',
+    description:
+        'Creates and manages a structured task list for your current coding session. This helps track progress, organize complex tasks, and demonstrate thoroughness.',
+    parametersJsonSchema: {
+        type: 'object',
+        properties: {
+            todos: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    properties: {
+                        content: {
+                            type: 'string',
+                            minLength: 1
+                        },
+                        status: {
+                            type: 'string',
+                            enum: ['pending', 'in_progress', 'completed']
+                        },
+                        id: {
+                            type: 'string'
+                        }
+                    },
+                    required: ['content', 'status', 'id'],
+                    additionalProperties: false
+                },
+                description: 'The updated todo list'
+            }
         },
-        description: 'The updated todo list',
-      },
-    },
-    required: ['todos'],
-    $schema: 'http://json-schema.org/draft-07/schema#',
-  },
+        required: ['todos'],
+        $schema: 'http://json-schema.org/draft-07/schema#'
+    }
 };
 
 const todoWriteToolDescription = `
@@ -246,225 +245,238 @@ When in doubt, use this tool. Being proactive with task management demonstrates 
 const TODO_SUBDIR = 'todos';
 
 function getTodoFilePath(sessionId?: string): string {
-  const todoDir = path.join(Storage.getRuntimeBaseDir(), TODO_SUBDIR);
+    const todoDir = path.join(Storage.getRuntimeBaseDir(), TODO_SUBDIR);
 
-  // Use sessionId if provided, otherwise fall back to 'default'
-  const filename = `${sessionId || 'default'}.json`;
-  return path.join(todoDir, filename);
+    // Use sessionId if provided, otherwise fall back to 'default'
+    const filename = `${sessionId || 'default'}.json`;
+    return path.join(todoDir, filename);
 }
 
 /**
  * Reads the current todos from the file system
  */
 async function readTodosFromFile(sessionId?: string): Promise<TodoItem[]> {
-  try {
-    const todoFilePath = getTodoFilePath(sessionId);
-    const content = await fs.readFile(todoFilePath, 'utf-8');
-    const data = JSON.parse(content);
-    return Array.isArray(data.todos) ? data.todos : [];
-  } catch (err) {
-    const error = err as Error & { code?: string };
-    if (!(error instanceof Error) || error.code !== 'ENOENT') {
-      throw err;
+    try {
+        const todoFilePath = getTodoFilePath(sessionId);
+        const content = await fs.readFile(todoFilePath, 'utf-8');
+        const data = JSON.parse(content);
+        return Array.isArray(data.todos) ? data.todos : [];
+    } catch (err) {
+        const error = err as Error & { code?: string };
+        if (!(error instanceof Error) || error.code !== 'ENOENT') {
+            throw err;
+        }
+        return [];
     }
-    return [];
-  }
 }
 
 /**
  * Writes todos to the file system
  */
 async function writeTodosToFile(
-  todos: TodoItem[],
-  sessionId?: string,
+    todos: TodoItem[],
+    sessionId?: string
 ): Promise<void> {
-  const todoFilePath = getTodoFilePath(sessionId);
-  const todoDir = path.dirname(todoFilePath);
+    const todoFilePath = getTodoFilePath(sessionId);
+    const todoDir = path.dirname(todoFilePath);
 
-  await fs.mkdir(todoDir, { recursive: true });
+    await fs.mkdir(todoDir, { recursive: true });
 
-  const data = {
-    todos,
-    sessionId: sessionId || 'default',
-  };
+    const data = {
+        todos,
+        sessionId: sessionId || 'default'
+    };
 
-  await fs.writeFile(todoFilePath, JSON.stringify(data, null, 2), 'utf-8');
+    await fs.writeFile(todoFilePath, JSON.stringify(data, null, 2), 'utf-8');
 }
 
 class TodoWriteToolInvocation extends BaseToolInvocation<
-  TodoWriteParams,
-  ToolResult
+    TodoWriteParams,
+    ToolResult
 > {
-  private operationType: 'create' | 'update';
+    private operationType: 'create' | 'update';
 
-  constructor(
-    private readonly config: Config,
-    params: TodoWriteParams,
-    operationType: 'create' | 'update' = 'update',
-  ) {
-    super(params);
-    this.operationType = operationType;
-  }
+    constructor(
+        private readonly config: Config,
+        params: TodoWriteParams,
+        operationType: 'create' | 'update' = 'update'
+    ) {
+        super(params);
+        this.operationType = operationType;
+    }
 
-  getDescription(): string {
-    return this.operationType === 'create' ? 'Create todos' : 'Update todos';
-  }
+    getDescription(): string {
+        return this.operationType === 'create'
+            ? 'Create todos'
+            : 'Update todos';
+    }
 
-  async execute(_signal: AbortSignal): Promise<ToolResult> {
-    const { todos, modified_by_user, modified_content } = this.params;
-    const sessionId = this.config.getSessionId();
+    async execute(_signal: AbortSignal): Promise<ToolResult> {
+        const { todos, modified_by_user, modified_content } = this.params;
+        const sessionId = this.config.getSessionId();
 
-    try {
-      let finalTodos: TodoItem[];
+        try {
+            let finalTodos: TodoItem[];
 
-      if (modified_by_user && modified_content !== undefined) {
-        // User modified the content in external editor, parse it directly
-        const data = JSON.parse(modified_content);
-        finalTodos = Array.isArray(data.todos) ? data.todos : [];
-      } else {
-        // Use the normal todo logic - simply replace with new todos
-        finalTodos = todos;
-      }
+            if (modified_by_user && modified_content !== undefined) {
+                // User modified the content in external editor, parse it directly
+                const data = JSON.parse(modified_content);
+                finalTodos = Array.isArray(data.todos) ? data.todos : [];
+            } else {
+                // Use the normal todo logic - simply replace with new todos
+                finalTodos = todos;
+            }
 
-      await writeTodosToFile(finalTodos, sessionId);
+            await writeTodosToFile(finalTodos, sessionId);
 
-      // Create structured display object for rich UI rendering
-      const todoResultDisplay = {
-        type: 'todo_list' as const,
-        todos: finalTodos,
-      };
+            // Create structured display object for rich UI rendering
+            const todoResultDisplay = {
+                type: 'todo_list' as const,
+                todos: finalTodos
+            };
 
-      // Create plain string format with system reminder
-      const todosJson = JSON.stringify(finalTodos);
-      let llmContent: string;
+            // Create plain string format with system reminder
+            const todosJson = JSON.stringify(finalTodos);
+            let llmContent: string;
 
-      if (finalTodos.length === 0) {
-        // Special message for empty todos
-        llmContent = `Todo list has been cleared.
+            if (finalTodos.length === 0) {
+                // Special message for empty todos
+                llmContent = `Todo list has been cleared.
 
 <system-reminder>
 Your todo list is now empty. DO NOT mention this explicitly to the user. You have no pending tasks in your todo list.
 </system-reminder>`;
-      } else {
-        // Normal message for todos with items
-        llmContent = `Todos have been modified successfully. Ensure that you continue to use the todo list to track your progress. Please proceed with the current tasks if applicable
+            } else {
+                // Normal message for todos with items
+                llmContent = `Todos have been modified successfully. Ensure that you continue to use the todo list to track your progress. Please proceed with the current tasks if applicable
 
 <system-reminder>
 Your todo list has changed. DO NOT mention this explicitly to the user. Here are the latest contents of your todo list: 
 
 ${todosJson}. Continue on with the tasks at hand if applicable.
 </system-reminder>`;
-      }
+            }
 
-      return {
-        llmContent,
-        returnDisplay: todoResultDisplay,
-      };
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
-      debugLogger.error(
-        `[TodoWriteTool] Error executing todo_write: ${errorMessage}`,
-      );
+            return {
+                llmContent,
+                returnDisplay: todoResultDisplay
+            };
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : String(error);
+            debugLogger.error(
+                `[TodoWriteTool] Error executing todo_write: ${errorMessage}`
+            );
 
-      // Create plain string format for error with system reminder
-      const errorLlmContent = `Failed to modify todos. An error occurred during the operation.
+            // Create plain string format for error with system reminder
+            const errorLlmContent = `Failed to modify todos. An error occurred during the operation.
 
 <system-reminder>
 Todo list modification failed with error: ${errorMessage}. You may need to retry or handle this error appropriately.
 </system-reminder>`;
 
-      return {
-        llmContent: errorLlmContent,
-        returnDisplay: `Error writing todos: ${errorMessage}`,
-      };
+            return {
+                llmContent: errorLlmContent,
+                returnDisplay: `Error writing todos: ${errorMessage}`
+            };
+        }
     }
-  }
 }
 
 /**
  * Utility function to read todos for a specific session (useful for session recovery)
  */
 export async function readTodosForSession(
-  sessionId?: string,
+    sessionId?: string
 ): Promise<TodoItem[]> {
-  return readTodosFromFile(sessionId);
+    return readTodosFromFile(sessionId);
 }
 
 /**
  * Utility function to list all todo files in the todos directory
  */
 export async function listTodoSessions(): Promise<string[]> {
-  try {
-    const todoDir = path.join(Storage.getRuntimeBaseDir(), TODO_SUBDIR);
-    const files = await fs.readdir(todoDir);
-    return files
-      .filter((file: string) => file.endsWith('.json'))
-      .map((file: string) => file.replace('.json', ''));
-  } catch (err) {
-    const error = err as Error & { code?: string };
-    if (!(error instanceof Error) || error.code !== 'ENOENT') {
-      throw err;
+    try {
+        const todoDir = path.join(Storage.getRuntimeBaseDir(), TODO_SUBDIR);
+        const files = await fs.readdir(todoDir);
+        return files
+            .filter((file: string) => file.endsWith('.json'))
+            .map((file: string) => file.replace('.json', ''));
+    } catch (err) {
+        const error = err as Error & { code?: string };
+        if (!(error instanceof Error) || error.code !== 'ENOENT') {
+            throw err;
+        }
+        return [];
     }
-    return [];
-  }
 }
 
 export class TodoWriteTool extends BaseDeclarativeTool<
-  TodoWriteParams,
-  ToolResult
+    TodoWriteParams,
+    ToolResult
 > {
-  static readonly Name: string = ToolNames.TODO_WRITE;
+    static readonly Name: string = ToolNames.TODO_WRITE;
 
-  constructor(private readonly config: Config) {
-    super(
-      TodoWriteTool.Name,
-      ToolDisplayNames.TODO_WRITE,
-      todoWriteToolDescription,
-      Kind.Think,
-      todoWriteToolSchemaData.parametersJsonSchema as Record<string, unknown>,
-    );
-  }
-
-  override validateToolParams(params: TodoWriteParams): string | null {
-    // Validate todos array
-    if (!Array.isArray(params.todos)) {
-      return 'Parameter "todos" must be an array.';
+    constructor(private readonly config: Config) {
+        super(
+            TodoWriteTool.Name,
+            ToolDisplayNames.TODO_WRITE,
+            todoWriteToolDescription,
+            Kind.Think,
+            todoWriteToolSchemaData.parametersJsonSchema as Record<
+                string,
+                unknown
+            >
+        );
     }
 
-    // Validate individual todos
-    for (const todo of params.todos) {
-      if (!todo.id || typeof todo.id !== 'string' || todo.id.trim() === '') {
-        return 'Each todo must have a non-empty "id" string.';
-      }
-      if (
-        !todo.content ||
-        typeof todo.content !== 'string' ||
-        todo.content.trim() === ''
-      ) {
-        return 'Each todo must have a non-empty "content" string.';
-      }
-      if (!['pending', 'in_progress', 'completed'].includes(todo.status)) {
-        return 'Each todo must have a valid "status" (pending, in_progress, completed).';
-      }
+    override validateToolParams(params: TodoWriteParams): string | null {
+        // Validate todos array
+        if (!Array.isArray(params.todos)) {
+            return 'Parameter "todos" must be an array.';
+        }
+
+        // Validate individual todos
+        for (const todo of params.todos) {
+            if (
+                !todo.id ||
+                typeof todo.id !== 'string' ||
+                todo.id.trim() === ''
+            ) {
+                return 'Each todo must have a non-empty "id" string.';
+            }
+            if (
+                !todo.content ||
+                typeof todo.content !== 'string' ||
+                todo.content.trim() === ''
+            ) {
+                return 'Each todo must have a non-empty "content" string.';
+            }
+            if (
+                !['pending', 'in_progress', 'completed'].includes(todo.status)
+            ) {
+                return 'Each todo must have a valid "status" (pending, in_progress, completed).';
+            }
+        }
+
+        // Check for duplicate IDs
+        const ids = params.todos.map((todo) => todo.id);
+        const uniqueIds = new Set(ids);
+        if (ids.length !== uniqueIds.size) {
+            return 'Todo IDs must be unique within the array.';
+        }
+
+        return null;
     }
 
-    // Check for duplicate IDs
-    const ids = params.todos.map((todo) => todo.id);
-    const uniqueIds = new Set(ids);
-    if (ids.length !== uniqueIds.size) {
-      return 'Todo IDs must be unique within the array.';
+    protected createInvocation(params: TodoWriteParams) {
+        // Determine if this is a create or update operation by checking if todos file exists
+        const sessionId = this.config.getSessionId();
+        const todoFilePath = getTodoFilePath(sessionId);
+        const operationType = fsSync.existsSync(todoFilePath)
+            ? 'update'
+            : 'create';
+
+        return new TodoWriteToolInvocation(this.config, params, operationType);
     }
-
-    return null;
-  }
-
-  protected createInvocation(params: TodoWriteParams) {
-    // Determine if this is a create or update operation by checking if todos file exists
-    const sessionId = this.config.getSessionId();
-    const todoFilePath = getTodoFilePath(sessionId);
-    const operationType = fsSync.existsSync(todoFilePath) ? 'update' : 'create';
-
-    return new TodoWriteToolInvocation(this.config, params, operationType);
-  }
 }

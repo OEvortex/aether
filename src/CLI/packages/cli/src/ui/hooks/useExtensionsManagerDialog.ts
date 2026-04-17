@@ -4,30 +4,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 interface UseExtensionsManagerDialogReturn {
-  isExtensionsManagerDialogOpen: boolean;
-  openExtensionsManagerDialog: () => void;
-  closeExtensionsManagerDialog: () => void;
+    isExtensionsManagerDialogOpen: boolean;
+    openExtensionsManagerDialog: () => void;
+    closeExtensionsManagerDialog: () => void;
 }
 
 export const useExtensionsManagerDialog =
-  (): UseExtensionsManagerDialogReturn => {
-    const [isExtensionsManagerDialogOpen, setIsExtensionsManagerDialogOpen] =
-      useState(false);
+    (): UseExtensionsManagerDialogReturn => {
+        const [
+            isExtensionsManagerDialogOpen,
+            setIsExtensionsManagerDialogOpen
+        ] = useState(false);
 
-    const openExtensionsManagerDialog = useCallback(() => {
-      setIsExtensionsManagerDialogOpen(true);
-    }, []);
+        const openExtensionsManagerDialog = useCallback(() => {
+            setIsExtensionsManagerDialogOpen(true);
+        }, []);
 
-    const closeExtensionsManagerDialog = useCallback(() => {
-      setIsExtensionsManagerDialogOpen(false);
-    }, []);
+        const closeExtensionsManagerDialog = useCallback(() => {
+            setIsExtensionsManagerDialogOpen(false);
+        }, []);
 
-    return {
-      isExtensionsManagerDialogOpen,
-      openExtensionsManagerDialog,
-      closeExtensionsManagerDialog,
+        return {
+            isExtensionsManagerDialogOpen,
+            openExtensionsManagerDialog,
+            closeExtensionsManagerDialog
+        };
     };
-  };

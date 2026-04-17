@@ -4,28 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface UseMcpDialogReturn {
-  isMcpDialogOpen: boolean;
-  openMcpDialog: () => void;
-  closeMcpDialog: () => void;
+    isMcpDialogOpen: boolean;
+    openMcpDialog: () => void;
+    closeMcpDialog: () => void;
 }
 
 export const useMcpDialog = (): UseMcpDialogReturn => {
-  const [isMcpDialogOpen, setIsMcpDialogOpen] = useState(false);
+    const [isMcpDialogOpen, setIsMcpDialogOpen] = useState(false);
 
-  const openMcpDialog = useCallback(() => {
-    setIsMcpDialogOpen(true);
-  }, []);
+    const openMcpDialog = useCallback(() => {
+        setIsMcpDialogOpen(true);
+    }, []);
 
-  const closeMcpDialog = useCallback(() => {
-    setIsMcpDialogOpen(false);
-  }, []);
+    const closeMcpDialog = useCallback(() => {
+        setIsMcpDialogOpen(false);
+    }, []);
 
-  return {
-    isMcpDialogOpen,
-    openMcpDialog,
-    closeMcpDialog,
-  };
+    return {
+        isMcpDialogOpen,
+        openMcpDialog,
+        closeMcpDialog
+    };
 };

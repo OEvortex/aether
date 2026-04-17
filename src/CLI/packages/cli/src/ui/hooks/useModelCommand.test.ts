@@ -4,39 +4,39 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { useModelCommand } from './useModelCommand.js';
 
 describe('useModelCommand', () => {
-  it('should initialize with the model dialog closed', () => {
-    const { result } = renderHook(() => useModelCommand());
-    expect(result.current.isModelDialogOpen).toBe(false);
-  });
-
-  it('should open the model dialog when openModelDialog is called', () => {
-    const { result } = renderHook(() => useModelCommand());
-
-    act(() => {
-      result.current.openModelDialog();
+    it('should initialize with the model dialog closed', () => {
+        const { result } = renderHook(() => useModelCommand());
+        expect(result.current.isModelDialogOpen).toBe(false);
     });
 
-    expect(result.current.isModelDialogOpen).toBe(true);
-  });
+    it('should open the model dialog when openModelDialog is called', () => {
+        const { result } = renderHook(() => useModelCommand());
 
-  it('should close the model dialog when closeModelDialog is called', () => {
-    const { result } = renderHook(() => useModelCommand());
+        act(() => {
+            result.current.openModelDialog();
+        });
 
-    // Open it first
-    act(() => {
-      result.current.openModelDialog();
+        expect(result.current.isModelDialogOpen).toBe(true);
     });
-    expect(result.current.isModelDialogOpen).toBe(true);
 
-    // Then close it
-    act(() => {
-      result.current.closeModelDialog();
+    it('should close the model dialog when closeModelDialog is called', () => {
+        const { result } = renderHook(() => useModelCommand());
+
+        // Open it first
+        act(() => {
+            result.current.openModelDialog();
+        });
+        expect(result.current.isModelDialogOpen).toBe(true);
+
+        // Then close it
+        act(() => {
+            result.current.closeModelDialog();
+        });
+        expect(result.current.isModelDialogOpen).toBe(false);
     });
-    expect(result.current.isModelDialogOpen).toBe(false);
-  });
 });

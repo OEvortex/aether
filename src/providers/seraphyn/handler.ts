@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
 import { ConfigManager } from '../../utils/configManager';
+import { resolveGlobalTokenLimits } from '../../utils/globalContextLengthManager';
 import { Logger } from '../../utils/logger';
 import { getUserAgent } from '../../utils/userAgent';
-import { resolveGlobalTokenLimits } from '../../utils/globalContextLengthManager';
 import { SeraphynSseParser } from './sseParser';
 import type {
     SeraphynContentPart,

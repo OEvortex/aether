@@ -4,92 +4,96 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Box, Text } from 'ink';
+import Link from 'ink-link';
 import type React from 'react';
 import { useState } from 'react';
-import { Box, Text } from 'ink';
-import { TextInput } from './shared/TextInput.js';
-import { theme } from '../semantic-colors.js';
-import { useKeypress } from '../hooks/useKeypress.js';
-import { t } from '../../i18n/index.js';
 import { CodingPlanRegion } from '../../constants/codingPlan.js';
-import Link from 'ink-link';
+import { t } from '../../i18n/index.js';
+import { useKeypress } from '../hooks/useKeypress.js';
+import { theme } from '../semantic-colors.js';
+import { TextInput } from './shared/TextInput.js';
 
 interface ApiKeyInputProps {
-  onSubmit: (apiKey: string) => void;
-  onCancel: () => void;
-  region?: CodingPlanRegion;
+    onSubmit: (apiKey: string) => void;
+    onCancel: () => void;
+    region?: CodingPlanRegion;
 }
 
 const CODING_PLAN_API_KEY_URL =
-  'https://bailian.console.aliyun.com/?tab=model#/efm/coding_plan';
+    'https://bailian.console.aliyun.com/?tab=model#/efm/coding_plan';
 
 const CODING_PLAN_INTL_API_KEY_URL =
-  'https://modelstudio.console.alibabacloud.com/?tab=dashboard#/efm/coding_plan';
+    'https://modelstudio.console.alibabacloud.com/?tab=dashboard#/efm/coding_plan';
 
 export function ApiKeyInput({
-  onSubmit,
-  onCancel,
-  region = CodingPlanRegion.CHINA,
+    onSubmit,
+    onCancel,
+    region = CodingPlanRegion.CHINA
 }: ApiKeyInputProps): React.JSX.Element {
-  const [apiKey, setApiKey] = useState('');
-  const [error, setError] = useState<string | null>(null);
+    const [apiKey, setApiKey] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
-  const apiKeyUrl =
-    region === CodingPlanRegion.GLOBAL
-      ? CODING_PLAN_INTL_API_KEY_URL
-      : CODING_PLAN_API_KEY_URL;
+    const apiKeyUrl =
+        region === CodingPlanRegion.GLOBAL
+            ? CODING_PLAN_INTL_API_KEY_URL
+            : CODING_PLAN_API_KEY_URL;
 
-  useKeypress(
-    (key) => {
-      if (key.name === 'escape') {
-        onCancel();
-      } else if (key.name === 'return') {
-        const trimmedKey = apiKey.trim();
-        if (!trimmedKey) {
-          setError(t('API key cannot be empty.'));
-          return;
-        }
-        // Only validate sk-sp- prefix for China region (aliyun.com)
-        if (
-          region === CodingPlanRegion.CHINA &&
-          !trimmedKey.startsWith('sk-sp-')
-        ) {
-          setError(
-            t(
-              'Invalid API key. Coding Plan API keys start with "sk-sp-". Please check.',
-            ),
-          );
-          return;
-        }
-        onSubmit(trimmedKey);
-      }
-    },
-    { isActive: true },
-  );
+    useKeypress(
+        (key) => {
+            if (key.name === 'escape') {
+                onCancel();
+            } else if (key.name === 'return') {
+                const trimmedKey = apiKey.trim();
+                if (!trimmedKey) {
+                    setError(t('API key cannot be empty.'));
+                    return;
+                }
+                // Only validate sk-sp- prefix for China region (aliyun.com)
+                if (
+                    region === CodingPlanRegion.CHINA &&
+                    !trimmedKey.startsWith('sk-sp-')
+                ) {
+                    setError(
+                        t(
+                            'Invalid API key. Coding Plan API keys start with "sk-sp-". Please check.'
+                        )
+                    );
+                    return;
+                }
+                onSubmit(trimmedKey);
+            }
+        },
+        { isActive: true }
+    );
 
-  return (
-    <Box flexDirection="column">
-      <TextInput value={apiKey} onChange={setApiKey} placeholder="sk-sp-..." />
-      {error && (
-        <Box marginTop={1}>
-          <Text color={theme.status.error}>{error}</Text>
+    return (
+        <Box flexDirection="column">
+            <TextInput
+                value={apiKey}
+                onChange={setApiKey}
+                placeholder="sk-sp-..."
+            />
+            {error && (
+                <Box marginTop={1}>
+                    <Text color={theme.status.error}>{error}</Text>
+                </Box>
+            )}
+            <Box marginTop={1}>
+                <Text>{t('You can get your Coding Plan API key here')}</Text>
+            </Box>
+            <Box marginTop={0}>
+                <Link url={apiKeyUrl} fallback={false}>
+                    <Text color={theme.text.link} underline>
+                        {apiKeyUrl}
+                    </Text>
+                </Link>
+            </Box>
+            <Box marginTop={1}>
+                <Text color={theme.text.secondary}>
+                    {t('Enter to submit, Esc to go back')}
+                </Text>
+            </Box>
         </Box>
-      )}
-      <Box marginTop={1}>
-        <Text>{t('You can get your Coding Plan API key here')}</Text>
-      </Box>
-      <Box marginTop={0}>
-        <Link url={apiKeyUrl} fallback={false}>
-          <Text color={theme.text.link} underline>
-            {apiKeyUrl}
-          </Text>
-        </Link>
-      </Box>
-      <Box marginTop={1}>
-        <Text color={theme.text.secondary}>
-          {t('Enter to submit, Esc to go back')}
-        </Text>
-      </Box>
-    </Box>
-  );
+    );
 }

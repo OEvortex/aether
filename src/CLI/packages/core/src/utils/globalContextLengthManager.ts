@@ -619,7 +619,7 @@ export function normalize(model: string): string {
         //   latest|exp - Match the literal string "latest" or "exp"
         s = s.replace(
             /-(?:\d{4,}|\d+x\d+b|v\d+(?:\.\d+)*|(?<=-[^-]+-)\d+(?:\.\d+)+|latest|exp)$/g,
-            '',
+            ''
         );
     }
 

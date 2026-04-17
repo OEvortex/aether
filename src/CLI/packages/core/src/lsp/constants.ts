@@ -61,32 +61,32 @@ export const DEFAULT_LSP_SOCKET_MAX_RETRY_DELAY_MS = 1000;
  * https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#symbolKind
  */
 export const SYMBOL_KIND_LABELS: Record<number, string> = {
-  1: 'File',
-  2: 'Module',
-  3: 'Namespace',
-  4: 'Package',
-  5: 'Class',
-  6: 'Method',
-  7: 'Property',
-  8: 'Field',
-  9: 'Constructor',
-  10: 'Enum',
-  11: 'Interface',
-  12: 'Function',
-  13: 'Variable',
-  14: 'Constant',
-  15: 'String',
-  16: 'Number',
-  17: 'Boolean',
-  18: 'Array',
-  19: 'Object',
-  20: 'Key',
-  21: 'Null',
-  22: 'EnumMember',
-  23: 'Struct',
-  24: 'Event',
-  25: 'Operator',
-  26: 'TypeParameter',
+    1: 'File',
+    2: 'Module',
+    3: 'Namespace',
+    4: 'Package',
+    5: 'Class',
+    6: 'Method',
+    7: 'Property',
+    8: 'Field',
+    9: 'Constructor',
+    10: 'Enum',
+    11: 'Interface',
+    12: 'Function',
+    13: 'Variable',
+    14: 'Constant',
+    15: 'String',
+    16: 'Number',
+    17: 'Boolean',
+    18: 'Array',
+    19: 'Object',
+    20: 'Key',
+    21: 'Null',
+    22: 'EnumMember',
+    23: 'Struct',
+    24: 'Event',
+    25: 'Operator',
+    26: 'TypeParameter'
 };
 
 /**
@@ -94,24 +94,24 @@ export const SYMBOL_KIND_LABELS: Record<number, string> = {
  * Based on the LSP specification.
  */
 export const DIAGNOSTIC_SEVERITY_LABELS: Record<number, LspDiagnosticSeverity> =
-  {
-    1: 'error',
-    2: 'warning',
-    3: 'information',
-    4: 'hint',
-  };
+    {
+        1: 'error',
+        2: 'warning',
+        3: 'information',
+        4: 'hint'
+    };
 
 /**
  * Code action kind labels from LSP specification.
  */
 export const CODE_ACTION_KIND_LABELS: Record<string, LspCodeActionKind> = {
-  '': 'quickfix',
-  quickfix: 'quickfix',
-  refactor: 'refactor',
-  'refactor.extract': 'refactor.extract',
-  'refactor.inline': 'refactor.inline',
-  'refactor.rewrite': 'refactor.rewrite',
-  source: 'source',
-  'source.organizeImports': 'source.organizeImports',
-  'source.fixAll': 'source.fixAll',
+    '': 'quickfix',
+    quickfix: 'quickfix',
+    refactor: 'refactor',
+    'refactor.extract': 'refactor.extract',
+    'refactor.inline': 'refactor.inline',
+    'refactor.rewrite': 'refactor.rewrite',
+    source: 'source',
+    'source.organizeImports': 'source.organizeImports',
+    'source.fixAll': 'source.fixAll'
 };

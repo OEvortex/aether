@@ -4,93 +4,93 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type OpenAI from 'openai';
-import { ModelScopeOpenAICompatibleProvider } from './modelscope.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Config } from '../../../config/config.js';
 import type { ContentGeneratorConfig } from '../../contentGenerator.js';
+import { ModelScopeOpenAICompatibleProvider } from './modelscope.js';
 
 vi.mock('openai');
 
 describe('ModelScopeOpenAICompatibleProvider', () => {
-  let provider: ModelScopeOpenAICompatibleProvider;
-  let mockContentGeneratorConfig: ContentGeneratorConfig;
-  let mockCliConfig: Config;
+    let provider: ModelScopeOpenAICompatibleProvider;
+    let mockContentGeneratorConfig: ContentGeneratorConfig;
+    let mockCliConfig: Config;
 
-  beforeEach(() => {
-    mockContentGeneratorConfig = {
-      apiKey: 'test-api-key',
-      baseUrl: 'https://api.modelscope.cn/v1',
-      model: 'aether-max',
-    } as ContentGeneratorConfig;
+    beforeEach(() => {
+        mockContentGeneratorConfig = {
+            apiKey: 'test-api-key',
+            baseUrl: 'https://api.modelscope.cn/v1',
+            model: 'aether-max'
+        } as ContentGeneratorConfig;
 
-    mockCliConfig = {
-      getCliVersion: vi.fn().mockReturnValue('1.0.0'),
-    } as unknown as Config;
+        mockCliConfig = {
+            getCliVersion: vi.fn().mockReturnValue('1.0.0')
+        } as unknown as Config;
 
-    provider = new ModelScopeOpenAICompatibleProvider(
-      mockContentGeneratorConfig,
-      mockCliConfig,
-    );
-  });
-
-  describe('isModelScopeProvider', () => {
-    it('should return true if baseUrl includes "modelscope"', () => {
-      const config = { baseUrl: 'https://api.modelscope.cn/v1' };
-      expect(
-        ModelScopeOpenAICompatibleProvider.isModelScopeProvider(
-          config as ContentGeneratorConfig,
-        ),
-      ).toBe(true);
+        provider = new ModelScopeOpenAICompatibleProvider(
+            mockContentGeneratorConfig,
+            mockCliConfig
+        );
     });
 
-    it('should return false if baseUrl does not include "modelscope"', () => {
-      const config = { baseUrl: 'https://api.openai.com/v1' };
-      expect(
-        ModelScopeOpenAICompatibleProvider.isModelScopeProvider(
-          config as ContentGeneratorConfig,
-        ),
-      ).toBe(false);
-    });
-  });
+    describe('isModelScopeProvider', () => {
+        it('should return true if baseUrl includes "modelscope"', () => {
+            const config = { baseUrl: 'https://api.modelscope.cn/v1' };
+            expect(
+                ModelScopeOpenAICompatibleProvider.isModelScopeProvider(
+                    config as ContentGeneratorConfig
+                )
+            ).toBe(true);
+        });
 
-  describe('buildRequest', () => {
-    it('should remove stream_options when stream is false', () => {
-      const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
-        model: 'aether-max',
-        messages: [{ role: 'user', content: 'Hello!' }],
-        stream: false,
-        stream_options: { include_usage: true },
-      };
-
-      const result = provider.buildRequest(originalRequest, 'prompt-id');
-
-      expect(result).not.toHaveProperty('stream_options');
+        it('should return false if baseUrl does not include "modelscope"', () => {
+            const config = { baseUrl: 'https://api.openai.com/v1' };
+            expect(
+                ModelScopeOpenAICompatibleProvider.isModelScopeProvider(
+                    config as ContentGeneratorConfig
+                )
+            ).toBe(false);
+        });
     });
 
-    it('should keep stream_options when stream is true', () => {
-      const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
-        model: 'aether-max',
-        messages: [{ role: 'user', content: 'Hello!' }],
-        stream: true,
-        stream_options: { include_usage: true },
-      };
+    describe('buildRequest', () => {
+        it('should remove stream_options when stream is false', () => {
+            const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
+                model: 'aether-max',
+                messages: [{ role: 'user', content: 'Hello!' }],
+                stream: false,
+                stream_options: { include_usage: true }
+            };
 
-      const result = provider.buildRequest(originalRequest, 'prompt-id');
+            const result = provider.buildRequest(originalRequest, 'prompt-id');
 
-      expect(result).toHaveProperty('stream_options');
+            expect(result).not.toHaveProperty('stream_options');
+        });
+
+        it('should keep stream_options when stream is true', () => {
+            const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
+                model: 'aether-max',
+                messages: [{ role: 'user', content: 'Hello!' }],
+                stream: true,
+                stream_options: { include_usage: true }
+            };
+
+            const result = provider.buildRequest(originalRequest, 'prompt-id');
+
+            expect(result).toHaveProperty('stream_options');
+        });
+
+        it('should handle requests without stream_options', () => {
+            const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
+                model: 'aether-max',
+                messages: [{ role: 'user', content: 'Hello!' }],
+                stream: false
+            };
+
+            const result = provider.buildRequest(originalRequest, 'prompt-id');
+
+            expect(result).not.toHaveProperty('stream_options');
+        });
     });
-
-    it('should handle requests without stream_options', () => {
-      const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
-        model: 'aether-max',
-        messages: [{ role: 'user', content: 'Hello!' }],
-        stream: false,
-      };
-
-      const result = provider.buildRequest(originalRequest, 'prompt-id');
-
-      expect(result).not.toHaveProperty('stream_options');
-    });
-  });
 });

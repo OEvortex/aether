@@ -7,28 +7,28 @@
 import { ToolConfirmationOutcome } from '../tools/tools.js';
 
 export enum ToolCallDecision {
-  ACCEPT = 'accept',
-  REJECT = 'reject',
-  MODIFY = 'modify',
-  AUTO_ACCEPT = 'auto_accept',
+    ACCEPT = 'accept',
+    REJECT = 'reject',
+    MODIFY = 'modify',
+    AUTO_ACCEPT = 'auto_accept'
 }
 
 export function getDecisionFromOutcome(
-  outcome: ToolConfirmationOutcome,
+    outcome: ToolConfirmationOutcome
 ): ToolCallDecision {
-  switch (outcome) {
-    case ToolConfirmationOutcome.ProceedOnce:
-      return ToolCallDecision.ACCEPT;
-    case ToolConfirmationOutcome.ProceedAlways:
-    case ToolConfirmationOutcome.ProceedAlwaysServer:
-    case ToolConfirmationOutcome.ProceedAlwaysTool:
-    case ToolConfirmationOutcome.ProceedAlwaysProject:
-    case ToolConfirmationOutcome.ProceedAlwaysUser:
-      return ToolCallDecision.AUTO_ACCEPT;
-    case ToolConfirmationOutcome.ModifyWithEditor:
-      return ToolCallDecision.MODIFY;
-    case ToolConfirmationOutcome.Cancel:
-    default:
-      return ToolCallDecision.REJECT;
-  }
+    switch (outcome) {
+        case ToolConfirmationOutcome.ProceedOnce:
+            return ToolCallDecision.ACCEPT;
+        case ToolConfirmationOutcome.ProceedAlways:
+        case ToolConfirmationOutcome.ProceedAlwaysServer:
+        case ToolConfirmationOutcome.ProceedAlwaysTool:
+        case ToolConfirmationOutcome.ProceedAlwaysProject:
+        case ToolConfirmationOutcome.ProceedAlwaysUser:
+            return ToolCallDecision.AUTO_ACCEPT;
+        case ToolConfirmationOutcome.ModifyWithEditor:
+            return ToolCallDecision.MODIFY;
+        case ToolConfirmationOutcome.Cancel:
+        default:
+            return ToolCallDecision.REJECT;
+    }
 }

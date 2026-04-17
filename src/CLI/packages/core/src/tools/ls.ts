@@ -6,17 +6,21 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { ToolInvocation, ToolResult } from './tools.js';
-import { BaseDeclarativeTool, BaseToolInvocation, Kind } from './tools.js';
-import { makeRelative, shortenPath } from '../utils/paths.js';
-import { isSubpaths, isSubpath } from '../utils/paths.js';
 import type { Config } from '../config/config.js';
-import type { PermissionDecision } from '../permissions/types.js';
 import { DEFAULT_FILE_FILTERING_OPTIONS } from '../config/constants.js';
+import { Storage } from '../config/storage.js';
+import type { PermissionDecision } from '../permissions/types.js';
+import { createDebugLogger } from '../utils/debugLogger.js';
+import {
+    isSubpath,
+    isSubpaths,
+    makeRelative,
+    shortenPath
+} from '../utils/paths.js';
 import { ToolErrorType } from './tool-error.js';
 import { ToolDisplayNames, ToolNames } from './tool-names.js';
-import { createDebugLogger } from '../utils/debugLogger.js';
-import { Storage } from '../config/storage.js';
+import type { ToolInvocation, ToolResult } from './tools.js';
+import { BaseDeclarativeTool, BaseToolInvocation, Kind } from './tools.js';
 
 const debugLogger = createDebugLogger('LS');
 
@@ -26,343 +30,360 @@ const MAX_ENTRY_COUNT = 100;
  * Parameters for the LS tool
  */
 export interface LSToolParams {
-  /**
-   * The absolute path to the directory to list
-   */
-  path: string;
+    /**
+     * The absolute path to the directory to list
+     */
+    path: string;
 
-  /**
-   * Array of glob patterns to ignore (optional)
-   */
-  ignore?: string[];
+    /**
+     * Array of glob patterns to ignore (optional)
+     */
+    ignore?: string[];
 
-  /**
-   * Whether to respect .gitignore and .aetherignore patterns (optional, defaults to true)
-   */
-  file_filtering_options?: {
-    respect_git_ignore?: boolean;
-    respect_aether_ignore?: boolean;
-  };
+    /**
+     * Whether to respect .gitignore and .aetherignore patterns (optional, defaults to true)
+     */
+    file_filtering_options?: {
+        respect_git_ignore?: boolean;
+        respect_aether_ignore?: boolean;
+    };
 }
 
 /**
  * File entry returned by LS tool
  */
 export interface FileEntry {
-  /**
-   * Name of the file or directory
-   */
-  name: string;
+    /**
+     * Name of the file or directory
+     */
+    name: string;
 
-  /**
-   * Absolute path to the file or directory
-   */
-  path: string;
+    /**
+     * Absolute path to the file or directory
+     */
+    path: string;
 
-  /**
-   * Whether this entry is a directory
-   */
-  isDirectory: boolean;
+    /**
+     * Whether this entry is a directory
+     */
+    isDirectory: boolean;
 
-  /**
-   * Size of the file in bytes (0 for directories)
-   */
-  size: number;
+    /**
+     * Size of the file in bytes (0 for directories)
+     */
+    size: number;
 
-  /**
-   * Last modified timestamp
-   */
-  modifiedTime: Date;
+    /**
+     * Last modified timestamp
+     */
+    modifiedTime: Date;
 }
 
 class LSToolInvocation extends BaseToolInvocation<LSToolParams, ToolResult> {
-  constructor(
-    private readonly config: Config,
-    params: LSToolParams,
-  ) {
-    super(params);
-  }
-
-  /**
-   * Checks if a filename matches any of the ignore patterns
-   * @param filename Filename to check
-   * @param patterns Array of glob patterns to check against
-   * @returns True if the filename should be ignored
-   */
-  private shouldIgnore(filename: string, patterns?: string[]): boolean {
-    if (!patterns || patterns.length === 0) {
-      return false;
-    }
-    for (const pattern of patterns) {
-      // Convert glob pattern to RegExp
-      const regexPattern = pattern
-        .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-        .replace(/\*/g, '.*')
-        .replace(/\?/g, '.');
-      const regex = new RegExp(`^${regexPattern}$`);
-      if (regex.test(filename)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Gets a description of the file reading operation
-   * @returns A string describing the file being read
-   */
-  getDescription(): string {
-    const relativePath = makeRelative(
-      this.params.path,
-      this.config.getTargetDir(),
-    );
-    return shortenPath(relativePath);
-  }
-
-  /**
-   * Returns 'ask' for paths outside the workspace/userSkills directories,
-   * so that external directory listings require user confirmation.
-   */
-  override async getDefaultPermission(): Promise<PermissionDecision> {
-    const dirPath = path.resolve(this.params.path);
-    const workspaceContext = this.config.getWorkspaceContext();
-    const userSkillsDirs = this.config.storage.getUserSkillsDirs();
-    const userExtensionsDir = Storage.getUserExtensionsDir();
-
-    if (
-      workspaceContext.isPathWithinWorkspace(dirPath) ||
-      isSubpaths(userSkillsDirs, dirPath) ||
-      isSubpath(userExtensionsDir, dirPath)
+    constructor(
+        private readonly config: Config,
+        params: LSToolParams
     ) {
-      return 'allow';
+        super(params);
     }
-    return 'ask';
-  }
 
-  // Helper for consistent error formatting
-  private errorResult(
-    llmContent: string,
-    returnDisplay: string,
-    type: ToolErrorType,
-  ): ToolResult {
-    return {
-      llmContent,
-      // Keep returnDisplay simpler in core logic
-      returnDisplay: `Error: ${returnDisplay}`,
-      error: {
-        message: llmContent,
-        type,
-      },
-    };
-  }
+    /**
+     * Checks if a filename matches any of the ignore patterns
+     * @param filename Filename to check
+     * @param patterns Array of glob patterns to check against
+     * @returns True if the filename should be ignored
+     */
+    private shouldIgnore(filename: string, patterns?: string[]): boolean {
+        if (!patterns || patterns.length === 0) {
+            return false;
+        }
+        for (const pattern of patterns) {
+            // Convert glob pattern to RegExp
+            const regexPattern = pattern
+                .replace(/[.+^${}()|[\]\\]/g, '\\$&')
+                .replace(/\*/g, '.*')
+                .replace(/\?/g, '.');
+            const regex = new RegExp(`^${regexPattern}$`);
+            if (regex.test(filename)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-  /**
-   * Executes the LS operation with the given parameters
-   * @returns Result of the LS operation
-   */
-  async execute(_signal: AbortSignal): Promise<ToolResult> {
-    try {
-      const stats = await fs.stat(this.params.path);
-      if (!stats) {
-        // fs.statSync throws on non-existence, so this check might be redundant
-        // but keeping for clarity. Error message adjusted.
-        return this.errorResult(
-          `Error: Directory not found or inaccessible: ${this.params.path}`,
-          `Directory not found or inaccessible.`,
-          ToolErrorType.FILE_NOT_FOUND,
+    /**
+     * Gets a description of the file reading operation
+     * @returns A string describing the file being read
+     */
+    getDescription(): string {
+        const relativePath = makeRelative(
+            this.params.path,
+            this.config.getTargetDir()
         );
-      }
-      if (!stats.isDirectory()) {
-        return this.errorResult(
-          `Error: Path is not a directory: ${this.params.path}`,
-          `Path is not a directory.`,
-          ToolErrorType.PATH_IS_NOT_A_DIRECTORY,
-        );
-      }
+        return shortenPath(relativePath);
+    }
 
-      const files = await fs.readdir(this.params.path);
-      if (files.length === 0) {
-        // Changed error message to be more neutral for LLM
+    /**
+     * Returns 'ask' for paths outside the workspace/userSkills directories,
+     * so that external directory listings require user confirmation.
+     */
+    override async getDefaultPermission(): Promise<PermissionDecision> {
+        const dirPath = path.resolve(this.params.path);
+        const workspaceContext = this.config.getWorkspaceContext();
+        const userSkillsDirs = this.config.storage.getUserSkillsDirs();
+        const userExtensionsDir = Storage.getUserExtensionsDir();
+
+        if (
+            workspaceContext.isPathWithinWorkspace(dirPath) ||
+            isSubpaths(userSkillsDirs, dirPath) ||
+            isSubpath(userExtensionsDir, dirPath)
+        ) {
+            return 'allow';
+        }
+        return 'ask';
+    }
+
+    // Helper for consistent error formatting
+    private errorResult(
+        llmContent: string,
+        returnDisplay: string,
+        type: ToolErrorType
+    ): ToolResult {
         return {
-          llmContent: `Directory ${this.params.path} is empty.`,
-          returnDisplay: `Directory is empty.`,
+            llmContent,
+            // Keep returnDisplay simpler in core logic
+            returnDisplay: `Error: ${returnDisplay}`,
+            error: {
+                message: llmContent,
+                type
+            }
         };
-      }
-
-      const relativePaths = files.map((file) =>
-        path.relative(
-          this.config.getTargetDir(),
-          path.join(this.params.path, file),
-        ),
-      );
-
-      const fileDiscovery = this.config.getFileService();
-      const { filteredPaths, gitIgnoredCount, aetherIgnoredCount } =
-        fileDiscovery.filterFilesWithReport(relativePaths, {
-          respectGitIgnore:
-            this.params.file_filtering_options?.respect_git_ignore ??
-            this.config.getFileFilteringOptions().respectGitIgnore ??
-            DEFAULT_FILE_FILTERING_OPTIONS.respectGitIgnore,
-          respectAetherIgnore:
-            this.params.file_filtering_options?.respect_aether_ignore ??
-            this.config.getFileFilteringOptions().respectAetherIgnore ??
-            DEFAULT_FILE_FILTERING_OPTIONS.respectAetherIgnore,
-        });
-
-      const entries = [];
-      for (const relativePath of filteredPaths) {
-        const fullPath = path.resolve(this.config.getTargetDir(), relativePath);
-
-        if (this.shouldIgnore(path.basename(fullPath), this.params.ignore)) {
-          continue;
-        }
-
-        try {
-          const stats = await fs.stat(fullPath);
-          const isDir = stats.isDirectory();
-          entries.push({
-            name: path.basename(fullPath),
-            path: fullPath,
-            isDirectory: isDir,
-            size: isDir ? 0 : stats.size,
-            modifiedTime: stats.mtime,
-          });
-        } catch (error) {
-          // Log error internally but don't fail the whole listing
-          debugLogger.warn(`Error accessing ${fullPath}: ${error}`);
-        }
-      }
-
-      // Sort entries (directories first, then alphabetically)
-      entries.sort((a, b) => {
-        if (a.isDirectory && !b.isDirectory) return -1;
-        if (!a.isDirectory && b.isDirectory) return 1;
-        return a.name.localeCompare(b.name);
-      });
-
-      const totalEntryCount = entries.length;
-      const entryLimit = Math.min(
-        MAX_ENTRY_COUNT,
-        this.config.getTruncateToolOutputLines(),
-      );
-      const truncated = totalEntryCount > entryLimit;
-
-      const entriesToShow = truncated ? entries.slice(0, entryLimit) : entries;
-
-      const directoryContent = entriesToShow
-        .map((entry) => `${entry.isDirectory ? '[DIR] ' : ''}${entry.name}`)
-        .join('\n');
-
-      let resultMessage = `Listed ${totalEntryCount} item(s) in ${this.params.path}:\n---\n${directoryContent}`;
-
-      if (truncated) {
-        const omittedEntries = totalEntryCount - entryLimit;
-        const entryTerm = omittedEntries === 1 ? 'item' : 'items';
-        resultMessage += `\n---\n[${omittedEntries} ${entryTerm} truncated] ...`;
-      }
-
-      const ignoredMessages = [];
-      if (gitIgnoredCount > 0) {
-        ignoredMessages.push(`${gitIgnoredCount} git-ignored`);
-      }
-      if (aetherIgnoredCount > 0) {
-        ignoredMessages.push(`${aetherIgnoredCount} aether-ignored`);
-      }
-      if (ignoredMessages.length > 0) {
-        resultMessage += `\n\n(${ignoredMessages.join(', ')})`;
-      }
-
-      let displayMessage = `Listed ${totalEntryCount} item(s)`;
-      if (ignoredMessages.length > 0) {
-        displayMessage += ` (${ignoredMessages.join(', ')})`;
-      }
-      if (truncated) {
-        displayMessage += ' (truncated)';
-      }
-
-      return {
-        llmContent: resultMessage,
-        returnDisplay: displayMessage,
-      };
-    } catch (error) {
-      const errorMsg = `Error listing directory: ${error instanceof Error ? error.message : String(error)}`;
-      return this.errorResult(
-        errorMsg,
-        'Failed to list directory.',
-        ToolErrorType.LS_EXECUTION_ERROR,
-      );
     }
-  }
+
+    /**
+     * Executes the LS operation with the given parameters
+     * @returns Result of the LS operation
+     */
+    async execute(_signal: AbortSignal): Promise<ToolResult> {
+        try {
+            const stats = await fs.stat(this.params.path);
+            if (!stats) {
+                // fs.statSync throws on non-existence, so this check might be redundant
+                // but keeping for clarity. Error message adjusted.
+                return this.errorResult(
+                    `Error: Directory not found or inaccessible: ${this.params.path}`,
+                    `Directory not found or inaccessible.`,
+                    ToolErrorType.FILE_NOT_FOUND
+                );
+            }
+            if (!stats.isDirectory()) {
+                return this.errorResult(
+                    `Error: Path is not a directory: ${this.params.path}`,
+                    `Path is not a directory.`,
+                    ToolErrorType.PATH_IS_NOT_A_DIRECTORY
+                );
+            }
+
+            const files = await fs.readdir(this.params.path);
+            if (files.length === 0) {
+                // Changed error message to be more neutral for LLM
+                return {
+                    llmContent: `Directory ${this.params.path} is empty.`,
+                    returnDisplay: `Directory is empty.`
+                };
+            }
+
+            const relativePaths = files.map((file) =>
+                path.relative(
+                    this.config.getTargetDir(),
+                    path.join(this.params.path, file)
+                )
+            );
+
+            const fileDiscovery = this.config.getFileService();
+            const { filteredPaths, gitIgnoredCount, aetherIgnoredCount } =
+                fileDiscovery.filterFilesWithReport(relativePaths, {
+                    respectGitIgnore:
+                        this.params.file_filtering_options
+                            ?.respect_git_ignore ??
+                        this.config.getFileFilteringOptions()
+                            .respectGitIgnore ??
+                        DEFAULT_FILE_FILTERING_OPTIONS.respectGitIgnore,
+                    respectAetherIgnore:
+                        this.params.file_filtering_options
+                            ?.respect_aether_ignore ??
+                        this.config.getFileFilteringOptions()
+                            .respectAetherIgnore ??
+                        DEFAULT_FILE_FILTERING_OPTIONS.respectAetherIgnore
+                });
+
+            const entries = [];
+            for (const relativePath of filteredPaths) {
+                const fullPath = path.resolve(
+                    this.config.getTargetDir(),
+                    relativePath
+                );
+
+                if (
+                    this.shouldIgnore(
+                        path.basename(fullPath),
+                        this.params.ignore
+                    )
+                ) {
+                    continue;
+                }
+
+                try {
+                    const stats = await fs.stat(fullPath);
+                    const isDir = stats.isDirectory();
+                    entries.push({
+                        name: path.basename(fullPath),
+                        path: fullPath,
+                        isDirectory: isDir,
+                        size: isDir ? 0 : stats.size,
+                        modifiedTime: stats.mtime
+                    });
+                } catch (error) {
+                    // Log error internally but don't fail the whole listing
+                    debugLogger.warn(`Error accessing ${fullPath}: ${error}`);
+                }
+            }
+
+            // Sort entries (directories first, then alphabetically)
+            entries.sort((a, b) => {
+                if (a.isDirectory && !b.isDirectory) return -1;
+                if (!a.isDirectory && b.isDirectory) return 1;
+                return a.name.localeCompare(b.name);
+            });
+
+            const totalEntryCount = entries.length;
+            const entryLimit = Math.min(
+                MAX_ENTRY_COUNT,
+                this.config.getTruncateToolOutputLines()
+            );
+            const truncated = totalEntryCount > entryLimit;
+
+            const entriesToShow = truncated
+                ? entries.slice(0, entryLimit)
+                : entries;
+
+            const directoryContent = entriesToShow
+                .map(
+                    (entry) =>
+                        `${entry.isDirectory ? '[DIR] ' : ''}${entry.name}`
+                )
+                .join('\n');
+
+            let resultMessage = `Listed ${totalEntryCount} item(s) in ${this.params.path}:\n---\n${directoryContent}`;
+
+            if (truncated) {
+                const omittedEntries = totalEntryCount - entryLimit;
+                const entryTerm = omittedEntries === 1 ? 'item' : 'items';
+                resultMessage += `\n---\n[${omittedEntries} ${entryTerm} truncated] ...`;
+            }
+
+            const ignoredMessages = [];
+            if (gitIgnoredCount > 0) {
+                ignoredMessages.push(`${gitIgnoredCount} git-ignored`);
+            }
+            if (aetherIgnoredCount > 0) {
+                ignoredMessages.push(`${aetherIgnoredCount} aether-ignored`);
+            }
+            if (ignoredMessages.length > 0) {
+                resultMessage += `\n\n(${ignoredMessages.join(', ')})`;
+            }
+
+            let displayMessage = `Listed ${totalEntryCount} item(s)`;
+            if (ignoredMessages.length > 0) {
+                displayMessage += ` (${ignoredMessages.join(', ')})`;
+            }
+            if (truncated) {
+                displayMessage += ' (truncated)';
+            }
+
+            return {
+                llmContent: resultMessage,
+                returnDisplay: displayMessage
+            };
+        } catch (error) {
+            const errorMsg = `Error listing directory: ${error instanceof Error ? error.message : String(error)}`;
+            return this.errorResult(
+                errorMsg,
+                'Failed to list directory.',
+                ToolErrorType.LS_EXECUTION_ERROR
+            );
+        }
+    }
 }
 
 /**
  * Implementation of the LS tool logic
  */
 export class LSTool extends BaseDeclarativeTool<LSToolParams, ToolResult> {
-  static readonly Name = ToolNames.LS;
+    static readonly Name = ToolNames.LS;
 
-  constructor(private config: Config) {
-    super(
-      LSTool.Name,
-      ToolDisplayNames.LS,
-      'Lists the names of files and subdirectories directly within a specified directory path. Can optionally ignore entries matching provided glob patterns.',
-      Kind.Search,
-      {
-        properties: {
-          path: {
-            description:
-              'The absolute path to the directory to list (must be absolute, not relative)',
-            type: 'string',
-          },
-          ignore: {
-            description: 'List of glob patterns to ignore',
-            items: {
-              type: 'string',
-            },
-            type: 'array',
-          },
-          file_filtering_options: {
-            description:
-              'Optional: Whether to respect ignore patterns from .gitignore or .aetherignore',
-            type: 'object',
-            properties: {
-              respect_git_ignore: {
-                description:
-                  'Optional: Whether to respect .gitignore patterns when listing files. Only available in git repositories. Defaults to true.',
-                type: 'boolean',
-              },
-              respect_aether_ignore: {
-                description:
-                  'Optional: Whether to respect .aetherignore patterns when listing files. Defaults to true.',
-                type: 'boolean',
-              },
-            },
-          },
-        },
-        required: ['path'],
-        type: 'object',
-      },
-    );
-  }
-
-  /**
-   * Validates the parameters for the tool
-   * @param params Parameters to validate
-   * @returns An error message string if invalid, null otherwise
-   */
-  protected override validateToolParamValues(
-    params: LSToolParams,
-  ): string | null {
-    if (!path.isAbsolute(params.path)) {
-      return `Path must be absolute: ${params.path}`;
+    constructor(private config: Config) {
+        super(
+            LSTool.Name,
+            ToolDisplayNames.LS,
+            'Lists the names of files and subdirectories directly within a specified directory path. Can optionally ignore entries matching provided glob patterns.',
+            Kind.Search,
+            {
+                properties: {
+                    path: {
+                        description:
+                            'The absolute path to the directory to list (must be absolute, not relative)',
+                        type: 'string'
+                    },
+                    ignore: {
+                        description: 'List of glob patterns to ignore',
+                        items: {
+                            type: 'string'
+                        },
+                        type: 'array'
+                    },
+                    file_filtering_options: {
+                        description:
+                            'Optional: Whether to respect ignore patterns from .gitignore or .aetherignore',
+                        type: 'object',
+                        properties: {
+                            respect_git_ignore: {
+                                description:
+                                    'Optional: Whether to respect .gitignore patterns when listing files. Only available in git repositories. Defaults to true.',
+                                type: 'boolean'
+                            },
+                            respect_aether_ignore: {
+                                description:
+                                    'Optional: Whether to respect .aetherignore patterns when listing files. Defaults to true.',
+                                type: 'boolean'
+                            }
+                        }
+                    }
+                },
+                required: ['path'],
+                type: 'object'
+            }
+        );
     }
 
-    return null;
-  }
+    /**
+     * Validates the parameters for the tool
+     * @param params Parameters to validate
+     * @returns An error message string if invalid, null otherwise
+     */
+    protected override validateToolParamValues(
+        params: LSToolParams
+    ): string | null {
+        if (!path.isAbsolute(params.path)) {
+            return `Path must be absolute: ${params.path}`;
+        }
 
-  protected createInvocation(
-    params: LSToolParams,
-  ): ToolInvocation<LSToolParams, ToolResult> {
-    return new LSToolInvocation(this.config, params);
-  }
+        return null;
+    }
+
+    protected createInvocation(
+        params: LSToolParams
+    ): ToolInvocation<LSToolParams, ToolResult> {
+        return new LSToolInvocation(this.config, params);
+    }
 }

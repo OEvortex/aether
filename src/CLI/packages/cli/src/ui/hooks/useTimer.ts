@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Custom hook to manage a timer that increments every second.
@@ -13,53 +13,53 @@ import { useState, useEffect, useRef } from 'react';
  * @returns The elapsed time in seconds.
  */
 export const useTimer = (isActive: boolean, resetKey: unknown) => {
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const prevResetKeyRef = useRef(resetKey);
-  const prevIsActiveRef = useRef(isActive);
+    const [elapsedTime, setElapsedTime] = useState(0);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const prevResetKeyRef = useRef(resetKey);
+    const prevIsActiveRef = useRef(isActive);
 
-  useEffect(() => {
-    let shouldResetTime = false;
+    useEffect(() => {
+        let shouldResetTime = false;
 
-    if (prevResetKeyRef.current !== resetKey) {
-      shouldResetTime = true;
-      prevResetKeyRef.current = resetKey;
-    }
+        if (prevResetKeyRef.current !== resetKey) {
+            shouldResetTime = true;
+            prevResetKeyRef.current = resetKey;
+        }
 
-    if (prevIsActiveRef.current === false && isActive) {
-      // Transitioned from inactive to active
-      shouldResetTime = true;
-    }
+        if (prevIsActiveRef.current === false && isActive) {
+            // Transitioned from inactive to active
+            shouldResetTime = true;
+        }
 
-    if (shouldResetTime) {
-      setElapsedTime(0);
-    }
-    prevIsActiveRef.current = isActive;
+        if (shouldResetTime) {
+            setElapsedTime(0);
+        }
+        prevIsActiveRef.current = isActive;
 
-    // Manage interval
-    if (isActive) {
-      // Clear previous interval unconditionally before starting a new one
-      // This handles resetKey changes while active, ensuring a fresh interval start.
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      timerRef.current = setInterval(() => {
-        setElapsedTime((prev) => prev + 1);
-      }, 1000);
-    } else {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    }
+        // Manage interval
+        if (isActive) {
+            // Clear previous interval unconditionally before starting a new one
+            // This handles resetKey changes while active, ensuring a fresh interval start.
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
+            timerRef.current = setInterval(() => {
+                setElapsedTime((prev) => prev + 1);
+            }, 1000);
+        } else {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        }
 
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [isActive, resetKey]);
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        };
+    }, [isActive, resetKey]);
 
-  return elapsedTime;
+    return elapsedTime;
 };

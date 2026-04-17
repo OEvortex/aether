@@ -4,471 +4,489 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { DeviceAuthorizationData } from '@aetherai/aether-core';
 // React import not needed for test files
 import { render } from 'ink-testing-library';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { AetherOAuthProgress } from './AetherOAuthProgress.js';
-import type { DeviceAuthorizationData } from '@aetherai/aether-core';
-import { useKeypress } from '../hooks/useKeypress.js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Key } from '../contexts/KeypressContext.js';
+import { useKeypress } from '../hooks/useKeypress.js';
+import { AetherOAuthProgress } from './AetherOAuthProgress.js';
 
 // Mock useKeypress hook
 vi.mock('../hooks/useKeypress.js', () => ({
-  useKeypress: vi.fn(),
+    useKeypress: vi.fn()
 }));
 
 // Mock ink-link
 vi.mock('ink-link', () => ({
-  default: ({ children }: { children: React.ReactNode; url: string }) =>
-    children,
+    default: ({ children }: { children: React.ReactNode; url: string }) =>
+        children
 }));
 
 describe('AetherOAuthProgress', () => {
-  const mockOnTimeout = vi.fn();
-  const mockOnCancel = vi.fn();
-  const mockedUseKeypress = vi.mocked(useKeypress);
-  let keypressHandler: ((key: Key) => void) | null = null;
+    const mockOnTimeout = vi.fn();
+    const mockOnCancel = vi.fn();
+    const mockedUseKeypress = vi.mocked(useKeypress);
+    let keypressHandler: ((key: Key) => void) | null = null;
 
-  const createMockDeviceAuth = (
-    overrides: Partial<DeviceAuthorizationData> = {},
-  ): DeviceAuthorizationData => ({
-    verification_uri: 'https://example.com/device',
-    verification_uri_complete: 'https://example.com/device?user_code=ABC123',
-    user_code: 'ABC123',
-    expires_in: 300,
-    device_code: 'test-device-code',
-    ...overrides,
-  });
-
-  const mockDeviceAuth = createMockDeviceAuth();
-
-  const renderComponent = (
-    props: Partial<{
-      deviceAuth: DeviceAuthorizationData;
-      authStatus:
-        | 'idle'
-        | 'polling'
-        | 'success'
-        | 'error'
-        | 'timeout'
-        | 'rate_limit';
-      authMessage: string | null;
-    }> = {},
-  ) =>
-    render(
-      <AetherOAuthProgress
-        onTimeout={mockOnTimeout}
-        onCancel={mockOnCancel}
-        {...props}
-      />,
-    );
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.useFakeTimers();
-    keypressHandler = null;
-
-    // Mock useKeypress to capture the handler
-    mockedUseKeypress.mockImplementation((handler) => {
-      keypressHandler = handler;
-    });
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  describe('Loading state (no deviceAuth)', () => {
-    it('should render loading state when deviceAuth is not provided', () => {
-      const { lastFrame } = renderComponent();
-
-      const output = lastFrame();
-      expect(output).toContain('Waiting for Aether OAuth authentication...');
-      expect(output).toContain('Esc to cancel');
+    const createMockDeviceAuth = (
+        overrides: Partial<DeviceAuthorizationData> = {}
+    ): DeviceAuthorizationData => ({
+        verification_uri: 'https://example.com/device',
+        verification_uri_complete:
+            'https://example.com/device?user_code=ABC123',
+        user_code: 'ABC123',
+        expires_in: 300,
+        device_code: 'test-device-code',
+        ...overrides
     });
 
-    it('should render loading state with single border', () => {
-      const { lastFrame } = renderComponent();
-      const output = lastFrame();
+    const mockDeviceAuth = createMockDeviceAuth();
 
-      // Should contain the auth title even in loading state
-      expect(output).toContain('Aether OAuth Authentication');
-      // Loading state shows time remaining with default timeout
-      expect(output).toContain('Time remaining:');
-    });
-  });
+    const renderComponent = (
+        props: Partial<{
+            deviceAuth: DeviceAuthorizationData;
+            authStatus:
+                | 'idle'
+                | 'polling'
+                | 'success'
+                | 'error'
+                | 'timeout'
+                | 'rate_limit';
+            authMessage: string | null;
+        }> = {}
+    ) =>
+        render(
+            <AetherOAuthProgress
+                onTimeout={mockOnTimeout}
+                onCancel={mockOnCancel}
+                {...props}
+            />
+        );
 
-  describe('Authenticated state (with deviceAuth)', () => {
-    it('should render authentication flow when deviceAuth is provided', () => {
-      const { lastFrame } = renderComponent({ deviceAuth: mockDeviceAuth });
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.useFakeTimers();
+        keypressHandler = null;
 
-      const output = lastFrame();
-      expect(output).toContain('Waiting for authorization');
-      expect(output).toContain('Time remaining: 5:00');
-      expect(output).toContain('Esc to cancel');
-    });
-
-    it('should display correct URL in auth URL display', () => {
-      const customAuth = createMockDeviceAuth({
-        verification_uri_complete: 'https://custom.com/auth?code=XYZ789',
-      });
-
-      const { lastFrame } = renderComponent({
-        deviceAuth: customAuth,
-      });
-
-      expect(lastFrame()).toContain('https://custom.com/auth?code=XYZ789');
-    });
-
-    it('should format time correctly', () => {
-      const deviceAuthWithCustomTime: DeviceAuthorizationData = {
-        ...mockDeviceAuth,
-        expires_in: 125, // 2 minutes and 5 seconds
-      };
-
-      const { lastFrame } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={deviceAuthWithCustomTime}
-        />,
-      );
-
-      const output = lastFrame();
-      expect(output).toContain('Time remaining: 2:05');
-    });
-
-    it('should format single digit seconds with leading zero', () => {
-      const deviceAuthWithCustomTime: DeviceAuthorizationData = {
-        ...mockDeviceAuth,
-        expires_in: 67, // 1 minute and 7 seconds
-      };
-
-      const { lastFrame } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={deviceAuthWithCustomTime}
-        />,
-      );
-
-      const output = lastFrame();
-      expect(output).toContain('Time remaining: 1:07');
-    });
-  });
-
-  describe('Timer functionality', () => {
-    it('should countdown and call onTimeout when timer expires', async () => {
-      const deviceAuthWithShortTime: DeviceAuthorizationData = {
-        ...mockDeviceAuth,
-        expires_in: 2, // 2 seconds
-      };
-
-      const { rerender } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={deviceAuthWithShortTime}
-        />,
-      );
-
-      // Advance timer by 1 second
-      vi.advanceTimersByTime(1000);
-      rerender(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={deviceAuthWithShortTime}
-        />,
-      );
-
-      // Advance timer by another second to trigger timeout
-      vi.advanceTimersByTime(1000);
-      rerender(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={deviceAuthWithShortTime}
-        />,
-      );
-
-      expect(mockOnTimeout).toHaveBeenCalledTimes(1);
-    });
-
-    it('should update time remaining display', async () => {
-      const { lastFrame, rerender } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-
-      // Initial time should be 5:00
-      expect(lastFrame()).toContain('Time remaining: 5:00');
-
-      // Advance by 1 second
-      vi.advanceTimersByTime(1000);
-      rerender(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-
-      // Should now show 4:59
-      expect(lastFrame()).toContain('Time remaining: 4:59');
-    });
-
-    it('should use default 300 second timeout when deviceAuth is null', () => {
-      const { lastFrame } = render(
-        <AetherOAuthProgress onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
-      );
-
-      // Should show default 5:00 (300 seconds) timeout
-      expect(lastFrame()).toContain('Time remaining: 5:00');
-
-      // The timer functionality is already tested in other tests,
-      // this test mainly verifies the default timeout value is used
-    });
-  });
-
-  describe('Animated dots', () => {
-    it('should cycle through animated dots', async () => {
-      const { lastFrame, rerender } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-
-      // Initial state should show '...' (default value)
-      const initialOutput = lastFrame();
-      expect(initialOutput).toContain('Waiting for authorization');
-
-      // Advance by 500ms to cycle animation
-      vi.advanceTimersByTime(500);
-      rerender(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-      const after500ms = lastFrame();
-      expect(after500ms).toContain('Waiting for authorization');
-
-      // Advance by another 500ms to continue animation
-      vi.advanceTimersByTime(500);
-      rerender(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-      const after1000ms = lastFrame();
-      expect(after1000ms).toContain('Waiting for authorization');
-
-      // Advance by another 500ms to complete cycle
-      vi.advanceTimersByTime(500);
-      rerender(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-      const after1500ms = lastFrame();
-      expect(after1500ms).toContain('Waiting for authorization');
-    });
-  });
-
-  describe('User interactions', () => {
-    it('should call onCancel when ESC key is pressed', () => {
-      render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-
-      // Simulate ESC key press
-      if (keypressHandler) {
-        keypressHandler({
-          name: 'escape',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: '\u001b',
+        // Mock useKeypress to capture the handler
+        mockedUseKeypress.mockImplementation((handler) => {
+            keypressHandler = handler;
         });
-      }
-
-      expect(mockOnCancel).toHaveBeenCalledTimes(1);
     });
 
-    it('should call onCancel when ESC is pressed in loading state', () => {
-      render(
-        <AetherOAuthProgress onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
-      );
+    afterEach(() => {
+        vi.useRealTimers();
+    });
 
-      // Simulate ESC key press
-      if (keypressHandler) {
-        keypressHandler({
-          name: 'escape',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: '\u001b',
+    describe('Loading state (no deviceAuth)', () => {
+        it('should render loading state when deviceAuth is not provided', () => {
+            const { lastFrame } = renderComponent();
+
+            const output = lastFrame();
+            expect(output).toContain(
+                'Waiting for Aether OAuth authentication...'
+            );
+            expect(output).toContain('Esc to cancel');
         });
-      }
 
-      expect(mockOnCancel).toHaveBeenCalledTimes(1);
-    });
+        it('should render loading state with single border', () => {
+            const { lastFrame } = renderComponent();
+            const output = lastFrame();
 
-    it('should not call onCancel for other key presses', () => {
-      render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-
-      // Simulate other key presses
-      if (keypressHandler) {
-        keypressHandler({
-          name: 'a',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: 'a',
+            // Should contain the auth title even in loading state
+            expect(output).toContain('Aether OAuth Authentication');
+            // Loading state shows time remaining with default timeout
+            expect(output).toContain('Time remaining:');
         });
-        keypressHandler({
-          name: 'return',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: '\r',
+    });
+
+    describe('Authenticated state (with deviceAuth)', () => {
+        it('should render authentication flow when deviceAuth is provided', () => {
+            const { lastFrame } = renderComponent({
+                deviceAuth: mockDeviceAuth
+            });
+
+            const output = lastFrame();
+            expect(output).toContain('Waiting for authorization');
+            expect(output).toContain('Time remaining: 5:00');
+            expect(output).toContain('Esc to cancel');
         });
-        keypressHandler({
-          name: 'space',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: ' ',
+
+        it('should display correct URL in auth URL display', () => {
+            const customAuth = createMockDeviceAuth({
+                verification_uri_complete: 'https://custom.com/auth?code=XYZ789'
+            });
+
+            const { lastFrame } = renderComponent({
+                deviceAuth: customAuth
+            });
+
+            expect(lastFrame()).toContain(
+                'https://custom.com/auth?code=XYZ789'
+            );
         });
-      }
 
-      expect(mockOnCancel).not.toHaveBeenCalled();
-    });
-  });
+        it('should format time correctly', () => {
+            const deviceAuthWithCustomTime: DeviceAuthorizationData = {
+                ...mockDeviceAuth,
+                expires_in: 125 // 2 minutes and 5 seconds
+            };
 
-  describe('Props changes', () => {
-    it('should display initial timer value from deviceAuth', () => {
-      const deviceAuthWith10Min: DeviceAuthorizationData = {
-        ...mockDeviceAuth,
-        expires_in: 600, // 10 minutes
-      };
+            const { lastFrame } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={deviceAuthWithCustomTime}
+                />
+            );
 
-      const { lastFrame } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={deviceAuthWith10Min}
-        />,
-      );
-
-      expect(lastFrame()).toContain('Time remaining: 10:00');
-    });
-
-    it('should reset to loading state when deviceAuth becomes null', () => {
-      const { rerender, lastFrame } = render(
-        <AetherOAuthProgress
-          onTimeout={mockOnTimeout}
-          onCancel={mockOnCancel}
-          deviceAuth={mockDeviceAuth}
-        />,
-      );
-
-      // Initially shows waiting for authorization
-      expect(lastFrame()).toContain('Waiting for authorization');
-
-      rerender(
-        <AetherOAuthProgress onTimeout={mockOnTimeout} onCancel={mockOnCancel} />,
-      );
-
-      expect(lastFrame()).toContain('Waiting for Aether OAuth authentication...');
-      expect(lastFrame()).not.toContain('Waiting for authorization');
-    });
-  });
-
-  describe('Timeout state', () => {
-    it('should render timeout state when authStatus is timeout', () => {
-      const { lastFrame } = renderComponent({
-        authStatus: 'timeout',
-        authMessage: 'Custom timeout message',
-      });
-
-      const output = lastFrame();
-      expect(output).toContain('Aether OAuth Authentication Timeout');
-      expect(output).toContain('Custom timeout message');
-      expect(output).toContain(
-        'Press any key to return to authentication type selection.',
-      );
-    });
-
-    it('should render default timeout message when no authMessage provided', () => {
-      const { lastFrame } = renderComponent({
-        authStatus: 'timeout',
-      });
-
-      const output = lastFrame();
-      expect(output).toContain('Aether OAuth Authentication Timeout');
-      expect(output).toContain(
-        'OAuth token expired (over 300 seconds). Please select authentication method again.',
-      );
-    });
-
-    it('should call onCancel for any key press in timeout state', () => {
-      renderComponent({
-        authStatus: 'timeout',
-      });
-
-      // Simulate any key press
-      if (keypressHandler) {
-        keypressHandler({
-          name: 'a',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: 'a',
+            const output = lastFrame();
+            expect(output).toContain('Time remaining: 2:05');
         });
-      }
-      expect(mockOnCancel).toHaveBeenCalledTimes(1);
 
-      // Reset mock and try enter key
-      mockOnCancel.mockClear();
-      if (keypressHandler) {
-        keypressHandler({
-          name: 'return',
-          ctrl: false,
-          meta: false,
-          shift: false,
-          paste: false,
-          sequence: '\r',
+        it('should format single digit seconds with leading zero', () => {
+            const deviceAuthWithCustomTime: DeviceAuthorizationData = {
+                ...mockDeviceAuth,
+                expires_in: 67 // 1 minute and 7 seconds
+            };
+
+            const { lastFrame } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={deviceAuthWithCustomTime}
+                />
+            );
+
+            const output = lastFrame();
+            expect(output).toContain('Time remaining: 1:07');
         });
-      }
-      expect(mockOnCancel).toHaveBeenCalledTimes(1);
     });
-  });
+
+    describe('Timer functionality', () => {
+        it('should countdown and call onTimeout when timer expires', async () => {
+            const deviceAuthWithShortTime: DeviceAuthorizationData = {
+                ...mockDeviceAuth,
+                expires_in: 2 // 2 seconds
+            };
+
+            const { rerender } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={deviceAuthWithShortTime}
+                />
+            );
+
+            // Advance timer by 1 second
+            vi.advanceTimersByTime(1000);
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={deviceAuthWithShortTime}
+                />
+            );
+
+            // Advance timer by another second to trigger timeout
+            vi.advanceTimersByTime(1000);
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={deviceAuthWithShortTime}
+                />
+            );
+
+            expect(mockOnTimeout).toHaveBeenCalledTimes(1);
+        });
+
+        it('should update time remaining display', async () => {
+            const { lastFrame, rerender } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+
+            // Initial time should be 5:00
+            expect(lastFrame()).toContain('Time remaining: 5:00');
+
+            // Advance by 1 second
+            vi.advanceTimersByTime(1000);
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+
+            // Should now show 4:59
+            expect(lastFrame()).toContain('Time remaining: 4:59');
+        });
+
+        it('should use default 300 second timeout when deviceAuth is null', () => {
+            const { lastFrame } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // Should show default 5:00 (300 seconds) timeout
+            expect(lastFrame()).toContain('Time remaining: 5:00');
+
+            // The timer functionality is already tested in other tests,
+            // this test mainly verifies the default timeout value is used
+        });
+    });
+
+    describe('Animated dots', () => {
+        it('should cycle through animated dots', async () => {
+            const { lastFrame, rerender } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+
+            // Initial state should show '...' (default value)
+            const initialOutput = lastFrame();
+            expect(initialOutput).toContain('Waiting for authorization');
+
+            // Advance by 500ms to cycle animation
+            vi.advanceTimersByTime(500);
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+            const after500ms = lastFrame();
+            expect(after500ms).toContain('Waiting for authorization');
+
+            // Advance by another 500ms to continue animation
+            vi.advanceTimersByTime(500);
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+            const after1000ms = lastFrame();
+            expect(after1000ms).toContain('Waiting for authorization');
+
+            // Advance by another 500ms to complete cycle
+            vi.advanceTimersByTime(500);
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+            const after1500ms = lastFrame();
+            expect(after1500ms).toContain('Waiting for authorization');
+        });
+    });
+
+    describe('User interactions', () => {
+        it('should call onCancel when ESC key is pressed', () => {
+            render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+
+            // Simulate ESC key press
+            if (keypressHandler) {
+                keypressHandler({
+                    name: 'escape',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: '\u001b'
+                });
+            }
+
+            expect(mockOnCancel).toHaveBeenCalledTimes(1);
+        });
+
+        it('should call onCancel when ESC is pressed in loading state', () => {
+            render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // Simulate ESC key press
+            if (keypressHandler) {
+                keypressHandler({
+                    name: 'escape',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: '\u001b'
+                });
+            }
+
+            expect(mockOnCancel).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call onCancel for other key presses', () => {
+            render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+
+            // Simulate other key presses
+            if (keypressHandler) {
+                keypressHandler({
+                    name: 'a',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: 'a'
+                });
+                keypressHandler({
+                    name: 'return',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: '\r'
+                });
+                keypressHandler({
+                    name: 'space',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: ' '
+                });
+            }
+
+            expect(mockOnCancel).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('Props changes', () => {
+        it('should display initial timer value from deviceAuth', () => {
+            const deviceAuthWith10Min: DeviceAuthorizationData = {
+                ...mockDeviceAuth,
+                expires_in: 600 // 10 minutes
+            };
+
+            const { lastFrame } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={deviceAuthWith10Min}
+                />
+            );
+
+            expect(lastFrame()).toContain('Time remaining: 10:00');
+        });
+
+        it('should reset to loading state when deviceAuth becomes null', () => {
+            const { rerender, lastFrame } = render(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                    deviceAuth={mockDeviceAuth}
+                />
+            );
+
+            // Initially shows waiting for authorization
+            expect(lastFrame()).toContain('Waiting for authorization');
+
+            rerender(
+                <AetherOAuthProgress
+                    onTimeout={mockOnTimeout}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            expect(lastFrame()).toContain(
+                'Waiting for Aether OAuth authentication...'
+            );
+            expect(lastFrame()).not.toContain('Waiting for authorization');
+        });
+    });
+
+    describe('Timeout state', () => {
+        it('should render timeout state when authStatus is timeout', () => {
+            const { lastFrame } = renderComponent({
+                authStatus: 'timeout',
+                authMessage: 'Custom timeout message'
+            });
+
+            const output = lastFrame();
+            expect(output).toContain('Aether OAuth Authentication Timeout');
+            expect(output).toContain('Custom timeout message');
+            expect(output).toContain(
+                'Press any key to return to authentication type selection.'
+            );
+        });
+
+        it('should render default timeout message when no authMessage provided', () => {
+            const { lastFrame } = renderComponent({
+                authStatus: 'timeout'
+            });
+
+            const output = lastFrame();
+            expect(output).toContain('Aether OAuth Authentication Timeout');
+            expect(output).toContain(
+                'OAuth token expired (over 300 seconds). Please select authentication method again.'
+            );
+        });
+
+        it('should call onCancel for any key press in timeout state', () => {
+            renderComponent({
+                authStatus: 'timeout'
+            });
+
+            // Simulate any key press
+            if (keypressHandler) {
+                keypressHandler({
+                    name: 'a',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: 'a'
+                });
+            }
+            expect(mockOnCancel).toHaveBeenCalledTimes(1);
+
+            // Reset mock and try enter key
+            mockOnCancel.mockClear();
+            if (keypressHandler) {
+                keypressHandler({
+                    name: 'return',
+                    ctrl: false,
+                    meta: false,
+                    shift: false,
+                    paste: false,
+                    sequence: '\r'
+                });
+            }
+            expect(mockOnCancel).toHaveBeenCalledTimes(1);
+        });
+    });
 });

@@ -5,14 +5,14 @@
  */
 
 import * as fs from 'node:fs';
+import { homedir } from 'node:os';
 import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { homedir } from 'node:os';
 import { writeStderrLine } from '../utils/stdioHelpers.js';
 import {
-  type SupportedLanguage,
-  SUPPORTED_LANGUAGES,
-  getLanguageNameFromLocale,
+    getLanguageNameFromLocale,
+    SUPPORTED_LANGUAGES,
+    type SupportedLanguage
 } from './languages.js';
 
 export type { SupportedLanguage };
@@ -29,12 +29,12 @@ const translationCache: Record<string, TranslationDict> = {};
 const loadingPromises: Record<string, Promise<TranslationDict>> = {};
 // Path helpers
 const getBuiltinLocalesDir = (): string => {
-  const __filename = fileURLToPath(import.meta.url);
-  return path.join(path.dirname(__filename), 'locales');
+    const __filename = fileURLToPath(import.meta.url);
+    return path.join(path.dirname(__filename), 'locales');
 };
 
 const getUserLocalesDir = (): string =>
-  path.join(homedir(), '.aether', 'locales');
+    path.join(homedir(), '.aether', 'locales');
 
 /**
  * Get the path to the user's custom locales directory.
@@ -42,199 +42,197 @@ const getUserLocalesDir = (): string =>
  * @returns The path to ~/.aether/locales
  */
 export function getUserLocalesDirectory(): string {
-  return getUserLocalesDir();
+    return getUserLocalesDir();
 }
 
 const getLocalePath = (
-  lang: SupportedLanguage,
-  useUserDir: boolean = false,
+    lang: SupportedLanguage,
+    useUserDir: boolean = false
 ): string => {
-  const baseDir = useUserDir ? getUserLocalesDir() : getBuiltinLocalesDir();
-  return path.join(baseDir, `${lang}.js`);
+    const baseDir = useUserDir ? getUserLocalesDir() : getBuiltinLocalesDir();
+    return path.join(baseDir, `${lang}.js`);
 };
 
 // Language detection
 export function detectSystemLanguage(): SupportedLanguage {
-  const envLang = process.env['aether_cli_LANG'] || process.env['LANG'];
-  if (envLang) {
-    for (const lang of SUPPORTED_LANGUAGES) {
-      if (envLang.startsWith(lang.code)) return lang.code;
+    const envLang = process.env['aether_cli_LANG'] || process.env['LANG'];
+    if (envLang) {
+        for (const lang of SUPPORTED_LANGUAGES) {
+            if (envLang.startsWith(lang.code)) return lang.code;
+        }
     }
-  }
 
-  try {
-    const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-    for (const lang of SUPPORTED_LANGUAGES) {
-      if (locale.startsWith(lang.code)) return lang.code;
+    try {
+        const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+        for (const lang of SUPPORTED_LANGUAGES) {
+            if (locale.startsWith(lang.code)) return lang.code;
+        }
+    } catch {
+        // Fallback to default
     }
-  } catch {
-    // Fallback to default
-  }
 
-  return 'en';
+    return 'en';
 }
 
 // Translation loading
 async function loadTranslationsAsync(
-  lang: SupportedLanguage,
+    lang: SupportedLanguage
 ): Promise<TranslationDict> {
-  if (translationCache[lang]) {
-    return translationCache[lang];
-  }
-
-  const existingPromise = loadingPromises[lang];
-  if (existingPromise) {
-    return existingPromise;
-  }
-
-  const loadPromise = (async () => {
-    // Try user directory first (for custom language packs), then builtin directory
-    const searchDirs = [
-      { dir: getUserLocalesDir(), isUser: true },
-      { dir: getBuiltinLocalesDir(), isUser: false },
-    ];
-
-    for (const { dir, isUser } of searchDirs) {
-      // Ensure directory exists
-      if (!fs.existsSync(dir)) {
-        continue;
-      }
-
-      const jsPath = getLocalePath(lang, isUser);
-      if (!fs.existsSync(jsPath)) {
-        continue;
-      }
-
-      try {
-        // Convert file path to file:// URL for cross-platform compatibility
-        const fileUrl = pathToFileURL(jsPath).href;
-        try {
-          const module = await import(fileUrl);
-          const result = module.default || module;
-          if (
-            result &&
-            typeof result === 'object' &&
-            Object.keys(result).length > 0
-          ) {
-            translationCache[lang] = result;
-            return result;
-          } else {
-            throw new Error('Module loaded but result is empty or invalid');
-          }
-        } catch {
-          // For builtin locales, try alternative import method (relative path)
-          if (!isUser) {
-            try {
-              const module = await import(`./locales/${lang}.js`);
-              const result = module.default || module;
-              if (
-                result &&
-                typeof result === 'object' &&
-                Object.keys(result).length > 0
-              ) {
-                translationCache[lang] = result;
-                return result;
-              }
-            } catch {
-              // Continue to next directory
-            }
-          }
-          // If import failed, continue to next directory
-          continue;
-        }
-      } catch (error) {
-        // Log warning but continue to next directory
-        if (isUser) {
-          writeStderrLine(
-            `Failed to load translations from user directory for ${lang}: ${error instanceof Error ? error.message : String(error)}`,
-          );
-        } else {
-          writeStderrLine(
-            `Failed to load JS translations for ${lang}: ${error instanceof Error ? error.message : String(error)}`,
-          );
-        }
-        // Continue to next directory
-        continue;
-      }
+    if (translationCache[lang]) {
+        return translationCache[lang];
     }
 
-    // Return empty object if both directories fail
-    // Cache it to avoid repeated failed attempts
-    translationCache[lang] = {};
-    return {};
-  })();
+    const existingPromise = loadingPromises[lang];
+    if (existingPromise) {
+        return existingPromise;
+    }
 
-  loadingPromises[lang] = loadPromise;
+    const loadPromise = (async () => {
+        // Try user directory first (for custom language packs), then builtin directory
+        const searchDirs = [
+            { dir: getUserLocalesDir(), isUser: true },
+            { dir: getBuiltinLocalesDir(), isUser: false }
+        ];
 
-  // Clean up promise after completion to allow retry on next call if needed
-  loadPromise.finally(() => {
-    delete loadingPromises[lang];
-  });
+        for (const { dir, isUser } of searchDirs) {
+            // Ensure directory exists
+            if (!fs.existsSync(dir)) {
+                continue;
+            }
 
-  return loadPromise;
+            const jsPath = getLocalePath(lang, isUser);
+            if (!fs.existsSync(jsPath)) {
+                continue;
+            }
+
+            try {
+                // Convert file path to file:// URL for cross-platform compatibility
+                const fileUrl = pathToFileURL(jsPath).href;
+                try {
+                    const module = await import(fileUrl);
+                    const result = module.default || module;
+                    if (
+                        result &&
+                        typeof result === 'object' &&
+                        Object.keys(result).length > 0
+                    ) {
+                        translationCache[lang] = result;
+                        return result;
+                    } else {
+                        throw new Error(
+                            'Module loaded but result is empty or invalid'
+                        );
+                    }
+                } catch {
+                    // For builtin locales, try alternative import method (relative path)
+                    if (!isUser) {
+                        try {
+                            const module = await import(`./locales/${lang}.js`);
+                            const result = module.default || module;
+                            if (
+                                result &&
+                                typeof result === 'object' &&
+                                Object.keys(result).length > 0
+                            ) {
+                                translationCache[lang] = result;
+                                return result;
+                            }
+                        } catch {
+                            // Continue to next directory
+                        }
+                    }
+                }
+            } catch (error) {
+                // Log warning but continue to next directory
+                if (isUser) {
+                    writeStderrLine(
+                        `Failed to load translations from user directory for ${lang}: ${error instanceof Error ? error.message : String(error)}`
+                    );
+                } else {
+                    writeStderrLine(
+                        `Failed to load JS translations for ${lang}: ${error instanceof Error ? error.message : String(error)}`
+                    );
+                }
+            }
+        }
+
+        // Return empty object if both directories fail
+        // Cache it to avoid repeated failed attempts
+        translationCache[lang] = {};
+        return {};
+    })();
+
+    loadingPromises[lang] = loadPromise;
+
+    // Clean up promise after completion to allow retry on next call if needed
+    loadPromise.finally(() => {
+        delete loadingPromises[lang];
+    });
+
+    return loadPromise;
 }
 
 function loadTranslations(lang: SupportedLanguage): TranslationDict {
-  // Only return from cache (JS files require async loading)
-  return translationCache[lang] || {};
+    // Only return from cache (JS files require async loading)
+    return translationCache[lang] || {};
 }
 
 // String interpolation
 function interpolate(
-  template: string,
-  params?: Record<string, string>,
+    template: string,
+    params?: Record<string, string>
 ): string {
-  if (!params) return template;
-  return template.replace(
-    /\{\{(\w+)\}\}/g,
-    (match, key) => params[key] ?? match,
-  );
+    if (!params) return template;
+    return template.replace(
+        /\{\{(\w+)\}\}/g,
+        (match, key) => params[key] ?? match
+    );
 }
 
 // Language setting helpers
 function resolveLanguage(lang: SupportedLanguage | 'auto'): SupportedLanguage {
-  return lang === 'auto' ? detectSystemLanguage() : lang;
+    return lang === 'auto' ? detectSystemLanguage() : lang;
 }
 
 // Public API
 export function setLanguage(lang: SupportedLanguage | 'auto'): void {
-  const resolvedLang = resolveLanguage(lang);
-  currentLanguage = resolvedLang;
+    const resolvedLang = resolveLanguage(lang);
+    currentLanguage = resolvedLang;
 
-  // Try to load translations synchronously (from cache only)
-  const loaded = loadTranslations(resolvedLang);
-  translations = loaded;
+    // Try to load translations synchronously (from cache only)
+    const loaded = loadTranslations(resolvedLang);
+    translations = loaded;
 
-  // Warn if translations are empty and JS file exists (requires async loading)
-  if (Object.keys(loaded).length === 0) {
-    const userJsPath = getLocalePath(resolvedLang, true);
-    const builtinJsPath = getLocalePath(resolvedLang, false);
-    if (fs.existsSync(userJsPath) || fs.existsSync(builtinJsPath)) {
-      writeStderrLine(
-        `Language file for ${resolvedLang} requires async loading. ` +
-          `Use setLanguageAsync() instead, or call initializeI18n() first.`,
-      );
+    // Warn if translations are empty and JS file exists (requires async loading)
+    if (Object.keys(loaded).length === 0) {
+        const userJsPath = getLocalePath(resolvedLang, true);
+        const builtinJsPath = getLocalePath(resolvedLang, false);
+        if (fs.existsSync(userJsPath) || fs.existsSync(builtinJsPath)) {
+            writeStderrLine(
+                `Language file for ${resolvedLang} requires async loading. ` +
+                    `Use setLanguageAsync() instead, or call initializeI18n() first.`
+            );
+        }
     }
-  }
 }
 
 export async function setLanguageAsync(
-  lang: SupportedLanguage | 'auto',
+    lang: SupportedLanguage | 'auto'
 ): Promise<void> {
-  currentLanguage = resolveLanguage(lang);
-  translations = await loadTranslationsAsync(currentLanguage);
+    currentLanguage = resolveLanguage(lang);
+    translations = await loadTranslationsAsync(currentLanguage);
 }
 
 export function getCurrentLanguage(): SupportedLanguage {
-  return currentLanguage;
+    return currentLanguage;
 }
 
 export function t(key: string, params?: Record<string, string>): string {
-  const translation = translations[key] ?? key;
-  if (Array.isArray(translation)) {
-    return key;
-  }
-  return interpolate(translation, params);
+    const translation = translations[key] ?? key;
+    if (Array.isArray(translation)) {
+        return key;
+    }
+    return interpolate(translation, params);
 }
 
 /**
@@ -243,15 +241,15 @@ export function t(key: string, params?: Record<string, string>): string {
  * @returns The array of strings, or an empty array if not found or not an array
  */
 export function ta(key: string): string[] {
-  const translation = translations[key];
-  if (Array.isArray(translation)) {
-    return translation;
-  }
-  return [];
+    const translation = translations[key];
+    if (Array.isArray(translation)) {
+        return translation;
+    }
+    return [];
 }
 
 export async function initializeI18n(
-  lang?: SupportedLanguage | 'auto',
+    lang?: SupportedLanguage | 'auto'
 ): Promise<void> {
-  await setLanguageAsync(lang ?? 'auto');
+    await setLanguageAsync(lang ?? 'auto');
 }

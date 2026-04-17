@@ -1,5 +1,9 @@
+import type {
+    AcpBridge,
+    ChannelBaseOptions,
+    ChannelConfig
+} from '../../base/src/index.js';
 import { ChannelBase } from '../../base/src/index.js';
-import type { AcpBridge, ChannelBaseOptions, ChannelConfig } from '../../base/src/index.js';
 import { loadAccount } from './accounts.js';
 
 export class WeixinChannel extends ChannelBase {
@@ -7,7 +11,7 @@ export class WeixinChannel extends ChannelBase {
         name: string,
         config: ChannelConfig,
         bridge: AcpBridge,
-        options?: ChannelBaseOptions,
+        options?: ChannelBaseOptions
     ) {
         super(name, config, bridge, options);
     }

@@ -7,11 +7,11 @@
 import { getLanguageFromFilePath } from '../utils/language-detection.js';
 
 export function getProgrammingLanguage(
-  args: Record<string, unknown>,
+    args: Record<string, unknown>
 ): string | undefined {
-  const filePath = args['file_path'] || args['path'];
-  if (typeof filePath === 'string') {
-    return getLanguageFromFilePath(filePath);
-  }
-  return undefined;
+    const filePath = args['file_path'] || args['path'];
+    if (typeof filePath === 'string') {
+        return getLanguageFromFilePath(filePath);
+    }
+    return undefined;
 }

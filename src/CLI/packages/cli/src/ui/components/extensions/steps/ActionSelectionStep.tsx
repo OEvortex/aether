@@ -4,99 +4,98 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useMemo } from 'react';
+import type { Extension } from '@aetherai/aether-core';
 import { Box } from 'ink';
-import { RadioButtonSelect } from '../../shared/RadioButtonSelect.js';
-import { type Extension } from '@aetherai/aether-core';
+import { useMemo, useState } from 'react';
 import { t } from '../../../../i18n/index.js';
-import { type ExtensionAction } from '../types.js';
+import { RadioButtonSelect } from '../../shared/RadioButtonSelect.js';
+import type { ExtensionAction } from '../types.js';
 
 interface ActionSelectionStepProps {
-  selectedExtension: Extension | null;
-  hasUpdateAvailable: boolean;
-  onNavigateToStep: (step: string) => void;
-  onActionSelect: (action: ExtensionAction) => void;
+    selectedExtension: Extension | null;
+    hasUpdateAvailable: boolean;
+    onNavigateToStep: (step: string) => void;
+    onActionSelect: (action: ExtensionAction) => void;
 }
 
 export const ActionSelectionStep = ({
-  selectedExtension,
-  hasUpdateAvailable,
-  onActionSelect,
+    selectedExtension,
+    hasUpdateAvailable,
+    onActionSelect
 }: ActionSelectionStepProps) => {
-  const [selectedAction, setSelectedAction] = useState<ExtensionAction | null>(
-    null,
-  );
+    const [selectedAction, setSelectedAction] =
+        useState<ExtensionAction | null>(null);
 
-  const isActive = selectedExtension?.isActive ?? false;
+    const isActive = selectedExtension?.isActive ?? false;
 
-  // Build action list based on extension state
-  const actions = useMemo(() => {
-    const allActions = [
-      {
-        key: 'view',
-        get label() {
-          return t('View Details');
-        },
-        value: 'view' as const,
-      },
-      ...(hasUpdateAvailable
-        ? [
+    // Build action list based on extension state
+    const actions = useMemo(() => {
+        const allActions = [
             {
-              key: 'update',
-              get label() {
-                return t('Update Extension');
-              },
-              value: 'update' as const,
+                key: 'view',
+                get label() {
+                    return t('View Details');
+                },
+                value: 'view' as const
             },
-          ]
-        : []),
-      ...(isActive
-        ? [
+            ...(hasUpdateAvailable
+                ? [
+                      {
+                          key: 'update',
+                          get label() {
+                              return t('Update Extension');
+                          },
+                          value: 'update' as const
+                      }
+                  ]
+                : []),
+            ...(isActive
+                ? [
+                      {
+                          key: 'disable',
+                          get label() {
+                              return t('Disable Extension');
+                          },
+                          value: 'disable' as const
+                      }
+                  ]
+                : [
+                      {
+                          key: 'enable',
+                          get label() {
+                              return t('Enable Extension');
+                          },
+                          value: 'enable' as const
+                      }
+                  ]),
             {
-              key: 'disable',
-              get label() {
-                return t('Disable Extension');
-              },
-              value: 'disable' as const,
-            },
-          ]
-        : [
-            {
-              key: 'enable',
-              get label() {
-                return t('Enable Extension');
-              },
-              value: 'enable' as const,
-            },
-          ]),
-      {
-        key: 'uninstall',
-        get label() {
-          return t('Uninstall Extension');
-        },
-        value: 'uninstall' as const,
-      },
-    ];
-    return allActions;
-  }, [hasUpdateAvailable, isActive]);
+                key: 'uninstall',
+                get label() {
+                    return t('Uninstall Extension');
+                },
+                value: 'uninstall' as const
+            }
+        ];
+        return allActions;
+    }, [hasUpdateAvailable, isActive]);
 
-  const handleActionSelect = (value: ExtensionAction) => {
-    setSelectedAction(value);
-    onActionSelect(value);
-  };
+    const handleActionSelect = (value: ExtensionAction) => {
+        setSelectedAction(value);
+        onActionSelect(value);
+    };
 
-  const selectedIndex = selectedAction
-    ? actions.findIndex((action) => action.value === selectedAction)
-    : 0;
+    const selectedIndex = selectedAction
+        ? actions.findIndex((action) => action.value === selectedAction)
+        : 0;
 
-  return (
-    <Box flexDirection="column">
-      <RadioButtonSelect
-        items={actions}
-        initialIndex={selectedIndex}
-        onSelect={handleActionSelect}
-        showNumbers={false}
-      />
-    </Box>
-  );
+    return (
+        <Box flexDirection="column">
+            <RadioButtonSelect
+                items={actions}
+                initialIndex={selectedIndex}
+                onSelect={handleActionSelect}
+                showNumbers={false}
+            />
+        </Box>
+    );
 };

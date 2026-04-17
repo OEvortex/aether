@@ -4,340 +4,364 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, afterEach, vi } from 'vitest';
 import * as path from 'node:path';
-import mock from 'mock-fs';
-import { FileCommandLoader } from './FileCommandLoader.js';
 import type { Config } from '@aetherai/aether-core';
 import { Storage } from '@aetherai/aether-core';
+import mock from 'mock-fs';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { FileCommandLoader } from './FileCommandLoader.js';
 
 describe('FileCommandLoader - Extension Commands Support', () => {
-  const projectRoot = '/test/project';
-  const userCommandsDir = Storage.getUserCommandsDir();
-  const projectCommandsDir = path.join(projectRoot, '.aether', 'commands');
+    const projectRoot = '/test/project';
+    const userCommandsDir = Storage.getUserCommandsDir();
+    const projectCommandsDir = path.join(projectRoot, '.aether', 'commands');
 
-  afterEach(() => {
-    mock.restore();
-  });
-
-  it('should load commands from extension with config.commands path', async () => {
-    const extensionDir = path.join(
-      projectRoot,
-      '.aether',
-      'extensions',
-      'test-ext',
-    );
-
-    const extensionConfig = {
-      name: 'test-ext',
-      version: '1.0.0',
-      commands: 'custom-cmds',
-    };
-
-    mock({
-      [userCommandsDir]: {},
-      [projectCommandsDir]: {},
-      [extensionDir]: {
-        'aether-extension.json': JSON.stringify(extensionConfig),
-        'custom-cmds': {
-          'test.md':
-            '---\ndescription: Test command from extension\n---\nDo something',
-        },
-      },
+    afterEach(() => {
+        mock.restore();
     });
 
-    const mockConfig = {
-      getFolderTrustFeature: vi.fn(() => false),
-      getFolderTrust: vi.fn(() => true),
-      getProjectRoot: vi.fn(() => projectRoot),
-      storage: new Storage(projectRoot),
-      getExtensions: vi.fn(() => [
-        {
-          id: 'test-ext',
-          config: extensionConfig,
-          name: 'test-ext',
-          version: '1.0.0',
-          isActive: true,
-          path: extensionDir,
-          contextFiles: [],
-        },
-      ]),
-    } as unknown as Config;
+    it('should load commands from extension with config.commands path', async () => {
+        const extensionDir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'test-ext'
+        );
 
-    const loader = new FileCommandLoader(mockConfig);
-    const commands = await loader.loadCommands(new AbortController().signal);
+        const extensionConfig = {
+            name: 'test-ext',
+            version: '1.0.0',
+            commands: 'custom-cmds'
+        };
 
-    expect(commands).toHaveLength(1);
-    expect(commands[0].name).toBe('test');
-    expect(commands[0].extensionName).toBe('test-ext');
-    expect(commands[0].description).toBe(
-      '[test-ext] Test command from extension',
-    );
-  });
+        mock({
+            [userCommandsDir]: {},
+            [projectCommandsDir]: {},
+            [extensionDir]: {
+                'aether-extension.json': JSON.stringify(extensionConfig),
+                'custom-cmds': {
+                    'test.md':
+                        '---\ndescription: Test command from extension\n---\nDo something'
+                }
+            }
+        });
 
-  it('should load commands from extension with multiple commands paths', async () => {
-    const extensionDir = path.join(
-      projectRoot,
-      '.aether',
-      'extensions',
-      'multi-ext',
-    );
+        const mockConfig = {
+            getFolderTrustFeature: vi.fn(() => false),
+            getFolderTrust: vi.fn(() => true),
+            getProjectRoot: vi.fn(() => projectRoot),
+            storage: new Storage(projectRoot),
+            getExtensions: vi.fn(() => [
+                {
+                    id: 'test-ext',
+                    config: extensionConfig,
+                    name: 'test-ext',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: extensionDir,
+                    contextFiles: []
+                }
+            ])
+        } as unknown as Config;
 
-    const extensionConfig = {
-      name: 'multi-ext',
-      version: '1.0.0',
-      commands: ['commands1', 'commands2'],
-    };
+        const loader = new FileCommandLoader(mockConfig);
+        const commands = await loader.loadCommands(
+            new AbortController().signal
+        );
 
-    mock({
-      [userCommandsDir]: {},
-      [projectCommandsDir]: {},
-      [extensionDir]: {
-        'aether-extension.json': JSON.stringify(extensionConfig),
-        commands1: {
-          'cmd1.md': '---\n---\nCommand 1',
-        },
-        commands2: {
-          'cmd2.md': '---\n---\nCommand 2',
-        },
-      },
+        expect(commands).toHaveLength(1);
+        expect(commands[0].name).toBe('test');
+        expect(commands[0].extensionName).toBe('test-ext');
+        expect(commands[0].description).toBe(
+            '[test-ext] Test command from extension'
+        );
     });
 
-    const mockConfig = {
-      getFolderTrustFeature: vi.fn(() => false),
-      getFolderTrust: vi.fn(() => true),
-      getProjectRoot: vi.fn(() => projectRoot),
-      storage: new Storage(projectRoot),
-      getExtensions: vi.fn(() => [
-        {
-          id: 'multi-ext',
-          config: extensionConfig,
-          contextFiles: [],
-          name: 'multi-ext',
-          version: '1.0.0',
-          isActive: true,
-          path: extensionDir,
-        },
-      ]),
-    } as unknown as Config;
+    it('should load commands from extension with multiple commands paths', async () => {
+        const extensionDir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'multi-ext'
+        );
 
-    const loader = new FileCommandLoader(mockConfig);
-    const commands = await loader.loadCommands(new AbortController().signal);
+        const extensionConfig = {
+            name: 'multi-ext',
+            version: '1.0.0',
+            commands: ['commands1', 'commands2']
+        };
 
-    expect(commands).toHaveLength(2);
-    const commandNames = commands.map((c) => c.name).sort();
-    expect(commandNames).toEqual(['cmd1', 'cmd2']);
-    expect(commands.every((c) => c.extensionName === 'multi-ext')).toBe(true);
-  });
+        mock({
+            [userCommandsDir]: {},
+            [projectCommandsDir]: {},
+            [extensionDir]: {
+                'aether-extension.json': JSON.stringify(extensionConfig),
+                commands1: {
+                    'cmd1.md': '---\n---\nCommand 1'
+                },
+                commands2: {
+                    'cmd2.md': '---\n---\nCommand 2'
+                }
+            }
+        });
 
-  it('should fallback to default "commands" directory when config.commands not specified', async () => {
-    const extensionDir = path.join(
-      projectRoot,
-      '.aether',
-      'extensions',
-      'default-ext',
-    );
+        const mockConfig = {
+            getFolderTrustFeature: vi.fn(() => false),
+            getFolderTrust: vi.fn(() => true),
+            getProjectRoot: vi.fn(() => projectRoot),
+            storage: new Storage(projectRoot),
+            getExtensions: vi.fn(() => [
+                {
+                    id: 'multi-ext',
+                    config: extensionConfig,
+                    contextFiles: [],
+                    name: 'multi-ext',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: extensionDir
+                }
+            ])
+        } as unknown as Config;
 
-    const extensionConfig = {
-      name: 'default-ext',
-      version: '1.0.0',
-    };
+        const loader = new FileCommandLoader(mockConfig);
+        const commands = await loader.loadCommands(
+            new AbortController().signal
+        );
 
-    mock({
-      [userCommandsDir]: {},
-      [projectCommandsDir]: {},
-      [extensionDir]: {
-        'aether-extension.json': JSON.stringify(extensionConfig),
-        commands: {
-          'default.md': '---\n---\nDefault command',
-        },
-      },
+        expect(commands).toHaveLength(2);
+        const commandNames = commands.map((c) => c.name).sort();
+        expect(commandNames).toEqual(['cmd1', 'cmd2']);
+        expect(commands.every((c) => c.extensionName === 'multi-ext')).toBe(
+            true
+        );
     });
 
-    const mockConfig = {
-      getFolderTrustFeature: vi.fn(() => false),
-      getFolderTrust: vi.fn(() => true),
-      getProjectRoot: vi.fn(() => projectRoot),
-      storage: new Storage(projectRoot),
-      getExtensions: vi.fn(() => [
-        {
-          id: 'default-ext',
-          config: extensionConfig,
-          contextFiles: [],
-          name: 'default-ext',
-          version: '1.0.0',
-          isActive: true,
-          path: extensionDir,
-        },
-      ]),
-    } as unknown as Config;
+    it('should fallback to default "commands" directory when config.commands not specified', async () => {
+        const extensionDir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'default-ext'
+        );
 
-    const loader = new FileCommandLoader(mockConfig);
-    const commands = await loader.loadCommands(new AbortController().signal);
+        const extensionConfig = {
+            name: 'default-ext',
+            version: '1.0.0'
+        };
 
-    expect(commands).toHaveLength(1);
-    expect(commands[0].name).toBe('default');
-    expect(commands[0].extensionName).toBe('default-ext');
-  });
+        mock({
+            [userCommandsDir]: {},
+            [projectCommandsDir]: {},
+            [extensionDir]: {
+                'aether-extension.json': JSON.stringify(extensionConfig),
+                commands: {
+                    'default.md': '---\n---\nDefault command'
+                }
+            }
+        });
 
-  it('should handle extension without commands directory gracefully', async () => {
-    const extensionDir = path.join(
-      projectRoot,
-      '.aether',
-      'extensions',
-      'no-cmds-ext',
-    );
+        const mockConfig = {
+            getFolderTrustFeature: vi.fn(() => false),
+            getFolderTrust: vi.fn(() => true),
+            getProjectRoot: vi.fn(() => projectRoot),
+            storage: new Storage(projectRoot),
+            getExtensions: vi.fn(() => [
+                {
+                    id: 'default-ext',
+                    config: extensionConfig,
+                    contextFiles: [],
+                    name: 'default-ext',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: extensionDir
+                }
+            ])
+        } as unknown as Config;
 
-    const extensionConfig = {
-      name: 'no-cmds-ext',
-      version: '1.0.0',
-    };
+        const loader = new FileCommandLoader(mockConfig);
+        const commands = await loader.loadCommands(
+            new AbortController().signal
+        );
 
-    mock({
-      [userCommandsDir]: {},
-      [projectCommandsDir]: {},
-      [extensionDir]: {
-        'aether-extension.json': JSON.stringify(extensionConfig),
-        // No commands directory
-      },
+        expect(commands).toHaveLength(1);
+        expect(commands[0].name).toBe('default');
+        expect(commands[0].extensionName).toBe('default-ext');
     });
 
-    const mockConfig = {
-      getFolderTrustFeature: vi.fn(() => false),
-      getFolderTrust: vi.fn(() => true),
-      getProjectRoot: vi.fn(() => projectRoot),
-      storage: new Storage(projectRoot),
-      getExtensions: vi.fn(() => [
-        {
-          id: 'no-cmds-ext',
-          config: extensionConfig,
-          contextFiles: [],
-          name: 'no-cmds-ext',
-          version: '1.0.0',
-          isActive: true,
-          path: extensionDir,
-        },
-      ]),
-    } as unknown as Config;
+    it('should handle extension without commands directory gracefully', async () => {
+        const extensionDir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'no-cmds-ext'
+        );
 
-    const loader = new FileCommandLoader(mockConfig);
-    const commands = await loader.loadCommands(new AbortController().signal);
+        const extensionConfig = {
+            name: 'no-cmds-ext',
+            version: '1.0.0'
+        };
 
-    // Should not throw and return empty array
-    expect(commands).toHaveLength(0);
-  });
+        mock({
+            [userCommandsDir]: {},
+            [projectCommandsDir]: {},
+            [extensionDir]: {
+                'aether-extension.json': JSON.stringify(extensionConfig)
+                // No commands directory
+            }
+        });
 
-  it('should set extensionName property for extension commands', async () => {
-    const extensionDir = path.join(
-      projectRoot,
-      '.aether',
-      'extensions',
-      'prefix-ext',
-    );
+        const mockConfig = {
+            getFolderTrustFeature: vi.fn(() => false),
+            getFolderTrust: vi.fn(() => true),
+            getProjectRoot: vi.fn(() => projectRoot),
+            storage: new Storage(projectRoot),
+            getExtensions: vi.fn(() => [
+                {
+                    id: 'no-cmds-ext',
+                    config: extensionConfig,
+                    contextFiles: [],
+                    name: 'no-cmds-ext',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: extensionDir
+                }
+            ])
+        } as unknown as Config;
 
-    const extensionConfig = {
-      name: 'prefix-ext',
-      version: '1.0.0',
-    };
+        const loader = new FileCommandLoader(mockConfig);
+        const commands = await loader.loadCommands(
+            new AbortController().signal
+        );
 
-    mock({
-      [userCommandsDir]: {},
-      [projectCommandsDir]: {},
-      [extensionDir]: {
-        'aether-extension.json': JSON.stringify(extensionConfig),
-        commands: {
-          'mycommand.md': '---\n---\nMy command',
-        },
-      },
+        // Should not throw and return empty array
+        expect(commands).toHaveLength(0);
     });
 
-    const mockConfig = {
-      getFolderTrustFeature: vi.fn(() => false),
-      getFolderTrust: vi.fn(() => true),
-      getProjectRoot: vi.fn(() => projectRoot),
-      storage: new Storage(projectRoot),
-      getExtensions: vi.fn(() => [
-        {
-          id: 'prefix-ext',
-          config: extensionConfig,
-          contextFiles: [],
-          name: 'prefix-ext',
-          version: '1.0.0',
-          isActive: true,
-          path: extensionDir,
-        },
-      ]),
-    } as unknown as Config;
+    it('should set extensionName property for extension commands', async () => {
+        const extensionDir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'prefix-ext'
+        );
 
-    const loader = new FileCommandLoader(mockConfig);
-    const commands = await loader.loadCommands(new AbortController().signal);
+        const extensionConfig = {
+            name: 'prefix-ext',
+            version: '1.0.0'
+        };
 
-    expect(commands).toHaveLength(1);
-    expect(commands[0].name).toBe('mycommand');
-    expect(commands[0].extensionName).toBe('prefix-ext');
-    expect(commands[0].description).toMatch(/^\[prefix-ext\]/);
-  });
+        mock({
+            [userCommandsDir]: {},
+            [projectCommandsDir]: {},
+            [extensionDir]: {
+                'aether-extension.json': JSON.stringify(extensionConfig),
+                commands: {
+                    'mycommand.md': '---\n---\nMy command'
+                }
+            }
+        });
 
-  it('should load commands from multiple extensions in alphabetical order', async () => {
-    const ext1Dir = path.join(projectRoot, '.aether', 'extensions', 'ext-b');
-    const ext2Dir = path.join(projectRoot, '.aether', 'extensions', 'ext-a');
+        const mockConfig = {
+            getFolderTrustFeature: vi.fn(() => false),
+            getFolderTrust: vi.fn(() => true),
+            getProjectRoot: vi.fn(() => projectRoot),
+            storage: new Storage(projectRoot),
+            getExtensions: vi.fn(() => [
+                {
+                    id: 'prefix-ext',
+                    config: extensionConfig,
+                    contextFiles: [],
+                    name: 'prefix-ext',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: extensionDir
+                }
+            ])
+        } as unknown as Config;
 
-    mock({
-      [userCommandsDir]: {},
-      [projectCommandsDir]: {},
-      [ext1Dir]: {
-        'aether-extension.json': JSON.stringify({
-          name: 'ext-b',
-          version: '1.0.0',
-        }),
-        commands: {
-          'cmd.md': '---\n---\nCommand B',
-        },
-      },
-      [ext2Dir]: {
-        'aether-extension.json': JSON.stringify({
-          name: 'ext-a',
-          version: '1.0.0',
-        }),
-        commands: {
-          'cmd.md': '---\n---\nCommand A',
-        },
-      },
+        const loader = new FileCommandLoader(mockConfig);
+        const commands = await loader.loadCommands(
+            new AbortController().signal
+        );
+
+        expect(commands).toHaveLength(1);
+        expect(commands[0].name).toBe('mycommand');
+        expect(commands[0].extensionName).toBe('prefix-ext');
+        expect(commands[0].description).toMatch(/^\[prefix-ext\]/);
     });
 
-    const mockConfig = {
-      getFolderTrustFeature: vi.fn(() => false),
-      getFolderTrust: vi.fn(() => true),
-      getProjectRoot: vi.fn(() => projectRoot),
-      storage: new Storage(projectRoot),
-      getExtensions: vi.fn(() => [
-        {
-          id: 'ext-b',
-          config: { name: 'ext-b', version: '1.0.0' },
-          contextFiles: [],
-          name: 'ext-b',
-          version: '1.0.0',
-          isActive: true,
-          path: ext1Dir,
-        },
-        {
-          id: 'ext-a',
-          config: { name: 'ext-a', version: '1.0.0' },
-          contextFiles: [],
-          name: 'ext-a',
-          version: '1.0.0',
-          isActive: true,
-          path: ext2Dir,
-        },
-      ]),
-    } as unknown as Config;
+    it('should load commands from multiple extensions in alphabetical order', async () => {
+        const ext1Dir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'ext-b'
+        );
+        const ext2Dir = path.join(
+            projectRoot,
+            '.aether',
+            'extensions',
+            'ext-a'
+        );
 
-    const loader = new FileCommandLoader(mockConfig);
-    const commands = await loader.loadCommands(new AbortController().signal);
+        mock({
+            [userCommandsDir]: {},
+            [projectCommandsDir]: {},
+            [ext1Dir]: {
+                'aether-extension.json': JSON.stringify({
+                    name: 'ext-b',
+                    version: '1.0.0'
+                }),
+                commands: {
+                    'cmd.md': '---\n---\nCommand B'
+                }
+            },
+            [ext2Dir]: {
+                'aether-extension.json': JSON.stringify({
+                    name: 'ext-a',
+                    version: '1.0.0'
+                }),
+                commands: {
+                    'cmd.md': '---\n---\nCommand A'
+                }
+            }
+        });
 
-    expect(commands).toHaveLength(2);
-    // Extensions are sorted alphabetically, so ext-a comes before ext-b
-    expect(commands[0].extensionName).toBe('ext-a');
-    expect(commands[1].extensionName).toBe('ext-b');
-  });
+        const mockConfig = {
+            getFolderTrustFeature: vi.fn(() => false),
+            getFolderTrust: vi.fn(() => true),
+            getProjectRoot: vi.fn(() => projectRoot),
+            storage: new Storage(projectRoot),
+            getExtensions: vi.fn(() => [
+                {
+                    id: 'ext-b',
+                    config: { name: 'ext-b', version: '1.0.0' },
+                    contextFiles: [],
+                    name: 'ext-b',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: ext1Dir
+                },
+                {
+                    id: 'ext-a',
+                    config: { name: 'ext-a', version: '1.0.0' },
+                    contextFiles: [],
+                    name: 'ext-a',
+                    version: '1.0.0',
+                    isActive: true,
+                    path: ext2Dir
+                }
+            ])
+        } as unknown as Config;
+
+        const loader = new FileCommandLoader(mockConfig);
+        const commands = await loader.loadCommands(
+            new AbortController().signal
+        );
+
+        expect(commands).toHaveLength(2);
+        // Extensions are sorted alphabetically, so ext-a comes before ext-b
+        expect(commands[0].extensionName).toBe('ext-a');
+        expect(commands[1].extensionName).toBe('ext-b');
+    });
 });

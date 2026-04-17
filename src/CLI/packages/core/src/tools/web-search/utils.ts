@@ -15,14 +15,14 @@
  * @returns Combined content with sources
  */
 export function buildContentWithSources(
-  content: string,
-  sources: Array<{ title: string; url: string }>,
+    content: string,
+    sources: Array<{ title: string; url: string }>
 ): string {
-  if (!sources.length) return content;
-  const sourceList = sources
-    .map((s, i) => `[${i + 1}] ${s.title || 'Untitled'} (${s.url})`)
-    .join('\n');
-  return `${content}\n\nSources:\n${sourceList}`;
+    if (!sources.length) return content;
+    const sourceList = sources
+        .map((s, i) => `[${i + 1}] ${s.title || 'Untitled'} (${s.url})`)
+        .join('\n');
+    return `${content}\n\nSources:\n${sourceList}`;
 }
 
 /**
@@ -32,11 +32,11 @@ export function buildContentWithSources(
  * @returns Concise summary string
  */
 export function buildSummary(
-  sources: Array<{ title: string; url: string }>,
-  maxResults: number = 3,
+    sources: Array<{ title: string; url: string }>,
+    maxResults: number = 3
 ): string {
-  return sources
-    .slice(0, maxResults)
-    .map((s, i) => `${i + 1}. ${s.title} - ${s.url}`)
-    .join('\n');
+    return sources
+        .slice(0, maxResults)
+        .map((s, i) => `${i + 1}. ${s.title} - ${s.url}`)
+        .join('\n');
 }

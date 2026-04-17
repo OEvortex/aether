@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from './types.js';
-export * from './rule-parser.js';
-export { PermissionManager } from './permission-manager.js';
 export type { PermissionManagerConfig } from './permission-manager.js';
-export { extractShellOperations } from './shell-semantics.js';
+export { PermissionManager } from './permission-manager.js';
+export * from './rule-parser.js';
 export type { ShellOperation } from './shell-semantics.js';
+export { extractShellOperations } from './shell-semantics.js';
+export * from './types.js';

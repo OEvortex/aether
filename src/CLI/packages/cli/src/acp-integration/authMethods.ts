@@ -8,44 +8,48 @@ import { AuthType } from '@aetherai/aether-core';
 import type { AuthMethod } from '@agentclientprotocol/sdk';
 
 export function buildAuthMethods(): AuthMethod[] {
-  return [
-    {
-      id: AuthType.USE_OPENAI,
-      name: 'Use OpenAI API key',
-      description: 'Requires setting the `OPENAI_API_KEY` environment variable',
-      _meta: {
-        type: 'terminal',
-        args: ['--auth-type=openai'],
-      },
-    },
-    {
-      id: AuthType.AETHER_OAUTH,
-      name: 'Aether OAuth',
-      description:
-        'OAuth authentication for Aether models with free daily requests',
-      _meta: {
-        type: 'terminal',
-        args: ['--auth-type=aether-oauth'],
-      },
-    },
-  ];
+    return [
+        {
+            id: AuthType.USE_OPENAI,
+            name: 'Use OpenAI API key',
+            description:
+                'Requires setting the `OPENAI_API_KEY` environment variable',
+            _meta: {
+                type: 'terminal',
+                args: ['--auth-type=openai']
+            }
+        },
+        {
+            id: AuthType.AETHER_OAUTH,
+            name: 'Aether OAuth',
+            description:
+                'OAuth authentication for Aether models with free daily requests',
+            _meta: {
+                type: 'terminal',
+                args: ['--auth-type=aether-oauth']
+            }
+        }
+    ];
 }
 
 export function filterAuthMethodsById(
-  authMethods: AuthMethod[],
-  authMethodId: string,
+    authMethods: AuthMethod[],
+    authMethodId: string
 ): AuthMethod[] {
-  return authMethods.filter((method) => method.id === authMethodId);
+    return authMethods.filter((method) => method.id === authMethodId);
 }
 
 export function pickAuthMethodsForDetails(details?: string): AuthMethod[] {
-  const authMethods = buildAuthMethods();
-  if (!details) {
+    const authMethods = buildAuthMethods();
+    if (!details) {
+        return authMethods;
+    }
+    if (details.includes('aether-oauth') || details.includes('Aether OAuth')) {
+        const narrowed = filterAuthMethodsById(
+            authMethods,
+            AuthType.AETHER_OAUTH
+        );
+        return narrowed.length ? narrowed : authMethods;
+    }
     return authMethods;
-  }
-  if (details.includes('aether-oauth') || details.includes('Aether OAuth')) {
-    const narrowed = filterAuthMethodsById(authMethods, AuthType.AETHER_OAUTH);
-    return narrowed.length ? narrowed : authMethods;
-  }
-  return authMethods;
 }

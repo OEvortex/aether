@@ -4,48 +4,48 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type React from 'react';
 import { Box, Text } from 'ink';
-import { StatsDisplay } from './StatsDisplay.js';
-import { useSessionStats } from '../contexts/SessionContext.js';
-import { useConfig } from '../contexts/ConfigContext.js';
-import { theme } from '../semantic-colors.js';
+import type React from 'react';
 import { t } from '../../i18n/index.js';
+import { useConfig } from '../contexts/ConfigContext.js';
+import { useSessionStats } from '../contexts/SessionContext.js';
+import { theme } from '../semantic-colors.js';
+import { StatsDisplay } from './StatsDisplay.js';
 
 interface SessionSummaryDisplayProps {
-  duration: string;
-  width: number;
+    duration: string;
+    width: number;
 }
 
 export const SessionSummaryDisplay: React.FC<SessionSummaryDisplayProps> = ({
-  duration,
-  width,
+    duration,
+    width
 }) => {
-  const config = useConfig();
-  const { stats } = useSessionStats();
+    const config = useConfig();
+    const { stats } = useSessionStats();
 
-  // Only show the resume message if there were messages in the session AND
-  // chat recording is enabled (otherwise there is nothing to resume).
-  const hasMessages = stats.promptCount > 0;
-  const canResume = !!config.getChatRecordingService();
+    // Only show the resume message if there were messages in the session AND
+    // chat recording is enabled (otherwise there is nothing to resume).
+    const hasMessages = stats.promptCount > 0;
+    const canResume = !!config.getChatRecordingService();
 
-  return (
-    <>
-      <StatsDisplay
-        title={t('Agent powering down. Goodbye!')}
-        duration={duration}
-        width={width}
-      />
-      {hasMessages && canResume && (
-        <Box marginTop={1}>
-          <Text color={theme.text.secondary}>
-            {t('To continue this session, run')}{' '}
-            <Text color={theme.text.accent}>
-              aether --resume {stats.sessionId}
-            </Text>
-          </Text>
-        </Box>
-      )}
-    </>
-  );
+    return (
+        <>
+            <StatsDisplay
+                title={t('Agent powering down. Goodbye!')}
+                duration={duration}
+                width={width}
+            />
+            {hasMessages && canResume && (
+                <Box marginTop={1}>
+                    <Text color={theme.text.secondary}>
+                        {t('To continue this session, run')}{' '}
+                        <Text color={theme.text.accent}>
+                            aether --resume {stats.sessionId}
+                        </Text>
+                    </Text>
+                </Box>
+            )}
+        </>
+    );
 };

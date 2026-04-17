@@ -5,34 +5,34 @@
  */
 
 import type {
-  Config,
-  ToolResultDisplay,
-  AgentResultDisplay,
-  OutputUpdateHandler,
-  ToolCallRequestInfo,
-  ToolCallResponseInfo,
-  SessionMetrics,
-  McpToolProgressData,
+    AgentResultDisplay,
+    Config,
+    McpToolProgressData,
+    OutputUpdateHandler,
+    SessionMetrics,
+    ToolCallRequestInfo,
+    ToolCallResponseInfo,
+    ToolResultDisplay
 } from '@aetherai/aether-core';
 import {
-  OutputFormat,
-  ToolErrorType,
-  createDebugLogger,
-  getMCPServerStatus,
+    createDebugLogger,
+    getMCPServerStatus,
+    OutputFormat,
+    ToolErrorType
 } from '@aetherai/aether-core';
 import type { Part, PartListUnion } from '@google/genai';
 import type {
-  CLIUserMessage,
-  Usage,
-  PermissionMode,
-  CLISystemMessage,
-} from '../nonInteractive/types.js';
-import type {
-  JsonOutputAdapterInterface,
-  MessageEmitter,
+    JsonOutputAdapterInterface,
+    MessageEmitter
 } from '../nonInteractive/io/BaseJsonOutputAdapter.js';
-import { computeSessionStats } from '../ui/utils/computeStats.js';
+import type {
+    CLISystemMessage,
+    CLIUserMessage,
+    PermissionMode,
+    Usage
+} from '../nonInteractive/types.js';
 import { getAvailableCommands } from '../nonInteractiveCliCommands.js';
+import { computeSessionStats } from '../ui/utils/computeStats.js';
 
 const debugLogger = createDebugLogger('NON_INTERACTIVE');
 
@@ -43,21 +43,21 @@ const debugLogger = createDebugLogger('NON_INTERACTIVE');
  * @returns Normalized array of Part objects
  */
 export function normalizePartList(parts: PartListUnion | null): Part[] {
-  if (!parts) {
-    return [];
-  }
+    if (!parts) {
+        return [];
+    }
 
-  if (typeof parts === 'string') {
-    return [{ text: parts }];
-  }
+    if (typeof parts === 'string') {
+        return [{ text: parts }];
+    }
 
-  if (Array.isArray(parts)) {
-    return parts.map((part) =>
-      typeof part === 'string' ? { text: part } : (part as Part),
-    );
-  }
+    if (Array.isArray(parts)) {
+        return parts.map((part) =>
+            typeof part === 'string' ? { text: part } : (part as Part)
+        );
+    }
 
-  return [parts as Part];
+    return [parts as Part];
 }
 
 /**
@@ -67,33 +67,33 @@ export function normalizePartList(parts: PartListUnion | null): Part[] {
  * @returns Extracted parts or null if the message lacks textual content
  */
 export function extractPartsFromUserMessage(
-  message: CLIUserMessage | undefined,
+    message: CLIUserMessage | undefined
 ): PartListUnion | null {
-  if (!message) {
-    return null;
-  }
-
-  const content = message.message?.content;
-  if (typeof content === 'string') {
-    return content;
-  }
-
-  if (Array.isArray(content)) {
-    const parts: Part[] = [];
-    for (const block of content) {
-      if (!block || typeof block !== 'object' || !('type' in block)) {
-        continue;
-      }
-      if (block.type === 'text' && 'text' in block && block.text) {
-        parts.push({ text: block.text });
-      } else {
-        parts.push({ text: JSON.stringify(block) });
-      }
+    if (!message) {
+        return null;
     }
-    return parts.length > 0 ? parts : null;
-  }
 
-  return null;
+    const content = message.message?.content;
+    if (typeof content === 'string') {
+        return content;
+    }
+
+    if (Array.isArray(content)) {
+        const parts: Part[] = [];
+        for (const block of content) {
+            if (!block || typeof block !== 'object' || !('type' in block)) {
+                continue;
+            }
+            if (block.type === 'text' && 'text' in block && block.text) {
+                parts.push({ text: block.text });
+            } else {
+                parts.push({ text: JSON.stringify(block) });
+            }
+        }
+        return parts.length > 0 ? parts : null;
+    }
+
+    return null;
 }
 
 /**
@@ -103,58 +103,65 @@ export function extractPartsFromUserMessage(
  * @returns Usage information or undefined if not available
  */
 export function extractUsageFromGeminiClient(
-  geminiClient: unknown,
+    geminiClient: unknown
 ): Usage | undefined {
-  if (
-    !geminiClient ||
-    typeof geminiClient !== 'object' ||
-    typeof (geminiClient as { getChat?: unknown }).getChat !== 'function'
-  ) {
-    return undefined;
-  }
-
-  try {
-    const chat = (geminiClient as { getChat: () => unknown }).getChat();
     if (
-      !chat ||
-      typeof chat !== 'object' ||
-      typeof (chat as { getDebugResponses?: unknown }).getDebugResponses !==
-        'function'
+        !geminiClient ||
+        typeof geminiClient !== 'object' ||
+        typeof (geminiClient as { getChat?: unknown }).getChat !== 'function'
     ) {
-      return undefined;
+        return undefined;
     }
 
-    const responses = (
-      chat as {
-        getDebugResponses: () => Array<Record<string, unknown>>;
-      }
-    ).getDebugResponses();
-    for (let i = responses.length - 1; i >= 0; i--) {
-      const metadata = responses[i]?.['usageMetadata'] as
-        | Record<string, unknown>
-        | undefined;
-      if (metadata) {
-        const promptTokens = metadata['promptTokenCount'];
-        const completionTokens = metadata['candidatesTokenCount'];
-        const totalTokens = metadata['totalTokenCount'];
-        const cachedTokens = metadata['cachedContentTokenCount'];
+    try {
+        const chat = (geminiClient as { getChat: () => unknown }).getChat();
+        if (
+            !chat ||
+            typeof chat !== 'object' ||
+            typeof (chat as { getDebugResponses?: unknown })
+                .getDebugResponses !== 'function'
+        ) {
+            return undefined;
+        }
 
-        return {
-          input_tokens: typeof promptTokens === 'number' ? promptTokens : 0,
-          output_tokens:
-            typeof completionTokens === 'number' ? completionTokens : 0,
-          total_tokens:
-            typeof totalTokens === 'number' ? totalTokens : undefined,
-          cache_read_input_tokens:
-            typeof cachedTokens === 'number' ? cachedTokens : undefined,
-        };
-      }
+        const responses = (
+            chat as {
+                getDebugResponses: () => Array<Record<string, unknown>>;
+            }
+        ).getDebugResponses();
+        for (let i = responses.length - 1; i >= 0; i--) {
+            const metadata = responses[i]?.['usageMetadata'] as
+                | Record<string, unknown>
+                | undefined;
+            if (metadata) {
+                const promptTokens = metadata['promptTokenCount'];
+                const completionTokens = metadata['candidatesTokenCount'];
+                const totalTokens = metadata['totalTokenCount'];
+                const cachedTokens = metadata['cachedContentTokenCount'];
+
+                return {
+                    input_tokens:
+                        typeof promptTokens === 'number' ? promptTokens : 0,
+                    output_tokens:
+                        typeof completionTokens === 'number'
+                            ? completionTokens
+                            : 0,
+                    total_tokens:
+                        typeof totalTokens === 'number'
+                            ? totalTokens
+                            : undefined,
+                    cache_read_input_tokens:
+                        typeof cachedTokens === 'number'
+                            ? cachedTokens
+                            : undefined
+                };
+            }
+        }
+    } catch (error) {
+        debugLogger.debug('Failed to extract usage metadata:', error);
     }
-  } catch (error) {
-    debugLogger.debug('Failed to extract usage metadata:', error);
-  }
 
-  return undefined;
+    return undefined;
 }
 
 /**
@@ -165,31 +172,31 @@ export function extractUsageFromGeminiClient(
  * @returns Usage object with token counts
  */
 export function computeUsageFromMetrics(metrics: SessionMetrics): Usage {
-  const stats = computeSessionStats(metrics);
-  const { models } = metrics;
+    const stats = computeSessionStats(metrics);
+    const { models } = metrics;
 
-  // Sum up output tokens (candidates) and total tokens across all models
-  const totalOutputTokens = Object.values(models).reduce(
-    (acc, model) => acc + model.tokens.candidates,
-    0,
-  );
-  const totalTokens = Object.values(models).reduce(
-    (acc, model) => acc + model.tokens.total,
-    0,
-  );
+    // Sum up output tokens (candidates) and total tokens across all models
+    const totalOutputTokens = Object.values(models).reduce(
+        (acc, model) => acc + model.tokens.candidates,
+        0
+    );
+    const totalTokens = Object.values(models).reduce(
+        (acc, model) => acc + model.tokens.total,
+        0
+    );
 
-  const usage: Usage = {
-    input_tokens: stats.totalPromptTokens,
-    output_tokens: totalOutputTokens,
-    cache_read_input_tokens: stats.totalCachedTokens,
-  };
+    const usage: Usage = {
+        input_tokens: stats.totalPromptTokens,
+        output_tokens: totalOutputTokens,
+        cache_read_input_tokens: stats.totalCachedTokens
+    };
 
-  // Only include total_tokens if it's greater than 0
-  if (totalTokens > 0) {
-    usage.total_tokens = totalTokens;
-  }
+    // Only include total_tokens if it's greater than 0
+    if (totalTokens > 0) {
+        usage.total_tokens = totalTokens;
+    }
 
-  return usage;
+    return usage;
 }
 
 /**
@@ -201,28 +208,28 @@ export function computeUsageFromMetrics(metrics: SessionMetrics): Usage {
  * @returns Promise resolving to array of slash command names
  */
 async function loadSlashCommandNames(
-  config: Config,
-  allowedBuiltinCommandNames?: string[],
+    config: Config,
+    allowedBuiltinCommandNames?: string[]
 ): Promise<string[]> {
-  const controller = new AbortController();
-  try {
-    const commands = await getAvailableCommands(
-      config,
-      controller.signal,
-      allowedBuiltinCommandNames,
-    );
+    const controller = new AbortController();
+    try {
+        const commands = await getAvailableCommands(
+            config,
+            controller.signal,
+            allowedBuiltinCommandNames
+        );
 
-    // Extract command names and sort
-    return commands.map((cmd) => cmd.name).sort();
-  } catch (error) {
-    debugLogger.error(
-      '[buildSystemMessage] Failed to load slash commands:',
-      error,
-    );
-    return [];
-  } finally {
-    controller.abort();
-  }
+        // Extract command names and sort
+        return commands.map((cmd) => cmd.name).sort();
+    } catch (error) {
+        debugLogger.error(
+            '[buildSystemMessage] Failed to load slash commands:',
+            error
+        );
+        return [];
+    } finally {
+        controller.abort();
+    }
 }
 
 /**
@@ -245,65 +252,68 @@ async function loadSlashCommandNames(
  * @returns Promise resolving to CLISystemMessage
  */
 export async function buildSystemMessage(
-  config: Config,
-  sessionId: string,
-  permissionMode: PermissionMode,
-  allowedBuiltinCommandNames?: string[],
+    config: Config,
+    sessionId: string,
+    permissionMode: PermissionMode,
+    allowedBuiltinCommandNames?: string[]
 ): Promise<CLISystemMessage> {
-  const toolRegistry = config.getToolRegistry();
-  const tools = toolRegistry ? toolRegistry.getAllToolNames() : [];
+    const toolRegistry = config.getToolRegistry();
+    const tools = toolRegistry ? toolRegistry.getAllToolNames() : [];
 
-  const mcpServers = config.getMcpServers();
-  const mcpServerList = mcpServers
-    ? Object.keys(mcpServers).map((name) => ({
-        name,
-        status: getMCPServerStatus(name),
-      }))
-    : [];
+    const mcpServers = config.getMcpServers();
+    const mcpServerList = mcpServers
+        ? Object.keys(mcpServers).map((name) => ({
+              name,
+              status: getMCPServerStatus(name)
+          }))
+        : [];
 
-  // Load slash commands with filtering based on allowed built-in commands
-  const slashCommands = await loadSlashCommandNames(
-    config,
-    allowedBuiltinCommandNames,
-  );
+    // Load slash commands with filtering based on allowed built-in commands
+    const slashCommands = await loadSlashCommandNames(
+        config,
+        allowedBuiltinCommandNames
+    );
 
-  // Load subagent names from config
-  let agentNames: string[] = [];
-  try {
-    const subagentManager = config.getSubagentManager();
-    const subagents = await subagentManager.listSubagents();
-    agentNames = subagents.map((subagent) => subagent.name);
-  } catch (error) {
-    debugLogger.error('[buildSystemMessage] Failed to load subagents:', error);
-  }
+    // Load subagent names from config
+    let agentNames: string[] = [];
+    try {
+        const subagentManager = config.getSubagentManager();
+        const subagents = await subagentManager.listSubagents();
+        agentNames = subagents.map((subagent) => subagent.name);
+    } catch (error) {
+        debugLogger.error(
+            '[buildSystemMessage] Failed to load subagents:',
+            error
+        );
+    }
 
-  const systemMessage: CLISystemMessage = {
-    type: 'system',
-    subtype: 'init',
-    uuid: sessionId,
-    session_id: sessionId,
-    cwd: config.getTargetDir(),
-    tools,
-    mcp_servers: mcpServerList,
-    model: config.getModel(),
-    permission_mode: permissionMode,
-    slash_commands: slashCommands,
-    aether_cli_version: config.getCliVersion() || 'unknown',
-    agents: agentNames,
-  };
+    const systemMessage: CLISystemMessage = {
+        type: 'system',
+        subtype: 'init',
+        uuid: sessionId,
+        session_id: sessionId,
+        cwd: config.getTargetDir(),
+        tools,
+        mcp_servers: mcpServerList,
+        model: config.getModel(),
+        permission_mode: permissionMode,
+        slash_commands: slashCommands,
+        aether_cli_version: config.getCliVersion() || 'unknown',
+        agents: agentNames
+    };
 
-  return systemMessage;
+    return systemMessage;
 }
 
 function isMcpToolProgressData(
-  output: ToolResultDisplay,
+    output: ToolResultDisplay
 ): output is McpToolProgressData {
-  return (
-    typeof output === 'object' &&
-    output !== null &&
-    'type' in output &&
-    (output as McpToolProgressData).type === 'mcp_tool_progress'
-  );
+    return (
+        typeof output === 'object' &&
+        output !== null &&
+        'type' in output &&
+        (output as McpToolProgressData).type === 'mcp_tool_progress'
+    );
 }
 
 /**
@@ -317,21 +327,21 @@ function isMcpToolProgressData(
  * @returns An object containing the output update handler
  */
 export function createToolProgressHandler(
-  request: ToolCallRequestInfo,
-  adapter: MessageEmitter,
+    request: ToolCallRequestInfo,
+    adapter: MessageEmitter
 ): {
-  handler: OutputUpdateHandler;
+    handler: OutputUpdateHandler;
 } {
-  const handler: OutputUpdateHandler = (
-    _callId: string,
-    output: ToolResultDisplay,
-  ) => {
-    if (isMcpToolProgressData(output)) {
-      adapter.emitToolProgress(request, output);
-    }
-  };
+    const handler: OutputUpdateHandler = (
+        _callId: string,
+        output: ToolResultDisplay
+    ) => {
+        if (isMcpToolProgressData(output)) {
+            adapter.emitToolProgress(request, output);
+        }
+    };
 
-  return { handler };
+    return { handler };
 }
 
 /**
@@ -346,275 +356,285 @@ export function createToolProgressHandler(
  * @returns An object containing the output update handler
  */
 export function createAgentToolProgressHandler(
-  config: Config,
-  agentToolCallId: string,
-  adapter: JsonOutputAdapterInterface,
+    config: Config,
+    agentToolCallId: string,
+    adapter: JsonOutputAdapterInterface
 ): {
-  handler: OutputUpdateHandler;
+    handler: OutputUpdateHandler;
 } {
-  // Track previous AgentResultDisplay states per tool call to detect changes
-  const previousTaskStates = new Map<string, AgentResultDisplay>();
-  // Track which tool call IDs have already emitted tool_use to prevent duplicates
-  const emittedToolUseIds = new Set<string>();
-  // Track which tool call IDs have already emitted tool_result to prevent duplicates
-  const emittedToolResultIds = new Set<string>();
+    // Track previous AgentResultDisplay states per tool call to detect changes
+    const previousTaskStates = new Map<string, AgentResultDisplay>();
+    // Track which tool call IDs have already emitted tool_use to prevent duplicates
+    const emittedToolUseIds = new Set<string>();
+    // Track which tool call IDs have already emitted tool_result to prevent duplicates
+    const emittedToolResultIds = new Set<string>();
 
-  /**
-   * Builds a ToolCallRequestInfo object from a tool call.
-   *
-   * @param toolCall - The tool call information
-   * @returns ToolCallRequestInfo object
-   */
-  const buildRequest = (
-    toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
-  ): ToolCallRequestInfo => ({
-    callId: toolCall.callId,
-    name: toolCall.name,
-    args: toolCall.args || {},
-    isClientInitiated: true,
-    prompt_id: '',
-    response_id: undefined,
-  });
+    /**
+     * Builds a ToolCallRequestInfo object from a tool call.
+     *
+     * @param toolCall - The tool call information
+     * @returns ToolCallRequestInfo object
+     */
+    const buildRequest = (
+        toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number]
+    ): ToolCallRequestInfo => ({
+        callId: toolCall.callId,
+        name: toolCall.name,
+        args: toolCall.args || {},
+        isClientInitiated: true,
+        prompt_id: '',
+        response_id: undefined
+    });
 
-  /**
-   * Builds a ToolCallResponseInfo object from a tool call.
-   *
-   * @param toolCall - The tool call information
-   * @returns ToolCallResponseInfo object
-   */
-  const buildResponse = (
-    toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
-  ): ToolCallResponseInfo => ({
-    callId: toolCall.callId,
-    error:
-      toolCall.status === 'failed'
-        ? new Error(toolCall.error || 'Tool execution failed')
-        : undefined,
-    errorType:
-      toolCall.status === 'failed' ? ToolErrorType.EXECUTION_FAILED : undefined,
-    resultDisplay: toolCall.resultDisplay,
-    responseParts: toolCall.responseParts || [],
-  });
+    /**
+     * Builds a ToolCallResponseInfo object from a tool call.
+     *
+     * @param toolCall - The tool call information
+     * @returns ToolCallResponseInfo object
+     */
+    const buildResponse = (
+        toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number]
+    ): ToolCallResponseInfo => ({
+        callId: toolCall.callId,
+        error:
+            toolCall.status === 'failed'
+                ? new Error(toolCall.error || 'Tool execution failed')
+                : undefined,
+        errorType:
+            toolCall.status === 'failed'
+                ? ToolErrorType.EXECUTION_FAILED
+                : undefined,
+        resultDisplay: toolCall.resultDisplay,
+        responseParts: toolCall.responseParts || []
+    });
 
-  /**
-   * Checks if a tool call has result content that should be emitted.
-   *
-   * @param toolCall - The tool call information
-   * @returns True if the tool call has result content to emit
-   */
-  const hasResultContent = (
-    toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
-  ): boolean => {
-    // Check resultDisplay string
-    if (
-      typeof toolCall.resultDisplay === 'string' &&
-      toolCall.resultDisplay.trim().length > 0
-    ) {
-      return true;
-    }
-
-    // Check responseParts - only check existence, don't parse for performance
-    if (toolCall.responseParts && toolCall.responseParts.length > 0) {
-      return true;
-    }
-
-    // Failed status should always emit result
-    return toolCall.status === 'failed';
-  };
-
-  /**
-   * Emits tool_use for a tool call if it hasn't been emitted yet.
-   *
-   * @param toolCall - The tool call information
-   * @param fallbackStatus - Optional fallback status if toolCall.status should be overridden
-   */
-  const emitToolUseIfNeeded = (
-    toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
-    fallbackStatus?: 'executing' | 'awaiting_approval',
-  ): void => {
-    if (emittedToolUseIds.has(toolCall.callId)) {
-      return;
-    }
-
-    const toolCallToEmit: NonNullable<AgentResultDisplay['toolCalls']>[number] =
-      fallbackStatus
-        ? {
-            ...toolCall,
-            status: fallbackStatus,
-          }
-        : toolCall;
-
-    if (
-      toolCallToEmit.status === 'executing' ||
-      toolCallToEmit.status === 'awaiting_approval'
-    ) {
-      if (adapter.processSubagentToolCall) {
-        adapter.processSubagentToolCall(toolCallToEmit, agentToolCallId);
-        emittedToolUseIds.add(toolCall.callId);
-      }
-    }
-  };
-
-  /**
-   * Emits tool_result for a tool call if it hasn't been emitted yet and has content.
-   *
-   * @param toolCall - The tool call information
-   */
-  const emitToolResultIfNeeded = (
-    toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
-  ): void => {
-    if (emittedToolResultIds.has(toolCall.callId)) {
-      return;
-    }
-
-    if (!hasResultContent(toolCall)) {
-      return;
-    }
-
-    // Mark as emitted even if we skip, to prevent duplicate emits
-    emittedToolResultIds.add(toolCall.callId);
-
-    const request = buildRequest(toolCall);
-    const response = buildResponse(toolCall);
-    // For subagent tool results, we need to pass parentToolUseId
-    // The adapter implementations accept an optional parentToolUseId parameter
-    if (
-      'emitToolResult' in adapter &&
-      typeof adapter.emitToolResult === 'function'
-    ) {
-      adapter.emitToolResult(request, response, agentToolCallId);
-    } else {
-      adapter.emitToolResult(request, response);
-    }
-  };
-
-  /**
-   * Processes a tool call, ensuring tool_use and tool_result are emitted exactly once.
-   *
-   * @param toolCall - The tool call information
-   * @param previousCall - The previous state of the tool call (if any)
-   */
-  const processToolCall = (
-    toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
-    previousCall?: NonNullable<AgentResultDisplay['toolCalls']>[number],
-  ): void => {
-    const isCompleted =
-      toolCall.status === 'success' || toolCall.status === 'failed';
-    const isExecuting =
-      toolCall.status === 'executing' ||
-      toolCall.status === 'awaiting_approval';
-    const wasExecuting =
-      previousCall &&
-      (previousCall.status === 'executing' ||
-        previousCall.status === 'awaiting_approval');
-
-    // Emit tool_use if needed
-    if (isExecuting) {
-      // Normal case: tool call is executing or awaiting approval
-      emitToolUseIfNeeded(toolCall);
-    } else if (isCompleted && !emittedToolUseIds.has(toolCall.callId)) {
-      // Edge case: tool call appeared with result already (shouldn't happen normally,
-      // but handle it gracefully by emitting tool_use with 'executing' status first)
-      emitToolUseIfNeeded(toolCall, 'executing');
-    } else if (wasExecuting && isCompleted) {
-      // Status changed from executing to completed - ensure tool_use was emitted
-      emitToolUseIfNeeded(toolCall, 'executing');
-    }
-
-    // Emit tool_result if tool call is completed
-    if (isCompleted) {
-      emitToolResultIfNeeded(toolCall);
-    }
-  };
-
-  const outputUpdateHandler = (
-    callId: string,
-    outputChunk: ToolResultDisplay,
-  ) => {
-    // Only process AgentResultDisplay (Task tool updates)
-    if (
-      typeof outputChunk === 'object' &&
-      outputChunk !== null &&
-      'type' in outputChunk &&
-      outputChunk.type === 'task_execution'
-    ) {
-      const taskDisplay = outputChunk as AgentResultDisplay;
-      const previous = previousTaskStates.get(callId);
-
-      // Only process if adapter supports subagent APIs
-      if (
-        !adapter.processSubagentToolCall ||
-        !adapter.emitSubagentErrorResult
-      ) {
-        previousTaskStates.set(callId, taskDisplay);
-        return;
-      }
-
-      if (taskDisplay.toolCalls) {
-        if (!previous || !previous.toolCalls) {
-          // First time seeing tool calls - process all initial ones
-          for (const toolCall of taskDisplay.toolCalls) {
-            processToolCall(toolCall);
-          }
-        } else {
-          // Compare with previous state to find new/changed tool calls
-          for (const toolCall of taskDisplay.toolCalls) {
-            const previousCall = previous.toolCalls.find(
-              (tc) => tc.callId === toolCall.callId,
-            );
-            processToolCall(toolCall, previousCall);
-          }
-        }
-      }
-
-      // Handle task-level errors (status: 'failed', 'cancelled')
-      if (
-        taskDisplay.status === 'failed' ||
-        taskDisplay.status === 'cancelled'
-      ) {
-        const previousStatus = previous?.status;
-        // Only emit error result if status changed to failed/cancelled
+    /**
+     * Checks if a tool call has result content that should be emitted.
+     *
+     * @param toolCall - The tool call information
+     * @returns True if the tool call has result content to emit
+     */
+    const hasResultContent = (
+        toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number]
+    ): boolean => {
+        // Check resultDisplay string
         if (
-          previousStatus !== 'failed' &&
-          previousStatus !== 'cancelled' &&
-          previousStatus !== undefined
+            typeof toolCall.resultDisplay === 'string' &&
+            toolCall.resultDisplay.trim().length > 0
         ) {
-          const errorMessage =
-            taskDisplay.terminateReason ||
-            (taskDisplay.status === 'cancelled'
-              ? 'Task was cancelled'
-              : 'Task execution failed');
-          // Use subagent adapter's emitSubagentErrorResult method
-          adapter.emitSubagentErrorResult(errorMessage, 0, agentToolCallId);
+            return true;
         }
-      }
 
-      // Handle subagent initial message (prompt) in non-interactive mode with json/stream-json output
-      // Emit when this is the first update (previous is undefined) and task starts
-      if (
-        !previous &&
-        taskDisplay.taskPrompt &&
-        !config.isInteractive() &&
-        (config.getOutputFormat() === OutputFormat.JSON ||
-          config.getOutputFormat() === OutputFormat.STREAM_JSON)
-      ) {
-        // Emit the user message with the correct parent_tool_use_id
-        adapter.emitUserMessage(
-          [{ text: taskDisplay.taskPrompt }],
-          agentToolCallId,
-        );
-      }
+        // Check responseParts - only check existence, don't parse for performance
+        if (toolCall.responseParts && toolCall.responseParts.length > 0) {
+            return true;
+        }
 
-      // Update previous state
-      previousTaskStates.set(callId, taskDisplay);
-    }
-  };
+        // Failed status should always emit result
+        return toolCall.status === 'failed';
+    };
 
-  // No longer need to attach adapter to handler - task.ts uses AgentResultDisplay.message instead
+    /**
+     * Emits tool_use for a tool call if it hasn't been emitted yet.
+     *
+     * @param toolCall - The tool call information
+     * @param fallbackStatus - Optional fallback status if toolCall.status should be overridden
+     */
+    const emitToolUseIfNeeded = (
+        toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
+        fallbackStatus?: 'executing' | 'awaiting_approval'
+    ): void => {
+        if (emittedToolUseIds.has(toolCall.callId)) {
+            return;
+        }
 
-  return {
-    handler: outputUpdateHandler,
-  };
+        const toolCallToEmit: NonNullable<
+            AgentResultDisplay['toolCalls']
+        >[number] = fallbackStatus
+            ? {
+                  ...toolCall,
+                  status: fallbackStatus
+              }
+            : toolCall;
+
+        if (
+            toolCallToEmit.status === 'executing' ||
+            toolCallToEmit.status === 'awaiting_approval'
+        ) {
+            if (adapter.processSubagentToolCall) {
+                adapter.processSubagentToolCall(
+                    toolCallToEmit,
+                    agentToolCallId
+                );
+                emittedToolUseIds.add(toolCall.callId);
+            }
+        }
+    };
+
+    /**
+     * Emits tool_result for a tool call if it hasn't been emitted yet and has content.
+     *
+     * @param toolCall - The tool call information
+     */
+    const emitToolResultIfNeeded = (
+        toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number]
+    ): void => {
+        if (emittedToolResultIds.has(toolCall.callId)) {
+            return;
+        }
+
+        if (!hasResultContent(toolCall)) {
+            return;
+        }
+
+        // Mark as emitted even if we skip, to prevent duplicate emits
+        emittedToolResultIds.add(toolCall.callId);
+
+        const request = buildRequest(toolCall);
+        const response = buildResponse(toolCall);
+        // For subagent tool results, we need to pass parentToolUseId
+        // The adapter implementations accept an optional parentToolUseId parameter
+        if (
+            'emitToolResult' in adapter &&
+            typeof adapter.emitToolResult === 'function'
+        ) {
+            adapter.emitToolResult(request, response, agentToolCallId);
+        } else {
+            adapter.emitToolResult(request, response);
+        }
+    };
+
+    /**
+     * Processes a tool call, ensuring tool_use and tool_result are emitted exactly once.
+     *
+     * @param toolCall - The tool call information
+     * @param previousCall - The previous state of the tool call (if any)
+     */
+    const processToolCall = (
+        toolCall: NonNullable<AgentResultDisplay['toolCalls']>[number],
+        previousCall?: NonNullable<AgentResultDisplay['toolCalls']>[number]
+    ): void => {
+        const isCompleted =
+            toolCall.status === 'success' || toolCall.status === 'failed';
+        const isExecuting =
+            toolCall.status === 'executing' ||
+            toolCall.status === 'awaiting_approval';
+        const wasExecuting =
+            previousCall &&
+            (previousCall.status === 'executing' ||
+                previousCall.status === 'awaiting_approval');
+
+        // Emit tool_use if needed
+        if (isExecuting) {
+            // Normal case: tool call is executing or awaiting approval
+            emitToolUseIfNeeded(toolCall);
+        } else if (isCompleted && !emittedToolUseIds.has(toolCall.callId)) {
+            // Edge case: tool call appeared with result already (shouldn't happen normally,
+            // but handle it gracefully by emitting tool_use with 'executing' status first)
+            emitToolUseIfNeeded(toolCall, 'executing');
+        } else if (wasExecuting && isCompleted) {
+            // Status changed from executing to completed - ensure tool_use was emitted
+            emitToolUseIfNeeded(toolCall, 'executing');
+        }
+
+        // Emit tool_result if tool call is completed
+        if (isCompleted) {
+            emitToolResultIfNeeded(toolCall);
+        }
+    };
+
+    const outputUpdateHandler = (
+        callId: string,
+        outputChunk: ToolResultDisplay
+    ) => {
+        // Only process AgentResultDisplay (Task tool updates)
+        if (
+            typeof outputChunk === 'object' &&
+            outputChunk !== null &&
+            'type' in outputChunk &&
+            outputChunk.type === 'task_execution'
+        ) {
+            const taskDisplay = outputChunk as AgentResultDisplay;
+            const previous = previousTaskStates.get(callId);
+
+            // Only process if adapter supports subagent APIs
+            if (
+                !adapter.processSubagentToolCall ||
+                !adapter.emitSubagentErrorResult
+            ) {
+                previousTaskStates.set(callId, taskDisplay);
+                return;
+            }
+
+            if (taskDisplay.toolCalls) {
+                if (!previous || !previous.toolCalls) {
+                    // First time seeing tool calls - process all initial ones
+                    for (const toolCall of taskDisplay.toolCalls) {
+                        processToolCall(toolCall);
+                    }
+                } else {
+                    // Compare with previous state to find new/changed tool calls
+                    for (const toolCall of taskDisplay.toolCalls) {
+                        const previousCall = previous.toolCalls.find(
+                            (tc) => tc.callId === toolCall.callId
+                        );
+                        processToolCall(toolCall, previousCall);
+                    }
+                }
+            }
+
+            // Handle task-level errors (status: 'failed', 'cancelled')
+            if (
+                taskDisplay.status === 'failed' ||
+                taskDisplay.status === 'cancelled'
+            ) {
+                const previousStatus = previous?.status;
+                // Only emit error result if status changed to failed/cancelled
+                if (
+                    previousStatus !== 'failed' &&
+                    previousStatus !== 'cancelled' &&
+                    previousStatus !== undefined
+                ) {
+                    const errorMessage =
+                        taskDisplay.terminateReason ||
+                        (taskDisplay.status === 'cancelled'
+                            ? 'Task was cancelled'
+                            : 'Task execution failed');
+                    // Use subagent adapter's emitSubagentErrorResult method
+                    adapter.emitSubagentErrorResult(
+                        errorMessage,
+                        0,
+                        agentToolCallId
+                    );
+                }
+            }
+
+            // Handle subagent initial message (prompt) in non-interactive mode with json/stream-json output
+            // Emit when this is the first update (previous is undefined) and task starts
+            if (
+                !previous &&
+                taskDisplay.taskPrompt &&
+                !config.isInteractive() &&
+                (config.getOutputFormat() === OutputFormat.JSON ||
+                    config.getOutputFormat() === OutputFormat.STREAM_JSON)
+            ) {
+                // Emit the user message with the correct parent_tool_use_id
+                adapter.emitUserMessage(
+                    [{ text: taskDisplay.taskPrompt }],
+                    agentToolCallId
+                );
+            }
+
+            // Update previous state
+            previousTaskStates.set(callId, taskDisplay);
+        }
+    };
+
+    // No longer need to attach adapter to handler - task.ts uses AgentResultDisplay.message instead
+
+    return {
+        handler: outputUpdateHandler
+    };
 }
 
 /**
@@ -625,15 +645,16 @@ export function createAgentToolProgressHandler(
  * @returns String representation of the parts
  */
 export function functionResponsePartsToString(parts: Part[]): string {
-  return parts
-    .map((part) => {
-      if ('functionResponse' in part) {
-        const content = part.functionResponse?.response?.['output'] ?? '';
-        return content;
-      }
-      return JSON.stringify(part);
-    })
-    .join('');
+    return parts
+        .map((part) => {
+            if ('functionResponse' in part) {
+                const content =
+                    part.functionResponse?.response?.['output'] ?? '';
+                return content;
+            }
+            return JSON.stringify(part);
+        })
+        .join('');
 }
 
 /**
@@ -646,21 +667,21 @@ export function functionResponsePartsToString(parts: Part[]): string {
  * @returns String content for the tool_result block, or undefined if no content available
  */
 export function toolResultContent(
-  response: ToolCallResponseInfo,
+    response: ToolCallResponseInfo
 ): string | undefined {
-  if (
-    typeof response.resultDisplay === 'string' &&
-    response.resultDisplay.trim().length > 0
-  ) {
-    return response.resultDisplay;
-  }
-  if (response.responseParts && response.responseParts.length > 0) {
-    // Always use functionResponsePartsToString to properly handle
-    // functionResponse parts that contain output content
-    return functionResponsePartsToString(response.responseParts);
-  }
-  if (response.error) {
-    return response.error.message;
-  }
-  return undefined;
+    if (
+        typeof response.resultDisplay === 'string' &&
+        response.resultDisplay.trim().length > 0
+    ) {
+        return response.resultDisplay;
+    }
+    if (response.responseParts && response.responseParts.length > 0) {
+        // Always use functionResponsePartsToString to properly handle
+        // functionResponse parts that contain output content
+        return functionResponsePartsToString(response.responseParts);
+    }
+    if (response.error) {
+        return response.error.message;
+    }
+    return undefined;
 }

@@ -20,11 +20,11 @@ import { ConfigManager } from '../../utils/configManager';
 import { getProviderRateLimit } from '../../utils/knownProviders';
 import { Logger } from '../../utils/logger';
 import { RateLimiter } from '../../utils/rateLimiter';
-import { RetryManager } from '../../utils/retryManager';
 import {
     formatRateLimitSummary,
     parseRateLimitFromHeaders
 } from '../../utils/rateLimitParser';
+import { RetryManager } from '../../utils/retryManager';
 import type { UsageLimitError } from './codexTypes';
 
 const CODEX_BASE_URL = 'https://chatgpt.com/backend-api/codex';

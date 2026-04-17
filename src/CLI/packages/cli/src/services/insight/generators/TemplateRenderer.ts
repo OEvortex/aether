@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { INSIGHT_JS, INSIGHT_CSS } from '../../../web-templates.js';
+import { INSIGHT_CSS, INSIGHT_JS } from '../../../web-templates.js';
 import type { InsightData } from '../types/StaticInsightTypes.js';
 
 export class TemplateRenderer {
-  // Render the complete HTML file
-  async renderInsightHTML(insights: InsightData): Promise<string> {
-    const html = `<!doctype html>
+    // Render the complete HTML file
+    async renderInsightHTML(insights: InsightData): Promise<string> {
+        const html = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -47,6 +47,6 @@ export class TemplateRenderer {
   </body>
 </html>`;
 
-    return html;
-  }
+        return html;
+    }
 }

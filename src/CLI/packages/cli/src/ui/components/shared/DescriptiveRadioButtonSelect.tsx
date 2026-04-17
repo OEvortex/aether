@@ -4,36 +4,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Box, Text } from 'ink';
 import type React from 'react';
-import { Text, Box } from 'ink';
+import type { SelectionListItem } from '../../hooks/useSelectionList.js';
 import { theme } from '../../semantic-colors.js';
 import { BaseSelectionList } from './BaseSelectionList.js';
-import type { SelectionListItem } from '../../hooks/useSelectionList.js';
 
 export interface DescriptiveRadioSelectItem<T> extends SelectionListItem<T> {
-  title: React.ReactNode;
-  description: React.ReactNode;
+    title: React.ReactNode;
+    description: React.ReactNode;
 }
 
 export interface DescriptiveRadioButtonSelectProps<T> {
-  /** An array of items to display as descriptive radio options. */
-  items: Array<DescriptiveRadioSelectItem<T>>;
-  /** The initial index selected */
-  initialIndex?: number;
-  /** Function called when an item is selected. Receives the `value` of the selected item. */
-  onSelect: (value: T) => void;
-  /** Function called when an item is highlighted. Receives the `value` of the selected item. */
-  onHighlight?: (value: T) => void;
-  /** Whether this select input is currently focused and should respond to input. */
-  isFocused?: boolean;
-  /** Whether to show numbers next to items. */
-  showNumbers?: boolean;
-  /** Whether to show the scroll arrows. */
-  showScrollArrows?: boolean;
-  /** The maximum number of items to show at once. */
-  maxItemsToShow?: number;
-  /** Gap (in rows) between each item. */
-  itemGap?: number;
+    /** An array of items to display as descriptive radio options. */
+    items: Array<DescriptiveRadioSelectItem<T>>;
+    /** The initial index selected */
+    initialIndex?: number;
+    /** Function called when an item is selected. Receives the `value` of the selected item. */
+    onSelect: (value: T) => void;
+    /** Function called when an item is highlighted. Receives the `value` of the selected item. */
+    onHighlight?: (value: T) => void;
+    /** Whether this select input is currently focused and should respond to input. */
+    isFocused?: boolean;
+    /** Whether to show numbers next to items. */
+    showNumbers?: boolean;
+    /** Whether to show the scroll arrows. */
+    showScrollArrows?: boolean;
+    /** The maximum number of items to show at once. */
+    maxItemsToShow?: number;
+    /** Gap (in rows) between each item. */
+    itemGap?: number;
 }
 
 /**
@@ -42,37 +42,39 @@ export interface DescriptiveRadioButtonSelectProps<T> {
  * @template T The type of the value associated with each descriptive radio item.
  */
 export function DescriptiveRadioButtonSelect<T>({
-  items,
-  initialIndex = 0,
-  onSelect,
-  onHighlight,
-  isFocused = true,
-  showNumbers = false,
-  showScrollArrows = false,
-  maxItemsToShow = 10,
-  itemGap = 0,
+    items,
+    initialIndex = 0,
+    onSelect,
+    onHighlight,
+    isFocused = true,
+    showNumbers = false,
+    showScrollArrows = false,
+    maxItemsToShow = 10,
+    itemGap = 0
 }: DescriptiveRadioButtonSelectProps<T>): React.JSX.Element {
-  return (
-    <BaseSelectionList<T, DescriptiveRadioSelectItem<T>>
-      items={items}
-      initialIndex={initialIndex}
-      onSelect={onSelect}
-      onHighlight={onHighlight}
-      isFocused={isFocused}
-      showNumbers={showNumbers}
-      showScrollArrows={showScrollArrows}
-      maxItemsToShow={maxItemsToShow}
-      itemGap={itemGap}
-      renderItem={(item, { titleColor }) => (
-        <Box flexDirection="column" key={item.key}>
-          <Text color={titleColor}>{item.title}</Text>
-          {typeof item.description === 'string' ? (
-            <Text color={theme.text.secondary}>{item.description}</Text>
-          ) : (
-            item.description
-          )}
-        </Box>
-      )}
-    />
-  );
+    return (
+        <BaseSelectionList<T, DescriptiveRadioSelectItem<T>>
+            items={items}
+            initialIndex={initialIndex}
+            onSelect={onSelect}
+            onHighlight={onHighlight}
+            isFocused={isFocused}
+            showNumbers={showNumbers}
+            showScrollArrows={showScrollArrows}
+            maxItemsToShow={maxItemsToShow}
+            itemGap={itemGap}
+            renderItem={(item, { titleColor }) => (
+                <Box flexDirection="column" key={item.key}>
+                    <Text color={titleColor}>{item.title}</Text>
+                    {typeof item.description === 'string' ? (
+                        <Text color={theme.text.secondary}>
+                            {item.description}
+                        </Text>
+                    ) : (
+                        item.description
+                    )}
+                </Box>
+            )}
+        />
+    );
 }

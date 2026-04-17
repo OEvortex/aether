@@ -32,16 +32,16 @@ export const VISIBLE_TOOLS_COUNT = 10;
  * 分组显示名称映射
  */
 export const SOURCE_DISPLAY_NAMES: Record<string, string> = {
-  user: 'User MCPs',
-  project: 'Project MCPs',
-  extension: 'Extension MCPs',
+    user: 'User MCPs',
+    project: 'Project MCPs',
+    extension: 'Extension MCPs'
 };
 
 /**
  * 状态显示文本
  */
 export const STATUS_TEXT: Record<string, string> = {
-  connected: 'connected',
-  connecting: 'connecting',
-  disconnected: 'failed',
+    connected: 'connected',
+    connecting: 'connecting',
+    disconnected: 'failed'
 };

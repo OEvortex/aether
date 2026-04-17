@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { Fragment, useEffect, useId } from 'react';
+import { createDebugLogger } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
+import React, { Fragment, useEffect, useId } from 'react';
 import stringWidth from 'string-width';
+import { useOverflowActions } from '../../contexts/OverflowContext.js';
 import { theme } from '../../semantic-colors.js';
 import { toCodePoints } from '../../utils/textUtils.js';
-import { useOverflowActions } from '../../contexts/OverflowContext.js';
-import { createDebugLogger } from '@aetherai/aether-core';
 
 let enableDebugLog = false;
 const debugLogger = createDebugLogger('MAX_SIZED_BOX');
@@ -23,43 +23,45 @@ const debugLogger = createDebugLogger('MAX_SIZED_BOX');
 export const MINIMUM_MAX_HEIGHT = 2;
 
 export function setMaxSizedBoxDebugging(value: boolean) {
-  enableDebugLog = value;
+    enableDebugLog = value;
 }
 
 function debugReportError(message: string, element: React.ReactNode) {
-  if (!enableDebugLog) return;
+    if (!enableDebugLog) return;
 
-  if (!React.isValidElement(element)) {
+    if (!React.isValidElement(element)) {
+        debugLogger.error(
+            message,
+            `Invalid element: '${String(element)}' typeof=${typeof element}`
+        );
+        return;
+    }
+
+    let sourceMessage = '<Unknown file>';
+    try {
+        const elementWithSource = element as {
+            _source?: { fileName?: string; lineNumber?: number };
+        };
+        const fileName = elementWithSource._source?.fileName;
+        const lineNumber = elementWithSource._source?.lineNumber;
+        sourceMessage = fileName
+            ? `${fileName}:${lineNumber}`
+            : '<Unknown file>';
+    } catch (error) {
+        debugLogger.error('Error while trying to get file name:', error);
+    }
+
     debugLogger.error(
-      message,
-      `Invalid element: '${String(element)}' typeof=${typeof element}`,
+        message,
+        `${String(element.type)}. Source: ${sourceMessage}`
     );
-    return;
-  }
-
-  let sourceMessage = '<Unknown file>';
-  try {
-    const elementWithSource = element as {
-      _source?: { fileName?: string; lineNumber?: number };
-    };
-    const fileName = elementWithSource._source?.fileName;
-    const lineNumber = elementWithSource._source?.lineNumber;
-    sourceMessage = fileName ? `${fileName}:${lineNumber}` : '<Unknown file>';
-  } catch (error) {
-    debugLogger.error('Error while trying to get file name:', error);
-  }
-
-  debugLogger.error(
-    message,
-    `${String(element.type)}. Source: ${sourceMessage}`,
-  );
 }
 interface MaxSizedBoxProps {
-  children?: React.ReactNode;
-  maxWidth?: number;
-  maxHeight: number | undefined;
-  overflowDirection?: 'top' | 'bottom';
-  additionalHiddenLinesCount?: number;
+    children?: React.ReactNode;
+    maxWidth?: number;
+    maxHeight: number | undefined;
+    overflowDirection?: 'top' | 'bottom';
+    additionalHiddenLinesCount?: number;
 }
 
 /**
@@ -102,115 +104,122 @@ interface MaxSizedBoxProps {
  * </MaxSizedBox>
  */
 export const MaxSizedBox: React.FC<MaxSizedBoxProps> = ({
-  children,
-  maxWidth,
-  maxHeight,
-  overflowDirection = 'top',
-  additionalHiddenLinesCount = 0,
+    children,
+    maxWidth,
+    maxHeight,
+    overflowDirection = 'top',
+    additionalHiddenLinesCount = 0
 }) => {
-  const id = useId();
-  const { addOverflowingId, removeOverflowingId } = useOverflowActions() || {};
+    const id = useId();
+    const { addOverflowingId, removeOverflowingId } =
+        useOverflowActions() || {};
 
-  const laidOutStyledText: StyledText[][] = [];
-  const targetMaxHeight = Math.max(
-    Math.round(maxHeight ?? Number.MAX_SAFE_INTEGER),
-    MINIMUM_MAX_HEIGHT,
-  );
+    const laidOutStyledText: StyledText[][] = [];
+    const targetMaxHeight = Math.max(
+        Math.round(maxHeight ?? Number.MAX_SAFE_INTEGER),
+        MINIMUM_MAX_HEIGHT
+    );
 
-  if (maxWidth === undefined) {
-    throw new Error('maxWidth must be defined when maxHeight is set.');
-  }
-  function visitRows(element: React.ReactNode) {
-    if (!React.isValidElement<{ children?: React.ReactNode }>(element)) {
-      return;
+    if (maxWidth === undefined) {
+        throw new Error('maxWidth must be defined when maxHeight is set.');
+    }
+    function visitRows(element: React.ReactNode) {
+        if (!React.isValidElement<{ children?: React.ReactNode }>(element)) {
+            return;
+        }
+
+        if (element.type === Fragment) {
+            React.Children.forEach(element.props.children, visitRows);
+            return;
+        }
+
+        if (element.type === Box) {
+            layoutInkElementAsStyledText(element, maxWidth!, laidOutStyledText);
+            return;
+        }
+
+        debugReportError(
+            'MaxSizedBox children must be <Box> elements',
+            element
+        );
     }
 
-    if (element.type === Fragment) {
-      React.Children.forEach(element.props.children, visitRows);
-      return;
-    }
+    React.Children.forEach(children, visitRows);
 
-    if (element.type === Box) {
-      layoutInkElementAsStyledText(element, maxWidth!, laidOutStyledText);
-      return;
-    }
+    const contentWillOverflow =
+        (targetMaxHeight !== undefined &&
+            laidOutStyledText.length > targetMaxHeight) ||
+        additionalHiddenLinesCount > 0;
+    const visibleContentHeight =
+        contentWillOverflow && targetMaxHeight !== undefined
+            ? targetMaxHeight - 1
+            : targetMaxHeight;
 
-    debugReportError('MaxSizedBox children must be <Box> elements', element);
-  }
+    const hiddenLinesCount =
+        visibleContentHeight !== undefined
+            ? Math.max(0, laidOutStyledText.length - visibleContentHeight)
+            : 0;
+    const totalHiddenLines = hiddenLinesCount + additionalHiddenLinesCount;
 
-  React.Children.forEach(children, visitRows);
+    useEffect(() => {
+        if (totalHiddenLines > 0) {
+            addOverflowingId?.(id);
+        } else {
+            removeOverflowingId?.(id);
+        }
 
-  const contentWillOverflow =
-    (targetMaxHeight !== undefined &&
-      laidOutStyledText.length > targetMaxHeight) ||
-    additionalHiddenLinesCount > 0;
-  const visibleContentHeight =
-    contentWillOverflow && targetMaxHeight !== undefined
-      ? targetMaxHeight - 1
-      : targetMaxHeight;
+        return () => {
+            removeOverflowingId?.(id);
+        };
+    }, [id, totalHiddenLines, addOverflowingId, removeOverflowingId]);
 
-  const hiddenLinesCount =
-    visibleContentHeight !== undefined
-      ? Math.max(0, laidOutStyledText.length - visibleContentHeight)
-      : 0;
-  const totalHiddenLines = hiddenLinesCount + additionalHiddenLinesCount;
+    const visibleStyledText =
+        hiddenLinesCount > 0
+            ? overflowDirection === 'top'
+                ? laidOutStyledText.slice(
+                      hiddenLinesCount,
+                      laidOutStyledText.length
+                  )
+                : laidOutStyledText.slice(0, visibleContentHeight)
+            : laidOutStyledText;
 
-  useEffect(() => {
-    if (totalHiddenLines > 0) {
-      addOverflowingId?.(id);
-    } else {
-      removeOverflowingId?.(id);
-    }
+    const visibleLines = visibleStyledText.map((line, index) => (
+        <Box key={index}>
+            {line.length > 0 ? (
+                line.map((segment, segIndex) => (
+                    <Text key={segIndex} {...segment.props}>
+                        {segment.text}
+                    </Text>
+                ))
+            ) : (
+                <Text> </Text>
+            )}
+        </Box>
+    ));
 
-    return () => {
-      removeOverflowingId?.(id);
-    };
-  }, [id, totalHiddenLines, addOverflowingId, removeOverflowingId]);
-
-  const visibleStyledText =
-    hiddenLinesCount > 0
-      ? overflowDirection === 'top'
-        ? laidOutStyledText.slice(hiddenLinesCount, laidOutStyledText.length)
-        : laidOutStyledText.slice(0, visibleContentHeight)
-      : laidOutStyledText;
-
-  const visibleLines = visibleStyledText.map((line, index) => (
-    <Box key={index}>
-      {line.length > 0 ? (
-        line.map((segment, segIndex) => (
-          <Text key={segIndex} {...segment.props}>
-            {segment.text}
-          </Text>
-        ))
-      ) : (
-        <Text> </Text>
-      )}
-    </Box>
-  ));
-
-  return (
-    <Box flexDirection="column" width={maxWidth} flexShrink={0}>
-      {totalHiddenLines > 0 && overflowDirection === 'top' && (
-        <Text color={theme.text.secondary} wrap="truncate">
-          ... first {totalHiddenLines} line{totalHiddenLines === 1 ? '' : 's'}{' '}
-          hidden ...
-        </Text>
-      )}
-      {visibleLines}
-      {totalHiddenLines > 0 && overflowDirection === 'bottom' && (
-        <Text color={theme.text.secondary} wrap="truncate">
-          ... last {totalHiddenLines} line{totalHiddenLines === 1 ? '' : 's'}{' '}
-          hidden ...
-        </Text>
-      )}
-    </Box>
-  );
+    return (
+        <Box flexDirection="column" width={maxWidth} flexShrink={0}>
+            {totalHiddenLines > 0 && overflowDirection === 'top' && (
+                <Text color={theme.text.secondary} wrap="truncate">
+                    ... first {totalHiddenLines} line
+                    {totalHiddenLines === 1 ? '' : 's'} hidden ...
+                </Text>
+            )}
+            {visibleLines}
+            {totalHiddenLines > 0 && overflowDirection === 'bottom' && (
+                <Text color={theme.text.secondary} wrap="truncate">
+                    ... last {totalHiddenLines} line
+                    {totalHiddenLines === 1 ? '' : 's'} hidden ...
+                </Text>
+            )}
+        </Box>
+    );
 };
 
 // Define a type for styled text segments
 interface StyledText {
-  text: string;
-  props: Record<string, unknown>;
+    text: string;
+    props: Record<string, unknown>;
 }
 
 /**
@@ -221,8 +230,8 @@ interface StyledText {
  * needed today.
  */
 interface Row {
-  noWrapSegments: StyledText[];
-  segments: StyledText[];
+    noWrapSegments: StyledText[];
+    segments: StyledText[];
 }
 
 /**
@@ -253,376 +262,397 @@ interface Row {
  * @returns An array of `Row` objects.
  */
 function visitBoxRow(element: React.ReactNode): Row {
-  if (
-    !React.isValidElement<{ children?: React.ReactNode }>(element) ||
-    element.type !== Box
-  ) {
-    debugReportError(
-      `All children of MaxSizedBox must be <Box> elements`,
-      element,
-    );
-    return {
-      noWrapSegments: [{ text: '<ERROR>', props: {} }],
-      segments: [],
-    };
-  }
-
-  if (enableDebugLog) {
-    const boxProps = element.props as {
-      children?: React.ReactNode;
-      readonly flexDirection?:
-        | 'row'
-        | 'column'
-        | 'row-reverse'
-        | 'column-reverse';
-    };
-    // Ensure the Box has no props other than the default ones and key.
-    let maxExpectedProps = 4;
-    if (boxProps.children !== undefined) {
-      // Allow the key prop, which is automatically added by React.
-      maxExpectedProps += 1;
-    }
     if (
-      boxProps.flexDirection !== undefined &&
-      boxProps.flexDirection !== 'row'
+        !React.isValidElement<{ children?: React.ReactNode }>(element) ||
+        element.type !== Box
     ) {
-      debugReportError(
-        'MaxSizedBox children must have flexDirection="row".',
-        element,
-      );
+        debugReportError(
+            `All children of MaxSizedBox must be <Box> elements`,
+            element
+        );
+        return {
+            noWrapSegments: [{ text: '<ERROR>', props: {} }],
+            segments: []
+        };
     }
-    if (Object.keys(boxProps).length > maxExpectedProps) {
-      debugReportError(
-        `Boxes inside MaxSizedBox must not have additional props. ${Object.keys(
-          boxProps,
-        ).join(', ')}`,
-        element,
-      );
-    }
-  }
 
-  const row: Row = {
-    noWrapSegments: [],
-    segments: [],
-  };
-
-  let hasSeenWrapped = false;
-
-  function visitRowChild(
-    element: React.ReactNode,
-    parentProps: Record<string, unknown> | undefined,
-  ) {
-    if (element === null) {
-      return;
-    }
-    if (typeof element === 'string' || typeof element === 'number') {
-      const text = String(element);
-      // Ignore empty strings as they don't need to be rendered.
-      if (!text) {
-        return;
-      }
-
-      const segment: StyledText = { text, props: parentProps ?? {} };
-
-      // Check the 'wrap' property from the merged props to decide the segment type.
-      if (parentProps === undefined || parentProps['wrap'] === 'wrap') {
-        hasSeenWrapped = true;
-        row.segments.push(segment);
-      } else {
-        if (!hasSeenWrapped) {
-          row.noWrapSegments.push(segment);
-        } else {
-          // put in the wrapped segment as the row is already stuck in wrapped mode.
-          row.segments.push(segment);
-          debugReportError(
-            'Text elements without wrapping cannot appear after elements with wrapping in the same row.',
-            element,
-          );
+    if (enableDebugLog) {
+        const boxProps = element.props as {
+            children?: React.ReactNode;
+            readonly flexDirection?:
+                | 'row'
+                | 'column'
+                | 'row-reverse'
+                | 'column-reverse';
+        };
+        // Ensure the Box has no props other than the default ones and key.
+        let maxExpectedProps = 4;
+        if (boxProps.children !== undefined) {
+            // Allow the key prop, which is automatically added by React.
+            maxExpectedProps += 1;
         }
-      }
-      return;
+        if (
+            boxProps.flexDirection !== undefined &&
+            boxProps.flexDirection !== 'row'
+        ) {
+            debugReportError(
+                'MaxSizedBox children must have flexDirection="row".',
+                element
+            );
+        }
+        if (Object.keys(boxProps).length > maxExpectedProps) {
+            debugReportError(
+                `Boxes inside MaxSizedBox must not have additional props. ${Object.keys(
+                    boxProps
+                ).join(', ')}`,
+                element
+            );
+        }
     }
 
-    if (!React.isValidElement<{ children?: React.ReactNode }>(element)) {
-      debugReportError('Invalid element.', element);
-      return;
+    const row: Row = {
+        noWrapSegments: [],
+        segments: []
+    };
+
+    let hasSeenWrapped = false;
+
+    function visitRowChild(
+        element: React.ReactNode,
+        parentProps: Record<string, unknown> | undefined
+    ) {
+        if (element === null) {
+            return;
+        }
+        if (typeof element === 'string' || typeof element === 'number') {
+            const text = String(element);
+            // Ignore empty strings as they don't need to be rendered.
+            if (!text) {
+                return;
+            }
+
+            const segment: StyledText = { text, props: parentProps ?? {} };
+
+            // Check the 'wrap' property from the merged props to decide the segment type.
+            if (parentProps === undefined || parentProps['wrap'] === 'wrap') {
+                hasSeenWrapped = true;
+                row.segments.push(segment);
+            } else {
+                if (!hasSeenWrapped) {
+                    row.noWrapSegments.push(segment);
+                } else {
+                    // put in the wrapped segment as the row is already stuck in wrapped mode.
+                    row.segments.push(segment);
+                    debugReportError(
+                        'Text elements without wrapping cannot appear after elements with wrapping in the same row.',
+                        element
+                    );
+                }
+            }
+            return;
+        }
+
+        if (!React.isValidElement<{ children?: React.ReactNode }>(element)) {
+            debugReportError('Invalid element.', element);
+            return;
+        }
+
+        if (element.type === Fragment) {
+            React.Children.forEach(element.props.children, (child) =>
+                visitRowChild(child, parentProps)
+            );
+            return;
+        }
+
+        if (element.type !== Text) {
+            debugReportError(
+                'Children of a row Box must be <Text> elements.',
+                element
+            );
+            return;
+        }
+
+        // Merge props from parent <Text> elements. Child props take precedence.
+        const { children, ...currentProps } = element.props;
+        const mergedProps =
+            parentProps === undefined
+                ? currentProps
+                : { ...parentProps, ...currentProps };
+        React.Children.forEach(children, (child) =>
+            visitRowChild(child, mergedProps)
+        );
     }
 
-    if (element.type === Fragment) {
-      React.Children.forEach(element.props.children, (child) =>
-        visitRowChild(child, parentProps),
-      );
-      return;
-    }
-
-    if (element.type !== Text) {
-      debugReportError(
-        'Children of a row Box must be <Text> elements.',
-        element,
-      );
-      return;
-    }
-
-    // Merge props from parent <Text> elements. Child props take precedence.
-    const { children, ...currentProps } = element.props;
-    const mergedProps =
-      parentProps === undefined
-        ? currentProps
-        : { ...parentProps, ...currentProps };
-    React.Children.forEach(children, (child) =>
-      visitRowChild(child, mergedProps),
+    React.Children.forEach(element.props.children, (child) =>
+        visitRowChild(child, undefined)
     );
-  }
 
-  React.Children.forEach(element.props.children, (child) =>
-    visitRowChild(child, undefined),
-  );
-
-  return row;
+    return row;
 }
 
 function layoutInkElementAsStyledText(
-  element: React.ReactElement,
-  maxWidth: number,
-  output: StyledText[][],
+    element: React.ReactElement,
+    maxWidth: number,
+    output: StyledText[][]
 ) {
-  const row = visitBoxRow(element);
-  if (row.segments.length === 0 && row.noWrapSegments.length === 0) {
-    // Return a single empty line if there are no segments to display
-    output.push([]);
-    return;
-  }
+    const row = visitBoxRow(element);
+    if (row.segments.length === 0 && row.noWrapSegments.length === 0) {
+        // Return a single empty line if there are no segments to display
+        output.push([]);
+        return;
+    }
 
-  const lines: StyledText[][] = [];
-  const nonWrappingContent: StyledText[] = [];
-  let noWrappingWidth = 0;
-
-  // First, lay out the non-wrapping segments
-  row.noWrapSegments.forEach((segment) => {
-    nonWrappingContent.push(segment);
-    noWrappingWidth += stringWidth(segment.text);
-  });
-
-  if (row.segments.length === 0) {
-    // This is a bit of a special case when there are no segments that allow
-    // wrapping. It would be ideal to unify.
     const lines: StyledText[][] = [];
-    let currentLine: StyledText[] = [];
-    nonWrappingContent.forEach((segment) => {
-      const textLines = segment.text.split('\n');
-      textLines.forEach((text, index) => {
-        if (index > 0) {
-          lines.push(currentLine);
-          currentLine = [];
-        }
-        if (text) {
-          currentLine.push({ text, props: segment.props });
-        }
-      });
+    const nonWrappingContent: StyledText[] = [];
+    let noWrappingWidth = 0;
+
+    // First, lay out the non-wrapping segments
+    row.noWrapSegments.forEach((segment) => {
+        nonWrappingContent.push(segment);
+        noWrappingWidth += stringWidth(segment.text);
     });
-    if (
-      currentLine.length > 0 ||
-      (nonWrappingContent.length > 0 &&
-        nonWrappingContent[nonWrappingContent.length - 1].text.endsWith('\n'))
-    ) {
-      lines.push(currentLine);
-    }
-    for (const line of lines) {
-      output.push(line);
-    }
-    return;
-  }
 
-  const availableWidth = maxWidth - noWrappingWidth;
-
-  if (availableWidth < 1) {
-    // No room to render the wrapping segments. Truncate the non-wrapping
-    // content and append an ellipsis so the line always fits within maxWidth.
-
-    // Handle line breaks in non-wrapping content when truncating
-    const lines: StyledText[][] = [];
-    let currentLine: StyledText[] = [];
-    let currentLineWidth = 0;
-
-    for (const segment of nonWrappingContent) {
-      const textLines = segment.text.split('\n');
-      textLines.forEach((text, index) => {
-        if (index > 0) {
-          // New line encountered, finish current line and start new one
-          lines.push(currentLine);
-          currentLine = [];
-          currentLineWidth = 0;
-        }
-
-        if (text) {
-          const textWidth = stringWidth(text);
-
-          // When there's no room for wrapping content, be very conservative
-          // For lines after the first line break, show only ellipsis if the text would be truncated
-          if (index > 0 && textWidth > 0) {
-            // This is content after a line break - just show ellipsis to indicate truncation
-            currentLine.push({ text: '…', props: {} });
-            currentLineWidth = stringWidth('…');
-          } else {
-            // This is the first line or a continuation, try to fit what we can
-            const maxContentWidth = Math.max(0, maxWidth - stringWidth('…'));
-
-            if (textWidth <= maxContentWidth && currentLineWidth === 0) {
-              // Text fits completely on this line
-              currentLine.push({ text, props: segment.props });
-              currentLineWidth += textWidth;
-            } else {
-              // Text needs truncation
-              const codePoints = toCodePoints(text);
-              let truncatedWidth = currentLineWidth;
-              let sliceEndIndex = 0;
-
-              for (const char of codePoints) {
-                const charWidth = stringWidth(char);
-                if (truncatedWidth + charWidth > maxContentWidth) {
-                  break;
+    if (row.segments.length === 0) {
+        // This is a bit of a special case when there are no segments that allow
+        // wrapping. It would be ideal to unify.
+        const lines: StyledText[][] = [];
+        let currentLine: StyledText[] = [];
+        nonWrappingContent.forEach((segment) => {
+            const textLines = segment.text.split('\n');
+            textLines.forEach((text, index) => {
+                if (index > 0) {
+                    lines.push(currentLine);
+                    currentLine = [];
                 }
-                truncatedWidth += charWidth;
-                sliceEndIndex++;
-              }
-
-              const slice = codePoints.slice(0, sliceEndIndex).join('');
-              if (slice) {
-                currentLine.push({ text: slice, props: segment.props });
-              }
-              currentLine.push({ text: '…', props: {} });
-              currentLineWidth = truncatedWidth + stringWidth('…');
-            }
-          }
-        }
-      });
-    }
-
-    // Add the last line if it has content or if the last segment ended with \n
-    if (
-      currentLine.length > 0 ||
-      (nonWrappingContent.length > 0 &&
-        nonWrappingContent[nonWrappingContent.length - 1].text.endsWith('\n'))
-    ) {
-      lines.push(currentLine);
-    }
-
-    // If we don't have any lines yet, add an ellipsis line
-    if (lines.length === 0) {
-      lines.push([{ text: '…', props: {} }]);
-    }
-
-    for (const line of lines) {
-      output.push(line);
-    }
-    return;
-  }
-
-  // Now, lay out the wrapping segments
-  let wrappingPart: StyledText[] = [];
-  let wrappingPartWidth = 0;
-
-  function addWrappingPartToLines() {
-    if (lines.length === 0) {
-      lines.push([...nonWrappingContent, ...wrappingPart]);
-    } else {
-      if (noWrappingWidth > 0) {
-        lines.push([
-          ...[{ text: ' '.repeat(noWrappingWidth), props: {} }],
-          ...wrappingPart,
-        ]);
-      } else {
-        lines.push(wrappingPart);
-      }
-    }
-    wrappingPart = [];
-    wrappingPartWidth = 0;
-  }
-
-  function addToWrappingPart(text: string, props: Record<string, unknown>) {
-    if (
-      wrappingPart.length > 0 &&
-      wrappingPart[wrappingPart.length - 1].props === props
-    ) {
-      wrappingPart[wrappingPart.length - 1].text += text;
-    } else {
-      wrappingPart.push({ text, props });
-    }
-  }
-
-  row.segments.forEach((segment) => {
-    const linesFromSegment = segment.text.split('\n');
-
-    linesFromSegment.forEach((lineText, lineIndex) => {
-      if (lineIndex > 0) {
-        addWrappingPartToLines();
-      }
-
-      const words = lineText.split(/(\s+)/); // Split by whitespace
-
-      words.forEach((word) => {
-        if (!word) return;
-        const wordWidth = stringWidth(word);
-
+                if (text) {
+                    currentLine.push({ text, props: segment.props });
+                }
+            });
+        });
         if (
-          wrappingPartWidth + wordWidth > availableWidth &&
-          wrappingPartWidth > 0
+            currentLine.length > 0 ||
+            (nonWrappingContent.length > 0 &&
+                nonWrappingContent[nonWrappingContent.length - 1].text.endsWith(
+                    '\n'
+                ))
         ) {
-          addWrappingPartToLines();
-          if (/^\s+$/.test(word)) {
-            return;
-          }
+            lines.push(currentLine);
         }
-
-        if (wordWidth > availableWidth) {
-          // Word is too long, needs to be split across lines
-          const wordAsCodePoints = toCodePoints(word);
-          let remainingWordAsCodePoints = wordAsCodePoints;
-          while (remainingWordAsCodePoints.length > 0) {
-            let splitIndex = 0;
-            let currentSplitWidth = 0;
-            for (const char of remainingWordAsCodePoints) {
-              const charWidth = stringWidth(char);
-              if (
-                wrappingPartWidth + currentSplitWidth + charWidth >
-                availableWidth
-              ) {
-                break;
-              }
-              currentSplitWidth += charWidth;
-              splitIndex++;
-            }
-
-            if (splitIndex > 0) {
-              const part = remainingWordAsCodePoints
-                .slice(0, splitIndex)
-                .join('');
-              addToWrappingPart(part, segment.props);
-              wrappingPartWidth += stringWidth(part);
-              remainingWordAsCodePoints =
-                remainingWordAsCodePoints.slice(splitIndex);
-            }
-
-            if (remainingWordAsCodePoints.length > 0) {
-              addWrappingPartToLines();
-            }
-          }
-        } else {
-          addToWrappingPart(word, segment.props);
-          wrappingPartWidth += wordWidth;
+        for (const line of lines) {
+            output.push(line);
         }
-      });
-    });
-    // Split omits a trailing newline, so we need to handle it here
-    if (segment.text.endsWith('\n')) {
-      addWrappingPartToLines();
+        return;
     }
-  });
 
-  if (wrappingPart.length > 0) {
-    addWrappingPartToLines();
-  }
-  for (const line of lines) {
-    output.push(line);
-  }
+    const availableWidth = maxWidth - noWrappingWidth;
+
+    if (availableWidth < 1) {
+        // No room to render the wrapping segments. Truncate the non-wrapping
+        // content and append an ellipsis so the line always fits within maxWidth.
+
+        // Handle line breaks in non-wrapping content when truncating
+        const lines: StyledText[][] = [];
+        let currentLine: StyledText[] = [];
+        let currentLineWidth = 0;
+
+        for (const segment of nonWrappingContent) {
+            const textLines = segment.text.split('\n');
+            textLines.forEach((text, index) => {
+                if (index > 0) {
+                    // New line encountered, finish current line and start new one
+                    lines.push(currentLine);
+                    currentLine = [];
+                    currentLineWidth = 0;
+                }
+
+                if (text) {
+                    const textWidth = stringWidth(text);
+
+                    // When there's no room for wrapping content, be very conservative
+                    // For lines after the first line break, show only ellipsis if the text would be truncated
+                    if (index > 0 && textWidth > 0) {
+                        // This is content after a line break - just show ellipsis to indicate truncation
+                        currentLine.push({ text: '…', props: {} });
+                        currentLineWidth = stringWidth('…');
+                    } else {
+                        // This is the first line or a continuation, try to fit what we can
+                        const maxContentWidth = Math.max(
+                            0,
+                            maxWidth - stringWidth('…')
+                        );
+
+                        if (
+                            textWidth <= maxContentWidth &&
+                            currentLineWidth === 0
+                        ) {
+                            // Text fits completely on this line
+                            currentLine.push({ text, props: segment.props });
+                            currentLineWidth += textWidth;
+                        } else {
+                            // Text needs truncation
+                            const codePoints = toCodePoints(text);
+                            let truncatedWidth = currentLineWidth;
+                            let sliceEndIndex = 0;
+
+                            for (const char of codePoints) {
+                                const charWidth = stringWidth(char);
+                                if (
+                                    truncatedWidth + charWidth >
+                                    maxContentWidth
+                                ) {
+                                    break;
+                                }
+                                truncatedWidth += charWidth;
+                                sliceEndIndex++;
+                            }
+
+                            const slice = codePoints
+                                .slice(0, sliceEndIndex)
+                                .join('');
+                            if (slice) {
+                                currentLine.push({
+                                    text: slice,
+                                    props: segment.props
+                                });
+                            }
+                            currentLine.push({ text: '…', props: {} });
+                            currentLineWidth =
+                                truncatedWidth + stringWidth('…');
+                        }
+                    }
+                }
+            });
+        }
+
+        // Add the last line if it has content or if the last segment ended with \n
+        if (
+            currentLine.length > 0 ||
+            (nonWrappingContent.length > 0 &&
+                nonWrappingContent[nonWrappingContent.length - 1].text.endsWith(
+                    '\n'
+                ))
+        ) {
+            lines.push(currentLine);
+        }
+
+        // If we don't have any lines yet, add an ellipsis line
+        if (lines.length === 0) {
+            lines.push([{ text: '…', props: {} }]);
+        }
+
+        for (const line of lines) {
+            output.push(line);
+        }
+        return;
+    }
+
+    // Now, lay out the wrapping segments
+    let wrappingPart: StyledText[] = [];
+    let wrappingPartWidth = 0;
+
+    function addWrappingPartToLines() {
+        if (lines.length === 0) {
+            lines.push([...nonWrappingContent, ...wrappingPart]);
+        } else {
+            if (noWrappingWidth > 0) {
+                lines.push([
+                    ...[{ text: ' '.repeat(noWrappingWidth), props: {} }],
+                    ...wrappingPart
+                ]);
+            } else {
+                lines.push(wrappingPart);
+            }
+        }
+        wrappingPart = [];
+        wrappingPartWidth = 0;
+    }
+
+    function addToWrappingPart(text: string, props: Record<string, unknown>) {
+        if (
+            wrappingPart.length > 0 &&
+            wrappingPart[wrappingPart.length - 1].props === props
+        ) {
+            wrappingPart[wrappingPart.length - 1].text += text;
+        } else {
+            wrappingPart.push({ text, props });
+        }
+    }
+
+    row.segments.forEach((segment) => {
+        const linesFromSegment = segment.text.split('\n');
+
+        linesFromSegment.forEach((lineText, lineIndex) => {
+            if (lineIndex > 0) {
+                addWrappingPartToLines();
+            }
+
+            const words = lineText.split(/(\s+)/); // Split by whitespace
+
+            words.forEach((word) => {
+                if (!word) return;
+                const wordWidth = stringWidth(word);
+
+                if (
+                    wrappingPartWidth + wordWidth > availableWidth &&
+                    wrappingPartWidth > 0
+                ) {
+                    addWrappingPartToLines();
+                    if (/^\s+$/.test(word)) {
+                        return;
+                    }
+                }
+
+                if (wordWidth > availableWidth) {
+                    // Word is too long, needs to be split across lines
+                    const wordAsCodePoints = toCodePoints(word);
+                    let remainingWordAsCodePoints = wordAsCodePoints;
+                    while (remainingWordAsCodePoints.length > 0) {
+                        let splitIndex = 0;
+                        let currentSplitWidth = 0;
+                        for (const char of remainingWordAsCodePoints) {
+                            const charWidth = stringWidth(char);
+                            if (
+                                wrappingPartWidth +
+                                    currentSplitWidth +
+                                    charWidth >
+                                availableWidth
+                            ) {
+                                break;
+                            }
+                            currentSplitWidth += charWidth;
+                            splitIndex++;
+                        }
+
+                        if (splitIndex > 0) {
+                            const part = remainingWordAsCodePoints
+                                .slice(0, splitIndex)
+                                .join('');
+                            addToWrappingPart(part, segment.props);
+                            wrappingPartWidth += stringWidth(part);
+                            remainingWordAsCodePoints =
+                                remainingWordAsCodePoints.slice(splitIndex);
+                        }
+
+                        if (remainingWordAsCodePoints.length > 0) {
+                            addWrappingPartToLines();
+                        }
+                    }
+                } else {
+                    addToWrappingPart(word, segment.props);
+                    wrappingPartWidth += wordWidth;
+                }
+            });
+        });
+        // Split omits a trailing newline, so we need to handle it here
+        if (segment.text.endsWith('\n')) {
+            addWrappingPartToLines();
+        }
+    });
+
+    if (wrappingPart.length > 0) {
+        addWrappingPartToLines();
+    }
+    for (const line of lines) {
+        output.push(line);
+    }
 }

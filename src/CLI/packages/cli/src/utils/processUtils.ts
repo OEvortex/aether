@@ -15,6 +15,6 @@ export const RELAUNCH_EXIT_CODE = 42;
  * Exits the process with a special code to signal that the parent process should relaunch it.
  */
 export async function relaunchApp(): Promise<void> {
-  await runExitCleanup();
-  process.exit(RELAUNCH_EXIT_CODE);
+    await runExitCleanup();
+    process.exit(RELAUNCH_EXIT_CODE);
 }

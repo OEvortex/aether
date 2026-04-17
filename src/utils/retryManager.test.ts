@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { RetryManager, type RetryableError } from './retryManager';
+import { type RetryableError, RetryManager } from './retryManager';
 
 vi.mock('./logger', () => ({
     Logger: {

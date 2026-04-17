@@ -15,18 +15,18 @@ import type {
 } from 'vscode';
 import * as vscode from 'vscode';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
-import { getProviderRateLimit } from '../../utils/knownProviders';
-import { Logger } from '../../utils/logger';
-import { RateLimiter } from '../../utils/rateLimiter';
-import {
-    GenericModelProvider,
-    DEFAULT_CONTEXT_LENGTH,
-    DEFAULT_MAX_OUTPUT_TOKENS
-} from '../common';
 import {
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
 } from '../../utils';
+import { getProviderRateLimit } from '../../utils/knownProviders';
+import { Logger } from '../../utils/logger';
+import { RateLimiter } from '../../utils/rateLimiter';
+import {
+    DEFAULT_CONTEXT_LENGTH,
+    DEFAULT_MAX_OUTPUT_TOKENS,
+    GenericModelProvider
+} from '../common';
 import { LLMGatewayWizard } from './llmgatewayWizard.js';
 
 const LLG_GATEWAY_BASE_URL = 'https://api.llmgateway.io/v1';

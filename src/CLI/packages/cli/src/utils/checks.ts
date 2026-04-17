@@ -20,9 +20,9 @@ export function assumeExhaustive(_value: never): void {}
  * }
  */
 export function checkExhaustive(
-  value: never,
-  msg = `unexpected value ${value}!`,
+    value: never,
+    msg = `unexpected value ${value}!`
 ): never {
-  assumeExhaustive(value);
-  throw new Error(msg);
+    assumeExhaustive(value);
+    throw new Error(msg);
 }

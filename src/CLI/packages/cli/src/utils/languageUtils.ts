@@ -24,7 +24,7 @@ export const OUTPUT_LANGUAGE_AUTO = 'auto';
  * Checks if a value represents the "auto" setting.
  */
 export function isAutoLanguage(value: string | undefined | null): boolean {
-  return !value || value.toLowerCase() === OUTPUT_LANGUAGE_AUTO;
+    return !value || value.toLowerCase() === OUTPUT_LANGUAGE_AUTO;
 }
 
 /**
@@ -33,30 +33,30 @@ export function isAutoLanguage(value: string | undefined | null): boolean {
  * (English, Spanish, French, Japanese, etc).
  */
 export function normalizeOutputLanguage(language: string): string {
-  if (!language) return 'English';
-  return language;
+    if (!language) return 'English';
+    return language;
 }
 
 /**
  * Resolves the output language, converting 'auto' to the detected system language.
  */
 export function resolveOutputLanguage(
-  value: string | undefined | null,
+    value: string | undefined | null
 ): string {
-  if (isAutoLanguage(value)) {
-    return 'English';
-  }
-  return normalizeOutputLanguage(value!);
+    if (isAutoLanguage(value)) {
+        return 'English';
+    }
+    return normalizeOutputLanguage(value!);
 }
 
 /**
  * Returns the path to the LLM output language rule file (~/.aether/output-language.md).
  */
 function getOutputLanguageFilePath(): string {
-  return path.join(
-    Storage.getGlobalAetherDir(),
-    LLM_OUTPUT_LANGUAGE_RULE_FILENAME,
-  );
+    return path.join(
+        Storage.getGlobalAetherDir(),
+        LLM_OUTPUT_LANGUAGE_RULE_FILENAME
+    );
 }
 
 /**
@@ -64,15 +64,18 @@ function getOutputLanguageFilePath(): string {
  * Removes characters that could break HTML comment syntax.
  */
 function sanitizeForMarker(language: string): string {
-  return language.replace(/[\r\n]/g, ' ').replace(/--!?>/g, '').replace(/--/g, '');
+    return language
+        .replace(/[\r\n]/g, ' ')
+        .replace(/--!?>/g, '')
+        .replace(/--/g, '');
 }
 
 /**
  * Generates the content for the LLM output language rule file.
  */
 function generateOutputLanguageFileContent(language: string): string {
-  const safeLanguage = sanitizeForMarker(language);
-  return `# Output language preference: ${language}
+    const safeLanguage = sanitizeForMarker(language);
+    return `# Output language preference: ${language}
 <!-- ${LLM_OUTPUT_LANGUAGE_MARKER_PREFIX} ${safeLanguage} -->
 
 ## Rule
@@ -97,25 +100,25 @@ Raw tool/system outputs may contain fixed-format English. Preserve them verbatim
  * Supports both the new marker format and legacy heading format.
  */
 function parseOutputLanguageFromContent(content: string): string | null {
-  // Primary: machine-readable marker (e.g., <!-- aether:llm-output-language: English -->)
-  const markerRegex = new RegExp(
-    String.raw`<!--\s*${LLM_OUTPUT_LANGUAGE_MARKER_PREFIX}\s*(.*?)\s*-->`,
-    'i',
-  );
-  const markerMatch = content.match(markerRegex);
-  if (markerMatch?.[1]?.trim()) {
-    return markerMatch[1].trim();
-  }
+    // Primary: machine-readable marker (e.g., <!-- aether:llm-output-language: English -->)
+    const markerRegex = new RegExp(
+        String.raw`<!--\s*${LLM_OUTPUT_LANGUAGE_MARKER_PREFIX}\s*(.*?)\s*-->`,
+        'i'
+    );
+    const markerMatch = content.match(markerRegex);
+    if (markerMatch?.[1]?.trim()) {
+        return markerMatch[1].trim();
+    }
 
-  // Fallback: legacy heading format (e.g., # CRITICAL: English Output Language Rule)
-  const headingMatch = content.match(
-    /^#.*?CRITICAL:\s*(.*?)\s+Output Language Rule\b/im,
-  );
-  if (headingMatch?.[1]?.trim()) {
-    return headingMatch[1].trim();
-  }
+    // Fallback: legacy heading format (e.g., # CRITICAL: English Output Language Rule)
+    const headingMatch = content.match(
+        /^#.*?CRITICAL:\s*(.*?)\s+Output Language Rule\b/im
+    );
+    if (headingMatch?.[1]?.trim()) {
+        return headingMatch[1].trim();
+    }
 
-  return null;
+    return null;
 }
 
 /**
@@ -123,27 +126,27 @@ function parseOutputLanguageFromContent(content: string): string | null {
  * Returns null if the file doesn't exist or can't be parsed.
  */
 function readOutputLanguageFromFile(): string | null {
-  const filePath = getOutputLanguageFilePath();
-  if (!fs.existsSync(filePath)) {
-    return null;
-  }
-  try {
-    const content = fs.readFileSync(filePath, 'utf-8');
-    return parseOutputLanguageFromContent(content);
-  } catch {
-    return null;
-  }
+    const filePath = getOutputLanguageFilePath();
+    if (!fs.existsSync(filePath)) {
+        return null;
+    }
+    try {
+        const content = fs.readFileSync(filePath, 'utf-8');
+        return parseOutputLanguageFromContent(content);
+    } catch {
+        return null;
+    }
 }
 
 /**
  * Writes the output language rule file with the given language.
  */
 export function writeOutputLanguageFile(language: string): void {
-  const filePath = getOutputLanguageFilePath();
-  const content = generateOutputLanguageFileContent(language);
-  const dir = path.dirname(filePath);
-  fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(filePath, content, 'utf-8');
+    const filePath = getOutputLanguageFilePath();
+    const content = generateOutputLanguageFileContent(language);
+    const dir = path.dirname(filePath);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(filePath, content, 'utf-8');
 }
 
 /**
@@ -151,8 +154,8 @@ export function writeOutputLanguageFile(language: string): void {
  * Resolves 'auto' to the detected system language before writing.
  */
 export function updateOutputLanguageFile(settingValue: string): void {
-  const resolved = resolveOutputLanguage(settingValue);
-  writeOutputLanguageFile(resolved);
+    const resolved = resolveOutputLanguage(settingValue);
+    writeOutputLanguageFile(resolved);
 }
 
 /**
@@ -165,15 +168,15 @@ export function updateOutputLanguageFile(settingValue: string): void {
  * - If the rule file doesn't exist, create it with the resolved language ('auto' -> English, or use as-is)
  */
 export function initializeLlmOutputLanguage(outputLanguage?: string): void {
-  // Check if the file already exists and has valid content
-  const currentFileLanguage = readOutputLanguageFromFile();
+    // Check if the file already exists and has valid content
+    const currentFileLanguage = readOutputLanguageFromFile();
 
-  // If file exists with valid language, preserve user's setting - do nothing
-  if (currentFileLanguage) {
-    return;
-  }
+    // If file exists with valid language, preserve user's setting - do nothing
+    if (currentFileLanguage) {
+        return;
+    }
 
-  // File doesn't exist or has invalid content, create it with resolved language
-  const resolved = resolveOutputLanguage(outputLanguage);
-  writeOutputLanguageFile(resolved);
+    // File doesn't exist or has invalid content, create it with resolved language
+    const resolved = resolveOutputLanguage(outputLanguage);
+    writeOutputLanguageFile(resolved);
 }

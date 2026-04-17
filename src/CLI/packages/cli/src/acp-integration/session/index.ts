@@ -16,25 +16,22 @@
  * ensuring consistency between normal flow, history replay, and sub-agent events.
  */
 
-// Types
-export type {
-  SessionContext,
-  SessionUpdateSender,
-  ToolCallStartParams,
-  ToolCallResultParams,
-  TodoItem,
-  ResolvedToolMetadata,
-} from './types.js';
-
 // Emitters
 export { BaseEmitter } from './emitters/BaseEmitter.js';
 export { MessageEmitter } from './emitters/MessageEmitter.js';
 export { PlanEmitter } from './emitters/PlanEmitter.js';
 export { ToolCallEmitter } from './emitters/ToolCallEmitter.js';
-
 // Components
 export { HistoryReplayer } from './HistoryReplayer.js';
-export { SubAgentTracker } from './SubAgentTracker.js';
-
 // Main Session class
 export { Session } from './Session.js';
+export { SubAgentTracker } from './SubAgentTracker.js';
+// Types
+export type {
+    ResolvedToolMetadata,
+    SessionContext,
+    SessionUpdateSender,
+    TodoItem,
+    ToolCallResultParams,
+    ToolCallStartParams
+} from './types.js';

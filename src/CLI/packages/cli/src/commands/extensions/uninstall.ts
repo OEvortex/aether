@@ -4,68 +4,72 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { CommandModule } from 'yargs';
-import { getErrorMessage } from '../../utils/errors.js';
-import { writeStdoutLine, writeStderrLine } from '../../utils/stdioHelpers.js';
 import { ExtensionManager } from '@aetherai/aether-core';
-import {
-  requestConsentNonInteractive,
-  requestConsentOrFail,
-} from './consent.js';
-import { isWorkspaceTrusted } from '../../config/trustedFolders.js';
+import type { CommandModule } from 'yargs';
 import { loadSettings } from '../../config/settings.js';
+import { isWorkspaceTrusted } from '../../config/trustedFolders.js';
 import { t } from '../../i18n/index.js';
+import { getErrorMessage } from '../../utils/errors.js';
+import { writeStderrLine, writeStdoutLine } from '../../utils/stdioHelpers.js';
+import {
+    requestConsentNonInteractive,
+    requestConsentOrFail
+} from './consent.js';
 
 interface UninstallArgs {
-  name: string; // can be extension name or source URL.
+    name: string; // can be extension name or source URL.
 }
 
 export async function handleUninstall(args: UninstallArgs) {
-  try {
-    const workspaceDir = process.cwd();
-    const extensionManager = new ExtensionManager({
-      workspaceDir,
-      requestConsent: requestConsentOrFail.bind(
-        null,
-        requestConsentNonInteractive,
-      ),
-      isWorkspaceTrusted: !!isWorkspaceTrusted(
-        loadSettings(workspaceDir).merged,
-      ),
-    });
-    await extensionManager.refreshCache();
-    await extensionManager.uninstallExtension(args.name, false);
-    writeStdoutLine(
-      t('Extension "{{name}}" successfully uninstalled.', { name: args.name }),
-    );
-  } catch (error) {
-    writeStderrLine(getErrorMessage(error));
-    process.exit(1);
-  }
+    try {
+        const workspaceDir = process.cwd();
+        const extensionManager = new ExtensionManager({
+            workspaceDir,
+            requestConsent: requestConsentOrFail.bind(
+                null,
+                requestConsentNonInteractive
+            ),
+            isWorkspaceTrusted: !!isWorkspaceTrusted(
+                loadSettings(workspaceDir).merged
+            )
+        });
+        await extensionManager.refreshCache();
+        await extensionManager.uninstallExtension(args.name, false);
+        writeStdoutLine(
+            t('Extension "{{name}}" successfully uninstalled.', {
+                name: args.name
+            })
+        );
+    } catch (error) {
+        writeStderrLine(getErrorMessage(error));
+        process.exit(1);
+    }
 }
 
 export const uninstallCommand: CommandModule = {
-  command: 'uninstall <name>',
-  describe: t('Uninstalls an extension.'),
-  builder: (yargs) =>
-    yargs
-      .positional('name', {
-        describe: t('The name or source path of the extension to uninstall.'),
-        type: 'string',
-      })
-      .check((argv) => {
-        if (!argv.name) {
-          throw new Error(
-            t(
-              'Please include the name of the extension to uninstall as a positional argument.',
-            ),
-          );
-        }
-        return true;
-      }),
-  handler: async (argv) => {
-    await handleUninstall({
-      name: argv['name'] as string,
-    });
-  },
+    command: 'uninstall <name>',
+    describe: t('Uninstalls an extension.'),
+    builder: (yargs) =>
+        yargs
+            .positional('name', {
+                describe: t(
+                    'The name or source path of the extension to uninstall.'
+                ),
+                type: 'string'
+            })
+            .check((argv) => {
+                if (!argv.name) {
+                    throw new Error(
+                        t(
+                            'Please include the name of the extension to uninstall as a positional argument.'
+                        )
+                    );
+                }
+                return true;
+            }),
+    handler: async (argv) => {
+        await handleUninstall({
+            name: argv['name'] as string
+        });
+    }
 };

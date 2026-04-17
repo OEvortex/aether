@@ -26,54 +26,54 @@ import type { PermissionMode } from '../types.js';
  * ControlService (programmatic API).
  */
 export interface IControlContext {
-  readonly config: Config;
-  readonly streamJson: StreamJsonOutputAdapter;
-  readonly sessionId: string;
-  readonly abortSignal: AbortSignal;
-  readonly debugMode: boolean;
+    readonly config: Config;
+    readonly streamJson: StreamJsonOutputAdapter;
+    readonly sessionId: string;
+    readonly abortSignal: AbortSignal;
+    readonly debugMode: boolean;
 
-  permissionMode: PermissionMode;
-  sdkMcpServers: Set<string>;
-  mcpClients: Map<string, { client: Client; config: MCPServerConfig }>;
-  inputClosed: boolean;
+    permissionMode: PermissionMode;
+    sdkMcpServers: Set<string>;
+    mcpClients: Map<string, { client: Client; config: MCPServerConfig }>;
+    inputClosed: boolean;
 
-  onInterrupt?: () => void;
+    onInterrupt?: () => void;
 }
 
 /**
  * Control Context implementation
  */
 export class ControlContext implements IControlContext {
-  readonly config: Config;
-  readonly streamJson: StreamJsonOutputAdapter;
-  readonly sessionId: string;
-  readonly abortSignal: AbortSignal;
-  readonly debugMode: boolean;
+    readonly config: Config;
+    readonly streamJson: StreamJsonOutputAdapter;
+    readonly sessionId: string;
+    readonly abortSignal: AbortSignal;
+    readonly debugMode: boolean;
 
-  permissionMode: PermissionMode;
-  sdkMcpServers: Set<string>;
-  mcpClients: Map<string, { client: Client; config: MCPServerConfig }>;
-  inputClosed: boolean;
+    permissionMode: PermissionMode;
+    sdkMcpServers: Set<string>;
+    mcpClients: Map<string, { client: Client; config: MCPServerConfig }>;
+    inputClosed: boolean;
 
-  onInterrupt?: () => void;
-
-  constructor(options: {
-    config: Config;
-    streamJson: StreamJsonOutputAdapter;
-    sessionId: string;
-    abortSignal: AbortSignal;
-    permissionMode?: PermissionMode;
     onInterrupt?: () => void;
-  }) {
-    this.config = options.config;
-    this.streamJson = options.streamJson;
-    this.sessionId = options.sessionId;
-    this.abortSignal = options.abortSignal;
-    this.debugMode = options.config.getDebugMode();
-    this.permissionMode = options.permissionMode || 'default';
-    this.sdkMcpServers = new Set();
-    this.mcpClients = new Map();
-    this.inputClosed = false;
-    this.onInterrupt = options.onInterrupt;
-  }
+
+    constructor(options: {
+        config: Config;
+        streamJson: StreamJsonOutputAdapter;
+        sessionId: string;
+        abortSignal: AbortSignal;
+        permissionMode?: PermissionMode;
+        onInterrupt?: () => void;
+    }) {
+        this.config = options.config;
+        this.streamJson = options.streamJson;
+        this.sessionId = options.sessionId;
+        this.abortSignal = options.abortSignal;
+        this.debugMode = options.config.getDebugMode();
+        this.permissionMode = options.permissionMode || 'default';
+        this.sdkMcpServers = new Set();
+        this.mcpClients = new Map();
+        this.inputClosed = false;
+        this.onInterrupt = options.onInterrupt;
+    }
 }

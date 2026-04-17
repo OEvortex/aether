@@ -458,14 +458,14 @@ function syncAccountUiFile(accountUiItems) {
 
     let next = replaceOrThrow(
         source,
-        /const providers = \[[\s\S]*?\n        \];/,
+        /const providers = \[[\s\S]*?\n {8}\];/,
         `const providers = [\n${providerEntries}\n        ];`,
         'Could not find providers array block in src/accounts/accountUI.ts'
     );
 
     next = replaceOrThrow(
         next,
-        /const names: Record<string, string> = \{[\s\S]*?\n        \};/,
+        /const names: Record<string, string> = \{[\s\S]*?\n {8}\};/,
         `const names: Record<string, string> = {\n${namesEntries}\n        };`,
         'Could not find provider names map block in src/accounts/accountUI.ts'
     );
@@ -481,7 +481,7 @@ function syncAccountSyncAdapterFile(syncProviderItems) {
     const replacement = `const providers = [\n${providerEntries}\n        ];`;
     const next = replaceOrThrow(
         source,
-        /const providers = \[[\s\S]*?\n        \];/,
+        /const providers = \[[\s\S]*?\n {8}\];/,
         replacement,
         'Could not find providers array block in src/accounts/accountSyncAdapter.ts'
     );
@@ -582,7 +582,9 @@ function syncPackageJson(knownProviders) {
     const setApiKeyProviderSet = new Set(setApiKeyProviders);
 
     const retainedCommands = commands.filter((command) => {
-        const match = /^aether\.([^.]+)\.setApiKey$/.exec(command.command || '');
+        const match = /^aether\.([^.]+)\.setApiKey$/.exec(
+            command.command || ''
+        );
         if (!match) {
             return true;
         }

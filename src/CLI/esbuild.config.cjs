@@ -18,7 +18,7 @@ const commonOptions = {
         '@teddyzhu/clipboard-linux-x64-gnu',
         '@teddyzhu/clipboard-win32-arm64-msvc',
         '@teddyzhu/clipboard-win32-x64-msvc',
-        'undici',
+        'undici'
     ],
     format: 'esm',
     platform: 'node',
@@ -29,13 +29,13 @@ const commonOptions = {
     logLevel: 'info',
     keepNames: true,
     mangleProps: /^_/,
-    reserveProps: /^AuthType/,
+    reserveProps: /^AuthType/
 };
 
 const cliBuildOptions = {
     ...commonOptions,
     entryPoints: ['./packages/cli/index.ts'],
-    outfile: 'dist/cli.mjs',
+    outfile: 'dist/cli.mjs'
 };
 
 async function build() {
@@ -49,7 +49,10 @@ async function build() {
             console.log('Cleaning dist directory...');
             const distPath = path.join(REPO_ROOT, 'dist');
             if (fs.existsSync(distPath)) {
-                await fs.promises.rm(distPath, { recursive: true, force: true });
+                await fs.promises.rm(distPath, {
+                    recursive: true,
+                    force: true
+                });
             }
 
             console.log('Building CLI...');

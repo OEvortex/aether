@@ -5,20 +5,25 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
-const outFile = join(root, 'packages', 'cli', 'src', 'generated', 'git-commit.ts');
+const outFile = join(
+    root,
+    'packages',
+    'cli',
+    'src',
+    'generated',
+    'git-commit.ts'
+);
 
 let commit = 'unknown';
 try {
-  commit = execSync('git rev-parse --short HEAD', {
-    cwd: root,
-    stdio: ['ignore', 'pipe', 'ignore'],
-  }).toString().trim();
+    commit = execSync('git rev-parse --short HEAD', {
+        cwd: root,
+        stdio: ['ignore', 'pipe', 'ignore']
+    })
+        .toString()
+        .trim();
 } catch {
-  // Leave the placeholder value in place if git is unavailable.
+    // Leave the placeholder value in place if git is unavailable.
 }
 
-writeFileSync(
-  outFile,
-  `export const GIT_COMMIT_INFO = '${commit}';\n`,
-  'utf8',
-);
+writeFileSync(outFile, `export const GIT_COMMIT_INFO = '${commit}';\n`, 'utf8');

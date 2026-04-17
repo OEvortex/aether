@@ -5,10 +5,10 @@
  */
 
 import type {
-  GenerateContentResponse,
-  PartListUnion,
-  Part,
-  PartUnion,
+    GenerateContentResponse,
+    Part,
+    PartListUnion,
+    PartUnion
 } from '@google/genai';
 
 /**
@@ -16,77 +16,77 @@ import type {
  * If verbose is true, includes summary representations of non-text parts.
  */
 export function partToString(
-  value: PartListUnion,
-  options?: { verbose?: boolean },
+    value: PartListUnion,
+    options?: { verbose?: boolean }
 ): string {
-  if (!value) {
-    return '';
-  }
-  if (typeof value === 'string') {
-    return value;
-  }
-  if (Array.isArray(value)) {
-    return value.map((part) => partToString(part, options)).join('');
-  }
-
-  // Cast to Part, assuming it might contain project-specific fields
-  const part = value as Part & {
-    videoMetadata?: unknown;
-    thought?: string;
-    codeExecutionResult?: unknown;
-    executableCode?: unknown;
-  };
-
-  if (options?.verbose) {
-    if (part.videoMetadata !== undefined) {
-      return `[Video Metadata]`;
+    if (!value) {
+        return '';
     }
-    if (part.thought !== undefined) {
-      return `[Thought: ${part.thought}]`;
+    if (typeof value === 'string') {
+        return value;
     }
-    if (part.codeExecutionResult !== undefined) {
-      return `[Code Execution Result]`;
-    }
-    if (part.executableCode !== undefined) {
-      return `[Executable Code]`;
+    if (Array.isArray(value)) {
+        return value.map((part) => partToString(part, options)).join('');
     }
 
-    // Standard Part fields
-    if (part.fileData !== undefined) {
-      return `[File Data]`;
-    }
-    if (part.functionCall !== undefined) {
-      return `[Function Call: ${part.functionCall.name}]`;
-    }
-    if (part.functionResponse !== undefined) {
-      return `[Function Response: ${part.functionResponse.name}]`;
-    }
-    if (part.inlineData !== undefined) {
-      return `<${part.inlineData.mimeType}>`;
-    }
-  }
+    // Cast to Part, assuming it might contain project-specific fields
+    const part = value as Part & {
+        videoMetadata?: unknown;
+        thought?: string;
+        codeExecutionResult?: unknown;
+        executableCode?: unknown;
+    };
 
-  return part.text ?? '';
+    if (options?.verbose) {
+        if (part.videoMetadata !== undefined) {
+            return `[Video Metadata]`;
+        }
+        if (part.thought !== undefined) {
+            return `[Thought: ${part.thought}]`;
+        }
+        if (part.codeExecutionResult !== undefined) {
+            return `[Code Execution Result]`;
+        }
+        if (part.executableCode !== undefined) {
+            return `[Executable Code]`;
+        }
+
+        // Standard Part fields
+        if (part.fileData !== undefined) {
+            return `[File Data]`;
+        }
+        if (part.functionCall !== undefined) {
+            return `[Function Call: ${part.functionCall.name}]`;
+        }
+        if (part.functionResponse !== undefined) {
+            return `[Function Response: ${part.functionResponse.name}]`;
+        }
+        if (part.inlineData !== undefined) {
+            return `<${part.inlineData.mimeType}>`;
+        }
+    }
+
+    return part.text ?? '';
 }
 
 export function getResponseText(
-  response: GenerateContentResponse,
+    response: GenerateContentResponse
 ): string | null {
-  if (response.candidates && response.candidates.length > 0) {
-    const candidate = response.candidates[0];
+    if (response.candidates && response.candidates.length > 0) {
+        const candidate = response.candidates[0];
 
-    if (
-      candidate.content &&
-      candidate.content.parts &&
-      candidate.content.parts.length > 0
-    ) {
-      return candidate.content.parts
-        .filter((part) => part.text && !part.thought)
-        .map((part) => part.text)
-        .join('');
+        if (
+            candidate.content &&
+            candidate.content.parts &&
+            candidate.content.parts.length > 0
+        ) {
+            return candidate.content.parts
+                .filter((part) => part.text && !part.thought)
+                .map((part) => part.text)
+                .join('');
+        }
     }
-  }
-  return null;
+    return null;
 }
 
 /**
@@ -100,33 +100,33 @@ export function getResponseText(
  *   transformations applied.
  */
 export async function flatMapTextParts(
-  parts: PartListUnion,
-  transform: (text: string) => Promise<PartUnion[]>,
+    parts: PartListUnion,
+    transform: (text: string) => Promise<PartUnion[]>
 ): Promise<PartUnion[]> {
-  const result: PartUnion[] = [];
-  const partArray = Array.isArray(parts)
-    ? parts
-    : typeof parts === 'string'
-      ? [{ text: parts }]
-      : [parts];
+    const result: PartUnion[] = [];
+    const partArray = Array.isArray(parts)
+        ? parts
+        : typeof parts === 'string'
+          ? [{ text: parts }]
+          : [parts];
 
-  for (const part of partArray) {
-    let textToProcess: string | undefined;
-    if (typeof part === 'string') {
-      textToProcess = part;
-    } else if ('text' in part) {
-      textToProcess = part.text;
-    }
+    for (const part of partArray) {
+        let textToProcess: string | undefined;
+        if (typeof part === 'string') {
+            textToProcess = part;
+        } else if ('text' in part) {
+            textToProcess = part.text;
+        }
 
-    if (textToProcess !== undefined) {
-      const transformedParts = await transform(textToProcess);
-      result.push(...transformedParts);
-    } else {
-      // Pass through non-text parts unmodified.
-      result.push(part);
+        if (textToProcess !== undefined) {
+            const transformedParts = await transform(textToProcess);
+            result.push(...transformedParts);
+        } else {
+            // Pass through non-text parts unmodified.
+            result.push(part);
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 /**
@@ -139,31 +139,32 @@ export async function flatMapTextParts(
  * @returns The modified prompt.
  */
 export function appendToLastTextPart(
-  prompt: PartUnion[],
-  textToAppend: string,
-  separator = '\n\n',
+    prompt: PartUnion[],
+    textToAppend: string,
+    separator = '\n\n'
 ): PartUnion[] {
-  if (!textToAppend) {
-    return prompt;
-  }
+    if (!textToAppend) {
+        return prompt;
+    }
 
-  if (prompt.length === 0) {
-    return [{ text: textToAppend }];
-  }
+    if (prompt.length === 0) {
+        return [{ text: textToAppend }];
+    }
 
-  const newPrompt = [...prompt];
-  const lastPart = newPrompt.at(-1);
+    const newPrompt = [...prompt];
+    const lastPart = newPrompt.at(-1);
 
-  if (typeof lastPart === 'string') {
-    newPrompt[newPrompt.length - 1] = `${lastPart}${separator}${textToAppend}`;
-  } else if (lastPart && 'text' in lastPart) {
-    newPrompt[newPrompt.length - 1] = {
-      ...lastPart,
-      text: `${lastPart.text}${separator}${textToAppend}`,
-    };
-  } else {
-    newPrompt.push({ text: `${separator}${textToAppend}` });
-  }
+    if (typeof lastPart === 'string') {
+        newPrompt[newPrompt.length - 1] =
+            `${lastPart}${separator}${textToAppend}`;
+    } else if (lastPart && 'text' in lastPart) {
+        newPrompt[newPrompt.length - 1] = {
+            ...lastPart,
+            text: `${lastPart.text}${separator}${textToAppend}`
+        };
+    } else {
+        newPrompt.push({ text: `${separator}${textToAppend}` });
+    }
 
-  return newPrompt;
+    return newPrompt;
 }

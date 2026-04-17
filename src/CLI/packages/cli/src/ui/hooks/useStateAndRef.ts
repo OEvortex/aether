@@ -10,27 +10,27 @@ import React from 'react';
 // We need this in order to setState and reference the updated state multiple
 // times in the same function.
 export const useStateAndRef = <
-  // Everything but function.
-  T extends object | null | undefined | number | string,
+    // Everything but function.
+    T extends object | null | undefined | number | string
 >(
-  initialValue: T,
+    initialValue: T
 ) => {
-  const [state, setState] = React.useState<T>(initialValue);
-  const ref = React.useRef<T>(initialValue);
+    const [state, setState] = React.useState<T>(initialValue);
+    const ref = React.useRef<T>(initialValue);
 
-  const setStateInternal = React.useCallback<typeof setState>(
-    (newStateOrCallback) => {
-      let newValue: T;
-      if (typeof newStateOrCallback === 'function') {
-        newValue = newStateOrCallback(ref.current);
-      } else {
-        newValue = newStateOrCallback;
-      }
-      setState(newValue);
-      ref.current = newValue;
-    },
-    [],
-  );
+    const setStateInternal = React.useCallback<typeof setState>(
+        (newStateOrCallback) => {
+            let newValue: T;
+            if (typeof newStateOrCallback === 'function') {
+                newValue = newStateOrCallback(ref.current);
+            } else {
+                newValue = newStateOrCallback;
+            }
+            setState(newValue);
+            ref.current = newValue;
+        },
+        []
+    );
 
-  return [state, ref, setStateInternal] as const;
+    return [state, ref, setStateInternal] as const;
 };

@@ -1,14 +1,14 @@
 ﻿import type {
-  ClaudeMarketplaceConfig,
-  ExtensionConfig,
-  ExtensionRequestOptions,
-  SkillConfig,
-  SubagentConfig,
+    ClaudeMarketplaceConfig,
+    ExtensionConfig,
+    ExtensionRequestOptions,
+    SkillConfig,
+    SubagentConfig
 } from '@aetherai/aether-core';
-import type { ConfirmationRequest } from '../../ui/types.js';
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { t } from '../../i18n/index.js';
+import type { ConfirmationRequest } from '../../ui/types.js';
 import { writeStdoutLine } from '../../utils/stdioHelpers.js';
 
 /**
@@ -21,13 +21,13 @@ import { writeStdoutLine } from '../../utils/stdioHelpers.js';
  * @returns boolean, whether they consented or not.
  */
 export async function requestConsentNonInteractive(
-  consentDescription: string,
+    consentDescription: string
 ): Promise<boolean> {
-  writeStdoutLine(consentDescription);
-  const result = await promptForConsentNonInteractive(
-    t('Do you want to continue? [Y/n]: '),
-  );
-  return result;
+    writeStdoutLine(consentDescription);
+    const result = await promptForConsentNonInteractive(
+        t('Do you want to continue? [Y/n]: ')
+    );
+    return result;
 }
 
 /**
@@ -40,37 +40,37 @@ export async function requestConsentNonInteractive(
  * @returns The name of the selected plugin.
  */
 export async function requestChoicePluginNonInteractive(
-  marketplace: ClaudeMarketplaceConfig,
+    marketplace: ClaudeMarketplaceConfig
 ): Promise<string> {
-  const plugins = marketplace.plugins;
+    const plugins = marketplace.plugins;
 
-  if (plugins.length === 0) {
-    throw new Error(t('No plugins available in this marketplace.'));
-  }
+    if (plugins.length === 0) {
+        throw new Error(t('No plugins available in this marketplace.'));
+    }
 
-  // Build choices for prompts select
+    // Build choices for prompts select
 
-  const choices = plugins.map((plugin) => ({
-    title: chalk.green(chalk.bold(`[${plugin.name}]`)),
-    value: plugin.name,
-  }));
+    const choices = plugins.map((plugin) => ({
+        title: chalk.green(chalk.bold(`[${plugin.name}]`)),
+        value: plugin.name
+    }));
 
-  const response = await prompts({
-    type: 'select',
-    name: 'plugin',
-    message: t('Select a plugin to install from marketplace "{{name}}":', {
-      name: marketplace.name,
-    }),
-    choices,
-    initial: 0,
-  });
+    const response = await prompts({
+        type: 'select',
+        name: 'plugin',
+        message: t('Select a plugin to install from marketplace "{{name}}":', {
+            name: marketplace.name
+        }),
+        choices,
+        initial: 0
+    });
 
-  // Handle cancellation (Ctrl+C)
-  if (response.plugin === undefined) {
-    throw new Error(t('Plugin selection cancelled.'));
-  }
+    // Handle cancellation (Ctrl+C)
+    if (response.plugin === undefined) {
+        throw new Error(t('Plugin selection cancelled.'));
+    }
 
-  return response.plugin;
+    return response.plugin;
 }
 
 /**
@@ -83,13 +83,13 @@ export async function requestChoicePluginNonInteractive(
  * @returns boolean, whether they consented or not.
  */
 export async function requestConsentInteractive(
-  consentDescription: string,
-  addExtensionUpdateConfirmationRequest: (value: ConfirmationRequest) => void,
+    consentDescription: string,
+    addExtensionUpdateConfirmationRequest: (value: ConfirmationRequest) => void
 ): Promise<boolean> {
-  return promptForConsentInteractive(
-    consentDescription + '\n\n' + t('Do you want to continue?'),
-    addExtensionUpdateConfirmationRequest,
-  );
+    return promptForConsentInteractive(
+        consentDescription + '\n\n' + t('Do you want to continue?'),
+        addExtensionUpdateConfirmationRequest
+    );
 }
 
 /**
@@ -101,20 +101,20 @@ export async function requestConsentInteractive(
  * @returns Whether or not the user answers 'y' (yes). Defaults to 'yes' on enter.
  */
 async function promptForConsentNonInteractive(
-  prompt: string,
+    prompt: string
 ): Promise<boolean> {
-  const readline = await import('node:readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  return new Promise((resolve) => {
-    rl.question(prompt, (answer) => {
-      rl.close();
-      resolve(['y', ''].includes(answer.trim().toLowerCase()));
+    const readline = await import('node:readline');
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
     });
-  });
+
+    return new Promise((resolve) => {
+        rl.question(prompt, (answer) => {
+            rl.close();
+            resolve(['y', ''].includes(answer.trim().toLowerCase()));
+        });
+    });
 }
 
 /**
@@ -127,17 +127,17 @@ async function promptForConsentNonInteractive(
  * @returns Whether or not the user answers yes.
  */
 async function promptForConsentInteractive(
-  prompt: string,
-  addExtensionUpdateConfirmationRequest: (value: ConfirmationRequest) => void,
+    prompt: string,
+    addExtensionUpdateConfirmationRequest: (value: ConfirmationRequest) => void
 ): Promise<boolean> {
-  return new Promise<boolean>((resolve) => {
-    addExtensionUpdateConfirmationRequest({
-      prompt,
-      onConfirm: (resolvedConfirmed) => {
-        resolve(resolvedConfirmed);
-      },
+    return new Promise<boolean>((resolve) => {
+        addExtensionUpdateConfirmationRequest({
+            prompt,
+            onConfirm: (resolvedConfirmed) => {
+                resolve(resolvedConfirmed);
+            }
+        });
     });
-  });
 }
 
 /**
@@ -145,74 +145,76 @@ async function promptForConsentInteractive(
  * extensionConfig.
  */
 export function extensionConsentString(
-  extensionConfig: ExtensionConfig,
-  commands: string[] = [],
-  skills: SkillConfig[] = [],
-  subagents: SubagentConfig[] = [],
-  originSource: string = 'AetherCli',
+    extensionConfig: ExtensionConfig,
+    commands: string[] = [],
+    skills: SkillConfig[] = [],
+    subagents: SubagentConfig[] = [],
+    originSource: string = 'AetherCli'
 ): string {
-  const output: string[] = [];
-  if (originSource !== 'AetherCli') {
+    const output: string[] = [];
+    if (originSource !== 'AetherCli') {
+        output.push(
+            t(
+                'You are installing an extension from {{originSource}}. Some features may not work perfectly with Aether Code.',
+                { originSource }
+            )
+        );
+    }
+    const mcpServerEntries = Object.entries(extensionConfig.mcpServers || {});
     output.push(
-      t(
-        'You are installing an extension from {{originSource}}. Some features may not work perfectly with Aether Code.',
-        { originSource },
-      ),
+        t('Installing extension "{{name}}".', { name: extensionConfig.name })
     );
-  }
-  const mcpServerEntries = Object.entries(extensionConfig.mcpServers || {});
-  output.push(
-    t('Installing extension "{{name}}".', { name: extensionConfig.name }),
-  );
-  output.push(
-    t(
-      '**Extensions may introduce unexpected behavior. Ensure you have investigated the extension source and trust the author.**',
-    ),
-  );
+    output.push(
+        t(
+            '**Extensions may introduce unexpected behavior. Ensure you have investigated the extension source and trust the author.**'
+        )
+    );
 
-  if (mcpServerEntries.length) {
-    output.push(t('This extension will run the following MCP servers:'));
-    for (const [key, mcpServer] of mcpServerEntries) {
-      const isLocal = !!mcpServer.command;
-      const source =
-        mcpServer.httpUrl ??
-        `${mcpServer.command || ''}${mcpServer.args ? ' ' + mcpServer.args.join(' ') : ''}`;
-      output.push(
-        `  * ${key} (${isLocal ? t('local') : t('remote')}): ${source}`,
-      );
+    if (mcpServerEntries.length) {
+        output.push(t('This extension will run the following MCP servers:'));
+        for (const [key, mcpServer] of mcpServerEntries) {
+            const isLocal = !!mcpServer.command;
+            const source =
+                mcpServer.httpUrl ??
+                `${mcpServer.command || ''}${mcpServer.args ? ' ' + mcpServer.args.join(' ') : ''}`;
+            output.push(
+                `  * ${key} (${isLocal ? t('local') : t('remote')}): ${source}`
+            );
+        }
     }
-  }
-  if (commands && commands.length > 0) {
-    output.push(
-      t('This extension will add the following commands: {{commands}}.', {
-        commands: commands.join(', '),
-      }),
-    );
-  }
-  if (extensionConfig.contextFileName) {
-    const fileName = Array.isArray(extensionConfig.contextFileName)
-      ? extensionConfig.contextFileName.join(', ')
-      : extensionConfig.contextFileName;
-    output.push(
-      t(
-        'This extension will append info to your AGENTS.md context using {{fileName}}',
-        { fileName },
-      ),
-    );
-  }
-  if (skills.length > 0) {
-    output.push(t('This extension will install the following skills:'));
-    for (const skill of skills) {
-      output.push(`  * ${chalk.bold(skill.name)}: ${skill.description}`);
+    if (commands && commands.length > 0) {
+        output.push(
+            t('This extension will add the following commands: {{commands}}.', {
+                commands: commands.join(', ')
+            })
+        );
     }
-  }
-  if (subagents.length > 0) {
-    output.push(t('This extension will install the following subagents:'));
-    for (const subagent of subagents) {
-      output.push(`  * ${chalk.bold(subagent.name)}: ${subagent.description}`);
+    if (extensionConfig.contextFileName) {
+        const fileName = Array.isArray(extensionConfig.contextFileName)
+            ? extensionConfig.contextFileName.join(', ')
+            : extensionConfig.contextFileName;
+        output.push(
+            t(
+                'This extension will append info to your AGENTS.md context using {{fileName}}',
+                { fileName }
+            )
+        );
     }
-  }
-  return output.join('\n');
+    if (skills.length > 0) {
+        output.push(t('This extension will install the following skills:'));
+        for (const skill of skills) {
+            output.push(`  * ${chalk.bold(skill.name)}: ${skill.description}`);
+        }
+    }
+    if (subagents.length > 0) {
+        output.push(t('This extension will install the following subagents:'));
+        for (const subagent of subagents) {
+            output.push(
+                `  * ${chalk.bold(subagent.name)}: ${subagent.description}`
+            );
+        }
+    }
+    return output.join('\n');
 }
 
 /**
@@ -225,45 +227,45 @@ export function extensionConsentString(
  * Throws if the user does not consent.
  */
 export const requestConsentOrFail = async (
-  requestConsent: (consent: string) => Promise<boolean>,
-  options?: ExtensionRequestOptions,
+    requestConsent: (consent: string) => Promise<boolean>,
+    options?: ExtensionRequestOptions
 ) => {
-  if (!options) return;
-  const {
-    extensionConfig,
-    originSource = 'AetherCli',
-    commands = [],
-    skills = [],
-    subagents = [],
-    previousExtensionConfig,
-    previousCommands = [],
-    previousSkills = [],
-    previousSubagents = [],
-  } = options;
-  const extensionConsent = extensionConsentString(
-    extensionConfig,
-    commands,
-    skills,
-    subagents,
-    originSource,
-  );
-  if (previousExtensionConfig) {
-    const previousExtensionConsent = extensionConsentString(
-      previousExtensionConfig,
-      previousCommands,
-      previousSkills,
-      previousSubagents,
-      originSource,
+    if (!options) return;
+    const {
+        extensionConfig,
+        originSource = 'AetherCli',
+        commands = [],
+        skills = [],
+        subagents = [],
+        previousExtensionConfig,
+        previousCommands = [],
+        previousSkills = [],
+        previousSubagents = []
+    } = options;
+    const extensionConsent = extensionConsentString(
+        extensionConfig,
+        commands,
+        skills,
+        subagents,
+        originSource
     );
-    if (previousExtensionConsent === extensionConsent) {
-      return;
+    if (previousExtensionConfig) {
+        const previousExtensionConsent = extensionConsentString(
+            previousExtensionConfig,
+            previousCommands,
+            previousSkills,
+            previousSubagents,
+            originSource
+        );
+        if (previousExtensionConsent === extensionConsent) {
+            return;
+        }
     }
-  }
-  if (!(await requestConsent(extensionConsent))) {
-    throw new Error(
-      t('Installation cancelled for "{{name}}".', {
-        name: extensionConfig.name,
-      }),
-    );
-  }
+    if (!(await requestConsent(extensionConsent))) {
+        throw new Error(
+            t('Installation cancelled for "{{name}}".', {
+                name: extensionConfig.name
+            })
+        );
+    }
 };

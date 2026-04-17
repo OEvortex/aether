@@ -5,17 +5,17 @@
  */
 
 import {
-  AuthType,
-  type Config,
-  type AvailableModel as CoreAvailableModel,
+    AuthType,
+    type Config,
+    type AvailableModel as CoreAvailableModel
 } from '@aetherai/aether-core';
 import { t } from '../../i18n/index.js';
 
 export type AvailableModel = {
-  id: string;
-  label: string;
-  description?: string;
-  isVision?: boolean;
+    id: string;
+    label: string;
+    description?: string;
+    isVision?: boolean;
 };
 
 /**
@@ -23,43 +23,45 @@ export type AvailableModel = {
  * In the future, after settings.json is updated, we will allow users to configure this themselves.
  */
 export function getOpenAIAvailableModelFromEnv(): AvailableModel | null {
-  const id = process.env['OPENAI_MODEL']?.trim();
-  return id
-    ? {
-        id,
-        label: id,
-        get description() {
-          return t('Configured via OPENAI_MODEL environment variable');
-        },
-      }
-    : null;
+    const id = process.env['OPENAI_MODEL']?.trim();
+    return id
+        ? {
+              id,
+              label: id,
+              get description() {
+                  return t('Configured via OPENAI_MODEL environment variable');
+              }
+          }
+        : null;
 }
 
 export function getAnthropicAvailableModelFromEnv(): AvailableModel | null {
-  const id = process.env['ANTHROPIC_MODEL']?.trim();
-  return id
-    ? {
-        id,
-        label: id,
-        get description() {
-          return t('Configured via ANTHROPIC_MODEL environment variable');
-        },
-      }
-    : null;
+    const id = process.env['ANTHROPIC_MODEL']?.trim();
+    return id
+        ? {
+              id,
+              label: id,
+              get description() {
+                  return t(
+                      'Configured via ANTHROPIC_MODEL environment variable'
+                  );
+              }
+          }
+        : null;
 }
 
 /**
  * Convert core AvailableModel to CLI AvailableModel format
  */
 function convertCoreModelToCliModel(
-  coreModel: CoreAvailableModel,
+    coreModel: CoreAvailableModel
 ): AvailableModel {
-  return {
-    id: coreModel.id,
-    label: coreModel.label,
-    description: coreModel.description,
-    isVision: coreModel.isVision ?? coreModel.capabilities?.vision ?? false,
-  };
+    return {
+        id: coreModel.id,
+        label: coreModel.label,
+        description: coreModel.description,
+        isVision: coreModel.isVision ?? coreModel.capabilities?.vision ?? false
+    };
 }
 
 /**
@@ -69,36 +71,36 @@ function convertCoreModelToCliModel(
  * Falls back to environment variables only when no config is provided.
  */
 export function getAvailableModelsForAuthType(
-  authType: AuthType,
-  config?: Config,
+    authType: AuthType,
+    config?: Config
 ): AvailableModel[] {
-  // Use config's model registry when available
-  if (config) {
-    try {
-      const models = config.getAvailableModelsForAuthType(authType);
-      if (models.length > 0) {
-        return models.map(convertCoreModelToCliModel);
-      }
-    } catch {
-      // If config throws (e.g., not initialized), return empty array
+    // Use config's model registry when available
+    if (config) {
+        try {
+            const models = config.getAvailableModelsForAuthType(authType);
+            if (models.length > 0) {
+                return models.map(convertCoreModelToCliModel);
+            }
+        } catch {
+            // If config throws (e.g., not initialized), return empty array
+        }
+        // When a Config object is provided, we intentionally do NOT fall back to env-based
+        // "raw" models. These may reflect the currently effective config but should not be
+        // presented as selectable options in /model.
+        return [];
     }
-    // When a Config object is provided, we intentionally do NOT fall back to env-based
-    // "raw" models. These may reflect the currently effective config but should not be
-    // presented as selectable options in /model.
-    return [];
-  }
 
-  // Fall back to environment variables for specific auth types (no config provided)
-  switch (authType) {
-    case AuthType.USE_OPENAI: {
-      const openAIModel = getOpenAIAvailableModelFromEnv();
-      return openAIModel ? [openAIModel] : [];
+    // Fall back to environment variables for specific auth types (no config provided)
+    switch (authType) {
+        case AuthType.USE_OPENAI: {
+            const openAIModel = getOpenAIAvailableModelFromEnv();
+            return openAIModel ? [openAIModel] : [];
+        }
+        case AuthType.USE_ANTHROPIC: {
+            const anthropicModel = getAnthropicAvailableModelFromEnv();
+            return anthropicModel ? [anthropicModel] : [];
+        }
+        default:
+            return [];
     }
-    case AuthType.USE_ANTHROPIC: {
-      const anthropicModel = getAnthropicAvailableModelFromEnv();
-      return anthropicModel ? [anthropicModel] : [];
-    }
-    default:
-      return [];
-  }
 }

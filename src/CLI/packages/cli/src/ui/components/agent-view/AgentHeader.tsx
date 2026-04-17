@@ -10,55 +10,57 @@
  * branch in a bordered info panel.
  */
 
-import type React from 'react';
-import { Box, Text } from 'ink';
 import { shortenPath, tildeifyPath } from '@aetherai/aether-core';
-import { theme } from '../../semantic-colors.js';
+import { Box, Text } from 'ink';
+import type React from 'react';
 import { useTerminalSize } from '../../hooks/useTerminalSize.js';
+import { theme } from '../../semantic-colors.js';
 
 interface AgentHeaderProps {
-  modelId: string;
-  modelName?: string;
-  workingDirectory: string;
-  gitBranch?: string;
+    modelId: string;
+    modelName?: string;
+    workingDirectory: string;
+    gitBranch?: string;
 }
 
 export const AgentHeader: React.FC<AgentHeaderProps> = ({
-  modelId,
-  modelName,
-  workingDirectory,
-  gitBranch,
+    modelId,
+    modelName,
+    workingDirectory,
+    gitBranch
 }) => {
-  const { columns: terminalWidth } = useTerminalSize();
-  const maxPathLen = Math.max(20, terminalWidth - 12);
-  const displayPath = shortenPath(tildeifyPath(workingDirectory), maxPathLen);
+    const { columns: terminalWidth } = useTerminalSize();
+    const maxPathLen = Math.max(20, terminalWidth - 12);
+    const displayPath = shortenPath(tildeifyPath(workingDirectory), maxPathLen);
 
-  const modelText =
-    modelName && modelName !== modelId ? `${modelId} (${modelName})` : modelId;
+    const modelText =
+        modelName && modelName !== modelId
+            ? `${modelId} (${modelName})`
+            : modelId;
 
-  return (
-    <Box
-      flexDirection="column"
-      marginX={2}
-      marginTop={1}
-      borderStyle="round"
-      borderColor={theme.border.default}
-      paddingX={1}
-    >
-      <Text>
-        <Text color={theme.text.secondary}>{'Model:  '}</Text>
-        <Text color={theme.text.primary}>{modelText}</Text>
-      </Text>
-      <Text>
-        <Text color={theme.text.secondary}>{'Path:   '}</Text>
-        <Text color={theme.text.primary}>{displayPath}</Text>
-      </Text>
-      {gitBranch && (
-        <Text>
-          <Text color={theme.text.secondary}>{'Branch: '}</Text>
-          <Text color={theme.text.primary}>{gitBranch}</Text>
-        </Text>
-      )}
-    </Box>
-  );
+    return (
+        <Box
+            flexDirection="column"
+            marginX={2}
+            marginTop={1}
+            borderStyle="round"
+            borderColor={theme.border.default}
+            paddingX={1}
+        >
+            <Text>
+                <Text color={theme.text.secondary}>{'Model:  '}</Text>
+                <Text color={theme.text.primary}>{modelText}</Text>
+            </Text>
+            <Text>
+                <Text color={theme.text.secondary}>{'Path:   '}</Text>
+                <Text color={theme.text.primary}>{displayPath}</Text>
+            </Text>
+            {gitBranch && (
+                <Text>
+                    <Text color={theme.text.secondary}>{'Branch: '}</Text>
+                    <Text color={theme.text.primary}>{gitBranch}</Text>
+                </Text>
+            )}
+        </Box>
+    );
 };

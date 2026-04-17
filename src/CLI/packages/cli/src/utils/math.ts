@@ -12,4 +12,4 @@
  * @param t The interpolation amount (typically between 0 and 1).
  */
 export const lerp = (start: number, end: number, t: number): number =>
-  start + (end - start) * t;
+    start + (end - start) * t;

@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { homedir } from 'node:os';
+import { join } from 'node:path';
 import type { PairingRequest } from './types.js';
 
 function pairingDir(): string {
@@ -35,6 +35,10 @@ export class PairingStore {
     }
 
     public savePending(requests: PairingRequest[]): void {
-        writeFileSync(pairingFile(this.name), JSON.stringify(requests, null, 2), 'utf8');
+        writeFileSync(
+            pairingFile(this.name),
+            JSON.stringify(requests, null, 2),
+            'utf8'
+        );
     }
 }

@@ -19,37 +19,37 @@ export type SkillLevel = 'project' | 'user' | 'extension' | 'bundled';
  * containing metadata, followed by markdown content describing the skill.
  */
 export interface SkillConfig {
-  /** Unique name identifier for the skill */
-  name: string;
+    /** Unique name identifier for the skill */
+    name: string;
 
-  /** Human-readable description of what this skill provides */
-  description: string;
+    /** Human-readable description of what this skill provides */
+    description: string;
 
-  /**
-   * Optional list of tool names that this skill is allowed to use.
-   * For v1, this is informational only (no gating).
-   */
-  allowedTools?: string[];
+    /**
+     * Optional list of tool names that this skill is allowed to use.
+     * For v1, this is informational only (no gating).
+     */
+    allowedTools?: string[];
 
-  /**
-   * Storage level - determines where the configuration file is stored
-   */
-  level: SkillLevel;
+    /**
+     * Storage level - determines where the configuration file is stored
+     */
+    level: SkillLevel;
 
-  /**
-   * Absolute path to the skill directory containing SKILL.md
-   */
-  filePath: string;
+    /**
+     * Absolute path to the skill directory containing SKILL.md
+     */
+    filePath: string;
 
-  /**
-   * The markdown body content from SKILL.md (after the frontmatter)
-   */
-  body: string;
+    /**
+     * The markdown body content from SKILL.md (after the frontmatter)
+     */
+    body: string;
 
-  /**
-   * For extension-level skills: the name of the providing extension
-   */
-  extensionName?: string;
+    /**
+     * For extension-level skills: the name of the providing extension
+     */
+    extensionName?: string;
 }
 
 /**
@@ -62,51 +62,51 @@ export type SkillRuntimeConfig = SkillConfig;
  * Result of a validation operation on a skill configuration.
  */
 export interface SkillValidationResult {
-  /** Whether the configuration is valid */
-  isValid: boolean;
+    /** Whether the configuration is valid */
+    isValid: boolean;
 
-  /** Array of error messages if validation failed */
-  errors: string[];
+    /** Array of error messages if validation failed */
+    errors: string[];
 
-  /** Array of warning messages (non-blocking issues) */
-  warnings: string[];
+    /** Array of warning messages (non-blocking issues) */
+    warnings: string[];
 }
 
 /**
  * Options for listing skills.
  */
 export interface ListSkillsOptions {
-  /** Filter by storage level */
-  level?: SkillLevel;
+    /** Filter by storage level */
+    level?: SkillLevel;
 
-  /** Force refresh from disk, bypassing cache. Defaults to false. */
-  force?: boolean;
+    /** Force refresh from disk, bypassing cache. Defaults to false. */
+    force?: boolean;
 }
 
 /**
  * Error thrown when a skill operation fails.
  */
 export class SkillError extends Error {
-  constructor(
-    message: string,
-    readonly code: SkillErrorCode,
-    readonly skillName?: string,
-  ) {
-    super(message);
-    this.name = 'SkillError';
-  }
+    constructor(
+        message: string,
+        readonly code: SkillErrorCode,
+        readonly skillName?: string
+    ) {
+        super(message);
+        this.name = 'SkillError';
+    }
 }
 
 /**
  * Error codes for skill operations.
  */
 export const SkillErrorCode = {
-  NOT_FOUND: 'NOT_FOUND',
-  INVALID_CONFIG: 'INVALID_CONFIG',
-  INVALID_NAME: 'INVALID_NAME',
-  FILE_ERROR: 'FILE_ERROR',
-  PARSE_ERROR: 'PARSE_ERROR',
+    NOT_FOUND: 'NOT_FOUND',
+    INVALID_CONFIG: 'INVALID_CONFIG',
+    INVALID_NAME: 'INVALID_NAME',
+    FILE_ERROR: 'FILE_ERROR',
+    PARSE_ERROR: 'PARSE_ERROR'
 } as const;
 
 export type SkillErrorCode =
-  (typeof SkillErrorCode)[keyof typeof SkillErrorCode];
+    (typeof SkillErrorCode)[keyof typeof SkillErrorCode];

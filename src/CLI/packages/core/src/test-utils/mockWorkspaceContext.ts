@@ -14,20 +14,20 @@ import type { WorkspaceContext } from '../utils/workspaceContext.js';
  * @returns A mock WorkspaceContext instance
  */
 export function createMockWorkspaceContext(
-  rootDir: string,
-  additionalDirs: string[] = [],
+    rootDir: string,
+    additionalDirs: string[] = []
 ): WorkspaceContext {
-  const allDirs = [rootDir, ...additionalDirs];
+    const allDirs = [rootDir, ...additionalDirs];
 
-  const mockWorkspaceContext = {
-    addDirectory: vi.fn(),
-    getDirectories: vi.fn().mockReturnValue(allDirs),
-    isPathWithinWorkspace: vi
-      .fn()
-      .mockImplementation((path: string) =>
-        allDirs.some((dir) => path.startsWith(dir)),
-      ),
-  } as unknown as WorkspaceContext;
+    const mockWorkspaceContext = {
+        addDirectory: vi.fn(),
+        getDirectories: vi.fn().mockReturnValue(allDirs),
+        isPathWithinWorkspace: vi
+            .fn()
+            .mockImplementation((path: string) =>
+                allDirs.some((dir) => path.startsWith(dir))
+            )
+    } as unknown as WorkspaceContext;
 
-  return mockWorkspaceContext;
+    return mockWorkspaceContext;
 }

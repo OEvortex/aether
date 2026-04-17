@@ -5,8 +5,8 @@
  */
 
 import { execSync } from 'node:child_process';
-import { ProxyAgent } from 'undici';
 import { createDebugLogger } from '@aetherai/aether-core';
+import { ProxyAgent } from 'undici';
 
 const debugLogger = createDebugLogger('GIT');
 
@@ -15,21 +15,21 @@ const debugLogger = createDebugLogger('GIT');
  * @returns true if the directory is in a git repository with a github.com remote, false otherwise
  */
 export const isGitHubRepository = (): boolean => {
-  try {
-    const remotes = (
-      execSync('git remote -v', {
-        encoding: 'utf-8',
-      }) || ''
-    ).trim();
+    try {
+        const remotes = (
+            execSync('git remote -v', {
+                encoding: 'utf-8'
+            }) || ''
+        ).trim();
 
-    const pattern = /github\.com/;
+        const pattern = /github\.com/;
 
-    return pattern.test(remotes);
-  } catch (_error) {
-    // If any filesystem error occurs, assume not a git repo
-    debugLogger.debug(`Failed to get git remote:`, _error);
-    return false;
-  }
+        return pattern.test(remotes);
+    } catch (_error) {
+        // If any filesystem error occurs, assume not a git repo
+        debugLogger.debug(`Failed to get git remote:`, _error);
+        return false;
+    }
 };
 
 /**
@@ -38,17 +38,17 @@ export const isGitHubRepository = (): boolean => {
  * @throws error if the exec command fails.
  */
 export const getGitRepoRoot = (): string => {
-  const gitRepoRoot = (
-    execSync('git rev-parse --show-toplevel', {
-      encoding: 'utf-8',
-    }) || ''
-  ).trim();
+    const gitRepoRoot = (
+        execSync('git rev-parse --show-toplevel', {
+            encoding: 'utf-8'
+        }) || ''
+    ).trim();
 
-  if (!gitRepoRoot) {
-    throw new Error(`Git repo returned empty value`);
-  }
+    if (!gitRepoRoot) {
+        throw new Error(`Git repo returned empty value`);
+    }
 
-  return gitRepoRoot;
+    return gitRepoRoot;
 };
 
 /**
@@ -56,44 +56,47 @@ export const getGitRepoRoot = (): string => {
  * @returns string of the release tag (e.g. "v1.2.3").
  */
 export const getLatestGitHubRelease = async (
-  proxy?: string,
+    proxy?: string
 ): Promise<string> => {
-  try {
-    const controller = new AbortController();
+    try {
+        const controller = new AbortController();
 
-    const endpoint = `https://api.github.com/repos/OEvortex/aether-action/releases/latest`;
+        const endpoint = `https://api.github.com/repos/OEvortex/aether-action/releases/latest`;
 
-    const response = await fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'Content-Type': 'application/json',
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-      dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
-      signal: AbortSignal.any([AbortSignal.timeout(30_000), controller.signal]),
-    } as RequestInit);
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/vnd.github+json',
+                'Content-Type': 'application/json',
+                'X-GitHub-Api-Version': '2022-11-28'
+            },
+            dispatcher: proxy ? new ProxyAgent(proxy) : undefined,
+            signal: AbortSignal.any([
+                AbortSignal.timeout(30_000),
+                controller.signal
+            ])
+        } as RequestInit);
 
-    if (!response.ok) {
-      throw new Error(
-        `Invalid response code: ${response.status} - ${response.statusText}`,
-      );
+        if (!response.ok) {
+            throw new Error(
+                `Invalid response code: ${response.status} - ${response.statusText}`
+            );
+        }
+
+        const releaseTag = (await response.json()).tag_name;
+        if (!releaseTag) {
+            throw new Error(`Response did not include tag_name field`);
+        }
+        return releaseTag;
+    } catch (_error) {
+        debugLogger.debug(
+            `Failed to determine latest aether-action release:`,
+            _error
+        );
+        throw new Error(
+            `Unable to determine the latest aether-action release on GitHub.`
+        );
     }
-
-    const releaseTag = (await response.json()).tag_name;
-    if (!releaseTag) {
-      throw new Error(`Response did not include tag_name field`);
-    }
-    return releaseTag;
-  } catch (_error) {
-    debugLogger.debug(
-      `Failed to determine latest aether-action release:`,
-      _error,
-    );
-    throw new Error(
-      `Unable to determine the latest aether-action release on GitHub.`,
-    );
-  }
 };
 
 /**
@@ -102,42 +105,42 @@ export const getLatestGitHubRelease = async (
  * @throws error if the exec command fails.
  */
 export function getGitHubRepoInfo(): { owner: string; repo: string } {
-  const remoteUrl = execSync('git remote get-url origin', {
-    encoding: 'utf-8',
-  }).trim();
+    const remoteUrl = execSync('git remote get-url origin', {
+        encoding: 'utf-8'
+    }).trim();
 
-  // Handle SCP-style SSH URLs (git@github.com:owner/repo.git)
-  let urlToParse = remoteUrl;
-  if (remoteUrl.startsWith('git@github.com:')) {
-    urlToParse = remoteUrl.replace('git@github.com:', '');
-  } else if (remoteUrl.startsWith('git@')) {
-    // SSH URL for a different provider (GitLab, Bitbucket, etc.)
-    throw new Error(
-      `Owner & repo could not be extracted from remote URL: ${remoteUrl}`,
-    );
-  }
+    // Handle SCP-style SSH URLs (git@github.com:owner/repo.git)
+    let urlToParse = remoteUrl;
+    if (remoteUrl.startsWith('git@github.com:')) {
+        urlToParse = remoteUrl.replace('git@github.com:', '');
+    } else if (remoteUrl.startsWith('git@')) {
+        // SSH URL for a different provider (GitLab, Bitbucket, etc.)
+        throw new Error(
+            `Owner & repo could not be extracted from remote URL: ${remoteUrl}`
+        );
+    }
 
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(urlToParse, 'https://github.com');
-  } catch {
-    throw new Error(
-      `Owner & repo could not be extracted from remote URL: ${remoteUrl}`,
-    );
-  }
+    let parsedUrl: URL;
+    try {
+        parsedUrl = new URL(urlToParse, 'https://github.com');
+    } catch {
+        throw new Error(
+            `Owner & repo could not be extracted from remote URL: ${remoteUrl}`
+        );
+    }
 
-  if (parsedUrl.host !== 'github.com') {
-    throw new Error(
-      `Owner & repo could not be extracted from remote URL: ${remoteUrl}`,
-    );
-  }
+    if (parsedUrl.host !== 'github.com') {
+        throw new Error(
+            `Owner & repo could not be extracted from remote URL: ${remoteUrl}`
+        );
+    }
 
-  const parts = parsedUrl.pathname.split('/').filter((part) => part !== '');
-  if (parts.length !== 2 || !parts[0] || !parts[1]) {
-    throw new Error(
-      `Owner & repo could not be extracted from remote URL: ${remoteUrl}`,
-    );
-  }
+    const parts = parsedUrl.pathname.split('/').filter((part) => part !== '');
+    if (parts.length !== 2 || !parts[0] || !parts[1]) {
+        throw new Error(
+            `Owner & repo could not be extracted from remote URL: ${remoteUrl}`
+        );
+    }
 
-  return { owner: parts[0], repo: parts[1].replace(/\.git$/, '') };
+    return { owner: parts[0], repo: parts[1].replace(/\.git$/, '') };
 }

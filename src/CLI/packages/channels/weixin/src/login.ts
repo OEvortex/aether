@@ -11,22 +11,33 @@ export interface LoginResult {
 }
 
 export async function startLogin(apiBaseUrl: string): Promise<string> {
-    const resp = await fetch(`${apiBaseUrl}/ilink/bot/get_bot_qrcode?bot_type=3`);
+    const resp = await fetch(
+        `${apiBaseUrl}/ilink/bot/get_bot_qrcode?bot_type=3`
+    );
     if (!resp.ok) {
         throw new Error(`Failed to get QR code: HTTP ${resp.status}`);
     }
-    const data = (await resp.json()) as { qrcode?: string; qrcode_img_content?: string };
+    const data = (await resp.json()) as {
+        qrcode?: string;
+        qrcode_img_content?: string;
+    };
     if (!data.qrcode) {
         throw new Error('No qrcode in response');
     }
     if (data.qrcode_img_content) {
-        process.stderr.write(`QR code URL: ${data.qrcode_img_content}\nScan this URL with WeChat.\n`);
+        process.stderr.write(
+            `QR code URL: ${data.qrcode_img_content}\nScan this URL with WeChat.\n`
+        );
     }
     process.stderr.write('Scan the QR code with WeChat to connect.\n');
     return data.qrcode;
 }
 
-export async function waitForLogin(params: { qrcodeId: string; apiBaseUrl: string; timeoutMs?: number }): Promise<LoginResult> {
+export async function waitForLogin(params: {
+    qrcodeId: string;
+    apiBaseUrl: string;
+    timeoutMs?: number;
+}): Promise<LoginResult> {
     const { apiBaseUrl, timeoutMs = 480000 } = params;
     let currentQrcodeId = params.qrcodeId;
     const deadline = Date.now() + timeoutMs;
@@ -40,10 +51,10 @@ export async function waitForLogin(params: { qrcodeId: string; apiBaseUrl: strin
                 `${apiBaseUrl}/ilink/bot/get_qrcode_status?qrcode=${encodeURIComponent(currentQrcodeId)}`,
                 {
                     headers: {
-                        'iLink-App-ClientVersion': '1',
+                        'iLink-App-ClientVersion': '1'
                     },
-                    signal: controller.signal,
-                },
+                    signal: controller.signal
+                }
             );
             clearTimeout(timeout);
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -61,17 +72,19 @@ export async function waitForLogin(params: { qrcodeId: string; apiBaseUrl: strin
                         token: data.bot_token,
                         baseUrl: data.baseurl,
                         userId: data.ilink_user_id,
-                        message: 'Connected to WeChat successfully!',
+                        message: 'Connected to WeChat successfully!'
                     };
                 case 'scaned':
-                    process.stderr.write('QR code scanned, waiting for confirmation...\n');
+                    process.stderr.write(
+                        'QR code scanned, waiting for confirmation...\n'
+                    );
                     break;
                 case 'expired':
                     retryCount++;
                     if (retryCount >= 3) {
                         return {
                             connected: false,
-                            message: 'QR code expired after maximum retries.',
+                            message: 'QR code expired after maximum retries.'
                         };
                     }
                     process.stderr.write('QR code expired, refreshing...\n');
@@ -90,6 +103,6 @@ export async function waitForLogin(params: { qrcodeId: string; apiBaseUrl: strin
     }
     return {
         connected: false,
-        message: 'Login timed out.',
+        message: 'Login timed out.'
     };
 }

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import stripAnsi from 'strip-ansi';
-import ansiRegex from 'ansi-regex';
 import { stripVTControlCharacters } from 'node:util';
+import ansiRegex from 'ansi-regex';
 import stringWidth from 'string-width';
+import stripAnsi from 'strip-ansi';
 
 /**
  * Calculates the maximum width of a multi-line ASCII art string.
@@ -15,11 +15,11 @@ import stringWidth from 'string-width';
  * @returns The length of the longest line in the ASCII art.
  */
 export const getAsciiArtWidth = (asciiArt: string): number => {
-  if (!asciiArt) {
-    return 0;
-  }
-  const lines = asciiArt.split('\n');
-  return Math.max(...lines.map((line) => line.length));
+    if (!asciiArt) {
+        return 0;
+    }
+    const lines = asciiArt.split('\n');
+    return Math.max(...lines.map((line) => line.length));
 };
 
 /*
@@ -33,44 +33,44 @@ const codePointsCache = new Map<string, string[]>();
 const MAX_STRING_LENGTH_TO_CACHE = 1000;
 
 export function toCodePoints(str: string): string[] {
-  // ASCII fast path - check if all chars are ASCII (0-127)
-  let isAscii = true;
-  for (let i = 0; i < str.length; i++) {
-    if (str.charCodeAt(i) > 127) {
-      isAscii = false;
-      break;
+    // ASCII fast path - check if all chars are ASCII (0-127)
+    let isAscii = true;
+    for (let i = 0; i < str.length; i++) {
+        if (str.charCodeAt(i) > 127) {
+            isAscii = false;
+            break;
+        }
     }
-  }
-  if (isAscii) {
-    return str.split('');
-  }
-
-  // Cache short strings
-  if (str.length <= MAX_STRING_LENGTH_TO_CACHE) {
-    const cached = codePointsCache.get(str);
-    if (cached) {
-      return cached;
+    if (isAscii) {
+        return str.split('');
     }
-  }
 
-  const result = Array.from(str);
+    // Cache short strings
+    if (str.length <= MAX_STRING_LENGTH_TO_CACHE) {
+        const cached = codePointsCache.get(str);
+        if (cached) {
+            return cached;
+        }
+    }
 
-  // Cache result (unlimited like Ink)
-  if (str.length <= MAX_STRING_LENGTH_TO_CACHE) {
-    codePointsCache.set(str, result);
-  }
+    const result = Array.from(str);
 
-  return result;
+    // Cache result (unlimited like Ink)
+    if (str.length <= MAX_STRING_LENGTH_TO_CACHE) {
+        codePointsCache.set(str, result);
+    }
+
+    return result;
 }
 
 export function cpLen(str: string): number {
-  return toCodePoints(str).length;
+    return toCodePoints(str).length;
 }
 
 export function cpSlice(str: string, start: number, end?: number): string {
-  // Slice by code‑point indices and re‑join.
-  const arr = toCodePoints(str).slice(start, end);
-  return arr.join('');
+    // Slice by code‑point indices and re‑join.
+    const arr = toCodePoints(str).slice(start, end);
+    return arr.join('');
 }
 
 /**
@@ -91,31 +91,31 @@ export function cpSlice(str: string, start: number, end?: number): string {
  * - CR/LF (0x0D/0x0A) - needed for line breaks
  */
 export function stripUnsafeCharacters(str: string): string {
-  const strippedAnsi = stripAnsi(str);
-  const strippedVT = stripVTControlCharacters(strippedAnsi);
+    const strippedAnsi = stripAnsi(str);
+    const strippedVT = stripVTControlCharacters(strippedAnsi);
 
-  return toCodePoints(strippedVT)
-    .filter((char) => {
-      const code = char.codePointAt(0);
-      if (code === undefined) return false;
+    return toCodePoints(strippedVT)
+        .filter((char) => {
+            const code = char.codePointAt(0);
+            if (code === undefined) return false;
 
-      // Preserve CR/LF for line handling
-      if (code === 0x0a || code === 0x0d) return true;
+            // Preserve CR/LF for line handling
+            if (code === 0x0a || code === 0x0d) return true;
 
-      // Remove C0 control chars (except CR/LF) that can break display
-      // Examples: BELL(0x07) makes noise, BS(0x08) moves cursor, VT(0x0B), FF(0x0C)
-      if (code >= 0x00 && code <= 0x1f) return false;
+            // Remove C0 control chars (except CR/LF) that can break display
+            // Examples: BELL(0x07) makes noise, BS(0x08) moves cursor, VT(0x0B), FF(0x0C)
+            if (code >= 0x00 && code <= 0x1f) return false;
 
-      // Remove C1 control chars (0x80-0x9f) - legacy 8-bit control codes
-      if (code >= 0x80 && code <= 0x9f) return false;
+            // Remove C1 control chars (0x80-0x9f) - legacy 8-bit control codes
+            if (code >= 0x80 && code <= 0x9f) return false;
 
-      // Preserve DEL (0x7f) - it's handled functionally by applyOperations as backspace
-      // and doesn't cause rendering issues when displayed
+            // Preserve DEL (0x7f) - it's handled functionally by applyOperations as backspace
+            // and doesn't cause rendering issues when displayed
 
-      // Preserve all other characters including Unicode/emojis
-      return true;
-    })
-    .join('');
+            // Preserve all other characters including Unicode/emojis
+            return true;
+        })
+        .join('');
 }
 
 // String width caching for performance optimization
@@ -126,26 +126,26 @@ const stringWidthCache = new Map<string, number>();
  * Follows Ink's approach with unlimited cache (no eviction)
  */
 export const getCachedStringWidth = (str: string): number => {
-  // ASCII printable chars have width 1
-  if (/^[\x20-\x7E]*$/.test(str)) {
-    return str.length;
-  }
+    // ASCII printable chars have width 1
+    if (/^[\x20-\x7E]*$/.test(str)) {
+        return str.length;
+    }
 
-  if (stringWidthCache.has(str)) {
-    return stringWidthCache.get(str)!;
-  }
+    if (stringWidthCache.has(str)) {
+        return stringWidthCache.get(str)!;
+    }
 
-  const width = stringWidth(str);
-  stringWidthCache.set(str, width);
+    const width = stringWidth(str);
+    stringWidthCache.set(str, width);
 
-  return width;
+    return width;
 };
 
 /**
  * Clear the string width cache
  */
 export const clearStringWidthCache = (): void => {
-  stringWidthCache.clear();
+    stringWidthCache.clear();
 };
 
 const regex = ansiRegex();
@@ -166,97 +166,97 @@ const regex = ansiRegex();
  * original `obj` reference if no changes were necessary.
  */
 export function escapeAnsiCtrlCodes<T>(obj: T): T {
-  if (typeof obj === 'string') {
-    if (obj.search(regex) === -1) {
-      return obj; // No changes return original string
-    }
-
-    regex.lastIndex = 0; // needed for global regex
-    return obj.replace(regex, (match) =>
-      JSON.stringify(match).slice(1, -1),
-    ) as T;
-  }
-
-  if (obj === null || typeof obj !== 'object') {
-    return obj;
-  }
-
-  if (Array.isArray(obj)) {
-    let newArr: unknown[] | null = null;
-
-    for (let i = 0; i < obj.length; i++) {
-      const value = obj[i];
-      const escapedValue = escapeAnsiCtrlCodes(value);
-      if (escapedValue !== value) {
-        if (newArr === null) {
-          newArr = [...obj];
+    if (typeof obj === 'string') {
+        if (obj.search(regex) === -1) {
+            return obj; // No changes return original string
         }
-        newArr[i] = escapedValue;
-      }
+
+        regex.lastIndex = 0; // needed for global regex
+        return obj.replace(regex, (match) =>
+            JSON.stringify(match).slice(1, -1)
+        ) as T;
     }
-    return (newArr !== null ? newArr : obj) as T;
-  }
 
-  let newObj: T | null = null;
-  const keys = Object.keys(obj);
-
-  for (const key of keys) {
-    const value = (obj as Record<string, unknown>)[key];
-    const escapedValue = escapeAnsiCtrlCodes(value);
-
-    if (escapedValue !== value) {
-      if (newObj === null) {
-        newObj = { ...obj };
-      }
-      (newObj as Record<string, unknown>)[key] = escapedValue;
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
     }
-  }
 
-  return newObj !== null ? newObj : obj;
+    if (Array.isArray(obj)) {
+        let newArr: unknown[] | null = null;
+
+        for (let i = 0; i < obj.length; i++) {
+            const value = obj[i];
+            const escapedValue = escapeAnsiCtrlCodes(value);
+            if (escapedValue !== value) {
+                if (newArr === null) {
+                    newArr = [...obj];
+                }
+                newArr[i] = escapedValue;
+            }
+        }
+        return (newArr !== null ? newArr : obj) as T;
+    }
+
+    let newObj: T | null = null;
+    const keys = Object.keys(obj);
+
+    for (const key of keys) {
+        const value = (obj as Record<string, unknown>)[key];
+        const escapedValue = escapeAnsiCtrlCodes(value);
+
+        if (escapedValue !== value) {
+            if (newObj === null) {
+                newObj = { ...obj };
+            }
+            (newObj as Record<string, unknown>)[key] = escapedValue;
+        }
+    }
+
+    return newObj !== null ? newObj : obj;
 }
 
 /**
  * Patterns that may indicate sensitive information like API keys, tokens, passwords.
  */
 const SENSITIVE_PATTERNS: Array<{ pattern: RegExp; replacement: string }> = [
-  // API keys with common prefixes
-  {
-    pattern: /(sk-[a-zA-Z0-9]{20,})/g,
-    replacement: 'sk-***REDACTED***',
-  },
-  {
-    pattern: /(api[_-]?key[_-]?[=:]\s*)[a-zA-Z0-9_-]{20,}/gi,
-    replacement: '$1***REDACTED***',
-  },
-  // Bearer tokens
-  {
-    pattern: /(Bearer\s+)[a-zA-Z0-9._-]+/gi,
-    replacement: '$1***REDACTED***',
-  },
-  // Generic tokens
-  {
-    pattern: /(token[_-]?[=:]\s*)[a-zA-Z0-9._-]{10,}/gi,
-    replacement: '$1***REDACTED***',
-  },
-  // Passwords in connection strings or assignments
-  {
-    pattern: /(password[_-]?[=:]\s*)[^\s]+/gi,
-    replacement: '$1***REDACTED***',
-  },
-  {
-    pattern: /(pwd[_-]?[=:]\s*)[^\s]+/gi,
-    replacement: '$1***REDACTED***',
-  },
-  // AWS keys
-  {
-    pattern: /(AKIA[A-Z0-9]{16})/g,
-    replacement: '***REDACTED***',
-  },
-  // Generic secret patterns
-  {
-    pattern: /(secret[_-]?[=:]\s*)[a-zA-Z0-9._-]{10,}/gi,
-    replacement: '$1***REDACTED***',
-  },
+    // API keys with common prefixes
+    {
+        pattern: /(sk-[a-zA-Z0-9]{20,})/g,
+        replacement: 'sk-***REDACTED***'
+    },
+    {
+        pattern: /(api[_-]?key[_-]?[=:]\s*)[a-zA-Z0-9_-]{20,}/gi,
+        replacement: '$1***REDACTED***'
+    },
+    // Bearer tokens
+    {
+        pattern: /(Bearer\s+)[a-zA-Z0-9._-]+/gi,
+        replacement: '$1***REDACTED***'
+    },
+    // Generic tokens
+    {
+        pattern: /(token[_-]?[=:]\s*)[a-zA-Z0-9._-]{10,}/gi,
+        replacement: '$1***REDACTED***'
+    },
+    // Passwords in connection strings or assignments
+    {
+        pattern: /(password[_-]?[=:]\s*)[^\s]+/gi,
+        replacement: '$1***REDACTED***'
+    },
+    {
+        pattern: /(pwd[_-]?[=:]\s*)[^\s]+/gi,
+        replacement: '$1***REDACTED***'
+    },
+    // AWS keys
+    {
+        pattern: /(AKIA[A-Z0-9]{16})/g,
+        replacement: '***REDACTED***'
+    },
+    // Generic secret patterns
+    {
+        pattern: /(secret[_-]?[=:]\s*)[a-zA-Z0-9._-]{10,}/gi,
+        replacement: '$1***REDACTED***'
+    }
 ];
 
 /**
@@ -268,23 +268,23 @@ const SENSITIVE_PATTERNS: Array<{ pattern: RegExp; replacement: string }> = [
  * @returns Sanitized and truncated text
  */
 export function sanitizeSensitiveText(
-  text: string,
-  maxLength: number = 200,
+    text: string,
+    maxLength: number = 200
 ): string {
-  let result = text;
+    let result = text;
 
-  // Apply each sensitive pattern replacement
-  for (const { pattern, replacement } of SENSITIVE_PATTERNS) {
-    result = result.replace(pattern, replacement);
-  }
-
-  // Truncate if too long
-  if (result.length > maxLength) {
-    if (maxLength <= 3) {
-      return result.slice(0, maxLength);
+    // Apply each sensitive pattern replacement
+    for (const { pattern, replacement } of SENSITIVE_PATTERNS) {
+        result = result.replace(pattern, replacement);
     }
-    return result.slice(0, maxLength - 3) + '...';
-  }
 
-  return result;
+    // Truncate if too long
+    if (result.length > maxLength) {
+        if (maxLength <= 3) {
+            return result.slice(0, maxLength);
+        }
+        return result.slice(0, maxLength - 3) + '...';
+    }
+
+    return result;
 }

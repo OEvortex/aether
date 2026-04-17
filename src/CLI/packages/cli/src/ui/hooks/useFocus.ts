@@ -17,46 +17,46 @@ export const FOCUS_IN = '\x1b[I';
 export const FOCUS_OUT = '\x1b[O';
 
 export const useFocus = () => {
-  const { stdin } = useStdin();
-  const { stdout } = useStdout();
-  const [isFocused, setIsFocused] = useState(true);
+    const { stdin } = useStdin();
+    const { stdout } = useStdout();
+    const [isFocused, setIsFocused] = useState(true);
 
-  useEffect(() => {
-    const handleData = (data: Buffer) => {
-      const sequence = data.toString();
-      const lastFocusIn = sequence.lastIndexOf(FOCUS_IN);
-      const lastFocusOut = sequence.lastIndexOf(FOCUS_OUT);
+    useEffect(() => {
+        const handleData = (data: Buffer) => {
+            const sequence = data.toString();
+            const lastFocusIn = sequence.lastIndexOf(FOCUS_IN);
+            const lastFocusOut = sequence.lastIndexOf(FOCUS_OUT);
 
-      if (lastFocusIn > lastFocusOut) {
-        setIsFocused(true);
-      } else if (lastFocusOut > lastFocusIn) {
-        setIsFocused(false);
-      }
-    };
+            if (lastFocusIn > lastFocusOut) {
+                setIsFocused(true);
+            } else if (lastFocusOut > lastFocusIn) {
+                setIsFocused(false);
+            }
+        };
 
-    // Enable focus reporting
-    stdout?.write(ENABLE_FOCUS_REPORTING);
-    stdin?.on('data', handleData);
+        // Enable focus reporting
+        stdout?.write(ENABLE_FOCUS_REPORTING);
+        stdin?.on('data', handleData);
 
-    return () => {
-      // Disable focus reporting on cleanup
-      stdout?.write(DISABLE_FOCUS_REPORTING);
-      stdin?.removeListener('data', handleData);
-    };
-  }, [stdin, stdout]);
+        return () => {
+            // Disable focus reporting on cleanup
+            stdout?.write(DISABLE_FOCUS_REPORTING);
+            stdin?.removeListener('data', handleData);
+        };
+    }, [stdin, stdout]);
 
-  useKeypress(
-    (_) => {
-      if (!isFocused) {
-        // If the user has typed a key, and we cannot possibly be focused out.
-        // This is a workaround for some tmux use cases. It is still useful to
-        // listen for the true FOCUS_IN event as well as that will update the
-        // focus state earlier than waiting for a keypress.
-        setIsFocused(true);
-      }
-    },
-    { isActive: true },
-  );
+    useKeypress(
+        (_) => {
+            if (!isFocused) {
+                // If the user has typed a key, and we cannot possibly be focused out.
+                // This is a workaround for some tmux use cases. It is still useful to
+                // listen for the true FOCUS_IN event as well as that will update the
+                // focus state earlier than waiting for a keypress.
+                setIsFocused(true);
+            }
+        },
+        { isActive: true }
+    );
 
-  return isFocused;
+    return isFocused;
 };

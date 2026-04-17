@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export { DISPLAY_MODE } from './types.js';
-export type {
-  Backend,
-  DisplayMode,
-  AgentSpawnConfig,
-  AgentExitCallback,
-  TmuxBackendOptions,
-  InProcessSpawnConfig,
-} from './types.js';
-export { TmuxBackend } from './TmuxBackend.js';
-export { ITermBackend } from './ITermBackend.js';
+export { type DetectBackendResult, detectBackend } from './detect.js';
 export { InProcessBackend } from './InProcessBackend.js';
-export { detectBackend, type DetectBackendResult } from './detect.js';
+export { ITermBackend } from './ITermBackend.js';
+export { TmuxBackend } from './TmuxBackend.js';
+export type {
+    AgentExitCallback,
+    AgentSpawnConfig,
+    Backend,
+    DisplayMode,
+    InProcessSpawnConfig,
+    TmuxBackendOptions
+} from './types.js';
+export { DISPLAY_MODE } from './types.js';

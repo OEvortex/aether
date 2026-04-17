@@ -14,12 +14,12 @@ import type {
     ProviderConfig,
     SdkMode
 } from '../types/sharedTypes';
+import { type KnownProviderConfig, KnownProviders } from './knownProvidersData';
 import { Logger } from './logger';
-import { KnownProviders, type KnownProviderConfig } from './knownProvidersData';
 
-// Re-export data types for convenience
-export { KnownProviders, type KnownProviderConfig } from './knownProvidersData';
 export type { KnownProviderConfig as KnownProviderConfigType } from './knownProvidersData';
+// Re-export data types for convenience
+export { type KnownProviderConfig, KnownProviders } from './knownProvidersData';
 
 export interface RateLimitConfig {
     /** Requests allowed within the configured window */

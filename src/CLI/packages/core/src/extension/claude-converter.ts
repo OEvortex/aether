@@ -4,48 +4,48 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { createHash } from 'node:crypto';
 /**
  * Converter for Claude Code plugins to Aether format.
  */
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { glob } from 'glob';
-import type { ExtensionConfig } from './extensionManager.js';
-import { ExtensionStorage } from './storage.js';
 import type {
-  ExtensionInstallMetadata,
-  MCPServerConfig,
+    ExtensionInstallMetadata,
+    MCPServerConfig
 } from '../config/config.js';
-import type { HookEventName, HookDefinition } from '../hooks/types.js';
-import { cloneFromGit, downloadFromGitHubRelease } from './github.js';
-import { createHash } from 'node:crypto';
-import { copyDirectory } from './gemini-converter.js';
-import {
-  parse as parseYaml,
-  stringify as stringifyYaml,
-} from '../utils/yaml-parser.js';
+import type { HookDefinition, HookEventName } from '../hooks/types.js';
 import { createDebugLogger } from '../utils/debugLogger.js';
 import { normalizeContent } from '../utils/textUtils.js';
+import {
+    parse as parseYaml,
+    stringify as stringifyYaml
+} from '../utils/yaml-parser.js';
+import type { ExtensionConfig } from './extensionManager.js';
+import { copyDirectory } from './gemini-converter.js';
+import { cloneFromGit, downloadFromGitHubRelease } from './github.js';
+import { ExtensionStorage } from './storage.js';
 import { substituteHookVariables } from './variables.js';
 
 const debugLogger = createDebugLogger('CLAUDE_CONVERTER');
 
 export interface ClaudePluginConfig {
-  name: string;
-  version: string;
-  description?: string;
-  author?: { name?: string; email?: string; url?: string };
-  homepage?: string;
-  repository?: string;
-  license?: string;
-  keywords?: string[];
-  commands?: string | string[];
-  agents?: string | string[];
-  skills?: string | string[];
-  hooks?: string | { [K in HookEventName]?: HookDefinition[] };
-  mcpServers?: string | Record<string, MCPServerConfig>;
-  outputStyles?: string | string[];
-  lspServers?: string | Record<string, unknown>;
+    name: string;
+    version: string;
+    description?: string;
+    author?: { name?: string; email?: string; url?: string };
+    homepage?: string;
+    repository?: string;
+    license?: string;
+    keywords?: string[];
+    commands?: string | string[];
+    agents?: string | string[];
+    skills?: string | string[];
+    hooks?: string | { [K in HookEventName]?: HookDefinition[] };
+    mcpServers?: string | Record<string, MCPServerConfig>;
+    outputStyles?: string | string[];
+    lspServers?: string | Record<string, unknown>;
 }
 
 /**
@@ -53,82 +53,82 @@ export interface ClaudePluginConfig {
  * Based on https://code.claude.com/docs/en/sub-agents
  */
 export interface ClaudeAgentConfig {
-  /** Unique identifier using lowercase letters and hyphens */
-  name: string;
-  /** When Claude should delegate to this subagent */
-  description: string;
-  /** Tools the subagent can use. Inherits all tools if omitted */
-  tools?: string[];
-  /** Tools to deny, removed from inherited or specified list */
-  disallowedTools?: string[];
-  /** Model to use: sonnet, opus, haiku, or inherit */
-  model?: string;
-  /** Permission mode: default, acceptEdits, dontAsk, bypassPermissions, or plan */
-  permissionMode?: string;
-  /** Skills to load into the subagent's context at startup */
-  skills?: string[];
-  /** Hooks configuration */
-  hooks?: unknown;
-  /** System prompt content */
-  systemPrompt?: string;
-  /** subagent color */
-  color?: string;
+    /** Unique identifier using lowercase letters and hyphens */
+    name: string;
+    /** When Claude should delegate to this subagent */
+    description: string;
+    /** Tools the subagent can use. Inherits all tools if omitted */
+    tools?: string[];
+    /** Tools to deny, removed from inherited or specified list */
+    disallowedTools?: string[];
+    /** Model to use: sonnet, opus, haiku, or inherit */
+    model?: string;
+    /** Permission mode: default, acceptEdits, dontAsk, bypassPermissions, or plan */
+    permissionMode?: string;
+    /** Skills to load into the subagent's context at startup */
+    skills?: string[];
+    /** Hooks configuration */
+    hooks?: unknown;
+    /** System prompt content */
+    systemPrompt?: string;
+    /** subagent color */
+    color?: string;
 }
 
 export type ClaudePluginSource =
-  | { source: 'github'; repo: string }
-  | { source: 'url'; url: string };
+    | { source: 'github'; repo: string }
+    | { source: 'url'; url: string };
 
 export interface ClaudeMarketplacePluginConfig extends ClaudePluginConfig {
-  source: string | ClaudePluginSource;
-  category?: string;
-  strict?: boolean;
-  tags?: string[];
+    source: string | ClaudePluginSource;
+    category?: string;
+    strict?: boolean;
+    tags?: string[];
 }
 
 export interface ClaudeMarketplaceConfig {
-  name: string;
-  owner: { name: string; email: string };
-  plugins: ClaudeMarketplacePluginConfig[];
-  metadata?: { description?: string; version?: string; pluginRoot?: string };
+    name: string;
+    owner: { name: string; email: string };
+    plugins: ClaudeMarketplacePluginConfig[];
+    metadata?: { description?: string; version?: string; pluginRoot?: string };
 }
 
 const CLAUDE_TOOLS_MAPPING: Record<string, string | string[]> = {
-  AskUserQuestion: 'AskUserQuestion',
-  Bash: 'Shell',
-  BashOutput: 'None',
-  Edit: 'Edit',
-  ExitPlanMode: 'ExitPlanMode',
-  Glob: 'Glob',
-  Grep: 'Grep',
-  KillShell: 'None',
-  NotebookEdit: 'None',
-  Read: 'ReadFile',
-  Skill: 'Skill',
-  Task: 'Task',
-  TodoWrite: 'TodoWrite',
-  WebFetch: 'WebFetch',
-  WebSearch: 'WebSearch',
-  Write: 'WriteFile',
-  LS: 'ListFiles',
+    AskUserQuestion: 'AskUserQuestion',
+    Bash: 'Shell',
+    BashOutput: 'None',
+    Edit: 'Edit',
+    ExitPlanMode: 'ExitPlanMode',
+    Glob: 'Glob',
+    Grep: 'Grep',
+    KillShell: 'None',
+    NotebookEdit: 'None',
+    Read: 'ReadFile',
+    Skill: 'Skill',
+    Task: 'Task',
+    TodoWrite: 'TodoWrite',
+    WebFetch: 'WebFetch',
+    WebSearch: 'WebSearch',
+    Write: 'WriteFile',
+    LS: 'ListFiles'
 };
 
 const claudeBuildInToolsTransform = (tools: string[]): string[] => {
-  const transformedTools: string[] = [];
-  tools.forEach((tool) => {
-    if (!CLAUDE_TOOLS_MAPPING[tool]) {
-      transformedTools.push(tool);
-    } else {
-      if (CLAUDE_TOOLS_MAPPING[tool] === 'None') {
-        return;
-      } else if (Array.isArray(CLAUDE_TOOLS_MAPPING[tool])) {
-        transformedTools.push(...CLAUDE_TOOLS_MAPPING[tool]);
-      } else {
-        transformedTools.push(CLAUDE_TOOLS_MAPPING[tool]);
-      }
-    }
-  });
-  return transformedTools;
+    const transformedTools: string[] = [];
+    tools.forEach((tool) => {
+        if (!CLAUDE_TOOLS_MAPPING[tool]) {
+            transformedTools.push(tool);
+        } else {
+            if (CLAUDE_TOOLS_MAPPING[tool] === 'None') {
+                return;
+            } else if (Array.isArray(CLAUDE_TOOLS_MAPPING[tool])) {
+                transformedTools.push(...CLAUDE_TOOLS_MAPPING[tool]);
+            } else {
+                transformedTools.push(CLAUDE_TOOLS_MAPPING[tool]);
+            }
+        }
+    });
+    return transformedTools;
 };
 
 /**
@@ -138,20 +138,20 @@ const claudeBuildInToolsTransform = (tools: string[]): string[] => {
  * @returns Array of strings or undefined
  */
 function parseStringOrArray(value: unknown): string[] | undefined {
-  if (value === undefined || value === null) {
+    if (value === undefined || value === null) {
+        return undefined;
+    }
+    if (Array.isArray(value)) {
+        return value.map(String);
+    }
+    if (typeof value === 'string') {
+        // Split by comma and trim whitespace
+        return value
+            .split(',')
+            .map((s) => s.trim())
+            .filter((s) => s.length > 0);
+    }
     return undefined;
-  }
-  if (Array.isArray(value)) {
-    return value.map(String);
-  }
-  if (typeof value === 'string') {
-    // Split by comma and trim whitespace
-    return value
-      .split(',')
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
-  }
-  return undefined;
 }
 
 /**
@@ -160,49 +160,49 @@ function parseStringOrArray(value: unknown): string[] | undefined {
  * @returns Converted agent config compatible with Qwen Code SubagentConfig
  */
 export function convertClaudeAgentConfig(
-  claudeAgent: ClaudeAgentConfig,
+    claudeAgent: ClaudeAgentConfig
 ): Record<string, unknown> {
-  // Base config with required fields
-  const aetherAgent: Record<string, unknown> = {
-    name: claudeAgent.name,
-    description: claudeAgent.description,
-  };
+    // Base config with required fields
+    const aetherAgent: Record<string, unknown> = {
+        name: claudeAgent.name,
+        description: claudeAgent.description
+    };
 
-  if (claudeAgent.color) {
-    aetherAgent['color'] = claudeAgent.color;
-  }
+    if (claudeAgent.color) {
+        aetherAgent['color'] = claudeAgent.color;
+    }
 
-  // Convert system prompt if present
-  if (claudeAgent.systemPrompt) {
-    aetherAgent['systemPrompt'] = claudeAgent.systemPrompt;
-  }
+    // Convert system prompt if present
+    if (claudeAgent.systemPrompt) {
+        aetherAgent['systemPrompt'] = claudeAgent.systemPrompt;
+    }
 
-  // Convert tools using claudeBuildInToolsTransform
-  if (claudeAgent.tools && claudeAgent.tools.length > 0) {
-    aetherAgent['tools'] = claudeBuildInToolsTransform(claudeAgent.tools);
-  }
+    // Convert tools using claudeBuildInToolsTransform
+    if (claudeAgent.tools && claudeAgent.tools.length > 0) {
+        aetherAgent['tools'] = claudeBuildInToolsTransform(claudeAgent.tools);
+    }
 
-  // Preserve Claude's top-level model selector.
-  if (claudeAgent.model) {
-    aetherAgent['model'] = claudeAgent.model;
-  }
+    // Preserve Claude's top-level model selector.
+    if (claudeAgent.model) {
+        aetherAgent['model'] = claudeAgent.model;
+    }
 
-  // Preserve unsupported fields as-is for potential future compatibility
-  // These fields are not supported by Qwen Code SubagentConfig but we keep them
-  if (claudeAgent.permissionMode) {
-    aetherAgent['permissionMode'] = claudeAgent.permissionMode;
-  }
-  if (claudeAgent.hooks) {
-    aetherAgent['hooks'] = claudeAgent.hooks;
-  }
-  if (claudeAgent.skills && claudeAgent.skills.length > 0) {
-    aetherAgent['skills'] = claudeAgent.skills;
-  }
-  if (claudeAgent.disallowedTools && claudeAgent.disallowedTools.length > 0) {
-    aetherAgent['disallowedTools'] = claudeAgent.disallowedTools;
-  }
+    // Preserve unsupported fields as-is for potential future compatibility
+    // These fields are not supported by Qwen Code SubagentConfig but we keep them
+    if (claudeAgent.permissionMode) {
+        aetherAgent['permissionMode'] = claudeAgent.permissionMode;
+    }
+    if (claudeAgent.hooks) {
+        aetherAgent['hooks'] = claudeAgent.hooks;
+    }
+    if (claudeAgent.skills && claudeAgent.skills.length > 0) {
+        aetherAgent['skills'] = claudeAgent.skills;
+    }
+    if (claudeAgent.disallowedTools && claudeAgent.disallowedTools.length > 0) {
+        aetherAgent['disallowedTools'] = claudeAgent.disallowedTools;
+    }
 
-  return aetherAgent;
+    return aetherAgent;
 }
 
 /**
@@ -211,76 +211,84 @@ export function convertClaudeAgentConfig(
  * @param agentsDir Directory containing agent markdown files
  */
 async function convertAgentFiles(agentsDir: string): Promise<void> {
-  if (!fs.existsSync(agentsDir)) {
-    return;
-  }
+    if (!fs.existsSync(agentsDir)) {
+        return;
+    }
 
-  const files = await fs.promises.readdir(agentsDir);
+    const files = await fs.promises.readdir(agentsDir);
 
-  for (const file of files) {
-    if (!file.endsWith('.md')) continue;
+    for (const file of files) {
+        if (!file.endsWith('.md')) continue;
 
-    const filePath = path.join(agentsDir, file);
+        const filePath = path.join(agentsDir, file);
 
-    try {
-      const content = await fs.promises.readFile(filePath, 'utf-8');
-      const normalizedContent = normalizeContent(content);
+        try {
+            const content = await fs.promises.readFile(filePath, 'utf-8');
+            const normalizedContent = normalizeContent(content);
 
-      // Parse frontmatter
-      const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-      const match = normalizedContent.match(frontmatterRegex);
+            // Parse frontmatter
+            const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+            const match = normalizedContent.match(frontmatterRegex);
 
-      if (!match) {
-        // No frontmatter, skip this file
-        continue;
-      }
+            if (!match) {
+                // No frontmatter, skip this file
+                continue;
+            }
 
-      const [, frontmatterYaml, body] = match;
-      const frontmatter = parseYaml(frontmatterYaml) as Record<string, unknown>;
+            const [, frontmatterYaml, body] = match;
+            const frontmatter = parseYaml(frontmatterYaml) as Record<
+                string,
+                unknown
+            >;
 
-      // Build Claude agent config from frontmatter
-      // Note: Claude tools/disallowedTools/skills can be comma-separated strings like 'Glob, Grep, Read'
-      const claudeAgent: ClaudeAgentConfig = {
-        name: String(frontmatter['name'] || ''),
-        description: String(frontmatter['description'] || ''),
-        tools: parseStringOrArray(frontmatter['tools']),
-        disallowedTools: parseStringOrArray(frontmatter['disallowedTools']),
-        model: frontmatter['model'] as string | undefined,
-        permissionMode: frontmatter['permissionMode'] as string | undefined,
-        skills: parseStringOrArray(frontmatter['skills']),
-        hooks: frontmatter['hooks'],
-        color: frontmatter['color'] as string | undefined,
-        systemPrompt: body.trim(),
-      };
+            // Build Claude agent config from frontmatter
+            // Note: Claude tools/disallowedTools/skills can be comma-separated strings like 'Glob, Grep, Read'
+            const claudeAgent: ClaudeAgentConfig = {
+                name: String(frontmatter['name'] || ''),
+                description: String(frontmatter['description'] || ''),
+                tools: parseStringOrArray(frontmatter['tools']),
+                disallowedTools: parseStringOrArray(
+                    frontmatter['disallowedTools']
+                ),
+                model: frontmatter['model'] as string | undefined,
+                permissionMode: frontmatter['permissionMode'] as
+                    | string
+                    | undefined,
+                skills: parseStringOrArray(frontmatter['skills']),
+                hooks: frontmatter['hooks'],
+                color: frontmatter['color'] as string | undefined,
+                systemPrompt: body.trim()
+            };
 
-      // Convert to Qwen format
-      const aetherAgent = convertClaudeAgentConfig(claudeAgent);
+            // Convert to Qwen format
+            const aetherAgent = convertClaudeAgentConfig(claudeAgent);
 
-      // Build new frontmatter (excluding systemPrompt as it goes in body)
-      const newFrontmatter: Record<string, unknown> = {};
-      for (const [key, value] of Object.entries(aetherAgent)) {
-        if (key !== 'systemPrompt' && value !== undefined) {
-          newFrontmatter[key] = value;
-        }
-      }
+            // Build new frontmatter (excluding systemPrompt as it goes in body)
+            const newFrontmatter: Record<string, unknown> = {};
+            for (const [key, value] of Object.entries(aetherAgent)) {
+                if (key !== 'systemPrompt' && value !== undefined) {
+                    newFrontmatter[key] = value;
+                }
+            }
 
-      // Write converted content back
-      const newYaml = stringifyYaml(newFrontmatter);
-      const systemPrompt = (aetherAgent['systemPrompt'] as string) || body.trim();
-      const newContent = `---
+            // Write converted content back
+            const newYaml = stringifyYaml(newFrontmatter);
+            const systemPrompt =
+                (aetherAgent['systemPrompt'] as string) || body.trim();
+            const newContent = `---
 ${newYaml}
 ---
 
 ${systemPrompt}
 `;
 
-      await fs.promises.writeFile(filePath, newContent, 'utf-8');
-    } catch (error) {
-      debugLogger.warn(
-        `[Claude Converter] Failed to convert agent file ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
-      );
+            await fs.promises.writeFile(filePath, newContent, 'utf-8');
+        } catch (error) {
+            debugLogger.warn(
+                `[Claude Converter] Failed to convert agent file ${filePath}: ${error instanceof Error ? error.message : String(error)}`
+            );
+        }
     }
-  }
 }
 
 /**
@@ -289,54 +297,56 @@ ${systemPrompt}
  * @returns Qwen ExtensionConfig
  */
 export function convertClaudeToQwenConfig(
-  claudeConfig: ClaudePluginConfig,
+    claudeConfig: ClaudePluginConfig
 ): ExtensionConfig {
-  // Validate required fields
-  if (!claudeConfig.name) {
-    throw new Error('Claude plugin config must have name field');
-  }
-
-  // Parse MCP servers
-  let mcpServers: Record<string, MCPServerConfig> | undefined;
-  if (claudeConfig.mcpServers) {
-    if (typeof claudeConfig.mcpServers === 'string') {
-      // TODO: Load from file path
-      debugLogger.warn(
-        `[Claude Converter] MCP servers path not yet supported: ${claudeConfig.mcpServers}`,
-      );
-    } else {
-      mcpServers = claudeConfig.mcpServers;
+    // Validate required fields
+    if (!claudeConfig.name) {
+        throw new Error('Claude plugin config must have name field');
     }
-  }
 
-  // Parse hooks
-  let hooks: { [K in HookEventName]?: HookDefinition[] } | undefined;
-  if (claudeConfig.hooks) {
-    if (typeof claudeConfig.hooks === 'string') {
-      // If it's a string, it's a file path, we handle it later in the conversion process
-      // hooks will be loaded from file path in the convertClaudePluginPackage function
-    } else {
-      // Assume it's already in the correct format
-      hooks = claudeConfig.hooks as { [K in HookEventName]?: HookDefinition[] };
+    // Parse MCP servers
+    let mcpServers: Record<string, MCPServerConfig> | undefined;
+    if (claudeConfig.mcpServers) {
+        if (typeof claudeConfig.mcpServers === 'string') {
+            // TODO: Load from file path
+            debugLogger.warn(
+                `[Claude Converter] MCP servers path not yet supported: ${claudeConfig.mcpServers}`
+            );
+        } else {
+            mcpServers = claudeConfig.mcpServers;
+        }
     }
-  } else {
-    hooks = undefined;
-  }
 
-  // Warn about unsupported fields
-  if (claudeConfig.outputStyles) {
-    debugLogger.warn(
-      `[Claude Converter] Output styles are not yet supported in ${claudeConfig.name}`,
-    );
-  }
-  // Direct field mapping - commands, skills, agents will be collected as folders
-  return {
-    name: claudeConfig.name,
-    version: claudeConfig.version,
-    mcpServers,
-    lspServers: claudeConfig.lspServers,
-    hooks, // Assign the properly typed hooks variable
-  };
+    // Parse hooks
+    let hooks: { [K in HookEventName]?: HookDefinition[] } | undefined;
+    if (claudeConfig.hooks) {
+        if (typeof claudeConfig.hooks === 'string') {
+            // If it's a string, it's a file path, we handle it later in the conversion process
+            // hooks will be loaded from file path in the convertClaudePluginPackage function
+        } else {
+            // Assume it's already in the correct format
+            hooks = claudeConfig.hooks as {
+                [K in HookEventName]?: HookDefinition[];
+            };
+        }
+    } else {
+        hooks = undefined;
+    }
+
+    // Warn about unsupported fields
+    if (claudeConfig.outputStyles) {
+        debugLogger.warn(
+            `[Claude Converter] Output styles are not yet supported in ${claudeConfig.name}`
+        );
+    }
+    // Direct field mapping - commands, skills, agents will be collected as folders
+    return {
+        name: claudeConfig.name,
+        version: claudeConfig.version,
+        mcpServers,
+        lspServers: claudeConfig.lspServers,
+        hooks // Assign the properly typed hooks variable
+    };
 }
 
 /**
@@ -348,189 +358,203 @@ export function convertClaudeToQwenConfig(
  * 4. All other files preserved
  */
 export async function convertClaudePluginPackage(
-  extensionDir: string,
-  pluginName: string,
+    extensionDir: string,
+    pluginName: string
 ): Promise<{ config: ExtensionConfig; convertedDir: string }> {
-  // Step 1: Load marketplace.json
-  const marketplaceJsonPath = path.join(
-    extensionDir,
-    '.claude-plugin',
-    'marketplace.json',
-  );
-  if (!fs.existsSync(marketplaceJsonPath)) {
-    throw new Error(
-      `Marketplace configuration not found at ${marketplaceJsonPath}`,
+    // Step 1: Load marketplace.json
+    const marketplaceJsonPath = path.join(
+        extensionDir,
+        '.claude-plugin',
+        'marketplace.json'
     );
-  }
-
-  const marketplaceContent = fs.readFileSync(marketplaceJsonPath, 'utf-8');
-  const marketplaceConfig: ClaudeMarketplaceConfig =
-    JSON.parse(marketplaceContent);
-
-  // Find the target plugin in marketplace
-  const marketplacePlugin = marketplaceConfig.plugins.find(
-    (p) => p.name === pluginName,
-  );
-  if (!marketplacePlugin) {
-    throw new Error(`Plugin ${pluginName} not found in marketplace.json`);
-  }
-
-  // Step 2: Resolve plugin source directory based on source field
-  const pluginDir = path.join(
-    extensionDir,
-    `plugin${createHash('sha256').update(`${extensionDir}/${pluginName}`).digest('hex')}`,
-  );
-  await fs.promises.mkdir(pluginDir, { recursive: true });
-
-  const pluginSource = await resolvePluginSource(
-    marketplacePlugin,
-    extensionDir,
-    pluginDir,
-  );
-
-  if (!fs.existsSync(pluginSource)) {
-    throw new Error(`Plugin source directory not found: ${pluginSource}`);
-  }
-
-  // Step 3: Load and merge plugin.json if exists (based on strict mode)
-  const strict = marketplacePlugin.strict ?? false;
-  let mergedConfig: ClaudePluginConfig;
-
-  const pluginJsonPath = path.join(
-    pluginSource,
-    '.claude-plugin',
-    'plugin.json',
-  );
-  if (strict && !fs.existsSync(pluginJsonPath)) {
-    throw new Error(`Strict mode requires plugin.json at ${pluginJsonPath}`);
-  }
-  if (fs.existsSync(pluginJsonPath)) {
-    const pluginContent = fs.readFileSync(pluginJsonPath, 'utf-8');
-    const pluginConfig: ClaudePluginConfig = JSON.parse(pluginContent);
-    mergedConfig = mergeClaudeConfigs(marketplacePlugin, pluginConfig);
-  } else {
-    mergedConfig = marketplacePlugin as ClaudePluginConfig;
-  }
-
-  // Step 4: Resolve MCP servers from JSON files if needed
-  if (mergedConfig.mcpServers && typeof mergedConfig.mcpServers === 'string') {
-    const mcpServersPath = path.isAbsolute(mergedConfig.mcpServers)
-      ? mergedConfig.mcpServers
-      : path.join(pluginSource, mergedConfig.mcpServers);
-
-    if (fs.existsSync(mcpServersPath)) {
-      try {
-        const mcpContent = fs.readFileSync(mcpServersPath, 'utf-8');
-        mergedConfig.mcpServers = JSON.parse(mcpContent) as Record<
-          string,
-          MCPServerConfig
-        >;
-      } catch (error) {
-        debugLogger.warn(
-          `Failed to parse MCP servers file ${mcpServersPath}: ${error instanceof Error ? error.message : String(error)}`,
+    if (!fs.existsSync(marketplaceJsonPath)) {
+        throw new Error(
+            `Marketplace configuration not found at ${marketplaceJsonPath}`
         );
-      }
-    }
-  }
-
-  // Step 5: Create temporary directory for converted extension
-  const tmpDir = await ExtensionStorage.createTmpDir();
-
-  try {
-    // Step 6: Copy plugin files to temporary directory
-    await copyDirectory(pluginSource, tmpDir);
-
-    // Step 6.1: Handle commands/skills/agents folders based on configuration
-    // If configuration specifies resources, only collect those
-    // If configuration doesn't specify, keep the existing folder (if exists)
-    const resourceConfigs = [
-      { name: 'commands', config: mergedConfig.commands },
-      { name: 'skills', config: mergedConfig.skills },
-      { name: 'agents', config: mergedConfig.agents },
-    ];
-
-    for (const { name, config } of resourceConfigs) {
-      const folderPath = path.join(tmpDir, name);
-      const sourceFolderPath = path.join(pluginSource, name);
-
-      // If config explicitly specifies resources, remove existing folder and collect only specified ones
-      if (config) {
-        if (fs.existsSync(folderPath)) {
-          fs.rmSync(folderPath, { recursive: true, force: true });
-        }
-        await collectResources(config, pluginSource, folderPath);
-      }
-      // If config doesn't specify and source folder doesn't exist in pluginSource,
-      // remove it from tmpDir (it was copied but not needed)
-      else if (!fs.existsSync(sourceFolderPath) && fs.existsSync(folderPath)) {
-        fs.rmSync(folderPath, { recursive: true, force: true });
-      }
-      // Otherwise, keep the existing folder from pluginSource (default behavior)
     }
 
-    // Step 7: Handle hooks from file paths if needed
-    if (mergedConfig.hooks && typeof mergedConfig.hooks === 'string') {
-      const hooksPath = path.isAbsolute(mergedConfig.hooks)
-        ? mergedConfig.hooks
-        : path.join(pluginSource, mergedConfig.hooks);
+    const marketplaceContent = fs.readFileSync(marketplaceJsonPath, 'utf-8');
+    const marketplaceConfig: ClaudeMarketplaceConfig =
+        JSON.parse(marketplaceContent);
 
-      if (fs.existsSync(hooksPath)) {
-        try {
-          const hooksContent = fs.readFileSync(hooksPath, 'utf-8');
-          const parsedHooks = JSON.parse(hooksContent);
-
-          // Check if the file has a top-level "hooks" property (like Claude plugins use)
-          // or if the entire file content is the hooks object
-          let hooksData;
-          if (parsedHooks.hooks && typeof parsedHooks.hooks === 'object') {
-            hooksData = parsedHooks.hooks as {
-              [K in HookEventName]?: HookDefinition[];
-            };
-          } else {
-            // Assume the entire file content is the hooks object
-            hooksData = parsedHooks as {
-              [K in HookEventName]?: HookDefinition[];
-            };
-          }
-
-          // Process the hooks to substitute variables like ${CLAUDE_PLUGIN_ROOT}
-          mergedConfig.hooks = substituteHookVariables(hooksData, pluginSource);
-        } catch (error) {
-          debugLogger.warn(
-            `Failed to parse hooks file ${hooksPath}: ${error instanceof Error ? error.message : String(error)}`,
-          );
-        }
-      }
+    // Find the target plugin in marketplace
+    const marketplacePlugin = marketplaceConfig.plugins.find(
+        (p) => p.name === pluginName
+    );
+    if (!marketplacePlugin) {
+        throw new Error(`Plugin ${pluginName} not found in marketplace.json`);
     }
 
-    // Step 9: Convert collected agent files from Claude format to Qwen format
-    const agentsDestDir = path.join(tmpDir, 'agents');
-    await convertAgentFiles(agentsDestDir);
+    // Step 2: Resolve plugin source directory based on source field
+    const pluginDir = path.join(
+        extensionDir,
+        `plugin${createHash('sha256').update(`${extensionDir}/${pluginName}`).digest('hex')}`
+    );
+    await fs.promises.mkdir(pluginDir, { recursive: true });
 
-    // Step 10: Convert to Qwen format config
-    const aetherConfig = convertClaudeToQwenConfig(mergedConfig);
-
-    // Step 11: Write aether-extension.json
-    const aetherConfigPath = path.join(tmpDir, 'aether-extension.json');
-    fs.writeFileSync(
-      aetherConfigPath,
-      JSON.stringify(aetherConfig, null, 2),
-      'utf-8',
+    const pluginSource = await resolvePluginSource(
+        marketplacePlugin,
+        extensionDir,
+        pluginDir
     );
 
-    return {
-      config: aetherConfig,
-      convertedDir: tmpDir,
-    };
-  } catch (error) {
-    // Clean up temporary directory on error
-    try {
-      fs.rmSync(tmpDir, { recursive: true, force: true });
-    } catch {
-      // Ignore cleanup errors
+    if (!fs.existsSync(pluginSource)) {
+        throw new Error(`Plugin source directory not found: ${pluginSource}`);
     }
-    throw error;
-  }
+
+    // Step 3: Load and merge plugin.json if exists (based on strict mode)
+    const strict = marketplacePlugin.strict ?? false;
+    let mergedConfig: ClaudePluginConfig;
+
+    const pluginJsonPath = path.join(
+        pluginSource,
+        '.claude-plugin',
+        'plugin.json'
+    );
+    if (strict && !fs.existsSync(pluginJsonPath)) {
+        throw new Error(
+            `Strict mode requires plugin.json at ${pluginJsonPath}`
+        );
+    }
+    if (fs.existsSync(pluginJsonPath)) {
+        const pluginContent = fs.readFileSync(pluginJsonPath, 'utf-8');
+        const pluginConfig: ClaudePluginConfig = JSON.parse(pluginContent);
+        mergedConfig = mergeClaudeConfigs(marketplacePlugin, pluginConfig);
+    } else {
+        mergedConfig = marketplacePlugin as ClaudePluginConfig;
+    }
+
+    // Step 4: Resolve MCP servers from JSON files if needed
+    if (
+        mergedConfig.mcpServers &&
+        typeof mergedConfig.mcpServers === 'string'
+    ) {
+        const mcpServersPath = path.isAbsolute(mergedConfig.mcpServers)
+            ? mergedConfig.mcpServers
+            : path.join(pluginSource, mergedConfig.mcpServers);
+
+        if (fs.existsSync(mcpServersPath)) {
+            try {
+                const mcpContent = fs.readFileSync(mcpServersPath, 'utf-8');
+                mergedConfig.mcpServers = JSON.parse(mcpContent) as Record<
+                    string,
+                    MCPServerConfig
+                >;
+            } catch (error) {
+                debugLogger.warn(
+                    `Failed to parse MCP servers file ${mcpServersPath}: ${error instanceof Error ? error.message : String(error)}`
+                );
+            }
+        }
+    }
+
+    // Step 5: Create temporary directory for converted extension
+    const tmpDir = await ExtensionStorage.createTmpDir();
+
+    try {
+        // Step 6: Copy plugin files to temporary directory
+        await copyDirectory(pluginSource, tmpDir);
+
+        // Step 6.1: Handle commands/skills/agents folders based on configuration
+        // If configuration specifies resources, only collect those
+        // If configuration doesn't specify, keep the existing folder (if exists)
+        const resourceConfigs = [
+            { name: 'commands', config: mergedConfig.commands },
+            { name: 'skills', config: mergedConfig.skills },
+            { name: 'agents', config: mergedConfig.agents }
+        ];
+
+        for (const { name, config } of resourceConfigs) {
+            const folderPath = path.join(tmpDir, name);
+            const sourceFolderPath = path.join(pluginSource, name);
+
+            // If config explicitly specifies resources, remove existing folder and collect only specified ones
+            if (config) {
+                if (fs.existsSync(folderPath)) {
+                    fs.rmSync(folderPath, { recursive: true, force: true });
+                }
+                await collectResources(config, pluginSource, folderPath);
+            }
+            // If config doesn't specify and source folder doesn't exist in pluginSource,
+            // remove it from tmpDir (it was copied but not needed)
+            else if (
+                !fs.existsSync(sourceFolderPath) &&
+                fs.existsSync(folderPath)
+            ) {
+                fs.rmSync(folderPath, { recursive: true, force: true });
+            }
+            // Otherwise, keep the existing folder from pluginSource (default behavior)
+        }
+
+        // Step 7: Handle hooks from file paths if needed
+        if (mergedConfig.hooks && typeof mergedConfig.hooks === 'string') {
+            const hooksPath = path.isAbsolute(mergedConfig.hooks)
+                ? mergedConfig.hooks
+                : path.join(pluginSource, mergedConfig.hooks);
+
+            if (fs.existsSync(hooksPath)) {
+                try {
+                    const hooksContent = fs.readFileSync(hooksPath, 'utf-8');
+                    const parsedHooks = JSON.parse(hooksContent);
+
+                    // Check if the file has a top-level "hooks" property (like Claude plugins use)
+                    // or if the entire file content is the hooks object
+                    let hooksData;
+                    if (
+                        parsedHooks.hooks &&
+                        typeof parsedHooks.hooks === 'object'
+                    ) {
+                        hooksData = parsedHooks.hooks as {
+                            [K in HookEventName]?: HookDefinition[];
+                        };
+                    } else {
+                        // Assume the entire file content is the hooks object
+                        hooksData = parsedHooks as {
+                            [K in HookEventName]?: HookDefinition[];
+                        };
+                    }
+
+                    // Process the hooks to substitute variables like ${CLAUDE_PLUGIN_ROOT}
+                    mergedConfig.hooks = substituteHookVariables(
+                        hooksData,
+                        pluginSource
+                    );
+                } catch (error) {
+                    debugLogger.warn(
+                        `Failed to parse hooks file ${hooksPath}: ${error instanceof Error ? error.message : String(error)}`
+                    );
+                }
+            }
+        }
+
+        // Step 9: Convert collected agent files from Claude format to Qwen format
+        const agentsDestDir = path.join(tmpDir, 'agents');
+        await convertAgentFiles(agentsDestDir);
+
+        // Step 10: Convert to Qwen format config
+        const aetherConfig = convertClaudeToQwenConfig(mergedConfig);
+
+        // Step 11: Write aether-extension.json
+        const aetherConfigPath = path.join(tmpDir, 'aether-extension.json');
+        fs.writeFileSync(
+            aetherConfigPath,
+            JSON.stringify(aetherConfig, null, 2),
+            'utf-8'
+        );
+
+        return {
+            config: aetherConfig,
+            convertedDir: tmpDir
+        };
+    } catch (error) {
+        // Clean up temporary directory on error
+        try {
+            fs.rmSync(tmpDir, { recursive: true, force: true });
+        } catch {
+            // Ignore cleanup errors
+        }
+        throw error;
+    }
 }
 
 /**
@@ -541,101 +565,107 @@ export async function convertClaudePluginPackage(
  * @param destDir Destination directory for collected resources
  */
 async function collectResources(
-  resourcePaths: string | string[],
-  pluginRoot: string,
-  destDir: string,
+    resourcePaths: string | string[],
+    pluginRoot: string,
+    destDir: string
 ): Promise<void> {
-  const paths = Array.isArray(resourcePaths) ? resourcePaths : [resourcePaths];
+    const paths = Array.isArray(resourcePaths)
+        ? resourcePaths
+        : [resourcePaths];
 
-  // Create destination directory
-  if (!fs.existsSync(destDir)) {
-    fs.mkdirSync(destDir, { recursive: true });
-  }
-
-  // Get the destination folder name (e.g., 'commands', 'skills', 'agents')
-  const destFolderName = path.basename(destDir);
-
-  for (const resourcePath of paths) {
-    const resolvedPath = path.isAbsolute(resourcePath)
-      ? resourcePath
-      : path.join(pluginRoot, resourcePath);
-
-    if (!fs.existsSync(resolvedPath)) {
-      debugLogger.warn(`Resource path not found: ${resolvedPath}`);
-      continue;
+    // Create destination directory
+    if (!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir, { recursive: true });
     }
 
-    const stat = fs.statSync(resolvedPath);
+    // Get the destination folder name (e.g., 'commands', 'skills', 'agents')
+    const destFolderName = path.basename(destDir);
 
-    if (stat.isDirectory()) {
-      // If it's a directory, check if it's already the destination folder
-      const dirName = path.basename(resolvedPath);
-      const parentDir = path.dirname(resolvedPath);
+    for (const resourcePath of paths) {
+        const resolvedPath = path.isAbsolute(resourcePath)
+            ? resourcePath
+            : path.join(pluginRoot, resourcePath);
 
-      // If the directory is already named as the destination folder (e.g., 'commands')
-      // and it's at the plugin root level, skip it
-      if (dirName === destFolderName && parentDir === pluginRoot) {
-        debugLogger.debug(
-          `Skipping ${resolvedPath} as it's already in the correct location`,
-        );
-        continue;
-      }
-
-      // Determine destination: preserve the directory name
-      // e.g., ./skills/xlsx -> tmpDir/skills/xlsx/
-      const finalDestDir = path.join(destDir, dirName);
-
-      // Copy all files from the directory
-      const files = await glob('**/*', {
-        cwd: resolvedPath,
-        nodir: true,
-        dot: false,
-      });
-
-      for (const file of files) {
-        const srcFile = path.join(resolvedPath, file);
-        const destFile = path.join(finalDestDir, file);
-
-        // Check if the source is a regular file (skip sockets, FIFOs, directories behind symlinks, etc.)
-        try {
-          const fileStat = fs.statSync(srcFile);
-          if (!fileStat.isFile()) {
-            debugLogger.debug(`Skipping non-regular file: ${srcFile}`);
+        if (!fs.existsSync(resolvedPath)) {
+            debugLogger.warn(`Resource path not found: ${resolvedPath}`);
             continue;
-          }
-        } catch {
-          debugLogger.debug(`Failed to stat file, skipping: ${srcFile}`);
-          continue;
         }
 
-        // Ensure parent directory exists
-        const destFileDir = path.dirname(destFile);
-        if (!fs.existsSync(destFileDir)) {
-          fs.mkdirSync(destFileDir, { recursive: true });
+        const stat = fs.statSync(resolvedPath);
+
+        if (stat.isDirectory()) {
+            // If it's a directory, check if it's already the destination folder
+            const dirName = path.basename(resolvedPath);
+            const parentDir = path.dirname(resolvedPath);
+
+            // If the directory is already named as the destination folder (e.g., 'commands')
+            // and it's at the plugin root level, skip it
+            if (dirName === destFolderName && parentDir === pluginRoot) {
+                debugLogger.debug(
+                    `Skipping ${resolvedPath} as it's already in the correct location`
+                );
+                continue;
+            }
+
+            // Determine destination: preserve the directory name
+            // e.g., ./skills/xlsx -> tmpDir/skills/xlsx/
+            const finalDestDir = path.join(destDir, dirName);
+
+            // Copy all files from the directory
+            const files = await glob('**/*', {
+                cwd: resolvedPath,
+                nodir: true,
+                dot: false
+            });
+
+            for (const file of files) {
+                const srcFile = path.join(resolvedPath, file);
+                const destFile = path.join(finalDestDir, file);
+
+                // Check if the source is a regular file (skip sockets, FIFOs, directories behind symlinks, etc.)
+                try {
+                    const fileStat = fs.statSync(srcFile);
+                    if (!fileStat.isFile()) {
+                        debugLogger.debug(
+                            `Skipping non-regular file: ${srcFile}`
+                        );
+                        continue;
+                    }
+                } catch {
+                    debugLogger.debug(
+                        `Failed to stat file, skipping: ${srcFile}`
+                    );
+                    continue;
+                }
+
+                // Ensure parent directory exists
+                const destFileDir = path.dirname(destFile);
+                if (!fs.existsSync(destFileDir)) {
+                    fs.mkdirSync(destFileDir, { recursive: true });
+                }
+
+                fs.copyFileSync(srcFile, destFile);
+            }
+        } else {
+            // If it's a file, check if it's already in the destination folder
+            const relativePath = path.relative(pluginRoot, resolvedPath);
+
+            // Check if the file path starts with the destination folder name
+            // e.g., 'commands/test1.md' or 'commands/me/test.md' should be skipped
+            const segments = relativePath.split(path.sep);
+            if (segments.length > 0 && segments[0] === destFolderName) {
+                debugLogger.debug(
+                    `Skipping ${resolvedPath} as it's already in ${destFolderName}/`
+                );
+                continue;
+            }
+
+            // Copy the file to destination
+            const fileName = path.basename(resolvedPath);
+            const destFile = path.join(destDir, fileName);
+            fs.copyFileSync(resolvedPath, destFile);
         }
-
-        fs.copyFileSync(srcFile, destFile);
-      }
-    } else {
-      // If it's a file, check if it's already in the destination folder
-      const relativePath = path.relative(pluginRoot, resolvedPath);
-
-      // Check if the file path starts with the destination folder name
-      // e.g., 'commands/test1.md' or 'commands/me/test.md' should be skipped
-      const segments = relativePath.split(path.sep);
-      if (segments.length > 0 && segments[0] === destFolderName) {
-        debugLogger.debug(
-          `Skipping ${resolvedPath} as it's already in ${destFolderName}/`,
-        );
-        continue;
-      }
-
-      // Copy the file to destination
-      const fileName = path.basename(resolvedPath);
-      const destFile = path.join(destDir, fileName);
-      fs.copyFileSync(resolvedPath, destFile);
     }
-  }
 }
 
 /**
@@ -646,46 +676,49 @@ async function collectResources(
  * @returns Merged Claude plugin config
  */
 export function mergeClaudeConfigs(
-  marketplacePlugin: ClaudeMarketplacePluginConfig,
-  pluginConfig?: ClaudePluginConfig,
+    marketplacePlugin: ClaudeMarketplacePluginConfig,
+    pluginConfig?: ClaudePluginConfig
 ): ClaudePluginConfig {
-  if (!pluginConfig && marketplacePlugin.strict === true) {
-    throw new Error(
-      `Plugin ${marketplacePlugin.name} requires plugin.json (strict mode)`,
-    );
-  }
+    if (!pluginConfig && marketplacePlugin.strict === true) {
+        throw new Error(
+            `Plugin ${marketplacePlugin.name} requires plugin.json (strict mode)`
+        );
+    }
 
-  // Start with plugin.json config (if exists)
-  const merged: ClaudePluginConfig = pluginConfig
-    ? { ...pluginConfig }
-    : {
-        name: marketplacePlugin.name,
-        version: '1.0.0', // Default version if not in marketplace
-      };
+    // Start with plugin.json config (if exists)
+    const merged: ClaudePluginConfig = pluginConfig
+        ? { ...pluginConfig }
+        : {
+              name: marketplacePlugin.name,
+              version: '1.0.0' // Default version if not in marketplace
+          };
 
-  // Overlay marketplace config (takes precedence)
-  if (marketplacePlugin.name) merged.name = marketplacePlugin.name;
-  if (marketplacePlugin.version) merged.version = marketplacePlugin.version;
-  if (marketplacePlugin.description)
-    merged.description = marketplacePlugin.description;
-  if (marketplacePlugin.author) merged.author = marketplacePlugin.author;
-  if (marketplacePlugin.homepage) merged.homepage = marketplacePlugin.homepage;
-  if (marketplacePlugin.repository)
-    merged.repository = marketplacePlugin.repository;
-  if (marketplacePlugin.license) merged.license = marketplacePlugin.license;
-  if (marketplacePlugin.keywords) merged.keywords = marketplacePlugin.keywords;
-  if (marketplacePlugin.commands) merged.commands = marketplacePlugin.commands;
-  if (marketplacePlugin.agents) merged.agents = marketplacePlugin.agents;
-  if (marketplacePlugin.skills) merged.skills = marketplacePlugin.skills;
-  if (marketplacePlugin.hooks) merged.hooks = marketplacePlugin.hooks;
-  if (marketplacePlugin.mcpServers)
-    merged.mcpServers = marketplacePlugin.mcpServers;
-  if (marketplacePlugin.outputStyles)
-    merged.outputStyles = marketplacePlugin.outputStyles;
-  if (marketplacePlugin.lspServers)
-    merged.lspServers = marketplacePlugin.lspServers;
+    // Overlay marketplace config (takes precedence)
+    if (marketplacePlugin.name) merged.name = marketplacePlugin.name;
+    if (marketplacePlugin.version) merged.version = marketplacePlugin.version;
+    if (marketplacePlugin.description)
+        merged.description = marketplacePlugin.description;
+    if (marketplacePlugin.author) merged.author = marketplacePlugin.author;
+    if (marketplacePlugin.homepage)
+        merged.homepage = marketplacePlugin.homepage;
+    if (marketplacePlugin.repository)
+        merged.repository = marketplacePlugin.repository;
+    if (marketplacePlugin.license) merged.license = marketplacePlugin.license;
+    if (marketplacePlugin.keywords)
+        merged.keywords = marketplacePlugin.keywords;
+    if (marketplacePlugin.commands)
+        merged.commands = marketplacePlugin.commands;
+    if (marketplacePlugin.agents) merged.agents = marketplacePlugin.agents;
+    if (marketplacePlugin.skills) merged.skills = marketplacePlugin.skills;
+    if (marketplacePlugin.hooks) merged.hooks = marketplacePlugin.hooks;
+    if (marketplacePlugin.mcpServers)
+        merged.mcpServers = marketplacePlugin.mcpServers;
+    if (marketplacePlugin.outputStyles)
+        merged.outputStyles = marketplacePlugin.outputStyles;
+    if (marketplacePlugin.lspServers)
+        merged.lspServers = marketplacePlugin.lspServers;
 
-  return merged;
+    return merged;
 }
 
 /**
@@ -694,49 +727,49 @@ export function mergeClaudeConfigs(
  * @returns true if config appears to be Claude format
  */
 export function isClaudePluginConfig(
-  extensionDir: string,
-  marketplace: { marketplaceSource: string; pluginName: string },
+    extensionDir: string,
+    marketplace: { marketplaceSource: string; pluginName: string }
 ) {
-  const marketplaceConfigFilePath = path.join(
-    extensionDir,
-    '.claude-plugin/marketplace.json',
-  );
-  if (!fs.existsSync(marketplaceConfigFilePath)) {
-    return false;
-  }
+    const marketplaceConfigFilePath = path.join(
+        extensionDir,
+        '.claude-plugin/marketplace.json'
+    );
+    if (!fs.existsSync(marketplaceConfigFilePath)) {
+        return false;
+    }
 
-  const marketplaceConfigContent = fs.readFileSync(
-    marketplaceConfigFilePath,
-    'utf-8',
-  );
-  const marketplaceConfig = JSON.parse(marketplaceConfigContent);
+    const marketplaceConfigContent = fs.readFileSync(
+        marketplaceConfigFilePath,
+        'utf-8'
+    );
+    const marketplaceConfig = JSON.parse(marketplaceConfigContent);
 
-  if (typeof marketplaceConfig !== 'object' || marketplaceConfig === null) {
-    return false;
-  }
+    if (typeof marketplaceConfig !== 'object' || marketplaceConfig === null) {
+        return false;
+    }
 
-  const marketplaceConfigObj = marketplaceConfig as Record<string, unknown>;
+    const marketplaceConfigObj = marketplaceConfig as Record<string, unknown>;
 
-  // Must have name and owner
-  if (
-    typeof marketplaceConfigObj['name'] !== 'string' ||
-    typeof marketplaceConfigObj['owner'] !== 'object'
-  ) {
-    return false;
-  }
+    // Must have name and owner
+    if (
+        typeof marketplaceConfigObj['name'] !== 'string' ||
+        typeof marketplaceConfigObj['owner'] !== 'object'
+    ) {
+        return false;
+    }
 
-  if (!Array.isArray(marketplaceConfigObj['plugins'])) {
-    return false;
-  }
+    if (!Array.isArray(marketplaceConfigObj['plugins'])) {
+        return false;
+    }
 
-  const marketplacePluginObj = marketplaceConfigObj['plugins'].find(
-    (plugin: ClaudeMarketplacePluginConfig) =>
-      plugin.name === marketplace.pluginName,
-  );
+    const marketplacePluginObj = marketplaceConfigObj['plugins'].find(
+        (plugin: ClaudeMarketplacePluginConfig) =>
+            plugin.name === marketplace.pluginName
+    );
 
-  if (!marketplacePluginObj) return false;
+    if (!marketplacePluginObj) return false;
 
-  return true;
+    return true;
 }
 
 /**
@@ -744,75 +777,77 @@ export function isClaudePluginConfig(
  * Returns the absolute path to the plugin source directory.
  */
 async function resolvePluginSource(
-  pluginConfig: ClaudeMarketplacePluginConfig,
-  marketplaceDir: string,
-  pluginDir: string,
+    pluginConfig: ClaudeMarketplacePluginConfig,
+    marketplaceDir: string,
+    pluginDir: string
 ): Promise<string> {
-  const source = pluginConfig.source;
+    const source = pluginConfig.source;
 
-  // Handle string source (relative path or URL)
-  if (typeof source === 'string') {
-    // Check if it's a URL
-    if (source.startsWith('http://') || source.startsWith('https://')) {
-      // Download from URL
-      const installMetadata: ExtensionInstallMetadata = {
-        source,
-        type: 'git',
-        originSource: 'Claude',
-      };
-      try {
-        await downloadFromGitHubRelease(installMetadata, pluginDir);
-      } catch {
-        await cloneFromGit(installMetadata, pluginDir);
-      }
-      return pluginDir;
+    // Handle string source (relative path or URL)
+    if (typeof source === 'string') {
+        // Check if it's a URL
+        if (source.startsWith('http://') || source.startsWith('https://')) {
+            // Download from URL
+            const installMetadata: ExtensionInstallMetadata = {
+                source,
+                type: 'git',
+                originSource: 'Claude'
+            };
+            try {
+                await downloadFromGitHubRelease(installMetadata, pluginDir);
+            } catch {
+                await cloneFromGit(installMetadata, pluginDir);
+            }
+            return pluginDir;
+        }
+
+        // Relative path within marketplace
+        const pluginRoot = marketplaceDir;
+        const sourcePath = path.join(pluginRoot, source);
+
+        if (!fs.existsSync(sourcePath)) {
+            throw new Error(`Plugin source not found at ${sourcePath}`);
+        }
+
+        // If source path equals marketplace dir (source is '.' or ''),
+        // return marketplaceDir directly to avoid copying to subdirectory of self
+        if (path.resolve(sourcePath) === path.resolve(marketplaceDir)) {
+            return marketplaceDir;
+        }
+
+        // Copy to plugin directory
+        await fs.promises.cp(sourcePath, pluginDir, { recursive: true });
+        return pluginDir;
     }
 
-    // Relative path within marketplace
-    const pluginRoot = marketplaceDir;
-    const sourcePath = path.join(pluginRoot, source);
-
-    if (!fs.existsSync(sourcePath)) {
-      throw new Error(`Plugin source not found at ${sourcePath}`);
+    // Handle object source (github or url)
+    if (source.source === 'github') {
+        const installMetadata: ExtensionInstallMetadata = {
+            source: `https://github.com/${source.repo}`,
+            type: 'git'
+        };
+        try {
+            await downloadFromGitHubRelease(installMetadata, pluginDir);
+        } catch {
+            await cloneFromGit(installMetadata, pluginDir);
+        }
+        return pluginDir;
     }
 
-    // If source path equals marketplace dir (source is '.' or ''),
-    // return marketplaceDir directly to avoid copying to subdirectory of self
-    if (path.resolve(sourcePath) === path.resolve(marketplaceDir)) {
-      return marketplaceDir;
+    if (source.source === 'url') {
+        const installMetadata: ExtensionInstallMetadata = {
+            source: source.url,
+            type: 'git'
+        };
+        try {
+            await downloadFromGitHubRelease(installMetadata, pluginDir);
+        } catch {
+            await cloneFromGit(installMetadata, pluginDir);
+        }
+        return pluginDir;
     }
 
-    // Copy to plugin directory
-    await fs.promises.cp(sourcePath, pluginDir, { recursive: true });
-    return pluginDir;
-  }
-
-  // Handle object source (github or url)
-  if (source.source === 'github') {
-    const installMetadata: ExtensionInstallMetadata = {
-      source: `https://github.com/${source.repo}`,
-      type: 'git',
-    };
-    try {
-      await downloadFromGitHubRelease(installMetadata, pluginDir);
-    } catch {
-      await cloneFromGit(installMetadata, pluginDir);
-    }
-    return pluginDir;
-  }
-
-  if (source.source === 'url') {
-    const installMetadata: ExtensionInstallMetadata = {
-      source: source.url,
-      type: 'git',
-    };
-    try {
-      await downloadFromGitHubRelease(installMetadata, pluginDir);
-    } catch {
-      await cloneFromGit(installMetadata, pluginDir);
-    }
-    return pluginDir;
-  }
-
-  throw new Error(`Unsupported plugin source type: ${JSON.stringify(source)}`);
+    throw new Error(
+        `Unsupported plugin source type: ${JSON.stringify(source)}`
+    );
 }

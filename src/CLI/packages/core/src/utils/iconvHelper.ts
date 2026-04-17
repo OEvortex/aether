@@ -12,15 +12,16 @@
  */
 
 interface IconvLite {
-  decode(buffer: Buffer, encoding: string): string;
-  encode(content: string, encoding: string): Buffer;
-  encodingExists(encoding: string): boolean;
+    decode(buffer: Buffer, encoding: string): string;
+    encode(content: string, encoding: string): Buffer;
+    encodingExists(encoding: string): boolean;
 }
 
 // iconv-lite is a CJS module. Under NodeNext resolution, its ambient type
 // declarations don't map correctly. We import the default export (which is
 // the CJS module.exports object) and cast it to a proper interface.
 import iconvModule from 'iconv-lite';
+
 const iconvLite: IconvLite = iconvModule as unknown as IconvLite;
 
 /**
@@ -30,7 +31,7 @@ const iconvLite: IconvLite = iconvModule as unknown as IconvLite;
  * @returns The decoded string
  */
 export function iconvDecode(buffer: Buffer, encoding: string): string {
-  return iconvLite.decode(buffer, encoding);
+    return iconvLite.decode(buffer, encoding);
 }
 
 /**
@@ -40,7 +41,7 @@ export function iconvDecode(buffer: Buffer, encoding: string): string {
  * @returns The encoded buffer
  */
 export function iconvEncode(content: string, encoding: string): Buffer {
-  return iconvLite.encode(content, encoding);
+    return iconvLite.encode(content, encoding);
 }
 
 /**
@@ -49,7 +50,7 @@ export function iconvEncode(content: string, encoding: string): Buffer {
  * @returns True if the encoding is supported
  */
 export function iconvEncodingExists(encoding: string): boolean {
-  return iconvLite.encodingExists(encoding);
+    return iconvLite.encodingExists(encoding);
 }
 
 /**
@@ -60,6 +61,6 @@ export function iconvEncodingExists(encoding: string): boolean {
  * @returns True if the encoding is UTF-8 or ASCII compatible
  */
 export function isUtf8CompatibleEncoding(encoding: string): boolean {
-  const lower = encoding.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return lower === 'utf8' || lower === 'ascii' || lower === 'usascii';
+    const lower = encoding.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return lower === 'utf8' || lower === 'ascii' || lower === 'usascii';
 }

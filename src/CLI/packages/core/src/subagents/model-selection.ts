@@ -7,9 +7,9 @@
 import { AuthType } from '../core/contentGenerator.js';
 
 export interface ParsedSubagentModelSelection {
-  authType?: AuthType;
-  modelId?: string;
-  inherits: boolean;
+    authType?: AuthType;
+    modelId?: string;
+    inherits: boolean;
 }
 
 const AUTH_TYPES = new Set<AuthType>(Object.values(AuthType));
@@ -23,36 +23,36 @@ const AUTH_TYPES = new Set<AuthType>(Object.values(AuthType));
  * - authType:modelId -> use explicit authType and modelId
  */
 export function parseSubagentModelSelection(
-  model: string | undefined,
+    model: string | undefined
 ): ParsedSubagentModelSelection {
-  const trimmed = model?.trim();
-  if (!trimmed || trimmed === 'inherit') {
-    return { inherits: true };
-  }
+    const trimmed = model?.trim();
+    if (!trimmed || trimmed === 'inherit') {
+        return { inherits: true };
+    }
 
-  const colonIndex = trimmed.indexOf(':');
-  if (colonIndex === -1) {
-    return { modelId: trimmed, inherits: false };
-  }
+    const colonIndex = trimmed.indexOf(':');
+    if (colonIndex === -1) {
+        return { modelId: trimmed, inherits: false };
+    }
 
-  const maybeAuthType = trimmed.slice(0, colonIndex).trim();
-  const modelId = trimmed.slice(colonIndex + 1).trim();
+    const maybeAuthType = trimmed.slice(0, colonIndex).trim();
+    const modelId = trimmed.slice(colonIndex + 1).trim();
 
-  // If the prefix isn't a known AuthType, treat the whole string as a bare
-  // model ID. Model IDs can legitimately contain colons (e.g. gpt-4o:online).
-  if (!AUTH_TYPES.has(maybeAuthType as AuthType)) {
-    return { modelId: trimmed, inherits: false };
-  }
+    // If the prefix isn't a known AuthType, treat the whole string as a bare
+    // model ID. Model IDs can legitimately contain colons (e.g. gpt-4o:online).
+    if (!AUTH_TYPES.has(maybeAuthType as AuthType)) {
+        return { modelId: trimmed, inherits: false };
+    }
 
-  if (!modelId) {
-    throw new Error(
-      'Model selector must include a model ID after the authType',
-    );
-  }
+    if (!modelId) {
+        throw new Error(
+            'Model selector must include a model ID after the authType'
+        );
+    }
 
-  return {
-    authType: maybeAuthType as AuthType,
-    modelId,
-    inherits: false,
-  };
+    return {
+        authType: maybeAuthType as AuthType,
+        modelId,
+        inherits: false
+    };
 }

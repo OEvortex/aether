@@ -5,22 +5,22 @@
  */
 
 import {
-  IdeClient,
-  IdeConnectionEvent,
-  IdeConnectionType,
-  logIdeConnection,
-  type Config,
+    type Config,
+    IdeClient,
+    IdeConnectionEvent,
+    IdeConnectionType,
+    logIdeConnection
 } from '@aetherai/aether-core';
-import { type LoadedSettings } from '../config/settings.js';
+import type { LoadedSettings } from '../config/settings.js';
+import { initializeI18n, type SupportedLanguage } from '../i18n/index.js';
 import { performInitialAuth } from './auth.js';
 import { validateTheme } from './theme.js';
-import { initializeI18n, type SupportedLanguage } from '../i18n/index.js';
 
 export interface InitializationResult {
-  authError: string | null;
-  themeError: string | null;
-  shouldOpenAuthDialog: boolean;
-  geminiMdFileCount: number;
+    authError: string | null;
+    themeError: string | null;
+    shouldOpenAuthDialog: boolean;
+    geminiMdFileCount: number;
 }
 
 /**
@@ -31,36 +31,40 @@ export interface InitializationResult {
  * @returns The results of the initialization.
  */
 export async function initializeApp(
-  config: Config,
-  settings: LoadedSettings,
+    config: Config,
+    settings: LoadedSettings
 ): Promise<InitializationResult> {
-  // Initialize i18n system
-  const languageSetting =
-    process.env['aether_cli_LANG'] ||
-    (settings.merged.general?.language as string) ||
-    'auto';
-  await initializeI18n(languageSetting as SupportedLanguage | 'auto');
+    // Initialize i18n system
+    const languageSetting =
+        process.env['aether_cli_LANG'] ||
+        (settings.merged.general?.language as string) ||
+        'auto';
+    await initializeI18n(languageSetting as SupportedLanguage | 'auto');
 
-  // Use authType from modelsConfig which respects CLI --auth-type argument
-  // over settings.security.auth.selectedType
-  const authType = config.getModelsConfig().getCurrentAuthType();
-  const authError = await performInitialAuth(config, authType);
+    // Use authType from modelsConfig which respects CLI --auth-type argument
+    // over settings.security.auth.selectedType
+    const authType = config.getModelsConfig().getCurrentAuthType();
+    const authError = await performInitialAuth(config, authType);
 
-  const themeError = validateTheme(settings);
+    const themeError = validateTheme(settings);
 
-  const shouldOpenAuthDialog =
-    !config.getModelsConfig().wasAuthTypeExplicitlyProvided() || !!authError;
+    const shouldOpenAuthDialog =
+        !config.getModelsConfig().wasAuthTypeExplicitlyProvided() ||
+        !!authError;
 
-  if (config.getIdeMode()) {
-    const ideClient = await IdeClient.getInstance();
-    await ideClient.connect();
-    logIdeConnection(config, new IdeConnectionEvent(IdeConnectionType.START));
-  }
+    if (config.getIdeMode()) {
+        const ideClient = await IdeClient.getInstance();
+        await ideClient.connect();
+        logIdeConnection(
+            config,
+            new IdeConnectionEvent(IdeConnectionType.START)
+        );
+    }
 
-  return {
-    authError,
-    themeError,
-    shouldOpenAuthDialog,
-    geminiMdFileCount: config.getGeminiMdFileCount(),
-  };
+    return {
+        authError,
+        themeError,
+        shouldOpenAuthDialog,
+        geminiMdFileCount: config.getGeminiMdFileCount()
+    };
 }

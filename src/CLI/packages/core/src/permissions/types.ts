@@ -43,29 +43,29 @@ export type SpecifierKind = 'command' | 'path' | 'domain' | 'literal';
  *   "mcp__server__tool"        → specific MCP tool
  */
 export interface PermissionRule {
-  /** The original raw rule string as written in config. */
-  raw: string;
-  /** The canonical tool name or category (e.g. "run_shell_command", "Read", "Edit"). */
-  toolName: string;
-  /**
-   * Optional specifier for fine-grained matching.
-   * For shell tools: a command pattern (e.g. "git *").
-   * For file tools: a path pattern (e.g. "./secrets/**").
-   * For WebFetch: a domain pattern (e.g. "domain:example.com").
-   */
-  specifier?: string;
-  /**
-   * The kind of specifier, determines matching algorithm.
-   * Set automatically during parsing based on the tool name/category.
-   */
-  specifierKind?: SpecifierKind;
+    /** The original raw rule string as written in config. */
+    raw: string;
+    /** The canonical tool name or category (e.g. "run_shell_command", "Read", "Edit"). */
+    toolName: string;
+    /**
+     * Optional specifier for fine-grained matching.
+     * For shell tools: a command pattern (e.g. "git *").
+     * For file tools: a path pattern (e.g. "./secrets/**").
+     * For WebFetch: a domain pattern (e.g. "domain:example.com").
+     */
+    specifier?: string;
+    /**
+     * The kind of specifier, determines matching algorithm.
+     * Set automatically during parsing based on the tool name/category.
+     */
+    specifierKind?: SpecifierKind;
 }
 
 /** A complete set of permission rules organized by type. */
 export interface PermissionRuleSet {
-  allow: PermissionRule[];
-  ask: PermissionRule[];
-  deny: PermissionRule[];
+    allow: PermissionRule[];
+    ask: PermissionRule[];
+    deny: PermissionRule[];
 }
 
 /**
@@ -78,32 +78,32 @@ export interface PermissionRuleSet {
  * - Other tools: only `toolName` is needed
  */
 export interface PermissionCheckContext {
-  /** The canonical tool name being checked. */
-  toolName: string;
-  /**
-   * The shell command being executed (only for Bash / run_shell_command).
-   */
-  command?: string;
-  /**
-   * The file path being accessed (only for Read / Edit / Write tools).
-   * Should be an absolute path for matching against path patterns.
-   */
-  filePath?: string;
-  /**
-   * The domain being fetched (only for WebFetch).
-   */
-  domain?: string;
-  /**
-   * A generic specifier for literal matching (e.g. skill name for Skill,
-   * subagent type for Task/Agent). Used when the rule has a literal
-   * specifier that doesn't fall into command/path/domain categories.
-   */
-  specifier?: string;
+    /** The canonical tool name being checked. */
+    toolName: string;
+    /**
+     * The shell command being executed (only for Bash / run_shell_command).
+     */
+    command?: string;
+    /**
+     * The file path being accessed (only for Read / Edit / Write tools).
+     * Should be an absolute path for matching against path patterns.
+     */
+    filePath?: string;
+    /**
+     * The domain being fetched (only for WebFetch).
+     */
+    domain?: string;
+    /**
+     * A generic specifier for literal matching (e.g. skill name for Skill,
+     * subagent type for Task/Agent). Used when the rule has a literal
+     * specifier that doesn't fall into command/path/domain categories.
+     */
+    specifier?: string;
 }
 
 /** A rule with its type and source scope, used for listing rules. */
 export interface RuleWithSource {
-  rule: PermissionRule;
-  type: RuleType;
-  scope: RuleScope;
+    rule: PermissionRule;
+    type: RuleType;
+    scope: RuleScope;
 }

@@ -14,42 +14,42 @@
  */
 
 import type {
-  Content,
-  GenerateContentConfig,
-  GenerateContentResponseUsageMetadata,
+    Content,
+    GenerateContentConfig,
+    GenerateContentResponseUsageMetadata
 } from '@google/genai';
-import { GeminiChat, StreamEventType } from '../core/geminiChat.js';
 import type { Config } from '../config/config.js';
+import { GeminiChat, StreamEventType } from '../core/geminiChat.js';
 
 /**
  * Snapshot of the main conversation's cache-critical parameters.
  * Captured after each successful main turn so forked queries share the same prefix.
  */
 export interface CacheSafeParams {
-  /** Full generation config including systemInstruction and tools */
-  generationConfig: GenerateContentConfig;
-  /** Curated conversation history (deep clone) */
-  history: Content[];
-  /** Model identifier */
-  model: string;
-  /** Version number — increments when systemInstruction or tools change */
-  version: number;
+    /** Full generation config including systemInstruction and tools */
+    generationConfig: GenerateContentConfig;
+    /** Curated conversation history (deep clone) */
+    history: Content[];
+    /** Model identifier */
+    model: string;
+    /** Version number — increments when systemInstruction or tools change */
+    version: number;
 }
 
 /**
  * Result from a forked query.
  */
 export interface ForkedQueryResult {
-  /** Extracted text response, or null if no text */
-  text: string | null;
-  /** Parsed JSON result if schema was provided */
-  jsonResult?: Record<string, unknown>;
-  /** Token usage metrics */
-  usage: {
-    inputTokens: number;
-    outputTokens: number;
-    cacheHitTokens: number;
-  };
+    /** Extracted text response, or null if no text */
+    text: string | null;
+    /** Parsed JSON result if schema was provided */
+    jsonResult?: Record<string, unknown>;
+    /** Token usage metrics */
+    usage: {
+        inputTokens: number;
+        outputTokens: number;
+        cacheHitTokens: number;
+    };
 }
 
 // ---------------------------------------------------------------------------
@@ -64,46 +64,47 @@ let currentVersion = 0;
  * Called from GeminiClient.sendMessageStream() on successful completion.
  */
 export function saveCacheSafeParams(
-  generationConfig: GenerateContentConfig,
-  history: Content[],
-  model: string,
+    generationConfig: GenerateContentConfig,
+    history: Content[],
+    model: string
 ): void {
-  // Detect if systemInstruction or tools changed
-  const prevConfig = currentCacheSafeParams?.generationConfig;
-  const sysChanged =
-    !prevConfig ||
-    JSON.stringify(prevConfig.systemInstruction) !==
-      JSON.stringify(generationConfig.systemInstruction);
-  const toolsChanged =
-    !prevConfig ||
-    JSON.stringify(prevConfig.tools) !== JSON.stringify(generationConfig.tools);
+    // Detect if systemInstruction or tools changed
+    const prevConfig = currentCacheSafeParams?.generationConfig;
+    const sysChanged =
+        !prevConfig ||
+        JSON.stringify(prevConfig.systemInstruction) !==
+            JSON.stringify(generationConfig.systemInstruction);
+    const toolsChanged =
+        !prevConfig ||
+        JSON.stringify(prevConfig.tools) !==
+            JSON.stringify(generationConfig.tools);
 
-  if (sysChanged || toolsChanged) {
-    currentVersion++;
-  }
+    if (sysChanged || toolsChanged) {
+        currentVersion++;
+    }
 
-  currentCacheSafeParams = {
-    generationConfig: structuredClone(generationConfig),
-    history, // caller passes structuredClone'd curated history (from getHistory(true))
-    model,
-    version: currentVersion,
-  };
+    currentCacheSafeParams = {
+        generationConfig: structuredClone(generationConfig),
+        history, // caller passes structuredClone'd curated history (from getHistory(true))
+        model,
+        version: currentVersion
+    };
 }
 
 /**
  * Get the current cache-safe params, or null if not yet captured.
  */
 export function getCacheSafeParams(): CacheSafeParams | null {
-  return currentCacheSafeParams
-    ? structuredClone(currentCacheSafeParams)
-    : null;
+    return currentCacheSafeParams
+        ? structuredClone(currentCacheSafeParams)
+        : null;
 }
 
 /**
  * Clear cache-safe params (e.g., on session reset).
  */
 export function clearCacheSafeParams(): void {
-  currentCacheSafeParams = null;
+    currentCacheSafeParams = null;
 }
 
 // ---------------------------------------------------------------------------
@@ -119,34 +120,34 @@ export function clearCacheSafeParams(): void {
  * polluting the main session's recordings and token counts.
  */
 export function createForkedChat(
-  config: Config,
-  params: CacheSafeParams,
+    config: Config,
+    params: CacheSafeParams
 ): GeminiChat {
-  // Limit history to avoid excessive cost
-  const maxHistoryEntries = 40;
-  const history =
-    params.history.length > maxHistoryEntries
-      ? params.history.slice(-maxHistoryEntries)
-      : params.history;
+    // Limit history to avoid excessive cost
+    const maxHistoryEntries = 40;
+    const history =
+        params.history.length > maxHistoryEntries
+            ? params.history.slice(-maxHistoryEntries)
+            : params.history;
 
-  // params.generationConfig and params.history are already deep-cloned snapshots
-  // from saveCacheSafeParams (which clones generationConfig) and getHistory(true)
-  // (which structuredClones the history). Slice creates a new array but shares
-  // Content references — GeminiChat only reads history, never mutates entries,
-  // so sharing is safe and avoids a redundant deep clone.
-  return new GeminiChat(
-    config,
-    {
-      ...params.generationConfig,
-      // Disable thinking for forked queries — suggestions/speculation don't need
-      // reasoning tokens and it wastes cost + latency on the fast model path.
-      // This doesn't affect cache prefix (system + tools + history).
-      thinkingConfig: { includeThoughts: false },
-    },
-    [...history], // shallow copy — entries are read-only
-    undefined, // no chatRecordingService
-    undefined, // no telemetryService
-  );
+    // params.generationConfig and params.history are already deep-cloned snapshots
+    // from saveCacheSafeParams (which clones generationConfig) and getHistory(true)
+    // (which structuredClones the history). Slice creates a new array but shares
+    // Content references — GeminiChat only reads history, never mutates entries,
+    // so sharing is safe and avoids a redundant deep clone.
+    return new GeminiChat(
+        config,
+        {
+            ...params.generationConfig,
+            // Disable thinking for forked queries — suggestions/speculation don't need
+            // reasoning tokens and it wastes cost + latency on the fast model path.
+            // This doesn't affect cache prefix (system + tools + history).
+            thinkingConfig: { includeThoughts: false }
+        },
+        [...history], // shallow copy — entries are read-only
+        undefined, // no chatRecordingService
+        undefined // no telemetryService
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -154,13 +155,13 @@ export function createForkedChat(
 // ---------------------------------------------------------------------------
 
 function extractUsage(
-  metadata?: GenerateContentResponseUsageMetadata,
+    metadata?: GenerateContentResponseUsageMetadata
 ): ForkedQueryResult['usage'] {
-  return {
-    inputTokens: metadata?.promptTokenCount ?? 0,
-    outputTokens: metadata?.candidatesTokenCount ?? 0,
-    cacheHitTokens: metadata?.cachedContentTokenCount ?? 0,
-  };
+    return {
+        inputTokens: metadata?.promptTokenCount ?? 0,
+        outputTokens: metadata?.candidatesTokenCount ?? 0,
+        cacheHitTokens: metadata?.cachedContentTokenCount ?? 0
+    };
 }
 
 /**
@@ -173,77 +174,80 @@ function extractUsage(
  * @returns Query result with text, optional JSON, and usage metrics
  */
 export async function runForkedQuery(
-  config: Config,
-  userMessage: string,
-  options?: {
-    abortSignal?: AbortSignal;
-    /** JSON schema for structured output */
-    jsonSchema?: Record<string, unknown>;
-    /** Override model (e.g., for speculation with a cheaper model) */
-    model?: string;
-  },
+    config: Config,
+    userMessage: string,
+    options?: {
+        abortSignal?: AbortSignal;
+        /** JSON schema for structured output */
+        jsonSchema?: Record<string, unknown>;
+        /** Override model (e.g., for speculation with a cheaper model) */
+        model?: string;
+    }
 ): Promise<ForkedQueryResult> {
-  const params = getCacheSafeParams();
-  if (!params) {
-    throw new Error('CacheSafeParams not available');
-  }
-
-  const model = options?.model ?? params.model;
-  const chat = createForkedChat(config, params);
-
-  // Build per-request config overrides for JSON schema if needed
-  const requestConfig: GenerateContentConfig = {};
-  if (options?.abortSignal) {
-    requestConfig.abortSignal = options.abortSignal;
-  }
-  if (options?.jsonSchema) {
-    requestConfig.responseMimeType = 'application/json';
-    requestConfig.responseJsonSchema = options.jsonSchema;
-  }
-
-  const stream = await chat.sendMessageStream(
-    model,
-    {
-      message: [{ text: userMessage }],
-      config: Object.keys(requestConfig).length > 0 ? requestConfig : undefined,
-    },
-    'forked_query',
-  );
-
-  // Collect the full response
-  let fullText = '';
-  let usage: ForkedQueryResult['usage'] = {
-    inputTokens: 0,
-    outputTokens: 0,
-    cacheHitTokens: 0,
-  };
-
-  for await (const event of stream) {
-    if (event.type !== StreamEventType.CHUNK) continue;
-    const response = event.value;
-    // Extract text from candidates
-    const text = response.candidates?.[0]?.content?.parts
-      ?.map((p) => p.text ?? '')
-      .join('');
-    if (text) {
-      fullText += text;
+    const params = getCacheSafeParams();
+    if (!params) {
+        throw new Error('CacheSafeParams not available');
     }
-    if (response.usageMetadata) {
-      usage = extractUsage(response.usageMetadata);
+
+    const model = options?.model ?? params.model;
+    const chat = createForkedChat(config, params);
+
+    // Build per-request config overrides for JSON schema if needed
+    const requestConfig: GenerateContentConfig = {};
+    if (options?.abortSignal) {
+        requestConfig.abortSignal = options.abortSignal;
     }
-  }
-
-  const trimmed = fullText.trim() || null;
-
-  // Parse JSON if schema was provided
-  let jsonResult: Record<string, unknown> | undefined;
-  if (options?.jsonSchema && trimmed) {
-    try {
-      jsonResult = JSON.parse(trimmed) as Record<string, unknown>;
-    } catch {
-      // Model returned non-JSON despite schema constraint — treat as text
+    if (options?.jsonSchema) {
+        requestConfig.responseMimeType = 'application/json';
+        requestConfig.responseJsonSchema = options.jsonSchema;
     }
-  }
 
-  return { text: trimmed, jsonResult, usage };
+    const stream = await chat.sendMessageStream(
+        model,
+        {
+            message: [{ text: userMessage }],
+            config:
+                Object.keys(requestConfig).length > 0
+                    ? requestConfig
+                    : undefined
+        },
+        'forked_query'
+    );
+
+    // Collect the full response
+    let fullText = '';
+    let usage: ForkedQueryResult['usage'] = {
+        inputTokens: 0,
+        outputTokens: 0,
+        cacheHitTokens: 0
+    };
+
+    for await (const event of stream) {
+        if (event.type !== StreamEventType.CHUNK) continue;
+        const response = event.value;
+        // Extract text from candidates
+        const text = response.candidates?.[0]?.content?.parts
+            ?.map((p) => p.text ?? '')
+            .join('');
+        if (text) {
+            fullText += text;
+        }
+        if (response.usageMetadata) {
+            usage = extractUsage(response.usageMetadata);
+        }
+    }
+
+    const trimmed = fullText.trim() || null;
+
+    // Parse JSON if schema was provided
+    let jsonResult: Record<string, unknown> | undefined;
+    if (options?.jsonSchema && trimmed) {
+        try {
+            jsonResult = JSON.parse(trimmed) as Record<string, unknown>;
+        } catch {
+            // Model returned non-JSON despite schema constraint — treat as text
+        }
+    }
+
+    return { text: trimmed, jsonResult, usage };
 }

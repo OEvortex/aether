@@ -4,67 +4,73 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { Extension } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
-import { RadioButtonSelect } from '../../shared/RadioButtonSelect.js';
-import { type Extension } from '@aetherai/aether-core';
-import { theme } from '../../../semantic-colors.js';
 import { t } from '../../../../i18n/index.js';
+import { theme } from '../../../semantic-colors.js';
+import { RadioButtonSelect } from '../../shared/RadioButtonSelect.js';
 
 interface ScopeSelectStepProps {
-  selectedExtension: Extension | null;
-  mode: 'disable' | 'enable';
-  onScopeSelect: (scope: 'user' | 'workspace') => void;
+    selectedExtension: Extension | null;
+    mode: 'disable' | 'enable';
+    onScopeSelect: (scope: 'user' | 'workspace') => void;
 }
 
 export function ScopeSelectStep({
-  selectedExtension,
-  mode,
-  onScopeSelect,
+    selectedExtension,
+    mode,
+    onScopeSelect
 }: ScopeSelectStepProps) {
-  const scopeItems = [
-    {
-      key: 'user',
-      get label() {
-        return t('User (global)');
-      },
-      value: 'user' as const,
-    },
-    {
-      key: 'workspace',
-      get label() {
-        return t('Workspace (project-specific)');
-      },
-      value: 'workspace' as const,
-    },
-  ];
+    const scopeItems = [
+        {
+            key: 'user',
+            get label() {
+                return t('User (global)');
+            },
+            value: 'user' as const
+        },
+        {
+            key: 'workspace',
+            get label() {
+                return t('Workspace (project-specific)');
+            },
+            value: 'workspace' as const
+        }
+    ];
 
-  const handleSelect = (value: 'user' | 'workspace') => {
-    onScopeSelect(value);
-  };
+    const handleSelect = (value: 'user' | 'workspace') => {
+        onScopeSelect(value);
+    };
 
-  if (!selectedExtension) {
+    if (!selectedExtension) {
+        return (
+            <Box>
+                <Text color={theme.status.error}>
+                    {t('No extension selected')}
+                </Text>
+            </Box>
+        );
+    }
+
+    const title =
+        mode === 'disable'
+            ? t('Disable "{{name}}" - Select Scope', {
+                  name: selectedExtension.name
+              })
+            : t('Enable "{{name}}" - Select Scope', {
+                  name: selectedExtension.name
+              });
+
     return (
-      <Box>
-        <Text color={theme.status.error}>{t('No extension selected')}</Text>
-      </Box>
+        <Box flexDirection="column" gap={1}>
+            <Text color={theme.text.primary}>{title}</Text>
+            <Box>
+                <RadioButtonSelect
+                    items={scopeItems}
+                    onSelect={handleSelect}
+                    showNumbers={false}
+                />
+            </Box>
+        </Box>
     );
-  }
-
-  const title =
-    mode === 'disable'
-      ? t('Disable "{{name}}" - Select Scope', { name: selectedExtension.name })
-      : t('Enable "{{name}}" - Select Scope', { name: selectedExtension.name });
-
-  return (
-    <Box flexDirection="column" gap={1}>
-      <Text color={theme.text.primary}>{title}</Text>
-      <Box>
-        <RadioButtonSelect
-          items={scopeItems}
-          onSelect={handleSelect}
-          showNumbers={false}
-        />
-      </Box>
-    </Box>
-  );
 }

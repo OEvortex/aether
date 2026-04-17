@@ -4,29 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface UseAgentsManagerDialogReturn {
-  isAgentsManagerDialogOpen: boolean;
-  openAgentsManagerDialog: () => void;
-  closeAgentsManagerDialog: () => void;
+    isAgentsManagerDialogOpen: boolean;
+    openAgentsManagerDialog: () => void;
+    closeAgentsManagerDialog: () => void;
 }
 
 export const useAgentsManagerDialog = (): UseAgentsManagerDialogReturn => {
-  const [isAgentsManagerDialogOpen, setIsAgentsManagerDialogOpen] =
-    useState(false);
+    const [isAgentsManagerDialogOpen, setIsAgentsManagerDialogOpen] =
+        useState(false);
 
-  const openAgentsManagerDialog = useCallback(() => {
-    setIsAgentsManagerDialogOpen(true);
-  }, []);
+    const openAgentsManagerDialog = useCallback(() => {
+        setIsAgentsManagerDialogOpen(true);
+    }, []);
 
-  const closeAgentsManagerDialog = useCallback(() => {
-    setIsAgentsManagerDialogOpen(false);
-  }, []);
+    const closeAgentsManagerDialog = useCallback(() => {
+        setIsAgentsManagerDialogOpen(false);
+    }, []);
 
-  return {
-    isAgentsManagerDialogOpen,
-    openAgentsManagerDialog,
-    closeAgentsManagerDialog,
-  };
+    return {
+        isAgentsManagerDialogOpen,
+        openAgentsManagerDialog,
+        closeAgentsManagerDialog
+    };
 };

@@ -4,26 +4,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { normalizeContent, parse as parseYaml } from '@aetherai/aether-core';
 import { z } from 'zod';
-import {
-  parse as parseYaml,
-  normalizeContent,
-} from '@aetherai/aether-core';
 
 /**
  * Defines the Zod schema for a Markdown command definition file.
  * The frontmatter contains optional metadata, and the body is the prompt.
  */
 export const MarkdownCommandDefSchema = z.object({
-  frontmatter: z
-    .object({
-      description: z.string().optional(),
+    frontmatter: z
+        .object({
+            description: z.string().optional()
+        })
+        .optional(),
+    prompt: z.string({
+        required_error: 'The prompt content is required.',
+        invalid_type_error: 'The prompt content must be a string.'
     })
-    .optional(),
-  prompt: z.string({
-    required_error: 'The prompt content is required.',
-    invalid_type_error: 'The prompt content must be a string.',
-  }),
 });
 
 export type MarkdownCommandDef = z.infer<typeof MarkdownCommandDefSchema>;
@@ -34,36 +31,36 @@ export type MarkdownCommandDef = z.infer<typeof MarkdownCommandDefSchema>;
  * @returns Parsed command definition with frontmatter and prompt
  */
 export function parseMarkdownCommand(content: string): MarkdownCommandDef {
-  const normalizedContent = normalizeContent(content);
+    const normalizedContent = normalizeContent(content);
 
-  // Match YAML frontmatter pattern: ---\n...\n---\n
-  // Allow empty frontmatter: ---\n---\n
-  const frontmatterRegex = /^---\n(?:([\s\S]*?)\n)?---(?:\n|$)([\s\S]*)$/;
-  const match = normalizedContent.match(frontmatterRegex);
+    // Match YAML frontmatter pattern: ---\n...\n---\n
+    // Allow empty frontmatter: ---\n---\n
+    const frontmatterRegex = /^---\n(?:([\s\S]*?)\n)?---(?:\n|$)([\s\S]*)$/;
+    const match = normalizedContent.match(frontmatterRegex);
 
-  if (!match) {
-    // No frontmatter, entire content is the prompt
-    return {
-      prompt: normalizedContent.trim(),
-    };
-  }
-
-  const [, frontmatterYaml = '', body] = match;
-
-  // Parse YAML frontmatter if not empty
-  let frontmatter: Record<string, unknown> | undefined;
-  if (frontmatterYaml.trim()) {
-    try {
-      frontmatter = parseYaml(frontmatterYaml) as Record<string, unknown>;
-    } catch (error) {
-      throw new Error(
-        `Failed to parse YAML frontmatter: ${error instanceof Error ? error.message : String(error)}`,
-      );
+    if (!match) {
+        // No frontmatter, entire content is the prompt
+        return {
+            prompt: normalizedContent.trim()
+        };
     }
-  }
 
-  return {
-    frontmatter,
-    prompt: body.trim(),
-  };
+    const [, frontmatterYaml = '', body] = match;
+
+    // Parse YAML frontmatter if not empty
+    let frontmatter: Record<string, unknown> | undefined;
+    if (frontmatterYaml.trim()) {
+        try {
+            frontmatter = parseYaml(frontmatterYaml) as Record<string, unknown>;
+        } catch (error) {
+            throw new Error(
+                `Failed to parse YAML frontmatter: ${error instanceof Error ? error.message : String(error)}`
+            );
+        }
+    }
+
+    return {
+        frontmatter,
+        prompt: body.trim()
+    };
 }

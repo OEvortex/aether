@@ -6,95 +6,95 @@
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import type {
-  CommandContext,
-  SlashCommand,
-  SlashCommandActionReturn,
-} from './types.js';
 import { getCurrentGeminiMdFilename } from '@aetherai/aether-core';
-import { CommandKind } from './types.js';
 import { Text } from 'ink';
 import React from 'react';
 import { t } from '../../i18n/index.js';
+import type {
+    CommandContext,
+    SlashCommand,
+    SlashCommandActionReturn
+} from './types.js';
+import { CommandKind } from './types.js';
 
 export const initCommand: SlashCommand = {
-  name: 'init',
-  get description() {
-    return t('Analyzes the project and creates a tailored AGENTS.md file.');
-  },
-  kind: CommandKind.BUILT_IN,
-  action: async (
-    context: CommandContext,
-    _args: string,
-  ): Promise<SlashCommandActionReturn> => {
-    if (!context.services.config) {
-      return {
-        type: 'message',
-        messageType: 'error',
-        content: t('Configuration not available.'),
-      };
-    }
-    const targetDir = context.services.config.getTargetDir();
-    const contextFileName = getCurrentGeminiMdFilename();
-    const contextFilePath = path.join(targetDir, contextFileName);
-
-    try {
-      if (fs.existsSync(contextFilePath)) {
-        // If file exists but is empty (or whitespace), continue to initialize
-        try {
-          const existing = fs.readFileSync(contextFilePath, 'utf8');
-          if (existing && existing.trim().length > 0) {
-            // File exists and has content - ask for confirmation to overwrite
-            if (!context.overwriteConfirmed) {
-              return {
-                type: 'confirm_action',
-                // TODO: Move to .tsx file to use JSX syntax instead of React.createElement
-                // For now, using React.createElement to maintain .ts compatibility for PR review
-                prompt: React.createElement(
-                  Text,
-                  null,
-                  `A ${contextFileName} file already exists in this directory. Do you want to regenerate it?`,
-                ),
-                originalInvocation: {
-                  raw: context.invocation?.raw || '/init',
-                },
-              };
-            }
-            // User confirmed overwrite, continue with regeneration
-          }
-        } catch {
-          // If we fail to read, conservatively proceed to (re)create the file
+    name: 'init',
+    get description() {
+        return t('Analyzes the project and creates a tailored AGENTS.md file.');
+    },
+    kind: CommandKind.BUILT_IN,
+    action: async (
+        context: CommandContext,
+        _args: string
+    ): Promise<SlashCommandActionReturn> => {
+        if (!context.services.config) {
+            return {
+                type: 'message',
+                messageType: 'error',
+                content: t('Configuration not available.')
+            };
         }
-      }
+        const targetDir = context.services.config.getTargetDir();
+        const contextFileName = getCurrentGeminiMdFilename();
+        const contextFilePath = path.join(targetDir, contextFileName);
 
-      // Ensure an empty context file exists before prompting the model to populate it
-      try {
-        fs.writeFileSync(contextFilePath, '', 'utf8');
-        context.ui.addItem(
-          {
-            type: 'info',
-            text: `Empty ${contextFileName} created. Now analyzing the project to populate it.`,
-          },
-          Date.now(),
-        );
-      } catch (err) {
+        try {
+            if (fs.existsSync(contextFilePath)) {
+                // If file exists but is empty (or whitespace), continue to initialize
+                try {
+                    const existing = fs.readFileSync(contextFilePath, 'utf8');
+                    if (existing && existing.trim().length > 0) {
+                        // File exists and has content - ask for confirmation to overwrite
+                        if (!context.overwriteConfirmed) {
+                            return {
+                                type: 'confirm_action',
+                                // TODO: Move to .tsx file to use JSX syntax instead of React.createElement
+                                // For now, using React.createElement to maintain .ts compatibility for PR review
+                                prompt: React.createElement(
+                                    Text,
+                                    null,
+                                    `A ${contextFileName} file already exists in this directory. Do you want to regenerate it?`
+                                ),
+                                originalInvocation: {
+                                    raw: context.invocation?.raw || '/init'
+                                }
+                            };
+                        }
+                        // User confirmed overwrite, continue with regeneration
+                    }
+                } catch {
+                    // If we fail to read, conservatively proceed to (re)create the file
+                }
+            }
+
+            // Ensure an empty context file exists before prompting the model to populate it
+            try {
+                fs.writeFileSync(contextFilePath, '', 'utf8');
+                context.ui.addItem(
+                    {
+                        type: 'info',
+                        text: `Empty ${contextFileName} created. Now analyzing the project to populate it.`
+                    },
+                    Date.now()
+                );
+            } catch (err) {
+                return {
+                    type: 'message',
+                    messageType: 'error',
+                    content: `Failed to create ${contextFileName}: ${err instanceof Error ? err.message : String(err)}`
+                };
+            }
+        } catch (error) {
+            return {
+                type: 'message',
+                messageType: 'error',
+                content: `Unexpected error preparing ${contextFileName}: ${error instanceof Error ? error.message : String(error)}`
+            };
+        }
+
         return {
-          type: 'message',
-          messageType: 'error',
-          content: `Failed to create ${contextFileName}: ${err instanceof Error ? err.message : String(err)}`,
-        };
-      }
-    } catch (error) {
-      return {
-        type: 'message',
-        messageType: 'error',
-        content: `Unexpected error preparing ${contextFileName}: ${error instanceof Error ? error.message : String(error)}`,
-      };
-    }
-
-    return {
-      type: 'submit_prompt',
-      content: `
+            type: 'submit_prompt',
+            content: `
 You are Aether Code, an interactive CLI agent. Analyze the current directory and generate a comprehensive ${contextFileName} file to be used as instructional context for future interactions.
 
 **Analysis Process:**
@@ -128,7 +128,7 @@ You are Aether Code, an interactive CLI agent. Analyze the current directory and
 **Final Output:**
 
 Write the complete content to the \`${contextFileName}\` file. The output must be well-formatted Markdown.
-`,
-    };
-  },
+`
+        };
+    }
 };

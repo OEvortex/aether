@@ -4,28 +4,28 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export interface UseHooksDialogReturn {
-  isHooksDialogOpen: boolean;
-  openHooksDialog: () => void;
-  closeHooksDialog: () => void;
+    isHooksDialogOpen: boolean;
+    openHooksDialog: () => void;
+    closeHooksDialog: () => void;
 }
 
 export const useHooksDialog = (): UseHooksDialogReturn => {
-  const [isHooksDialogOpen, setIsHooksDialogOpen] = useState(false);
+    const [isHooksDialogOpen, setIsHooksDialogOpen] = useState(false);
 
-  const openHooksDialog = useCallback(() => {
-    setIsHooksDialogOpen(true);
-  }, []);
+    const openHooksDialog = useCallback(() => {
+        setIsHooksDialogOpen(true);
+    }, []);
 
-  const closeHooksDialog = useCallback(() => {
-    setIsHooksDialogOpen(false);
-  }, []);
+    const closeHooksDialog = useCallback(() => {
+        setIsHooksDialogOpen(false);
+    }, []);
 
-  return {
-    isHooksDialogOpen,
-    openHooksDialog,
-    closeHooksDialog,
-  };
+    return {
+        isHooksDialogOpen,
+        openHooksDialog,
+        closeHooksDialog
+    };
 };

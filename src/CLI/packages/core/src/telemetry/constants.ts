@@ -28,10 +28,10 @@ export const EVENT_CHAT_COMPRESSION = 'aether-cli.chat_compression';
 export const EVENT_INVALID_CHUNK = 'aether-cli.chat.invalid_chunk';
 export const EVENT_CONTENT_RETRY = 'aether-cli.chat.content_retry';
 export const EVENT_CONTENT_RETRY_FAILURE =
-  'aether-cli.chat.content_retry_failure';
+    'aether-cli.chat.content_retry_failure';
 export const EVENT_CONVERSATION_FINISHED = 'aether-cli.conversation_finished';
 export const EVENT_MALFORMED_JSON_RESPONSE =
-  'aether-cli.malformed_json_response';
+    'aether-cli.malformed_json_response';
 export const EVENT_FILE_OPERATION = 'aether-cli.file_operation';
 export const EVENT_MODEL_SLASH_COMMAND = 'aether-cli.slash_command.model';
 export const EVENT_SUBAGENT_EXECUTION = 'aether-cli.subagent_execution';

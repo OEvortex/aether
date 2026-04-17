@@ -16,22 +16,22 @@ const DISABLE_BRACKETED_PASTE = '\x1b[?2004l';
  * mounts and disabled when it unmounts or when the process exits.
  */
 export const useBracketedPaste = () => {
-  const cleanup = () => {
-    process.stdout.write(DISABLE_BRACKETED_PASTE);
-  };
-
-  useEffect(() => {
-    process.stdout.write(ENABLE_BRACKETED_PASTE);
-
-    process.on('exit', cleanup);
-    process.on('SIGINT', cleanup);
-    process.on('SIGTERM', cleanup);
-
-    return () => {
-      cleanup();
-      process.removeListener('exit', cleanup);
-      process.removeListener('SIGINT', cleanup);
-      process.removeListener('SIGTERM', cleanup);
+    const cleanup = () => {
+        process.stdout.write(DISABLE_BRACKETED_PASTE);
     };
-  }, []);
+
+    useEffect(() => {
+        process.stdout.write(ENABLE_BRACKETED_PASTE);
+
+        process.on('exit', cleanup);
+        process.on('SIGINT', cleanup);
+        process.on('SIGTERM', cleanup);
+
+        return () => {
+            cleanup();
+            process.removeListener('exit', cleanup);
+            process.removeListener('SIGINT', cleanup);
+            process.removeListener('SIGTERM', cleanup);
+        };
+    }, []);
 };

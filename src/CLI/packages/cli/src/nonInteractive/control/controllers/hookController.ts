@@ -11,46 +11,50 @@
  * - hook_callback: Process hook callbacks (placeholder for future)
  */
 
-import { BaseController } from './baseController.js';
 import type {
-  ControlRequestPayload,
-  CLIHookCallbackRequest,
+    CLIHookCallbackRequest,
+    ControlRequestPayload
 } from '../../types.js';
+import { BaseController } from './baseController.js';
 
 export class HookController extends BaseController {
-  /**
-   * Handle hook control requests
-   */
-  protected async handleRequestPayload(
-    payload: ControlRequestPayload,
-    _signal: AbortSignal,
-  ): Promise<Record<string, unknown>> {
-    switch (payload.subtype) {
-      case 'hook_callback':
-        return this.handleHookCallback(payload as CLIHookCallbackRequest);
+    /**
+     * Handle hook control requests
+     */
+    protected async handleRequestPayload(
+        payload: ControlRequestPayload,
+        _signal: AbortSignal
+    ): Promise<Record<string, unknown>> {
+        switch (payload.subtype) {
+            case 'hook_callback':
+                return this.handleHookCallback(
+                    payload as CLIHookCallbackRequest
+                );
 
-      default:
-        throw new Error(`Unsupported request subtype in HookController`);
+            default:
+                throw new Error(
+                    `Unsupported request subtype in HookController`
+                );
+        }
     }
-  }
 
-  /**
-   * Handle hook_callback request
-   *
-   * Processes hook callbacks (placeholder implementation)
-   */
-  private async handleHookCallback(
-    payload: CLIHookCallbackRequest,
-  ): Promise<Record<string, unknown>> {
-    this.debugLogger.debug(
-      `[HookController] Hook callback: ${payload.callback_id}`,
-    );
+    /**
+     * Handle hook_callback request
+     *
+     * Processes hook callbacks (placeholder implementation)
+     */
+    private async handleHookCallback(
+        payload: CLIHookCallbackRequest
+    ): Promise<Record<string, unknown>> {
+        this.debugLogger.debug(
+            `[HookController] Hook callback: ${payload.callback_id}`
+        );
 
-    // Hook callback processing not yet implemented
-    return {
-      result: 'Hook callback processing not yet implemented',
-      callback_id: payload.callback_id,
-      tool_use_id: payload.tool_use_id,
-    };
-  }
+        // Hook callback processing not yet implemented
+        return {
+            result: 'Hook callback processing not yet implemented',
+            callback_id: payload.callback_id,
+            tool_use_id: payload.tool_use_id
+        };
+    }
 }

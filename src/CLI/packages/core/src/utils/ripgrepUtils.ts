@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFile } from 'node:child_process';
+import { createDebugLogger } from './debugLogger.js';
 import { fileExists } from './fileUtils.js';
 import { execCommand, isCommandAvailable } from './shell-utils.js';
-import { createDebugLogger } from './debugLogger.js';
 
 const debugLogger = createDebugLogger('RIPGREP');
 
@@ -22,29 +22,29 @@ const RIPGREP_WSL_TIMEOUT_MS = 60_000;
 type RipgrepMode = 'builtin' | 'system';
 
 interface RipgrepSelection {
-  mode: RipgrepMode;
-  command: string;
+    mode: RipgrepMode;
+    command: string;
 }
 
 interface RipgrepHealth {
-  working: boolean;
-  lastTested: number;
-  selection: RipgrepSelection;
+    working: boolean;
+    lastTested: number;
+    selection: RipgrepSelection;
 }
 
 export interface RipgrepRunResult {
-  /**
-   * The stdout output from ripgrep
-   */
-  stdout: string;
-  /**
-   * Whether the results were truncated due to buffer overflow or signal termination
-   */
-  truncated: boolean;
-  /**
-   * Any error that occurred during execution (non-fatal errors like no matches won't populate this)
-   */
-  error?: Error;
+    /**
+     * The stdout output from ripgrep
+     */
+    stdout: string;
+    /**
+     * Whether the results were truncated due to buffer overflow or signal termination
+     */
+    truncated: boolean;
+    /**
+     * Any error that occurred during execution (non-fatal errors like no matches won't populate this)
+     */
+    error?: Error;
 }
 
 let cachedSelection: RipgrepSelection | null = null;
@@ -52,9 +52,9 @@ let cachedHealth: RipgrepHealth | null = null;
 let macSigningAttempted = false;
 
 function wslTimeout(): number {
-  return process.platform === 'linux' && process.env['WSL_INTEROP']
-    ? RIPGREP_WSL_TIMEOUT_MS
-    : RIPGREP_RUN_TIMEOUT_MS;
+    return process.platform === 'linux' && process.env['WSL_INTEROP']
+        ? RIPGREP_WSL_TIMEOUT_MS
+        : RIPGREP_RUN_TIMEOUT_MS;
 }
 
 // Get the directory of the current module
@@ -68,27 +68,27 @@ type Architecture = 'x64' | 'arm64';
  * Maps process.platform values to vendor directory names
  */
 function getPlatformString(platform: string): Platform | undefined {
-  switch (platform) {
-    case 'darwin':
-    case 'linux':
-    case 'win32':
-      return platform;
-    default:
-      return undefined;
-  }
+    switch (platform) {
+        case 'darwin':
+        case 'linux':
+        case 'win32':
+            return platform;
+        default:
+            return undefined;
+    }
 }
 
 /**
  * Maps process.arch values to vendor directory names
  */
 function getArchitectureString(arch: string): Architecture | undefined {
-  switch (arch) {
-    case 'x64':
-    case 'arm64':
-      return arch;
-    default:
-      return undefined;
-  }
+    switch (arch) {
+        case 'x64':
+        case 'arm64':
+            return arch;
+        default:
+            return undefined;
+    }
 }
 
 /**
@@ -96,30 +96,30 @@ function getArchitectureString(arch: string): Architecture | undefined {
  * @returns The path to the bundled ripgrep binary, or null if not available
  */
 export function getBuiltinRipgrep(): string | null {
-  const platform = getPlatformString(process.platform);
-  const arch = getArchitectureString(process.arch);
+    const platform = getPlatformString(process.platform);
+    const arch = getArchitectureString(process.arch);
 
-  if (!platform || !arch) {
-    return null;
-  }
+    if (!platform || !arch) {
+        return null;
+    }
 
-  const binaryName = platform === 'win32' ? 'rg.exe' : 'rg';
+    const binaryName = platform === 'win32' ? 'rg.exe' : 'rg';
 
-  // Determine levels to traverse up to reach package root where vendor/ lives:
-  // - Bundle (dist/index.js): vendor copied into dist/, 0 levels
-  // - Source (src/utils/*.ts): 2 levels up
-  // - Transpiled (dist/src/utils/*.js): 3 levels up
-  const inSrcUtils = __filename.includes(path.join('src', 'utils'));
-  const levelsUp = !inSrcUtils ? 0 : __filename.endsWith('.ts') ? 2 : 3;
+    // Determine levels to traverse up to reach package root where vendor/ lives:
+    // - Bundle (dist/index.js): vendor copied into dist/, 0 levels
+    // - Source (src/utils/*.ts): 2 levels up
+    // - Transpiled (dist/src/utils/*.js): 3 levels up
+    const inSrcUtils = __filename.includes(path.join('src', 'utils'));
+    const levelsUp = !inSrcUtils ? 0 : __filename.endsWith('.ts') ? 2 : 3;
 
-  return path.join(
-    __dirname,
-    ...Array<string>(levelsUp).fill('..'),
-    'vendor',
-    'ripgrep',
-    `${arch}-${platform}`,
-    binaryName,
-  );
+    return path.join(
+        __dirname,
+        ...Array<string>(levelsUp).fill('..'),
+        'vendor',
+        'ripgrep',
+        `${arch}-${platform}`,
+        binaryName
+    );
 }
 
 /**
@@ -130,31 +130,31 @@ export function getBuiltinRipgrep(): string | null {
  * @throws {Error} If an error occurs while resolving the ripgrep binary.
  */
 export async function resolveRipgrep(
-  useBuiltin: boolean = true,
+    useBuiltin: boolean = true
 ): Promise<RipgrepSelection | null> {
-  if (cachedSelection) return cachedSelection;
+    if (cachedSelection) return cachedSelection;
 
-  if (useBuiltin) {
-    // Try bundled ripgrep first
-    const rgPath = getBuiltinRipgrep();
-    if (rgPath && (await fileExists(rgPath))) {
-      cachedSelection = { mode: 'builtin', command: rgPath };
-      return cachedSelection;
+    if (useBuiltin) {
+        // Try bundled ripgrep first
+        const rgPath = getBuiltinRipgrep();
+        if (rgPath && (await fileExists(rgPath))) {
+            cachedSelection = { mode: 'builtin', command: rgPath };
+            return cachedSelection;
+        }
+        // Fallback to system rg if bundled binary is not available
     }
-    // Fallback to system rg if bundled binary is not available
-  }
 
-  const { available, error } = isCommandAvailable(RIPGREP_COMMAND);
-  if (available) {
-    cachedSelection = { mode: 'system', command: RIPGREP_COMMAND };
-    return cachedSelection;
-  }
+    const { available, error } = isCommandAvailable(RIPGREP_COMMAND);
+    if (available) {
+        cachedSelection = { mode: 'system', command: RIPGREP_COMMAND };
+        return cachedSelection;
+    }
 
-  if (error) {
-    throw error;
-  }
+    if (error) {
+        throw error;
+    }
 
-  return null;
+    return null;
 }
 
 /**
@@ -163,58 +163,58 @@ export async function resolveRipgrep(
  * @throws {Error} If ripgrep is not found or is not healthy.
  */
 export async function ensureRipgrepHealthy(
-  selection: RipgrepSelection,
+    selection: RipgrepSelection
 ): Promise<void> {
-  if (
-    cachedHealth &&
-    cachedHealth.selection.command === selection.command &&
-    cachedHealth.working
-  )
-    return;
+    if (
+        cachedHealth &&
+        cachedHealth.selection.command === selection.command &&
+        cachedHealth.working
+    )
+        return;
 
-  try {
-    const { stdout, code } = await execCommand(
-      selection.command,
-      ['--version'],
-      {
-        timeout: RIPGREP_TEST_TIMEOUT_MS,
-      },
-    );
-    const working = code === 0 && stdout.startsWith('ripgrep');
-    cachedHealth = { working, lastTested: Date.now(), selection };
-  } catch (error) {
-    cachedHealth = { working: false, lastTested: Date.now(), selection };
-    throw error;
-  }
+    try {
+        const { stdout, code } = await execCommand(
+            selection.command,
+            ['--version'],
+            {
+                timeout: RIPGREP_TEST_TIMEOUT_MS
+            }
+        );
+        const working = code === 0 && stdout.startsWith('ripgrep');
+        cachedHealth = { working, lastTested: Date.now(), selection };
+    } catch (error) {
+        cachedHealth = { working: false, lastTested: Date.now(), selection };
+        throw error;
+    }
 }
 
 export async function ensureMacBinarySigned(
-  selection: RipgrepSelection,
+    selection: RipgrepSelection
 ): Promise<void> {
-  if (process.platform !== 'darwin') return;
-  if (macSigningAttempted) return;
-  macSigningAttempted = true;
+    if (process.platform !== 'darwin') return;
+    if (macSigningAttempted) return;
+    macSigningAttempted = true;
 
-  if (selection.mode !== 'builtin') return;
-  const binaryPath = selection.command;
+    if (selection.mode !== 'builtin') return;
+    const binaryPath = selection.command;
 
-  const inspect = await execCommand('codesign', ['-vv', '-d', binaryPath], {
-    preserveOutputOnError: false,
-  });
-  const alreadySigned =
-    inspect.stdout
-      ?.split('\n')
-      .some((line) => line.includes('linker-signed')) ?? false;
-  if (!alreadySigned) return;
+    const inspect = await execCommand('codesign', ['-vv', '-d', binaryPath], {
+        preserveOutputOnError: false
+    });
+    const alreadySigned =
+        inspect.stdout
+            ?.split('\n')
+            .some((line) => line.includes('linker-signed')) ?? false;
+    if (!alreadySigned) return;
 
-  await execCommand('codesign', [
-    '--sign',
-    '-',
-    '--force',
-    '--preserve-metadata=entitlements,requirements,flags,runtime',
-    binaryPath,
-  ]);
-  await execCommand('xattr', ['-d', 'com.apple.quarantine', binaryPath]);
+    await execCommand('codesign', [
+        '--sign',
+        '-',
+        '--force',
+        '--preserve-metadata=entitlements,requirements,flags,runtime',
+        binaryPath
+    ]);
+    await execCommand('xattr', ['-d', 'com.apple.quarantine', binaryPath]);
 }
 
 /**
@@ -225,14 +225,14 @@ export async function ensureMacBinarySigned(
  * @throws {Error} If an error occurs while resolving the ripgrep binary.
  */
 export async function canUseRipgrep(
-  useBuiltin: boolean = true,
+    useBuiltin: boolean = true
 ): Promise<boolean> {
-  const selection = await resolveRipgrep(useBuiltin);
-  if (!selection) {
-    return false;
-  }
-  await ensureRipgrepHealthy(selection);
-  return true;
+    const selection = await resolveRipgrep(useBuiltin);
+    if (!selection) {
+        return false;
+    }
+    await ensureRipgrepHealthy(selection);
+    return true;
 }
 
 /**
@@ -243,80 +243,83 @@ export async function canUseRipgrep(
  * @throws {Error} If an error occurs while running ripgrep.
  */
 export async function runRipgrep(
-  args: string[],
-  signal?: AbortSignal,
+    args: string[],
+    signal?: AbortSignal
 ): Promise<RipgrepRunResult> {
-  const selection = await resolveRipgrep();
-  if (!selection) {
-    throw new Error('ripgrep not found.');
-  }
-  await ensureRipgrepHealthy(selection);
+    const selection = await resolveRipgrep();
+    if (!selection) {
+        throw new Error('ripgrep not found.');
+    }
+    await ensureRipgrepHealthy(selection);
 
-  return new Promise<RipgrepRunResult>((resolve) => {
-    const child = execFile(
-      selection.command,
-      args,
-      {
-        maxBuffer: RIPGREP_BUFFER_LIMIT,
-        timeout: wslTimeout(),
-        signal,
-      },
-      (error, stdout = '', stderr = '') => {
-        if (!error) {
-          // Success case
-          resolve({
-            stdout,
-            truncated: false,
-          });
-          return;
-        }
+    return new Promise<RipgrepRunResult>((resolve) => {
+        const child = execFile(
+            selection.command,
+            args,
+            {
+                maxBuffer: RIPGREP_BUFFER_LIMIT,
+                timeout: wslTimeout(),
+                signal
+            },
+            (error, stdout = '', stderr = '') => {
+                if (!error) {
+                    // Success case
+                    resolve({
+                        stdout,
+                        truncated: false
+                    });
+                    return;
+                }
 
-        // Exit code 1 = no matches found (not an error)
-        // The error.code from execFile can be string | number | undefined | null
-        const errorCode = (
-          error as Error & { code?: string | number | undefined | null }
-        ).code;
-        if (errorCode === 1) {
-          resolve({ stdout: '', truncated: false });
-          return;
-        }
+                // Exit code 1 = no matches found (not an error)
+                // The error.code from execFile can be string | number | undefined | null
+                const errorCode = (
+                    error as Error & {
+                        code?: string | number | undefined | null;
+                    }
+                ).code;
+                if (errorCode === 1) {
+                    resolve({ stdout: '', truncated: false });
+                    return;
+                }
 
-        // Detect various error conditions
-        const wasKilled =
-          error.signal === 'SIGTERM' || error.name === 'AbortError';
-        const overflow = errorCode === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER';
-        const syntaxError = errorCode === 2;
+                // Detect various error conditions
+                const wasKilled =
+                    error.signal === 'SIGTERM' || error.name === 'AbortError';
+                const overflow =
+                    errorCode === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER';
+                const syntaxError = errorCode === 2;
 
-        const truncated = wasKilled || overflow;
-        let partialOutput = stdout;
+                const truncated = wasKilled || overflow;
+                let partialOutput = stdout;
 
-        // If killed or overflow with partial output, remove the last potentially incomplete line
-        if (truncated && partialOutput.length > 0) {
-          const lines = partialOutput.split('\n');
-          if (lines.length > 0) {
-            lines.pop();
-            partialOutput = lines.join('\n');
-          }
-        }
+                // If killed or overflow with partial output, remove the last potentially incomplete line
+                if (truncated && partialOutput.length > 0) {
+                    const lines = partialOutput.split('\n');
+                    if (lines.length > 0) {
+                        lines.pop();
+                        partialOutput = lines.join('\n');
+                    }
+                }
 
-        // Log warnings for abnormal exits (except syntax errors)
-        if (!syntaxError && truncated) {
-          debugLogger.warn(
-            `ripgrep exited abnormally (signal=${error.signal} code=${error.code}) with stderr:\n${stderr.trim() || '(empty)'}`,
-          );
-        }
+                // Log warnings for abnormal exits (except syntax errors)
+                if (!syntaxError && truncated) {
+                    debugLogger.warn(
+                        `ripgrep exited abnormally (signal=${error.signal} code=${error.code}) with stderr:\n${stderr.trim() || '(empty)'}`
+                    );
+                }
 
-        resolve({
-          stdout: partialOutput,
-          truncated,
-          error: error instanceof Error ? error : undefined,
-        });
-      },
-    );
+                resolve({
+                    stdout: partialOutput,
+                    truncated,
+                    error: error instanceof Error ? error : undefined
+                });
+            }
+        );
 
-    // Handle spawn errors
-    child.on('error', (err) =>
-      resolve({ stdout: '', truncated: false, error: err }),
-    );
-  });
+        // Handle spawn errors
+        child.on('error', (err) =>
+            resolve({ stdout: '', truncated: false, error: err })
+        );
+    });
 }

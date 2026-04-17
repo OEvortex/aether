@@ -20,7 +20,7 @@
  * Avoids double newlines if the message already ends with one.
  */
 export const writeStdoutLine = (message: string): void => {
-  process.stdout.write(message.endsWith('\n') ? message : `${message}\n`);
+    process.stdout.write(message.endsWith('\n') ? message : `${message}\n`);
 };
 
 /**
@@ -29,7 +29,7 @@ export const writeStdoutLine = (message: string): void => {
  * Avoids double newlines if the message already ends with one.
  */
 export const writeStderrLine = (message: string): void => {
-  process.stderr.write(message.endsWith('\n') ? message : `${message}\n`);
+    process.stderr.write(message.endsWith('\n') ? message : `${message}\n`);
 };
 
 /**
@@ -37,5 +37,5 @@ export const writeStderrLine = (message: string): void => {
  * Use instead of console.clear() to satisfy no-console lint rules.
  */
 export const clearScreen = (): void => {
-  console.clear();
+    console.clear();
 };

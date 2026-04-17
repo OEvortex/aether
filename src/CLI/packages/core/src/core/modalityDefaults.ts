@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { InputModalities } from './contentGenerator.js';
 import { normalize } from '../utils/globalContextLengthManager.js';
+import type { InputModalities } from './contentGenerator.js';
 
 const FULL_MULTIMODAL: InputModalities = {
-  image: true,
-  pdf: true,
-  audio: true,
-  video: true,
+    image: true,
+    pdf: true,
+    audio: true,
+    video: true
 };
 
 /**
@@ -19,61 +19,61 @@ const FULL_MULTIMODAL: InputModalities = {
  * Default for unknown models is text-only (empty object = all false).
  */
 const MODALITY_PATTERNS: Array<[RegExp, InputModalities]> = [
-  // -------------------
-  // Google Gemini — full multimodal
-  // -------------------
-  [/^gemini-3/, FULL_MULTIMODAL],
-  [/^gemini-/, FULL_MULTIMODAL],
+    // -------------------
+    // Google Gemini — full multimodal
+    // -------------------
+    [/^gemini-3/, FULL_MULTIMODAL],
+    [/^gemini-/, FULL_MULTIMODAL],
 
-  // -------------------
-  // OpenAI — image by default for all gpt/o-series models
-  // -------------------
-  [/^gpt-5/, { image: true }],
-  [/^gpt-/, { image: true }],
-  [/^o\d/, { image: true }],
+    // -------------------
+    // OpenAI — image by default for all gpt/o-series models
+    // -------------------
+    [/^gpt-5/, { image: true }],
+    [/^gpt-/, { image: true }],
+    [/^o\d/, { image: true }],
 
-  // -------------------
-  // Anthropic Claude — image + pdf
-  // -------------------
-  [/^claude-/, { image: true, pdf: true }],
+    // -------------------
+    // Anthropic Claude — image + pdf
+    // -------------------
+    [/^claude-/, { image: true, pdf: true }],
 
-  // -------------------
-  // Alibaba / Qwen
-  // -------------------
-  // aether3.5-Plus: image support
-  [/^aether3\.5-plus/, { image: true, video: true }],
-  [/^coder-model$/, { image: true, video: true }],
+    // -------------------
+    // Alibaba / Qwen
+    // -------------------
+    // aether3.5-Plus: image support
+    [/^aether3\.5-plus/, { image: true, video: true }],
+    [/^coder-model$/, { image: true, video: true }],
 
-  // Qwen VL (vision-language) models: image + video
-  [/^qwen-vl-/, { image: true, video: true }],
-  [/^aether3-vl-/, { image: true, video: true }],
+    // Qwen VL (vision-language) models: image + video
+    [/^qwen-vl-/, { image: true, video: true }],
+    [/^aether3-vl-/, { image: true, video: true }],
 
-  // Qwen coder / text models: text-only
-  [/^aether3-coder-/, {}],
-  [/^aether/, {}],
+    // Qwen coder / text models: text-only
+    [/^aether3-coder-/, {}],
+    [/^aether/, {}],
 
-  // -------------------
-  // DeepSeek — text-only
-  // -------------------
-  [/^deepseek/, {}],
+    // -------------------
+    // DeepSeek — text-only
+    // -------------------
+    [/^deepseek/, {}],
 
-  // -------------------
-  // Zhipu GLM
-  // -------------------
-  [/^glm-4\.5v/, { image: true }],
-  [/^glm-5(?:-|$)/, {}],
-  [/^glm-/, {}],
+    // -------------------
+    // Zhipu GLM
+    // -------------------
+    [/^glm-4\.5v/, { image: true }],
+    [/^glm-5(?:-|$)/, {}],
+    [/^glm-/, {}],
 
-  // -------------------
-  // MiniMax — text-only
-  // -------------------
-  [/^minimax-/, {}],
+    // -------------------
+    // MiniMax — text-only
+    // -------------------
+    [/^minimax-/, {}],
 
-  // -------------------
-  // Moonshot / Kimi
-  // -------------------
-  [/^kimi-k2\.5/, { image: true, video: true }],
-  [/^kimi-/, {}],
+    // -------------------
+    // Moonshot / Kimi
+    // -------------------
+    [/^kimi-k2\.5/, { image: true, video: true }],
+    [/^kimi-/, {}]
 ];
 
 /**
@@ -84,11 +84,11 @@ const MODALITY_PATTERNS: Array<[RegExp, InputModalities]> = [
  * unsupported media types that would cause unrecoverable API errors.
  */
 export function defaultModalities(model: string): InputModalities {
-  const norm = normalize(model);
-  for (const [regex, modalities] of MODALITY_PATTERNS) {
-    if (regex.test(norm)) {
-      return { ...modalities };
+    const norm = normalize(model);
+    for (const [regex, modalities] of MODALITY_PATTERNS) {
+        if (regex.test(norm)) {
+            return { ...modalities };
+        }
     }
-  }
-  return {};
+    return {};
 }

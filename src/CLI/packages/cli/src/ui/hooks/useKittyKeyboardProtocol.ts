@@ -6,14 +6,14 @@
 
 import { useState } from 'react';
 import {
-  isKittyProtocolEnabled,
-  isKittyProtocolSupported,
+    isKittyProtocolEnabled,
+    isKittyProtocolSupported
 } from '../utils/kittyProtocolDetector.js';
 
 export interface KittyProtocolStatus {
-  supported: boolean;
-  enabled: boolean;
-  checking: boolean;
+    supported: boolean;
+    enabled: boolean;
+    checking: boolean;
 }
 
 /**
@@ -21,11 +21,11 @@ export interface KittyProtocolStatus {
  * Detection is done once at app startup to avoid repeated queries.
  */
 export function useKittyKeyboardProtocol(): KittyProtocolStatus {
-  const [status] = useState<KittyProtocolStatus>({
-    supported: isKittyProtocolSupported(),
-    enabled: isKittyProtocolEnabled(),
-    checking: false,
-  });
+    const [status] = useState<KittyProtocolStatus>({
+        supported: isKittyProtocolSupported(),
+        enabled: isKittyProtocolEnabled(),
+        checking: false
+    });
 
-  return status;
+    return status;
 }

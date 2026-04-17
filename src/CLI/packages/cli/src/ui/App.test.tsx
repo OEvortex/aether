@@ -4,153 +4,153 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect, vi } from 'vitest';
-import { render } from 'ink-testing-library';
 import { Text, useIsScreenReaderEnabled } from 'ink';
+import { render } from 'ink-testing-library';
+import { describe, expect, it, vi } from 'vitest';
 import { App } from './App.js';
-import { UIStateContext, type UIState } from './contexts/UIStateContext.js';
-import {
-  UIActionsContext,
-  type UIActions,
-} from './contexts/UIActionsContext.js';
 import { AgentViewProvider } from './contexts/AgentViewContext.js';
+import {
+    type UIActions,
+    UIActionsContext
+} from './contexts/UIActionsContext.js';
+import { type UIState, UIStateContext } from './contexts/UIStateContext.js';
 import { StreamingState } from './types.js';
 
 vi.mock('ink', async (importOriginal) => {
-  const original = await importOriginal<typeof import('ink')>();
-  return {
-    ...original,
-    useIsScreenReaderEnabled: vi.fn(),
-  };
+    const original = await importOriginal<typeof import('ink')>();
+    return {
+        ...original,
+        useIsScreenReaderEnabled: vi.fn()
+    };
 });
 
 vi.mock('./components/MainContent.js', () => ({
-  MainContent: () => <Text>MainContent</Text>,
+    MainContent: () => <Text>MainContent</Text>
 }));
 
 vi.mock('./components/DialogManager.js', () => ({
-  DialogManager: () => <Text>DialogManager</Text>,
+    DialogManager: () => <Text>DialogManager</Text>
 }));
 
 vi.mock('./components/Composer.js', () => ({
-  Composer: () => <Text>Composer</Text>,
+    Composer: () => <Text>Composer</Text>
 }));
 
 vi.mock('./components/Notifications.js', () => ({
-  Notifications: () => <Text>Notifications</Text>,
+    Notifications: () => <Text>Notifications</Text>
 }));
 
 vi.mock('./components/QuittingDisplay.js', () => ({
-  QuittingDisplay: () => <Text>Quitting...</Text>,
+    QuittingDisplay: () => <Text>Quitting...</Text>
 }));
 
 vi.mock('./components/Footer.js', () => ({
-  Footer: () => <Text>Footer</Text>,
+    Footer: () => <Text>Footer</Text>
 }));
 
 vi.mock('./components/agent-view/AgentTabBar.js', () => ({
-  AgentTabBar: () => null,
+    AgentTabBar: () => null
 }));
 
 describe('App', () => {
-  const mockUIState: Partial<UIState> = {
-    streamingState: StreamingState.Idle,
-    quittingMessages: null,
-    dialogsVisible: false,
-    mainControlsRef: { current: null },
-    historyManager: {
-      addItem: vi.fn(),
-      history: [],
-      updateItem: vi.fn(),
-      clearItems: vi.fn(),
-      loadHistory: vi.fn(),
-    },
-  };
+    const mockUIState: Partial<UIState> = {
+        streamingState: StreamingState.Idle,
+        quittingMessages: null,
+        dialogsVisible: false,
+        mainControlsRef: { current: null },
+        historyManager: {
+            addItem: vi.fn(),
+            history: [],
+            updateItem: vi.fn(),
+            clearItems: vi.fn(),
+            loadHistory: vi.fn()
+        }
+    };
 
-  const mockUIActions = {
-    refreshStatic: vi.fn(),
-  } as unknown as UIActions;
+    const mockUIActions = {
+        refreshStatic: vi.fn()
+    } as unknown as UIActions;
 
-  const renderWithProviders = (uiState: UIState) =>
-    render(
-      <UIActionsContext.Provider value={mockUIActions}>
-        <AgentViewProvider>
-          <UIStateContext.Provider value={uiState}>
-            <App />
-          </UIStateContext.Provider>
-        </AgentViewProvider>
-      </UIActionsContext.Provider>,
-    );
+    const renderWithProviders = (uiState: UIState) =>
+        render(
+            <UIActionsContext.Provider value={mockUIActions}>
+                <AgentViewProvider>
+                    <UIStateContext.Provider value={uiState}>
+                        <App />
+                    </UIStateContext.Provider>
+                </AgentViewProvider>
+            </UIActionsContext.Provider>
+        );
 
-  it('should render main content and composer when not quitting', () => {
-    const { lastFrame } = renderWithProviders(mockUIState as UIState);
+    it('should render main content and composer when not quitting', () => {
+        const { lastFrame } = renderWithProviders(mockUIState as UIState);
 
-    expect(lastFrame()).toContain('MainContent');
-    expect(lastFrame()).toContain('Composer');
-  });
+        expect(lastFrame()).toContain('MainContent');
+        expect(lastFrame()).toContain('Composer');
+    });
 
-  it('should render quitting display when quittingMessages is set', () => {
-    const quittingUIState = {
-      ...mockUIState,
-      quittingMessages: [{ id: 1, type: 'user', text: 'test' }],
-    } as UIState;
+    it('should render quitting display when quittingMessages is set', () => {
+        const quittingUIState = {
+            ...mockUIState,
+            quittingMessages: [{ id: 1, type: 'user', text: 'test' }]
+        } as UIState;
 
-    const { lastFrame } = renderWithProviders(quittingUIState);
+        const { lastFrame } = renderWithProviders(quittingUIState);
 
-    expect(lastFrame()).toContain('Quitting...');
-  });
+        expect(lastFrame()).toContain('Quitting...');
+    });
 
-  it('should render dialog manager when dialogs are visible', () => {
-    const dialogUIState = {
-      ...mockUIState,
-      dialogsVisible: true,
-    } as UIState;
+    it('should render dialog manager when dialogs are visible', () => {
+        const dialogUIState = {
+            ...mockUIState,
+            dialogsVisible: true
+        } as UIState;
 
-    const { lastFrame } = renderWithProviders(dialogUIState);
+        const { lastFrame } = renderWithProviders(dialogUIState);
 
-    expect(lastFrame()).toContain('MainContent');
-    expect(lastFrame()).toContain('DialogManager');
-  });
+        expect(lastFrame()).toContain('MainContent');
+        expect(lastFrame()).toContain('DialogManager');
+    });
 
-  it('should show Ctrl+C exit prompt when dialogs are visible and ctrlCPressedOnce is true', () => {
-    const ctrlCUIState = {
-      ...mockUIState,
-      dialogsVisible: true,
-      ctrlCPressedOnce: true,
-    } as UIState;
+    it('should show Ctrl+C exit prompt when dialogs are visible and ctrlCPressedOnce is true', () => {
+        const ctrlCUIState = {
+            ...mockUIState,
+            dialogsVisible: true,
+            ctrlCPressedOnce: true
+        } as UIState;
 
-    const { lastFrame } = renderWithProviders(ctrlCUIState);
+        const { lastFrame } = renderWithProviders(ctrlCUIState);
 
-    expect(lastFrame()).toContain('Press Ctrl+C again to exit.');
-  });
+        expect(lastFrame()).toContain('Press Ctrl+C again to exit.');
+    });
 
-  it('should show Ctrl+D exit prompt when dialogs are visible and ctrlDPressedOnce is true', () => {
-    const ctrlDUIState = {
-      ...mockUIState,
-      dialogsVisible: true,
-      ctrlDPressedOnce: true,
-    } as UIState;
+    it('should show Ctrl+D exit prompt when dialogs are visible and ctrlDPressedOnce is true', () => {
+        const ctrlDUIState = {
+            ...mockUIState,
+            dialogsVisible: true,
+            ctrlDPressedOnce: true
+        } as UIState;
 
-    const { lastFrame } = renderWithProviders(ctrlDUIState);
+        const { lastFrame } = renderWithProviders(ctrlDUIState);
 
-    expect(lastFrame()).toContain('Press Ctrl+D again to exit.');
-  });
+        expect(lastFrame()).toContain('Press Ctrl+D again to exit.');
+    });
 
-  it('should render ScreenReaderAppLayout when screen reader is enabled', () => {
-    (useIsScreenReaderEnabled as vi.Mock).mockReturnValue(true);
+    it('should render ScreenReaderAppLayout when screen reader is enabled', () => {
+        (useIsScreenReaderEnabled as vi.Mock).mockReturnValue(true);
 
-    const { lastFrame } = renderWithProviders(mockUIState as UIState);
+        const { lastFrame } = renderWithProviders(mockUIState as UIState);
 
-    expect(lastFrame()).toContain(
-      'Notifications\nFooter\nMainContent\nComposer',
-    );
-  });
+        expect(lastFrame()).toContain(
+            'Notifications\nFooter\nMainContent\nComposer'
+        );
+    });
 
-  it('should render DefaultAppLayout when screen reader is not enabled', () => {
-    (useIsScreenReaderEnabled as vi.Mock).mockReturnValue(false);
+    it('should render DefaultAppLayout when screen reader is not enabled', () => {
+        (useIsScreenReaderEnabled as vi.Mock).mockReturnValue(false);
 
-    const { lastFrame } = renderWithProviders(mockUIState as UIState);
+        const { lastFrame } = renderWithProviders(mockUIState as UIState);
 
-    expect(lastFrame()).toContain('MainContent\nComposer');
-  });
+        expect(lastFrame()).toContain('MainContent\nComposer');
+    });
 });

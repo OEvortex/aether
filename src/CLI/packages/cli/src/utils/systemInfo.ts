@@ -4,44 +4,44 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import process from 'node:process';
-import os from 'node:os';
 import { execSync } from 'node:child_process';
-import type { CommandContext } from '../ui/commands/types.js';
-import { getCliVersion } from './version.js';
-import { IdeClient, AuthType } from '@aetherai/aether-core';
-import { formatMemoryUsage } from '../ui/utils/formatters.js';
+import os from 'node:os';
+import process from 'node:process';
+import { AuthType, IdeClient } from '@aetherai/aether-core';
 import { GIT_COMMIT_INFO } from '../generated/git-commit.js';
+import type { CommandContext } from '../ui/commands/types.js';
+import { formatMemoryUsage } from '../ui/utils/formatters.js';
+import { getCliVersion } from './version.js';
 
 /**
  * System information interface containing all system-related details
  * that can be collected for debugging and reporting purposes.
  */
 export interface SystemInfo {
-  cliVersion: string;
-  osPlatform: string;
-  osArch: string;
-  osRelease: string;
-  nodeVersion: string;
-  npmVersion: string;
-  sandboxEnv: string;
-  modelVersion: string;
-  selectedAuthType: string;
-  ideClient: string;
-  sessionId: string;
-  proxy?: string;
+    cliVersion: string;
+    osPlatform: string;
+    osArch: string;
+    osRelease: string;
+    nodeVersion: string;
+    npmVersion: string;
+    sandboxEnv: string;
+    modelVersion: string;
+    selectedAuthType: string;
+    ideClient: string;
+    sessionId: string;
+    proxy?: string;
 }
 
 /**
  * Additional system information for bug reports
  */
 export interface ExtendedSystemInfo extends SystemInfo {
-  memoryUsage: string;
-  baseUrl?: string;
-  apiKeyEnvKey?: string;
-  gitCommit?: string;
-  proxy?: string;
-  fastModel?: string;
+    memoryUsage: string;
+    baseUrl?: string;
+    apiKeyEnvKey?: string;
+    gitCommit?: string;
+    proxy?: string;
+    fastModel?: string;
 }
 
 /**
@@ -49,11 +49,11 @@ export interface ExtendedSystemInfo extends SystemInfo {
  * Returns 'unknown' if npm command fails or is not found.
  */
 export async function getNpmVersion(): Promise<string> {
-  try {
-    return execSync('npm --version', { encoding: 'utf-8' }).trim();
-  } catch {
-    return 'unknown';
-  }
+    try {
+        return execSync('npm --version', { encoding: 'utf-8' }).trim();
+    } catch {
+        return 'unknown';
+    }
 }
 
 /**
@@ -61,17 +61,17 @@ export async function getNpmVersion(): Promise<string> {
  * Returns empty string if IDE mode is disabled or IDE client is not detected.
  */
 export async function getIdeClientName(
-  context: CommandContext,
+    context: CommandContext
 ): Promise<string> {
-  if (!context.services.config?.getIdeMode()) {
-    return '';
-  }
-  try {
-    const ideClient = await IdeClient.getInstance();
-    return ideClient?.getDetectedIdeDisplayName() ?? '';
-  } catch {
-    return '';
-  }
+    if (!context.services.config?.getIdeMode()) {
+        return '';
+    }
+    try {
+        const ideClient = await IdeClient.getInstance();
+        return ideClient?.getDetectedIdeDisplayName() ?? '';
+    } catch {
+        return '';
+    }
 }
 
 /**
@@ -82,22 +82,22 @@ export async function getIdeClientName(
  * @param stripPrefix - Whether to strip 'aether-' prefix (used for bug reports)
  */
 export function getSandboxEnv(stripPrefix = false): string {
-  const sandbox = process.env['SANDBOX'];
+    const sandbox = process.env['SANDBOX'];
 
-  if (!sandbox || sandbox === 'sandbox-exec') {
-    if (sandbox === 'sandbox-exec') {
-      const profile = process.env['SEATBELT_PROFILE'] || 'unknown';
-      return `sandbox-exec (${profile})`;
+    if (!sandbox || sandbox === 'sandbox-exec') {
+        if (sandbox === 'sandbox-exec') {
+            const profile = process.env['SEATBELT_PROFILE'] || 'unknown';
+            return `sandbox-exec (${profile})`;
+        }
+        return 'no sandbox';
     }
-    return 'no sandbox';
-  }
 
-  // For bug reports, remove aether- prefix
-  if (stripPrefix) {
-    return sandbox.replace(/^aether-(?:code-)?/, '');
-  }
+    // For bug reports, remove aether- prefix
+    if (stripPrefix) {
+        return sandbox.replace(/^aether-(?:code-)?/, '');
+    }
 
-  return sandbox;
+    return sandbox;
 }
 
 /**
@@ -109,35 +109,35 @@ export function getSandboxEnv(stripPrefix = false): string {
  * @returns Promise resolving to SystemInfo object with all collected information
  */
 export async function getSystemInfo(
-  context: CommandContext,
+    context: CommandContext
 ): Promise<SystemInfo> {
-  const osPlatform = process.platform;
-  const osArch = process.arch;
-  const osRelease = os.release();
-  const nodeVersion = process.version;
-  const npmVersion = await getNpmVersion();
-  const sandboxEnv = getSandboxEnv();
-  const modelVersion = context.services.config?.getModel() || 'Unknown';
-  const cliVersion = await getCliVersion();
-  const selectedAuthType = context.services.config?.getAuthType() || '';
-  const ideClient = await getIdeClientName(context);
-  const sessionId = context.services.config?.getSessionId() || 'unknown';
-  const proxy = context.services.config?.getProxy();
+    const osPlatform = process.platform;
+    const osArch = process.arch;
+    const osRelease = os.release();
+    const nodeVersion = process.version;
+    const npmVersion = await getNpmVersion();
+    const sandboxEnv = getSandboxEnv();
+    const modelVersion = context.services.config?.getModel() || 'Unknown';
+    const cliVersion = await getCliVersion();
+    const selectedAuthType = context.services.config?.getAuthType() || '';
+    const ideClient = await getIdeClientName(context);
+    const sessionId = context.services.config?.getSessionId() || 'unknown';
+    const proxy = context.services.config?.getProxy();
 
-  return {
-    cliVersion,
-    osPlatform,
-    osArch,
-    osRelease,
-    nodeVersion,
-    npmVersion,
-    sandboxEnv,
-    modelVersion,
-    selectedAuthType,
-    ideClient,
-    sessionId,
-    proxy,
-  };
+    return {
+        cliVersion,
+        osPlatform,
+        osArch,
+        osRelease,
+        nodeVersion,
+        npmVersion,
+        sandboxEnv,
+        modelVersion,
+        selectedAuthType,
+        ideClient,
+        sessionId,
+        proxy
+    };
 }
 
 /**
@@ -148,39 +148,39 @@ export async function getSystemInfo(
  * @returns Promise resolving to ExtendedSystemInfo object
  */
 export async function getExtendedSystemInfo(
-  context: CommandContext,
+    context: CommandContext
 ): Promise<ExtendedSystemInfo> {
-  const baseInfo = await getSystemInfo(context);
-  const memoryUsage = formatMemoryUsage(process.memoryUsage().rss);
+    const baseInfo = await getSystemInfo(context);
+    const memoryUsage = formatMemoryUsage(process.memoryUsage().rss);
 
-  // For bug reports, use sandbox name without prefix
-  const sandboxEnv = getSandboxEnv(true);
+    // For bug reports, use sandbox name without prefix
+    const sandboxEnv = getSandboxEnv(true);
 
-  // Get base URL and apiKeyEnvKey if using OpenAI or Anthropic auth
-  const contentGeneratorConfig =
-    baseInfo.selectedAuthType === AuthType.USE_OPENAI ||
-    baseInfo.selectedAuthType === AuthType.USE_ANTHROPIC
-      ? context.services.config?.getContentGeneratorConfig()
-      : undefined;
-  const baseUrl = contentGeneratorConfig?.baseUrl;
-  const apiKeyEnvKey = contentGeneratorConfig?.apiKeyEnvKey;
+    // Get base URL and apiKeyEnvKey if using OpenAI or Anthropic auth
+    const contentGeneratorConfig =
+        baseInfo.selectedAuthType === AuthType.USE_OPENAI ||
+        baseInfo.selectedAuthType === AuthType.USE_ANTHROPIC
+            ? context.services.config?.getContentGeneratorConfig()
+            : undefined;
+    const baseUrl = contentGeneratorConfig?.baseUrl;
+    const apiKeyEnvKey = contentGeneratorConfig?.apiKeyEnvKey;
 
-  // Get git commit info
-  const gitCommit =
-    GIT_COMMIT_INFO && !['N/A'].includes(GIT_COMMIT_INFO)
-      ? GIT_COMMIT_INFO
-      : undefined;
+    // Get git commit info
+    const gitCommit =
+        GIT_COMMIT_INFO && !['N/A'].includes(GIT_COMMIT_INFO)
+            ? GIT_COMMIT_INFO
+            : undefined;
 
-  // Get fast model from settings
-  const fastModel = context.services.settings?.merged?.fastModel || undefined;
+    // Get fast model from settings
+    const fastModel = context.services.settings?.merged?.fastModel || undefined;
 
-  return {
-    ...baseInfo,
-    sandboxEnv,
-    memoryUsage,
-    baseUrl,
-    apiKeyEnvKey,
-    gitCommit,
-    fastModel,
-  };
+    return {
+        ...baseInfo,
+        sandboxEnv,
+        memoryUsage,
+        baseUrl,
+        apiKeyEnvKey,
+        gitCommit,
+        fastModel
+    };
 }

@@ -10,44 +10,41 @@
 
 // Core configuration
 export * from './config/config.js';
-export { Storage } from './config/storage.js';
-
-// Permission system
-export * from './permissions/index.js';
-
 // Model configuration
 export {
-  DEFAULT_AETHER_MODEL,
-  DEFAULT_AETHER_FLASH_MODEL,
-  DEFAULT_AETHER_EMBEDDING_MODEL,
-  MAINLINE_CODER_MODEL,
+    DEFAULT_AETHER_EMBEDDING_MODEL,
+    DEFAULT_AETHER_FLASH_MODEL,
+    DEFAULT_AETHER_MODEL,
+    DEFAULT_AETHER_MODEL as DEFAULT_QWEN_MODEL,
+    MAINLINE_CODER_MODEL
 } from './config/models.js';
-export { DEFAULT_AETHER_MODEL as DEFAULT_QWEN_MODEL } from './config/models.js';
+export { Storage } from './config/storage.js';
 export {
-  type AvailableModel,
-  type ModelCapabilities,
-  type ModelConfig as ProviderModelConfig,
-  type ModelConfigCliInput,
-  type ModelConfigResolutionResult,
-  type ModelConfigSettingsInput,
-  type ModelConfigSourcesInput,
-  type ModelConfigValidationResult,
-  ModelRegistry,
-  type ModelGenerationConfig,
-  ModelsConfig,
-  type ModelsConfigOptions,
-  type ModelProvidersConfig,
-  type ModelSwitchMetadata,
-  type OnModelChangeCallback,
-  AETHER_OAUTH_MODELS,
-  resolveModelConfig,
-  type ResolvedModelConfig,
-  validateModelConfig,
+    AETHER_OAUTH_MODELS,
+    type AvailableModel,
+    type ModelCapabilities,
+    type ModelConfig as ProviderModelConfig,
+    type ModelConfigCliInput,
+    type ModelConfigResolutionResult,
+    type ModelConfigSettingsInput,
+    type ModelConfigSourcesInput,
+    type ModelConfigValidationResult,
+    type ModelGenerationConfig,
+    type ModelProvidersConfig,
+    ModelRegistry,
+    type ModelSwitchMetadata,
+    ModelsConfig,
+    type ModelsConfigOptions,
+    type OnModelChangeCallback,
+    type ResolvedModelConfig,
+    resolveModelConfig,
+    validateModelConfig
 } from './models/index.js';
-
 // Output formatting
 export * from './output/json-formatter.js';
 export * from './output/types.js';
+// Permission system
+export * from './permissions/index.js';
 
 // ============================================================================
 // Core Engine
@@ -56,11 +53,11 @@ export * from './output/types.js';
 export * from './core/client.js';
 export * from './core/contentGenerator.js';
 export * from './core/coreToolScheduler.js';
-export * from './core/permission-helpers.js';
 export * from './core/geminiChat.js';
 export * from './core/geminiRequest.js';
 export * from './core/logger.js';
 export * from './core/nonInteractiveToolExecutor.js';
+export * from './core/permission-helpers.js';
 export * from './core/prompts.js';
 export * from './core/turn.js';
 
@@ -68,15 +65,10 @@ export * from './core/turn.js';
 // Tools
 // ============================================================================
 
-// Utilities
-export * from './utils/globalContextLengthManager.js';
-
-// Tool names and registry
-export * from './tools/tool-names.js';
-export * from './tools/tool-error.js';
-export * from './tools/tool-registry.js';
-export * from './tools/tools.js';
-
+export * from './tools/agent.js';
+export * from './tools/cron-create.js';
+export * from './tools/cron-delete.js';
+export * from './tools/cron-list.js';
 // Individual tools
 export * from './tools/edit.js';
 export * from './tools/exitPlanMode.js';
@@ -93,16 +85,19 @@ export * from './tools/ripGrep.js';
 export * from './tools/sdk-control-client-transport.js';
 export * from './tools/shell.js';
 export * from './tools/skill.js';
-export * from './tools/agent.js';
 export * from './tools/todoWrite.js';
 export * from './tools/tool-error.js';
+export * from './tools/tool-error.js';
+// Tool names and registry
+export * from './tools/tool-names.js';
 export * from './tools/tool-registry.js';
+export * from './tools/tool-registry.js';
+export * from './tools/tools.js';
 export * from './tools/web-fetch.js';
 export * from './tools/web-search/index.js';
 export * from './tools/write-file.js';
-export * from './tools/cron-create.js';
-export * from './tools/cron-list.js';
-export * from './tools/cron-delete.js';
+// Utilities
+export * from './utils/globalContextLengthManager.js';
 
 // ============================================================================
 // Services
@@ -121,12 +116,12 @@ export * from './services/shellExecutionService.js';
 // IDE Support
 // ============================================================================
 
-export * from './ide/ide-client.js';
-export * from './ide/ideContext.js';
-export * from './ide/ide-installer.js';
-export { IDE_DEFINITIONS, type IdeInfo } from './ide/detect-ide.js';
 export * from './ide/constants.js';
 export { AETHER_CODE_COMPANION_EXTENSION_NAME as aether_cli_COMPANION_EXTENSION_NAME } from './ide/constants.js';
+export { IDE_DEFINITIONS, type IdeInfo } from './ide/detect-ide.js';
+export * from './ide/ide-client.js';
+export * from './ide/ide-installer.js';
+export * from './ide/ideContext.js';
 export * from './ide/types.js';
 
 // ============================================================================
@@ -146,23 +141,23 @@ export * from './lsp/types.js';
 // MCP (Model Context Protocol)
 // ============================================================================
 
-export { MCPOAuthProvider } from './mcp/oauth-provider.js';
 export type {
-  MCPOAuthConfig,
-  OAuthDisplayMessage,
-  OAuthDisplayPayload,
+    MCPOAuthConfig,
+    OAuthDisplayMessage,
+    OAuthDisplayPayload
 } from './mcp/oauth-provider.js';
+export { MCPOAuthProvider } from './mcp/oauth-provider.js';
 export { MCPOAuthTokenStorage } from './mcp/oauth-token-storage.js';
+export type {
+    OAuthAuthorizationServerMetadata,
+    OAuthProtectedResourceMetadata
+} from './mcp/oauth-utils.js';
+export { OAuthUtils } from './mcp/oauth-utils.js';
 export { KeychainTokenStorage } from './mcp/token-storage/keychain-token-storage.js';
 export type {
-  OAuthCredentials,
-  OAuthToken,
+    OAuthCredentials,
+    OAuthToken
 } from './mcp/token-storage/types.js';
-export { OAuthUtils } from './mcp/oauth-utils.js';
-export type {
-  OAuthAuthorizationServerMetadata,
-  OAuthProtectedResourceMetadata,
-} from './mcp/oauth-utils.js';
 
 // ============================================================================
 // Telemetry
@@ -171,36 +166,36 @@ export type {
 export { AetherLogger } from './telemetry/aether-logger/aether-logger.js';
 export * from './telemetry/index.js';
 export {
-  logAuth,
-  logExtensionDisable,
-  logExtensionEnable,
-  logIdeConnection,
-  logModelSlashCommand,
-  logPromptSuggestion,
-  logSpeculation,
+    logAuth,
+    logExtensionDisable,
+    logExtensionEnable,
+    logIdeConnection,
+    logModelSlashCommand,
+    logPromptSuggestion,
+    logSpeculation
 } from './telemetry/loggers.js';
 export {
-  AuthEvent,
-  ExtensionDisableEvent,
-  ExtensionEnableEvent,
-  ExtensionInstallEvent,
-  ExtensionUninstallEvent,
-  IdeConnectionEvent,
-  IdeConnectionType,
-  ModelSlashCommandEvent,
-  PromptSuggestionEvent,
-  SpeculationEvent,
+    AuthEvent,
+    ExtensionDisableEvent,
+    ExtensionEnableEvent,
+    ExtensionInstallEvent,
+    ExtensionUninstallEvent,
+    IdeConnectionEvent,
+    IdeConnectionType,
+    ModelSlashCommandEvent,
+    PromptSuggestionEvent,
+    SpeculationEvent
 } from './telemetry/types.js';
 
 // ============================================================================
 // Extensions, Skills, Subagents & Agents
 // ============================================================================
 
+export * from './agents/index.js';
 export * from './extension/index.js';
 export * from './prompts/mcp-prompts.js';
 export * from './skills/index.js';
 export * from './subagents/index.js';
-export * from './agents/index.js';
 
 // ============================================================================
 // Follow-up Suggestions
@@ -219,8 +214,8 @@ export * from './utils/editor.js';
 export * from './utils/environmentContext.js';
 export * from './utils/errorParsing.js';
 export * from './utils/errors.js';
-export * from './utils/fileUtils.js';
 export * from './utils/filesearch/fileSearch.js';
+export * from './utils/fileUtils.js';
 export * from './utils/formatters.js';
 export * from './utils/generateContentResponseUtilities.js';
 export * from './utils/getFolderStructure.js';
@@ -274,13 +269,12 @@ export * from './test-utils/index.js';
 // Hooks
 // ============================================================================
 
-export * from './hooks/types.js';
-export { HookSystem, HookRegistry } from './hooks/index.js';
-export type { HookRegistryEntry } from './hooks/index.js';
-
 // Export hook triggers for notification hooks
 export {
-  fireNotificationHook,
-  firePermissionRequestHook,
-  type NotificationHookResult,
+    fireNotificationHook,
+    firePermissionRequestHook,
+    type NotificationHookResult
 } from './core/toolHookTriggers.js';
+export type { HookRegistryEntry } from './hooks/index.js';
+export { HookRegistry, HookSystem } from './hooks/index.js';
+export * from './hooks/types.js';

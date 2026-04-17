@@ -4,19 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { EditorType } from '../utils/editor.js';
-import { openDiff } from '../utils/editor.js';
+import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import fs from 'node:fs';
 import * as Diff from 'diff';
-import { DEFAULT_DIFF_OPTIONS } from './diffOptions.js';
-import { isNodeError } from '../utils/errors.js';
 import { createDebugLogger } from '../utils/debugLogger.js';
+import type { EditorType } from '../utils/editor.js';
+import { openDiff } from '../utils/editor.js';
+import { isNodeError } from '../utils/errors.js';
+import { DEFAULT_DIFF_OPTIONS } from './diffOptions.js';
 import type {
-  AnyDeclarativeTool,
-  DeclarativeTool,
-  ToolResult,
+    AnyDeclarativeTool,
+    DeclarativeTool,
+    ToolResult
 } from './tools.js';
 
 const debugLogger = createDebugLogger('MODIFIABLE_TOOL');
@@ -25,120 +25,120 @@ const debugLogger = createDebugLogger('MODIFIABLE_TOOL');
  * A declarative tool that supports a modify operation.
  */
 export interface ModifiableDeclarativeTool<TParams extends object>
-  extends DeclarativeTool<TParams, ToolResult> {
-  getModifyContext(abortSignal: AbortSignal): ModifyContext<TParams>;
+    extends DeclarativeTool<TParams, ToolResult> {
+    getModifyContext(abortSignal: AbortSignal): ModifyContext<TParams>;
 }
 
 export interface ModifyContext<ToolParams> {
-  getFilePath: (params: ToolParams) => string;
+    getFilePath: (params: ToolParams) => string;
 
-  getCurrentContent: (params: ToolParams) => Promise<string>;
+    getCurrentContent: (params: ToolParams) => Promise<string>;
 
-  getProposedContent: (params: ToolParams) => Promise<string>;
+    getProposedContent: (params: ToolParams) => Promise<string>;
 
-  createUpdatedParams: (
-    oldContent: string,
-    modifiedProposedContent: string,
-    originalParams: ToolParams,
-  ) => ToolParams;
+    createUpdatedParams: (
+        oldContent: string,
+        modifiedProposedContent: string,
+        originalParams: ToolParams
+    ) => ToolParams;
 }
 
 export interface ModifyResult<ToolParams> {
-  updatedParams: ToolParams;
-  updatedDiff: string;
+    updatedParams: ToolParams;
+    updatedDiff: string;
 }
 
 /**
  * Type guard to check if a declarative tool is modifiable.
  */
 export function isModifiableDeclarativeTool(
-  tool: AnyDeclarativeTool,
+    tool: AnyDeclarativeTool
 ): tool is ModifiableDeclarativeTool<object> {
-  return 'getModifyContext' in tool;
+    return 'getModifyContext' in tool;
 }
 
 function createTempFilesForModify(
-  currentContent: string,
-  proposedContent: string,
-  file_path: string,
+    currentContent: string,
+    proposedContent: string,
+    file_path: string
 ): { oldPath: string; newPath: string } {
-  const tempDir = os.tmpdir();
-  const diffDir = path.join(tempDir, 'aether-cli-tool-modify-diffs');
+    const tempDir = os.tmpdir();
+    const diffDir = path.join(tempDir, 'aether-cli-tool-modify-diffs');
 
-  if (!fs.existsSync(diffDir)) {
-    fs.mkdirSync(diffDir, { recursive: true });
-  }
+    if (!fs.existsSync(diffDir)) {
+        fs.mkdirSync(diffDir, { recursive: true });
+    }
 
-  const ext = path.extname(file_path);
-  const fileName = path.basename(file_path, ext);
-  const timestamp = Date.now();
-  const tempOldPath = path.join(
-    diffDir,
-    `aether-cli-modify-${fileName}-old-${timestamp}${ext}`,
-  );
-  const tempNewPath = path.join(
-    diffDir,
-    `aether-cli-modify-${fileName}-new-${timestamp}${ext}`,
-  );
+    const ext = path.extname(file_path);
+    const fileName = path.basename(file_path, ext);
+    const timestamp = Date.now();
+    const tempOldPath = path.join(
+        diffDir,
+        `aether-cli-modify-${fileName}-old-${timestamp}${ext}`
+    );
+    const tempNewPath = path.join(
+        diffDir,
+        `aether-cli-modify-${fileName}-new-${timestamp}${ext}`
+    );
 
-  fs.writeFileSync(tempOldPath, currentContent, 'utf8');
-  fs.writeFileSync(tempNewPath, proposedContent, 'utf8');
+    fs.writeFileSync(tempOldPath, currentContent, 'utf8');
+    fs.writeFileSync(tempNewPath, proposedContent, 'utf8');
 
-  return { oldPath: tempOldPath, newPath: tempNewPath };
+    return { oldPath: tempOldPath, newPath: tempNewPath };
 }
 
 function getUpdatedParams<ToolParams>(
-  tmpOldPath: string,
-  tempNewPath: string,
-  originalParams: ToolParams,
-  modifyContext: ModifyContext<ToolParams>,
+    tmpOldPath: string,
+    tempNewPath: string,
+    originalParams: ToolParams,
+    modifyContext: ModifyContext<ToolParams>
 ): { updatedParams: ToolParams; updatedDiff: string } {
-  let oldContent = '';
-  let newContent = '';
+    let oldContent = '';
+    let newContent = '';
 
-  try {
-    oldContent = fs.readFileSync(tmpOldPath, 'utf8');
-  } catch (err) {
-    if (!isNodeError(err) || err.code !== 'ENOENT') throw err;
-    oldContent = '';
-  }
+    try {
+        oldContent = fs.readFileSync(tmpOldPath, 'utf8');
+    } catch (err) {
+        if (!isNodeError(err) || err.code !== 'ENOENT') throw err;
+        oldContent = '';
+    }
 
-  try {
-    newContent = fs.readFileSync(tempNewPath, 'utf8');
-  } catch (err) {
-    if (!isNodeError(err) || err.code !== 'ENOENT') throw err;
-    newContent = '';
-  }
+    try {
+        newContent = fs.readFileSync(tempNewPath, 'utf8');
+    } catch (err) {
+        if (!isNodeError(err) || err.code !== 'ENOENT') throw err;
+        newContent = '';
+    }
 
-  const updatedParams = modifyContext.createUpdatedParams(
-    oldContent,
-    newContent,
-    originalParams,
-  );
-  const updatedDiff = Diff.createPatch(
-    path.basename(modifyContext.getFilePath(originalParams)),
-    oldContent,
-    newContent,
-    'Current',
-    'Proposed',
-    DEFAULT_DIFF_OPTIONS,
-  );
+    const updatedParams = modifyContext.createUpdatedParams(
+        oldContent,
+        newContent,
+        originalParams
+    );
+    const updatedDiff = Diff.createPatch(
+        path.basename(modifyContext.getFilePath(originalParams)),
+        oldContent,
+        newContent,
+        'Current',
+        'Proposed',
+        DEFAULT_DIFF_OPTIONS
+    );
 
-  return { updatedParams, updatedDiff };
+    return { updatedParams, updatedDiff };
 }
 
 function deleteTempFiles(oldPath: string, newPath: string): void {
-  try {
-    fs.unlinkSync(oldPath);
-  } catch {
-    debugLogger.warn(`Error deleting temp diff file: ${oldPath}`);
-  }
+    try {
+        fs.unlinkSync(oldPath);
+    } catch {
+        debugLogger.warn(`Error deleting temp diff file: ${oldPath}`);
+    }
 
-  try {
-    fs.unlinkSync(newPath);
-  } catch {
-    debugLogger.warn(`Error deleting temp diff file: ${newPath}`);
-  }
+    try {
+        fs.unlinkSync(newPath);
+    } catch {
+        debugLogger.warn(`Error deleting temp diff file: ${newPath}`);
+    }
 }
 
 /**
@@ -146,33 +146,34 @@ function deleteTempFiles(oldPath: string, newPath: string): void {
  * and returns the updated tool parameters and the diff after the user has modified the proposed content.
  */
 export async function modifyWithEditor<ToolParams>(
-  originalParams: ToolParams,
-  modifyContext: ModifyContext<ToolParams>,
-  editorType: EditorType,
-  _abortSignal: AbortSignal,
-  onEditorClose: () => void,
+    originalParams: ToolParams,
+    modifyContext: ModifyContext<ToolParams>,
+    editorType: EditorType,
+    _abortSignal: AbortSignal,
+    onEditorClose: () => void
 ): Promise<ModifyResult<ToolParams>> {
-  const currentContent = await modifyContext.getCurrentContent(originalParams);
-  const proposedContent =
-    await modifyContext.getProposedContent(originalParams);
+    const currentContent =
+        await modifyContext.getCurrentContent(originalParams);
+    const proposedContent =
+        await modifyContext.getProposedContent(originalParams);
 
-  const { oldPath, newPath } = createTempFilesForModify(
-    currentContent,
-    proposedContent,
-    modifyContext.getFilePath(originalParams),
-  );
-
-  try {
-    await openDiff(oldPath, newPath, editorType, onEditorClose);
-    const result = getUpdatedParams(
-      oldPath,
-      newPath,
-      originalParams,
-      modifyContext,
+    const { oldPath, newPath } = createTempFilesForModify(
+        currentContent,
+        proposedContent,
+        modifyContext.getFilePath(originalParams)
     );
 
-    return result;
-  } finally {
-    deleteTempFiles(oldPath, newPath);
-  }
+    try {
+        await openDiff(oldPath, newPath, editorType, onEditorClose);
+        const result = getUpdatedParams(
+            oldPath,
+            newPath,
+            originalParams,
+            modifyContext
+        );
+
+        return result;
+    } finally {
+        deleteTempFiles(oldPath, newPath);
+    }
 }

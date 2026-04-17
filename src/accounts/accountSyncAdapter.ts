@@ -266,7 +266,7 @@ export class AccountSyncAdapter {
             ProviderKey.Sherlock,
             ProviderKey.Vercelai,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu,
+            ProviderKey.Zhipu
         ];
 
         // Sync Codex (OAuth)

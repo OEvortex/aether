@@ -27,14 +27,14 @@ const debugLogger = createDebugLogger('MCP_SDK_TRANSPORT');
  * Returns the MCP response from the SDK
  */
 export type SendMcpMessageCallback = (
-  serverName: string,
-  message: JSONRPCMessage,
+    serverName: string,
+    message: JSONRPCMessage
 ) => Promise<JSONRPCMessage>;
 
 export interface SdkControlClientTransportOptions {
-  serverName: string;
-  sendMcpMessage: SendMcpMessageCallback;
-  debugMode?: boolean;
+    serverName: string;
+    sendMcpMessage: SendMcpMessageCallback;
+    debugMode?: boolean;
 }
 
 /**
@@ -44,102 +44,109 @@ export interface SdkControlClientTransportOptions {
  * CLI's MCP client to connect to SDK MCP servers via the control plane.
  */
 export class SdkControlClientTransport {
-  private serverName: string;
-  private sendMcpMessage: SendMcpMessageCallback;
-  private started = false;
+    private serverName: string;
+    private sendMcpMessage: SendMcpMessageCallback;
+    private started = false;
 
-  // Transport interface callbacks
-  onmessage?: (message: JSONRPCMessage) => void;
-  onerror?: (error: Error) => void;
-  onclose?: () => void;
+    // Transport interface callbacks
+    onmessage?: (message: JSONRPCMessage) => void;
+    onerror?: (error: Error) => void;
+    onclose?: () => void;
 
-  constructor(options: SdkControlClientTransportOptions) {
-    this.serverName = options.serverName;
-    this.sendMcpMessage = options.sendMcpMessage;
-    // Note: debugMode option is preserved for API compatibility but no longer used
-    // since debugLogger now always writes to the session logfile
-  }
-
-  /**
-   * Start the transport
-   * For SDK transport, this just marks it as ready - no subprocess to spawn
-   */
-  async start(): Promise<void> {
-    if (this.started) {
-      return;
+    constructor(options: SdkControlClientTransportOptions) {
+        this.serverName = options.serverName;
+        this.sendMcpMessage = options.sendMcpMessage;
+        // Note: debugMode option is preserved for API compatibility but no longer used
+        // since debugLogger now always writes to the session logfile
     }
 
-    this.started = true;
-    debugLogger.debug(`Started for server '${this.serverName}'`);
-  }
+    /**
+     * Start the transport
+     * For SDK transport, this just marks it as ready - no subprocess to spawn
+     */
+    async start(): Promise<void> {
+        if (this.started) {
+            return;
+        }
 
-  /**
-   * Send a message to the SDK MCP server via control plane
-   *
-   * Routes the message through the control plane and delivers
-   * the response via onmessage callback.
-   */
-  async send(message: JSONRPCMessage): Promise<void> {
-    if (!this.started) {
-      throw new Error(
-        `SdkControlClientTransport (${this.serverName}) not started. Call start() first.`,
-      );
+        this.started = true;
+        debugLogger.debug(`Started for server '${this.serverName}'`);
     }
 
-    debugLogger.debug(
-      `Sending message to '${this.serverName}': ${JSON.stringify(message)}`,
-    );
+    /**
+     * Send a message to the SDK MCP server via control plane
+     *
+     * Routes the message through the control plane and delivers
+     * the response via onmessage callback.
+     */
+    async send(message: JSONRPCMessage): Promise<void> {
+        if (!this.started) {
+            throw new Error(
+                `SdkControlClientTransport (${this.serverName}) not started. Call start() first.`
+            );
+        }
 
-    try {
-      // Send message to SDK and wait for response
-      const response = await this.sendMcpMessage(this.serverName, message);
+        debugLogger.debug(
+            `Sending message to '${this.serverName}': ${JSON.stringify(message)}`
+        );
 
-      debugLogger.debug(
-        `Received response from '${this.serverName}': ${JSON.stringify(response)}`,
-      );
+        try {
+            // Send message to SDK and wait for response
+            const response = await this.sendMcpMessage(
+                this.serverName,
+                message
+            );
 
-      // Deliver response via onmessage callback
-      if (this.onmessage) {
-        this.onmessage(response);
-      }
-    } catch (error) {
-      debugLogger.error(`Error sending to '${this.serverName}': ${error}`);
+            debugLogger.debug(
+                `Received response from '${this.serverName}': ${JSON.stringify(response)}`
+            );
 
-      if (this.onerror) {
-        this.onerror(error instanceof Error ? error : new Error(String(error)));
-      }
+            // Deliver response via onmessage callback
+            if (this.onmessage) {
+                this.onmessage(response);
+            }
+        } catch (error) {
+            debugLogger.error(
+                `Error sending to '${this.serverName}': ${error}`
+            );
 
-      throw error;
+            if (this.onerror) {
+                this.onerror(
+                    error instanceof Error ? error : new Error(String(error))
+                );
+            }
+
+            throw error;
+        }
     }
-  }
 
-  /**
-   * Close the transport
-   */
-  async close(): Promise<void> {
-    if (!this.started) {
-      return;
+    /**
+     * Close the transport
+     */
+    async close(): Promise<void> {
+        if (!this.started) {
+            return;
+        }
+
+        this.started = false;
+        debugLogger.debug(`Closed for server '${this.serverName}'`);
+
+        if (this.onclose) {
+            this.onclose();
+        }
     }
 
-    this.started = false;
-    debugLogger.debug(`Closed for server '${this.serverName}'`);
-
-    if (this.onclose) {
-      this.onclose();
+    /**
+     * Check if transport is started
+     */
+    isStarted(): boolean {
+        return this.started;
     }
-  }
 
-  /**
-   * Check if transport is started
-   */
-  isStarted(): boolean {
-    return this.started;
-  }
-
-  /**
-   * Get server name
-   */
-  getServerName(): string {
-    return this.serverName;
-  }
+    /**
+     * Get server name
+     */
+    getServerName(): string {
+        return this.serverName;
+    }
 }

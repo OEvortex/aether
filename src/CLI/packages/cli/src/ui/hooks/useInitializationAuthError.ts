@@ -23,25 +23,25 @@ import { useEffect, useRef } from 'react';
  * ```
  */
 export const useInitializationAuthError = (
-  authError: string | null,
-  onAuthError: (error: string) => void,
+    authError: string | null,
+    onAuthError: (error: string) => void
 ): void => {
-  const hasHandled = useRef(false);
-  const authErrorRef = useRef(authError);
-  const onAuthErrorRef = useRef(onAuthError);
+    const hasHandled = useRef(false);
+    const authErrorRef = useRef(authError);
+    const onAuthErrorRef = useRef(onAuthError);
 
-  // Update refs to always use latest values
-  authErrorRef.current = authError;
-  onAuthErrorRef.current = onAuthError;
+    // Update refs to always use latest values
+    authErrorRef.current = authError;
+    onAuthErrorRef.current = onAuthError;
 
-  useEffect(() => {
-    if (hasHandled.current) {
-      return;
-    }
+    useEffect(() => {
+        if (hasHandled.current) {
+            return;
+        }
 
-    if (authErrorRef.current) {
-      hasHandled.current = true;
-      onAuthErrorRef.current(authErrorRef.current);
-    }
-  }, [authError, onAuthError]);
+        if (authErrorRef.current) {
+            hasHandled.current = true;
+            onAuthErrorRef.current(authErrorRef.current);
+        }
+    }, [authError, onAuthError]);
 };

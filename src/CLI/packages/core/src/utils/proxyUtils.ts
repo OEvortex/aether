@@ -21,33 +21,33 @@
  * @throws Error if a SOCKS proxy URL is provided
  */
 export function normalizeProxyUrl(
-  proxyUrl: string | undefined,
+    proxyUrl: string | undefined
 ): string | undefined {
-  if (!proxyUrl) {
-    return undefined;
-  }
+    if (!proxyUrl) {
+        return undefined;
+    }
 
-  const trimmed = proxyUrl.trim();
-  if (!trimmed) {
-    return undefined;
-  }
+    const trimmed = proxyUrl.trim();
+    if (!trimmed) {
+        return undefined;
+    }
 
-  // Check if the URL already has a protocol prefix
-  // Only support http and https protocols (undici limitation)
-  if (/^https?:\/\//i.test(trimmed)) {
-    return trimmed;
-  }
+    // Check if the URL already has a protocol prefix
+    // Only support http and https protocols (undici limitation)
+    if (/^https?:\/\//i.test(trimmed)) {
+        return trimmed;
+    }
 
-  // Reject SOCKS proxies - undici does not support them
-  if (/^socks[45]?:\/\//i.test(trimmed)) {
-    throw new Error(
-      `SOCKS proxy is not supported. The underlying HTTP client (undici) only supports HTTP and HTTPS proxies. ` +
-        `Please use an HTTP/HTTPS proxy instead, or set up a SOCKS-to-HTTP proxy converter. ` +
-        `See: https://github.com/nodejs/undici/issues/2224`,
-    );
-  }
+    // Reject SOCKS proxies - undici does not support them
+    if (/^socks[45]?:\/\//i.test(trimmed)) {
+        throw new Error(
+            `SOCKS proxy is not supported. The underlying HTTP client (undici) only supports HTTP and HTTPS proxies. ` +
+                `Please use an HTTP/HTTPS proxy instead, or set up a SOCKS-to-HTTP proxy converter. ` +
+                `See: https://github.com/nodejs/undici/issues/2224`
+        );
+    }
 
-  // Add http:// prefix for proxy URLs without protocol
-  // HTTP is the default for most proxy configurations
-  return `http://${trimmed}`;
+    // Add http:// prefix for proxy URLs without protocol
+    // HTTP is the default for most proxy configurations
+    return `http://${trimmed}`;
 }

@@ -3,9 +3,16 @@
  * Stores account data in ~/.aether/channels/weixin/ (legacy: ~/.qwen/channels/weixin/)
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync, chmodSync } from 'node:fs';
-import { join } from 'node:path';
+import {
+    chmodSync,
+    existsSync,
+    mkdirSync,
+    readFileSync,
+    unlinkSync,
+    writeFileSync
+} from 'node:fs';
 import { homedir } from 'node:os';
+import { join } from 'node:path';
 
 export const DEFAULT_BASE_URL = 'https://ilinkai.weixin.qq.com';
 

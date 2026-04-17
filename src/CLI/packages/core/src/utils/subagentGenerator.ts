@@ -5,8 +5,8 @@
  */
 
 import type { Content } from '@google/genai';
-import { DEFAULT_AETHER_MODEL } from '../config/models.js';
 import type { Config } from '../config/config.js';
+import { DEFAULT_AETHER_MODEL } from '../config/models.js';
 
 const SYSTEM_PROMPT = `You are an elite AI agent architect specializing in crafting high-performance agent configurations. Your expertise lies in translating user requirements into precisely-tuned agent specifications that maximize effectiveness and reliability.
 
@@ -75,34 +75,34 @@ Remember: The agents you create should be autonomous experts capable of handling
 `;
 
 const createUserPrompt = (userInput: string): string =>
-  `Create an agent configuration based on this request: "${userInput}"`;
+    `Create an agent configuration based on this request: "${userInput}"`;
 
 const RESPONSE_SCHEMA: Record<string, unknown> = {
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string',
-      description:
-        "A unique, descriptive identifier using lowercase letters, numbers, and hyphens (e.g., 'code-reviewer', 'api-docs-writer', 'test-generator')",
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            description:
+                "A unique, descriptive identifier using lowercase letters, numbers, and hyphens (e.g., 'code-reviewer', 'api-docs-writer', 'test-generator')"
+        },
+        description: {
+            type: 'string',
+            description:
+                "A precise, actionable description starting with 'Use this agent when...' that clearly defines the triggering conditions and use cases"
+        },
+        systemPrompt: {
+            type: 'string',
+            description:
+                "The complete system prompt that will govern the agent's behavior, written in second person ('You are...', 'You will...') and structured for maximum clarity and effectiveness"
+        }
     },
-    description: {
-      type: 'string',
-      description:
-        "A precise, actionable description starting with 'Use this agent when...' that clearly defines the triggering conditions and use cases",
-    },
-    systemPrompt: {
-      type: 'string',
-      description:
-        "The complete system prompt that will govern the agent's behavior, written in second person ('You are...', 'You will...') and structured for maximum clarity and effectiveness",
-    },
-  },
-  required: ['name', 'description', 'systemPrompt'],
+    required: ['name', 'description', 'systemPrompt']
 };
 
 export interface SubagentGeneratedContent {
-  name: string;
-  description: string;
-  systemPrompt: string;
+    name: string;
+    description: string;
+    systemPrompt: string;
 }
 
 /**
@@ -114,33 +114,35 @@ export interface SubagentGeneratedContent {
  * @returns Promise resolving to generated subagent content
  */
 export async function subagentGenerator(
-  userDescription: string,
-  config: Config,
-  abortSignal: AbortSignal,
+    userDescription: string,
+    config: Config,
+    abortSignal: AbortSignal
 ): Promise<SubagentGeneratedContent> {
-  if (!userDescription.trim()) {
-    throw new Error('User description cannot be empty');
-  }
+    if (!userDescription.trim()) {
+        throw new Error('User description cannot be empty');
+    }
 
-  const userPrompt = createUserPrompt(userDescription);
-  const contents: Content[] = [{ role: 'user', parts: [{ text: userPrompt }] }];
+    const userPrompt = createUserPrompt(userDescription);
+    const contents: Content[] = [
+        { role: 'user', parts: [{ text: userPrompt }] }
+    ];
 
-  const parsedResponse = (await config.getBaseLlmClient().generateJson({
-    model: config.getModel() || DEFAULT_AETHER_MODEL,
-    contents,
-    schema: RESPONSE_SCHEMA,
-    abortSignal,
-    systemInstruction: SYSTEM_PROMPT,
-  })) as unknown as SubagentGeneratedContent;
+    const parsedResponse = (await config.getBaseLlmClient().generateJson({
+        model: config.getModel() || DEFAULT_AETHER_MODEL,
+        contents,
+        schema: RESPONSE_SCHEMA,
+        abortSignal,
+        systemInstruction: SYSTEM_PROMPT
+    })) as unknown as SubagentGeneratedContent;
 
-  if (
-    !parsedResponse ||
-    !parsedResponse.name ||
-    !parsedResponse.description ||
-    !parsedResponse.systemPrompt
-  ) {
-    throw new Error('Invalid response from LLM: missing required fields');
-  }
+    if (
+        !parsedResponse ||
+        !parsedResponse.name ||
+        !parsedResponse.description ||
+        !parsedResponse.systemPrompt
+    ) {
+        throw new Error('Invalid response from LLM: missing required fields');
+    }
 
-  return parsedResponse;
+    return parsedResponse;
 }

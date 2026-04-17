@@ -19,30 +19,30 @@ const debugLogger = createDebugLogger('JSON_PARSE');
  * @returns The parsed object or the fallback value
  */
 export function safeJsonParse<T = Record<string, unknown>>(
-  jsonString: string,
-  fallbackValue: T = {} as T,
+    jsonString: string,
+    fallbackValue: T = {} as T
 ): T {
-  if (!jsonString || typeof jsonString !== 'string') {
-    return fallbackValue;
-  }
-
-  try {
-    // First attempt: try normal JSON.parse
-    return JSON.parse(jsonString) as T;
-  } catch (error) {
-    try {
-      // Second attempt: use jsonrepair to fix common JSON issues
-      const repairedJson = jsonrepair(jsonString);
-
-      // jsonrepair always returns a string, so we need to parse it
-      return JSON.parse(repairedJson) as T;
-    } catch (repairError) {
-      debugLogger.error('Failed to parse JSON even with jsonrepair:', {
-        originalError: error,
-        repairError,
-        jsonString,
-      });
-      return fallbackValue;
+    if (!jsonString || typeof jsonString !== 'string') {
+        return fallbackValue;
     }
-  }
+
+    try {
+        // First attempt: try normal JSON.parse
+        return JSON.parse(jsonString) as T;
+    } catch (error) {
+        try {
+            // Second attempt: use jsonrepair to fix common JSON issues
+            const repairedJson = jsonrepair(jsonString);
+
+            // jsonrepair always returns a string, so we need to parse it
+            return JSON.parse(repairedJson) as T;
+        } catch (repairError) {
+            debugLogger.error('Failed to parse JSON even with jsonrepair:', {
+                originalError: error,
+                repairError,
+                jsonString
+            });
+            return fallbackValue;
+        }
+    }
 }

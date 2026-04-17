@@ -18,20 +18,24 @@
  * resolveEnvVarsInString("Missing: $UNDEFINED_VAR") // Returns "Missing: $UNDEFINED_VAR"
  */
 export function resolveEnvVarsInString(
-  value: string,
-  customEnv?: Record<string, string>,
+    value: string,
+    customEnv?: Record<string, string>
 ): string {
-  const envVarRegex = /\$(?:(\w+)|{([^}]+)})/g; // Find $VAR_NAME or ${VAR_NAME}
-  return value.replace(envVarRegex, (match, varName1, varName2) => {
-    const varName = varName1 || varName2;
-    if (customEnv && typeof customEnv[varName] === 'string') {
-      return customEnv[varName];
-    }
-    if (process && process.env && typeof process.env[varName] === 'string') {
-      return process.env[varName]!;
-    }
-    return match;
-  });
+    const envVarRegex = /\$(?:(\w+)|{([^}]+)})/g; // Find $VAR_NAME or ${VAR_NAME}
+    return value.replace(envVarRegex, (match, varName1, varName2) => {
+        const varName = varName1 || varName2;
+        if (customEnv && typeof customEnv[varName] === 'string') {
+            return customEnv[varName];
+        }
+        if (
+            process &&
+            process.env &&
+            typeof process.env[varName] === 'string'
+        ) {
+            return process.env[varName]!;
+        }
+        return match;
+    });
 }
 
 /**
@@ -54,10 +58,10 @@ export function resolveEnvVarsInString(
  * const resolved = resolveEnvVarsInObject(config);
  */
 export function resolveEnvVarsInObject<T>(
-  obj: T,
-  customEnv?: Record<string, string>,
+    obj: T,
+    customEnv?: Record<string, string>
 ): T {
-  return resolveEnvVarsInObjectInternal(obj, new WeakSet(), customEnv);
+    return resolveEnvVarsInObjectInternal(obj, new WeakSet(), customEnv);
 }
 
 /**
@@ -68,59 +72,59 @@ export function resolveEnvVarsInObject<T>(
  * @returns A new object with environment variables resolved
  */
 function resolveEnvVarsInObjectInternal<T>(
-  obj: T,
-  visited: WeakSet<object>,
-  customEnv?: Record<string, string>,
+    obj: T,
+    visited: WeakSet<object>,
+    customEnv?: Record<string, string>
 ): T {
-  if (
-    obj === null ||
-    obj === undefined ||
-    typeof obj === 'boolean' ||
-    typeof obj === 'number'
-  ) {
+    if (
+        obj === null ||
+        obj === undefined ||
+        typeof obj === 'boolean' ||
+        typeof obj === 'number'
+    ) {
+        return obj;
+    }
+
+    if (typeof obj === 'string') {
+        return resolveEnvVarsInString(obj, customEnv) as unknown as T;
+    }
+
+    if (Array.isArray(obj)) {
+        // Check for circular reference
+        if (visited.has(obj)) {
+            // Return a shallow copy to break the cycle
+            return [...obj] as unknown as T;
+        }
+
+        visited.add(obj);
+        const result = obj.map((item) =>
+            resolveEnvVarsInObjectInternal(item, visited, customEnv)
+        ) as unknown as T;
+        visited.delete(obj);
+        return result;
+    }
+
+    if (typeof obj === 'object') {
+        // Check for circular reference
+        if (visited.has(obj as object)) {
+            // Return a shallow copy to break the cycle
+            return { ...obj } as T;
+        }
+
+        visited.add(obj as object);
+        const newObj = { ...obj } as T;
+        for (const key in newObj) {
+            if (Object.hasOwn(newObj as object, key)) {
+                newObj[key] = resolveEnvVarsInObjectInternal(
+                    newObj[key],
+                    visited,
+                    customEnv
+                );
+            }
+        }
+        visited.delete(obj as object);
+        return newObj;
+    }
+
     return obj;
-  }
-
-  if (typeof obj === 'string') {
-    return resolveEnvVarsInString(obj, customEnv) as unknown as T;
-  }
-
-  if (Array.isArray(obj)) {
-    // Check for circular reference
-    if (visited.has(obj)) {
-      // Return a shallow copy to break the cycle
-      return [...obj] as unknown as T;
-    }
-
-    visited.add(obj);
-    const result = obj.map((item) =>
-      resolveEnvVarsInObjectInternal(item, visited, customEnv),
-    ) as unknown as T;
-    visited.delete(obj);
-    return result;
-  }
-
-  if (typeof obj === 'object') {
-    // Check for circular reference
-    if (visited.has(obj as object)) {
-      // Return a shallow copy to break the cycle
-      return { ...obj } as T;
-    }
-
-    visited.add(obj as object);
-    const newObj = { ...obj } as T;
-    for (const key in newObj) {
-      if (Object.prototype.hasOwnProperty.call(newObj, key)) {
-        newObj[key] = resolveEnvVarsInObjectInternal(
-          newObj[key],
-          visited,
-          customEnv,
-        );
-      }
-    }
-    visited.delete(obj as object);
-    return newObj;
-  }
-
-  return obj;
 }

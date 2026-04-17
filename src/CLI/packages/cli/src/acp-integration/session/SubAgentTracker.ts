@@ -5,33 +5,33 @@
  */
 
 import type {
-  AgentEventEmitter,
-  AgentToolCallEvent,
-  AgentToolResultEvent,
-  AgentApprovalRequestEvent,
-  AgentUsageEvent,
-  AgentStreamTextEvent,
-  ToolCallConfirmationDetails,
-  AnyDeclarativeTool,
-  AnyToolInvocation,
+    AgentApprovalRequestEvent,
+    AgentEventEmitter,
+    AgentStreamTextEvent,
+    AgentToolCallEvent,
+    AgentToolResultEvent,
+    AgentUsageEvent,
+    AnyDeclarativeTool,
+    AnyToolInvocation,
+    ToolCallConfirmationDetails
 } from '@aetherai/aether-core';
 import {
-  AgentEventType,
-  ToolConfirmationOutcome,
-  createDebugLogger,
+    AgentEventType,
+    createDebugLogger,
+    ToolConfirmationOutcome
 } from '@aetherai/aether-core';
-import { z } from 'zod';
-import type { SessionContext } from './types.js';
-import { ToolCallEmitter } from './emitters/ToolCallEmitter.js';
-import { MessageEmitter } from './emitters/MessageEmitter.js';
 import type {
-  AgentSideConnection,
-  RequestPermissionRequest,
+    AgentSideConnection,
+    RequestPermissionRequest
 } from '@agentclientprotocol/sdk';
+import { z } from 'zod';
+import { MessageEmitter } from './emitters/MessageEmitter.js';
+import { ToolCallEmitter } from './emitters/ToolCallEmitter.js';
 import {
-  buildPermissionRequestContent,
-  toPermissionOptions,
+    buildPermissionRequestContent,
+    toPermissionOptions
 } from './permissionUtils.js';
+import type { SessionContext } from './types.js';
 
 const debugLogger = createDebugLogger('ACP_SUBAGENT_TRACKER');
 
@@ -43,240 +43,254 @@ const debugLogger = createDebugLogger('ACP_SUBAGENT_TRACKER');
  * require user approval.
  */
 export class SubAgentTracker {
-  private readonly toolCallEmitter: ToolCallEmitter;
-  private readonly messageEmitter: MessageEmitter;
-  private readonly toolStates = new Map<
-    string,
-    {
-      tool?: AnyDeclarativeTool;
-      invocation?: AnyToolInvocation;
-      args?: Record<string, unknown>;
-    }
-  >();
-
-  constructor(
-    private readonly ctx: SessionContext,
-    private readonly client: AgentSideConnection,
-    private readonly parentToolCallId: string,
-    private readonly subagentType: string,
-  ) {
-    this.toolCallEmitter = new ToolCallEmitter(ctx);
-    this.messageEmitter = new MessageEmitter(ctx);
-  }
-
-  /**
-   * Gets the subagent metadata to attach to all events.
-   */
-  private getSubagentMeta() {
-    return {
-      parentToolCallId: this.parentToolCallId,
-      subagentType: this.subagentType,
-    };
-  }
-
-  /**
-   * Sets up event listeners for a sub-agent's tool events.
-   *
-   * @param eventEmitter - The AgentEventEmitter from AgentTool
-   * @param abortSignal - Signal to abort tracking if parent is cancelled
-   * @returns Array of cleanup functions to remove listeners
-   */
-  setup(
-    eventEmitter: AgentEventEmitter,
-    abortSignal: AbortSignal,
-  ): Array<() => void> {
-    const onToolCall = this.createToolCallHandler(abortSignal);
-    const onToolResult = this.createToolResultHandler(abortSignal);
-    const onApproval = this.createApprovalHandler(abortSignal);
-    const onUsageMetadata = this.createUsageMetadataHandler(abortSignal);
-    const onStreamText = this.createStreamTextHandler(abortSignal);
-
-    eventEmitter.on(AgentEventType.TOOL_CALL, onToolCall);
-    eventEmitter.on(AgentEventType.TOOL_RESULT, onToolResult);
-    eventEmitter.on(AgentEventType.TOOL_WAITING_APPROVAL, onApproval);
-    eventEmitter.on(AgentEventType.USAGE_METADATA, onUsageMetadata);
-    eventEmitter.on(AgentEventType.STREAM_TEXT, onStreamText);
-
-    return [
-      () => {
-        eventEmitter.off(AgentEventType.TOOL_CALL, onToolCall);
-        eventEmitter.off(AgentEventType.TOOL_RESULT, onToolResult);
-        eventEmitter.off(AgentEventType.TOOL_WAITING_APPROVAL, onApproval);
-        eventEmitter.off(AgentEventType.USAGE_METADATA, onUsageMetadata);
-        eventEmitter.off(AgentEventType.STREAM_TEXT, onStreamText);
-        // Clean up any remaining states
-        this.toolStates.clear();
-      },
-    ];
-  }
-
-  /**
-   * Creates a handler for tool call start events.
-   */
-  private createToolCallHandler(
-    abortSignal: AbortSignal,
-  ): (...args: unknown[]) => void {
-    return (...args: unknown[]) => {
-      const event = args[0] as AgentToolCallEvent;
-      if (abortSignal.aborted) return;
-
-      // Look up tool and build invocation for metadata
-      const toolRegistry = this.ctx.config.getToolRegistry();
-      const tool = toolRegistry.getTool(event.name);
-      let invocation: AnyToolInvocation | undefined;
-
-      if (tool) {
-        try {
-          invocation = tool.build(event.args);
-        } catch (e) {
-          // If building fails, continue with defaults
-          debugLogger.warn(`Failed to build subagent tool ${event.name}:`, e);
+    private readonly toolCallEmitter: ToolCallEmitter;
+    private readonly messageEmitter: MessageEmitter;
+    private readonly toolStates = new Map<
+        string,
+        {
+            tool?: AnyDeclarativeTool;
+            invocation?: AnyToolInvocation;
+            args?: Record<string, unknown>;
         }
-      }
+    >();
 
-      // Store tool, invocation, and args for result handling
-      this.toolStates.set(event.callId, {
-        tool,
-        invocation,
-        args: event.args,
-      });
+    constructor(
+        private readonly ctx: SessionContext,
+        private readonly client: AgentSideConnection,
+        private readonly parentToolCallId: string,
+        private readonly subagentType: string
+    ) {
+        this.toolCallEmitter = new ToolCallEmitter(ctx);
+        this.messageEmitter = new MessageEmitter(ctx);
+    }
 
-      // Use unified emitter - handles TodoWriteTool skipping internally
-      void this.toolCallEmitter.emitStart({
-        toolName: event.name,
-        callId: event.callId,
-        args: event.args,
-        subagentMeta: this.getSubagentMeta(),
-      });
-    };
-  }
+    /**
+     * Gets the subagent metadata to attach to all events.
+     */
+    private getSubagentMeta() {
+        return {
+            parentToolCallId: this.parentToolCallId,
+            subagentType: this.subagentType
+        };
+    }
 
-  /**
-   * Creates a handler for tool result events.
-   */
-  private createToolResultHandler(
-    abortSignal: AbortSignal,
-  ): (...args: unknown[]) => void {
-    return (...args: unknown[]) => {
-      const event = args[0] as AgentToolResultEvent;
-      if (abortSignal.aborted) return;
+    /**
+     * Sets up event listeners for a sub-agent's tool events.
+     *
+     * @param eventEmitter - The AgentEventEmitter from AgentTool
+     * @param abortSignal - Signal to abort tracking if parent is cancelled
+     * @returns Array of cleanup functions to remove listeners
+     */
+    setup(
+        eventEmitter: AgentEventEmitter,
+        abortSignal: AbortSignal
+    ): Array<() => void> {
+        const onToolCall = this.createToolCallHandler(abortSignal);
+        const onToolResult = this.createToolResultHandler(abortSignal);
+        const onApproval = this.createApprovalHandler(abortSignal);
+        const onUsageMetadata = this.createUsageMetadataHandler(abortSignal);
+        const onStreamText = this.createStreamTextHandler(abortSignal);
 
-      const state = this.toolStates.get(event.callId);
+        eventEmitter.on(AgentEventType.TOOL_CALL, onToolCall);
+        eventEmitter.on(AgentEventType.TOOL_RESULT, onToolResult);
+        eventEmitter.on(AgentEventType.TOOL_WAITING_APPROVAL, onApproval);
+        eventEmitter.on(AgentEventType.USAGE_METADATA, onUsageMetadata);
+        eventEmitter.on(AgentEventType.STREAM_TEXT, onStreamText);
 
-      // Use unified emitter - handles TodoWriteTool plan updates internally
-      void this.toolCallEmitter.emitResult({
-        toolName: event.name,
-        callId: event.callId,
-        success: event.success,
-        message: event.responseParts ?? [],
-        resultDisplay: event.resultDisplay,
-        args: state?.args,
-        subagentMeta: this.getSubagentMeta(),
-      });
+        return [
+            () => {
+                eventEmitter.off(AgentEventType.TOOL_CALL, onToolCall);
+                eventEmitter.off(AgentEventType.TOOL_RESULT, onToolResult);
+                eventEmitter.off(
+                    AgentEventType.TOOL_WAITING_APPROVAL,
+                    onApproval
+                );
+                eventEmitter.off(
+                    AgentEventType.USAGE_METADATA,
+                    onUsageMetadata
+                );
+                eventEmitter.off(AgentEventType.STREAM_TEXT, onStreamText);
+                // Clean up any remaining states
+                this.toolStates.clear();
+            }
+        ];
+    }
 
-      // Clean up state
-      this.toolStates.delete(event.callId);
-    };
-  }
+    /**
+     * Creates a handler for tool call start events.
+     */
+    private createToolCallHandler(
+        abortSignal: AbortSignal
+    ): (...args: unknown[]) => void {
+        return (...args: unknown[]) => {
+            const event = args[0] as AgentToolCallEvent;
+            if (abortSignal.aborted) return;
 
-  /**
-   * Creates a handler for tool approval request events.
-   */
-  private createApprovalHandler(
-    abortSignal: AbortSignal,
-  ): (...args: unknown[]) => Promise<void> {
-    return async (...args: unknown[]) => {
-      const event = args[0] as AgentApprovalRequestEvent;
-      if (abortSignal.aborted) return;
+            // Look up tool and build invocation for metadata
+            const toolRegistry = this.ctx.config.getToolRegistry();
+            const tool = toolRegistry.getTool(event.name);
+            let invocation: AnyToolInvocation | undefined;
 
-      const state = this.toolStates.get(event.callId);
+            if (tool) {
+                try {
+                    invocation = tool.build(event.args);
+                } catch (e) {
+                    // If building fails, continue with defaults
+                    debugLogger.warn(
+                        `Failed to build subagent tool ${event.name}:`,
+                        e
+                    );
+                }
+            }
 
-      // Build permission request
-      const fullConfirmationDetails = {
-        ...event.confirmationDetails,
-        onConfirm: async () => {
-          // Placeholder - actual response handled via event.respond
-        },
-      } as unknown as ToolCallConfirmationDetails;
+            // Store tool, invocation, and args for result handling
+            this.toolStates.set(event.callId, {
+                tool,
+                invocation,
+                args: event.args
+            });
 
-      const { title, locations, kind } =
-        this.toolCallEmitter.resolveToolMetadata(event.name, state?.args);
+            // Use unified emitter - handles TodoWriteTool skipping internally
+            void this.toolCallEmitter.emitStart({
+                toolName: event.name,
+                callId: event.callId,
+                args: event.args,
+                subagentMeta: this.getSubagentMeta()
+            });
+        };
+    }
 
-      const params: RequestPermissionRequest = {
-        sessionId: this.ctx.sessionId,
-        options: toPermissionOptions(fullConfirmationDetails),
-        toolCall: {
-          toolCallId: event.callId,
-          status: 'pending',
-          title,
-          content: buildPermissionRequestContent(fullConfirmationDetails),
-          locations,
-          kind,
-          rawInput: state?.args,
-        },
-      };
+    /**
+     * Creates a handler for tool result events.
+     */
+    private createToolResultHandler(
+        abortSignal: AbortSignal
+    ): (...args: unknown[]) => void {
+        return (...args: unknown[]) => {
+            const event = args[0] as AgentToolResultEvent;
+            if (abortSignal.aborted) return;
 
-      try {
-        // Request permission from client
-        const output = await this.client.requestPermission(params);
-        const outcome =
-          output.outcome.outcome === 'cancelled'
-            ? ToolConfirmationOutcome.Cancel
-            : z
-                .nativeEnum(ToolConfirmationOutcome)
-                .parse(output.outcome.optionId);
+            const state = this.toolStates.get(event.callId);
 
-        // Respond to subagent with the outcome
-        await event.respond(outcome, {
-          answers: 'answers' in output ? output.answers : undefined,
-        });
-      } catch (error) {
-        // If permission request fails, cancel the tool call
-        debugLogger.error(
-          `Permission request failed for subagent tool ${event.name}:`,
-          error,
-        );
-        await event.respond(ToolConfirmationOutcome.Cancel);
-      }
-    };
-  }
+            // Use unified emitter - handles TodoWriteTool plan updates internally
+            void this.toolCallEmitter.emitResult({
+                toolName: event.name,
+                callId: event.callId,
+                success: event.success,
+                message: event.responseParts ?? [],
+                resultDisplay: event.resultDisplay,
+                args: state?.args,
+                subagentMeta: this.getSubagentMeta()
+            });
 
-  /**
-   * Creates a handler for usage metadata events.
-   */
-  private createUsageMetadataHandler(
-    abortSignal: AbortSignal,
-  ): (...args: unknown[]) => void {
-    return (...args: unknown[]) => {
-      const event = args[0] as AgentUsageEvent;
-      if (abortSignal.aborted) return;
+            // Clean up state
+            this.toolStates.delete(event.callId);
+        };
+    }
 
-      this.messageEmitter.emitUsageMetadata(
-        event.usage,
-        '',
-        event.durationMs,
-        this.getSubagentMeta(),
-      );
-    };
-  }
+    /**
+     * Creates a handler for tool approval request events.
+     */
+    private createApprovalHandler(
+        abortSignal: AbortSignal
+    ): (...args: unknown[]) => Promise<void> {
+        return async (...args: unknown[]) => {
+            const event = args[0] as AgentApprovalRequestEvent;
+            if (abortSignal.aborted) return;
 
-  /**
-   * Creates a handler for stream text events.
-   * Emits agent message or thought chunks for text content from subagent model responses.
-   */
-  private createStreamTextHandler(
-    abortSignal: AbortSignal,
-  ): (...args: unknown[]) => void {
-    return (...args: unknown[]) => {
-      const event = args[0] as AgentStreamTextEvent;
-      if (abortSignal.aborted) return;
+            const state = this.toolStates.get(event.callId);
 
-      // Emit streamed text as agent message or thought based on the flag
-      void this.messageEmitter.emitMessage(
-        event.text,
-        'assistant',
-        event.thought ?? false,
-      );
-    };
-  }
+            // Build permission request
+            const fullConfirmationDetails = {
+                ...event.confirmationDetails,
+                onConfirm: async () => {
+                    // Placeholder - actual response handled via event.respond
+                }
+            } as unknown as ToolCallConfirmationDetails;
+
+            const { title, locations, kind } =
+                this.toolCallEmitter.resolveToolMetadata(
+                    event.name,
+                    state?.args
+                );
+
+            const params: RequestPermissionRequest = {
+                sessionId: this.ctx.sessionId,
+                options: toPermissionOptions(fullConfirmationDetails),
+                toolCall: {
+                    toolCallId: event.callId,
+                    status: 'pending',
+                    title,
+                    content: buildPermissionRequestContent(
+                        fullConfirmationDetails
+                    ),
+                    locations,
+                    kind,
+                    rawInput: state?.args
+                }
+            };
+
+            try {
+                // Request permission from client
+                const output = await this.client.requestPermission(params);
+                const outcome =
+                    output.outcome.outcome === 'cancelled'
+                        ? ToolConfirmationOutcome.Cancel
+                        : z
+                              .nativeEnum(ToolConfirmationOutcome)
+                              .parse(output.outcome.optionId);
+
+                // Respond to subagent with the outcome
+                await event.respond(outcome, {
+                    answers: 'answers' in output ? output.answers : undefined
+                });
+            } catch (error) {
+                // If permission request fails, cancel the tool call
+                debugLogger.error(
+                    `Permission request failed for subagent tool ${event.name}:`,
+                    error
+                );
+                await event.respond(ToolConfirmationOutcome.Cancel);
+            }
+        };
+    }
+
+    /**
+     * Creates a handler for usage metadata events.
+     */
+    private createUsageMetadataHandler(
+        abortSignal: AbortSignal
+    ): (...args: unknown[]) => void {
+        return (...args: unknown[]) => {
+            const event = args[0] as AgentUsageEvent;
+            if (abortSignal.aborted) return;
+
+            this.messageEmitter.emitUsageMetadata(
+                event.usage,
+                '',
+                event.durationMs,
+                this.getSubagentMeta()
+            );
+        };
+    }
+
+    /**
+     * Creates a handler for stream text events.
+     * Emits agent message or thought chunks for text content from subagent model responses.
+     */
+    private createStreamTextHandler(
+        abortSignal: AbortSignal
+    ): (...args: unknown[]) => void {
+        return (...args: unknown[]) => {
+            const event = args[0] as AgentStreamTextEvent;
+            if (abortSignal.aborted) return;
+
+            // Emit streamed text as agent message or thought based on the flag
+            void this.messageEmitter.emitMessage(
+                event.text,
+                'assistant',
+                event.thought ?? false
+            );
+        };
+    }
 }

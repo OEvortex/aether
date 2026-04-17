@@ -20,16 +20,14 @@
  * - Bundled: built-in skills shipped with aether-cli
  */
 
-// Core types and interfaces
-export type {
-  SkillConfig,
-  SkillLevel,
-  SkillValidationResult,
-  ListSkillsOptions,
-  SkillErrorCode,
-} from './types.js';
-
-export { SkillError } from './types.js';
-
 // Main management class
 export { SkillManager } from './skill-manager.js';
+// Core types and interfaces
+export type {
+    ListSkillsOptions,
+    SkillConfig,
+    SkillErrorCode,
+    SkillLevel,
+    SkillValidationResult
+} from './types.js';
+export { SkillError } from './types.js';

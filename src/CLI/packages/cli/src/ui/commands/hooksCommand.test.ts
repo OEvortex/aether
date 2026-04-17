@@ -4,85 +4,88 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { hooksCommand } from './hooksCommand.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockCommandContext } from '../../test-utils/mockCommandContext.js';
+import { hooksCommand } from './hooksCommand.js';
 
 describe('hooksCommand', () => {
-  let mockContext: ReturnType<typeof createMockCommandContext>;
-  let mockConfig: {
-    getHookSystem: ReturnType<typeof vi.fn>;
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-
-    // Create mock config with hook system
-    mockConfig = {
-      getHookSystem: vi.fn().mockReturnValue({
-        getRegistry: vi.fn().mockReturnValue({
-          getAllHooks: vi.fn().mockReturnValue([]),
-        }),
-      }),
+    let mockContext: ReturnType<typeof createMockCommandContext>;
+    let mockConfig: {
+        getHookSystem: ReturnType<typeof vi.fn>;
     };
 
-    mockContext = createMockCommandContext({
-      services: {
-        config: mockConfig,
-      },
-    });
-  });
+    beforeEach(() => {
+        vi.clearAllMocks();
 
-  describe('basic functionality', () => {
-    it('should open hooks management dialog in interactive mode', async () => {
-      const result = await hooksCommand.action!(mockContext, '');
+        // Create mock config with hook system
+        mockConfig = {
+            getHookSystem: vi.fn().mockReturnValue({
+                getRegistry: vi.fn().mockReturnValue({
+                    getAllHooks: vi.fn().mockReturnValue([])
+                })
+            })
+        };
 
-      expect(result).toEqual({
-        type: 'dialog',
-        dialog: 'hooks',
-      });
-    });
-
-    it('should open hooks management dialog even if config is not available', async () => {
-      const contextWithoutConfig = createMockCommandContext({
-        services: {
-          config: null,
-        },
-      });
-
-      const result = await hooksCommand.action!(contextWithoutConfig, '');
-
-      expect(result).toEqual({
-        type: 'dialog',
-        dialog: 'hooks',
-      });
+        mockContext = createMockCommandContext({
+            services: {
+                config: mockConfig
+            }
+        });
     });
 
-    it('should open hooks management dialog even if hook system is not available', async () => {
-      mockConfig.getHookSystem = vi.fn().mockReturnValue(null);
+    describe('basic functionality', () => {
+        it('should open hooks management dialog in interactive mode', async () => {
+            const result = await hooksCommand.action!(mockContext, '');
 
-      const result = await hooksCommand.action!(mockContext, '');
+            expect(result).toEqual({
+                type: 'dialog',
+                dialog: 'hooks'
+            });
+        });
 
-      expect(result).toEqual({
-        type: 'dialog',
-        dialog: 'hooks',
-      });
+        it('should open hooks management dialog even if config is not available', async () => {
+            const contextWithoutConfig = createMockCommandContext({
+                services: {
+                    config: null
+                }
+            });
+
+            const result = await hooksCommand.action!(contextWithoutConfig, '');
+
+            expect(result).toEqual({
+                type: 'dialog',
+                dialog: 'hooks'
+            });
+        });
+
+        it('should open hooks management dialog even if hook system is not available', async () => {
+            mockConfig.getHookSystem = vi.fn().mockReturnValue(null);
+
+            const result = await hooksCommand.action!(mockContext, '');
+
+            expect(result).toEqual({
+                type: 'dialog',
+                dialog: 'hooks'
+            });
+        });
     });
-  });
 
-  describe('non-interactive mode', () => {
-    it('should list hooks in non-interactive mode', async () => {
-      const nonInteractiveContext = createMockCommandContext({
-        services: {
-          config: mockConfig,
-        },
-        executionMode: 'non_interactive',
-      });
+    describe('non-interactive mode', () => {
+        it('should list hooks in non-interactive mode', async () => {
+            const nonInteractiveContext = createMockCommandContext({
+                services: {
+                    config: mockConfig
+                },
+                executionMode: 'non_interactive'
+            });
 
-      const result = await hooksCommand.action!(nonInteractiveContext, '');
+            const result = await hooksCommand.action!(
+                nonInteractiveContext,
+                ''
+            );
 
-      // In non-interactive mode, it should return a message
-      expect(result).toHaveProperty('type', 'message');
+            // In non-interactive mode, it should return a message
+            expect(result).toHaveProperty('type', 'message');
+        });
     });
-  });
 });

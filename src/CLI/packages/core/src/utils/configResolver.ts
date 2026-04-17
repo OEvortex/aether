@@ -17,34 +17,34 @@
  * Extensible for domain-specific needs.
  */
 export type ConfigSourceKind =
-  | 'cli'
-  | 'env'
-  | 'settings'
-  | 'modelProviders'
-  | 'default'
-  | 'computed'
-  | 'programmatic'
-  | 'unknown';
+    | 'cli'
+    | 'env'
+    | 'settings'
+    | 'modelProviders'
+    | 'default'
+    | 'computed'
+    | 'programmatic'
+    | 'unknown';
 
 /**
  * Source metadata for a configuration value.
  * Tracks where the value came from for debugging and UI display.
  */
 export interface ConfigSource {
-  /** The kind/category of the source */
-  kind: ConfigSourceKind;
-  /** Additional detail about the source (e.g., '--model' for CLI) */
-  detail?: string;
-  /** Environment variable key if kind is 'env' */
-  envKey?: string;
-  /** Settings path if kind is 'settings' (e.g., 'model.name') */
-  settingsPath?: string;
-  /** Auth type if relevant (for modelProviders) */
-  authType?: string;
-  /** Model ID if relevant (for modelProviders) */
-  modelId?: string;
-  /** Indirect source - when a value is derived via another source */
-  via?: Omit<ConfigSource, 'via'>;
+    /** The kind/category of the source */
+    kind: ConfigSourceKind;
+    /** Additional detail about the source (e.g., '--model' for CLI) */
+    detail?: string;
+    /** Environment variable key if kind is 'env' */
+    envKey?: string;
+    /** Settings path if kind is 'settings' (e.g., 'model.name') */
+    settingsPath?: string;
+    /** Auth type if relevant (for modelProviders) */
+    authType?: string;
+    /** Model ID if relevant (for modelProviders) */
+    modelId?: string;
+    /** Indirect source - when a value is derived via another source */
+    via?: Omit<ConfigSource, 'via'>;
 }
 
 /**
@@ -57,20 +57,20 @@ export type ConfigSources = Record<string, ConfigSource>;
  * Layers are evaluated in priority order (first non-undefined wins).
  */
 export interface ConfigLayer<T> {
-  /** The value from this layer (undefined means not present) */
-  value: T | undefined;
-  /** Source metadata for this layer */
-  source: ConfigSource;
+    /** The value from this layer (undefined means not present) */
+    value: T | undefined;
+    /** Source metadata for this layer */
+    source: ConfigSource;
 }
 
 /**
  * Result of resolving a single field
  */
 export interface ResolvedField<T> {
-  /** The resolved value */
-  value: T;
-  /** Source metadata indicating where the value came from */
-  source: ConfigSource;
+    /** The resolved value */
+    value: T;
+    /** Source metadata indicating where the value came from */
+    source: ConfigSource;
 }
 
 /**
@@ -98,16 +98,16 @@ export interface ResolvedField<T> {
  * ```
  */
 export function resolveField<T>(
-  layers: Array<ConfigLayer<T>>,
-  defaultValue: T,
-  defaultSource: ConfigSource = { kind: 'default' },
+    layers: Array<ConfigLayer<T>>,
+    defaultValue: T,
+    defaultSource: ConfigSource = { kind: 'default' }
 ): ResolvedField<T> {
-  for (const layer of layers) {
-    if (isValuePresent(layer.value)) {
-      return { value: layer.value, source: layer.source };
+    for (const layer of layers) {
+        if (isValuePresent(layer.value)) {
+            return { value: layer.value, source: layer.source };
+        }
     }
-  }
-  return { value: defaultValue, source: defaultSource };
+    return { value: defaultValue, source: defaultSource };
 }
 
 /**
@@ -117,14 +117,14 @@ export function resolveField<T>(
  * @returns The resolved value and source, or undefined if not found
  */
 export function resolveOptionalField<T>(
-  layers: Array<ConfigLayer<T>>,
+    layers: Array<ConfigLayer<T>>
 ): ResolvedField<T> | undefined {
-  for (const layer of layers) {
-    if (isValuePresent(layer.value)) {
-      return { value: layer.value, source: layer.source };
+    for (const layer of layers) {
+        if (isValuePresent(layer.value)) {
+            return { value: layer.value, source: layer.source };
+        }
     }
-  }
-  return undefined;
+    return undefined;
 }
 
 /**
@@ -134,89 +134,89 @@ export function resolveOptionalField<T>(
  * @returns true if the value should be considered present
  */
 function isValuePresent<T>(value: T | undefined | null): value is T {
-  if (value === undefined || value === null) {
-    return false;
-  }
-  // Treat empty strings as not present
-  if (typeof value === 'string' && value.trim() === '') {
-    return false;
-  }
-  return true;
+    if (value === undefined || value === null) {
+        return false;
+    }
+    // Treat empty strings as not present
+    if (typeof value === 'string' && value.trim() === '') {
+        return false;
+    }
+    return true;
 }
 
 /**
  * Create a CLI source descriptor
  */
 export function cliSource(detail: string): ConfigSource {
-  return { kind: 'cli', detail };
+    return { kind: 'cli', detail };
 }
 
 /**
  * Create an environment variable source descriptor
  */
 function envSource(envKey: string): ConfigSource {
-  return { kind: 'env', envKey };
+    return { kind: 'env', envKey };
 }
 
 /**
  * Create a settings source descriptor
  */
 export function settingsSource(settingsPath: string): ConfigSource {
-  return { kind: 'settings', settingsPath };
+    return { kind: 'settings', settingsPath };
 }
 
 /**
  * Create a modelProviders source descriptor
  */
 export function modelProvidersSource(
-  authType: string,
-  modelId: string,
-  detail?: string,
+    authType: string,
+    modelId: string,
+    detail?: string
 ): ConfigSource {
-  return { kind: 'modelProviders', authType, modelId, detail };
+    return { kind: 'modelProviders', authType, modelId, detail };
 }
 
 /**
  * Create a default value source descriptor
  */
 export function defaultSource(detail?: string): ConfigSource {
-  return { kind: 'default', detail };
+    return { kind: 'default', detail };
 }
 
 /**
  * Create a computed value source descriptor
  */
 export function computedSource(detail?: string): ConfigSource {
-  return { kind: 'computed', detail };
+    return { kind: 'computed', detail };
 }
 
 /**
  * Create a layer from an environment variable
  */
 export function envLayer<T = string>(
-  env: Record<string, string | undefined>,
-  key: string,
-  transform?: (value: string) => T,
+    env: Record<string, string | undefined>,
+    key: string,
+    transform?: (value: string) => T
 ): ConfigLayer<T> {
-  const rawValue = env[key];
-  const value =
-    rawValue !== undefined
-      ? transform
-        ? transform(rawValue)
-        : (rawValue as unknown as T)
-      : undefined;
-  return {
-    value,
-    source: envSource(key),
-  };
+    const rawValue = env[key];
+    const value =
+        rawValue !== undefined
+            ? transform
+                ? transform(rawValue)
+                : (rawValue as unknown as T)
+            : undefined;
+    return {
+        value,
+        source: envSource(key)
+    };
 }
 
 /**
  * Create a layer with a static value and source
  */
 export function layer<T>(
-  value: T | undefined,
-  source: ConfigSource,
+    value: T | undefined,
+    source: ConfigSource
 ): ConfigLayer<T> {
-  return { value, source };
+    return { value, source };
 }

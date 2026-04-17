@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as path from 'node:path';
-import * as os from 'node:os';
-import * as fs from 'node:fs';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import { getProjectHash, sanitizeCwd } from '../utils/paths.js';
 
 export const AETHER_DIR = '.aether';
@@ -22,233 +22,242 @@ const DEBUG_DIR_NAME = 'debug';
 const ARENA_DIR_NAME = 'arena';
 
 export class Storage {
-  private readonly targetDir: string;
+    private readonly targetDir: string;
 
-  /**
-   * Custom runtime output base directory set via settings.
-   * When null, falls back to getGlobalAetherDir().
-   */
-  private static runtimeBaseDir: string | null = null;
-  private static readonly runtimeBaseDirContext = new AsyncLocalStorage<
-    string | null
-  >();
+    /**
+     * Custom runtime output base directory set via settings.
+     * When null, falls back to getGlobalAetherDir().
+     */
+    private static runtimeBaseDir: string | null = null;
+    private static readonly runtimeBaseDirContext = new AsyncLocalStorage<
+        string | null
+    >();
 
-  constructor(targetDir: string) {
-    this.targetDir = targetDir;
-  }
-
-  private static resolveRuntimeBaseDir(
-    dir: string | null | undefined,
-    cwd?: string,
-  ): string | null {
-    if (!dir) {
-      return null;
+    constructor(targetDir: string) {
+        this.targetDir = targetDir;
     }
 
-    let resolved = dir;
-    if (
-      resolved === '~' ||
-      resolved.startsWith('~/') ||
-      resolved.startsWith('~\\')
-    ) {
-      const relativeSegments =
-        resolved === '~'
-          ? []
-          : resolved
-              .slice(2)
-              .split(/[/\\]+/)
-              .filter(Boolean);
-      resolved = path.join(os.homedir(), ...relativeSegments);
-    }
-    if (!path.isAbsolute(resolved)) {
-      resolved = cwd ? path.resolve(cwd, resolved) : path.resolve(resolved);
-    }
-    return resolved;
-  }
+    private static resolveRuntimeBaseDir(
+        dir: string | null | undefined,
+        cwd?: string
+    ): string | null {
+        if (!dir) {
+            return null;
+        }
 
-  /**
-   * Sets the custom runtime output base directory.
-   * Handles tilde (~) expansion and resolves relative paths to absolute.
-   * Pass null/undefined/empty string to reset to default (getGlobalAetherDir()).
-   * @param dir - The directory path, or null/undefined to reset
-   * @param cwd - Base directory for resolving relative paths (defaults to process.cwd()).
-   *              Pass the project root so that relative values like ".aether" resolve
-   *              per-project, enabling a single global config to work across all projects.
-   */
-  static setRuntimeBaseDir(dir: string | null | undefined, cwd?: string): void {
-    Storage.runtimeBaseDir = Storage.resolveRuntimeBaseDir(dir, cwd);
-  }
-
-  /**
-   * Runs function execution in an async context with a specific runtime output dir.
-   * This is used to isolate runtime output paths between concurrent sessions.
-   */
-  static runWithRuntimeBaseDir<T>(
-    dir: string | null | undefined,
-    cwd: string | undefined,
-    fn: () => T,
-  ): T {
-    const resolved = Storage.resolveRuntimeBaseDir(dir, cwd);
-    return Storage.runtimeBaseDirContext.run(resolved, fn);
-  }
-
-  /**
-   * Returns the base directory for all runtime output (temp files, debug logs,
-   * session data, todos, insights, etc.).
-   *
-   * Priority: AETHER_RUNTIME_DIR env var > setRuntimeBaseDir() value > getGlobalAetherDir()
-   * @returns Absolute path to the runtime output base directory
-   */
-  static getRuntimeBaseDir(): string {
-    const envDir = process.env['AETHER_RUNTIME_DIR'];
-    if (envDir) {
-      return (
-        Storage.resolveRuntimeBaseDir(envDir) ?? Storage.getGlobalAetherDir()
-      );
+        let resolved = dir;
+        if (
+            resolved === '~' ||
+            resolved.startsWith('~/') ||
+            resolved.startsWith('~\\')
+        ) {
+            const relativeSegments =
+                resolved === '~'
+                    ? []
+                    : resolved
+                          .slice(2)
+                          .split(/[/\\]+/)
+                          .filter(Boolean);
+            resolved = path.join(os.homedir(), ...relativeSegments);
+        }
+        if (!path.isAbsolute(resolved)) {
+            resolved = cwd
+                ? path.resolve(cwd, resolved)
+                : path.resolve(resolved);
+        }
+        return resolved;
     }
 
-    const contextualDir = Storage.runtimeBaseDirContext.getStore();
-    if (contextualDir !== undefined) {
-      return contextualDir ?? Storage.getGlobalAetherDir();
+    /**
+     * Sets the custom runtime output base directory.
+     * Handles tilde (~) expansion and resolves relative paths to absolute.
+     * Pass null/undefined/empty string to reset to default (getGlobalAetherDir()).
+     * @param dir - The directory path, or null/undefined to reset
+     * @param cwd - Base directory for resolving relative paths (defaults to process.cwd()).
+     *              Pass the project root so that relative values like ".aether" resolve
+     *              per-project, enabling a single global config to work across all projects.
+     */
+    static setRuntimeBaseDir(
+        dir: string | null | undefined,
+        cwd?: string
+    ): void {
+        Storage.runtimeBaseDir = Storage.resolveRuntimeBaseDir(dir, cwd);
     }
-    if (Storage.runtimeBaseDir) {
-      return Storage.runtimeBaseDir;
+
+    /**
+     * Runs function execution in an async context with a specific runtime output dir.
+     * This is used to isolate runtime output paths between concurrent sessions.
+     */
+    static runWithRuntimeBaseDir<T>(
+        dir: string | null | undefined,
+        cwd: string | undefined,
+        fn: () => T
+    ): T {
+        const resolved = Storage.resolveRuntimeBaseDir(dir, cwd);
+        return Storage.runtimeBaseDirContext.run(resolved, fn);
     }
-    return Storage.getGlobalAetherDir();
-  }
 
-  static getGlobalAetherDir(): string {
-    const homeDir = os.homedir();
-    if (!homeDir) {
-      return path.join(os.tmpdir(), '.aether');
+    /**
+     * Returns the base directory for all runtime output (temp files, debug logs,
+     * session data, todos, insights, etc.).
+     *
+     * Priority: AETHER_RUNTIME_DIR env var > setRuntimeBaseDir() value > getGlobalAetherDir()
+     * @returns Absolute path to the runtime output base directory
+     */
+    static getRuntimeBaseDir(): string {
+        const envDir = process.env['AETHER_RUNTIME_DIR'];
+        if (envDir) {
+            return (
+                Storage.resolveRuntimeBaseDir(envDir) ??
+                Storage.getGlobalAetherDir()
+            );
+        }
+
+        const contextualDir = Storage.runtimeBaseDirContext.getStore();
+        if (contextualDir !== undefined) {
+            return contextualDir ?? Storage.getGlobalAetherDir();
+        }
+        if (Storage.runtimeBaseDir) {
+            return Storage.runtimeBaseDir;
+        }
+        return Storage.getGlobalAetherDir();
     }
-    return path.join(homeDir, AETHER_DIR);
-  }
 
-  static getMcpOAuthTokensPath(): string {
-    return path.join(Storage.getGlobalAetherDir(), 'mcp-oauth-tokens.json');
-  }
+    static getGlobalAetherDir(): string {
+        const homeDir = os.homedir();
+        if (!homeDir) {
+            return path.join(os.tmpdir(), '.aether');
+        }
+        return path.join(homeDir, AETHER_DIR);
+    }
 
-  static getGlobalSettingsPath(): string {
-    return path.join(Storage.getGlobalAetherDir(), 'settings.json');
-  }
+    static getMcpOAuthTokensPath(): string {
+        return path.join(Storage.getGlobalAetherDir(), 'mcp-oauth-tokens.json');
+    }
 
-  static getInstallationIdPath(): string {
-    return path.join(Storage.getGlobalAetherDir(), 'installation_id');
-  }
+    static getGlobalSettingsPath(): string {
+        return path.join(Storage.getGlobalAetherDir(), 'settings.json');
+    }
 
-  static getGoogleAccountsPath(): string {
-    return path.join(Storage.getGlobalAetherDir(), GOOGLE_ACCOUNTS_FILENAME);
-  }
+    static getInstallationIdPath(): string {
+        return path.join(Storage.getGlobalAetherDir(), 'installation_id');
+    }
 
-  static getUserCommandsDir(): string {
-    return path.join(Storage.getGlobalAetherDir(), 'commands');
-  }
+    static getGoogleAccountsPath(): string {
+        return path.join(
+            Storage.getGlobalAetherDir(),
+            GOOGLE_ACCOUNTS_FILENAME
+        );
+    }
 
-  static getGlobalMemoryFilePath(): string {
-    return path.join(Storage.getGlobalAetherDir(), 'memory.md');
-  }
+    static getUserCommandsDir(): string {
+        return path.join(Storage.getGlobalAetherDir(), 'commands');
+    }
 
-  static getGlobalTempDir(): string {
-    return path.join(Storage.getRuntimeBaseDir(), TMP_DIR_NAME);
-  }
+    static getGlobalMemoryFilePath(): string {
+        return path.join(Storage.getGlobalAetherDir(), 'memory.md');
+    }
 
-  static getGlobalDebugDir(): string {
-    return path.join(Storage.getRuntimeBaseDir(), DEBUG_DIR_NAME);
-  }
+    static getGlobalTempDir(): string {
+        return path.join(Storage.getRuntimeBaseDir(), TMP_DIR_NAME);
+    }
 
-  static getDebugLogPath(sessionId: string): string {
-    return path.join(Storage.getGlobalDebugDir(), `${sessionId}.txt`);
-  }
+    static getGlobalDebugDir(): string {
+        return path.join(Storage.getRuntimeBaseDir(), DEBUG_DIR_NAME);
+    }
 
-  static getGlobalIdeDir(): string {
-    return path.join(Storage.getRuntimeBaseDir(), IDE_DIR_NAME);
-  }
+    static getDebugLogPath(sessionId: string): string {
+        return path.join(Storage.getGlobalDebugDir(), `${sessionId}.txt`);
+    }
 
-  static getGlobalBinDir(): string {
-    return path.join(Storage.getGlobalAetherDir(), BIN_DIR_NAME);
-  }
+    static getGlobalIdeDir(): string {
+        return path.join(Storage.getRuntimeBaseDir(), IDE_DIR_NAME);
+    }
 
-  static getGlobalArenaDir(): string {
-    return path.join(Storage.getGlobalAetherDir(), ARENA_DIR_NAME);
-  }
+    static getGlobalBinDir(): string {
+        return path.join(Storage.getGlobalAetherDir(), BIN_DIR_NAME);
+    }
 
-  getAetherDir(): string {
-    return path.join(this.targetDir, AETHER_DIR);
-  }
+    static getGlobalArenaDir(): string {
+        return path.join(Storage.getGlobalAetherDir(), ARENA_DIR_NAME);
+    }
 
-  getProjectDir(): string {
-    const projectId = sanitizeCwd(this.getProjectRoot());
-    const projectsDir = path.join(
-      Storage.getRuntimeBaseDir(),
-      PROJECT_DIR_NAME,
-    );
-    return path.join(projectsDir, projectId);
-  }
+    getAetherDir(): string {
+        return path.join(this.targetDir, AETHER_DIR);
+    }
 
-  getProjectTempDir(): string {
-    const hash = getProjectHash(this.getProjectRoot());
-    const tempDir = Storage.getGlobalTempDir();
-    const targetDir = path.join(tempDir, hash);
-    return targetDir;
-  }
+    getProjectDir(): string {
+        const projectId = sanitizeCwd(this.getProjectRoot());
+        const projectsDir = path.join(
+            Storage.getRuntimeBaseDir(),
+            PROJECT_DIR_NAME
+        );
+        return path.join(projectsDir, projectId);
+    }
 
-  ensureProjectTempDirExists(): void {
-    fs.mkdirSync(this.getProjectTempDir(), { recursive: true });
-  }
+    getProjectTempDir(): string {
+        const hash = getProjectHash(this.getProjectRoot());
+        const tempDir = Storage.getGlobalTempDir();
+        const targetDir = path.join(tempDir, hash);
+        return targetDir;
+    }
 
-  static getOAuthCredsPath(): string {
-    return path.join(Storage.getGlobalAetherDir(), OAUTH_FILE);
-  }
+    ensureProjectTempDirExists(): void {
+        fs.mkdirSync(this.getProjectTempDir(), { recursive: true });
+    }
 
-  getProjectRoot(): string {
-    return this.targetDir;
-  }
+    static getOAuthCredsPath(): string {
+        return path.join(Storage.getGlobalAetherDir(), OAUTH_FILE);
+    }
 
-  getHistoryDir(): string {
-    const hash = getProjectHash(this.getProjectRoot());
-    const historyDir = path.join(Storage.getRuntimeBaseDir(), 'history');
-    const targetDir = path.join(historyDir, hash);
-    return targetDir;
-  }
+    getProjectRoot(): string {
+        return this.targetDir;
+    }
 
-  getWorkspaceSettingsPath(): string {
-    return path.join(this.getAetherDir(), 'settings.json');
-  }
+    getHistoryDir(): string {
+        const hash = getProjectHash(this.getProjectRoot());
+        const historyDir = path.join(Storage.getRuntimeBaseDir(), 'history');
+        const targetDir = path.join(historyDir, hash);
+        return targetDir;
+    }
 
-  getProjectCommandsDir(): string {
-    return path.join(this.getAetherDir(), 'commands');
-  }
+    getWorkspaceSettingsPath(): string {
+        return path.join(this.getAetherDir(), 'settings.json');
+    }
 
-  getProjectTempCheckpointsDir(): string {
-    return path.join(this.getProjectTempDir(), 'checkpoints');
-  }
+    getProjectCommandsDir(): string {
+        return path.join(this.getAetherDir(), 'commands');
+    }
 
-  getExtensionsDir(): string {
-    return path.join(this.getAetherDir(), 'extensions');
-  }
+    getProjectTempCheckpointsDir(): string {
+        return path.join(this.getProjectTempDir(), 'checkpoints');
+    }
 
-  getExtensionsConfigPath(): string {
-    return path.join(this.getExtensionsDir(), 'aether-extension.json');
-  }
+    getExtensionsDir(): string {
+        return path.join(this.getAetherDir(), 'extensions');
+    }
 
-  getUserSkillsDirs(): string[] {
-    const homeDir = os.homedir() || os.tmpdir();
-    return SKILL_PROVIDER_CONFIG_DIRS.map((dir) =>
-      path.join(homeDir, dir, 'skills'),
-    );
-  }
+    getExtensionsConfigPath(): string {
+        return path.join(this.getExtensionsDir(), 'aether-extension.json');
+    }
 
-  /**
-   * Returns the user-level extensions directory (~/.aether/extensions/).
-   * Extensions installed at user scope are stored here, as opposed to
-   * project-level extensions which live in <project>/.aether/extensions/.
-   */
-  static getUserExtensionsDir(): string {
-    return path.join(Storage.getGlobalAetherDir(), 'extensions');
-  }
+    getUserSkillsDirs(): string[] {
+        const homeDir = os.homedir() || os.tmpdir();
+        return SKILL_PROVIDER_CONFIG_DIRS.map((dir) =>
+            path.join(homeDir, dir, 'skills')
+        );
+    }
 
-  getHistoryFilePath(): string {
-    return path.join(this.getProjectTempDir(), 'shell_history');
-  }
+    /**
+     * Returns the user-level extensions directory (~/.aether/extensions/).
+     * Extensions installed at user scope are stored here, as opposed to
+     * project-level extensions which live in <project>/.aether/extensions/.
+     */
+    static getUserExtensionsDir(): string {
+        return path.join(Storage.getGlobalAetherDir(), 'extensions');
+    }
+
+    getHistoryFilePath(): string {
+        return path.join(this.getProjectTempDir(), 'shell_history');
+    }
 }

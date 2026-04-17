@@ -6,83 +6,83 @@
 
 import type React from 'react';
 import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
+    createContext,
+    useCallback,
+    useContext,
+    useMemo,
+    useState
 } from 'react';
 
 interface OverflowState {
-  overflowingIds: ReadonlySet<string>;
+    overflowingIds: ReadonlySet<string>;
 }
 
 interface OverflowActions {
-  addOverflowingId: (id: string) => void;
-  removeOverflowingId: (id: string) => void;
+    addOverflowingId: (id: string) => void;
+    removeOverflowingId: (id: string) => void;
 }
 
 const OverflowStateContext = createContext<OverflowState | undefined>(
-  undefined,
+    undefined
 );
 
 const OverflowActionsContext = createContext<OverflowActions | undefined>(
-  undefined,
+    undefined
 );
 
 export const useOverflowState = (): OverflowState | undefined =>
-  useContext(OverflowStateContext);
+    useContext(OverflowStateContext);
 
 export const useOverflowActions = (): OverflowActions | undefined =>
-  useContext(OverflowActionsContext);
+    useContext(OverflowActionsContext);
 
 export const OverflowProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+    children
 }) => {
-  const [overflowingIds, setOverflowingIds] = useState(new Set<string>());
+    const [overflowingIds, setOverflowingIds] = useState(new Set<string>());
 
-  const addOverflowingId = useCallback((id: string) => {
-    setOverflowingIds((prevIds) => {
-      if (prevIds.has(id)) {
-        return prevIds;
-      }
-      const newIds = new Set(prevIds);
-      newIds.add(id);
-      return newIds;
-    });
-  }, []);
+    const addOverflowingId = useCallback((id: string) => {
+        setOverflowingIds((prevIds) => {
+            if (prevIds.has(id)) {
+                return prevIds;
+            }
+            const newIds = new Set(prevIds);
+            newIds.add(id);
+            return newIds;
+        });
+    }, []);
 
-  const removeOverflowingId = useCallback((id: string) => {
-    setOverflowingIds((prevIds) => {
-      if (!prevIds.has(id)) {
-        return prevIds;
-      }
-      const newIds = new Set(prevIds);
-      newIds.delete(id);
-      return newIds;
-    });
-  }, []);
+    const removeOverflowingId = useCallback((id: string) => {
+        setOverflowingIds((prevIds) => {
+            if (!prevIds.has(id)) {
+                return prevIds;
+            }
+            const newIds = new Set(prevIds);
+            newIds.delete(id);
+            return newIds;
+        });
+    }, []);
 
-  const stateValue = useMemo(
-    () => ({
-      overflowingIds,
-    }),
-    [overflowingIds],
-  );
+    const stateValue = useMemo(
+        () => ({
+            overflowingIds
+        }),
+        [overflowingIds]
+    );
 
-  const actionsValue = useMemo(
-    () => ({
-      addOverflowingId,
-      removeOverflowingId,
-    }),
-    [addOverflowingId, removeOverflowingId],
-  );
+    const actionsValue = useMemo(
+        () => ({
+            addOverflowingId,
+            removeOverflowingId
+        }),
+        [addOverflowingId, removeOverflowingId]
+    );
 
-  return (
-    <OverflowStateContext.Provider value={stateValue}>
-      <OverflowActionsContext.Provider value={actionsValue}>
-        {children}
-      </OverflowActionsContext.Provider>
-    </OverflowStateContext.Provider>
-  );
+    return (
+        <OverflowStateContext.Provider value={stateValue}>
+            <OverflowActionsContext.Provider value={actionsValue}>
+                {children}
+            </OverflowActionsContext.Provider>
+        </OverflowStateContext.Provider>
+    );
 };

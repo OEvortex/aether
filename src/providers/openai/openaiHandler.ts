@@ -340,9 +340,7 @@ export class OpenAIHandler {
             try {
                 const parsed = JSON.parse(text);
                 const msg =
-                    parsed?.error?.message ||
-                    parsed?.message ||
-                    parsed?.detail;
+                    parsed?.error?.message || parsed?.message || parsed?.detail;
                 if (msg && typeof msg === 'string') {
                     errorMessage = msg;
                 }
