@@ -20,7 +20,7 @@
     },
     "scripts": {
         "build": "echo 'Skipping tsc build for cli, using bundle instead'",
-        "start": "node dist/cli.mjs",
+        "start": "tsx index.ts",
         "debug": "node --inspect-brk dist/index.js",
         "lint": "eslint . --ext .ts,.tsx",
         "format": "prettier --write .",

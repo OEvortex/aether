@@ -27,9 +27,7 @@ const commonOptions = {
     mainFields: ['module', 'main'],
     resolveExtensions: ['.ts', '.js', '.mjs', '.json'],
     logLevel: 'info',
-    keepNames: true,
-    mangleProps: /^_/,
-    reserveProps: /^AuthType/
+    keepNames: true
 };
 
 const cliBuildOptions = {

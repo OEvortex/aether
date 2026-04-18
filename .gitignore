@@ -29,3 +29,6 @@ extension.js*
 
 # Ignore .agents files
 .agents
+
+# Ignore .aether files
+.aether

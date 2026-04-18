@@ -10,9 +10,6 @@ const buildEntry = join(
     'packages',
     'cli',
     'dist',
-    'CLI',
-    'packages',
-    'cli',
     'index.js'
 );
 

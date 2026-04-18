@@ -328,18 +328,45 @@ npm run aether:build   # Aether CLI build</code_block>
         <title>Building and Publishing Aether CLI</title>
         <description>The Aether CLI is a monorepo workspace containing multiple packages. We use a synchronized versioning scheme for all @aetherai/* packages.</description>
 
+        <section name="Running_the_CLI">
+            <title>Running the CLI</title>
+            <warning>The CLI runs directly from TypeScript source using tsx to avoid esbuild bundling issues with dynamic requires in ESM format.</warning>
+            <step_list>
+                <step order="1">
+                    <title>Start CLI (Development)</title>
+                    <code_block language="bash">npm run aether:cli:start</code_block>
+                    <description>Runs the CLI directly from source using tsx. This is the recommended way to run the CLI for development and testing.</description>
+                </step>
+                <step order="2">
+                    <title>Debug Mode</title>
+                    <code_block language="bash">npm run aether:cli:debug</code_block>
+                    <description>Starts the CLI with Node.js debugger attached.</description>
+                </step>
+                <step order="3">
+                    <title>Workspace Dev Mode</title>
+                    <code_block language="bash">npm run aether:dev</code_block>
+                    <description>Builds all workspace packages and starts the CLI using the compiled JavaScript output.</description>
+                </step>
+            </step_list>
+        </section>
+
         <section name="Build_Process">
             <title>Building the CLI</title>
             <step_list>
                 <step order="1">
                     <title>Standard Build</title>
                     <code_block language="bash">npm run aether:build</code_block>
-                    <description>This runs the build in the src/CLI directory, which compiles all workspace packages.</description>
+                    <description>This runs the build in the src/CLI directory, which compiles all workspace packages using TypeScript.</description>
                 </step>
                 <step order="2">
-                    <title>Bundling</title>
-                    <code_block language="bash">npm run bundle --prefix src/CLI</code_block>
-                    <description>This uses esbuild to create a single, optimized executable file at `src/CLI/dist/cli.mjs`.</description>
+                    <title>CLI Package Build</title>
+                    <code_block language="bash">npm run aether:cli:build</code_block>
+                    <description>Builds the CLI package specifically. Note: The CLI package skips TypeScript compilation and uses tsx for runtime execution.</description>
+                </step>
+                <step order="3">
+                    <title>Bundling (For Distribution)</title>
+                    <code_block language="bash">npm run aether:cli:bundle</code_block>
+                    <description>Uses esbuild to create a single, optimized executable file at `src/CLI/dist/cli.mjs`. Note: The bundle has runtime issues with dynamic requires and is currently not used for local development.</description>
                 </step>
             </step_list>
         </section>
@@ -376,7 +403,8 @@ npm --prefix src/CLI run publish:all:minor</code_block>
     </section>
 
     <section name="COMMANDS">
-        <code_block language="bash">npm run compile          # Build extension to dist/
+        <code_block language="bash"># Extension commands
+npm run compile          # Build extension to dist/
 npm run compile:dev      # Build in development mode
 npm run watch            # Watch mode for development
 npm run lint             # Run Biome lint checks
@@ -385,13 +413,26 @@ npm run sync-providers   # Sync provider metadata from knownProvidersData.ts
 npm run package          # Create .vsix package
 npm run publish          # Publish to VS Code marketplace
 
-# Aether CLI commands
-npm run aether:build                       # Build Aether CLI workspace
-npm run bundle --prefix src/CLI            # Generate optimized CLI bundle
+# Aether CLI workspace commands
+npm run aether:build                       # Build Aether CLI workspace (all packages)
+npm run aether:start                       # Start Aether CLI (workspace level)
+npm run aether:dev                         # Build and start Aether CLI (dev mode)
+
+# Aether CLI package-specific commands (src/CLI/packages/cli)
+npm run aether:cli:build                   # Build CLI package (skips tsc, uses bundle)
+npm run aether:cli:start                   # Start CLI using tsx (recommended for dev)
+npm run aether:cli:debug                   # Start CLI with Node.js debugger
+npm run aether:cli:bundle                  # Generate esbuild bundle (for distribution)
+npm run aether:cli:test                    # Run CLI tests
+npm run aether:cli:lint                    # Lint CLI code
+npm run aether:cli:format                  # Format CLI code
+npm run aether:cli:typecheck               # Type check CLI code
+
+# Publishing commands
 npm --prefix src/CLI run publish:all       # Synchronize and publish all packages
 npm --prefix src/CLI run publish:all:dry   # Dry run publication
-npm run aether:start                       # Start Aether CLI
-npm run aether:dev                         # Build and start Aether CLI (dev mode)</code_block>
+npm --prefix src/CLI run publish:all:patch  # Publish with patch version bump
+npm --prefix src/CLI run publish:all:minor  # Publish with minor version bump</code_block>
     </section>
 
     <section name="RULES">
