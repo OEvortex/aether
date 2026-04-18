@@ -98,7 +98,9 @@ export class ModelRegistry {
     }
 
     private isSelectableModel(model: ResolvedModelConfig): boolean {
-        return !model.fetchModels;
+        // Allow models with fetchModels=true - they are discovery templates that trigger dynamic fetching
+        // Static models (fetchModels=false) are also selectable
+        return true;
     }
 
     /**

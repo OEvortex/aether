@@ -13,7 +13,7 @@ import {
 } from '@aetherai/aether-core';
 import { Box, Text } from 'ink';
 import type React from 'react';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { getPersistScopeForModelSelection } from '../../config/modelProvidersScope.js';
 import { t } from '../../i18n/index.js';
 import { ConfigContext } from '../contexts/ConfigContext.js';
@@ -185,10 +185,54 @@ export function ModelDialog({
         null
     );
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [isFetchingModels, setIsFetchingModels] = useState(false);
 
     const authType =
         config?.getContentGeneratorConfig()?.authType ?? config?.getAuthType();
     const selectedProvider = settings.merged.security?.auth?.selectedProvider;
+
+    // Trigger dynamic model fetching when dialog opens for providers with fetchModels=true
+    useEffect(() => {
+        const fetchDynamicModels = async () => {
+            if (!config || !authType || !selectedProvider) {
+                return;
+            }
+
+            // Check if the selected provider has fetchModels=true
+            const providers = settings.merged.providers as
+                | Record<string, unknown>
+                | undefined;
+            const providerConfig = providers?.[selectedProvider] as
+                | { fetchModels?: boolean }
+                | undefined;
+
+            // Only fetch dynamically if provider has fetchModels=true
+            if (providerConfig?.fetchModels !== true) {
+                return;
+            }
+
+            const models = config.getAvailableModelsForAuthType(authType);
+            const hasDiscoveryTemplate = models.some((model) => {
+                const resolved = config
+                    .getModelsConfig()
+                    .getResolvedModel(authType, model.id);
+                return resolved?.fetchModels;
+            });
+
+            if (hasDiscoveryTemplate) {
+                setIsFetchingModels(true);
+                try {
+                    await config.getModelsConfig().refreshRuntimeModelProviders(true);
+                } catch (error) {
+                    console.error('Failed to fetch dynamic models:', error);
+                } finally {
+                    setIsFetchingModels(false);
+                }
+            }
+        };
+
+        fetchDynamicModels();
+    }, [config, authType, selectedProvider, settings]);
 
     const availableModelEntries = useMemo(() => {
         if (!config || !authType) {
@@ -196,8 +240,16 @@ export function ModelDialog({
         }
 
         // Defensive: ensure all models have provider property
+        // Filter out discovery templates (fetchModels: true) as they are not selectable
         const models = config
             .getAvailableModelsForAuthType(authType)
+            .filter((model) => {
+                // Filter out discovery templates - they trigger dynamic fetching but aren't selectable
+                const resolved = config
+                    .getModelsConfig()
+                    .getResolvedModel(authType, model.id);
+                return !resolved?.fetchModels;
+            })
             .map((model) => {
                 if (!model.provider && selectedProvider) {
                     return { ...model, provider: selectedProvider };
@@ -414,15 +466,23 @@ export function ModelDialog({
                 <Text color={theme.text.secondary}>_</Text>
             </Box>
 
-            {!hasModels ? (
+            {isFetchingModels ? (
+                <Box marginTop={1}>
+                    <Text color={theme.text.secondary}>
+                        {t('Fetching models from provider...')}
+                    </Text>
+                </Box>
+            ) : !hasModels ? (
                 <Box marginTop={1} flexDirection="column">
                     <Text color={theme.status.warning}>
                         {t(
-                            'No models available for the current provider ({{authType}}).',
+                            'No models available for the current provider ({{provider}}).',
                             {
-                                authType: authType
-                                    ? String(authType)
-                                    : t('(none)')
+                                provider: selectedProvider
+                                    ? String(selectedProvider)
+                                    : authType
+                                        ? String(authType)
+                                        : t('(none)')
                             }
                         )}
                     </Text>
@@ -474,9 +534,9 @@ export function ModelDialog({
                         label="API Key"
                         value={
                             highlightedEntry.provider &&
-                            (
-                                settings.merged.providers as Record<string, any>
-                            )?.[highlightedEntry.provider]?.apiKey
+                                (
+                                    settings.merged.providers as Record<string, any>
+                                )?.[highlightedEntry.provider]?.apiKey
                                 ? t('configured')
                                 : t('(not set)')
                         }

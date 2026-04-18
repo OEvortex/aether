@@ -159,30 +159,31 @@ function mapStaticModels(
     const staticModels =
         loadProviderCatalog(providerId)?.models ?? providerConfig?.models ?? [];
 
-    if (providerConfig?.fetchModels !== false || staticModels.length === 0) {
-        return [];
+    // Return static models if fetchModels is false (use static list)
+    if (providerConfig?.fetchModels === false && staticModels.length > 0) {
+        const baseUrl = getProviderBaseUrl(providerId, provider);
+        const customHeader = getProviderCustomHeader(providerId, provider);
+        const extraBody = getProviderExtraBody(providerId, provider);
+
+        // Use provider config from settings for apiKey if available
+        const providerApiKey = provider?.apiKey;
+
+        return staticModels.map((model) => ({
+            id: model.id,
+            name: model.name || model.id,
+            description: model.tooltip,
+            provider: providerId,
+            model: model.model || model.id,
+            sdkMode: model.sdkMode || providerConfig?.sdkMode,
+            baseUrl: model.baseUrl || baseUrl,
+            apiKey: model.apiKey || providerApiKey,
+            customHeader: model.customHeader || customHeader,
+            extraBody: model.extraBody || extraBody,
+            fetchModels: false
+        }));
     }
 
-    const baseUrl = getProviderBaseUrl(providerId, provider);
-    const customHeader = getProviderCustomHeader(providerId, provider);
-    const extraBody = getProviderExtraBody(providerId, provider);
-
-    // Use provider config from settings for apiKey if available
-    const providerApiKey = provider?.apiKey;
-
-    return staticModels.map((model) => ({
-        id: model.id,
-        name: model.name || model.id,
-        description: model.tooltip,
-        provider: providerId,
-        model: model.model || model.id,
-        sdkMode: model.sdkMode || providerConfig?.sdkMode,
-        baseUrl: model.baseUrl || baseUrl,
-        apiKey: model.apiKey || providerApiKey,
-        customHeader: model.customHeader || customHeader,
-        extraBody: model.extraBody || extraBody,
-        fetchModels: false
-    }));
+    return [];
 }
 
 function buildDiscoveryTemplate(

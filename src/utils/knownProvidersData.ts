@@ -90,6 +90,23 @@ export interface KnownProviderConfig extends Partial<ProviderOverride> {
 }
 
 const knownProviderOverrides: Record<string, KnownProviderConfig> = {
+    openai: {
+        displayName: 'OpenAI',
+        family: 'OpenAI',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        openai: {
+            baseUrl: 'https://api.openai.com/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     aihubmix: {
         displayName: 'AIHubMix',
         family: 'AIHubMix',

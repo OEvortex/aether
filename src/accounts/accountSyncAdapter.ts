@@ -260,6 +260,7 @@ export class AccountSyncAdapter {
             ProviderKey.Nvidia,
             ProviderKey.Ollama,
             ProviderKey.OpenAI,
+            ProviderKey.OpenAI,
             ProviderKey.OpenCode,
             ProviderKey.Opencodego,
             ProviderKey.Pollinations,

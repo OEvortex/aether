@@ -379,6 +379,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.OpenAI,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.OpenCode,
             {
                 supportsMultiAccount: true,

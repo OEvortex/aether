@@ -4,25 +4,47 @@
         "outDir": "dist",
         "composite": true,
         "paths": {
-            "@aetherai/aether-core": ["../core/src/index.ts"],
-            "@aetherai/aether-test-utils": ["../core/src/aetherTestUtils.ts"],
-            "@aetherai/channel-base": ["../channels/base/src/index.ts"],
-            "@aetherai/channel-telegram": ["../channels/telegram/src/index.ts"],
-            "@aetherai/channel-weixin": ["../channels/weixin/src/index.ts"],
-            "@aetherai/channel-weixin/*": ["../channels/weixin/src/*"],
-            "@aetherai/channel-dingtalk": ["../channels/dingtalk/src/index.ts"],
-            "@aetherai/channel-dingtalk/*": ["../channels/dingtalk/src/*"]
+            "@aetherai/aether-core": [
+                "../core/src/index.ts"
+            ],
+            "@aetherai/aether-test-utils": [
+                "../core/src/aetherTestUtils.ts"
+            ],
+            "@aetherai/channel-base": [
+                "../channels/base/src/index.ts"
+            ],
+            "@aetherai/channel-telegram": [
+                "../channels/telegram/src/index.ts"
+            ],
+            "@aetherai/channel-weixin": [
+                "../channels/weixin/src/index.ts"
+            ],
+            "@aetherai/channel-weixin/*": [
+                "../channels/weixin/src/*"
+            ],
+            "@aetherai/channel-dingtalk": [
+                "../channels/dingtalk/src/index.ts"
+            ],
+            "@aetherai/channel-dingtalk/*": [
+                "../channels/dingtalk/src/*"
+            ]
         },
         "jsx": "react-jsx",
-        "lib": ["DOM", "DOM.Iterable", "ES2023"],
-        "types": ["node", "vitest/globals"]
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ES2023"
+        ],
+        "types": [
+            "node",
+            "vitest/globals"
+        ]
     },
     "include": [
         "index.ts",
         "src/**/*.ts",
         "src/**/*.tsx",
         "src/**/*.json",
-        "../../../utils/knownProvidersData.ts",
         "./package.json"
     ],
     "exclude": [
@@ -40,6 +62,7 @@
         "../channels/**/*.test.tsx",
         "../channels/**/*.spec.ts",
         "../channels/**/*.spec.tsx",
+        "../../../utils/knownProvidersData.ts",
         // TODO(5691): Fix type errors and remove excludes.
         "src/commands/mcp.test.ts",
         "src/commands/mcp/add.test.ts",

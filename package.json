@@ -90,6 +90,7 @@
         "onLanguageModelProvider:aether.nanogpt",
         "onLanguageModelProvider:aether.nvidia",
         "onLanguageModelProvider:aether.ollama",
+        "onLanguageModelProvider:aether.openai",
         "onLanguageModelProvider:aether.opencode",
         "onLanguageModelProvider:aether.opencodego",
         "onLanguageModelProvider:aether.pollinations",
@@ -461,6 +462,11 @@
             {
                 "command": "aether.routingrun.setApiKey",
                 "title": "Configure Routing.run",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.openai.setApiKey",
+                "title": "Configure OpenAI",
                 "category": "Aether"
             }
         ],
@@ -1372,6 +1378,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Ollama API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.openai",
+                "displayName": "⦿ OpenAI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "OpenAI API key.",
                             "secret": true
                         }
                     }

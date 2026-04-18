@@ -45,8 +45,8 @@ const PROVIDER_ITEMS: ProviderChoice[] = [
             (provider.supportsApiKey === false
                 ? t('No API key required')
                 : provider.fetchModels
-                  ? t('API key and live models')
-                  : t('API key required')),
+                    ? t('API key and live models')
+                    : t('API key required')),
         value: providerId
     }))
 ];
@@ -116,7 +116,7 @@ export function AuthDialog(): React.JSX.Element {
         }
 
         setSelectedProviderId(value);
-        setApiKey('');
+        setApiKey(storedApiKey || '');
         setApiKeyError(null);
         setViewLevel('api-key-input');
     };

@@ -305,6 +305,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "OpenAI",
+                value: ProviderKey.OpenAI,
+                authType: "apiKey" as const
+            },
+            {
                 label: "OpenCode",
                 value: ProviderKey.OpenCode,
                 authType: "apiKey" as const
@@ -1008,6 +1013,7 @@ export class AccountUI {
             nanogpt: "NanoGPT",
             nvidia: "NVIDIA NIM",
             ollama: "Ollama",
+            openai: "OpenAI",
             openai: "OpenAI",
             opencode: "OpenCode",
             opencodego: "OpenCode Zen Go",

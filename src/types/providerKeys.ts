@@ -41,6 +41,7 @@ export enum ProviderKey {
 	Nvidia = 'nvidia',
 	Ollama = 'ollama',
 	OpenAI = 'openai',
+	OpenAI = 'openai',
 	OpenCode = 'opencode',
 	Opencodego = 'opencodego',
 	Pollinations = 'pollinations',
