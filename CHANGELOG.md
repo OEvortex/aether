@@ -9,6 +9,14 @@ All notable changes to this project will be documented in this file.
 - **Dialagram provider**: Added Dialagram provider (`dialagram`) with OpenAI-compatible router at `https://www.dialagram.me/router/v1`, Anthropic/Claude router at `https://www.dialagram.me/router/claude`, and model listing endpoint `/model`.
 - **Routing.run provider**: Added Routing.run provider (`routingrun`) with OpenAI-compatible router at `https://api.routing.run/v1` and automatic model discovery via `/models`.
 - **Crof AI provider**: Added Crof AI provider (`crof`) with OpenAI-compatible endpoint at `https://crof.ai/v1` and automatic model discovery via `/models`.
+- **Requesty provider**: Added Requesty provider (`requesty`) with OpenAI-compatible endpoint at `https://router.requesty.ai/v1` and automatic model discovery via `/models`.
+- **AIML API provider**: Added AIML API provider (`aimlapi`) with OpenAI-compatible endpoint at `https://api.aimlapi.com/v1` and automatic model discovery via `/models`.
+- **Ofox provider**: Added Ofox provider (`ofox`) with OpenAI-compatible endpoint at `https://api.ofox.ai/v1` and automatic model discovery via `/models`.
+
+### Fixed
+
+- Removed Aether CLI and AVA Supernova provider artifacts; cleaned up build/test environment and removed stale CLI references.
+- Fixed duplicate `openai` key in `src/accounts/accountUI.ts` which caused a build-time duplicate-object-key warning.
 
 
 ## [0.4.0] - 2026-04-17

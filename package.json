@@ -53,8 +53,8 @@
         "onLanguageModelTool:aether_zhipuWebSearch",
         "onStartupFinished",
         "onLanguageModelProvider:aether.aihubmix",
+        "onLanguageModelProvider:aether.aimlapi",
         "onLanguageModelProvider:aether.apertis",
-        "onLanguageModelProvider:aether.ava-supernova",
         "onLanguageModelProvider:aether.baseten",
         "onLanguageModelProvider:aether.berget",
         "onLanguageModelProvider:aether.blackbox",
@@ -89,6 +89,7 @@
         "onLanguageModelProvider:aether.moonshot",
         "onLanguageModelProvider:aether.nanogpt",
         "onLanguageModelProvider:aether.nvidia",
+        "onLanguageModelProvider:aether.ofox",
         "onLanguageModelProvider:aether.ollama",
         "onLanguageModelProvider:aether.openai",
         "onLanguageModelProvider:aether.opencode",
@@ -96,6 +97,7 @@
         "onLanguageModelProvider:aether.pollinations",
         "onLanguageModelProvider:aether.puter",
         "onLanguageModelProvider:aether.qwencli",
+        "onLanguageModelProvider:aether.requesty",
         "onLanguageModelProvider:aether.routingrun",
         "onLanguageModelProvider:aether.seraphyn",
         "onLanguageModelProvider:aether.sherlock",
@@ -345,11 +347,6 @@
                 "category": "Aether"
             },
             {
-                "command": "aether.ava-supernova.setApiKey",
-                "title": "Configure AVA Supernova",
-                "category": "Aether"
-            },
-            {
                 "command": "aether.knox.setApiKey",
                 "title": "Configure Knox",
                 "category": "Aether"
@@ -467,6 +464,21 @@
             {
                 "command": "aether.openai.setApiKey",
                 "title": "Configure OpenAI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.aimlapi.setApiKey",
+                "title": "Configure AIML API",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.ofox.setApiKey",
+                "title": "Configure Ofox AI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.requesty.setApiKey",
+                "title": "Configure Requesty Router",
                 "category": "Aether"
             }
         ],
@@ -915,6 +927,19 @@
                 }
             },
             {
+                "vendor": "aether.aimlapi",
+                "displayName": "⦿ AIML API",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "AIML API API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.apertis",
                 "displayName": "⦿ Apertis AI (Apertis AI endpoint integration)",
                 "configuration": {
@@ -925,13 +950,6 @@
                             "secret": true
                         }
                     }
-                }
-            },
-            {
-                "vendor": "aether.ava-supernova",
-                "displayName": "⦿ AVA Supernova (AVA Supernova - free public API, no auth required)",
-                "configuration": {
-                    "properties": {}
                 }
             },
             {
@@ -1371,6 +1389,19 @@
                 }
             },
             {
+                "vendor": "aether.ofox",
+                "displayName": "⦿ Ofox AI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Ofox AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.ollama",
                 "displayName": "⦿ Ollama (Ollama)",
                 "configuration": {
@@ -1456,6 +1487,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Qwen CLI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.requesty",
+                "displayName": "⦿ Requesty Router",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Requesty Router API key.",
                             "secret": true
                         }
                     }

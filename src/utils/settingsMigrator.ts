@@ -95,7 +95,7 @@ const KNOWN_PROVIDERS = [
     'cline',
     'pollinations',
     'opencodego',
-    'ava-supernova',
+    /* 'ava-supernova' removed */
     'knox',
     'seraphyn',
     'apertis',

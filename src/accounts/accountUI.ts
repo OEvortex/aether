@@ -120,6 +120,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "AIML API",
+                value: ProviderKey.Aimlapi,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Apertis AI",
                 value: ProviderKey.Apertis,
                 authType: "apiKey" as const
@@ -295,6 +300,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Ofox AI",
+                value: ProviderKey.Ofox,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Ollama",
                 value: ProviderKey.Ollama,
                 authType: "apiKey" as const
@@ -327,6 +337,11 @@ export class AccountUI {
             {
                 label: "Puter AI",
                 value: ProviderKey.Puter,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Requesty Router",
+                value: ProviderKey.Requesty,
                 authType: "apiKey" as const
             },
             {
@@ -977,6 +992,7 @@ export class AccountUI {
             codex: "Codex (OpenAI)",
             qwencli: "Qwen CLI",
             aihubmix: "AIHubMix",
+            aimlapi: "AIML API",
             apertis: "Apertis AI",
             baseten: "Baseten",
             berget: "Berget",
@@ -1012,13 +1028,14 @@ export class AccountUI {
             moonshot: "Moonshot",
             nanogpt: "NanoGPT",
             nvidia: "NVIDIA NIM",
+            ofox: "Ofox AI",
             ollama: "Ollama",
-            openai: "OpenAI",
             openai: "OpenAI",
             opencode: "OpenCode",
             opencodego: "OpenCode Zen Go",
             pollinations: "Pollinations AI",
             puter: "Puter AI",
+            requesty: "Requesty Router",
             routingrun: "Routing.run",
             seraphyn: "Seraphyn",
             sherlock: "Sherlock (CloudFerro)",

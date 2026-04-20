@@ -93,14 +93,7 @@ const knownProviderOverrides = {
         family: 'ChatJimmy',
         supportsApiKey: false
     },
-    'ava-supernova': {
-        displayName: 'AVA Supernova',
-        family: 'AVA Supernova',
-        supportsApiKey: false,
-        openai: { baseUrl: 'https://ava-supernova.com/api/v1' },
-        openModelEndpoint: true,
-        fetchModels: false
-    },
+    /* AVA Supernova entry removed */
     cline: {
         displayName: 'Cline',
         family: 'Cline',

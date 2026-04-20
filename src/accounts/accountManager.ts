@@ -51,7 +51,7 @@ export class AccountManager {
             }
         ],
         [
-            ProviderKey.Apertis,
+            ProviderKey.Aimlapi,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -59,11 +59,11 @@ export class AccountManager {
             }
         ],
         [
-            ProviderKey.AvaSupernova,
+            ProviderKey.Apertis,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
-                supportsApiKey: false
+                supportsApiKey: true
             }
         ],
         [
@@ -363,6 +363,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Ofox,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Ollama,
             {
                 supportsMultiAccount: true,
@@ -424,6 +432,14 @@ export class AccountManager {
                 supportsMultiAccount: true,
                 supportsOAuth: true,
                 supportsApiKey: false
+            }
+        ],
+        [
+            ProviderKey.Requesty,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
             }
         ],
         [

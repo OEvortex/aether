@@ -1,1 +1,0 @@
-{"version":3,"file":"mcp-prompts.js","sourceRoot":"","sources":["mcp-prompts.ts"],"names":[],"mappings":"AAAA;;;;GAIG;AAKH,MAAM,UAAU,mBAAmB,CAC/B,MAAc,EACd,UAAkB;IAElB,MAAM,cAAc,GAAG,MAAM,CAAC,iBAAiB,EAAE,CAAC;IAClD,IAAI,CAAC,cAAc,EAAE,CAAC;QAClB,OAAO,EAAE,CAAC;IACd,CAAC;IACD,OAAO,cAAc,CAAC,kBAAkB,CAAC,UAAU,CAAC,CAAC;AACzD,CAAC"}

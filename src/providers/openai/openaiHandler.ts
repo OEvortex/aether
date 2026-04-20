@@ -264,32 +264,7 @@ export class OpenAIHandler {
             url: string | URL | Request,
             init?: RequestInit
         ): Promise<Response> => {
-            // Handle provider specific endpoint remapping
-            if (providerKey === 'ava-supernova') {
-                // AVA Supernova expects /api/v1/free/chat instead of /v1/chat/completions
-                try {
-                    const rewrittenUrl = this.rewriteAvaSupernovaUrl(
-                        url,
-                        baseURL
-                    );
-                    if (rewrittenUrl) {
-                        url = rewrittenUrl;
-                    }
-
-                    // Add the stream_options payload (many callers want usage info)
-                    if (init?.body && typeof init.body === 'string') {
-                        const data = JSON.parse(init.body);
-                        if (data?.stream && !data.stream_options) {
-                            data.stream_options = { include_usage: true };
-                            init = { ...init, body: JSON.stringify(data) };
-                        }
-                    }
-                } catch (e) {
-                    Logger.debug(
-                        `[${this.displayName}] Failed to rewrite AVA Supernova request: ${e}`
-                    );
-                }
-            }
+            // Provider-specific remapping removed for AVA Supernova
 
             // Call original fetch
             const response = await fetch(url, init);
@@ -300,31 +275,7 @@ export class OpenAIHandler {
     }
 
     /** Rewrite OpenAI-style ChatCompletion URLs to AVA Supernova API endpoint. */
-    private rewriteAvaSupernovaUrl(
-        url: string | URL | Request,
-        baseURL?: string
-    ): string | undefined {
-        const rawUrl =
-            typeof url === 'string'
-                ? url
-                : url instanceof URL
-                  ? url.toString()
-                  : url.url;
-        if (!rawUrl) {
-            return undefined;
-        }
-
-        const normalizedBase = baseURL?.replace(/\/+$/, '') || '';
-        // If the request targets the OpenAI chat completions endpoint, redirect it to AVA Supernova's /free/chat endpoint.
-        if (rawUrl.includes('/chat/completions')) {
-            // Use provided baseURL if available, otherwise try to preserve original origin
-            const base =
-                normalizedBase || rawUrl.replace(/\/chat\/completions.*$/, '');
-            return `${base.replace(/\/+$/, '')}/free/chat`;
-        }
-
-        return undefined;
-    }
+    // AVA Supernova-specific URL rewrite removed
 
     /**
      * Preprocess SSE response, fix non-standard format

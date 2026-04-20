@@ -1,7 +1,6 @@
 import type { ProviderConfig } from '../../types/sharedTypes.js';
 import aihubmix from './aihubmix.json';
 import apertis from './apertis.json';
-import avaSupernova from './ava-supernova.json';
 import baseten from './baseten.json';
 import berget from './berget.json';
 import blackbox from './blackbox.json';
@@ -46,7 +45,6 @@ import zhipu from './zhipu.json';
 const providers = {
 	aihubmix: aihubmix,
 	apertis: apertis,
-	"ava-supernova": avaSupernova,
 	baseten: baseten,
 	berget: berget,
 	blackbox: blackbox,

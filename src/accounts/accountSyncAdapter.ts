@@ -222,6 +222,7 @@ export class AccountSyncAdapter {
     async syncAllAccounts(): Promise<void> {
         const providers = [
             ProviderKey.AIHubMix,
+            ProviderKey.Aimlapi,
             ProviderKey.Apertis,
             ProviderKey.Baseten,
             ProviderKey.Berget,
@@ -258,6 +259,7 @@ export class AccountSyncAdapter {
             ProviderKey.Moonshot,
             ProviderKey.Nanogpt,
             ProviderKey.Nvidia,
+            ProviderKey.Ofox,
             ProviderKey.Ollama,
             ProviderKey.OpenAI,
             ProviderKey.OpenAI,
@@ -265,6 +267,7 @@ export class AccountSyncAdapter {
             ProviderKey.Opencodego,
             ProviderKey.Pollinations,
             ProviderKey.Puter,
+            ProviderKey.Requesty,
             ProviderKey.Routingrun,
             ProviderKey.Seraphyn,
             ProviderKey.Sherlock,

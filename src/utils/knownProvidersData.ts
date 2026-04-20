@@ -197,14 +197,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         family: 'ChatJimmy',
         supportsApiKey: false
     },
-    'ava-supernova': {
-        displayName: 'AVA Supernova',
-        family: 'AVA Supernova',
-        supportsApiKey: false,
-        openai: { baseUrl: 'https://ava-supernova.com/api/v1' },
-        openModelEndpoint: true,
-        fetchModels: false
-    },
+    /* AVA Supernova entry removed */
     cline: {
         displayName: 'Cline',
         family: 'Cline',
@@ -827,6 +820,48 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         sdkMode: 'openai',
         openai: { baseUrl: 'https://crof.ai/v1' },
         openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,requesty: {
+        displayName: 'Requesty Router',
+        family: 'Requesty',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://router.requesty.ai/v1' },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,aimlapi: {
+        displayName: 'AIML API',
+        family: 'AIML API',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.aimlapi.com/v1' },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,ofox: {
+        displayName: 'Ofox AI',
+        family: 'Ofox AI',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.ofox.ai/v1' },
+        openModelEndpoint: true,
         fetchModels: true,
         modelsEndpoint: '/models',
         modelParser: {
