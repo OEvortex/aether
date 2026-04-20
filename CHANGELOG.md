@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.4.1] - 2026-04-20
 
 ### Added
 
@@ -23,20 +23,6 @@ All notable changes to this project will be documented in this file.
 
 
 ## [0.4.0] - 2026-04-17
-
-## [0.4.1] - 2026-04-20
-
-### Added
-
-- Added multiple OpenAI-compatible provider entries (Requesty, AIML API, Ofox, Helicone, Portkey, EdenAI) and enabled model discovery where supported.
-
-### Changed
-
-- Bumped extension version to 0.4.1.
-
-### Fixed
-
-- Removed the top-level `openai` provider entry from `knownProvidersData.ts` to avoid duplication with provider-specific entries.
 
 ### Added
 
