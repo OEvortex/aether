@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 - **Requesty provider**: Added Requesty provider (`requesty`) with OpenAI-compatible endpoint at `https://router.requesty.ai/v1` and automatic model discovery via `/models`.
 - **AIML API provider**: Added AIML API provider (`aimlapi`) with OpenAI-compatible endpoint at `https://api.aimlapi.com/v1` and automatic model discovery via `/models`.
 - **Ofox provider**: Added Ofox provider (`ofox`) with OpenAI-compatible endpoint at `https://api.ofox.ai/v1` and automatic model discovery via `/models`.
+ - **Helicone provider**: Added Helicone AI Gateway provider (`helicone`) with OpenAI-compatible endpoint at `https://ai-gateway.helicone.ai` and automatic model discovery via `/models`.
+ - **Portkey provider**: Added Portkey provider (`portkey`) exposing OpenAI-compatible endpoint at `https://api.portkey.ai/v1`, Responses endpoint at `https://api.portkey.ai/v1` (oai-response), and Anthropic-compatible endpoint at `https://api.portkey.ai`. Model discovery available via `/models`.
+ - **EdenAI provider**: Added EdenAI provider (`edenai`) with OpenAI-compatible endpoint at `https://api.edenai.run/v3/llm` and automatic model discovery via `/models`.
 
 ### Fixed
 
@@ -20,6 +23,20 @@ All notable changes to this project will be documented in this file.
 
 
 ## [0.4.0] - 2026-04-17
+
+## [0.4.1] - 2026-04-20
+
+### Added
+
+- Added multiple OpenAI-compatible provider entries (Requesty, AIML API, Ofox, Helicone, Portkey, EdenAI) and enabled model discovery where supported.
+
+### Changed
+
+- Bumped extension version to 0.4.1.
+
+### Fixed
+
+- Removed the top-level `openai` provider entry from `knownProvidersData.ts` to avoid duplication with provider-specific entries.
 
 ### Added
 

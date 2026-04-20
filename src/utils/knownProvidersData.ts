@@ -90,23 +90,6 @@ export interface KnownProviderConfig extends Partial<ProviderOverride> {
 }
 
 const knownProviderOverrides: Record<string, KnownProviderConfig> = {
-    openai: {
-        displayName: 'OpenAI',
-        family: 'OpenAI',
-        supportsApiKey: true,
-        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        openai: {
-            baseUrl: 'https://api.openai.com/v1'
-        },
-        openModelEndpoint: false,
-        fetchModels: true,
-        modelsEndpoint: '/models',
-        modelParser: {
-            arrayPath: 'data',
-            descriptionField: 'id',
-            cooldownMinutes: 10
-        }
-    },
     aihubmix: {
         displayName: 'AIHubMix',
         family: 'AIHubMix',
@@ -861,6 +844,51 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         family: 'Ofox AI',
         sdkMode: 'openai',
         openai: { baseUrl: 'https://api.ofox.ai/v1' },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,helicone: {
+        displayName: 'Helicone AI Gateway',
+        family: 'Helicone',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://ai-gateway.helicone.ai' },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,portkey: {
+        displayName: 'Portkey',
+        family: 'Portkey',
+        // Expose OpenAI-compatible, Responses (oai-response), and Anthropic-compatible bridges
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.portkey.ai/v1' },
+        responses: { baseUrl: 'https://api.portkey.ai/v1' },
+        anthropic: { baseUrl: 'https://api.portkey.ai' },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,edenai: {
+        displayName: 'Eden AI',
+        family: 'EdenAI',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.edenai.run/v3/llm' },
         openModelEndpoint: true,
         fetchModels: true,
         modelsEndpoint: '/models',

@@ -3,7 +3,7 @@
     "publisher": "OEvortex",
     "displayName": "Aether AI",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "license": "MIT",
     "keywords": [
         "ai",
@@ -70,9 +70,11 @@
         "onLanguageModelProvider:aether.deepseek",
         "onLanguageModelProvider:aether.dialagram",
         "onLanguageModelProvider:aether.dinference",
+        "onLanguageModelProvider:aether.edenai",
         "onLanguageModelProvider:aether.fastrouter",
         "onLanguageModelProvider:aether.fireworks",
         "onLanguageModelProvider:aether.friendli",
+        "onLanguageModelProvider:aether.helicone",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
         "onLanguageModelProvider:aether.jiekou",
@@ -91,10 +93,10 @@
         "onLanguageModelProvider:aether.nvidia",
         "onLanguageModelProvider:aether.ofox",
         "onLanguageModelProvider:aether.ollama",
-        "onLanguageModelProvider:aether.openai",
         "onLanguageModelProvider:aether.opencode",
         "onLanguageModelProvider:aether.opencodego",
         "onLanguageModelProvider:aether.pollinations",
+        "onLanguageModelProvider:aether.portkey",
         "onLanguageModelProvider:aether.puter",
         "onLanguageModelProvider:aether.qwencli",
         "onLanguageModelProvider:aether.requesty",
@@ -479,6 +481,21 @@
             {
                 "command": "aether.requesty.setApiKey",
                 "title": "Configure Requesty Router",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.helicone.setApiKey",
+                "title": "Configure Helicone AI Gateway",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.portkey.setApiKey",
+                "title": "Configure Portkey",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.edenai.setApiKey",
+                "title": "Configure Eden AI",
                 "category": "Aether"
             }
         ],
@@ -903,6 +920,17 @@
                     "default": "openai",
                     "description": "Select SDK compatibility mode for OpenCode Zen Go.",
                     "scope": "application"
+                },
+                "aether.portkey.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic",
+                        "oai-response"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for Portkey.",
+                    "scope": "application"
                 }
             }
         },
@@ -1142,6 +1170,19 @@
                 }
             },
             {
+                "vendor": "aether.edenai",
+                "displayName": "⦿ Eden AI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Eden AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.fastrouter",
                 "displayName": "⦿ FastRouter",
                 "configuration": {
@@ -1175,6 +1216,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Friendli API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.helicone",
+                "displayName": "⦿ Helicone AI Gateway",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Helicone AI Gateway API key.",
                             "secret": true
                         }
                     }
@@ -1415,19 +1469,6 @@
                 }
             },
             {
-                "vendor": "aether.openai",
-                "displayName": "⦿ OpenAI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "OpenAI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
                 "vendor": "aether.opencode",
                 "displayName": "⦿ OpenCode (OpenCode endpoint integration)",
                 "configuration": {
@@ -1461,6 +1502,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Pollinations AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.portkey",
+                "displayName": "⦿ Portkey",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Portkey API key.",
                             "secret": true
                         }
                     }

@@ -93,6 +93,24 @@
                 "reveal": "silent",
                 "group": "watchers"
             }
+        },
+        {
+            "label": "sync-providers",
+            "type": "npm",
+            "script": "sync-providers",
+            "problemMatcher": {
+                "owner": "typescript",
+                "fileLocation": "relative",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): (error|warning|info): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "group": "build"
         }
     ]
 }

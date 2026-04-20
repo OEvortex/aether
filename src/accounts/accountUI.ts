@@ -195,6 +195,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Eden AI",
+                value: ProviderKey.Edenai,
+                authType: "apiKey" as const
+            },
+            {
                 label: "FastRouter",
                 value: ProviderKey.Fastrouter,
                 authType: "apiKey" as const
@@ -207,6 +212,11 @@ export class AccountUI {
             {
                 label: "Friendli",
                 value: ProviderKey.Friendli,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Helicone AI Gateway",
+                value: ProviderKey.Helicone,
                 authType: "apiKey" as const
             },
             {
@@ -315,11 +325,6 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
-                label: "OpenAI",
-                value: ProviderKey.OpenAI,
-                authType: "apiKey" as const
-            },
-            {
                 label: "OpenCode",
                 value: ProviderKey.OpenCode,
                 authType: "apiKey" as const
@@ -332,6 +337,11 @@ export class AccountUI {
             {
                 label: "Pollinations AI",
                 value: ProviderKey.Pollinations,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Portkey",
+                value: ProviderKey.Portkey,
                 authType: "apiKey" as const
             },
             {
@@ -1007,9 +1017,11 @@ export class AccountUI {
             deepseek: "DeepSeek",
             dialagram: "Dialagram",
             dinference: "Dinference",
+            edenai: "Eden AI",
             fastrouter: "FastRouter",
             fireworks: "Fireworks AI",
             friendli: "Friendli",
+            helicone: "Helicone AI Gateway",
             hicapai: "HicapAI",
             huggingface: "Hugging Face",
             jiekou: "Jiekou AI",
@@ -1034,6 +1046,7 @@ export class AccountUI {
             opencode: "OpenCode",
             opencodego: "OpenCode Zen Go",
             pollinations: "Pollinations AI",
+            portkey: "Portkey",
             puter: "Puter AI",
             requesty: "Requesty Router",
             routingrun: "Routing.run",

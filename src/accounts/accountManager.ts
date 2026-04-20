@@ -195,6 +195,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Edenai,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Fastrouter,
             {
                 supportsMultiAccount: true,
@@ -212,6 +220,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Friendli,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Helicone,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
@@ -387,14 +403,6 @@ export class AccountManager {
             }
         ],
         [
-            ProviderKey.OpenAI,
-            {
-                supportsMultiAccount: true,
-                supportsOAuth: false,
-                supportsApiKey: true
-            }
-        ],
-        [
             ProviderKey.OpenCode,
             {
                 supportsMultiAccount: true,
@@ -412,6 +420,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Pollinations,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Portkey,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
