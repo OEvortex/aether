@@ -1,0 +1,6 @@
+{
+    "displayName": "Together",
+    "baseUrl": "https://api.together.xyz/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

@@ -274,6 +274,7 @@ export class AccountSyncAdapter {
             ProviderKey.Routingrun,
             ProviderKey.Seraphyn,
             ProviderKey.Sherlock,
+            ProviderKey.Together,
             ProviderKey.Vercelai,
             ProviderKey.Zenmux,
             ProviderKey.Zhipu,

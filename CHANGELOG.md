@@ -7,14 +7,19 @@ All notable changes to this project will be documented in this file.
 ## Added
 - Register CommonStack provider (`commonstack`) with OpenAI-compatible and Anthropic-compatible endpoints (https://api.commonstack.ai/v1 / https://api.commonstack.ai). Models are fetched dynamically when an API key is provided; the bundled config includes a single static model `moonshotai/kimi-k2.6`.
 - Bundled provider config: `src/providers/config/commonstack.json` (contains `moonshotai/kimi-k2.6`).
+- Register Together provider (`together`) with OpenAI-compatible endpoint `https://api.together.xyz/v1`, disabled open model endpoint, and dynamic model discovery via `/models`.
+- Bundled provider config: `src/providers/config/together.json`.
 
 ## Changed
 - Treat Moonshot Kimi K2.6 the same as K2.5 in `src/utils/globalContextLengthManager.ts` (context-length handling regex/logic updated).
 - Added `kimi-k2.6` entry to `src/providers/config/opencodego.json` (modeled after `kimi-k2.5`).
 - Updated provider metadata in `src/utils/knownProvidersData.ts` to enable model fetching for CommonStack (fetchModels=true, modelsEndpoint="/models", openModelEndpoint=false) and added an Anthropic-compatible baseUrl.
+- Added unit test coverage for `scripts/sync-providers.js` and exported helper functions to make provider config index syncing testable.
 
 ## Build
 - Ran `npm run sync-providers` to regenerate provider artifacts and `npm run compile:dev` to build extension and copy provider configs into `dist/`.
+- Added Together provider artifacts and bundled config `src/providers/config/together.json` via provider sync.
+- Added a dedicated Vitest regression test for `scripts/sync-providers.js`.
 
 
 ## [0.4.1] - 2026-04-20

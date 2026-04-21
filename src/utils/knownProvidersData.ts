@@ -922,6 +922,23 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     }
+    ,together: {
+        displayName: 'TogetherAI',
+        family: 'Together',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.together.xyz/v1' },
+        // Model listing requires API key; do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
 };
 
 export const KnownProviders: Record<string, KnownProviderConfig> =

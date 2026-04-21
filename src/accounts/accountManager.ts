@@ -491,6 +491,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Together,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Vercelai,
             {
                 supportsMultiAccount: true,

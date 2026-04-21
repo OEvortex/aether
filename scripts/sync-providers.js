@@ -703,19 +703,22 @@ function syncPackageJson(knownProviders) {
     writeUtf8(PACKAGE_JSON_FILE, `${JSON.stringify(packageJson, null, 4)}\n`);
 }
 
-function getProviderConfigFiles() {
-    const files = fs.readdirSync(PROVIDER_CONFIG_DIR);
+function getProviderConfigFiles(providerConfigDir = PROVIDER_CONFIG_DIR) {
+    const files = fs.readdirSync(providerConfigDir);
     return files
         .filter((file) => file.endsWith('.json') && file !== 'index.json')
         .map((file) => file.replace('.json', ''))
         .sort();
 }
 
-function syncProviderConfigIndex() {
-    const configFiles = getProviderConfigFiles();
+function syncProviderConfigIndex(
+    providerConfigDir = PROVIDER_CONFIG_DIR,
+    providerConfigIndexFile = PROVIDER_CONFIG_INDEX_FILE
+) {
+    const configFiles = getProviderConfigFiles(providerConfigDir);
 
     // Read the current index.ts to preserve comments and structure
-    let source = readUtf8(PROVIDER_CONFIG_INDEX_FILE);
+    let source = readUtf8(providerConfigIndexFile);
 
     // Generate import statements
     const imports = configFiles
@@ -734,10 +737,10 @@ function syncProviderConfigIndex() {
         })
         .join('\n');
 
-    // Replace imports section (from "import type" to the last import before "// Export")
+    // Replace imports section (from "import type" to the providers object declaration)
     const importRegex =
-        /import type \{ ProviderConfig \} from "[^"]+";\n[\s\S]*?\n\nconst providers = \{/;
-    const importReplacement = `import type { ProviderConfig } from "../../types/sharedTypes";
+        /import type \{ ProviderConfig \} from ['"][^'"]+['"];\n[\s\S]*?\nconst providers = \{/;
+    const importReplacement = `import type { ProviderConfig } from '../../types/sharedTypes.js';
 ${imports}
 
 const providers = {`;
@@ -750,7 +753,7 @@ ${providerEntries}
 };`;
     source = source.replace(providersRegex, providersReplacement);
 
-    writeUtf8(PROVIDER_CONFIG_INDEX_FILE, source);
+    writeUtf8(providerConfigIndexFile, source);
 }
 
 function run() {
@@ -779,4 +782,11 @@ function run() {
     console.log('Updated: package.json');
 }
 
-run();
+if (require.main === module) {
+    run();
+}
+
+module.exports = {
+    syncProviderConfigIndex,
+    getProviderConfigFiles
+};

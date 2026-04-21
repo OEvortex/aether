@@ -104,6 +104,7 @@
         "onLanguageModelProvider:aether.routingrun",
         "onLanguageModelProvider:aether.seraphyn",
         "onLanguageModelProvider:aether.sherlock",
+        "onLanguageModelProvider:aether.together",
         "onLanguageModelProvider:aether.vercelai",
         "onLanguageModelProvider:aether.zenmux",
         "onLanguageModelProvider:aether.zhipu"
@@ -502,6 +503,11 @@
             {
                 "command": "aether.commonstack.setApiKey",
                 "title": "Configure CommonStack",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.together.setApiKey",
+                "title": "Configure TogetherAI",
                 "category": "Aether"
             }
         ],
@@ -1622,6 +1628,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Sherlock (CloudFerro) API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.together",
+                "displayName": "⦿ TogetherAI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "TogetherAI API key.",
                             "secret": true
                         }
                     }

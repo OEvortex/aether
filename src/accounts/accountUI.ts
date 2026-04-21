@@ -375,6 +375,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "TogetherAI",
+                value: ProviderKey.Together,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Vercel AI",
                 value: ProviderKey.Vercelai,
                 authType: "apiKey" as const
@@ -1058,6 +1063,7 @@ export class AccountUI {
             routingrun: "Routing.run",
             seraphyn: "Seraphyn",
             sherlock: "Sherlock (CloudFerro)",
+            together: "TogetherAI",
             vercelai: "Vercel AI",
             zenmux: "Zenmux",
             zhipu: "ZhipuAI",
