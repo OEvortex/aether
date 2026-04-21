@@ -115,6 +115,11 @@ export class AccountUI {
                 authType: "oauth" as const
             },
             {
+                label: "0api (Qzz)",
+                value: ProviderKey.Qzz,
+                authType: "apiKey" as const
+            },
+            {
                 label: "AIHubMix",
                 value: ProviderKey.AIHubMix,
                 authType: "apiKey" as const
@@ -392,6 +397,11 @@ export class AccountUI {
             {
                 label: "VSLLM",
                 value: ProviderKey.Vsllm,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Xinjianya",
+                value: ProviderKey.Xinjianya,
                 authType: "apiKey" as const
             },
             {
@@ -1021,6 +1031,7 @@ export class AccountUI {
         const names: Record<string, string> = {
             codex: "Codex (OpenAI)",
             qwencli: "Qwen CLI",
+            qzz: "0api (Qzz)",
             aihubmix: "AIHubMix",
             aimlapi: "AIML API",
             apertis: "Apertis AI",
@@ -1077,6 +1088,7 @@ export class AccountUI {
             together: "TogetherAI",
             vercelai: "Vercel AI",
             vsllm: "VSLLM",
+            xinjianya: "Xinjianya",
             zenmux: "Zenmux",
             zhipu: "ZhipuAI",
             compatible: "Compatible",

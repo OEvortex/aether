@@ -38,6 +38,8 @@ import opencodego from "./opencodego.json";
 import pollinations from "./pollinations.json";
 import puter from "./puter.json";
 import qwencli from "./qwencli.json";
+import qzz from "./qzz.json";
+import xinjianya from "./xinjianya.json";
 import rinkoai from "./rinkoai.json";
 import seraphyn from "./seraphyn.json";
 import sherlock from "./sherlock.json";
@@ -86,6 +88,8 @@ const providers = {
 	pollinations: pollinations,
 	puter: puter,
 	qwencli: qwencli,
+	qzz: qzz,
+	xinjianya: xinjianya,
 	rinkoai: rinkoai,
 	seraphyn: seraphyn,
 	sherlock: sherlock,

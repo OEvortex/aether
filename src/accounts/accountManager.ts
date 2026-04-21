@@ -459,6 +459,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Qzz,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Requesty,
             {
                 supportsMultiAccount: true,
@@ -516,6 +524,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Vsllm,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Xinjianya,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,

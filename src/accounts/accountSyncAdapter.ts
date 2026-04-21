@@ -270,6 +270,7 @@ export class AccountSyncAdapter {
             ProviderKey.Pollinations,
             ProviderKey.Portkey,
             ProviderKey.Puter,
+            ProviderKey.Qzz,
             ProviderKey.Requesty,
             ProviderKey.Rinkoai,
             ProviderKey.Routingrun,
@@ -278,6 +279,7 @@ export class AccountSyncAdapter {
             ProviderKey.Together,
             ProviderKey.Vercelai,
             ProviderKey.Vsllm,
+            ProviderKey.Xinjianya,
             ProviderKey.Zenmux,
             ProviderKey.Zhipu,
         ];

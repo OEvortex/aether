@@ -1,0 +1,21 @@
+{
+    "displayName": "Xinjianya",
+    "baseUrl": "https://api.xinjianya.top/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-5.4",
+            "name": "GPT-5.4",
+            "tooltip": "GPT-5.4 (Xinjianya)",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 8192,
+            "model": "gpt-5.4",
+            "sdkMode": "openai",
+            "baseUrl": "https://api.xinjianya.top/v1",
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        }
+    ]
+}

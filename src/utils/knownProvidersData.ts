@@ -562,6 +562,43 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    qzz: {
+        displayName: '0api (Qzz)',
+        family: 'Qzz',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        openai: { baseUrl: 'https://0api.qzz.io/v1' },
+        // Model listing typically requires API key; do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            idField: 'id',
+            nameField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    xinjianya: {
+        displayName: 'Xinjianya',
+        family: 'Xinjianya',
+        description: '星见雅 API (api.xinjianya.top) — community gateway',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        // Primary OpenAI-compatible gateway base
+        openai: { baseUrl: 'https://api.xinjianya.top/v1' },
+        // Site exposes an open pricing/model catalog; allow model listing
+        openModelEndpoint: false,
+        fetchModels: true,
+        // The site uses /v1 endpoints; model listing path set accordingly
+        modelsEndpoint: '/v1/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     opencode: {
         displayName: 'OpenCode',
         family: 'OpenCode',

@@ -51,6 +51,7 @@ export enum ProviderKey {
 	Portkey = 'portkey',
 	Puter = 'puter',
 	QwenCli = 'qwencli',
+	Qzz = 'qzz',
 	Requesty = 'requesty',
 	Rinkoai = 'rinkoai',
 	Routingrun = 'routingrun',
@@ -59,6 +60,7 @@ export enum ProviderKey {
 	Together = 'together',
 	Vercelai = 'vercelai',
 	Vsllm = 'vsllm',
+	Xinjianya = 'xinjianya',
 	Zenmux = 'zenmux',
 	Zhipu = 'zhipu',
 }
