@@ -131,6 +131,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Commonstack,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Compatible,
             {
                 supportsMultiAccount: true,

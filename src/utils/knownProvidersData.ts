@@ -399,6 +399,30 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    commonstack: {
+        displayName: 'CommonStack',
+        family: 'CommonStack',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // OpenAI-compatible SDK endpoint. Do NOT expose an open model endpoint or enable automatic model sync.
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.commonstack.ai/v1'
+        },
+        // CommonStack also exposes Anthropic-compatible endpoints for some models
+        anthropic: {
+            baseUrl: 'https://api.commonstack.ai'
+        },
+        // Configure model listing to require API key but allow automatic model sync
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     dashscope: {
         displayName: 'DashScope (Ali Bailian)',
         family: 'DashScope',

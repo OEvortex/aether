@@ -52,6 +52,7 @@ const providers = {
 	chutes: chutes,
 	clarifai: clarifai,
 	codex: codex,
+	commonstack: commonstack,
 	cortecs: cortecs,
 	dashscope: dashscope,
 	deepinfra: deepinfra,

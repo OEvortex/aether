@@ -231,7 +231,8 @@ export function isClaudeModel(modelId: string): boolean {
 }
 
 export function isKimiK25Model(modelId: string): boolean {
-    return /kimi[-_/]?k2(?:\.|-)5/i.test(modelId);
+    // Matches kimi-k2.5 and kimi-k2.6 (both K2.x vision-capable variants)
+    return /kimi[-_/]?k2(?:[._-]?(?:5|6))/i.test(modelId);
 }
 
 export function isKimiModel(modelId: string): boolean {

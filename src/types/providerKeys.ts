@@ -10,6 +10,7 @@ export enum ProviderKey {
 	Clarifai = 'clarifai',
 	Cline = 'cline',
 	Codex = 'codex',
+	Commonstack = 'commonstack',
 	Compatible = 'compatible',
 	Cortecs = 'cortecs',
 	Crof = 'crof',

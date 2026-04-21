@@ -63,6 +63,7 @@
         "onLanguageModelProvider:aether.clarifai",
         "onLanguageModelProvider:aether.cline",
         "onLanguageModelProvider:aether.codex",
+        "onLanguageModelProvider:aether.commonstack",
         "onLanguageModelProvider:aether.cortecs",
         "onLanguageModelProvider:aether.crof",
         "onLanguageModelProvider:aether.dashscope",
@@ -497,6 +498,11 @@
                 "command": "aether.edenai.setApiKey",
                 "title": "Configure Eden AI",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.commonstack.setApiKey",
+                "title": "Configure CommonStack",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -799,6 +805,16 @@
                     "description": "Select SDK compatibility mode for Clarifai.",
                     "scope": "application"
                 },
+                "aether.commonstack.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for CommonStack.",
+                    "scope": "application"
+                },
                 "aether.dashscope.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -1073,6 +1089,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "OpenAI Codex API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.commonstack",
+                "displayName": "⦿ CommonStack",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "CommonStack API key.",
                             "secret": true
                         }
                     }

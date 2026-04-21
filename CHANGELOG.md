@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+## Added
+- Register CommonStack provider (`commonstack`) with OpenAI-compatible and Anthropic-compatible endpoints (https://api.commonstack.ai/v1 / https://api.commonstack.ai). Models are fetched dynamically when an API key is provided; the bundled config includes a single static model `moonshotai/kimi-k2.6`.
+- Bundled provider config: `src/providers/config/commonstack.json` (contains `moonshotai/kimi-k2.6`).
+
+## Changed
+- Treat Moonshot Kimi K2.6 the same as K2.5 in `src/utils/globalContextLengthManager.ts` (context-length handling regex/logic updated).
+- Added `kimi-k2.6` entry to `src/providers/config/opencodego.json` (modeled after `kimi-k2.5`).
+- Updated provider metadata in `src/utils/knownProvidersData.ts` to enable model fetching for CommonStack (fetchModels=true, modelsEndpoint="/models", openModelEndpoint=false) and added an Anthropic-compatible baseUrl.
+
+## Build
+- Ran `npm run sync-providers` to regenerate provider artifacts and `npm run compile:dev` to build extension and copy provider configs into `dist/`.
+
+
 ## [0.4.1] - 2026-04-20
 
 ### Added

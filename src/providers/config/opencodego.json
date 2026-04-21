@@ -46,6 +46,20 @@
             "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
         },
         {
+            "id": "kimi-k2.6",
+            "name": "Kimi K2.6",
+            "tooltip": "Kimi K2.6 - OpenCode Zen Go",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "model": "kimi-k2.6",
+            "sdkMode": "openai",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            },
+            "baseUrl": "https://opencode.ai/zen/go/v1/chat/completions"
+        },
+        {
             "id": "minimax-m2.7",
             "name": "MiniMax M2.7",
             "tooltip": "MiniMax M2.7 - OpenCode Zen Go",

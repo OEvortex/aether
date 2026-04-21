@@ -1,0 +1,18 @@
+{
+    "displayName": "CommonStack",
+    "baseUrl": "https://api.commonstack.ai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "moonshotai/kimi-k2.6",
+            "name": "Kimi K2.6",
+            "tooltip": "Moonshot Kimi K2.6",
+            "maxInputTokens": 262144,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
+}

@@ -160,6 +160,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "CommonStack",
+                value: ProviderKey.Commonstack,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Cortecs",
                 value: ProviderKey.Cortecs,
                 authType: "apiKey" as const
@@ -1010,6 +1015,7 @@ export class AccountUI {
             chutes: "Chutes AI",
             clarifai: "Clarifai",
             cline: "Cline",
+            commonstack: "CommonStack",
             cortecs: "Cortecs",
             crof: "Crof AI",
             dashscope: "DashScope (Ali Bailian)",
