@@ -467,6 +467,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Rinkoai,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Routingrun,
             {
                 supportsMultiAccount: true,
@@ -500,6 +508,14 @@ export class AccountManager {
         ],
         [
             ProviderKey.Vercelai,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Vsllm,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,

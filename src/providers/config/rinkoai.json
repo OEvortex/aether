@@ -1,0 +1,40 @@
+{
+    "displayName": "RinkoAI",
+    "baseUrl": "https://rinkoai.com/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "BAAI/bge-m3",
+            "name": "BAAI BGE-M3",
+            "tooltip": "BAAI BGE-M3 — free model (pricing ¥0.0000)",
+            "maxInputTokens": 32768,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "claude-haiku-4.5",
+            "name": "Claude Haiku 4.5",
+            "tooltip": "Claude Haiku 4.5 — free model (pricing ¥0.0000)",
+            "maxInputTokens": 65536,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-sonnet-4.5",
+            "name": "Claude Sonnet 4.5",
+            "tooltip": "Claude Sonnet 4.5 — free model (pricing ¥0.0000)",
+            "maxInputTokens": 65536,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
+}

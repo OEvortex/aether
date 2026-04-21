@@ -1,0 +1,18 @@
+{
+    "displayName": "VSLLM",
+    "baseUrl": "https://vsllm.com/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-oss-120b",
+            "name": "gpt-oss-120b",
+            "tooltip": "Open-source GPT model",
+            "maxInputTokens": 65536,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": false,
+                "imageInput": false
+            }
+        }
+    ]
+}

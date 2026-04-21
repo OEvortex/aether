@@ -784,6 +784,41 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         openModelEndpoint: false,
         fetchModels: false
     }
+    ,rinkoai: {
+        displayName: 'RinkoAI',
+        family: 'RinkoAI',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        // OpenAI-compatible gateway
+        openai: { baseUrl: 'https://rinkoai.com/v1' },
+        // Allow model listing and automatic sync (requires API key in practice)
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
+    ,vsllm: {
+        displayName: 'VSLLM',
+        family: 'VSLLM',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://vsllm.com/v1' },
+        // Expose model listing when available
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    }
     ,dialagram: {
         displayName: 'Dialagram',
         family: 'Dialagram',

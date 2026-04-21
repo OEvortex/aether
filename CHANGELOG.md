@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Register RinkoAI provider (`rinkoai`) with OpenAI-compatible gateway `https://rinkoai.com/v1` and dynamic model discovery via `/models`.
+- Bundled provider config: `src/providers/config/rinkoai.json` (includes example free models `BAAI/bge-m3`, `claude-haiku-4.5`, `claude-sonnet-4.5`).
+- Register VSLLM provider (`vsllm`) with OpenAI-compatible gateway `https://vsllm.com/v1` and bundled config `src/providers/config/vsllm.json`.
+
 ## Added
 - Register CommonStack provider (`commonstack`) with OpenAI-compatible and Anthropic-compatible endpoints (https://api.commonstack.ai/v1 / https://api.commonstack.ai). Models are fetched dynamically when an API key is provided; the bundled config includes a single static model `moonshotai/kimi-k2.6`.
 - Bundled provider config: `src/providers/config/commonstack.json` (contains `moonshotai/kimi-k2.6`).

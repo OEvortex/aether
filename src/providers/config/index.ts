@@ -38,9 +38,11 @@ import opencodego from "./opencodego.json";
 import pollinations from "./pollinations.json";
 import puter from "./puter.json";
 import qwencli from "./qwencli.json";
+import rinkoai from "./rinkoai.json";
 import seraphyn from "./seraphyn.json";
 import sherlock from "./sherlock.json";
 import together from "./together.json";
+import vsllm from "./vsllm.json";
 import zenmux from "./zenmux.json";
 import zhipu from "./zhipu.json";
 
@@ -84,9 +86,11 @@ const providers = {
 	pollinations: pollinations,
 	puter: puter,
 	qwencli: qwencli,
+	rinkoai: rinkoai,
 	seraphyn: seraphyn,
 	sherlock: sherlock,
 	together: together,
+	vsllm: vsllm,
 	zenmux: zenmux,
 	zhipu: zhipu,
 };

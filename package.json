@@ -101,11 +101,13 @@
         "onLanguageModelProvider:aether.puter",
         "onLanguageModelProvider:aether.qwencli",
         "onLanguageModelProvider:aether.requesty",
+        "onLanguageModelProvider:aether.rinkoai",
         "onLanguageModelProvider:aether.routingrun",
         "onLanguageModelProvider:aether.seraphyn",
         "onLanguageModelProvider:aether.sherlock",
         "onLanguageModelProvider:aether.together",
         "onLanguageModelProvider:aether.vercelai",
+        "onLanguageModelProvider:aether.vsllm",
         "onLanguageModelProvider:aether.zenmux",
         "onLanguageModelProvider:aether.zhipu"
     ],
@@ -508,6 +510,16 @@
             {
                 "command": "aether.together.setApiKey",
                 "title": "Configure TogetherAI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.rinkoai.setApiKey",
+                "title": "Configure RinkoAI",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.vsllm.setApiKey",
+                "title": "Configure VSLLM",
                 "category": "Aether"
             }
         ],
@@ -1595,6 +1607,19 @@
                 }
             },
             {
+                "vendor": "aether.rinkoai",
+                "displayName": "⦿ RinkoAI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "RinkoAI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.routingrun",
                 "displayName": "⦿ Routing.run",
                 "configuration": {
@@ -1654,6 +1679,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Vercel AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.vsllm",
+                "displayName": "⦿ VSLLM",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "VSLLM API key.",
                             "secret": true
                         }
                     }

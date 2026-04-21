@@ -52,11 +52,13 @@ export enum ProviderKey {
 	Puter = 'puter',
 	QwenCli = 'qwencli',
 	Requesty = 'requesty',
+	Rinkoai = 'rinkoai',
 	Routingrun = 'routingrun',
 	Seraphyn = 'seraphyn',
 	Sherlock = 'sherlock',
 	Together = 'together',
 	Vercelai = 'vercelai',
+	Vsllm = 'vsllm',
 	Zenmux = 'zenmux',
 	Zhipu = 'zhipu',
 }

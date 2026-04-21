@@ -271,11 +271,13 @@ export class AccountSyncAdapter {
             ProviderKey.Portkey,
             ProviderKey.Puter,
             ProviderKey.Requesty,
+            ProviderKey.Rinkoai,
             ProviderKey.Routingrun,
             ProviderKey.Seraphyn,
             ProviderKey.Sherlock,
             ProviderKey.Together,
             ProviderKey.Vercelai,
+            ProviderKey.Vsllm,
             ProviderKey.Zenmux,
             ProviderKey.Zhipu,
         ];

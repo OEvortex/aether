@@ -360,6 +360,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "RinkoAI",
+                value: ProviderKey.Rinkoai,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Routing.run",
                 value: ProviderKey.Routingrun,
                 authType: "apiKey" as const
@@ -382,6 +387,11 @@ export class AccountUI {
             {
                 label: "Vercel AI",
                 value: ProviderKey.Vercelai,
+                authType: "apiKey" as const
+            },
+            {
+                label: "VSLLM",
+                value: ProviderKey.Vsllm,
                 authType: "apiKey" as const
             },
             {
@@ -638,7 +648,7 @@ export class AccountUI {
             selectedProvider.provider
         );
         const accountItems: AccountQuickPickItem[] = providerAccounts.map(
-            (account) => ({
+            (account: { isDefault: any; displayName: any; email: any; authType: any; }) => ({
                 label: `${account.isDefault ? '$(check) ' : ''}${account.displayName}`,
                 description: account.email || account.authType,
                 detail: account.isDefault
@@ -688,7 +698,7 @@ export class AccountUI {
         }
 
         const accountItems: AccountQuickPickItem[] = accounts.map(
-            (account) => ({
+            (account: { displayName: any; provider: any; email: any; authType: any; isDefault: any; }) => ({
                 label: `${account.displayName}`,
                 description: `${account.provider} - ${account.email || account.authType}`,
                 detail: account.isDefault
@@ -757,7 +767,7 @@ export class AccountUI {
         }
 
         const accountItems: AccountQuickPickItem[] = accounts.map(
-            (account) => ({
+            (account: { isDefault: any; displayName: any; email: any; authType: any; }) => ({
                 label: `${account.isDefault ? '$(check) ' : ''}${account.displayName}`,
                 description: account.email || account.authType,
                 account
@@ -954,7 +964,7 @@ export class AccountUI {
         quickPick.title = `Switch ${this.getProviderDisplayName(provider)} Account`;
         quickPick.placeholder = 'Select an account to switch to';
 
-        const items: AccountQuickPickItem[] = accounts.map((account) => {
+        const items: AccountQuickPickItem[] = accounts.map((account: { isDefault: any; status: string; displayName: any; email: any; authType: any; }) => {
             const isActive = account.isDefault;
             const statusIcon = this.getStatusIcon(account.status);
 
@@ -1060,11 +1070,13 @@ export class AccountUI {
             portkey: "Portkey",
             puter: "Puter AI",
             requesty: "Requesty Router",
+            rinkoai: "RinkoAI",
             routingrun: "Routing.run",
             seraphyn: "Seraphyn",
             sherlock: "Sherlock (CloudFerro)",
             together: "TogetherAI",
             vercelai: "Vercel AI",
+            vsllm: "VSLLM",
             zenmux: "Zenmux",
             zhipu: "ZhipuAI",
             compatible: "Compatible",
