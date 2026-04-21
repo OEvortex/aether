@@ -19,6 +19,36 @@
             }
         },
         {
+            "id": "MiniMax-M2.7",
+            "name": "MiniMax-M2.7",
+            "sdkMode": "anthropic",
+            "baseUrl": "https://api.minimaxi.com/anthropic",
+            "tooltip": "MiniMax-M2.7 - 204.8K context (latest model)",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "MiniMax-M2.7-Coding-Plan",
+            "name": "MiniMax-M2.7 (Coding Plan)",
+            "model": "MiniMax-M2.7",
+            "sdkMode": "anthropic",
+            "baseUrl": "https://api.minimaxi.com/anthropic",
+            "tooltip": "MiniMax-M2.7 - 204.8K context (coding-focused)",
+            "provider": "minimax-coding",
+            "maxInputTokens": 172032,
+            "maxOutputTokens": 32768,
+            "includeThinking": true,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
             "id": "MiniMax-M2.5-Coding-Plan",
             "name": "MiniMax-M2.5 (Coding Plan)",
             "model": "MiniMax-M2.5",
