@@ -457,6 +457,17 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         fetchModels: false
     },
+    modelark: {
+        displayName: 'ModelArk (BytePlus)',
+        family: 'ModelArk',
+        supportsApiKey: true,
+        apiKeyTemplate: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://ark.ap-southeast.bytepluses.com/api/coding/v3' },
+        anthropic: { baseUrl: 'https://ark.ap-southeast.bytepluses.com/api/coding' },
+        openModelEndpoint: false,
+        fetchModels: false
+    },
     moark: {
         displayName: 'Moark',
         family: 'Moark',

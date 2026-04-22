@@ -38,6 +38,7 @@ export enum ProviderKey {
 	Mistral = 'mistral',
 	Moark = 'moark',
 	Modal = 'modal',
+	Modelark = 'modelark',
 	ModelScope = 'modelscope',
 	Moonshot = 'moonshot',
 	Nanogpt = 'nanogpt',

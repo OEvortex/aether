@@ -258,6 +258,7 @@ export class AccountSyncAdapter {
             ProviderKey.Mistral,
             ProviderKey.Moark,
             ProviderKey.Modal,
+            ProviderKey.Modelark,
             ProviderKey.ModelScope,
             ProviderKey.Moonshot,
             ProviderKey.Nanogpt,

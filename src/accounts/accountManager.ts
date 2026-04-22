@@ -355,6 +355,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Modelark,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.ModelScope,
             {
                 supportsMultiAccount: true,

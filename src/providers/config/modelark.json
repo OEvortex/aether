@@ -1,0 +1,107 @@
+{
+    "displayName": "ModelArk (BytePlus)",
+    "baseUrl": "https://ark.ap-southeast.bytepluses.com/api/coding/v3",
+    "models": [
+        {
+            "id": "ark-code-latest",
+            "name": "Ark Code Latest",
+            "tooltip": "Auto-select model via ModelArk console - recommended. Switch models in console without changing config.",
+            "maxInputTokens": 262144,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "dola-seed-2.0-pro",
+            "name": "Dola Seed 2.0 Pro",
+            "tooltip": "Dola Seed 2.0 Pro - ByteDance reasoning model with tool calling",
+            "maxInputTokens": 262144,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "dola-seed-2.0-lite",
+            "name": "Dola Seed 2.0 Lite",
+            "tooltip": "Dola Seed 2.0 Lite - faster reasoning",
+            "maxInputTokens": 262144,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "dola-seed-2.0-code",
+            "name": "Dola Seed 2.0 Code",
+            "tooltip": "Dola Seed 2.0 Code - coding optimized model",
+            "maxInputTokens": 262144,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "bytedance-seed-code",
+            "name": "ByteDance Seed Code",
+            "tooltip": "ByteDance Seed-Code - coding specialized model",
+            "maxInputTokens": 262144,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "glm-5.1",
+            "name": "GLM 5.1",
+            "tooltip": "GLM-5.1 - latest Zhipu model",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "glm-4.7",
+            "name": "GLM 4.7",
+            "tooltip": "GLM-4.7 - Zhipu multimodal model",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "kimi-k2.5",
+            "name": "Kimi K2.5",
+            "tooltip": "Kimi K2.5 - Moonshot latest model",
+            "maxInputTokens": 229376,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-oss-120b",
+            "name": "GPT OSS 120B",
+            "tooltip": "GPT OSS 120B - open source large model",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 32768,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ],
+    "family": "ModelArk",
+    "apiKeyTemplate": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}

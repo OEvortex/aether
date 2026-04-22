@@ -300,6 +300,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "ModelArk (BytePlus)",
+                value: ProviderKey.Modelark,
+                authType: "apiKey" as const
+            },
+            {
                 label: "ModelScope",
                 value: ProviderKey.ModelScope,
                 authType: "apiKey" as const
@@ -1068,6 +1073,7 @@ export class AccountUI {
             mistral: "Mistral",
             moark: "Moark",
             modal: "Modal (Research)",
+            modelark: "ModelArk (BytePlus)",
             modelscope: "ModelScope",
             moonshot: "Moonshot",
             nanogpt: "NanoGPT",
