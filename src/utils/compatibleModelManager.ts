@@ -13,6 +13,9 @@ import {
 import { KnownProviders } from './knownProviders';
 import { Logger } from './logger';
 
+const CURRENT_CONFIG_SECTION = 'aether';
+const LEGACY_CONFIG_SECTION = 'chp';
+
 /**
  * Back button click event
  */
@@ -113,7 +116,10 @@ export class CompatibleModelManager {
         // Listen to chp configuration changes
         CompatibleModelManager.configListener =
             vscode.workspace.onDidChangeConfiguration((event) => {
-                if (event.affectsConfiguration('aether.compatibleModels')) {
+                if (
+                    event.affectsConfiguration('aether.compatibleModels') ||
+                    event.affectsConfiguration('chp.compatibleModels')
+                ) {
                     // If currently saving, ignore configuration changes (avoid reloading overriding in-memory data)
                     if (CompatibleModelManager.isSaving) {
                         Logger.debug('Saving configuration, skipping reload');
@@ -145,13 +151,37 @@ export class CompatibleModelManager {
         return model;
     }
 
+    private static getConfiguredModels(): CompatibleModelConfig[] {
+        const currentConfig = vscode.workspace.getConfiguration(
+            CURRENT_CONFIG_SECTION
+        );
+        const currentInspection = currentConfig.inspect<CompatibleModelConfig[]>(
+            'compatibleModels'
+        );
+
+        if (
+            currentInspection?.globalValue !== undefined ||
+            currentInspection?.workspaceValue !== undefined ||
+            currentInspection?.workspaceFolderValue !== undefined
+        ) {
+            return (
+                currentConfig.get<CompatibleModelConfig[]>('compatibleModels',
+                    []) || []
+            );
+        }
+
+        const legacyConfig = vscode.workspace.getConfiguration(
+            LEGACY_CONFIG_SECTION
+        );
+        return (
+            legacyConfig.get<CompatibleModelConfig[]>('compatibleModels', []) ||
+            []
+        );
+    }
+
     private static loadModels(): void {
         try {
-            const config = vscode.workspace.getConfiguration('chp');
-            const modelsData = config.get<CompatibleModelConfig[]>(
-                'compatibleModels',
-                []
-            );
+            const modelsData = CompatibleModelManager.getConfiguredModels();
             CompatibleModelManager.models = (modelsData || [])
                 .filter(
                     (model) =>
@@ -179,7 +209,9 @@ export class CompatibleModelManager {
     private static async saveModels(): Promise<void> {
         try {
             CompatibleModelManager.isSaving = true; // Set save marker
-            const config = vscode.workspace.getConfiguration('chp');
+            const config = vscode.workspace.getConfiguration(
+                CURRENT_CONFIG_SECTION
+            );
             // Remove internal marker fields and fields with undefined or null values when saving
             const modelsToSave = CompatibleModelManager.models
                 .filter((model) => model != null && typeof model === 'object')
@@ -243,14 +275,8 @@ export class CompatibleModelManager {
         modelId: string
     ): CompatibleModelConfig | undefined {
         try {
-            const config = vscode.workspace.getConfiguration('chp');
-            const modelsData = config.get<CompatibleModelConfig[]>(
-                'compatibleModels',
-                []
-            );
-            const rawModel = modelsData.find(
-                (model) => model && model.id === modelId
-            );
+            const modelsData = CompatibleModelManager.getConfiguredModels();
+            const rawModel = modelsData.find((model) => model && model.id === modelId);
 
             // Return raw data without any processing (including not adding default tooltip)
             return rawModel

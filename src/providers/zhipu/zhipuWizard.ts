@@ -238,9 +238,9 @@ export class ZhipuWizard {
      */
     private static async setMCPConfig(enable: boolean): Promise<void> {
         try {
-            const config = vscode.workspace.getConfiguration('chp');
+            const config = vscode.workspace.getConfiguration('aether.zhipu');
             await config.update(
-                'zhipu.search.enableMCP',
+                'search.enableMCP',
                 enable,
                 vscode.ConfigurationTarget.Global
             );

@@ -65,7 +65,8 @@ const SETTINGS_TO_MIGRATE = [
     'fimCompletion.modelConfig.maxTokens',
     'fimCompletion.modelConfig.extraBody',
     // Provider overrides
-    'providerOverrides'
+    'providerOverrides',
+    'compatibleModels'
 ];
 
 /**

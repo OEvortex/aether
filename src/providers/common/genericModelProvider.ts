@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import { AccountManager } from '../../accounts';
 import type { Account } from '../../accounts/types';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
+import { CompatibleModelManager } from '../../utils/compatibleModelManager';
 import {
     AnthropicHandler,
     ApiKeyManager,
@@ -88,10 +89,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
         // Save original configuration (overrides not applied)
         this.baseProviderConfig = providerConfig;
         // Initialize cached configuration (overrides applied)
-        this.cachedProviderConfig = ConfigManager.applyProviderOverrides(
-            this.providerKey,
-            this.baseProviderConfig
-        );
+        this.cachedProviderConfig = this.buildEffectiveProviderConfig();
         // Initialize model information cache
         this.modelInfoCache = new ModelInfoCache(context);
 
@@ -101,14 +99,11 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             if (
                 providerKey !== 'compatible' &&
                 (e.affectsConfiguration('aether.providerOverrides') ||
+                    e.affectsConfiguration('aether.compatibleModels') ||
                     e.affectsConfiguration(`aether.${providerKey}.sdkMode`))
             ) {
                 // Recalculate configuration
-                this.cachedProviderConfig =
-                    ConfigManager.applyProviderOverrides(
-                        this.providerKey,
-                        this.baseProviderConfig
-                    );
+                this.cachedProviderConfig = this.buildEffectiveProviderConfig();
                 this.refreshHandlers();
                 // Clear cache
                 this.modelInfoCache
@@ -168,6 +163,69 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             this.baseProviderConfig.displayName,
             this.cachedProviderConfig.baseUrl
         );
+    }
+
+    private buildEffectiveProviderConfig(): ProviderConfig {
+        const overriddenConfig = ConfigManager.applyProviderOverrides(
+            this.providerKey,
+            this.baseProviderConfig
+        );
+
+        if (this.providerKey === 'compatible') {
+            return overriddenConfig;
+        }
+
+        const compatibleModels = CompatibleModelManager.getModels().filter(
+            (model) => model.provider?.trim() === this.providerKey
+        );
+
+        if (compatibleModels.length === 0) {
+            return overriddenConfig;
+        }
+
+        const mergedModels = [...overriddenConfig.models];
+        const indexById = new Map<string, number>();
+
+        mergedModels.forEach((model, index) => {
+            indexById.set(model.id, index);
+        });
+
+        for (const model of compatibleModels) {
+            const mergedModel: ModelConfig = {
+                id: model.id,
+                name: model.name,
+                tooltip:
+                    model.tooltip || `${model.name} (${model.sdkMode || 'openai'})`,
+                maxInputTokens: model.maxInputTokens,
+                maxOutputTokens: model.maxOutputTokens,
+                capabilities: model.capabilities,
+                ...(model.baseUrl ? { baseUrl: model.baseUrl } : {}),
+                ...(model.model ? { model: model.model } : {}),
+                ...(model.sdkMode ? { sdkMode: model.sdkMode } : {}),
+                ...(model.customHeader ? { customHeader: model.customHeader } : {}),
+                ...(model.extraBody ? { extraBody: model.extraBody } : {}),
+                ...(model.outputThinking !== undefined
+                    ? { outputThinking: model.outputThinking }
+                    : {}),
+                ...(model.includeThinking !== undefined
+                    ? { includeThinking: model.includeThinking }
+                    : {}),
+                provider: model.provider || this.providerKey
+            };
+
+            const existingIndex = indexById.get(mergedModel.id);
+            if (existingIndex === undefined) {
+                indexById.set(mergedModel.id, mergedModels.length);
+                mergedModels.push(mergedModel);
+            } else {
+                mergedModels[existingIndex] = mergedModel;
+            }
+        }
+
+        return {
+            ...overriddenConfig,
+            models: mergedModels
+        };
     }
 
     /**
