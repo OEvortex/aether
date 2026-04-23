@@ -3,7 +3,7 @@
     "publisher": "OEvortex",
     "displayName": "Aether AI",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "license": "MIT",
     "keywords": [
         "ai",
@@ -88,6 +88,7 @@
         "onLanguageModelProvider:aether.mistral",
         "onLanguageModelProvider:aether.moark",
         "onLanguageModelProvider:aether.modal",
+        "onLanguageModelProvider:aether.modelark",
         "onLanguageModelProvider:aether.modelscope",
         "onLanguageModelProvider:aether.moonshot",
         "onLanguageModelProvider:aether.nanogpt",
@@ -533,6 +534,11 @@
                 "command": "aether.xinjianya.setApiKey",
                 "title": "Configure Xinjianya",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.modelark.setApiKey",
+                "title": "Configure ModelArk (BytePlus)",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -925,6 +931,16 @@
                     ],
                     "default": "anthropic",
                     "description": "Select SDK compatibility mode for MiniMax.",
+                    "scope": "application"
+                },
+                "aether.modelark.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for ModelArk (BytePlus).",
                     "scope": "application"
                 },
                 "aether.modelscope.sdkMode": {
@@ -1444,6 +1460,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Modal (Research) API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.modelark",
+                "displayName": "⦿ ModelArk (BytePlus)",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "ModelArk (BytePlus) API key.",
                             "secret": true
                         }
                     }

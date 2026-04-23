@@ -28,6 +28,7 @@ import minimax from "./minimax.json";
 import mistral from "./mistral.json";
 import moark from "./moark.json";
 import modal from "./modal.json";
+import modelark from "./modelark.json";
 import modelscope from "./modelscope.json";
 import moonshot from "./moonshot.json";
 import nanogpt from "./nanogpt.json";
@@ -39,12 +40,12 @@ import pollinations from "./pollinations.json";
 import puter from "./puter.json";
 import qwencli from "./qwencli.json";
 import qzz from "./qzz.json";
-import xinjianya from "./xinjianya.json";
 import rinkoai from "./rinkoai.json";
 import seraphyn from "./seraphyn.json";
 import sherlock from "./sherlock.json";
 import together from "./together.json";
 import vsllm from "./vsllm.json";
+import xinjianya from "./xinjianya.json";
 import zenmux from "./zenmux.json";
 import zhipu from "./zhipu.json";
 
@@ -78,6 +79,7 @@ const providers = {
 	mistral: mistral,
 	moark: moark,
 	modal: modal,
+	modelark: modelark,
 	modelscope: modelscope,
 	moonshot: moonshot,
 	nanogpt: nanogpt,
@@ -89,12 +91,12 @@ const providers = {
 	puter: puter,
 	qwencli: qwencli,
 	qzz: qzz,
-	xinjianya: xinjianya,
 	rinkoai: rinkoai,
 	seraphyn: seraphyn,
 	sherlock: sherlock,
 	together: together,
 	vsllm: vsllm,
+	xinjianya: xinjianya,
 	zenmux: zenmux,
 	zhipu: zhipu,
 };
