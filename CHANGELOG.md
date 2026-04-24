@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 ## [0.4.3] - Unreleased
 
 ### Added
+- **MCP Bridge (VS Code LM Tools → MCP)**: Added MCP Bridge feature that exposes VS Code Language Model tools to external MCP clients (Claude Code, Claude Desktop, Cursor, Windsurf). Includes:
+  - HTTP MCP Server using `@modelcontextprotocol/sdk` with StreamableHTTP transport
+  - Dynamic `vscode.lm.tools` registry polling with configurable interval
+  - Activity Bar TreeView with extension-grouped tools and checkboxes
+  - Tool visibility management (per-tool and per-extension toggle)
+  - Rich tooltips with metadata, input schemas, and invocation counts
+  - Colored icons (green=exposed, gray=hidden, lock=disabled)
+  - Status bar integration showing server status and tool count
+  - Auto-start server option via `aether.mcpBridge.http.enabled` setting
+  - Commands: Start/Stop/Restart Server, Refresh Tools, Copy MCP Config, Show Log
+  - Context menu support for toggling tools and groups
+  - Configuration: port (default 59684), filters, polling interval
 - **Baidu Qianfan provider**: Added Baidu Qianfan provider (`baidu`) with OpenAI-compatible endpoint at `https://qianfan.baidubce.com/v2`, bundled config `src/providers/config/baidu.json` (includes ERNIE 4.0 Turbo 8K model), and automatic model discovery via `/models`.
 - **StreamLake provider**: Added StreamLake provider (`streamlake`) with OpenAI-compatible endpoint at `https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints`, bundled config `src/providers/config/streamlake.json` (includes GPT-4o model), and automatic model discovery via `/models`.
 - **Tencent Hunyuan provider**: Added Tencent Hunyuan provider (`tencent`) with OpenAI-compatible endpoint at `https://api.hunyuan.cloud.tencent.com/v1`, bundled config `src/providers/config/tencent.json` (includes Hunyuan TurboS Latest model), and automatic model discovery via `/models`.

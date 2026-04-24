@@ -29,6 +29,11 @@ import {
     registerProvidersFromConfig
 } from './utils/knownProviders';
 import { ModelSelector } from './utils/modelSelector';
+import { ToolRegistry } from './mcpBridge/toolRegistry';
+import { startHttpMcpServer, type HttpMcpServer } from './mcpBridge/httpServer';
+import { BridgeViewProvider, ExtensionTreeItem, ToolTreeItem } from './mcpBridge/bridgeView';
+import { BridgeStatusBar } from './mcpBridge/statusBar';
+import type { FilterConfig } from './mcpBridge/types';
 
 /**
  * Global variables - Store registered provider instances for cleanup on extension uninstall
@@ -38,6 +43,13 @@ const registeredDisposables: vscode.Disposable[] = [];
 
 // Inline completion provider instance (using lightweight Shim, lazy loading real completion engine)
 let inlineCompletionProvider: InlineCompletionShim | undefined;
+
+let mcpHttpServer: HttpMcpServer | undefined;
+let mcpRegistry: ToolRegistry | undefined;
+let mcpOutputChannel: vscode.OutputChannel | undefined;
+let mcpStatusBar: BridgeStatusBar | undefined;
+let mcpTreeView: vscode.TreeView<unknown> | undefined;
+let mcpViewProvider: BridgeViewProvider | undefined;
 
 /**
  * Activate providers - dynamic registration based on config file using registry pattern
@@ -465,6 +477,185 @@ export async function activate(context: vscode.ExtensionContext) {
         const totalActivationTime = Date.now() - activationStartTime;
         Logger.info(
             `Aether extension activation completed (total time: ${totalActivationTime}ms)`
+        );
+
+        // Initialize MCP Bridge
+        mcpOutputChannel = vscode.window.createOutputChannel('Aether MCP Bridge');
+        context.subscriptions.push(mcpOutputChannel);
+
+        function getMcpFilterConfig(): FilterConfig {
+            const config = vscode.workspace.getConfiguration('aether.mcpBridge');
+            return {
+                includeTools: config.get<string[]>('tools.include', ['**']),
+                excludeTools: config.get<string[]>('tools.exclude', []),
+                includeExtensions: config.get<string[]>('extensions.include', ['**']),
+                excludeExtensions: config.get<string[]>('extensions.exclude', [])
+            };
+        }
+
+        mcpRegistry = new ToolRegistry(
+            getMcpFilterConfig,
+            vscode.workspace.getConfiguration('aether.mcpBridge').get<number>('polling.intervalMs', 3000),
+            mcpOutputChannel,
+            context.globalState
+        );
+        mcpRegistry.start();
+        context.subscriptions.push(mcpRegistry);
+
+        mcpStatusBar = new BridgeStatusBar(mcpRegistry);
+        context.subscriptions.push(mcpStatusBar);
+
+        mcpViewProvider = new BridgeViewProvider(mcpRegistry);
+        mcpTreeView = vscode.window.createTreeView('aether.mcpBridge.toolsView', {
+            treeDataProvider: mcpViewProvider,
+            manageCheckboxStateManually: true
+        });
+        context.subscriptions.push(mcpTreeView, mcpViewProvider);
+
+        mcpTreeView.onDidChangeCheckboxState((e) => {
+            for (const [item, state] of e.items) {
+                if (item instanceof ExtensionTreeItem) {
+                    mcpRegistry?.setGroupExposed(
+                        item.toggleableToolNames,
+                        state === vscode.TreeItemCheckboxState.Checked
+                    );
+                } else if (item instanceof ToolTreeItem) {
+                    mcpRegistry?.toggleTool(item.tool.name);
+                }
+            }
+        });
+
+        context.subscriptions.push(
+            vscode.commands.registerCommand('aether.mcpBridge.startServer', async () => {
+                if (mcpHttpServer !== undefined) {
+                    vscode.window.showWarningMessage('MCP server is already running');
+                    return;
+                }
+                const config = vscode.workspace.getConfiguration('aether.mcpBridge');
+                const port = config.get<number>('http.port', 59684);
+                try {
+                    mcpHttpServer = await startHttpMcpServer({
+                        port,
+                        registry: mcpRegistry!,
+                        outputChannel: mcpOutputChannel!,
+                        onInvocation: (entry) => {
+                            if (config.get<boolean>('logging.logInvocations', true)) {
+                                mcpOutputChannel?.appendLine(
+                                    `[invoke] ${entry.timestamp} ${entry.toolName} ${entry.status} ${entry.durationMs}ms`
+                                );
+                            }
+                        },
+                        onToolBlocked: (toolName, reason) => {
+                            const msg = reason === 'disabled'
+                                ? `Tool "${toolName}" is disabled in VS Code`
+                                : `Tool "${toolName}" is hidden. Enable it in MCP Bridge panel`;
+                            void vscode.window.showWarningMessage(msg, 'Open MCP Bridge').then((choice) => {
+                                if (choice === 'Open MCP Bridge') {
+                                    void vscode.commands.executeCommand('aether.mcpBridge.toolsView.focus');
+                                }
+                            });
+                        }
+                    });
+                    mcpStatusBar.setServerInfo(mcpHttpServer.port);
+                    await vscode.commands.executeCommand('setContext', 'aether.mcpBridge.serverRunning', true);
+                    mcpOutputChannel.appendLine(`[extension] MCP server started on port ${mcpHttpServer.port}`);
+                    vscode.window.showInformationMessage(`MCP Bridge server started on port ${mcpHttpServer.port}`);
+                } catch (err) {
+                    const msg = err instanceof Error ? err.message : String(err);
+                    mcpOutputChannel?.appendLine(`[extension] Failed to start server: ${msg}`);
+                    vscode.window.showErrorMessage(`Failed to start MCP server: ${msg}`);
+                }
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.stopServer', async () => {
+                if (mcpHttpServer === undefined) {
+                    return;
+                }
+                await mcpHttpServer.dispose();
+                mcpHttpServer = undefined;
+                mcpStatusBar?.clearServerInfo();
+                await vscode.commands.executeCommand('setContext', 'aether.mcpBridge.serverRunning', false);
+                mcpOutputChannel?.appendLine('[extension] MCP server stopped');
+                vscode.window.showInformationMessage('MCP Bridge server stopped');
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.restartServer', async () => {
+                mcpOutputChannel?.appendLine('[extension] Restarting MCP server...');
+                await vscode.commands.executeCommand('aether.mcpBridge.stopServer');
+                await vscode.commands.executeCommand('aether.mcpBridge.startServer');
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.refreshTools', () => {
+                mcpRegistry?.refresh();
+                vscode.window.showInformationMessage(
+                    `Refreshed tools. ${mcpRegistry?.getExposedTools().length} tools exposed`
+                );
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.showLog', () => {
+                mcpOutputChannel?.show();
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.copyMcpConfig', async () => {
+                if (mcpHttpServer === undefined) {
+                    vscode.window.showWarningMessage('MCP server is not running');
+                    return;
+                }
+                const mcpConfig = {
+                    mcpServers: {
+                        'aether-mcp-bridge': {
+                            command: 'npx',
+                            args: ['-y', 'mcp-remote', `http://localhost:${mcpHttpServer.port}/mcp`, '--allow-http']
+                        }
+                    }
+                };
+                await vscode.env.clipboard.writeText(JSON.stringify(mcpConfig, null, 2));
+                vscode.window.showInformationMessage('MCP config copied to clipboard. Paste into .mcp.json or client config');
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.openSettings', () => {
+                void vscode.commands.executeCommand('workbench.action.openSettings', 'aether.mcpBridge');
+            }),
+
+            // Context menu commands for TreeView
+            vscode.commands.registerCommand('aether.mcpBridge.toggleTool', (item) => {
+                if (item instanceof ToolTreeItem) {
+                    mcpRegistry?.toggleTool(item.toolName);
+                }
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.toggleGroup', (item) => {
+                if (item instanceof ExtensionTreeItem) {
+                    const newState = !item.toggleableToolNames.every(
+                        name => mcpRegistry?.getTool(name)?.exposed
+                    );
+                    mcpRegistry?.setGroupExposed(item.toggleableToolNames, newState);
+                }
+            }),
+
+            vscode.commands.registerCommand('aether.mcpBridge.expandGroup', (item) => {
+                if (item instanceof ExtensionTreeItem) {
+                    void vscode.commands.executeCommand('aether.mcpBridge.toolsView.focus');
+                }
+            })
+        );
+
+        // Auto-start server if enabled
+        const mcpConfig = vscode.workspace.getConfiguration('aether.mcpBridge');
+        if (mcpConfig.get<boolean>('http.enabled', true)) {
+            await vscode.commands.executeCommand('aether.mcpBridge.startServer');
+        }
+
+        // Listen to configuration changes
+        context.subscriptions.push(
+            vscode.workspace.onDidChangeConfiguration((e) => {
+                if (e.affectsConfiguration('aether.mcpBridge')) {
+                    if (e.affectsConfiguration('aether.mcpBridge.http.port') || e.affectsConfiguration('aether.mcpBridge.http.enabled')) {
+                        void vscode.commands.executeCommand('aether.mcpBridge.restartServer');
+                    }
+                    mcpRegistry?.refresh();
+                }
+            })
         );
     } catch (error) {
         const errorMessage = `Aether extension activation failed: ${error instanceof Error ? error.message : 'Unknown error'}`;

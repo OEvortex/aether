@@ -26,20 +26,42 @@
 
 A powerful VS Code extension that provides model support for **GitHub Copilot Chat**, seamlessly integrating **20+ AI providers** including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Codex (OpenAI), Chutes, OpenCode, Blackbox, Vercel AI, Cline, and custom OpenAI/Anthropic compatible models.
 
-### 🖥️ Aether CLI
+> [!NOTE]
+> Aether CLI has been moved to a separate package (`@oevortex/aether`). The CLI is no longer bundled with this extension.
 
-In addition to the VS Code extension, Aether includes a standalone CLI (`@oevortex/aether`) that brings the same multi-provider AI coding assistant capabilities to your terminal:
+### 🌉 MCP Tool Bridge (New in v0.4.3!)
 
-- **Installation**: `npm install -g @oevortex/aether`
-- **Usage**: Run `Aether` in your terminal to start the coding agent
-- **Features**: 
-  - Works with OpenAI-compatible APIs, Gemini, GitHub Models, Codex, Ollama, Atomic Chat, and more
-  - Save provider profiles inside the app with `/provider` command
-  - Run locally with Ollama or Atomic Chat
-  - Core coding-agent workflows: bash, file tools, grep, glob, agents, tasks, MCP, and web tools
-  - Agent routing capabilities for cost optimization and leveraging model strengths
+Aether now includes an **MCP (Model Context Protocol) Bridge** that exposes VS Code Language Model tools to external AI clients:
 
-See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
+- **What it does**: Exposes `vscode.lm.tools` to MCP clients like Claude Code, Claude Desktop, Cursor, and Windsurf
+- **Auto-Start**: Enabled by default (`aether.mcpBridge.http.enabled`)
+- **Port**: Runs on `http://localhost:59684` (configurable via `aether.mcpBridge.http.port`)
+- **Features**:
+  - Activity Bar panel with tool management (checkboxes to expose/hide tools)
+  - Tools grouped by extension with exposure controls
+  - HTTP MCP Server using StreamableHTTP transport
+  - Dynamic tool discovery with configurable polling
+  - Rich tooltips with metadata and input schemas
+  - Status bar integration showing server status and tool count
+
+**Quick Start:**
+1. Launch Extension Development Host (`F5`)
+2. Find **Aether MCP Bridge** in the Activity Bar
+3. Click to view and manage tools
+4. Run "Aether: Copy MCP Config to Clipboard"
+5. Paste into your MCP client config (e.g., `.mcp.json`)
+
+**Example MCP Client Config:**
+```json
+{
+  "mcpServers": {
+    "aether-mcp-bridge": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:59684/mcp", "--allow-http"]
+    }
+  }
+}
+```
 
 ---
 
@@ -78,7 +100,9 @@ See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
 
 ### 🔄 Multi-Account Management
 
-> **Manage multiple accounts per provider with ease**
+> [!TIP]
+> 
+> Manage multiple accounts per provider with ease
 
 - Add **unlimited accounts** for each AI provider
 - Quick switch between accounts with `Ctrl+Shift+Q` / `Cmd+Shift+Q`
@@ -89,7 +113,9 @@ See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
 
 ### ⚖️ Load Balancing & Auto-Switching
 
-> **Automatic load distribution across accounts**
+> [!TIP]
+> 
+> Automatic load distribution across accounts
 
 - Auto-switch when hitting rate limits or quota exhaustion
 - Intelligent retry with exponential backoff strategy
@@ -100,7 +126,9 @@ See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
 
 ### 🔐 OAuth Authentication
 
-> **Secure login for supported providers**
+> [!TIP]
+> 
+> Secure login for supported providers
 
 | Provider | Auth Method | Command |
 | :------- | :---------- | :------ |
@@ -111,7 +139,9 @@ See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
 
 ### 🌐 Web Search Integration
 
-> **Real-time information retrieval**
+> [!TIP]
+> 
+> Real-time information retrieval
 
 | Tool | Provider | Description |
 | :--- | :------- | :---------- |
@@ -127,7 +157,9 @@ See [src/aether/README.md](src/aether/README.md) for complete CLI documentation.
 
 ### ✨ Advanced Code Completion
 
-> **Smart code completion features**
+> [!TIP]
+> 
+> Smart code completion features
 
 | Feature | Description | Default |
 | :------ | :---------- | :------ |

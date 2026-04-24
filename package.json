@@ -574,6 +574,56 @@
                 "command": "aether.gemini.setApiKey",
                 "title": "Configure Gemini CLI",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.startServer",
+                "title": "Start MCP Server",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.stopServer",
+                "title": "Stop MCP Server",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.restartServer",
+                "title": "Restart MCP Server",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.refreshTools",
+                "title": "Refresh Tools",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.showLog",
+                "title": "Show MCP Bridge Log",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.copyMcpConfig",
+                "title": "Copy MCP Config to Clipboard",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.openSettings",
+                "title": "Open MCP Bridge Settings",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.toggleTool",
+                "title": "Toggle Tool Exposure",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.toggleGroup",
+                "title": "Toggle All Tools in Group",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mcpBridge.expandGroup",
+                "title": "Expand/Collapse Group",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -1028,6 +1078,50 @@
                     "default": "openai",
                     "description": "Select SDK compatibility mode for Portkey.",
                     "scope": "application"
+                },
+                "aether.mcpBridge.http.port": {
+                    "type": "number",
+                    "default": 59684,
+                    "description": "Port for the MCP HTTP server"
+                },
+                "aether.mcpBridge.http.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable MCP HTTP server on startup"
+                },
+                "aether.mcpBridge.logging.logInvocations": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Log tool invocations to output channel"
+                },
+                "aether.mcpBridge.tools.include": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "default": ["**"],
+                    "description": "Glob patterns for tools to include"
+                },
+                "aether.mcpBridge.tools.exclude": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "default": [],
+                    "description": "Glob patterns for tools to exclude"
+                },
+                "aether.mcpBridge.extensions.include": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "default": ["**"],
+                    "description": "Glob patterns for extensions to include"
+                },
+                "aether.mcpBridge.extensions.exclude": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "default": [],
+                    "description": "Glob patterns for extensions to exclude"
+                },
+                "aether.mcpBridge.polling.intervalMs": {
+                    "type": "number",
+                    "default": 3000,
+                    "description": "Polling interval for tool registry in milliseconds"
                 }
             }
         },
@@ -2040,6 +2134,28 @@
                     "group": "2_attach@1",
                     "when": "editorTextFocus && editorHasSelection"
                 }
+            ],
+            "view/item/context": [
+                {
+                    "command": "aether.mcpBridge.toggleTool",
+                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-tool-exposed",
+                    "group": "1_tool@1"
+                },
+                {
+                    "command": "aether.mcpBridge.toggleTool",
+                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-tool-hidden",
+                    "group": "1_tool@1"
+                },
+                {
+                    "command": "aether.mcpBridge.toggleGroup",
+                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-extension",
+                    "group": "2_extension@1"
+                },
+                {
+                    "command": "aether.mcpBridge.expandGroup",
+                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-extension",
+                    "group": "2_extension@2"
+                }
             ]
         },
         "submenus": [
@@ -2048,7 +2164,24 @@
                 "label": "Aether",
                 "icon": "$(copilot)"
             }
-        ]
+        ],
+        "viewContainers": {
+            "activitybar": [
+                {
+                    "id": "aether.mcpBridge",
+                    "title": "Aether MCP Bridge",
+                    "icon": "assets/aether.png"
+                }
+            ]
+        },
+        "views": {
+            "aether.mcpBridge": [
+                {
+                    "id": "aether.mcpBridge.toolsView",
+                    "name": "Tools"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run clean && npm run compile",
