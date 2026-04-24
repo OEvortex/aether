@@ -1,0 +1,6 @@
+{
+    "displayName": "HicapAI",
+    "baseUrl": "https://api.hicap.ai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

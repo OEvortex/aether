@@ -135,6 +135,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Baidu Qianfan",
+                value: ProviderKey.Baidu,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Baseten",
                 value: ProviderKey.Baseten,
                 authType: "apiKey" as const
@@ -390,6 +395,16 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "StreamLake",
+                value: ProviderKey.Streamlake,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Tencent Hunyuan",
+                value: ProviderKey.Tencent,
+                authType: "apiKey" as const
+            },
+            {
                 label: "TogetherAI",
                 value: ProviderKey.Together,
                 authType: "apiKey" as const
@@ -400,8 +415,18 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Volcengine",
+                value: ProviderKey.Volcengine,
+                authType: "apiKey" as const
+            },
+            {
                 label: "VSLLM",
                 value: ProviderKey.Vsllm,
+                authType: "apiKey" as const
+            },
+            {
+                label: "Xiaomi Mimo",
+                value: ProviderKey.Xiaomimimo,
                 authType: "apiKey" as const
             },
             {
@@ -1040,6 +1065,7 @@ export class AccountUI {
             aihubmix: "AIHubMix",
             aimlapi: "AIML API",
             apertis: "Apertis AI",
+            baidu: "Baidu Qianfan",
             baseten: "Baseten",
             berget: "Berget",
             blackbox: "Blackbox",
@@ -1091,9 +1117,13 @@ export class AccountUI {
             routingrun: "Routing.run",
             seraphyn: "Seraphyn",
             sherlock: "Sherlock (CloudFerro)",
+            streamlake: "StreamLake",
+            tencent: "Tencent Hunyuan",
             together: "TogetherAI",
             vercelai: "Vercel AI",
+            volcengine: "Volcengine",
             vsllm: "VSLLM",
+            xiaomimimo: "Xiaomi Mimo",
             xinjianya: "Xinjianya",
             zenmux: "Zenmux",
             zhipu: "ZhipuAI",

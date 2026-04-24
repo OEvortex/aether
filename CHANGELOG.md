@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.3] - Unreleased
+
+### Added
+- **Baidu Qianfan provider**: Added Baidu Qianfan provider (`baidu`) with OpenAI-compatible endpoint at `https://qianfan.baidubce.com/v2`, bundled config `src/providers/config/baidu.json` (includes ERNIE 4.0 Turbo 8K model), and automatic model discovery via `/models`.
+- **StreamLake provider**: Added StreamLake provider (`streamlake`) with OpenAI-compatible endpoint at `https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints`, bundled config `src/providers/config/streamlake.json` (includes GPT-4o model), and automatic model discovery via `/models`.
+- **Tencent Hunyuan provider**: Added Tencent Hunyuan provider (`tencent`) with OpenAI-compatible endpoint at `https://api.hunyuan.cloud.tencent.com/v1`, bundled config `src/providers/config/tencent.json` (includes Hunyuan TurboS Latest model), and automatic model discovery via `/models`.
+- **Volcengine provider**: Added Volcengine provider (`volcengine`) with OpenAI-compatible endpoint at `https://ark.cn-beijing.volces.com/api/v3`, bundled config `src/providers/config/volcengine.json` (includes example endpoint model), and automatic model discovery via `/models`.
+- **Xiaomi Mimo provider**: Added Xiaomi Mimo provider (`xiaomimimo`) with OpenAI-compatible endpoint at `https://api.xiaomimimo.com/v1`, bundled config `src/providers/config/xiaomimimo.json` (includes Mimo V2 model), and automatic model discovery via `/models`.
+
+### Build
+- Ran `npm run sync-providers` to register new providers and regenerate all provider artifacts.
+- Created bundled provider configs with initial models to enable VS Code registration: `src/providers/config/baidu.json`, `src/providers/config/streamlake.json`, `src/providers/config/tencent.json`, `src/providers/config/volcengine.json`, `src/providers/config/xiaomimimo.json`.
+
 ## [0.4.2] - 2026-04-22
 
 ### Added

@@ -55,6 +55,7 @@
         "onLanguageModelProvider:aether.aihubmix",
         "onLanguageModelProvider:aether.aimlapi",
         "onLanguageModelProvider:aether.apertis",
+        "onLanguageModelProvider:aether.baidu",
         "onLanguageModelProvider:aether.baseten",
         "onLanguageModelProvider:aether.berget",
         "onLanguageModelProvider:aether.blackbox",
@@ -107,9 +108,13 @@
         "onLanguageModelProvider:aether.routingrun",
         "onLanguageModelProvider:aether.seraphyn",
         "onLanguageModelProvider:aether.sherlock",
+        "onLanguageModelProvider:aether.streamlake",
+        "onLanguageModelProvider:aether.tencent",
         "onLanguageModelProvider:aether.together",
         "onLanguageModelProvider:aether.vercelai",
+        "onLanguageModelProvider:aether.volcengine",
         "onLanguageModelProvider:aether.vsllm",
+        "onLanguageModelProvider:aether.xiaomimimo",
         "onLanguageModelProvider:aether.xinjianya",
         "onLanguageModelProvider:aether.zenmux",
         "onLanguageModelProvider:aether.zhipu"
@@ -538,6 +543,36 @@
             {
                 "command": "aether.modelark.setApiKey",
                 "title": "Configure ModelArk (BytePlus)",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.baidu.setApiKey",
+                "title": "Configure Baidu Qianfan",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.streamlake.setApiKey",
+                "title": "Configure StreamLake",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.tencent.setApiKey",
+                "title": "Configure Tencent Hunyuan",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.volcengine.setApiKey",
+                "title": "Configure Volcengine",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.xiaomimimo.setApiKey",
+                "title": "Configure Xiaomi Mimo",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.gemini.setApiKey",
+                "title": "Configure Gemini CLI",
                 "category": "Aether"
             }
         ],
@@ -1037,6 +1072,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Apertis AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.baidu",
+                "displayName": "⦿ Baidu Qianfan",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Baidu Qianfan API key.",
                             "secret": true
                         }
                     }
@@ -1713,6 +1761,32 @@
                 }
             },
             {
+                "vendor": "aether.streamlake",
+                "displayName": "⦿ StreamLake",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "StreamLake API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.tencent",
+                "displayName": "⦿ Tencent Hunyuan",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Tencent Hunyuan API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.together",
                 "displayName": "⦿ TogetherAI",
                 "configuration": {
@@ -1739,6 +1813,19 @@
                 }
             },
             {
+                "vendor": "aether.volcengine",
+                "displayName": "⦿ Volcengine",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Volcengine API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
                 "vendor": "aether.vsllm",
                 "displayName": "⦿ VSLLM",
                 "configuration": {
@@ -1746,6 +1833,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "VSLLM API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.xiaomimimo",
+                "displayName": "⦿ Xiaomi Mimo",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Xiaomi Mimo API key.",
                             "secret": true
                         }
                     }

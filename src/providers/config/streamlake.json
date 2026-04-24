@@ -1,0 +1,18 @@
+{
+    "displayName": "StreamLake",
+    "baseUrl": "https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints",
+    "apiKeyTemplate": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-4o",
+            "name": "GPT-4o",
+            "tooltip": "StreamLake GPT-4o model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
+}

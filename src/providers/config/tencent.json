@@ -1,0 +1,18 @@
+{
+    "displayName": "Tencent Hunyuan",
+    "baseUrl": "https://api.hunyuan.cloud.tencent.com/v1",
+    "apiKeyTemplate": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "hunyuan-turbos-latest",
+            "name": "Hunyuan TurboS Latest",
+            "tooltip": "Tencent Hunyuan TurboS latest version",
+            "maxInputTokens": 65536,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        }
+    ]
+}

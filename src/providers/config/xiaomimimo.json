@@ -1,0 +1,18 @@
+{
+    "displayName": "Xiaomi Mimo",
+    "baseUrl": "https://api.xiaomimimo.com/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "mimo-v2",
+            "name": "Mimo V2",
+            "tooltip": "Xiaomi Mimo V2 model",
+            "maxInputTokens": 32768,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

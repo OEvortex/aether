@@ -2,5 +2,17 @@
     "displayName": "0api (Qzz)",
     "baseUrl": "https://0api.qzz.io",
     "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": []
+    "models": [
+        {
+            "id": "gpt-4o-mini",
+            "name": "GPT-4o Mini",
+            "tooltip": "Qzz GPT-4o Mini model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
 }

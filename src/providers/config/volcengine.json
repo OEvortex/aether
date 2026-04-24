@@ -1,0 +1,18 @@
+{
+    "displayName": "Volcengine",
+    "baseUrl": "https://ark.cn-beijing.volces.com/api/v3",
+    "apiKeyTemplate": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "ep-20250101-xxxxx",
+            "name": "Volcengine Endpoint",
+            "tooltip": "Volcengine model endpoint (replace with your endpoint ID)",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

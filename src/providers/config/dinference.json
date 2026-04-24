@@ -2,5 +2,17 @@
     "displayName": "Dinference",
     "baseUrl": "https://api.dinference.com/v1",
     "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": []
+    "models": [
+        {
+            "id": "mixtral-8x7b-instruct-v0.1",
+            "name": "Mixtral 8x7B Instruct",
+            "tooltip": "Dinference Mixtral 8x7B Instruct model",
+            "maxInputTokens": 32768,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
 }

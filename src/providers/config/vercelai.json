@@ -1,0 +1,5 @@
+{
+    "displayName": "Vercel AI",
+    "baseUrl": "https://ai-gateway.vercel.sh/v1",
+    "models": []
+}

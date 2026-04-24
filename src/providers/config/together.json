@@ -2,5 +2,17 @@
     "displayName": "Together",
     "baseUrl": "https://api.together.xyz/v1",
     "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "models": []
+    "models": [
+        {
+            "id": "meta-llama/Llama-3-70b-chat-hf",
+            "name": "Llama 3 70B Chat",
+            "tooltip": "Together Llama 3 70B Chat model",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
 }

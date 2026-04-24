@@ -760,7 +760,7 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         displayName: 'Berget',
         family: 'Berget AI',
         supportsApiKey: true,
-        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxx',
         sdkMode: 'openai',
         openai: {
             baseUrl: 'https://api.berget.ai/v1'
@@ -1013,6 +1013,96 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         sdkMode: 'openai',
         openai: { baseUrl: 'https://api.together.xyz/v1' },
         // Model listing requires API key; do not mark openModelEndpoint
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    baidu: {
+        displayName: 'Baidu Qianfan',
+        family: 'Baidu',
+        supportsApiKey: true,
+        apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://qianfan.baidubce.com/v2'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    streamlake: {
+        displayName: 'StreamLake',
+        family: 'StreamLake',
+        supportsApiKey: true,
+        apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    tencent: {
+        displayName: 'Tencent Hunyuan',
+        family: 'Tencent',
+        supportsApiKey: true,
+        apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.hunyuan.cloud.tencent.com/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    volcengine: {
+        displayName: 'Volcengine',
+        family: 'Volcengine',
+        supportsApiKey: true,
+        apiKeyTemplate: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://ark.cn-beijing.volces.com/api/v3'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    xiaomimimo: {
+        displayName: 'Xiaomi Mimo',
+        family: 'Xiaomi',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.xiaomimimo.com/v1'
+        },
         openModelEndpoint: false,
         fetchModels: true,
         modelsEndpoint: '/models',

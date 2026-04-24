@@ -1,0 +1,6 @@
+{
+    "displayName": "Crof AI",
+    "baseUrl": "https://crof.ai/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

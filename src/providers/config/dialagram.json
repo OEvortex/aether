@@ -1,0 +1,6 @@
+{
+    "displayName": "Dialagram",
+    "baseUrl": "https://www.dialagram.me/router/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

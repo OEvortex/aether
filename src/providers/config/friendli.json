@@ -3,5 +3,17 @@
     "baseUrl": "https://api.friendli.ai/serverless/v1",
     "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     "modelsEndpoint": "/models",
-    "models": []
+    "models": [
+        {
+            "id": "llama-3.1-8b-instruct",
+            "name": "Llama 3.1 8B Instruct",
+            "tooltip": "Friendli Llama 3.1 8B Instruct model",
+            "maxInputTokens": 131072,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
 }

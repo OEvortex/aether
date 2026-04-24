@@ -1,0 +1,6 @@
+{
+    "displayName": "Routing.run",
+    "baseUrl": "https://api.routing.run/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

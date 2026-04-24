@@ -1,0 +1,18 @@
+{
+    "displayName": "Baidu Qianfan",
+    "baseUrl": "https://qianfan.baidubce.com/v2",
+    "apiKeyTemplate": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "ernie-4.0-turbo-8k",
+            "name": "ERNIE 4.0 Turbo",
+            "tooltip": "Baidu ERNIE 4.0 Turbo - 8K context",
+            "maxInputTokens": 8000,
+            "maxOutputTokens": 2048,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

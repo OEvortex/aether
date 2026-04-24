@@ -67,6 +67,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Baidu,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Baseten,
             {
                 supportsMultiAccount: true,
@@ -515,6 +523,22 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Streamlake,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Tencent,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Together,
             {
                 supportsMultiAccount: true,
@@ -531,7 +555,23 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Volcengine,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Vsllm,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
+            ProviderKey.Xiaomimimo,
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
