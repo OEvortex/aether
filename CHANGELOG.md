@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.4.3] - Unreleased
+## [0.4.3] - 2026-04-24
 
 ### Added
 - **MCP Bridge (VS Code LM Tools → MCP)**: Added MCP Bridge feature that exposes VS Code Language Model tools to external MCP clients (Claude Code, Claude Desktop, Cursor, Windsurf). Includes:
