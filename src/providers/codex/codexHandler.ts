@@ -27,8 +27,18 @@ import {
 import type { UsageLimitError } from './codexTypes';
 
 const CODEX_BASE_URL = 'https://chatgpt.com/backend-api/codex';
+
+// Some Codex servers gate certain models (e.g. gpt-5.3-codex) to clients that
+// report a sufficiently new Version header / User-Agent string.  Make both
+// values configurable via environment variables so users can override them
+// without a code change if the server ever requires a different value.
+//
+// Override examples:
+//   CODEX_VERSION=0.121      (sets the Version request header)
+//   CODEX_USER_AGENT=codex-cli/0.121  (sets the User-Agent request header)
+const CODEX_CLIENT_VERSION = process.env.CODEX_VERSION || '0.121';
 const CODEX_USER_AGENT =
-    'codex_cli_rs/1.104.1 (Mac OS 26.0.1; arm64) Apple_Terminal/464';
+    process.env.CODEX_USER_AGENT || 'codex-cli/0.121';
 
 // Sandbox configuration for FULL ACCESS mode (danger-full-access + never approval)
 // This tells the model it has unrestricted access to filesystem, network, and commands
@@ -711,7 +721,7 @@ export class CodexHandler {
         const headers: Record<string, string> = {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
-            Version: '0.21.0',
+            Version: CODEX_CLIENT_VERSION,
             'Openai-Beta': 'responses=experimental',
             Session_id: sessionId,
             Conversation_id: sessionId,
