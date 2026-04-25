@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.4] - Unreleased
+
+### Changed
+- **Codex client headers**: Made Codex `Version` header and `User-Agent` configurable via environment variables (`CODEX_VERSION`, `CODEX_USER_AGENT`). Defaults set to `0.121` and `codex-cli/0.121` respectively, replacing hardcoded values.
+
 ## [0.4.3] - 2026-04-24
 
 ### Added
