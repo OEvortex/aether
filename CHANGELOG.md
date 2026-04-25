@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 ## [0.4.4] - Unreleased
 
 ### Added
-- **OpenCode Zen Go provider**: Added new `opencodego` provider with dynamic model fetching from models.dev API (`https://models.dev/api.json`), parsing the `opencode-go` provider model data (ID, name, description, context length, max output tokens). Built with dedicated `OpenCodeGoProvider` and `OpenCodeGoHandler` classes.
+- **DeepSeek V4 context window**: DeepSeek V4 models now support 1M context window with 64K max output / 936K max input. Added new detector `isDeepSeekV4Model()` in `globalContextLengthManager.ts`.
+- **GLM-5/5.1 context window**: Updated GLM-5 and GLM-5.1 models to 204,800 total context with 64K output (same as Gemini3) / 140K input.
+- **Kimi K2.5/K2.6 context window**: Updated to 262,144 context (256K binary) with 32K output / 229,376 input.
+- **MiMo v2.5 context window**: Added new detector `isMiMoV25Model()` for MiMo v2.5 at 262,144 context / 32K output.
+- **MiMo v2.5 Pro context window**: Added new detector `isMiMoV25ProModel()` for MiMo v2.5 Pro at 1M context / 64K output.
+- **OpenCode Qwen Plus models**: Added new detector `isOpenCodeQwenPlusModel()` for OpenCode Qwen3.5 Plus / Qwen3.6 Plus at 262,144 context / 32K output.
+- **HY3 model support**: Added `isHy3Model()` detector and configured 256K context (224K input / 32K output).
+- **OpenCode Zen Go provider**: Added new `opencodego` provider with dynamic model fetching from models.dev API.
 
 ### Changed
-- **Codex client headers**: Made Codex `Version` header and `User-Agent` configurable via environment variables (`CODEX_VERSION`, `CODEX_USER_AGENT`). Defaults set to `0.121` and `codex-cli/0.121` respectively, replacing hardcoded values.
+- **Codex client headers**: Made Codex `Version` header and `User-Agent` configurable via environment variables.
 
 ## [0.4.3] - 2026-04-24
 
