@@ -22,6 +22,7 @@ export { ConfigManager } from './configManager';
 export {
     getDefaultMaxOutputTokensForContext,
     isDeepSeekModel,
+    isDeepSeekV4Model,
     isGemini2Model,
     isGemini3Model,
     isGemini25Model,
@@ -35,8 +36,13 @@ export {
     isKimiK25Model,
     isKimiModel,
     isLlama32Model,
+    isMiMoV25Model,
+    isMiMoV25ProModel,
+    isMiMoV2OmniModel,
+    isMiMoV2ProModel,
     isMingFlashOmniModel,
     isMinimaxModel,
+    isOpenCodeQwenPlusModel,
     isVisionGptModel,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits

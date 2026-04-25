@@ -902,8 +902,6 @@ export class CodexHandler {
 
                     // Thinking/Reasoning support
                     let currentThinkingId: string | null = null;
-                    let thinkingContentBuffer = '';
-                    const MAX_THINKING_BUFFER_LENGTH = 500; // Buffer size before flushing thinking content
                     const hideThinkingInUI =
                         ConfigManager.getHideThinkingInUI();
                     const reportThinkingPart = (
@@ -975,43 +973,6 @@ export class CodexHandler {
                                                 delta &&
                                                 typeof delta === 'string'
                                             ) {
-                                                // Close any open thinking block before outputting text
-                                                if (currentThinkingId) {
-                                                    // Flush remaining thinking buffer
-                                                    if (
-                                                        thinkingContentBuffer.length >
-                                                        0
-                                                    ) {
-                                                        try {
-                                                            reportThinkingPart(
-                                                                thinkingContentBuffer,
-                                                                currentThinkingId
-                                                            );
-                                                            thinkingContentBuffer =
-                                                                '';
-                                                        } catch (e) {
-                                                            Logger.warn(
-                                                                `[codex] Failed to flush thinking before text: ${e}`
-                                                            );
-                                                        }
-                                                    }
-                                                    // Close thinking block
-                                                    try {
-                                                        reportThinkingPart(
-                                                            '',
-                                                            currentThinkingId
-                                                        );
-                                                        Logger.debug(
-                                                            `[codex] Closed thinking block before text output: ${currentThinkingId}`
-                                                        );
-                                                    } catch (e) {
-                                                        Logger.warn(
-                                                            `[codex] Failed to close thinking block: ${e}`
-                                                        );
-                                                    }
-                                                    currentThinkingId = null;
-                                                }
-
                                                 _hasResponse = true;
                                                 hasTextResponse = true;
                                                 progress.report(
@@ -1051,7 +1012,6 @@ export class CodexHandler {
                                             if (delta) {
                                                 _hasResponse = true;
 
-                                                // Initialize thinking ID if not set
                                                 if (!currentThinkingId) {
                                                     currentThinkingId = `thinking_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
                                                     Logger.debug(
@@ -1059,29 +1019,15 @@ export class CodexHandler {
                                                     );
                                                 }
 
-                                                // Accumulate thinking content
-                                                thinkingContentBuffer += delta;
-
-                                                // Flush buffer if it exceeds threshold
-                                                if (
-                                                    thinkingContentBuffer.length >=
-                                                    MAX_THINKING_BUFFER_LENGTH
-                                                ) {
-                                                    try {
-                                                        reportThinkingPart(
-                                                            thinkingContentBuffer,
-                                                            currentThinkingId
-                                                        );
-                                                        Logger.trace(
-                                                            `[codex] Flushed thinking buffer: ${thinkingContentBuffer.length} chars`
-                                                        );
-                                                        thinkingContentBuffer =
-                                                            '';
-                                                    } catch (e) {
-                                                        Logger.warn(
-                                                            `[codex] Failed to report thinking part: ${e}`
-                                                        );
-                                                    }
+                                                try {
+                                                    reportThinkingPart(
+                                                        delta,
+                                                        currentThinkingId
+                                                    );
+                                                } catch (e) {
+                                                    Logger.warn(
+                                                        `[codex] Failed to report thinking delta: ${e}`
+                                                    );
                                                 }
                                             }
                                             break;
@@ -1089,29 +1035,8 @@ export class CodexHandler {
                                         case 'response.reasoning_summary_text.done': {
                                             // Reasoning/thinking summary complete - flush remaining buffer and close thinking block
                                             if (hideThinkingInUI) {
-                                                thinkingContentBuffer = '';
                                                 currentThinkingId = null;
                                                 break;
-                                            }
-                                            if (
-                                                thinkingContentBuffer.length >
-                                                    0 &&
-                                                currentThinkingId
-                                            ) {
-                                                try {
-                                                    reportThinkingPart(
-                                                        thinkingContentBuffer,
-                                                        currentThinkingId
-                                                    );
-                                                    Logger.debug(
-                                                        `[codex] Final thinking flush: ${thinkingContentBuffer.length} chars`
-                                                    );
-                                                    thinkingContentBuffer = '';
-                                                } catch (e) {
-                                                    Logger.warn(
-                                                        `[codex] Failed to report final thinking part: ${e}`
-                                                    );
-                                                }
                                             }
 
                                             // Close the thinking block
@@ -1156,24 +1081,15 @@ export class CodexHandler {
                                                     );
                                                 }
 
-                                                thinkingContentBuffer += delta;
-
-                                                if (
-                                                    thinkingContentBuffer.length >=
-                                                    MAX_THINKING_BUFFER_LENGTH
-                                                ) {
-                                                    try {
-                                                        reportThinkingPart(
-                                                            thinkingContentBuffer,
-                                                            currentThinkingId
-                                                        );
-                                                        thinkingContentBuffer =
-                                                            '';
-                                                    } catch (e) {
-                                                        Logger.warn(
-                                                            `[codex] Failed to report reasoning_text.delta: ${e}`
-                                                        );
-                                                    }
+                                                try {
+                                                    reportThinkingPart(
+                                                        delta,
+                                                        currentThinkingId
+                                                    );
+                                                } catch (e) {
+                                                    Logger.warn(
+                                                        `[codex] Failed to report reasoning_text.delta: ${e}`
+                                                    );
                                                 }
                                             }
                                             break;
@@ -1182,33 +1098,22 @@ export class CodexHandler {
                                         case 'response.reasoning.done': {
                                             // Reasoning/thinking done (official event is response.reasoning_text.done)
                                             if (hideThinkingInUI) {
-                                                thinkingContentBuffer = '';
                                                 currentThinkingId = null;
                                                 break;
                                             }
                                             if (
-                                                thinkingContentBuffer.length ===
-                                                    0 &&
+                                                currentThinkingId &&
                                                 typeof data.text === 'string' &&
                                                 data.text.length > 0
                                             ) {
-                                                thinkingContentBuffer =
-                                                    data.text;
-                                            }
-                                            if (
-                                                thinkingContentBuffer.length >
-                                                    0 &&
-                                                currentThinkingId
-                                            ) {
                                                 try {
                                                     reportThinkingPart(
-                                                        thinkingContentBuffer,
+                                                        data.text,
                                                         currentThinkingId
                                                     );
-                                                    thinkingContentBuffer = '';
                                                 } catch (e) {
                                                     Logger.warn(
-                                                        `[codex] Failed to flush reasoning_text.done: ${e}`
+                                                        `[codex] Failed to report reasoning_text.done text: ${e}`
                                                     );
                                                 }
                                             }
@@ -1973,26 +1878,6 @@ export class CodexHandler {
                     });
 
                     res.on('end', () => {
-                        // Flush any remaining thinking content
-                        if (
-                            thinkingContentBuffer.length > 0 &&
-                            currentThinkingId
-                        ) {
-                            try {
-                                reportThinkingPart(
-                                    thinkingContentBuffer,
-                                    currentThinkingId
-                                );
-                                Logger.debug(
-                                    `[codex] Flushed remaining thinking on stream end: ${thinkingContentBuffer.length} chars`
-                                );
-                            } catch (e) {
-                                Logger.warn(
-                                    `[codex] Failed to flush thinking on stream end: ${e}`
-                                );
-                            }
-                        }
-
                         // Close thinking block if still open
                         if (currentThinkingId) {
                             try {

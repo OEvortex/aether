@@ -778,11 +778,6 @@ export class OpenAIHandler {
             // ID of the chain of thought currently being output.
             // Keep this alive for the whole stream so reasoning chunks stay in one block.
             let currentThinkingId: string | null = null;
-            // Thinking content cache, used to accumulate thinking content
-            let thinkingContentBuffer: string = '';
-            // Buffer visible content until reasoning finishes so we do not interleave
-            // content with late reasoning deltas from OpenAI chat-completions streams.
-            let pendingVisibleContentBuffer: string = '';
             let lastFallbackReasoningSnapshot = '';
             let lastFallbackMessageContent = '';
             // Track last complete message for fallback (some providers return complete message in one chunk)
@@ -964,33 +959,6 @@ export class OpenAIHandler {
                                         Logger.trace(
                                             `${model.name} captured tool call name: ${toolCall.function.name} at index ${toolCall.index}`
                                         );
-                                    }
-
-                                    // If there is a tool call but no arguments, it means tool call just started
-                                    if (
-                                        toolCall.index !== undefined &&
-                                        !toolCall.function?.arguments
-                                    ) {
-                                        // At tool call start, if there is cached thinking content, report it first
-                                        if (
-                                            thinkingContentBuffer.length > 0 &&
-                                            currentThinkingId
-                                        ) {
-                                            try {
-                                                progress.report(
-                                                    new vscode.LanguageModelThinkingPart(
-                                                        thinkingContentBuffer,
-                                                        currentThinkingId
-                                                    )
-                                                );
-                                                thinkingContentBuffer = ''; // Clear cache
-                                                hasThinkingContent = true; // Mark thinking content was output
-                                            } catch (e) {
-                                                Logger.trace(
-                                                    `${model.name} failed to report thinking: ${String(e)}`
-                                                );
-                                            }
-                                        }
                                     }
 
                                     // Accumulate tool call arguments
@@ -1274,10 +1242,19 @@ export class OpenAIHandler {
                                     }
 
                                     if (currentThinkingId) {
-                                        // Accumulate thinking content in buffer (don't report yet)
-                                        thinkingContentBuffer +=
-                                            reasoningContent;
-                                        hasThinkingContent = true;
+                                        try {
+                                            progress.report(
+                                                new vscode.LanguageModelThinkingPart(
+                                                    reasoningContent,
+                                                    currentThinkingId
+                                                )
+                                            );
+                                            hasThinkingContent = true;
+                                        } catch (e) {
+                                            Logger.trace(
+                                                `${model.name} failed to report thinking delta: ${String(e)}`
+                                            );
+                                        }
                                     }
                                 }
                             }
@@ -1295,8 +1272,11 @@ export class OpenAIHandler {
                                         ''
                                     ).length > 0;
 
-                                // Buffer visible content until reasoning completes.
-                                pendingVisibleContentBuffer += delta.content;
+                                progress.report(
+                                    new vscode.LanguageModelTextPart(
+                                        delta.content
+                                    )
+                                );
                                 if (deltaVisible) {
                                     hasReceivedContent = true;
                                 }
@@ -1326,8 +1306,11 @@ export class OpenAIHandler {
                                         ''
                                     ).length > 0
                                 ) {
-                                    pendingVisibleContentBuffer +=
-                                        messageContentDelta;
+                                    progress.report(
+                                        new vscode.LanguageModelTextPart(
+                                            messageContentDelta
+                                        )
+                                    );
                                     hasReceivedContent = true;
                                     hasSeenNativeContentEvent = true;
                                 }
@@ -1388,24 +1371,6 @@ export class OpenAIHandler {
                     }
                 }
 
-                // Check for unreported thinking content cache when stream ends
-                if (thinkingContentBuffer.length > 0 && currentThinkingId) {
-                    try {
-                        progress.report(
-                            new vscode.LanguageModelThinkingPart(
-                                thinkingContentBuffer,
-                                currentThinkingId
-                            )
-                        );
-                        thinkingContentBuffer = ''; // Clear cache
-                        hasThinkingContent = true; // Mark thinking content was output
-                    } catch (e) {
-                        Logger.trace(
-                            `${model.name} failed to report thinking at end: ${String(e)}`
-                        );
-                    }
-                }
-
                 // Close the current thinking sequence only once the stream is fully done.
                 if (currentThinkingId) {
                     try {
@@ -1421,21 +1386,6 @@ export class OpenAIHandler {
                         );
                     }
                     currentThinkingId = null;
-                }
-
-                // Now that thinking is fully done, flush any buffered visible content.
-                if (pendingVisibleContentBuffer.length > 0) {
-                    try {
-                        progress.report(
-                            new vscode.LanguageModelTextPart(
-                                pendingVisibleContentBuffer
-                            )
-                        );
-                    } catch (e) {
-                        Logger.trace(
-                            `${model.name} failed to flush buffered visible content: ${String(e)}`
-                        );
-                    }
                 }
 
                 // Fallback: if no content was received at all, try to get a complete response
