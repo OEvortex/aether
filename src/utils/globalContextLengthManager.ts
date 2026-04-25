@@ -41,6 +41,11 @@ const DEEPSEEK_TOTAL_TOKENS = 160 * TOKENS_PER_KIBI; // 163840
 const DEEPSEEK_MAX_OUTPUT_TOKENS = 16 * TOKENS_PER_KIBI; // 16384
 const DEEPSEEK_MAX_INPUT_TOKENS =
     DEEPSEEK_TOTAL_TOKENS - DEEPSEEK_MAX_OUTPUT_TOKENS; // 147456
+// DeepSeek V4: 1M total context, 384K output / 616K input (decimal like user specified)
+const DEEPSEEK_V4_TOTAL_TOKENS = 1000 * 1024; // 1024000 (close to 1M)
+const DEEPSEEK_V4_MAX_OUTPUT_TOKENS = 384 * 1024; // 393216
+const DEEPSEEK_V4_MAX_INPUT_TOKENS =
+    DEEPSEEK_V4_TOTAL_TOKENS - DEEPSEEK_V4_MAX_OUTPUT_TOKENS; // 630784
 // Fixed 128K family: 16K output / 112K input
 export const FIXED_128K_MAX_INPUT_TOKENS =
     128 * TOKENS_PER_KIBI - 16 * TOKENS_PER_KIBI; // 114688
@@ -126,6 +131,11 @@ export function isDevstralModel(modelId: string): boolean {
 export function isDeepSeekModel(modelId: string): boolean {
     // Matches deepseek-r1, deepseek-tng, deepseek-v3-1, deepseek-v3.2
     return /deepseek[-_]?/i.test(modelId);
+}
+
+export function isDeepSeekV4Model(modelId: string): boolean {
+    // Matches deepseek-v4 models (1M context, 384K output)
+    return /deepseek[-_]?v4/i.test(modelId);
 }
 
 export function isGemma3Model(modelId: string): boolean {
@@ -288,6 +298,14 @@ export function resolveGlobalTokenLimits(
     contextLength: number,
     options: ResolveTokenLimitsOptions
 ): { maxInputTokens: number; maxOutputTokens: number } {
+    // DeepSeek V4: 1M total context, 384K output
+    if (isDeepSeekV4Model(modelId)) {
+        return {
+            maxInputTokens: DEEPSEEK_V4_MAX_INPUT_TOKENS,
+            maxOutputTokens: DEEPSEEK_V4_MAX_OUTPUT_TOKENS
+        };
+    }
+
     // DeepSeek models: 160K total (16K output)
     if (isDeepSeekModel(modelId)) {
         return {

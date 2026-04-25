@@ -286,6 +286,10 @@ const specializedProviderFactories: Record<string, ProviderFactory> = {
     zhipu: createLazyFactory(
         () => import('../providers/zhipu/zhipuProvider.js'),
         'ZhipuProvider'
+    ),
+    opencodego: createLazyFactory(
+        () => import('../providers/opencodego/provider.js'),
+        'OpenCodeGoProvider'
     )
 };
 

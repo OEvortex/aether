@@ -642,7 +642,10 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             anthropic: { requestsPerSecond: 1, windowMs: 1000 }
         },
         openModelEndpoint: true,
-        fetchModels: false
+        fetchModels: true,
+        modelParser: {
+            cooldownMinutes: 30
+        }
     },
     pollinations: {
         displayName: 'Pollinations AI',

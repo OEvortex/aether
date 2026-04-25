@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [0.4.4] - Unreleased
 
+### Added
+- **OpenCode Zen Go provider**: Added new `opencodego` provider with dynamic model fetching from models.dev API (`https://models.dev/api.json`), parsing the `opencode-go` provider model data (ID, name, description, context length, max output tokens). Built with dedicated `OpenCodeGoProvider` and `OpenCodeGoHandler` classes.
+
 ### Changed
 - **Codex client headers**: Made Codex `Version` header and `User-Agent` configurable via environment variables (`CODEX_VERSION`, `CODEX_USER_AGENT`). Defaults set to `0.121` and `codex-cli/0.121` respectively, replacing hardcoded values.
 
