@@ -4,10 +4,142 @@
     "apiKeyTemplate": "",
     "models": [
         {
+            "id": "gpt-5.5",
+            "name": "GPT-5.5",
+            "model": "gpt-5.5",
+            "tooltip": "GPT-5.5 - Latest frontier model for complex coding, computer use, knowledge work (Recommended)",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.5-medium",
+            "name": "GPT-5.5 (Medium Reasoning)",
+            "model": "gpt-5.5",
+            "tooltip": "GPT-5.5 with medium reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.5-high",
+            "name": "GPT-5.5 (High Reasoning)",
+            "model": "gpt-5.5",
+            "tooltip": "GPT-5.5 with high reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.5-xhigh",
+            "name": "GPT-5.5 (XHigh Reasoning)",
+            "model": "gpt-5.5",
+            "tooltip": "GPT-5.5 with extra high reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4",
+            "name": "GPT-5.4",
+            "model": "gpt-5.4",
+            "tooltip": "GPT-5.4 - Previous flagship model",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-medium",
+            "name": "GPT-5.4 (Medium Reasoning)",
+            "model": "gpt-5.4",
+            "tooltip": "GPT-5.4 with medium reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-high",
+            "name": "GPT-5.4 (High Reasoning)",
+            "model": "gpt-5.4",
+            "tooltip": "GPT-5.4 with high reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-xhigh",
+            "name": "GPT-5.4 (XHigh Reasoning)",
+            "model": "gpt-5.4",
+            "tooltip": "GPT-5.4 with extra high reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-mini",
+            "name": "GPT-5.4 Mini",
+            "model": "gpt-5.4-mini",
+            "tooltip": "GPT-5.4 Mini - Faster, lower-cost option for lighter coding tasks",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-mini-low",
+            "name": "GPT-5.4 Mini (Low Reasoning)",
+            "model": "gpt-5.4-mini",
+            "tooltip": "GPT-5.4 Mini with low reasoning effort - Fast responses",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-mini-medium",
+            "name": "GPT-5.4 Mini (Medium Reasoning)",
+            "model": "gpt-5.4-mini",
+            "tooltip": "GPT-5.4 Mini with medium reasoning effort",
+            "maxInputTokens": 344064,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
             "id": "gpt-5.3-codex",
             "name": "GPT-5.3 Codex",
             "model": "gpt-5.3-codex",
-            "tooltip": "GPT-5.3 Codex",
+            "tooltip": "GPT-5.3 Codex - Codex-optimized variant",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "capabilities": {
@@ -55,139 +187,7 @@
             "id": "gpt-5.3-codex-xhigh",
             "name": "GPT-5.3 Codex (XHigh Reasoning)",
             "model": "gpt-5.3-codex",
-            "tooltip": "GPT-5.3 Codex with xhigh reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-codex",
-            "name": "GPT-5.2 Codex",
-            "model": "gpt-5.2-codex",
-            "tooltip": "GPT-5.2 Codex",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-codex-low",
-            "name": "GPT-5.2 Codex (Low Reasoning)",
-            "model": "gpt-5.2-codex",
-            "tooltip": "GPT-5.2 Codex with low reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-codex-medium",
-            "name": "GPT-5.2 Codex (Medium Reasoning)",
-            "model": "gpt-5.2-codex",
-            "tooltip": "GPT-5.2 Codex with medium reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-codex-high",
-            "name": "GPT-5.2 Codex (High Reasoning)",
-            "model": "gpt-5.2-codex",
-            "tooltip": "GPT-5.2 Codex with high reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-codex-xhigh",
-            "name": "GPT-5.2 Codex (XHigh Reasoning)",
-            "model": "gpt-5.2-codex",
-            "tooltip": "GPT-5.2 Codex with xhigh reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2",
-            "name": "GPT-5.2",
-            "model": "gpt-5.2",
-            "tooltip": "GPT-5.2",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-low",
-            "name": "GPT-5.2 (Low Reasoning)",
-            "model": "gpt-5.2",
-            "tooltip": "GPT-5.2 with low reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-medium",
-            "name": "GPT-5.2 (Medium Reasoning)",
-            "model": "gpt-5.2",
-            "tooltip": "GPT-5.2 with medium reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-high",
-            "name": "GPT-5.2 (High Reasoning)",
-            "model": "gpt-5.2",
-            "tooltip": "GPT-5.2 with high reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.2-xhigh",
-            "name": "GPT-5.2 (XHigh Reasoning)",
-            "model": "gpt-5.2",
-            "tooltip": "GPT-5.2 with xhigh reasoning effort",
-            "maxInputTokens": 344064,
-            "maxOutputTokens": 65536,
-            "capabilities": {
-                "toolCalling": true,
-                "imageInput": true
-            }
-        },
-        {
-            "id": "gpt-5.1-codex-mini",
-            "name": "GPT-5.1 Codex Mini",
-            "model": "gpt-5.1-codex-mini",
-            "tooltip": "GPT-5.1 Codex Mini",
+            "tooltip": "GPT-5.3 Codex with extra high reasoning effort",
             "maxInputTokens": 344064,
             "maxOutputTokens": 65536,
             "capabilities": {

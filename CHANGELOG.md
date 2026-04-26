@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - **Codex client headers**: Made Codex `Version` header and `User-Agent` configurable via environment variables.
+- **Codex models**: Updated to current models. Removed deprecated gpt-5.2* and gpt-5.1-codex-mini. Added gpt-5.5, gpt-5.4 (with medium/high/xhigh reasoning), gpt-5.4-mini (with low/medium reasoning).
 
 ## [0.4.3] - 2026-04-24
 
