@@ -155,9 +155,8 @@ export class CompatibleModelManager {
         const currentConfig = vscode.workspace.getConfiguration(
             CURRENT_CONFIG_SECTION
         );
-        const currentInspection = currentConfig.inspect<CompatibleModelConfig[]>(
-            'compatibleModels'
-        );
+        const currentInspection =
+            currentConfig.inspect<CompatibleModelConfig[]>('compatibleModels');
 
         if (
             currentInspection?.globalValue !== undefined ||
@@ -165,8 +164,10 @@ export class CompatibleModelManager {
             currentInspection?.workspaceFolderValue !== undefined
         ) {
             return (
-                currentConfig.get<CompatibleModelConfig[]>('compatibleModels',
-                    []) || []
+                currentConfig.get<CompatibleModelConfig[]>(
+                    'compatibleModels',
+                    []
+                ) || []
             );
         }
 
@@ -276,7 +277,9 @@ export class CompatibleModelManager {
     ): CompatibleModelConfig | undefined {
         try {
             const modelsData = CompatibleModelManager.getConfiguredModels();
-            const rawModel = modelsData.find((model) => model && model.id === modelId);
+            const rawModel = modelsData.find(
+                (model) => model && model.id === modelId
+            );
 
             // Return raw data without any processing (including not adding default tooltip)
             return rawModel

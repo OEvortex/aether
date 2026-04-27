@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import syncProviders from './sync-providers.js';
 
 const tempRoot = path.join(os.tmpdir(), 'aether-sync-providers-test');
@@ -57,9 +57,15 @@ export const configProviders = providers as Record<ProviderName, ProviderConfig>
 `
         );
 
-        syncProviders.syncProviderConfigIndex(configDir, path.join(configDir, 'index.ts'));
+        syncProviders.syncProviderConfigIndex(
+            configDir,
+            path.join(configDir, 'index.ts')
+        );
 
-        const result = fs.readFileSync(path.join(configDir, 'index.ts'), 'utf8');
+        const result = fs.readFileSync(
+            path.join(configDir, 'index.ts'),
+            'utf8'
+        );
 
         expect(result).toContain('import aihubmix from "./aihubmix.json";');
         expect(result).toContain('import together from "./together.json";');

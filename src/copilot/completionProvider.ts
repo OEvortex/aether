@@ -543,7 +543,7 @@ export class InlineCompletionProvider
                 `[InlineCompletionProvider] FIM request completed, elapsed: ${elapsed}ms`
             );
 
-            if (!fimResult || !fimResult.length) {
+            if (!fimResult?.length) {
                 return undefined;
             }
 
@@ -627,7 +627,7 @@ export class InlineCompletionProvider
                 `[InlineCompletionProvider] NES request completed, elapsed: ${elapsed}ms`
             );
 
-            if (!nesResult || !nesResult.result) {
+            if (!nesResult?.result) {
                 return undefined;
             }
 

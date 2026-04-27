@@ -3,7 +3,7 @@
  *  Types for the VS Code LM Tools → MCP Bridge feature
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from 'vscode';
+import type * as vscode from 'vscode';
 
 /**
  * A tool that has been discovered and may be exposed via MCP

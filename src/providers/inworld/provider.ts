@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------------------------
- *  OpenCode Zen Go Provider
- *  Custom provider with HTML-based model fetching from models.dev
+ *  Inworld Router Provider
+ *  Custom provider with HTML-based model fetching from inworld.ai/models
  *--------------------------------------------------------------------------------------------*/
 
 import * as crypto from 'node:crypto';
@@ -29,18 +29,18 @@ import {
 import { getProviderRateLimit } from '../../utils/knownProviders';
 import { ProviderWizard } from '../../utils/providerWizard';
 import { GenericModelProvider } from '../common/genericModelProvider';
-import { OpenCodeGoHandler } from './handler';
+import { InworldHandler } from './handler';
 
 function hashValue(value: string): string {
     return crypto.createHash('sha256').update(value).digest('hex');
 }
 
-export class OpenCodeGoProvider
+export class InworldProvider
     extends GenericModelProvider
     implements LanguageModelChatProvider
 {
     private readonly accountManager = AccountManager.getInstance();
-    private readonly handler = new OpenCodeGoHandler();
+    private readonly handler = new InworldHandler();
     cachedModelConfigs: ModelConfig[] = [];
     private cachedSignature = '';
     private cachedAt = 0;
@@ -165,7 +165,7 @@ export class OpenCodeGoProvider
             return fetched.map((m) => this.modelConfigToInfo(m));
         } catch (error) {
             Logger.warn(
-                `[OpenCodeGo] Failed to fetch remote models: ${error instanceof Error ? error.message : String(error)}`
+                `[Inworld] Failed to fetch remote models: ${error instanceof Error ? error.message : String(error)}`
             );
             const staticModels = [...(this.providerConfig.models || [])];
             this.cachedModelConfigs = staticModels;
@@ -235,10 +235,10 @@ export class OpenCodeGoProvider
         context: vscode.ExtensionContext,
         providerKey: string,
         providerConfig: ProviderConfig
-    ): { provider: OpenCodeGoProvider; disposables: vscode.Disposable[] } {
+    ): { provider: InworldProvider; disposables: vscode.Disposable[] } {
         Logger.trace(`${providerConfig.displayName} provider activated!`);
 
-        const provider = new OpenCodeGoProvider(
+        const provider = new InworldProvider(
             context,
             providerKey,
             providerConfig

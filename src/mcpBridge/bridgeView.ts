@@ -21,10 +21,7 @@ export class ExtensionTreeItem extends vscode.TreeItem {
         disabledTools: number,
         toggleableToolNames: string[]
     ) {
-        super(
-            displayName,
-            vscode.TreeItemCollapsibleState.Expanded
-        );
+        super(displayName, vscode.TreeItemCollapsibleState.Expanded);
         this.extensionId = extensionId;
         this.toggleableToolNames = toggleableToolNames;
 
@@ -38,16 +35,19 @@ export class ExtensionTreeItem extends vscode.TreeItem {
         this.contextValue = 'aether-mcp-extension';
 
         if (toggleableToolNames.length > 0) {
-            this.checkboxState = exposedTools >= toggleableToolNames.length
-                ? vscode.TreeItemCheckboxState.Checked
-                : vscode.TreeItemCheckboxState.Unchecked;
+            this.checkboxState =
+                exposedTools >= toggleableToolNames.length
+                    ? vscode.TreeItemCheckboxState.Checked
+                    : vscode.TreeItemCheckboxState.Unchecked;
         }
 
         this.tooltip = new vscode.MarkdownString(
             `**${displayName}**\n\n` +
-            `Extension ID: \`${extensionId}\`\n\n` +
-            `Tools: ${totalTools} total, ${exposedTools} exposed` +
-            (disabledTools > 0 ? `, ${disabledTools} disabled in VS Code` : '')
+                `Extension ID: \`${extensionId}\`\n\n` +
+                `Tools: ${totalTools} total, ${exposedTools} exposed` +
+                (disabledTools > 0
+                    ? `, ${disabledTools} disabled in VS Code`
+                    : '')
         );
     }
 }
@@ -56,11 +56,12 @@ export class ToolTreeItem extends vscode.TreeItem {
     public readonly toolName: string;
 
     constructor(tool: BridgedTool, displayName?: string) {
-        const name = displayName ?? tool.name;
+        const _name = displayName ?? tool.name;
         const underscoreIdx = tool.name.indexOf('_');
-        const shortName = underscoreIdx !== -1
-            ? tool.name.slice(underscoreIdx + 1)
-            : tool.name;
+        const shortName =
+            underscoreIdx !== -1
+                ? tool.name.slice(underscoreIdx + 1)
+                : tool.name;
 
         super(shortName, vscode.TreeItemCollapsibleState.None);
         this.toolName = tool.name;
@@ -124,7 +125,10 @@ export class ToolTreeItem extends vscode.TreeItem {
 
         if (tool.inputSchema !== undefined) {
             md.appendMarkdown(`**Input Schema:**\n`);
-            md.appendCodeblock(JSON.stringify(tool.inputSchema, null, 2), 'json');
+            md.appendCodeblock(
+                JSON.stringify(tool.inputSchema, null, 2),
+                'json'
+            );
         }
 
         this.tooltip = md;
@@ -135,21 +139,33 @@ export class EmptyTreeItem extends vscode.TreeItem {
     constructor() {
         super('No LM tools detected', vscode.TreeItemCollapsibleState.None);
         this.iconPath = new vscode.ThemeIcon('info');
-        this.tooltip = 'No language model tools are currently registered in VS Code. Install extensions that provide LM tools or enable the Aether providers.';
+        this.tooltip =
+            'No language model tools are currently registered in VS Code. Install extensions that provide LM tools or enable the Aether providers.';
         this.contextValue = 'aether-mcp-empty';
     }
 }
 
-export class BridgeViewProvider implements vscode.TreeDataProvider<TreeElement> {
-    private _onDidChangeTreeData = new vscode.EventEmitter<TreeElement | undefined>();
+export class BridgeViewProvider
+    implements vscode.TreeDataProvider<TreeElement>
+{
+    private _onDidChangeTreeData = new vscode.EventEmitter<
+        TreeElement | undefined
+    >();
     readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
+
+    private _onDidChangeCheckboxState = new vscode.EventEmitter<
+        vscode.TreeCheckboxChangeEvent<TreeElement>
+    >();
+    readonly onDidChangeCheckboxState = this._onDidChangeCheckboxState.event;
 
     private groupCache = new Map<string, BridgedTool[]>();
     private disposables: vscode.Disposable[] = [];
 
     constructor(private readonly registry: ToolRegistry) {
         this.disposables.push(
-            registry.onDidChangeTools(() => this._onDidChangeTreeData.fire(undefined))
+            registry.onDidChangeTools(() =>
+                this._onDidChangeTreeData.fire(undefined)
+            )
         );
         this.disposables.push(
             vscode.workspace.onDidChangeConfiguration((e) => {
@@ -215,7 +231,9 @@ export class BridgeViewProvider implements vscode.TreeDataProvider<TreeElement> 
             const displayName = tools[0]?.extensionDisplayName ?? extId;
             const toggleable = tools.filter((t) => !t.disabledInVscode);
             const exposedCount = toggleable.filter((t) => t.exposed).length;
-            const disabledCount = tools.filter((t) => t.disabledInVscode).length;
+            const disabledCount = tools.filter(
+                (t) => t.disabledInVscode
+            ).length;
 
             result.push(
                 new ExtensionTreeItem(

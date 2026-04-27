@@ -143,14 +143,14 @@ export class Fetcher implements IFetcher {
 
         if (url.endsWith('/chat/completions')) {
             modelConfig = ConfigManager.getNESConfig().modelConfig;
-            if (!modelConfig || !modelConfig.baseUrl) {
+            if (!modelConfig?.baseUrl) {
                 logger.error('[Fetcher] NES model configuration missing');
                 throw new Error('NES model configuration is missing');
             }
             url = `${modelConfig.baseUrl}/chat/completions`;
         } else if (url.endsWith('/completions')) {
             modelConfig = ConfigManager.getFIMConfig().modelConfig;
-            if (!modelConfig || !modelConfig.baseUrl) {
+            if (!modelConfig?.baseUrl) {
                 logger.error('[Fetcher] FIM model configuration missing');
                 throw new Error('FIM model configuration is missing');
             }

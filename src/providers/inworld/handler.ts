@@ -1,27 +1,27 @@
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
 import { getUserAgent, Logger } from '../../utils';
 
-interface OpenCodeModelInfo {
+interface InworldModelInfo {
     name?: string;
     description?: string;
     context_length?: number;
     max_output_tokens?: number;
 }
 
-interface OpenCodeModelsResponse {
-    [modelId: string]: OpenCodeModelInfo;
+interface InworldModelsResponse {
+    [modelId: string]: InworldModelInfo;
 }
 
-export class OpenCodeGoHandler {
+export class InworldHandler {
     async fetchModels(
         _apiKey: string,
         _baseUrl: string,
         _providerConfig: ProviderConfig,
         _customHeaders?: Record<string, string>
     ): Promise<ModelConfig[]> {
-        const modelsUrl = 'https://models.dev/api.json';
+        const modelsUrl = 'https://inworld.ai/models';
 
-        Logger.debug(`[OpenCodeGo] Fetching models from: ${modelsUrl}`);
+        Logger.debug(`[Inworld] Fetching models from: ${modelsUrl}`);
 
         const headers: Record<string, string> = {
             'User-Agent': getUserAgent(),
@@ -38,31 +38,30 @@ export class OpenCodeGoHandler {
         }
 
         const data = (await resp.json()) as Record<string, unknown>;
-        Logger.debug(`[OpenCodeGo] Received API response`);
+        Logger.debug(`[Inworld] Received API response`);
 
-        const models = this.parseOpenCodeModels(data);
+        const models = this.parseInworldModels(data);
         Logger.debug(
-            `[OpenCodeGo] Parsed ${models.length} models from opencode-go provider`
+            `[Inworld] Parsed ${models.length} models from Inworld provider`
         );
 
         return models;
     }
 
-    private parseOpenCodeModels(data: Record<string, unknown>): ModelConfig[] {
+    private parseInworldModels(data: Record<string, unknown>): ModelConfig[] {
         const models: ModelConfig[] = [];
 
-        const opencodeGo = data['opencode-go'] as
-            | { models?: OpenCodeModelsResponse }
+        const inworldData = data as Record<string, unknown>;
+        const router = inworldData.inworld as
+            | { models?: InworldModelsResponse }
             | undefined;
 
-        if (!opencodeGo?.models) {
-            Logger.warn(
-                '[OpenCodeGo] opencode-go provider not found in API response'
-            );
+        if (!router?.models) {
+            Logger.warn('[Inworld] inworld provider not found in API response');
             return models;
         }
 
-        const modelEntries = opencodeGo.models;
+        const modelEntries = router.models;
 
         for (const [modelId, modelInfo] of Object.entries(modelEntries)) {
             if (typeof modelInfo !== 'object' || modelInfo === null) {
@@ -78,11 +77,7 @@ export class OpenCodeGoHandler {
 
             models.push({
                 id: this.sanitizeModelId(modelId),
-                name:
-                    (info.name as string) ||
-                    modelId
-                        .replace(/-/g, ' ')
-                        .replace(/\b\w/g, (c) => c.toUpperCase()),
+                name: (info.name as string) || modelId,
                 tooltip: (info.description as string) || modelId,
                 maxInputTokens: contextLength,
                 maxOutputTokens,

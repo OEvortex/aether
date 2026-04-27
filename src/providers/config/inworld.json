@@ -1,0 +1,4001 @@
+{
+    "displayName": "Inworld Router",
+    "family": "inworld",
+    "baseUrl": "https://api.inworld.ai/v1",
+    "apiKeyTemplate": "inworld-api-key-xxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gemini-2.0-flash",
+            "name": "Gemini 2.0 Flash",
+            "tooltip": "Google Gemini 2.0 Flash - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.0-flash-001",
+            "name": "Gemini 2.0 Flash 001",
+            "tooltip": "Google Gemini 2.0 Flash 001 - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.0-flash-lite",
+            "name": "Gemini 2.0 Flash Lite",
+            "tooltip": "Google Gemini 2.0 Flash Lite - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.0-flash-lite-001",
+            "name": "Gemini 2.0 Flash Lite 001",
+            "tooltip": "Google Gemini 2.0 Flash Lite 001 - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.5-flash",
+            "name": "Gemini 2.5 Flash",
+            "tooltip": "Google Gemini 2.5 Flash - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.5-flash-image",
+            "name": "Gemini 2.5 Flash Image",
+            "tooltip": "Google Gemini 2.5 Flash Image - 32.8K context",
+            "maxInputTokens": 32800,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini-2.5-flash-lite",
+            "name": "Gemini 2.5 Flash Lite",
+            "tooltip": "Google Gemini 2.5 Flash Lite - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.5-flash-lite-preview-09-2025",
+            "name": "Gemini 2.5 Flash Lite Preview 09 2025",
+            "tooltip": "Google Gemini 2.5 Flash Lite Preview - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-2.5-pro",
+            "name": "Gemini 2.5 PRO",
+            "tooltip": "Google Gemini 2.5 PRO - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-3-flash-preview",
+            "name": "Gemini 3 Flash Preview",
+            "tooltip": "Google Gemini 3 Flash Preview - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-3-pro-image-preview",
+            "name": "Gemini 3 PRO Image Preview",
+            "tooltip": "Google Gemini 3 PRO Image Preview - 65.5K context",
+            "maxInputTokens": 65500,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini-3.1-flash-image-preview",
+            "name": "Gemini 3.1 Flash Image Preview",
+            "tooltip": "Google Gemini 3.1 Flash Image Preview - 65.5K context",
+            "maxInputTokens": 65500,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gemini-3.1-flash-lite-preview",
+            "name": "Gemini 3.1 Flash Lite Preview",
+            "tooltip": "Google Gemini 3.1 Flash Lite Preview - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-3.1-pro-preview",
+            "name": "Gemini 3.1 PRO Preview",
+            "tooltip": "Google Gemini 3.1 PRO Preview - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-3.1-pro-preview-customtools",
+            "name": "Gemini 3.1 PRO Preview Customtools",
+            "tooltip": "Google Gemini 3.1 PRO Preview Customtools - 1M context",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-flash-latest",
+            "name": "Gemini Flash Latest",
+            "tooltip": "Google Gemini Flash Latest",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-flash-lite-latest",
+            "name": "Gemini Flash Lite Latest",
+            "tooltip": "Google Gemini Flash Lite Latest",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemini-pro-latest",
+            "name": "Gemini Pro Latest",
+            "tooltip": "Google Gemini Pro Latest",
+            "maxInputTokens": 1000000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma-3-12b",
+            "name": "Gemma 3 12B",
+            "tooltip": "Google Gemma 3 12B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma-3-27b",
+            "name": "Gemma 3 27B",
+            "tooltip": "Google Gemma 3 27B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma-3-4b",
+            "name": "Gemma 3 4B",
+            "tooltip": "Google Gemma 3 4B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma-4-26b-a4b",
+            "name": "Gemma 4 26B A4B",
+            "tooltip": "Google Gemma 4 26B A4B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gemma-4-31b",
+            "name": "Gemma 4 31B",
+            "tooltip": "Google Gemma 4 31B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-3.5-turbo",
+            "name": "GPT-3.5 Turbo",
+            "tooltip": "OpenAI GPT-3.5 Turbo",
+            "maxInputTokens": 16385,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-3.5-turbo-0125",
+            "name": "GPT-3.5 Turbo 0125",
+            "tooltip": "OpenAI GPT-3.5 Turbo 0125",
+            "maxInputTokens": 16385,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-3.5-turbo-1106",
+            "name": "GPT-3.5 Turbo 1106",
+            "tooltip": "OpenAI GPT-3.5 Turbo 1106",
+            "maxInputTokens": 16385,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-3.5-turbo-16k",
+            "name": "GPT-3.5 Turbo 16K",
+            "tooltip": "OpenAI GPT-3.5 Turbo 16K",
+            "maxInputTokens": 16385,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4-turbo",
+            "name": "GPT-4 Turbo",
+            "tooltip": "OpenAI GPT-4 Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4-turbo-2024-04-09",
+            "name": "GPT-4 Turbo 2024-04-09",
+            "tooltip": "OpenAI GPT-4 Turbo 2024-04-09",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4.1",
+            "name": "GPT-4.1",
+            "tooltip": "OpenAI GPT-4.1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4.1-2025-04-14",
+            "name": "GPT-4.1 2025-04-14",
+            "tooltip": "OpenAI GPT-4.1 2025-04-14",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4.1-mini",
+            "name": "GPT-4.1 Mini",
+            "tooltip": "OpenAI GPT-4.1 Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4.1-mini-2025-04-14",
+            "name": "GPT-4.1 Mini 2025-04-14",
+            "tooltip": "OpenAI GPT-4.1 Mini 2025-04-14",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4.1-nano",
+            "name": "GPT-4.1 Nano",
+            "tooltip": "OpenAI GPT-4.1 Nano",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4.1-nano-2025-04-14",
+            "name": "GPT-4.1 Nano 2025-04-14",
+            "tooltip": "OpenAI GPT-4.1 Nano 2025-04-14",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o",
+            "name": "GPT-4o",
+            "tooltip": "OpenAI GPT-4o",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4o-2024-05-13",
+            "name": "GPT-4o 2024-05-13",
+            "tooltip": "OpenAI GPT-4o 2024-05-13",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4o-2024-08-06",
+            "name": "GPT-4o 2024-08-06",
+            "tooltip": "OpenAI GPT-4o 2024-08-06",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4o-2024-11-20",
+            "name": "GPT-4o 2024-11-20",
+            "tooltip": "OpenAI GPT-4o 2024-11-20",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4o-audio-preview",
+            "name": "GPT-4o Audio Preview",
+            "tooltip": "OpenAI GPT-4o Audio Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-audio-preview-2024-12-17",
+            "name": "GPT-4o Audio Preview 2024-12-17",
+            "tooltip": "OpenAI GPT-4o Audio Preview 2024-12-17",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-audio-preview-2025-06-03",
+            "name": "GPT-4o Audio Preview 2025-06-03",
+            "tooltip": "OpenAI GPT-4o Audio Preview 2025-06-03",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-mini",
+            "name": "GPT-4o Mini",
+            "tooltip": "OpenAI GPT-4o Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4o-mini-2024-07-18",
+            "name": "GPT-4o Mini 2024-07-18",
+            "tooltip": "OpenAI GPT-4o Mini 2024-07-18",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-4o-mini-audio-preview",
+            "name": "GPT-4o Mini Audio Preview",
+            "tooltip": "OpenAI GPT-4o Mini Audio Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-mini-audio-preview-2024-12-17",
+            "name": "GPT-4o Mini Audio Preview 2024-12-17",
+            "tooltip": "OpenAI GPT-4o Mini Audio Preview 2024-12-17",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-mini-search-preview",
+            "name": "GPT-4o Mini Search Preview",
+            "tooltip": "OpenAI GPT-4o Mini Search Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-mini-search-preview-2025-03-11",
+            "name": "GPT-4o Mini Search Preview 2025-03-11",
+            "tooltip": "OpenAI GPT-4o Mini Search Preview 2025-03-11",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-search-preview",
+            "name": "GPT-4o Search Preview",
+            "tooltip": "OpenAI GPT-4o Search Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-4o-search-preview-2025-03-11",
+            "name": "GPT-4o Search Preview 2025-03-11",
+            "tooltip": "OpenAI GPT-4o Search Preview 2025-03-11",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5",
+            "name": "GPT-5",
+            "tooltip": "OpenAI GPT-5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5-2025-08-07",
+            "name": "GPT-5 2025-08-07",
+            "tooltip": "OpenAI GPT-5 2025-08-07",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5-chat-latest",
+            "name": "GPT-5 Chat Latest",
+            "tooltip": "OpenAI GPT-5 Chat Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5-mini",
+            "name": "GPT-5 Mini",
+            "tooltip": "OpenAI GPT-5 Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5-mini-2025-08-07",
+            "name": "GPT-5 Mini 2025-08-07",
+            "tooltip": "OpenAI GPT-5 Mini 2025-08-07",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5-nano",
+            "name": "GPT-5 Nano",
+            "tooltip": "OpenAI GPT-5 Nano",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5-nano-2025-08-07",
+            "name": "GPT-5 Nano 2025-08-07",
+            "tooltip": "OpenAI GPT-5 Nano 2025-08-07",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5-search-api",
+            "name": "GPT-5 Search API",
+            "tooltip": "OpenAI GPT-5 Search API",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5-search-api-2025-10-14",
+            "name": "GPT-5 Search API 2025-10-14",
+            "tooltip": "OpenAI GPT-5 Search API 2025-10-14",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5.1",
+            "name": "GPT-5.1",
+            "tooltip": "OpenAI GPT-5.1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.1-2025-11-13",
+            "name": "GPT-5.1 2025-11-13",
+            "tooltip": "OpenAI GPT-5.1 2025-11-13",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.1-chat-latest",
+            "name": "GPT-5.1 Chat Latest",
+            "tooltip": "OpenAI GPT-5.1 Chat Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.2",
+            "name": "GPT-5.2",
+            "tooltip": "OpenAI GPT-5.2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.2-2025-12-11",
+            "name": "GPT-5.2 2025-12-11",
+            "tooltip": "OpenAI GPT-5.2 2025-12-11",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.2-chat-latest",
+            "name": "GPT-5.2 Chat Latest",
+            "tooltip": "OpenAI GPT-5.2 Chat Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.3-chat-latest",
+            "name": "GPT-5.3 Chat Latest",
+            "tooltip": "OpenAI GPT-5.3 Chat Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4",
+            "name": "GPT-5.4",
+            "tooltip": "OpenAI GPT-5.4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-2026-03-05",
+            "name": "GPT-5.4 2026-03-05",
+            "tooltip": "OpenAI GPT-5.4 2026-03-05",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.4-mini",
+            "name": "GPT-5.4 Mini",
+            "tooltip": "OpenAI GPT-5.4 Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5.4-mini-2026-03-17",
+            "name": "GPT-5.4 Mini 2026-03-17",
+            "tooltip": "OpenAI GPT-5.4 Mini 2026-03-17",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5.4-nano",
+            "name": "GPT-5.4 Nano",
+            "tooltip": "OpenAI GPT-5.4 Nano",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5.4-nano-2026-03-17",
+            "name": "GPT-5.4 Nano 2026-03-17",
+            "tooltip": "OpenAI GPT-5.4 Nano 2026-03-17",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-5.5",
+            "name": "GPT-5.5",
+            "tooltip": "OpenAI GPT-5.5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.5-2026-04-23",
+            "name": "GPT-5.5 2026-04-23",
+            "tooltip": "OpenAI GPT-5.5 2026-04-23",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.5-pro",
+            "name": "GPT-5.5 Pro",
+            "tooltip": "OpenAI GPT-5.5 Pro",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-5.5-pro-2026-04-23",
+            "name": "GPT-5.5 Pro 2026-04-23",
+            "tooltip": "OpenAI GPT-5.5 Pro 2026-04-23",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "gpt-audio",
+            "name": "GPT Audio",
+            "tooltip": "OpenAI GPT Audio",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-audio-1.5",
+            "name": "GPT Audio 1.5",
+            "tooltip": "OpenAI GPT Audio 1.5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-audio-2025-08-28",
+            "name": "GPT Audio 2025-08-28",
+            "tooltip": "OpenAI GPT Audio 2025-08-28",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-audio-mini",
+            "name": "GPT Audio Mini",
+            "tooltip": "OpenAI GPT Audio Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-audio-mini-2025-10-06",
+            "name": "GPT Audio Mini 2025-10-06",
+            "tooltip": "OpenAI GPT Audio Mini 2025-10-06",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-audio-mini-2025-12-15",
+            "name": "GPT Audio Mini 2025-12-15",
+            "tooltip": "OpenAI GPT Audio Mini 2025-12-15",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-oss-120b",
+            "name": "GPT OSS 120B",
+            "tooltip": "OpenAI GPT OSS 120B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-oss-120b-turbo",
+            "name": "GPT OSS 120B Turbo",
+            "tooltip": "OpenAI GPT OSS 120B Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "gpt-oss-20b",
+            "name": "GPT OSS 20B",
+            "tooltip": "OpenAI GPT OSS 20B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "o3",
+            "name": "O3",
+            "tooltip": "OpenAI O3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "o3-2025-04-16",
+            "name": "O3 2025-04-16",
+            "tooltip": "OpenAI O3 2025-04-16",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "o3-mini",
+            "name": "O3 Mini",
+            "tooltip": "OpenAI O3 Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "o3-mini-2025-01-31",
+            "name": "O3 Mini 2025-01-31",
+            "tooltip": "OpenAI O3 Mini 2025-01-31",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "o4-mini",
+            "name": "O4 Mini",
+            "tooltip": "OpenAI O4 Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "o4-mini-2025-04-16",
+            "name": "O4 Mini 2025-04-16",
+            "tooltip": "OpenAI O4 Mini 2025-04-16",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "openai/gpt-oss-safeguard-20b",
+            "name": "GPT OSS Safeguard 20B",
+            "tooltip": "OpenAI GPT OSS Safeguard 20B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "claude-haiku-4-5-20251001",
+            "name": "Claude Haiku 4.5",
+            "tooltip": "Anthropic Claude Haiku 4.5",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "claude-opus-4-20250514",
+            "name": "Claude Opus 4",
+            "tooltip": "Anthropic Claude Opus 4",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-opus-4-1-20250805",
+            "name": "Claude Opus 4.1",
+            "tooltip": "Anthropic Claude Opus 4.1",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-opus-4-5-20251101",
+            "name": "Claude Opus 4.5",
+            "tooltip": "Anthropic Claude Opus 4.5",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-opus-4-6",
+            "name": "Claude Opus 4.6",
+            "tooltip": "Anthropic Claude Opus 4.6",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-opus-4-7",
+            "name": "Claude Opus 4.7",
+            "tooltip": "Anthropic Claude Opus 4.7",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-sonnet-4-20250514",
+            "name": "Claude Sonnet 4",
+            "tooltip": "Anthropic Claude Sonnet 4",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-sonnet-4-5-20250929",
+            "name": "Claude Sonnet 4.5",
+            "tooltip": "Anthropic Claude Sonnet 4.5",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "claude-sonnet-4-6",
+            "name": "Claude Sonnet 4.6",
+            "tooltip": "Anthropic Claude Sonnet 4.6",
+            "maxInputTokens": 200000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "grok-3",
+            "name": "Grok 3",
+            "tooltip": "xAI Grok 3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-beta",
+            "name": "Grok 3 Beta",
+            "tooltip": "xAI Grok 3 Beta",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-fast",
+            "name": "Grok 3 Fast",
+            "tooltip": "xAI Grok 3 Fast",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-fast-beta",
+            "name": "Grok 3 Fast Beta",
+            "tooltip": "xAI Grok 3 Fast Beta",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-fast-latest",
+            "name": "Grok 3 Fast Latest",
+            "tooltip": "xAI Grok 3 Fast Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-latest",
+            "name": "Grok 3 Latest",
+            "tooltip": "xAI Grok 3 Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-mini-fast",
+            "name": "Grok 3 Mini Fast",
+            "tooltip": "xAI Grok 3 Mini Fast",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-mini-fast-beta",
+            "name": "Grok 3 Mini Fast Beta",
+            "tooltip": "xAI Grok 3 Mini Fast Beta",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-mini-fast-latest",
+            "name": "Grok 3 Mini Fast Latest",
+            "tooltip": "xAI Grok 3 Mini Fast Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-3-mini-latest",
+            "name": "Grok 3 Mini Latest",
+            "tooltip": "xAI Grok 3 Mini Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4",
+            "name": "Grok 4",
+            "tooltip": "xAI Grok 4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-0709",
+            "name": "Grok 4 0709",
+            "tooltip": "xAI Grok 4 0709",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-fast",
+            "name": "Grok 4 Fast",
+            "tooltip": "xAI Grok 4 Fast",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-fast-non-reasoning",
+            "name": "Grok 4 Fast Non-Reasoning",
+            "tooltip": "xAI Grok 4 Fast Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-fast-non-reasoning-latest",
+            "name": "Grok 4 Fast Non-Reasoning Latest",
+            "tooltip": "xAI Grok 4 Fast Non-Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-fast-reasoning",
+            "name": "Grok 4 Fast Reasoning",
+            "tooltip": "xAI Grok 4 Fast Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-fast-reasoning-latest",
+            "name": "Grok 4 Fast Reasoning Latest",
+            "tooltip": "xAI Grok 4 Fast Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-latest",
+            "name": "Grok 4 Latest",
+            "tooltip": "xAI Grok 4 Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-1-fast",
+            "name": "Grok 4.1 Fast",
+            "tooltip": "xAI Grok 4.1 Fast",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-1-fast-non-reasoning",
+            "name": "Grok 4.1 Fast Non-Reasoning",
+            "tooltip": "xAI Grok 4.1 Fast Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-1-fast-non-reasoning-latest",
+            "name": "Grok 4.1 Fast Non-Reasoning Latest",
+            "tooltip": "xAI Grok 4.1 Fast Non-Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-1-fast-reasoning",
+            "name": "Grok 4.1 Fast Reasoning",
+            "tooltip": "xAI Grok 4.1 Fast Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4-1-fast-reasoning-latest",
+            "name": "Grok 4.1 Fast Reasoning Latest",
+            "tooltip": "xAI Grok 4.1 Fast Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20",
+            "name": "Grok 4.20",
+            "tooltip": "xAI Grok 4.20",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-0309",
+            "name": "Grok 4.20 0309",
+            "tooltip": "xAI Grok 4.20 0309",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-0309-non-reasoning",
+            "name": "Grok 4.20 0309 Non-Reasoning",
+            "tooltip": "xAI Grok 4.20 0309 Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-0309-reasoning",
+            "name": "Grok 4.20 0309 Reasoning",
+            "tooltip": "xAI Grok 4.20 0309 Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta",
+            "name": "Grok 4.20 Beta",
+            "tooltip": "xAI Grok 4.20 Beta",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-0309",
+            "name": "Grok 4.20 Beta 0309",
+            "tooltip": "xAI Grok 4.20 Beta 0309",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-0309-non-reasoning",
+            "name": "Grok 4.20 Beta 0309 Non-Reasoning",
+            "tooltip": "xAI Grok 4.20 Beta 0309 Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-0309-reasoning",
+            "name": "Grok 4.20 Beta 0309 Reasoning",
+            "tooltip": "xAI Grok 4.20 Beta 0309 Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-latest",
+            "name": "Grok 4.20 Beta Latest",
+            "tooltip": "xAI Grok 4.20 Beta Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-latest-non-reasoning",
+            "name": "Grok 4.20 Beta Latest Non-Reasoning",
+            "tooltip": "xAI Grok 4.20 Beta Latest Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-latest-reasoning",
+            "name": "Grok 4.20 Beta Latest Reasoning",
+            "tooltip": "xAI Grok 4.20 Beta Latest Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-non-reasoning",
+            "name": "Grok 4.20 Beta Non-Reasoning",
+            "tooltip": "xAI Grok 4.20 Beta Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-beta-reasoning",
+            "name": "Grok 4.20 Beta Reasoning",
+            "tooltip": "xAI Grok 4.20 Beta Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-experimental-beta-0304",
+            "name": "Grok 4.20 Experimental Beta 0304",
+            "tooltip": "xAI Grok 4.20 Experimental Beta 0304",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-experimental-beta-0304-non-reasoning",
+            "name": "Grok 4.20 Experimental Beta 0304 Non-Reasoning",
+            "tooltip": "xAI Grok 4.20 Experimental Beta 0304 Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-experimental-beta-0304-reasoning",
+            "name": "Grok 4.20 Experimental Beta 0304 Reasoning",
+            "tooltip": "xAI Grok 4.20 Experimental Beta 0304 Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-experimental-beta-latest",
+            "name": "Grok 4.20 Experimental Beta Latest",
+            "tooltip": "xAI Grok 4.20 Experimental Beta Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-experimental-beta-non-reasoning-latest",
+            "name": "Grok 4.20 Experimental Beta Non-Reasoning Latest",
+            "tooltip": "xAI Grok 4.20 Experimental Beta Non-Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-experimental-beta-reasoning-latest",
+            "name": "Grok 4.20 Experimental Beta Reasoning Latest",
+            "tooltip": "xAI Grok 4.20 Experimental Beta Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-non-reasoning",
+            "name": "Grok 4.20 Non-Reasoning",
+            "tooltip": "xAI Grok 4.20 Non-Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-non-reasoning-gv2",
+            "name": "Grok 4.20 Non-Reasoning GV2",
+            "tooltip": "xAI Grok 4.20 Non-Reasoning GV2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-non-reasoning-latest",
+            "name": "Grok 4.20 Non-Reasoning Latest",
+            "tooltip": "xAI Grok 4.20 Non-Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-reasoning",
+            "name": "Grok 4.20 Reasoning",
+            "tooltip": "xAI Grok 4.20 Reasoning",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-reasoning-gv2",
+            "name": "Grok 4.20 Reasoning GV2",
+            "tooltip": "xAI Grok 4.20 Reasoning GV2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-4.20-reasoning-latest",
+            "name": "Grok 4.20 Reasoning Latest",
+            "tooltip": "xAI Grok 4.20 Reasoning Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-code-fast",
+            "name": "Grok Code Fast",
+            "tooltip": "xAI Grok Code Fast",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-code-fast-1",
+            "name": "Grok Code Fast 1",
+            "tooltip": "xAI Grok Code Fast 1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "grok-code-fast-1-0825",
+            "name": "Grok Code Fast 1 0825",
+            "tooltip": "xAI Grok Code Fast 1 0825",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "codestral-2508",
+            "name": "Codestral 2508",
+            "tooltip": "Mistral Codestral 2508",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "codestral-latest",
+            "name": "Codestral Latest",
+            "tooltip": "Mistral Codestral Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "devstral-2",
+            "name": "Devstral 2",
+            "tooltip": "Mistral Devstral 2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "devstral-medium-2507",
+            "name": "Devstral Medium 2507",
+            "tooltip": "Mistral Devstral Medium 2507",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "devstral-medium-latest",
+            "name": "Devstral Medium Latest",
+            "tooltip": "Mistral Devstral Medium Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "devstral-small",
+            "name": "Devstral Small",
+            "tooltip": "Mistral Devstral Small",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "labs-mistral-small-creative",
+            "name": "Labs Mistral Small Creative",
+            "tooltip": "Mistral Labs Mistral Small Creative",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "magistral-medium-2509",
+            "name": "Magistral Medium 2509",
+            "tooltip": "Mistral Magistral Medium 2509",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "magistral-medium-latest",
+            "name": "Magistral Medium Latest",
+            "tooltip": "Mistral Magistral Medium Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "magistral-small-latest",
+            "name": "Magistral Small Latest",
+            "tooltip": "Mistral Magistral Small Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ministral-3-14b",
+            "name": "Ministral 3 14B",
+            "tooltip": "Mistral Ministral 3 14B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ministral-3-3b",
+            "name": "Ministral 3 3B",
+            "tooltip": "Mistral Ministral 3 3B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ministral-3-8b",
+            "name": "Ministral 3 8B",
+            "tooltip": "Mistral Ministral 3 8B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-large-2",
+            "name": "Mistral Large 2",
+            "tooltip": "Mistral Large 2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-large-3",
+            "name": "Mistral Large 3",
+            "tooltip": "Mistral Large 3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-medium",
+            "name": "Mistral Medium",
+            "tooltip": "Mistral Medium",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-medium-2505",
+            "name": "Mistral Medium 2505",
+            "tooltip": "Mistral Medium 2505",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-medium-2508",
+            "name": "Mistral Medium 2508",
+            "tooltip": "Mistral Medium 2508",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-medium-latest",
+            "name": "Mistral Medium Latest",
+            "tooltip": "Mistral Medium Latest",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-small-2603",
+            "name": "Mistral Small 2603",
+            "tooltip": "Mistral Small 2603",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistral-small-3-2",
+            "name": "Mistral Small 3.2",
+            "tooltip": "Mistral Small 3.2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistralai/Mistral-Nemo-Instruct-2407",
+            "name": "Mistral Nemo Instruct 2407",
+            "tooltip": "Mistral AI Mistral Nemo Instruct 2407",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistralai/Mistral-Small-24B-Instruct-2501",
+            "name": "Mistral Small 24B Instruct 2501",
+            "tooltip": "Mistral AI Mistral Small 24B Instruct 2501",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+            "name": "Mistral Small 3.2 24B Instruct 2506",
+            "tooltip": "Mistral AI Mistral Small 3.2 24B Instruct 2506",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+            "name": "Mixtral 8x7B Instruct v0.1",
+            "tooltip": "Mistral AI Mixtral 8x7B Instruct v0.1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "open-mistral-nemo",
+            "name": "Open Mistral Nemo",
+            "tooltip": "Open Mistral Nemo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "open-mistral-nemo-2407",
+            "name": "Open Mistral Nemo 2407",
+            "tooltip": "Open Mistral Nemo 2407",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "pixtral-large-2411",
+            "name": "Pixtral Large 2411",
+            "tooltip": "Mistral Pixtral Large 2411",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "deepseek-ai/DeepSeek-OCR",
+            "name": "DeepSeek OCR",
+            "tooltip": "DeepSeek AI DeepSeek OCR",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "deepseek-ai/DeepSeek-R1-0528",
+            "name": "DeepSeek R1 0528",
+            "tooltip": "DeepSeek AI DeepSeek R1 0528",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai/DeepSeek-R1-0528-Turbo",
+            "name": "DeepSeek R1 0528 Turbo",
+            "tooltip": "DeepSeek AI DeepSeek R1 0528 Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai/DeepSeek-V4-Flash",
+            "name": "DeepSeek V4 Flash",
+            "tooltip": "DeepSeek AI DeepSeek V4 Flash",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-ai/DeepSeek-V4-Pro",
+            "name": "DeepSeek V4 Pro",
+            "tooltip": "DeepSeek AI DeepSeek V4 Pro",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-r1-distill-llama-70b",
+            "name": "DeepSeek R1 Distill Llama 70B",
+            "tooltip": "DeepSeek R1 Distill Llama 70B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3",
+            "name": "DeepSeek V3",
+            "tooltip": "DeepSeek V3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3-0324",
+            "name": "DeepSeek V3 0324",
+            "tooltip": "DeepSeek V3 0324",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3-1",
+            "name": "DeepSeek V3.1",
+            "tooltip": "DeepSeek V3.1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3-1-terminus",
+            "name": "DeepSeek V3.1 Terminus",
+            "tooltip": "DeepSeek V3.1 Terminus",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v3-2",
+            "name": "DeepSeek V3.2",
+            "tooltip": "DeepSeek V3.2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+            "name": "Qwen3 235B A22B Thinking 2507",
+            "tooltip": "Qwen Qwen3 235B A22B Thinking 2507",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Qwen/Qwen3-Max",
+            "name": "Qwen3 Max",
+            "tooltip": "Qwen Qwen3 Max",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Qwen/Qwen3-Max-Thinking",
+            "name": "Qwen3 Max Thinking",
+            "tooltip": "Qwen Qwen3 Max Thinking",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+            "name": "Qwen3 VL 235B A22B Instruct",
+            "tooltip": "Qwen Qwen3 VL 235B A22B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+            "name": "Qwen3 VL 30B A3B Instruct",
+            "tooltip": "Qwen Qwen3 VL 30B A3B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "Qwen/Qwen3.5-0.8B",
+            "name": "Qwen3.5 0.8B",
+            "tooltip": "Qwen Qwen3.5 0.8B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Qwen/Qwen3.5-2B",
+            "name": "Qwen3.5 2B",
+            "tooltip": "Qwen Qwen3.5 2B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen2-5-72b-instruct",
+            "name": "Qwen2.5 72B Instruct",
+            "tooltip": "Qwen2.5 72B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-14b-instruct",
+            "name": "Qwen3 14B Instruct",
+            "tooltip": "Qwen3 14B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-235b-a22b-instruct-2507",
+            "name": "Qwen3 235B A22B Instruct 2507",
+            "tooltip": "Qwen3 235B A22B Instruct 2507",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-30b-a3b-instruct",
+            "name": "Qwen3 30B A3B Instruct",
+            "tooltip": "Qwen3 30B A3B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-32b-instruct",
+            "name": "Qwen3 32B Instruct",
+            "tooltip": "Qwen3 32B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-5-122b-a10b",
+            "name": "Qwen3.5 122B A10B",
+            "tooltip": "Qwen3.5 122B A10B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-5-27b",
+            "name": "Qwen3.5 27B",
+            "tooltip": "Qwen3.5 27B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-5-35b-a3b",
+            "name": "Qwen3.5 35B A3B",
+            "tooltip": "Qwen3.5 35B A3B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-5-397b-a17b",
+            "name": "Qwen3.5 397B A17B",
+            "tooltip": "Qwen3.5 397B A17B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-5-4b",
+            "name": "Qwen3.5 4B",
+            "tooltip": "Qwen3.5 4B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-6-35b-a3b",
+            "name": "Qwen3.6 35B A3B",
+            "tooltip": "Qwen3.6 35B A3B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-coder-480b-a35b-instruct-turbo",
+            "name": "Qwen3 Coder 480B A35B Instruct Turbo",
+            "tooltip": "Qwen3 Coder 480B A35B Instruct Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "qwen3-next-80b-a3b-instruct",
+            "name": "Qwen3 Next 80B A3B Instruct",
+            "tooltip": "Qwen3 Next 80B A3B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "minimax-m2-5",
+            "name": "MiniMax M2.5",
+            "tooltip": "MiniMax M2.5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "minimax-m2-7",
+            "name": "MiniMax M2.7",
+            "tooltip": "MiniMax M2.7",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-instruct-8b",
+            "name": "Llama 3 Instruct 8B",
+            "tooltip": "Meta Llama 3 Instruct 8B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-1-instruct-70b",
+            "name": "Llama 3.1 Instruct 70B",
+            "tooltip": "Meta Llama 3.1 Instruct 70B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-1-instruct-70b-turbo",
+            "name": "Llama 3.1 Instruct 70B Turbo",
+            "tooltip": "Meta Llama 3.1 Instruct 70B Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-1-instruct-8b",
+            "name": "Llama 3.1 Instruct 8B",
+            "tooltip": "Meta Llama 3.1 Instruct 8B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-1-instruct-8b-turbo",
+            "name": "Llama 3.1 Instruct 8B Turbo",
+            "tooltip": "Meta Llama 3.1 Instruct 8B Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-2-instruct-11b-vision",
+            "name": "Llama 3.2 Instruct 11B Vision",
+            "tooltip": "Meta Llama 3.2 Instruct 11B Vision",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "llama-3-3-instruct-70b",
+            "name": "Llama 3.3 Instruct 70B",
+            "tooltip": "Meta Llama 3.3 Instruct 70B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-3-instruct-70b-turbo",
+            "name": "Llama 3.3 Instruct 70B Turbo",
+            "tooltip": "Meta Llama 3.3 Instruct 70B Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-4-maverick",
+            "name": "Llama 4 Maverick",
+            "tooltip": "Meta Llama 4 Maverick",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-4-scout",
+            "name": "Llama 4 Scout",
+            "tooltip": "Meta Llama 4 Scout",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "meta-llama/Llama-Guard-4-12B",
+            "name": "Llama Guard 4 12B",
+            "tooltip": "Meta Llama Guard 4 12B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "kimi-k2-5",
+            "name": "Kimi K2.5",
+            "tooltip": "Kimi K2.5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "kimi-k2-6",
+            "name": "Kimi K2.6",
+            "tooltip": "Kimi K2.6",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "llama-3-1-nemotron-instruct-70b",
+            "name": "Llama 3.1 Nemotron Instruct 70B",
+            "tooltip": "NVIDIA Llama 3.1 Nemotron Instruct 70B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "nvidia-nemotron-nano-12b-v2-vl",
+            "name": "NVIDIA Nemotron Nano 12B V2 VL",
+            "tooltip": "NVIDIA Nemotron Nano 12B V2 VL",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "nvidia-nemotron-nano-9b-v2",
+            "name": "NVIDIA Nemotron Nano 9B V2",
+            "tooltip": "NVIDIA Nemotron Nano 9B V2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "nvidia/Llama-3.3-Nemotron-Super-49B-v1.5",
+            "name": "Llama 3.3 Nemotron Super 49B v1.5",
+            "tooltip": "NVIDIA Llama 3.3 Nemotron Super 49B v1.5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "nvidia/Nemotron-3-Nano-30B-A3B",
+            "name": "Nemotron 3 Nano 30B A3B",
+            "tooltip": "NVIDIA Nemotron 3 Nano 30B A3B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B",
+            "name": "NVIDIA Nemotron 3 Super 120B A12B",
+            "tooltip": "NVIDIA Nemotron 3 Super 120B A12B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "hermes-3-llama-3-1-70b",
+            "name": "Hermes 3 Llama 3.1 70B",
+            "tooltip": "Nous Research Hermes 3 Llama 3.1 70B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "NousResearch/Hermes-3-Llama-3.1-405B",
+            "name": "Hermes 3 Llama 3.1 405B",
+            "tooltip": "Nous Research Hermes 3 Llama 3.1 405B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ByteDance/Seed-1.8",
+            "name": "ByteDance Seed 1.8",
+            "tooltip": "ByteDance Seed 1.8",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ByteDance/Seed-2.0-mini",
+            "name": "ByteDance Seed 2.0 Mini",
+            "tooltip": "ByteDance Seed 2.0 Mini",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "ByteDance/Seed-2.0-pro",
+            "name": "ByteDance Seed 2.0 Pro",
+            "tooltip": "ByteDance Seed 2.0 Pro",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "PaddlePaddle/PaddleOCR-VL-0.9B",
+            "name": "PaddlePaddle PaddleOCR VL 0.9B",
+            "tooltip": "Baidu PaddlePaddle PaddleOCR VL 0.9B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "glm-4-7",
+            "name": "GLM 4.7",
+            "tooltip": "GLM 4.7",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm-4-7-flash",
+            "name": "GLM 4.7 Flash",
+            "tooltip": "GLM 4.7 Flash",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm-5",
+            "name": "GLM 5",
+            "tooltip": "GLM 5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "glm-5-1",
+            "name": "GLM 5.1",
+            "tooltip": "GLM 5.1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Gryphe/MythoMax-L2-13b",
+            "name": "Gryphe MythoMax L2 13B",
+            "tooltip": "Gryphe MythoMax L2 13B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "olmo-3-1-32b-instruct",
+            "name": "Olmo 3.1 32B Instruct",
+            "tooltip": "Olmo 3.1 32B Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "phi-4",
+            "name": "Phi 4",
+            "tooltip": "Phi 4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Sao10K/L3-8B-Lunaris-v1-Turbo",
+            "name": "Sao10K L3 8B Lunaris v1 Turbo",
+            "tooltip": "Sao10K L3 8B Lunaris v1 Turbo",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Sao10K/L3.1-70B-Euryale-v2.2",
+            "name": "Sao10K L3.1 70B Euryale v2.2",
+            "tooltip": "Sao10K L3.1 70B Euryale v2.2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "Sao10K/L3.3-70B-Euryale-v2.3",
+            "name": "Sao10K L3.3 70B Euryale v2.3",
+            "tooltip": "Sao10K L3.3 70B Euryale v2.3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "stepfun-ai/Step-3.5-Flash",
+            "name": "Stepfun AI Step 3.5 Flash",
+            "tooltip": "Stepfun AI Step 3.5 Flash",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "zai-org/GLM-4.6",
+            "name": "Zai Org GLM 4.6",
+            "tooltip": "Zai Org GLM 4.6",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC",
+            "name": "YandexGPT 5 RC",
+            "tooltip": "Yandex YandexGPT 5 RC",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-Lite-RC",
+            "name": "YandexGPT 5 Lite RC",
+            "tooltip": "Yandex YandexGPT 5 Lite RC",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-Pro-RC",
+            "name": "YandexGPT 5 Pro RC",
+            "tooltip": "Yandex YandexGPT 5 Pro RC",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-Plus-RC",
+            "name": "YandexGPT 5 Plus RC",
+            "tooltip": "Yandex YandexGPT 5 Plus RC",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-1",
+            "name": "YandexGPT 5 RC 1",
+            "tooltip": "Yandex YandexGPT 5 RC 1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-2",
+            "name": "YandexGPT 5 RC 2",
+            "tooltip": "Yandex YandexGPT 5 RC 2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-3",
+            "name": "YandexGPT 5 RC 3",
+            "tooltip": "Yandex YandexGPT 5 RC 3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-4",
+            "name": "YandexGPT 5 RC 4",
+            "tooltip": "Yandex YandexGPT 5 RC 4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-5",
+            "name": "YandexGPT 5 RC 5",
+            "tooltip": "Yandex YandexGPT 5 RC 5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-6",
+            "name": "YandexGPT 5 RC 6",
+            "tooltip": "Yandex YandexGPT 5 RC 6",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-7",
+            "name": "YandexGPT 5 RC 7",
+            "tooltip": "Yandex YandexGPT 5 RC 7",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-8",
+            "name": "YandexGPT 5 RC 8",
+            "tooltip": "Yandex YandexGPT 5 RC 8",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-9",
+            "name": "YandexGPT 5 RC 9",
+            "tooltip": "Yandex YandexGPT 5 RC 9",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-10",
+            "name": "YandexGPT 5 RC 10",
+            "tooltip": "Yandex YandexGPT 5 RC 10",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-11",
+            "name": "YandexGPT 5 RC 11",
+            "tooltip": "Yandex YandexGPT 5 RC 11",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-12",
+            "name": "YandexGPT 5 RC 12",
+            "tooltip": "Yandex YandexGPT 5 RC 12",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-13",
+            "name": "YandexGPT 5 RC 13",
+            "tooltip": "Yandex YandexGPT 5 RC 13",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-14",
+            "name": "YandexGPT 5 RC 14",
+            "tooltip": "Yandex YandexGPT 5 RC 14",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-15",
+            "name": "YandexGPT 5 RC 15",
+            "tooltip": "Yandex YandexGPT 5 RC 15",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-16",
+            "name": "YandexGPT 5 RC 16",
+            "tooltip": "Yandex YandexGPT 5 RC 16",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-17",
+            "name": "YandexGPT 5 RC 17",
+            "tooltip": "Yandex YandexGPT 5 RC 17",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-18",
+            "name": "YandexGPT 5 RC 18",
+            "tooltip": "Yandex YandexGPT 5 RC 18",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-19",
+            "name": "YandexGPT 5 RC 19",
+            "tooltip": "Yandex YandexGPT 5 RC 19",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-20",
+            "name": "YandexGPT 5 RC 20",
+            "tooltip": "Yandex YandexGPT 5 RC 20",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-21",
+            "name": "YandexGPT 5 RC 21",
+            "tooltip": "Yandex YandexGPT 5 RC 21",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-22",
+            "name": "YandexGPT 5 RC 22",
+            "tooltip": "Yandex YandexGPT 5 RC 22",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-23",
+            "name": "YandexGPT 5 RC 23",
+            "tooltip": "Yandex YandexGPT 5 RC 23",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-24",
+            "name": "YandexGPT 5 RC 24",
+            "tooltip": "Yandex YandexGPT 5 RC 24",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-25",
+            "name": "YandexGPT 5 RC 25",
+            "tooltip": "Yandex YandexGPT 5 RC 25",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-26",
+            "name": "YandexGPT 5 RC 26",
+            "tooltip": "Yandex YandexGPT 5 RC 26",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-27",
+            "name": "YandexGPT 5 RC 27",
+            "tooltip": "Yandex YandexGPT 5 RC 27",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-28",
+            "name": "YandexGPT 5 RC 28",
+            "tooltip": "Yandex YandexGPT 5 RC 28",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-29",
+            "name": "YandexGPT 5 RC 29",
+            "tooltip": "Yandex YandexGPT 5 RC 29",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-30",
+            "name": "YandexGPT 5 RC 30",
+            "tooltip": "Yandex YandexGPT 5 RC 30",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-31",
+            "name": "YandexGPT 5 RC 31",
+            "tooltip": "Yandex YandexGPT 5 RC 31",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-32",
+            "name": "YandexGPT 5 RC 32",
+            "tooltip": "Yandex YandexGPT 5 RC 32",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-33",
+            "name": "YandexGPT 5 RC 33",
+            "tooltip": "Yandex YandexGPT 5 RC 33",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-34",
+            "name": "YandexGPT 5 RC 34",
+            "tooltip": "Yandex YandexGPT 5 RC 34",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-35",
+            "name": "YandexGPT 5 RC 35",
+            "tooltip": "Yandex YandexGPT 5 RC 35",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-36",
+            "name": "YandexGPT 5 RC 36",
+            "tooltip": "Yandex YandexGPT 5 RC 36",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-37",
+            "name": "YandexGPT 5 RC 37",
+            "tooltip": "Yandex YandexGPT 5 RC 37",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-38",
+            "name": "YandexGPT 5 RC 38",
+            "tooltip": "Yandex YandexGPT 5 RC 38",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-39",
+            "name": "YandexGPT 5 RC 39",
+            "tooltip": "Yandex YandexGPT 5 RC 39",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-40",
+            "name": "YandexGPT 5 RC 40",
+            "tooltip": "Yandex YandexGPT 5 RC 40",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-41",
+            "name": "YandexGPT 5 RC 41",
+            "tooltip": "Yandex YandexGPT 5 RC 41",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-42",
+            "name": "YandexGPT 5 RC 42",
+            "tooltip": "Yandex YandexGPT 5 RC 42",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-43",
+            "name": "YandexGPT 5 RC 43",
+            "tooltip": "Yandex YandexGPT 5 RC 43",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-44",
+            "name": "YandexGPT 5 RC 44",
+            "tooltip": "Yandex YandexGPT 5 RC 44",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-45",
+            "name": "YandexGPT 5 RC 45",
+            "tooltip": "Yandex YandexGPT 5 RC 45",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-46",
+            "name": "YandexGPT 5 RC 46",
+            "tooltip": "Yandex YandexGPT 5 RC 46",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-47",
+            "name": "YandexGPT 5 RC 47",
+            "tooltip": "Yandex YandexGPT 5 RC 47",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-48",
+            "name": "YandexGPT 5 RC 48",
+            "tooltip": "Yandex YandexGPT 5 RC 48",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-49",
+            "name": "YandexGPT 5 RC 49",
+            "tooltip": "Yandex YandexGPT 5 RC 49",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "yandex/YandexGPT-5-RC-50",
+            "name": "YandexGPT 5 RC 50",
+            "tooltip": "Yandex YandexGPT 5 RC 50",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "microsoft/Phi-3-mini-128k-instruct",
+            "name": "Phi 3 Mini 128K Instruct",
+            "tooltip": "Microsoft Phi 3 Mini 128K Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "microsoft/Phi-3-medium-128k-instruct",
+            "name": "Phi 3 Medium 128K Instruct",
+            "tooltip": "Microsoft Phi 3 Medium 128K Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "microsoft/Phi-3.5-mini-instruct",
+            "name": "Phi 3.5 Mini Instruct",
+            "tooltip": "Microsoft Phi 3.5 Mini Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "microsoft/Phi-3.5-vision-instruct",
+            "name": "Phi 3.5 Vision Instruct",
+            "tooltip": "Microsoft Phi 3.5 Vision Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "cognitivecomputations/dolphin-2.9.4-llama-3.1-8b",
+            "name": "Dolphin 2.9.4 Llama 3.1 8B",
+            "tooltip": "Cognitive Computations Dolphin 2.9.4 Llama 3.1 8B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "allenai/OLMoE-1B-7B-0924-Instruct",
+            "name": "OLMoE 1B 7B 0924 Instruct",
+            "tooltip": "AllenAI OLMoE 1B 7B 0924 Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "allenai/tulu-3-dpo-70b",
+            "name": "Tulu 3 DPO 70B",
+            "tooltip": "AllenAI Tulu 3 DPO 70B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "allenai/tulu-3-dpo-8b",
+            "name": "Tulu 3 DPO 8B",
+            "tooltip": "AllenAI Tulu 3 DPO 8B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-1.5-34B-Chat",
+            "name": "Yi 1.5 34B Chat",
+            "tooltip": "01.AI Yi 1.5 34B Chat",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-1.5-9B-Chat",
+            "name": "Yi 1.5 9B Chat",
+            "tooltip": "01.AI Yi 1.5 9B Chat",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-1.5-9B-Chat-16K",
+            "name": "Yi 1.5 9B Chat 16K",
+            "tooltip": "01.AI Yi 1.5 9B Chat 16K",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-1.5-9B-Chat-32K",
+            "name": "Yi 1.5 9B Chat 32K",
+            "tooltip": "01.AI Yi 1.5 9B Chat 32K",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-Coder-9B-Chat",
+            "name": "Yi Coder 9B Chat",
+            "tooltip": "01.AI Yi Coder 9B Chat",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-Lightning-9B",
+            "name": "Yi Lightning 9B",
+            "tooltip": "01.AI Yi Lightning 9B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "01-ai/Yi-VL-34B",
+            "name": "Yi VL 34B",
+            "tooltip": "01.AI Yi VL 34B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "01-ai/Yi-VL-9B",
+            "name": "Yi VL 9B",
+            "tooltip": "01.AI Yi VL 9B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct",
+            "name": "Snowflake Arctic Instruct",
+            "tooltip": "Snowflake Arctic Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b",
+            "name": "Snowflake Arctic Instruct 33B",
+            "tooltip": "Snowflake Arctic Instruct 33B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-preview",
+            "name": "Snowflake Arctic Instruct 33B Preview",
+            "tooltip": "Snowflake Arctic Instruct 33B Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v2",
+            "name": "Snowflake Arctic Instruct 33B v2",
+            "tooltip": "Snowflake Arctic Instruct 33B v2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v2-preview",
+            "name": "Snowflake Arctic Instruct 33B v2 Preview",
+            "tooltip": "Snowflake Arctic Instruct 33B v2 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v3",
+            "name": "Snowflake Arctic Instruct 33B v3",
+            "tooltip": "Snowflake Arctic Instruct 33B v3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v3-preview",
+            "name": "Snowflake Arctic Instruct 33B v3 Preview",
+            "tooltip": "Snowflake Arctic Instruct 33B v3 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v4",
+            "name": "Snowflake Arctic Instruct 33B v4",
+            "tooltip": "Snowflake Arctic Instruct 33B v4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v4-preview",
+            "name": "Snowflake Arctic Instruct 33B v4 Preview",
+            "tooltip": "Snowflake Arctic Instruct 33B v4 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v5",
+            "name": "Snowflake Arctic Instruct 33B v5",
+            "tooltip": "Snowflake Arctic Instruct 33B v5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "snowflake/snowflake-arctic-instruct-33b-v5-preview",
+            "name": "Snowflake Arctic Instruct 33B v5 Preview",
+            "tooltip": "Snowflake Arctic Instruct 33B v5 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct",
+            "name": "DBRX Instruct",
+            "tooltip": "Databricks DBRX Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b",
+            "name": "DBRX Instruct 27B",
+            "tooltip": "Databricks DBRX Instruct 27B",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-preview",
+            "name": "DBRX Instruct 27B Preview",
+            "tooltip": "Databricks DBRX Instruct 27B Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v2",
+            "name": "DBRX Instruct 27B v2",
+            "tooltip": "Databricks DBRX Instruct 27B v2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v2-preview",
+            "name": "DBRX Instruct 27B v2 Preview",
+            "tooltip": "Databricks DBRX Instruct 27B v2 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v3",
+            "name": "DBRX Instruct 27B v3",
+            "tooltip": "Databricks DBRX Instruct 27B v3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v3-preview",
+            "name": "DBRX Instruct 27B v3 Preview",
+            "tooltip": "Databricks DBRX Instruct 27B v3 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v4",
+            "name": "DBRX Instruct 27B v4",
+            "tooltip": "Databricks DBRX Instruct 27B v4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v4-preview",
+            "name": "DBRX Instruct 27B v4 Preview",
+            "tooltip": "Databricks DBRX Instruct 27B v4 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v5",
+            "name": "DBRX Instruct 27B v5",
+            "tooltip": "Databricks DBRX Instruct 27B v5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "databricks/dbrx-instruct-27b-v5-preview",
+            "name": "DBRX Instruct 27B v5 Preview",
+            "tooltip": "Databricks DBRX Instruct 27B v5 Preview",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r-plus",
+            "name": "Command R Plus",
+            "tooltip": "Cohere Command R Plus",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r-plus-08-2024",
+            "name": "Command R Plus 08-2024",
+            "tooltip": "Cohere Command R Plus 08-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r-plus-04-2024",
+            "name": "Command R Plus 04-2024",
+            "tooltip": "Cohere Command R Plus 04-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r",
+            "name": "Command R",
+            "tooltip": "Cohere Command R",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r-08-2024",
+            "name": "Command R 08-2024",
+            "tooltip": "Cohere Command R 08-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r-04-2024",
+            "name": "Command R 04-2024",
+            "tooltip": "Cohere Command R 04-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r7b-12-2024",
+            "name": "Command R7B 12-2024",
+            "tooltip": "Cohere Command R7B 12-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r7b-08-2024",
+            "name": "Command R7B 08-2024",
+            "tooltip": "Cohere Command R7B 08-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "cohere/command-r7b-04-2024",
+            "name": "Command R7B 04-2024",
+            "tooltip": "Cohere Command R7B 04-2024",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/RedPajama-INCITE-Chat-7B-v1",
+            "name": "RedPajama INCITE Chat 7B v1",
+            "tooltip": "Together Computer RedPajama INCITE Chat 7B v1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/RedPajama-INCITE-Instruct-7B-v1",
+            "name": "RedPajama INCITE Instruct 7B v1",
+            "tooltip": "Together Computer RedPajama INCITE Instruct 7B v1",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-Instruct",
+            "name": "Llama 2 7B 32K Instruct",
+            "tooltip": "Together Computer Llama 2 7B 32K Instruct",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K",
+            "name": "Llama 2 7B 32K",
+            "tooltip": "Together Computer Llama 2 7B 32K",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-Instruct-v2",
+            "name": "Llama 2 7B 32K Instruct v2",
+            "tooltip": "Together Computer Llama 2 7B 32K Instruct v2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-v2",
+            "name": "Llama 2 7B 32K v2",
+            "tooltip": "Together Computer Llama 2 7B 32K v2",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-Instruct-v3",
+            "name": "Llama 2 7B 32K Instruct v3",
+            "tooltip": "Together Computer Llama 2 7B 32K Instruct v3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-v3",
+            "name": "Llama 2 7B 32K v3",
+            "tooltip": "Together Computer Llama 2 7B 32K v3",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-Instruct-v4",
+            "name": "Llama 2 7B 32K Instruct v4",
+            "tooltip": "Together Computer Llama 2 7B 32K Instruct v4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-v4",
+            "name": "Llama 2 7B 32K v4",
+            "tooltip": "Together Computer Llama 2 7B 32K v4",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-Instruct-v5",
+            "name": "Llama 2 7B 32K Instruct v5",
+            "tooltip": "Together Computer Llama 2 7B 32K Instruct v5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "togethercomputer/Llama-2-7B-32K-v5",
+            "name": "Llama 2 7B 32K v5",
+            "tooltip": "Together Computer Llama 2 7B 32K v5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 8192,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

@@ -290,6 +290,10 @@ const specializedProviderFactories: Record<string, ProviderFactory> = {
     opencodego: createLazyFactory(
         () => import('../providers/opencodego/provider.js'),
         'OpenCodeGoProvider'
+    ),
+    inworld: createLazyFactory(
+        () => import('../providers/inworld/provider.js'),
+        'InworldProvider'
     )
 };
 

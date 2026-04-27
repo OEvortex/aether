@@ -725,7 +725,9 @@ const knownProviderOverrides = {
         }
     }
 };
-export const KnownProviders = Object.fromEntries(Object.entries(knownProviderOverrides)
-    .sort((left, right) => left[0].localeCompare(right[0]))
-    .map(([providerId, config]) => [providerId, { ...config }]));
+export const KnownProviders = Object.fromEntries(
+    Object.entries(knownProviderOverrides)
+        .sort((left, right) => left[0].localeCompare(right[0]))
+        .map(([providerId, config]) => [providerId, { ...config }])
+);
 //# sourceMappingURL=knownProvidersData.js.map

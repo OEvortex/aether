@@ -267,6 +267,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Inworld,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Jiekou,
             {
                 supportsMultiAccount: true,
@@ -601,7 +609,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ],
+        ]
     ]);
 
     private constructor(context: vscode.ExtensionContext) {
@@ -1225,7 +1233,7 @@ export class AccountManager {
      */
     isAccountExpired(accountId: string): boolean {
         const account = this.accounts.get(accountId);
-        if (!account || !account.expiresAt) {
+        if (!account?.expiresAt) {
             return false;
         }
         return new Date(account.expiresAt) < new Date();

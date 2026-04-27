@@ -18,7 +18,6 @@ import * as vscode from 'vscode';
 import { AccountManager } from '../../accounts';
 import type { Account } from '../../accounts/types';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
-import { CompatibleModelManager } from '../../utils/compatibleModelManager';
 import {
     AnthropicHandler,
     ApiKeyManager,
@@ -30,6 +29,7 @@ import {
     RetryManager,
     TokenCounter
 } from '../../utils';
+import { CompatibleModelManager } from '../../utils/compatibleModelManager';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
@@ -195,14 +195,17 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                 id: model.id,
                 name: model.name,
                 tooltip:
-                    model.tooltip || `${model.name} (${model.sdkMode || 'openai'})`,
+                    model.tooltip ||
+                    `${model.name} (${model.sdkMode || 'openai'})`,
                 maxInputTokens: model.maxInputTokens,
                 maxOutputTokens: model.maxOutputTokens,
                 capabilities: model.capabilities,
                 ...(model.baseUrl ? { baseUrl: model.baseUrl } : {}),
                 ...(model.model ? { model: model.model } : {}),
                 ...(model.sdkMode ? { sdkMode: model.sdkMode } : {}),
-                ...(model.customHeader ? { customHeader: model.customHeader } : {}),
+                ...(model.customHeader
+                    ? { customHeader: model.customHeader }
+                    : {}),
                 ...(model.extraBody ? { extraBody: model.extraBody } : {}),
                 ...(model.outputThinking !== undefined
                     ? { outputThinking: model.outputThinking }

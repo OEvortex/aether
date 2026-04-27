@@ -257,8 +257,8 @@ export class OpenAIHandler {
      * Fix issue where some models output "data:" without a space
      */
     private createCustomFetch(
-        providerKey: string,
-        baseURL?: string
+        _providerKey: string,
+        _baseURL?: string
     ): typeof fetch {
         return async (
             url: string | URL | Request,
@@ -304,11 +304,7 @@ export class OpenAIHandler {
             );
         }
         // Only process SSE responses, other types return original response
-        if (
-            !contentType ||
-            !contentType.includes('text/event-stream') ||
-            !response.body
-        ) {
+        if (!contentType?.includes('text/event-stream') || !response.body) {
             return response;
         }
         const reader = response.body.getReader();

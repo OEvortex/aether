@@ -4,8 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import type { BridgedTool, DeclaredTool, ExtensionToolMapping, FilterConfig } from './types';
-import { isToolAllowed, isExtensionAllowed } from './filters';
+import { isExtensionAllowed, isToolAllowed } from './filters';
+import type {
+    BridgedTool,
+    DeclaredTool,
+    ExtensionToolMapping,
+    FilterConfig
+} from './types';
 
 const OVERRIDES_KEY = 'aether.mcpBridge.toolOverrides';
 
@@ -37,7 +42,7 @@ function shortenDescription(desc: string, maxLen = 80): string {
     if (firstSentence && firstSentence[0].length <= maxLen) {
         return firstSentence[0].trimEnd();
     }
-    return desc.slice(0, maxLen - 1) + '\u2026';
+    return `${desc.slice(0, maxLen - 1)}\u2026`;
 }
 
 export class ToolRegistry implements vscode.Disposable {
@@ -49,7 +54,9 @@ export class ToolRegistry implements vscode.Disposable {
     readonly onDidChangeTools = this._onDidChangeTools.event;
 
     private cachedExtensionMap: Map<string, ExtensionToolMapping> | undefined;
-    private cachedDeclaredTools: Map<string, { ext: ExtensionToolMapping; declared: DeclaredTool }> | undefined;
+    private cachedDeclaredTools:
+        | Map<string, { ext: ExtensionToolMapping; declared: DeclaredTool }>
+        | undefined;
 
     constructor(
         private readonly getFilterConfig: () => FilterConfig,
@@ -57,7 +64,8 @@ export class ToolRegistry implements vscode.Disposable {
         private readonly outputChannel?: vscode.OutputChannel,
         private readonly storage?: vscode.Memento
     ) {
-        const saved = storage?.get<Record<string, boolean>>(OVERRIDES_KEY) ?? {};
+        const saved =
+            storage?.get<Record<string, boolean>>(OVERRIDES_KEY) ?? {};
         for (const [name, state] of Object.entries(saved)) {
             this.manualOverrides.set(name, state);
         }
@@ -72,7 +80,9 @@ export class ToolRegistry implements vscode.Disposable {
                 this.refresh();
             })
         );
-        this.outputChannel?.appendLine('[ToolRegistry] Started polling for tools');
+        this.outputChannel?.appendLine(
+            '[ToolRegistry] Started polling for tools'
+        );
     }
 
     private buildExtensionMap(): Map<string, ExtensionToolMapping> {
@@ -86,7 +96,10 @@ export class ToolRegistry implements vscode.Disposable {
             if (!Array.isArray(declaredTools)) {
                 continue;
             }
-            const displayName = (typeof pkg?.displayName === 'string' ? pkg.displayName : undefined) ?? ext.id;
+            const displayName =
+                (typeof pkg?.displayName === 'string'
+                    ? pkg.displayName
+                    : undefined) ?? ext.id;
             for (const dt of declaredTools) {
                 if (typeof dt.name === 'string') {
                     map.set(dt.name, {
@@ -99,8 +112,14 @@ export class ToolRegistry implements vscode.Disposable {
         return map;
     }
 
-    private getDeclaredTools(): Map<string, { ext: ExtensionToolMapping; declared: DeclaredTool }> {
-        const result = new Map<string, { ext: ExtensionToolMapping; declared: DeclaredTool }>();
+    private getDeclaredTools(): Map<
+        string,
+        { ext: ExtensionToolMapping; declared: DeclaredTool }
+    > {
+        const result = new Map<
+            string,
+            { ext: ExtensionToolMapping; declared: DeclaredTool }
+        >();
         for (const ext of vscode.extensions.all) {
             const pkg = ext.packageJSON as Record<string, unknown> | undefined;
             const contributes = pkg?.contributes as
@@ -110,7 +129,10 @@ export class ToolRegistry implements vscode.Disposable {
             if (!Array.isArray(declaredTools)) {
                 continue;
             }
-            const displayName = (typeof pkg?.displayName === 'string' ? pkg.displayName : undefined) ?? ext.id;
+            const displayName =
+                (typeof pkg?.displayName === 'string'
+                    ? pkg.displayName
+                    : undefined) ?? ext.id;
             for (const dt of declaredTools) {
                 if (typeof dt.name === 'string') {
                     result.set(dt.name, {
@@ -129,7 +151,9 @@ export class ToolRegistry implements vscode.Disposable {
     private invalidateExtensionCache(): void {
         this.cachedExtensionMap = undefined;
         this.cachedDeclaredTools = undefined;
-        this.outputChannel?.appendLine('[ToolRegistry] Extension cache invalidated');
+        this.outputChannel?.appendLine(
+            '[ToolRegistry] Extension cache invalidated'
+        );
     }
 
     refresh(): void {
@@ -147,10 +171,11 @@ export class ToolRegistry implements vscode.Disposable {
             currentNames.add(tool.name);
             const extInfo = extensionMap.get(tool.name);
             const extId = extInfo?.extensionId ?? 'unknown';
-            const filterExposed = isToolAllowed(tool.name, config) &&
-                isExtensionAllowed(extId, config) &&
-                this.manualOverrides.has(tool.name);
-            const exposed = this.manualOverrides.get(tool.name) ?? filterExposed;
+            const defaultExposed =
+                isToolAllowed(tool.name, config) &&
+                isExtensionAllowed(extId, config);
+            const manualOverride = this.manualOverrides.get(tool.name);
+            const exposed = manualOverride ?? defaultExposed;
             const declaredInfo = declaredTools.get(tool.name);
             const shortDesc = declaredInfo?.declared.description ?? '';
             const existing = this.tools.get(tool.name);
@@ -158,31 +183,40 @@ export class ToolRegistry implements vscode.Disposable {
             if (existing === undefined) {
                 this.tools.set(tool.name, {
                     name: tool.name,
-                    shortDescription: shortDesc ? shortenDescription(shortDesc) : shortenDescription(tool.description),
+                    shortDescription: shortDesc
+                        ? shortenDescription(shortDesc)
+                        : shortenDescription(tool.description),
                     description: tool.description,
                     toolIconId: extractIconId(declaredInfo?.declared.icon),
-                    inputSchema: tool.inputSchema as Record<string, unknown> | undefined,
+                    inputSchema: tool.inputSchema as
+                        | Record<string, unknown>
+                        | undefined,
                     tags: tool.tags,
                     exposed,
                     invocationCount: 0,
                     extensionId: extId,
-                    extensionDisplayName: extInfo?.extensionDisplayName ?? 'Unknown Extension',
+                    extensionDisplayName:
+                        extInfo?.extensionDisplayName ?? 'Unknown Extension',
                     disabledInVscode: false
                 });
                 changed = true;
             } else {
-                const newExtName = extInfo?.extensionDisplayName ?? 'Unknown Extension';
+                const newExtName =
+                    extInfo?.extensionDisplayName ?? 'Unknown Extension';
                 if (
                     existing.description !== tool.description ||
                     existing.exposed !== exposed ||
                     existing.extensionId !== extId ||
                     existing.extensionDisplayName !== newExtName ||
                     existing.disabledInVscode ||
-                    JSON.stringify(existing.inputSchema) !== JSON.stringify(tool.inputSchema) ||
+                    JSON.stringify(existing.inputSchema) !==
+                        JSON.stringify(tool.inputSchema) ||
                     JSON.stringify(existing.tags) !== JSON.stringify(tool.tags)
                 ) {
                     existing.description = tool.description;
-                    existing.inputSchema = tool.inputSchema as Record<string, unknown> | undefined;
+                    existing.inputSchema = tool.inputSchema as
+                        | Record<string, unknown>
+                        | undefined;
                     existing.tags = tool.tags;
                     existing.exposed = exposed;
                     existing.extensionId = extId;
@@ -201,11 +235,14 @@ export class ToolRegistry implements vscode.Disposable {
             currentNames.add(toolName);
             const existing = this.tools.get(toolName);
             if (existing === undefined) {
-                const fullDesc = declared.modelDescription ?? declared.description ?? '';
+                const fullDesc =
+                    declared.modelDescription ?? declared.description ?? '';
                 const shortDesc = declared.description ?? '';
                 this.tools.set(toolName, {
                     name: toolName,
-                    shortDescription: shortDesc ? shortenDescription(shortDesc) : shortenDescription(fullDesc),
+                    shortDescription: shortDesc
+                        ? shortenDescription(shortDesc)
+                        : shortenDescription(fullDesc),
                     description: fullDesc,
                     toolIconId: extractIconId(declared.icon),
                     inputSchema: declared.inputSchema,
@@ -236,7 +273,9 @@ export class ToolRegistry implements vscode.Disposable {
         if (changed) {
             this._onDidChangeTools.fire();
             this.persistOverrides();
-            this.outputChannel?.appendLine(`[ToolRegistry] Tools updated, total: ${this.tools.size}, exposed: ${this.getExposedTools().length}`);
+            this.outputChannel?.appendLine(
+                `[ToolRegistry] Tools updated, total: ${this.tools.size}, exposed: ${this.getExposedTools().length}`
+            );
         }
     }
 
@@ -245,7 +284,9 @@ export class ToolRegistry implements vscode.Disposable {
     }
 
     getExposedTools(): BridgedTool[] {
-        return Array.from(this.tools.values()).filter(t => t.exposed && !t.disabledInVscode);
+        return Array.from(this.tools.values()).filter(
+            (t) => t.exposed && !t.disabledInVscode
+        );
     }
 
     getTool(name: string): BridgedTool | undefined {
@@ -309,7 +350,7 @@ export class ToolRegistry implements vscode.Disposable {
 
     getToolsByExtension(extensionId: string): BridgedTool[] {
         return Array.from(this.tools.values())
-            .filter(t => t.extensionId === extensionId)
+            .filter((t) => t.extensionId === extensionId)
             .sort((a, b) => a.name.localeCompare(b.name));
     }
 

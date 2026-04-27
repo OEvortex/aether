@@ -342,7 +342,7 @@ export class AccountQuotaCache {
      */
     isInCooldown(accountId: string): boolean {
         const state = this.cache.get(accountId);
-        if (!state || !state.quotaExceeded) {
+        if (!state?.quotaExceeded) {
             return false;
         }
         if (state.quotaResetAt && Date.now() >= state.quotaResetAt) {
@@ -358,7 +358,7 @@ export class AccountQuotaCache {
      */
     getRemainingCooldown(accountId: string): number {
         const state = this.cache.get(accountId);
-        if (!state || !state.quotaExceeded || !state.quotaResetAt) {
+        if (!state?.quotaExceeded || !state.quotaResetAt) {
             return 0;
         }
         const remaining = state.quotaResetAt - Date.now();

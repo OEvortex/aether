@@ -37,8 +37,7 @@ const CODEX_BASE_URL = 'https://chatgpt.com/backend-api/codex';
 //   CODEX_VERSION=0.121      (sets the Version request header)
 //   CODEX_USER_AGENT=codex-cli/0.121  (sets the User-Agent request header)
 const CODEX_CLIENT_VERSION = process.env.CODEX_VERSION || '0.121';
-const CODEX_USER_AGENT =
-    process.env.CODEX_USER_AGENT || 'codex-cli/0.121';
+const CODEX_USER_AGENT = process.env.CODEX_USER_AGENT || 'codex-cli/0.121';
 
 // Sandbox configuration for FULL ACCESS mode (danger-full-access + never approval)
 // This tells the model it has unrestricted access to filesystem, network, and commands

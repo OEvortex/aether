@@ -346,6 +346,16 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    inworld: {
+        displayName: 'Inworld Router',
+        family: 'Inworld',
+        supportsApiKey: true,
+        apiKeyTemplate: 'YOUR_INWORLD_API_KEY',
+        sdkMode: 'openai',
+        openai: { baseUrl: 'https://api.inworld.ai/v1' },
+        anthropic: { baseUrl: 'https://api.inworld.ai' },
+        fetchModels: false
+    },
     jiekou: {
         displayName: 'Jiekou AI',
         family: 'Jiekou AI',
@@ -463,8 +473,12 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         supportsApiKey: true,
         apiKeyTemplate: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
         sdkMode: 'openai',
-        openai: { baseUrl: 'https://ark.ap-southeast.bytepluses.com/api/coding/v3' },
-        anthropic: { baseUrl: 'https://ark.ap-southeast.bytepluses.com/api/coding' },
+        openai: {
+            baseUrl: 'https://ark.ap-southeast.bytepluses.com/api/coding/v3'
+        },
+        anthropic: {
+            baseUrl: 'https://ark.ap-southeast.bytepluses.com/api/coding'
+        },
         openModelEndpoint: false,
         fetchModels: false
     },
@@ -834,8 +848,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         },
         openModelEndpoint: false,
         fetchModels: false
-    }
-    ,rinkoai: {
+    },
+    rinkoai: {
         displayName: 'RinkoAI',
         family: 'RinkoAI',
         supportsApiKey: true,
@@ -852,8 +866,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,vsllm: {
+    },
+    vsllm: {
         displayName: 'VSLLM',
         family: 'VSLLM',
         supportsApiKey: true,
@@ -869,8 +883,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,dialagram: {
+    },
+    dialagram: {
         displayName: 'Dialagram',
         family: 'Dialagram',
         supportsApiKey: true,
@@ -887,8 +901,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,routingrun: {
+    },
+    routingrun: {
         displayName: 'Routing.run',
         family: 'Routing.run',
         supportsApiKey: true,
@@ -904,8 +918,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,crof: {
+    },
+    crof: {
         displayName: 'Crof AI',
         family: 'Crof AI',
         supportsApiKey: true,
@@ -920,8 +934,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,requesty: {
+    },
+    requesty: {
         displayName: 'Requesty Router',
         family: 'Requesty',
         sdkMode: 'openai',
@@ -934,8 +948,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,aimlapi: {
+    },
+    aimlapi: {
         displayName: 'AIML API',
         family: 'AIML API',
         sdkMode: 'openai',
@@ -948,8 +962,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,ofox: {
+    },
+    ofox: {
         displayName: 'Ofox AI',
         family: 'Ofox AI',
         sdkMode: 'openai',
@@ -962,8 +976,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,helicone: {
+    },
+    helicone: {
         displayName: 'Helicone AI Gateway',
         family: 'Helicone',
         sdkMode: 'openai',
@@ -976,8 +990,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,portkey: {
+    },
+    portkey: {
         displayName: 'Portkey',
         family: 'Portkey',
         // Expose OpenAI-compatible, Responses (oai-response), and Anthropic-compatible bridges
@@ -993,8 +1007,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,edenai: {
+    },
+    edenai: {
         displayName: 'Eden AI',
         family: 'EdenAI',
         sdkMode: 'openai',
@@ -1007,8 +1021,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
-    }
-    ,together: {
+    },
+    together: {
         displayName: 'TogetherAI',
         family: 'Together',
         supportsApiKey: true,
@@ -1050,7 +1064,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         apiKeyTemplate: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         sdkMode: 'openai',
         openai: {
-            baseUrl: 'https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints'
+            baseUrl:
+                'https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints'
         },
         openModelEndpoint: false,
         fetchModels: true,

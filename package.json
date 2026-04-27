@@ -79,6 +79,7 @@
         "onLanguageModelProvider:aether.helicone",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
+        "onLanguageModelProvider:aether.inworld",
         "onLanguageModelProvider:aether.jiekou",
         "onLanguageModelProvider:aether.kilo",
         "onLanguageModelProvider:aether.knox",
@@ -624,6 +625,11 @@
                 "command": "aether.mcpBridge.expandGroup",
                 "title": "Expand/Collapse Group",
                 "category": "Aether"
+            },
+            {
+                "command": "aether.inworld.setApiKey",
+                "title": "Configure Inworld Router",
+                "category": "Aether"
             }
         ],
         "configuration": {
@@ -884,6 +890,62 @@
                     "description": "MoonshotAI plan type. coding: use https://api.kimi.com/coding/v1, normal: use https://api.moonshot.ai/v1.",
                     "scope": "application"
                 },
+                "aether.mcpBridge.http.port": {
+                    "type": "number",
+                    "default": 59684,
+                    "description": "Port for the MCP HTTP server"
+                },
+                "aether.mcpBridge.http.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable MCP HTTP server on startup"
+                },
+                "aether.mcpBridge.logging.logInvocations": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Log tool invocations to output channel"
+                },
+                "aether.mcpBridge.tools.include": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "**"
+                    ],
+                    "description": "Glob patterns for tools to include"
+                },
+                "aether.mcpBridge.tools.exclude": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [],
+                    "description": "Glob patterns for tools to exclude"
+                },
+                "aether.mcpBridge.extensions.include": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "**"
+                    ],
+                    "description": "Glob patterns for extensions to include"
+                },
+                "aether.mcpBridge.extensions.exclude": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [],
+                    "description": "Glob patterns for extensions to exclude"
+                },
+                "aether.mcpBridge.polling.intervalMs": {
+                    "type": "number",
+                    "default": 3000,
+                    "description": "Polling interval for tool registry in milliseconds"
+                },
                 "aether.aihubmix.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -988,6 +1050,16 @@
                     "description": "Select SDK compatibility mode for Fireworks AI.",
                     "scope": "application"
                 },
+                "aether.inworld.sdkMode": {
+                    "type": "string",
+                    "enum": [
+                        "openai",
+                        "anthropic"
+                    ],
+                    "default": "openai",
+                    "description": "Select SDK compatibility mode for Inworld Router.",
+                    "scope": "application"
+                },
                 "aether.jiekou.sdkMode": {
                     "type": "string",
                     "enum": [
@@ -1078,62 +1150,6 @@
                     "default": "openai",
                     "description": "Select SDK compatibility mode for Portkey.",
                     "scope": "application"
-                },
-                "aether.mcpBridge.http.port": {
-                    "type": "number",
-                    "default": 59684,
-                    "description": "Port for the MCP HTTP server"
-                },
-                "aether.mcpBridge.http.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable MCP HTTP server on startup"
-                },
-                "aether.mcpBridge.logging.logInvocations": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Log tool invocations to output channel"
-                },
-                "aether.mcpBridge.tools.include": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "**"
-                    ],
-                    "description": "Glob patterns for tools to include"
-                },
-                "aether.mcpBridge.tools.exclude": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [],
-                    "description": "Glob patterns for tools to exclude"
-                },
-                "aether.mcpBridge.extensions.include": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "**"
-                    ],
-                    "description": "Glob patterns for extensions to include"
-                },
-                "aether.mcpBridge.extensions.exclude": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [],
-                    "description": "Glob patterns for extensions to exclude"
-                },
-                "aether.mcpBridge.polling.intervalMs": {
-                    "type": "number",
-                    "default": 3000,
-                    "description": "Polling interval for tool registry in milliseconds"
                 }
             }
         },
@@ -1484,6 +1500,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Hugging Face API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.inworld",
+                "displayName": "⦿ Inworld Router",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Inworld Router API key.",
                             "secret": true
                         }
                     }

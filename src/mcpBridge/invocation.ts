@@ -33,7 +33,9 @@ export async function invokeLmTool(
                 errorMessage: `Tool "${toolName}" not found`
             };
             return {
-                content: [{ type: 'text', text: `Tool "${toolName}" not found` }],
+                content: [
+                    { type: 'text', text: `Tool "${toolName}" not found` }
+                ],
                 isError: true,
                 logEntry
             };
@@ -49,7 +51,12 @@ export async function invokeLmTool(
                 errorMessage: `Tool "${toolName}" is disabled in VS Code`
             };
             return {
-                content: [{ type: 'text', text: `Tool "${toolName}" is disabled in VS Code (extension not active)` }],
+                content: [
+                    {
+                        type: 'text',
+                        text: `Tool "${toolName}" is disabled in VS Code (extension not active)`
+                    }
+                ],
                 isError: true,
                 logEntry
             };
@@ -65,7 +72,12 @@ export async function invokeLmTool(
                 errorMessage: `Tool "${toolName}" is hidden`
             };
             return {
-                content: [{ type: 'text', text: `Tool "${toolName}" is hidden. Enable it in Aether MCP Bridge panel` }],
+                content: [
+                    {
+                        type: 'text',
+                        text: `Tool "${toolName}" is hidden. Enable it in Aether MCP Bridge panel`
+                    }
+                ],
                 isError: true,
                 logEntry
             };
@@ -78,7 +90,7 @@ export async function invokeLmTool(
         );
 
         const durationMs = Date.now() - startTime;
-        const content = result.content.map(part => {
+        const content = result.content.map((part) => {
             if (part instanceof vscode.LanguageModelTextPart) {
                 return { type: 'text' as const, text: part.value };
             }
@@ -100,7 +112,8 @@ export async function invokeLmTool(
         return { content, isError: false, logEntry };
     } catch (error) {
         const durationMs = Date.now() - startTime;
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage =
+            error instanceof Error ? error.message : String(error);
         const logEntry: InvocationLogEntry = {
             timestamp,
             toolName,
@@ -109,7 +122,12 @@ export async function invokeLmTool(
             errorMessage
         };
         return {
-            content: [{ type: 'text', text: `Tool invocation failed: ${errorMessage}` }],
+            content: [
+                {
+                    type: 'text',
+                    text: `Tool invocation failed: ${errorMessage}`
+                }
+            ],
             isError: true,
             logEntry
         };
