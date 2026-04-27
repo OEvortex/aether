@@ -300,14 +300,26 @@ export class ToolRegistry implements vscode.Disposable {
         }
     }
 
+    setToolExposed(name: string, exposed: boolean): void {
+        const tool = this.tools.get(name);
+        if (
+            tool === undefined ||
+            tool.disabledInVscode ||
+            tool.exposed === exposed
+        ) {
+            return;
+        }
+
+        tool.exposed = exposed;
+        this.manualOverrides.set(name, exposed);
+        this.persistOverrides();
+        this._onDidChangeTools.fire();
+    }
+
     toggleTool(name: string): void {
         const tool = this.tools.get(name);
         if (tool !== undefined && !tool.disabledInVscode) {
-            const newState = !tool.exposed;
-            tool.exposed = newState;
-            this.manualOverrides.set(name, newState);
-            this.persistOverrides();
-            this._onDidChangeTools.fire();
+            this.setToolExposed(name, !tool.exposed);
         }
     }
 
@@ -315,7 +327,11 @@ export class ToolRegistry implements vscode.Disposable {
         let changed = false;
         for (const name of toolNames) {
             const tool = this.tools.get(name);
-            if (tool !== undefined && !tool.disabledInVscode) {
+            if (
+                tool !== undefined &&
+                !tool.disabledInVscode &&
+                tool.exposed !== exposed
+            ) {
                 tool.exposed = exposed;
                 this.manualOverrides.set(name, exposed);
                 changed = true;

@@ -234,7 +234,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // Asynchronously sync existing accounts (non-blocking startup)
         accountSyncAdapter
             .syncAllAccounts()
-            .catch((err) => Logger.warn('Account sync failed:', err));
+            .catch((err: unknown) => Logger.warn('Account sync failed:', err));
 
         Logger.trace(
             `⏱️ Multi-account manager initialization complete (time: ${Date.now() - stepStartTime}ms)`
@@ -522,8 +522,7 @@ export async function activate(context: vscode.ExtensionContext) {
         mcpTreeView = vscode.window.createTreeView(
             'aether.mcpBridge.toolsView',
             {
-                treeDataProvider: mcpViewProvider,
-                manageCheckboxStateManually: true
+                treeDataProvider: mcpViewProvider
             }
         );
         context.subscriptions.push(mcpTreeView, mcpViewProvider);
@@ -536,7 +535,10 @@ export async function activate(context: vscode.ExtensionContext) {
                         state === vscode.TreeItemCheckboxState.Checked
                     );
                 } else if (item instanceof ToolTreeItem) {
-                    mcpRegistry?.toggleTool(item.tool.name);
+                    mcpRegistry?.setToolExposed(
+                        item.toolName,
+                        state === vscode.TreeItemCheckboxState.Checked
+                    );
                 }
             }
         });
@@ -559,7 +561,7 @@ export async function activate(context: vscode.ExtensionContext) {
                             port,
                             registry: mcpRegistry!,
                             outputChannel: mcpOutputChannel!,
-                            onInvocation: (entry) => {
+                            onInvocation: (entry: { timestamp: string; toolName: string; status: string; durationMs: number }) => {
                                 if (
                                     config.get<boolean>(
                                         'logging.logInvocations',
@@ -571,7 +573,7 @@ export async function activate(context: vscode.ExtensionContext) {
                                     );
                                 }
                             },
-                            onToolBlocked: (toolName, reason) => {
+                            onToolBlocked: (toolName: string, reason: 'hidden' | 'disabled') => {
                                 const msg =
                                     reason === 'disabled'
                                         ? `Tool "${toolName}" is disabled in VS Code`
@@ -593,7 +595,7 @@ export async function activate(context: vscode.ExtensionContext) {
                             'aether.mcpBridge.serverRunning',
                             true
                         );
-                        mcpOutputChannel.appendLine(
+                        mcpOutputChannel?.appendLine(
                             `[extension] MCP server started on port ${mcpHttpServer.port}`
                         );
                         vscode.window.showInformationMessage(
@@ -673,7 +675,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     const allTools = mcpRegistry.getAllTools();
                     for (const tool of allTools) {
                         if (!tool.disabledInVscode) {
-                            mcpRegistry.toggleTool(tool.name);
+                            mcpRegistry.setToolExposed(tool.name, true);
                         }
                     }
                     const exposed = mcpRegistry.getExposedTools().length;
@@ -791,7 +793,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 (item) => {
                     if (item instanceof ExtensionTreeItem) {
                         const newState = !item.toggleableToolNames.every(
-                            (name) => mcpRegistry?.getTool(name)?.exposed
+                            (name: string) => mcpRegistry?.getTool(name)?.exposed
                         );
                         mcpRegistry?.setGroupExposed(
                             item.toggleableToolNames,

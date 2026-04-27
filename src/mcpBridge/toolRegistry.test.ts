@@ -121,6 +121,72 @@ describe('ToolRegistry', () => {
         expect(registry.getExposedTools()).toHaveLength(0);
     });
 
+    it('applies explicit checkbox state without flipping back', () => {
+        registry.refresh();
+
+        registry.setToolExposed('aether_testTool', false);
+        expect(registry.getTool('aether_testTool')?.exposed).toBe(false);
+
+        registry.setToolExposed('aether_testTool', false);
+        expect(registry.getTool('aether_testTool')?.exposed).toBe(false);
+
+        registry.setToolExposed('aether_testTool', true);
+        expect(registry.getTool('aether_testTool')?.exposed).toBe(true);
+    });
+
+    it('updates groups idempotently', () => {
+        mockState.tools = [
+            ...mockState.tools,
+            {
+                name: 'aether_secondTool',
+                description: 'Second tool description',
+                inputSchema: {
+                    type: 'object',
+                    properties: {}
+                },
+                tags: []
+            }
+        ];
+        mockState.extensions = [
+            {
+                id: 'sample.extension',
+                packageJSON: {
+                    displayName: 'Sample Extension',
+                    contributes: {
+                        languageModelTools: [
+                            {
+                                name: 'aether_testTool',
+                                description: 'Declared tool description',
+                                icon: '$(tools)'
+                            },
+                            {
+                                name: 'aether_secondTool',
+                                description: 'Second declared tool description',
+                                icon: '$(tools)'
+                            }
+                        ]
+                    }
+                }
+            }
+        ];
+        registry.refresh();
+
+        registry.setGroupExposed(
+            ['aether_testTool', 'aether_secondTool'],
+            false
+        );
+        expect(registry.getExposedTools()).toHaveLength(0);
+
+        registry.setGroupExposed(
+            ['aether_testTool', 'aether_secondTool'],
+            false
+        );
+        expect(registry.getExposedTools()).toHaveLength(0);
+
+        registry.setGroupExposed(['aether_testTool', 'aether_secondTool'], true);
+        expect(registry.getExposedTools()).toHaveLength(2);
+    });
+
     it('still hides tools excluded by filters', () => {
         registry = createRegistry({
             includeTools: ['**'],

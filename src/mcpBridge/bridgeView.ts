@@ -36,9 +36,11 @@ export class ExtensionTreeItem extends vscode.TreeItem {
 
         if (toggleableToolNames.length > 0) {
             this.checkboxState =
-                exposedTools >= toggleableToolNames.length
+                exposedTools === 0
+                    ? vscode.TreeItemCheckboxState.Unchecked
+                    : exposedTools >= toggleableToolNames.length
                     ? vscode.TreeItemCheckboxState.Checked
-                    : vscode.TreeItemCheckboxState.Unchecked;
+                    : vscode.TreeItemCheckboxState.Indeterminate;
         }
 
         this.tooltip = new vscode.MarkdownString(
@@ -152,11 +154,6 @@ export class BridgeViewProvider
         TreeElement | undefined
     >();
     readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
-
-    private _onDidChangeCheckboxState = new vscode.EventEmitter<
-        vscode.TreeCheckboxChangeEvent<TreeElement>
-    >();
-    readonly onDidChangeCheckboxState = this._onDidChangeCheckboxState.event;
 
     private groupCache = new Map<string, BridgedTool[]>();
     private disposables: vscode.Disposable[] = [];

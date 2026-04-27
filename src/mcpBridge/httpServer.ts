@@ -208,10 +208,19 @@ export async function startHttpMcpServer(
         outputChannel?.appendLine(
             `[HttpServer] Tools changed, exposed: ${exposedCount}`
         );
-        for (const [, entry] of sessionEntries) {
-            try {
-                void entry.server.sendToolListChanged();
-            } catch {}
+        for (const [sid, entry] of sessionEntries) {
+            void entry.server.sendToolListChanged().then(
+                () => {
+                    outputChannel?.appendLine(
+                        `[HttpServer] Sent tools/list_changed to session ${sid}`
+                    );
+                },
+                (error: unknown) => {
+                    outputChannel?.appendLine(
+                        `[HttpServer] Failed to send tools/list_changed to session ${sid}: ${error instanceof Error ? error.message : String(error)}`
+                    );
+                }
+            );
         }
     });
 

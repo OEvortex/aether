@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file.
 - **Codex client headers**: Made Codex `Version` header and `User-Agent` configurable via environment variables.
 - **Codex models**: Updated to current models. Removed deprecated gpt-5.2* and gpt-5.1-codex-mini. Added gpt-5.5, gpt-5.4 (with medium/high/xhigh reasoning), gpt-5.4-mini (with low/medium reasoning).
 
+### Fixed
+- **MCP Bridge checkbox selection**: Fixed issue where tool checkboxes in the MCP Bridge TreeView were not responding to clicks. Removed `manageCheckboxStateManually` flag to let VS Code handle checkbox state automatically, and removed unused event emitter from TreeDataProvider.
+
 ## [0.4.3] - 2026-04-24
 
 ### Added
