@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.4.4] - Unreleased
+## [0.4.4] - 2026-04-27
 
 ### Added
 - **DeepSeek V4 context window**: DeepSeek V4 models now support 1M context window with 64K max output / 936K max input. Added new detector `isDeepSeekV4Model()` in `globalContextLengthManager.ts`.
