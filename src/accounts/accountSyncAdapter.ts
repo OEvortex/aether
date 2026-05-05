@@ -244,6 +244,7 @@ export class AccountSyncAdapter {
             ProviderKey.Fastrouter,
             ProviderKey.Fireworks,
             ProviderKey.Friendli,
+            ProviderKey.Gemini,
             ProviderKey.Helicone,
             ProviderKey.Hicapai,
             ProviderKey.Huggingface,
@@ -288,7 +289,7 @@ export class AccountSyncAdapter {
             ProviderKey.Xiaomimimo,
             ProviderKey.Xinjianya,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu
+            ProviderKey.Zhipu,
         ];
 
         // Sync Codex (OAuth)

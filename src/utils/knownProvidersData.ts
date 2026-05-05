@@ -301,6 +301,20 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    gemini: {
+        displayName: 'Gemini CLI',
+        family: 'Gemini',
+        openai: {
+            baseUrl: 'https://cloudcode-pa.googleapis.com/v1'
+        },
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     compatible: {
         displayName: 'OpenAI/Anthropic Compatible',
         family: 'Custom',

@@ -269,7 +269,7 @@ export function apiMessageToAnthropicMessage(
         }
     }
 
-    // If includeThinking=true, check and ensure assistant messages contain thinking blocks
+    // If includeThinking=true, ensure thinking blocks are first (Anthropic requirement)
     if (model.includeThinking) {
         for (const message of mergedMessages) {
             if (
@@ -287,20 +287,13 @@ export function apiMessageToAnthropicMessage(
                         block.type !== 'thinking' &&
                         block.type !== 'redacted_thinking'
                 );
-                if (thinkingBlocks.length === 0) {
-                    // Add default thinking block at the beginning of assistant message
-                    content.unshift({
-                        type: 'thinking',
-                        thinking: '...'
-                    } as ThinkingBlockParam);
-                    Logger.trace(
-                        'Assistant message missing thinking block, added default one'
-                    );
-                } else if (
+                // Ensure thinking blocks are first (Anthropic requirement)
+                // Do NOT add fake placeholders - Anthropic requires actual thinking content
+                if (
+                    thinkingBlocks.length > 0 &&
                     content[0]?.type !== 'thinking' &&
                     content[0]?.type !== 'redacted_thinking'
                 ) {
-                    // Ensure thinking blocks are first (Anthropic requirement)
                     message.content = [...thinkingBlocks, ...nonThinkingBlocks];
                     Logger.trace(
                         'Assistant message reordered to start with thinking block'

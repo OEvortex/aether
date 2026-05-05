@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.5] - Unreleased
+
+### Fixed
+- Fixed MCP bridge tool invocation error caused by accessing undefined `vscode.CancellationToken.None`, replacing with `undefined` to resolve "Cannot read properties of undefined (reading 'None')" error when invoking tools like `read_file`
+
+### Changed
+- Updated Anthropic thinking block handling: removed fake placeholder thinking blocks, enforced thinking blocks to appear first in assistant messages per Anthropic API requirements
+
 ## [0.4.4] - 2026-04-27
 
 ### Added

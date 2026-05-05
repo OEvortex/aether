@@ -86,7 +86,7 @@ export async function invokeLmTool(
         const result = await vscode.lm.invokeTool(
             toolName,
             { input },
-            vscode.CancellationToken.None
+            undefined
         );
 
         const durationMs = Date.now() - startTime;

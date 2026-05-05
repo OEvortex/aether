@@ -76,6 +76,7 @@
         "onLanguageModelProvider:aether.fastrouter",
         "onLanguageModelProvider:aether.fireworks",
         "onLanguageModelProvider:aether.friendli",
+        "onLanguageModelProvider:aether.gemini",
         "onLanguageModelProvider:aether.helicone",
         "onLanguageModelProvider:aether.hicapai",
         "onLanguageModelProvider:aether.huggingface",
@@ -270,6 +271,16 @@
             {
                 "command": "aether.qwencli.addAccount",
                 "title": "Qwen Code Add Account",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.gemini.login",
+                "title": "Gemini Code Login (OAuth)",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.gemini.addAccount",
+                "title": "Gemini Code Add Account",
                 "category": "Aether"
             },
             {
@@ -1461,6 +1472,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Friendli API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.gemini",
+                "displayName": "⦿ Gemini CLI",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Gemini CLI API key.",
                             "secret": true
                         }
                     }

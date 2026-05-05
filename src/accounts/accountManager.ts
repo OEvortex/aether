@@ -243,6 +243,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Gemini,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Helicone,
             {
                 supportsMultiAccount: true,
@@ -609,7 +617,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ]
+        ],
     ]);
 
     private constructor(context: vscode.ExtensionContext) {

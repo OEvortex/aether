@@ -275,6 +275,10 @@ const specializedProviderFactories: Record<string, ProviderFactory> = {
         () => import('../providers/qwencli/provider.js'),
         'QwenCliProvider'
     ),
+    gemini: createLazyFactory(
+        () => import('../providers/gemini/provider.js'),
+        'GeminiCliProvider'
+    ),
     moonshot: createLazyFactory(
         () => import('../providers/moonshot/moonshotProvider.js'),
         'MoonshotProvider'
