@@ -26,6 +26,10 @@ const PKCE_CHALLENGE_METHOD = 'S256';
 const GEMINI_DIR = path.join(os.homedir(), '.gemini');
 const OAUTH_CREDS_FILE = path.join(GEMINI_DIR, 'oauth_creds.json');
 
+// Retry configuration for token refresh
+const DEFAULT_MAX_ATTEMPTS = 5;
+const RETRY_BASE_DELAY_MS = 1000;
+
 export class GeminiOAuthManager {
     private static instance: GeminiOAuthManager;
     private credentials: GeminiOAuthCredentials | null = null;
@@ -85,6 +89,20 @@ export class GeminiOAuthManager {
             Logger.trace(`[gemini] Failed to load from CLI storage: ${error}`);
         }
         return null;
+    }
+
+    /**
+     * Helper to wait for a specified delay (used for retry backoff)
+     */
+    private async waitMs(ms: number): Promise<void> {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    /**
+     * Check if an error is retryable (network issues, 5xx errors)
+     */
+    private isRetryableError(status: number | undefined): boolean {
+        return !status || status >= 500 || status === 429;
     }
 
     private startProactiveRefresh(): void {
@@ -250,45 +268,75 @@ export class GeminiOAuthManager {
     }
 
     private async exchangeCode(code: string, verifier: string): Promise<GeminiOAuthCredentials | null> {
-        try {
-            const body = new URLSearchParams();
-            body.set('client_id', GEMINI_CLIENT_ID);
-            body.set('code', code);
-            body.set('grant_type', 'authorization_code');
-            body.set('redirect_uri', GEMINI_REDIRECT_URI);
-            body.set('code_verifier', verifier);
+        const maxAttempts = DEFAULT_MAX_ATTEMPTS;
 
-            const response = await fetch(GEMINI_OAUTH_TOKEN_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json',
-                    'User-Agent': getUserAgent()
-                },
-                body: body.toString()
-            });
+        for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                const body = new URLSearchParams();
+                body.set('client_id', GEMINI_CLIENT_ID);
+                body.set('code', code);
+                body.set('grant_type', 'authorization_code');
+                body.set('redirect_uri', GEMINI_REDIRECT_URI);
+                body.set('code_verifier', verifier);
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Token exchange failed: ${response.status} ${errorText}`);
+                const response = await fetch(GEMINI_OAUTH_TOKEN_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/json',
+                        'User-Agent': getUserAgent()
+                    },
+                    body: body.toString()
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+
+                    // Handle invalid_grant error - Google revoked the refresh token
+                    if (errorText.includes('invalid_grant')) {
+                        Logger.warn('[gemini] Google revoked the stored refresh token. Run "Gemini: Sign In" to re-authenticate.');
+                        this.invalidateCredentials();
+                    }
+
+                    // Retry on retryable errors
+                    if (attempt < maxAttempts && this.isRetryableError(response.status)) {
+                        const delay = RETRY_BASE_DELAY_MS * Math.pow(2, attempt - 1);
+                        Logger.debug(`[gemini] Token exchange attempt ${attempt} failed, retrying in ${delay}ms...`);
+                        await this.waitMs(delay);
+                        continue;
+                    }
+
+                    throw new Error(`Token exchange failed: ${response.status} ${errorText}`);
+                }
+
+                const tokenData = (await response.json()) as GeminiTokenResponse;
+
+                const credentials: GeminiOAuthCredentials = {
+                    access_token: tokenData.access_token,
+                    token_type: tokenData.token_type || 'Bearer',
+                    refresh_token: tokenData.refresh_token,
+                    expiry_date: Date.now() + tokenData.expires_in * 1000,
+                    resource_url: 'https://generativelanguage.googleapis.com'
+                };
+
+                return credentials;
+
+            } catch (error) {
+                Logger.error('[gemini] Token exchange failed', error);
+
+                // Retry on network errors
+                if (attempt < maxAttempts) {
+                    const delay = RETRY_BASE_DELAY_MS * Math.pow(2, attempt - 1);
+                    Logger.debug(`[gemini] Token exchange attempt ${attempt} failed, retrying in ${delay}ms...`);
+                    await this.waitMs(delay);
+                    continue;
+                }
+
+                return null;
             }
-
-            const tokenData = (await response.json()) as GeminiTokenResponse;
-
-            const credentials: GeminiOAuthCredentials = {
-                access_token: tokenData.access_token,
-                token_type: tokenData.token_type || 'Bearer',
-                refresh_token: tokenData.refresh_token,
-                expiry_date: Date.now() + tokenData.expires_in * 1000,
-                resource_url: 'https://generativelanguage.googleapis.com'
-            };
-
-            return credentials;
-
-        } catch (error) {
-            Logger.error('[gemini] Token exchange failed', error);
-            return null;
         }
+
+        return null;
     }
 
     private async refreshAccessToken(credentials: GeminiOAuthCredentials): Promise<GeminiOAuthCredentials> {
@@ -316,6 +364,14 @@ export class GeminiOAuthManager {
         if (!response.ok) {
             const errorText = await response.text();
             Logger.warn(`[gemini] Token refresh failed: ${response.status} ${errorText}`);
+
+            // Handle invalid_grant error - Google revoked the refresh token
+            // Clear stored credentials and prompt user to re-authenticate
+            if (errorText.includes('invalid_grant')) {
+                Logger.warn('[gemini] Google revoked the stored refresh token. Run "Gemini: Sign In" to re-authenticate.');
+                this.invalidateCredentials();
+            }
+
             throw new Error(`Token refresh failed: ${response.status} ${errorText}`);
         }
 

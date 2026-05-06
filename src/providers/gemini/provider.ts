@@ -417,6 +417,11 @@ export class GeminiCliProvider
             // Try to use managed accounts first (load balancing if configured)
             const accountManager = AccountManager.getInstance();
             const accounts = accountManager.getAccountsByProvider('geminicli');
+            Logger.debug('[geminicli] provideLanguageModelChatResponse called', {
+                modelId: model.id,
+                hasAccounts: !!(accounts && accounts.length > 0),
+                accountCount: accounts?.length || 0
+            });
             const loadBalanceEnabled =
                 accountManager.getLoadBalanceEnabled('geminicli');
             const assignedAccountId = accountManager.getAccountIdForModel(
@@ -561,6 +566,11 @@ export class GeminiCliProvider
             // Fallback: Ensure we read latest token (in case CLI updated credentials externally)
             const creds = await GeminiOAuthManager.getInstance().getValidCredentials();
             if (!creds) {
+                Logger.error('[geminicli] Debug: Credentials check failed', {
+                    hasAccessToken: !!(creds?.access_token),
+                    hasResourceUrl: !!(creds?.resource_url),
+                    message: 'GeminiOAuthManager.getValidCredentials returned null or undefined'
+                });
                 throw new Error('Not authenticated');
             }
             const { accessToken, baseURL } = { accessToken: creds.access_token, baseURL: creds.resource_url || 'https://generativelanguage.googleapis.com' };
