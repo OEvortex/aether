@@ -29,6 +29,32 @@
                 "toolCalling": true,
                 "imageInput": false
             }
+        },
+        {
+            "id": "deepseek-v4-flash",
+            "name": "DeepSeek-V4-Flash",
+            "tooltip": "DeepSeek V4 Flash model optimized for faster inference with 1M context window. Supports 64K max output / 936K max input.",
+            "sdkMode": "anthropic",
+            "baseUrl": "https://api.deepseek.com/anthropic",
+            "maxInputTokens": 936000,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "deepseek-v4-pro",
+            "name": "DeepSeek-V4-Pro",
+            "tooltip": "DeepSeek V4 Pro model with 1M context window. Supports 64K max output / 936K max input.",
+            "sdkMode": "anthropic",
+            "baseUrl": "https://api.deepseek.com/anthropic",
+            "maxInputTokens": 936000,
+            "maxOutputTokens": 65536,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
         }
     ]
 }

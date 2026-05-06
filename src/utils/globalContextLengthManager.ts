@@ -27,8 +27,8 @@ const DEEPSEEK_MAX_OUTPUT_TOKENS = 16 * TOKENS_PER_KIBI;
 const DEEPSEEK_MAX_INPUT_TOKENS =
     DEEPSEEK_TOTAL_TOKENS - DEEPSEEK_MAX_OUTPUT_TOKENS;
 
-const DEEPSEEK_V4_TOTAL_TOKENS = 1000 * 1024;
-const DEEPSEEK_V4_MAX_OUTPUT_TOKENS = 64 * 1024;
+const DEEPSEEK_V4_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const DEEPSEEK_V4_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
 const DEEPSEEK_V4_MAX_INPUT_TOKENS =
     DEEPSEEK_V4_TOTAL_TOKENS - DEEPSEEK_V4_MAX_OUTPUT_TOKENS;
 
@@ -80,6 +80,10 @@ const QWEN36_1M_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI;
 const QWEN36_1M_MAX_INPUT_TOKENS =
     QWEN36_1M_TOTAL_TOKENS - QWEN36_1M_MAX_OUTPUT_TOKENS;
 
+const LLAMA4_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const LLAMA4_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
+const LLAMA4_MAX_INPUT_TOKENS = LLAMA4_TOTAL_TOKENS - LLAMA4_MAX_OUTPUT_TOKENS;
+
 const GEMINI_1M_TOTAL_TOKENS = TOKENS_PER_MEBI;
 const GEMINI25_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI;
 const GEMINI25_MAX_INPUT_TOKENS =
@@ -99,9 +103,38 @@ const NOVA2_MAX_INPUT_TOKENS = TOKENS_PER_MEBI - NOVA2_MAX_OUTPUT_TOKENS;
 const GPT5_MAX_INPUT_TOKENS = 400 * TOKENS_PER_KIBI - 64 * TOKENS_PER_KIBI;
 const GPT5_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
 
+// GPT-5.4: 1M context, 64K output
+const GPT54_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const GPT54_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
+const GPT54_MAX_INPUT_TOKENS = GPT54_TOTAL_TOKENS - GPT54_MAX_OUTPUT_TOKENS;
+
+// GPT-5.5: 1M context, 64K output
+const GPT55_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const GPT55_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
+const GPT55_MAX_INPUT_TOKENS = GPT55_TOTAL_TOKENS - GPT55_MAX_OUTPUT_TOKENS;
+
 const GPT4_1_TOTAL_TOKENS = TOKENS_PER_MEBI;
 const GPT4_1_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI;
 const GPT4_1_MAX_INPUT_TOKENS = GPT4_1_TOTAL_TOKENS - GPT4_1_MAX_OUTPUT_TOKENS;
+
+// Grok-4 base: 256K context, 32K output
+const GROK4_TOTAL_TOKENS = 256 * TOKENS_PER_KIBI;
+const GROK4_MAX_OUTPUT_TOKENS = 32 * TOKENS_PER_KIBI;
+const GROK4_MAX_INPUT_TOKENS = GROK4_TOTAL_TOKENS - GROK4_MAX_OUTPUT_TOKENS;
+
+// Grok-4.1: 1M context, 64K output
+const GROK41_TOTAL_TOKENS = TOKENS_PER_MEBI;
+const GROK41_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
+const GROK41_MAX_INPUT_TOKENS = GROK41_TOTAL_TOKENS - GROK41_MAX_OUTPUT_TOKENS;
+
+// Grok-4.2: 2M context, 64K output
+const GROK42_TOTAL_TOKENS = 2 * TOKENS_PER_MEBI;
+const GROK42_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
+const GROK42_MAX_INPUT_TOKENS = GROK42_TOTAL_TOKENS - GROK42_MAX_OUTPUT_TOKENS;
+
+// Grok-4.3: 1M context, 64K output
+const GROK43_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
+const GROK43_MAX_INPUT_TOKENS = GROK41_TOTAL_TOKENS - GROK43_MAX_OUTPUT_TOKENS;
 
 const MIMOV2_PRO_TOTAL_TOKENS = TOKENS_PER_MEBI;
 const MIMOV2_PRO_MAX_OUTPUT_TOKENS = 64 * TOKENS_PER_KIBI;
@@ -156,6 +189,10 @@ export function isLlama32Model(modelId: string): boolean {
     return /llama[-_]?3[-_]?2/i.test(modelId);
 }
 
+export function isLlama4Model(modelId: string): boolean {
+    return /llama[-_]?4/i.test(modelId);
+}
+
 export function isGemini25Model(modelId: string): boolean {
     return /gemini[-_]?2(?:\.|-)5/i.test(modelId);
 }
@@ -188,8 +225,32 @@ export function isGpt4oModel(modelId: string): boolean {
     return /gpt-4o/i.test(modelId);
 }
 
+export function isGrok4Model(modelId: string): boolean {
+    return /grok-4$/i.test(modelId) || /grok-4[^-_.\d]/i.test(modelId);
+}
+
+export function isGrok41Model(modelId: string): boolean {
+    return /grok[-_]?4[._-]?1/i.test(modelId);
+}
+
+export function isGrok42Model(modelId: string): boolean {
+    return /grok[-_]?4[._-]?2/i.test(modelId);
+}
+
+export function isGrok43Model(modelId: string): boolean {
+    return /grok[-_]?4[._-]?3/i.test(modelId);
+}
+
 export function isGpt5Model(modelId: string): boolean {
     return /gpt-5/i.test(modelId);
+}
+
+export function isGpt54Model(modelId: string): boolean {
+    return /gpt-5[._-]?4/i.test(modelId);
+}
+
+export function isGpt55Model(modelId: string): boolean {
+    return /gpt-5[._-]?5/i.test(modelId);
 }
 
 const HY3_TOTAL_TOKENS = 256 * TOKENS_PER_KIBI;
@@ -317,6 +378,12 @@ export function resolveGlobalTokenLimits(
             maxOutputTokens: FIXED_128K_MAX_OUTPUT_TOKENS
         };
     }
+    if (isLlama4Model(modelId)) {
+        return {
+            maxInputTokens: LLAMA4_MAX_INPUT_TOKENS,
+            maxOutputTokens: LLAMA4_MAX_OUTPUT_TOKENS
+        };
+    }
     if (isQwen35OneMillionContextModel(modelId)) {
         return {
             maxInputTokens: QWEN35_1M_MAX_INPUT_TOKENS,
@@ -375,6 +442,42 @@ export function resolveGlobalTokenLimits(
         return {
             maxInputTokens: GPT5_MAX_INPUT_TOKENS,
             maxOutputTokens: GPT5_MAX_OUTPUT_TOKENS
+        };
+    }
+    if (isGpt54Model(modelId)) {
+        return {
+            maxInputTokens: GPT54_MAX_INPUT_TOKENS,
+            maxOutputTokens: GPT54_MAX_OUTPUT_TOKENS
+        };
+    }
+    if (isGpt55Model(modelId)) {
+        return {
+            maxInputTokens: GPT55_MAX_INPUT_TOKENS,
+            maxOutputTokens: GPT55_MAX_OUTPUT_TOKENS
+        };
+    }
+    if (isGrok4Model(modelId)) {
+        return {
+            maxInputTokens: GROK4_MAX_INPUT_TOKENS,
+            maxOutputTokens: GROK4_MAX_OUTPUT_TOKENS
+        };
+    }
+    if (isGrok41Model(modelId)) {
+        return {
+            maxInputTokens: GROK41_MAX_INPUT_TOKENS,
+            maxOutputTokens: GROK41_MAX_OUTPUT_TOKENS
+        };
+    }
+    if (isGrok42Model(modelId)) {
+        return {
+            maxInputTokens: GROK42_MAX_INPUT_TOKENS,
+            maxOutputTokens: GROK42_MAX_OUTPUT_TOKENS
+        };
+    }
+    if (isGrok43Model(modelId)) {
+        return {
+            maxInputTokens: GROK43_MAX_INPUT_TOKENS,
+            maxOutputTokens: GROK43_MAX_OUTPUT_TOKENS
         };
     }
     if (isMingFlashOmniModel(modelId)) {
@@ -557,6 +660,11 @@ export function resolveGlobalCapabilities(
             isMiMoV25Model(modelId) ||
             isMiMoV25ProModel(modelId) ||
             isMiMoV2OmniModel(modelId) ||
-            isGemma4Model(modelId)
+            isGemma4Model(modelId) ||
+            isGrok4Model(modelId) ||
+            isGrok41Model(modelId) ||
+            isGrok42Model(modelId) ||
+            isGrok43Model(modelId) ||
+            isLlama4Model(modelId)
     };
 }

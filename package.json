@@ -119,7 +119,8 @@
         "onLanguageModelProvider:aether.xiaomimimo",
         "onLanguageModelProvider:aether.xinjianya",
         "onLanguageModelProvider:aether.zenmux",
-        "onLanguageModelProvider:aether.zhipu"
+        "onLanguageModelProvider:aether.zhipu",
+        "onLanguageModelProvider:aether.compatible"
     ],
     "contributes": {
         "commands": [
@@ -582,12 +583,7 @@
                 "title": "Configure Xiaomi Mimo",
                 "category": "Aether"
             },
-            {
-                "command": "aether.gemini.setApiKey",
-                "title": "Configure Gemini CLI",
-                "category": "Aether"
-            },
-            {
+                        {
                 "command": "aether.mcpBridge.startServer",
                 "title": "Start MCP Server",
                 "category": "Aether"
@@ -2044,6 +2040,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Zhipu AI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.compatible",
+                "displayName": "⦿ OpenAI/Anthropic Compatible",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Compatible provider API key.",
                             "secret": true
                         }
                     }

@@ -36,6 +36,7 @@ export {
     isKimiK25Model,
     isKimiModel,
     isLlama32Model,
+    isLlama4Model,
     isMiMoV2OmniModel,
     isMiMoV2ProModel,
     isMiMoV25Model,

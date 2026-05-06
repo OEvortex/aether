@@ -172,15 +172,11 @@ export class GeminiCliProvider
 
                 // Check if credentials already exist
                 try {
-                    const existing = await oauthManager.getActiveOAuthAccount({
-                        allowExhausted: true
-                    });
-                    if (existing?.accessToken) {
+                    const creds = await oauthManager.getValidCredentials();
+                    if (creds) {
                         // Credentials exist, refresh and confirm
-                        const { accessToken, baseURL, totalAccountCount } =
-                            await oauthManager.ensureAuthenticated(true);
                         vscode.window.showInformationMessage(
-                            `${providerConfig.displayName} already logged in! (${totalAccountCount} account${totalAccountCount === 1 ? '' : 's'})`
+                            `${providerConfig.displayName} already logged in!`
                         );
                         await provider.modelInfoCache?.invalidateCache(
                             providerKey
@@ -195,14 +191,12 @@ export class GeminiCliProvider
                     );
                 }
 
-                // Start OAuth device flow
+                // Start OAuth flow
                 try {
                     const credentials = await oauthManager.startOAuthFlow();
                     if (credentials) {
-                        const result =
-                            await oauthManager.addOAuthAccount(credentials);
                         vscode.window.showInformationMessage(
-                            `${providerConfig.displayName} login successful! (${result?.totalAccountCount || 1} account${(result?.totalAccountCount || 1) === 1 ? '' : 's'})`
+                            `${providerConfig.displayName} login successful!`
                         );
                         await provider.modelInfoCache?.invalidateCache(
                             providerKey
@@ -210,26 +204,9 @@ export class GeminiCliProvider
                         provider._onDidChangeLanguageModelChatInformation.fire();
                     }
                 } catch (error) {
-                    // Fallback to legacy CLI authentication
-                    Logger.warn(
-                        '[geminicli] OAuth flow failed, trying legacy CLI',
-                        error
+                    vscode.window.showErrorMessage(
+                        `${providerConfig.displayName} login failed: ${error instanceof Error ? error.message : 'Unknown error'}`
                     );
-                    try {
-                        const { accessToken, baseURL, totalAccountCount } =
-                            await oauthManager.ensureAuthenticated(true);
-                        vscode.window.showInformationMessage(
-                            `${providerConfig.displayName} login successful! (${totalAccountCount} account${totalAccountCount === 1 ? '' : 's'})`
-                        );
-                        await provider.modelInfoCache?.invalidateCache(
-                            providerKey
-                        );
-                        provider._onDidChangeLanguageModelChatInformation.fire();
-                    } catch (fallbackError) {
-                        vscode.window.showErrorMessage(
-                            `${providerConfig.displayName} login failed: ${fallbackError instanceof Error ? fallbackError.message : 'Unknown error'}`
-                        );
-                    }
                 }
             }
         );
@@ -242,10 +219,8 @@ export class GeminiCliProvider
                 try {
                     const credentials = await oauthManager.startOAuthFlow();
                     if (credentials) {
-                        const result =
-                            await oauthManager.addOAuthAccount(credentials);
                         vscode.window.showInformationMessage(
-                            `Added new Gemini account! Total: ${result?.totalAccountCount || '?'} account(s)`
+                            `Added new Gemini account!`
                         );
                         await provider.modelInfoCache?.invalidateCache(
                             providerKey
@@ -584,8 +559,11 @@ export class GeminiCliProvider
             }
 
             // Fallback: Ensure we read latest token (in case CLI updated credentials externally)
-            const { accessToken, baseURL } =
-                await GeminiOAuthManager.getInstance().ensureAuthenticated();
+            const creds = await GeminiOAuthManager.getInstance().getValidCredentials();
+            if (!creds) {
+                throw new Error('Not authenticated');
+            }
+            const { accessToken, baseURL } = { accessToken: creds.access_token, baseURL: creds.resource_url || 'https://generativelanguage.googleapis.com' };
 
             // Update handler with latest credentials (CLI)
             // Pass accessToken as apiKey so OpenAIHandler uses it for Authorization header
@@ -606,58 +584,17 @@ export class GeminiCliProvider
 
             // success — continue normally
         } catch (error) {
-            if (this.isInsufficientQuotaError(error)) {
-                try {
-                    const oauthManager = GeminiOAuthManager.getInstance();
-                    const active = await oauthManager.getActiveOAuthAccount({
-                        allowExhausted: true
-                    });
-                    if (active?.accountId) {
-                        await oauthManager.markOAuthAccountQuotaExhausted(
-                            active.accountId,
-                            'insufficient_quota'
-                        );
-                    }
-
-                    const switched =
-                        await oauthManager.switchToNextHealthyOAuthAccount(
-                            active?.accountId ? [active.accountId] : []
-                        );
-                    if (switched?.accessToken) {
-                        const switchedConfig = this.buildGeminiModelConfig(
-                            modelConfig,
-                            switched.accessToken,
-                            switched.baseURL
-                        );
-                        await this.openaiHandler.handleRequest(
-                            model,
-                            switchedConfig,
-                            messages,
-                            options,
-                            wrappedProgress,
-                            token
-                        );
-                        return;
-                    }
-                } catch (switchError) {
-                    Logger.warn(
-                        '[geminicli] Failed to switch OAuth account after insufficient_quota',
-                        switchError
-                    );
-                }
-            }
-
             // If we got a 401, invalidate cached credentials and retry once with fresh token
             if (this.isUnauthorizedError(error)) {
                 GeminiOAuthManager.getInstance().invalidateCredentials();
-                const { accessToken, baseURL } =
-                    await GeminiOAuthManager.getInstance().ensureAuthenticated(
-                        true
-                    );
+                const creds = await GeminiOAuthManager.getInstance().startOAuthFlow();
+                if (!creds) {
+                    throw new Error('OAuth flow failed');
+                }
                 const configWithAuth = this.buildGeminiModelConfig(
                     modelConfig,
-                    accessToken,
-                    baseURL
+                    creds.access_token,
+                    creds.resource_url || 'https://generativelanguage.googleapis.com'
                 );
                 await this.openaiHandler.handleRequest(
                     model,
