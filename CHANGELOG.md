@@ -2,19 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.4.5] - Unreleased
+## [0.4.5] - 2026-05-06
 
 ### Added
-- **DeepSeek V4 models**: Added `deepseek-v4-flash` and `deepseek-v4-pro` models to the DeepSeek provider, both with 1M context window support (983K max input / 64K max output). Updated to use exact 1M (TOKENS_PER_MEBI) context.
-- **Llama-4 models**: Added Llama-4 model support with 1M context window (983K max input / 64K max output) and image input capability.
-- **Grok-4 models**: Added grok-4 model family with version-specific context windows:
-  - grok-4 (base): 256K context (229K input / 32K output)
-  - grok-4.1: 1M context (983K input / 64K output)
-  - grok-4.2: 2M context (2M input / 64K output)
-  - grok-4.3: 1M context (983K input / 64K output)
-  - All grok-4.x models have image input capability.
-- **GPT-5.4 models**: Added GPT-5.4 model support with 1M context window (983K max input / 64K max output) and image input capability.
-- **GPT-5.5 models**: Added GPT-5.5 model support with 1M context window (983K max input / 64K max output) and image input capability.
+- **DeepSeek V4 models**: Added `deepseek-v4-flash` and `deepseek-v4-pro` models to the DeepSeek provider, both with 1M context window support (936K max input / 64K max output).
+- **Llama-4 models**: Added Llama-4 model support with 1M context window (936K max input / 64K max output) and image input capability.
 
 ### Fixed
 - Fixed Compatible Provider (`aether.compatible`) not registering with VS Code due to missing vendor declaration in `package.json` `languageModelChatProviders`. Custom models configured via "Aether: Compatible Provider Settings" now appear in the Copilot Chat model dropdown.
