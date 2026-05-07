@@ -8,7 +8,7 @@ import type { ToolRegistry } from './toolRegistry';
 import type { InvocationLogEntry } from './types';
 
 export interface InvocationResult {
-    content: Array<{ type: 'text'; text: string }>;
+    content: Array<{ type: 'text'; text: string } | { type: 'image'; data: string; mimeType: string }>;
     isError: boolean;
     logEntry: InvocationLogEntry;
 }
@@ -85,19 +85,52 @@ export async function invokeLmTool(
 
         const result = await vscode.lm.invokeTool(
             toolName,
-            { input },
+            { input, toolInvocationToken: undefined },
             undefined
         );
 
         const durationMs = Date.now() - startTime;
-        const content = result.content.map((part) => {
+        const content: Array<{ type: 'text'; text: string } | { type: 'image'; data: string; mimeType: string }> = result.content.map((part) => {
             if (part instanceof vscode.LanguageModelTextPart) {
                 return { type: 'text' as const, text: part.value };
             }
             if (part instanceof vscode.LanguageModelPromptTsxPart) {
                 return { type: 'text' as const, text: part.value };
             }
-            return { type: 'text' as const, text: JSON.stringify(part) };
+            if (part instanceof vscode.LanguageModelDataPart) {
+                // Handle binary data (including images) properly for MCP
+                // LanguageModelDataPart has mimeType and data (Uint8Array)
+                const mimeType = part.mimeType;
+                
+                // Check if this is an image based on MIME type
+                if (mimeType.startsWith('image/')) {
+                    // Convert Uint8Array to base64 string for MCP
+                    const base64Data = Buffer.from(part.data).toString('base64');
+                    return { 
+                        type: 'image' as const, 
+                        data: base64Data, 
+                        mimeType 
+                    };
+                } else {
+                    // For non-image binary data, convert to text representation
+                    try {
+                        const textData = Buffer.from(part.data).toString('utf-8');
+                        return { type: 'text' as const, text: textData };
+                    } catch {
+                        return { type: 'text' as const, text: `[Binary data: ${mimeType}]` };
+                    }
+                }
+            }
+            // For any other content types, serialize as text to maintain compatibility
+            return { type: 'text' as const, text: String(JSON.stringify(part)) };
+        }).filter((contentItem): contentItem is { type: 'text'; text: string } | { type: 'image'; data: string; mimeType: string } => {
+            // Validate content items to ensure MCP compliance
+            if (contentItem.type === 'text') {
+                return typeof contentItem.text === 'string';
+            } else if (contentItem.type === 'image') {
+                return typeof contentItem.data === 'string' && typeof contentItem.mimeType === 'string';
+            }
+            return false;
         });
 
         const logEntry: InvocationLogEntry = {

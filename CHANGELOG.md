@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.6] - 2026-05-07
+
+### Fixed
+- **MCP Bridge content type handling**: Fixed MCP error -32602 (Invalid tools/call result) by replacing non-existent `LanguageModelImagePart` with correct VS Code API `LanguageModelDataPart` for handling images and binary data
+- **MCP Bridge tool invocation**: Added missing `toolInvocationToken` parameter to `vscode.lm.invokeTool` call to comply with VS Code API requirements
+- **MCP Bridge type safety**: Fixed TypeScript type errors in `src/mcpBridge/invocation.ts` with explicit type annotations and type guard to ensure proper MCP-compliant content formatting
+- **Binary data conversion**: Added proper handling for `LanguageModelDataPart` binary data - converts `Uint8Array` to base64 for images with correct MIME type, and to UTF-8 text for non-image binary data
+
 ## [0.4.5] - 2026-05-06
 
 ### Added
