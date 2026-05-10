@@ -17,6 +17,8 @@ import {
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
+    isDeepSeekModel,
+    isDeepSeekV4Model,
     resolveAdvertisedTokenLimits,
     resolveGlobalCapabilities
 } from '../../utils/globalContextLengthManager';
@@ -331,11 +333,25 @@ export class DynamicModelProvider extends GenericModelProvider {
                     `[${this.providerKey}] Model list changed, updating...`
                 );
                 this.baseProviderConfig.models = modelConfigs;
-                this.cachedProviderConfig =
+                const overriddenConfig =
                     ConfigManager.applyProviderOverrides(
                         this.providerKey,
                         this.baseProviderConfig
                     );
+                
+                // Auto-detect DeepSeek V4 models and force includeThinking=true
+                // DeepSeek V4 API requires thinking content in multi-turn conversations with tool calls
+                const modelsWithAutoDetection = overriddenConfig.models.map(model => {
+                    if (isDeepSeekV4Model(model.id) && model.includeThinking !== false) {
+                        return { ...model, includeThinking: true };
+                    }
+                    return model;
+                });
+                
+                this.cachedProviderConfig = {
+                    ...overriddenConfig,
+                    models: modelsWithAutoDetection
+                };
                 this._onDidChangeLanguageModelChatInformation.fire();
 
                 // Ensure directory exists

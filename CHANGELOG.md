@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.7] - 2026-05-10
+
+### Fixed
+- **DeepSeek V4 thinking tokens**: Fixed DeepSeek V4 models (`deepseek-v4-pro`, `deepseek-v4-flash`) failing on multi-turn tool calls due to missing `reasoning_content` (OpenAI path) or `content[].thinking` (Anthropic path) in replayed assistant messages. Implemented automatic `includeThinking: true` detection for DeepSeek V4 models, ensuring API compliance without manual configuration. Addresses both SDK paths and makes DeepSeek models work out-of-the-box.
+
+### Added
+- **DeepSeek auto-detection**: Added automatic `includeThinking: true` for DeepSeek V4 models in both static and dynamic providers
+- **ModelOverride includeThinking support**: Extended `ModelOverride` interface to support `includeThinking` configuration via `aether.providerOverrides`
+
 ## [0.4.6] - 2026-05-07
 
 ### Fixed

@@ -719,6 +719,14 @@ export class ConfigManager {
                             `  Model ${modelOverride.id}: Override outputThinking = ${modelOverride.outputThinking}`
                         );
                     }
+                    // Override includeThinking
+                    if (modelOverride.includeThinking !== undefined) {
+                        existingModel.includeThinking =
+                            modelOverride.includeThinking;
+                        Logger.debug(
+                            `  Model ${modelOverride.id}: Override includeThinking = ${modelOverride.includeThinking}`
+                        );
+                    }
                 } else {
                     const fullConfig = modelOverride as ModelConfig;
                     // Add new model
@@ -758,6 +766,9 @@ export class ConfigManager {
                         }),
                         ...(modelOverride.outputThinking !== undefined && {
                             outputThinking: modelOverride.outputThinking
+                        }),
+                        ...(modelOverride.includeThinking !== undefined && {
+                            includeThinking: modelOverride.includeThinking
                         })
                     };
                     config.models.push(newModel);

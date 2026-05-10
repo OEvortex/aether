@@ -33,6 +33,8 @@ import { CompatibleModelManager } from '../../utils/compatibleModelManager';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
+    isDeepSeekModel,
+    isDeepSeekV4Model,
     resolveAdvertisedTokenLimits,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
@@ -171,8 +173,17 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             this.baseProviderConfig
         );
 
+        // Auto-detect DeepSeek V4 models and force includeThinking=true
+        // DeepSeek V4 API requires thinking content in multi-turn conversations with tool calls
+        const modelsWithAutoDetection = overriddenConfig.models.map(model => {
+            if (isDeepSeekV4Model(model.id) && model.includeThinking !== false) {
+                return { ...model, includeThinking: true };
+            }
+            return model;
+        });
+
         if (this.providerKey === 'compatible') {
-            return overriddenConfig;
+            return { ...overriddenConfig, models: modelsWithAutoDetection };
         }
 
         const compatibleModels = CompatibleModelManager.getModels().filter(
@@ -180,10 +191,10 @@ export class GenericModelProvider implements LanguageModelChatProvider {
         );
 
         if (compatibleModels.length === 0) {
-            return overriddenConfig;
+            return { ...overriddenConfig, models: modelsWithAutoDetection };
         }
 
-        const mergedModels = [...overriddenConfig.models];
+        const mergedModels = [...modelsWithAutoDetection];
         const indexById = new Map<string, number>();
 
         mergedModels.forEach((model, index) => {

@@ -115,7 +115,11 @@ export interface ModelOverride {
      * Whether to show thinking process in chat interface (recommended for thinking models)
      */
     outputThinking?: boolean;
-}
+    /**
+     * Whether multi-round dialogue messages must include thinking content (required for DeepSeek models)
+     * When model requires tool messages to include thinking content, set to true
+     */
+    includeThinking?: boolean;
 
 /**
  * Provider Override Configuration Interface - Used for user configuration override
