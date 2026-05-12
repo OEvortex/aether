@@ -174,6 +174,7 @@ export class LLGGatewayProvider
                 return {
                     id: m.id,
                     name: modelMeta.name,
+                    detail: 'LLMGateway',
                     tooltip: m.description || `${m.id} via LLMGateway`,
                     family: m.family || 'LLMGateway',
                     version: '1.0.0',
@@ -182,6 +183,12 @@ export class LLGGatewayProvider
                     capabilities: {
                         toolCalling: modelMeta.toolCalling,
                         imageInput: modelMeta.imageInput
+                    },
+                    // CRITICAL: Make models visible in VS Code model picker
+                    isUserSelectable: true,
+                    category: {
+                        label: 'LLMGateway',
+                        order: 100
                     }
                 } as LanguageModelChatInformation;
             });
@@ -190,13 +197,20 @@ export class LLGGatewayProvider
             const freeModelInfo: LanguageModelChatInformation = {
                 id: 'free',
                 name: 'Free (Auto-Routed Free Models)',
+                detail: 'LLMGateway',
                 tooltip:
                     'Automatically routes to available free models. Sends model:auto + free_models_only:true to API.',
                 family: 'LLMGateway',
                 version: '1.0.0',
                 maxInputTokens: 128 * 1024,
                 maxOutputTokens: 32 * 1024,
-                capabilities: { toolCalling: true, imageInput: false }
+                capabilities: { toolCalling: true, imageInput: false },
+                // CRITICAL: Make models visible in VS Code model picker
+                isUserSelectable: true,
+                category: {
+                    label: 'LLMGateway',
+                    order: 100
+                }
             };
             if (!infos.some((i) => i.id === 'free')) {
                 infos.push(freeModelInfo);

@@ -153,7 +153,13 @@ export class CodexProvider
                             imageInput: model.capabilities?.imageInput ?? false
                         },
                         tooltip: model.tooltip || model.name,
-                        detail: 'Codex'
+                        detail: 'Codex',
+                        // CRITICAL: Make models visible in VS Code model picker
+                        isUserSelectable: true,
+                        category: {
+                            label: 'Codex',
+                            order: 100
+                        }
                     };
                 });
 

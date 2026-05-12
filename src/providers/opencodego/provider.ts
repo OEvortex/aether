@@ -84,7 +84,13 @@ export class OpenCodeGoProvider
             maxInputTokens,
             maxOutputTokens,
             version: model.model || model.id,
-            capabilities
+            capabilities,
+            // CRITICAL: Make models visible in VS Code model picker
+            isUserSelectable: true,
+            category: {
+                label: this.providerConfig.displayName,
+                order: 100
+            }
         };
     }
 

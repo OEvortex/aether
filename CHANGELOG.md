@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - **Model Visibility in VS Code Model Picker**: Fixed providers not appearing in VS Code's language model selection list.
   - Added `isUserSelectable: true` to all `LanguageModelChatInformation` objects returned by providers.
   - Added `category` with provider display name to group models in the picker.
-  - Updated `GenericModelProvider`, `SeraphynProvider`, `MoonshotProvider`, `ZhipuProvider`, and `InworldProvider` to include these visibility flags.
+  - Updated `GenericModelProvider`, `SeraphynProvider`, `MoonshotProvider`, `ZhipuProvider`, `InworldProvider`, `CodexProvider`, `OpenCodeGoProvider`, and `LLMGatewayProvider` to include these visibility flags.
 
 ## [0.4.7] - 2026-05-10
 
