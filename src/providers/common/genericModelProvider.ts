@@ -7,10 +7,13 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import type {
     CancellationToken,
+    LanguageModelChatCapabilities,
     LanguageModelChatInformation,
     LanguageModelChatMessage,
     LanguageModelChatMessage2,
     LanguageModelChatProvider,
+    LanguageModelChatRequestMessage,
+    LanguageModelResponsePart2,
     Progress,
     ProvideLanguageModelChatResponseOptions
 } from 'vscode';
@@ -339,6 +342,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 
     /**
      * Convert ModelConfig to LanguageModelChatInformation
+     * Includes all required fields for VS Code model picker visibility
      */
     protected modelConfigToInfo(
         model: ModelConfig
@@ -357,6 +361,12 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             detectedImageInput: model.capabilities?.imageInput
         });
 
+        // Build capabilities object for LanguageModelChatInformation
+        const chatCapabilities: LanguageModelChatCapabilities = {
+            toolCalling: capabilities.toolCalling ?? model.capabilities?.toolCalling,
+            imageInput: capabilities.imageInput ?? model.capabilities?.imageInput
+        };
+
         const info: LanguageModelChatInformation = {
             id: model.id,
             name: model.name,
@@ -369,7 +379,14 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             maxInputTokens,
             maxOutputTokens,
             version: model.id,
-            capabilities
+            capabilities: chatCapabilities,
+            // CRITICAL: Make models visible in VS Code model picker
+            isUserSelectable: true,
+            // Optional: add category to group by provider
+            category: {
+                label: this.providerConfig.displayName,
+                order: 100 // Lower = higher in list
+            }
         };
 
         return info;
@@ -870,9 +887,9 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 
     async provideLanguageModelChatResponse(
         model: LanguageModelChatInformation,
-        messages: Array<LanguageModelChatMessage>,
+        messages: readonly vscode.LanguageModelChatRequestMessage[],
         options: ProvideLanguageModelChatResponseOptions,
-        progress: Progress<vscode.LanguageModelResponsePart>,
+        progress: Progress<LanguageModelResponsePart2>,
         token: CancellationToken
     ): Promise<void> {
         const hideThinkingInUI = ConfigManager.getHideThinkingInUI();

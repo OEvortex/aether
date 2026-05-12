@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- **VS Code Language Model API Alignment**: Updated all provider implementations to fully align with the latest VS Code Language Model API (v5).
+  - Updated `vscode.proposed.chatProvider.d.ts` with complete type definitions including `LanguageModelChatCapabilities`, `LanguageModelChatRequestMessage`, tool interfaces, and new optional methods (`onDidChangeLanguageModelChatInformation`, `provideTokenCount`).
+  - Changed `provideLanguageModelChatResponse` signature to use `readonly LanguageModelChatRequestMessage[]` instead of `Array<LanguageModelChatMessage>`.
+  - Updated `LanguageModelResponsePart2` type to include `LanguageModelThinkingPart` and `LanguageModelDataPart`.
+
+### Fixed
+- **Model Visibility in VS Code Model Picker**: Fixed providers not appearing in VS Code's language model selection list.
+  - Added `isUserSelectable: true` to all `LanguageModelChatInformation` objects returned by providers.
+  - Added `category` with provider display name to group models in the picker.
+  - Updated `GenericModelProvider`, `SeraphynProvider`, `MoonshotProvider`, `ZhipuProvider`, and `InworldProvider` to include these visibility flags.
+
 ## [0.4.7] - 2026-05-10
 
 ### Fixed

@@ -254,6 +254,7 @@ export class ZhipuProvider
                 return {
                     id: m.id,
                     name: modelMeta.name,
+                    detail: 'ZhipuAI',
                     tooltip: `${m.id} by ZhipuAI`,
                     family: 'ZhipuAI',
                     version: '1.0.0',
@@ -262,6 +263,12 @@ export class ZhipuProvider
                     capabilities: {
                         toolCalling: modelMeta.toolCalling,
                         imageInput: modelMeta.imageInput
+                    },
+                    // CRITICAL: Make models visible in VS Code model picker
+                    isUserSelectable: true,
+                    category: {
+                        label: 'ZhipuAI',
+                        order: 100
                     }
                 } as LanguageModelChatInformation;
             });

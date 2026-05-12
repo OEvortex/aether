@@ -33,3 +33,4 @@ extension.js*
 # Ignore .aether files
 .aether
 .pi
+.mcp.json

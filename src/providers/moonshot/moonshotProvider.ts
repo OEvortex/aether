@@ -208,6 +208,7 @@ export class MoonshotProvider
                 return {
                     id: model.id,
                     name: modelMeta.name,
+                    detail: 'MoonshotAI',
                     tooltip: `${model.id} by MoonshotAI`,
                     family: 'MoonshotAI',
                     version: '1.0.0',
@@ -216,6 +217,12 @@ export class MoonshotProvider
                     capabilities: {
                         toolCalling: modelMeta.toolCalling,
                         imageInput: modelMeta.imageInput
+                    },
+                    // CRITICAL: Make models visible in VS Code model picker
+                    isUserSelectable: true,
+                    category: {
+                        label: 'MoonshotAI',
+                        order: 100
                     }
                 } as LanguageModelChatInformation;
             });

@@ -98,6 +98,12 @@ export class SeraphynProvider implements LanguageModelChatProvider {
             detectedImageInput: model.capabilities?.imageInput
         });
 
+        // Build capabilities object for LanguageModelChatInformation
+        const chatCapabilities = {
+            toolCalling: capabilities.toolCalling ?? model.capabilities?.toolCalling,
+            imageInput: capabilities.imageInput ?? model.capabilities?.imageInput
+        };
+
         return {
             id: model.id,
             name: model.name,
@@ -110,7 +116,13 @@ export class SeraphynProvider implements LanguageModelChatProvider {
             maxInputTokens,
             maxOutputTokens,
             version: model.model || model.id,
-            capabilities
+            capabilities: chatCapabilities,
+            // CRITICAL: Make models visible in VS Code model picker
+            isUserSelectable: true,
+            category: {
+                label: this.providerConfig.displayName,
+                order: 100
+            }
         };
     }
 
