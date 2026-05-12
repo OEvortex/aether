@@ -1,2454 +1,2454 @@
 {
-    "name": "aether-ai",
-    "publisher": "OEvortex",
-    "displayName": "Aether AI",
-    "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
-    "version": "0.4.7",
-    "license": "MIT",
-    "keywords": [
-        "ai",
-        "chat",
-        "copilot",
-        "github-copilot",
-        "language-model",
-        "zhipu",
-        "kimi",
-        "minimax",
-        "moonshot",
-        "deepseek",
-        "ZenmuxAI",
-        "OpenAI Compatible",
-        "Anthropic Compatible",
-        "ZhipuAI",
-        "MoonshotAI",
-        "DeepSeek",
-        "Alibaba Cloud Bailian",
-        "Coding Plan",
-        "Mistral AI"
+  "name": "aether-ai",
+  "publisher": "OEvortex",
+  "displayName": "Aether AI",
+  "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
+  "version": "0.4.8",
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "chat",
+    "copilot",
+    "github-copilot",
+    "language-model",
+    "zhipu",
+    "kimi",
+    "minimax",
+    "moonshot",
+    "deepseek",
+    "ZenmuxAI",
+    "OpenAI Compatible",
+    "Anthropic Compatible",
+    "ZhipuAI",
+    "MoonshotAI",
+    "DeepSeek",
+    "Alibaba Cloud Bailian",
+    "Coding Plan",
+    "Mistral AI"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OEvortex/aether"
+  },
+  "engines": {
+    "vscode": ">=1.104.0",
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
+  "extensionDependencies": [
+    "github.copilot-chat"
+  ],
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "icon": "./logo_ai.png",
+  "main": "./dist/extension.js",
+  "enabledApiProposals": [
+    "chatProvider"
+  ],
+  "activationEvents": [
+    "onFileSystem:aether-settings",
+    "onLanguageModelTool:aether_minimaxWebSearch",
+    "onLanguageModelTool:aether_zhipuWebSearch",
+    "onStartupFinished",
+    "onLanguageModelProvider:aether.aihubmix",
+    "onLanguageModelProvider:aether.aimlapi",
+    "onLanguageModelProvider:aether.apertis",
+    "onLanguageModelProvider:aether.baidu",
+    "onLanguageModelProvider:aether.baseten",
+    "onLanguageModelProvider:aether.berget",
+    "onLanguageModelProvider:aether.blackbox",
+    "onLanguageModelProvider:aether.chatjimmy",
+    "onLanguageModelProvider:aether.chutes",
+    "onLanguageModelProvider:aether.clarifai",
+    "onLanguageModelProvider:aether.cline",
+    "onLanguageModelProvider:aether.codex",
+    "onLanguageModelProvider:aether.commonstack",
+    "onLanguageModelProvider:aether.cortecs",
+    "onLanguageModelProvider:aether.crof",
+    "onLanguageModelProvider:aether.dashscope",
+    "onLanguageModelProvider:aether.deepinfra",
+    "onLanguageModelProvider:aether.deepseek",
+    "onLanguageModelProvider:aether.dialagram",
+    "onLanguageModelProvider:aether.dinference",
+    "onLanguageModelProvider:aether.edenai",
+    "onLanguageModelProvider:aether.fastrouter",
+    "onLanguageModelProvider:aether.fireworks",
+    "onLanguageModelProvider:aether.friendli",
+    "onLanguageModelProvider:aether.gemini",
+    "onLanguageModelProvider:aether.helicone",
+    "onLanguageModelProvider:aether.hicapai",
+    "onLanguageModelProvider:aether.huggingface",
+    "onLanguageModelProvider:aether.inworld",
+    "onLanguageModelProvider:aether.jiekou",
+    "onLanguageModelProvider:aether.kilo",
+    "onLanguageModelProvider:aether.knox",
+    "onLanguageModelProvider:aether.lightningai",
+    "onLanguageModelProvider:aether.llmgateway",
+    "onLanguageModelProvider:aether.meganova",
+    "onLanguageModelProvider:aether.minimax",
+    "onLanguageModelProvider:aether.mistral",
+    "onLanguageModelProvider:aether.moark",
+    "onLanguageModelProvider:aether.modal",
+    "onLanguageModelProvider:aether.modelark",
+    "onLanguageModelProvider:aether.modelscope",
+    "onLanguageModelProvider:aether.moonshot",
+    "onLanguageModelProvider:aether.nanogpt",
+    "onLanguageModelProvider:aether.nvidia",
+    "onLanguageModelProvider:aether.ofox",
+    "onLanguageModelProvider:aether.ollama",
+    "onLanguageModelProvider:aether.opencode",
+    "onLanguageModelProvider:aether.opencodego",
+    "onLanguageModelProvider:aether.pollinations",
+    "onLanguageModelProvider:aether.portkey",
+    "onLanguageModelProvider:aether.puter",
+    "onLanguageModelProvider:aether.qwencli",
+    "onLanguageModelProvider:aether.qzz",
+    "onLanguageModelProvider:aether.requesty",
+    "onLanguageModelProvider:aether.rinkoai",
+    "onLanguageModelProvider:aether.routingrun",
+    "onLanguageModelProvider:aether.seraphyn",
+    "onLanguageModelProvider:aether.sherlock",
+    "onLanguageModelProvider:aether.streamlake",
+    "onLanguageModelProvider:aether.tencent",
+    "onLanguageModelProvider:aether.together",
+    "onLanguageModelProvider:aether.vercelai",
+    "onLanguageModelProvider:aether.volcengine",
+    "onLanguageModelProvider:aether.vsllm",
+    "onLanguageModelProvider:aether.xiaomimimo",
+    "onLanguageModelProvider:aether.xinjianya",
+    "onLanguageModelProvider:aether.zenmux",
+    "onLanguageModelProvider:aether.zhipu",
+    "onLanguageModelProvider:aether.compatible"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "aether.zhipu.setApiKey",
+        "title": "Configure ZhipuAI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.zhipu.configWizard",
+        "title": "ZhipuAI Configuration Wizard (API Key & Search MCP Mode)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.minimax.setApiKey",
+        "title": "Configure MiniMax",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.minimax.setCodingPlanApiKey",
+        "title": "Configure MiniMax Coding Plan Dedicated Key",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.minimax.setCodingPlanEndpoint",
+        "title": "Configure MiniMax Coding Plan Endpoint (Domestic/International)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.llmgateway.setApiKey",
+        "title": "Configure LLMGateway",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.minimax.configWizard",
+        "title": "MiniMax Configuration Wizard",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.kimi.setApiKey",
+        "title": "Configure Kimi For Coding Key",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.moonshot.setApiKey",
+        "title": "Configure MoonshotAI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.moonshot.configWizard",
+        "title": "MoonshotAI Configuration Wizard",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.deepseek.setApiKey",
+        "title": "Configure DeepSeek",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.aihubmix.setApiKey",
+        "title": "Configure AIHubMix",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.chutes.setApiKey",
+        "title": "Configure Chutes",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.zenmux.setApiKey",
+        "title": "Configure Zenmux",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.opencode.setApiKey",
+        "title": "Configure OpenCode",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.blackbox.setApiKey",
+        "title": "Configure Blackbox",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.huggingface.setApiKey",
+        "title": "Configure Hugging Face",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.kilo.setApiKey",
+        "title": "Configure Kilo AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.lightningai.setApiKey",
+        "title": "Configure Lightning AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.lightningai.configWizard",
+        "title": "Lightning AI Configuration Wizard",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.deepinfra.setApiKey",
+        "title": "Configure DeepInfra",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.nvidia.setApiKey",
+        "title": "Configure NVIDIA NIM",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mistral.setApiKey",
+        "title": "Configure Mistral AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.modelscope.setApiKey",
+        "title": "Configure ModelScope",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.ollama.setApiKey",
+        "title": "Configure Ollama Cloud",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.compatible.manageModels",
+        "title": "Compatible Provider Settings",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.codex.login",
+        "title": "Codex Login (OpenAI OAuth)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.codex.logout",
+        "title": "Codex Logout",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.qwencli.login",
+        "title": "Qwen Code Login (OAuth)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.qwencli.addAccount",
+        "title": "Qwen Code Add Account",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.gemini.login",
+        "title": "Gemini Code Login (OAuth)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.gemini.addAccount",
+        "title": "Gemini Code Add Account",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.nesCompletion.toggleManual",
+        "title": "Toggle NES Manual Trigger Mode",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.copilot.attachSelection",
+        "title": "Attach Selection to Copilot Chat",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.copilot.insertHandle",
+        "title": "Insert Handle Reference (#handle:filename:L1-L100)",
+        "category": "Aether",
+        "icon": "$(symbol-reference)"
+      },
+      {
+        "command": "aether.copilot.insertHandleFullPath",
+        "title": "Insert Handle Reference with Full Path",
+        "category": "Aether",
+        "icon": "$(file-symlink-file)"
+      },
+      {
+        "command": "aether.accounts.add",
+        "title": "Add Account",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.accounts.switch",
+        "title": "Switch Account",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.accounts.remove",
+        "title": "Remove Account",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.accounts.list",
+        "title": "View All Accounts",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.accounts.quickSwitch",
+        "title": "Quick Switch Account",
+        "category": "Aether",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "aether.accounts.quickSwitchProvider",
+        "title": "Quick Switch Account for Provider",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.openSettings",
+        "title": "Open Aether Settings",
+        "category": "Aether",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "aether.selectModel",
+        "title": "Select Model",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.nanogpt.setApiKey",
+        "title": "Configure NanoGPT",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.vercelai.setApiKey",
+        "title": "Configure Vercel AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.cline.setApiKey",
+        "title": "Configure Cline",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.pollinations.setApiKey",
+        "title": "Configure Pollinations AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.opencodego.setApiKey",
+        "title": "Configure OpenCode Zen Go",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.knox.setApiKey",
+        "title": "Configure Knox",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.seraphyn.setApiKey",
+        "title": "Configure Seraphyn",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.apertis.setApiKey",
+        "title": "Configure Apertis AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.puter.setApiKey",
+        "title": "Configure Puter AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.hicapai.setApiKey",
+        "title": "Configure HicapAI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.showAllApiKeys",
+        "title": "Show All API Keys",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.baseten.setApiKey",
+        "title": "Configure Baseten",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.berget.setApiKey",
+        "title": "Configure Berget",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.clarifai.setApiKey",
+        "title": "Configure Clarifai",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.modal.setApiKey",
+        "title": "Configure Modal (Research)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.sherlock.setApiKey",
+        "title": "Configure Sherlock (CloudFerro)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.cortecs.setApiKey",
+        "title": "Configure Cortecs",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.dinference.setApiKey",
+        "title": "Configure Dinference",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.fastrouter.setApiKey",
+        "title": "Configure FastRouter",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.fireworks.setApiKey",
+        "title": "Configure Fireworks AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.friendli.setApiKey",
+        "title": "Configure Friendli",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.jiekou.setApiKey",
+        "title": "Configure Jiekou AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.meganova.setApiKey",
+        "title": "Configure MegaNova",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.moark.setApiKey",
+        "title": "Configure Moark",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.dashscope.setApiKey",
+        "title": "Configure DashScope (Ali Bailian)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.dialagram.setApiKey",
+        "title": "Configure Dialagram",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.crof.setApiKey",
+        "title": "Configure Crof AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.routingrun.setApiKey",
+        "title": "Configure Routing.run",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.openai.setApiKey",
+        "title": "Configure OpenAI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.aimlapi.setApiKey",
+        "title": "Configure AIML API",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.ofox.setApiKey",
+        "title": "Configure Ofox AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.requesty.setApiKey",
+        "title": "Configure Requesty Router",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.helicone.setApiKey",
+        "title": "Configure Helicone AI Gateway",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.portkey.setApiKey",
+        "title": "Configure Portkey",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.edenai.setApiKey",
+        "title": "Configure Eden AI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.commonstack.setApiKey",
+        "title": "Configure CommonStack",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.together.setApiKey",
+        "title": "Configure TogetherAI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.rinkoai.setApiKey",
+        "title": "Configure RinkoAI",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.vsllm.setApiKey",
+        "title": "Configure VSLLM",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.qzz.setApiKey",
+        "title": "Configure 0api (Qzz)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.xinjianya.setApiKey",
+        "title": "Configure Xinjianya",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.modelark.setApiKey",
+        "title": "Configure ModelArk (BytePlus)",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.baidu.setApiKey",
+        "title": "Configure Baidu Qianfan",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.streamlake.setApiKey",
+        "title": "Configure StreamLake",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.tencent.setApiKey",
+        "title": "Configure Tencent Hunyuan",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.volcengine.setApiKey",
+        "title": "Configure Volcengine",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.xiaomimimo.setApiKey",
+        "title": "Configure Xiaomi Mimo",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.startServer",
+        "title": "Start MCP Server",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.stopServer",
+        "title": "Stop MCP Server",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.restartServer",
+        "title": "Restart MCP Server",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.refreshTools",
+        "title": "Refresh Tools",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.showLog",
+        "title": "Show MCP Bridge Log",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.copyMcpConfig",
+        "title": "Copy MCP Config to Clipboard",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.openSettings",
+        "title": "Open MCP Bridge Settings",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.toggleTool",
+        "title": "Toggle Tool Exposure",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.toggleGroup",
+        "title": "Toggle All Tools in Group",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.mcpBridge.expandGroup",
+        "title": "Expand/Collapse Group",
+        "category": "Aether"
+      },
+      {
+        "command": "aether.inworld.setApiKey",
+        "title": "Configure Inworld Router",
+        "category": "Aether"
+      }
     ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/OEvortex/aether"
-    },
-    "engines": {
-        "vscode": ">=1.104.0",
-        "node": ">=20.0.0",
-        "npm": ">=9.0.0"
-    },
-    "extensionDependencies": [
-        "github.copilot-chat"
-    ],
-    "categories": [
-        "AI",
-        "Chat"
-    ],
-    "icon": "./logo_ai.png",
-    "main": "./dist/extension.js",
-    "enabledApiProposals": [
-        "chatProvider"
-    ],
-    "activationEvents": [
-        "onFileSystem:aether-settings",
-        "onLanguageModelTool:aether_minimaxWebSearch",
-        "onLanguageModelTool:aether_zhipuWebSearch",
-        "onStartupFinished",
-        "onLanguageModelProvider:aether.aihubmix",
-        "onLanguageModelProvider:aether.aimlapi",
-        "onLanguageModelProvider:aether.apertis",
-        "onLanguageModelProvider:aether.baidu",
-        "onLanguageModelProvider:aether.baseten",
-        "onLanguageModelProvider:aether.berget",
-        "onLanguageModelProvider:aether.blackbox",
-        "onLanguageModelProvider:aether.chatjimmy",
-        "onLanguageModelProvider:aether.chutes",
-        "onLanguageModelProvider:aether.clarifai",
-        "onLanguageModelProvider:aether.cline",
-        "onLanguageModelProvider:aether.codex",
-        "onLanguageModelProvider:aether.commonstack",
-        "onLanguageModelProvider:aether.cortecs",
-        "onLanguageModelProvider:aether.crof",
-        "onLanguageModelProvider:aether.dashscope",
-        "onLanguageModelProvider:aether.deepinfra",
-        "onLanguageModelProvider:aether.deepseek",
-        "onLanguageModelProvider:aether.dialagram",
-        "onLanguageModelProvider:aether.dinference",
-        "onLanguageModelProvider:aether.edenai",
-        "onLanguageModelProvider:aether.fastrouter",
-        "onLanguageModelProvider:aether.fireworks",
-        "onLanguageModelProvider:aether.friendli",
-        "onLanguageModelProvider:aether.gemini",
-        "onLanguageModelProvider:aether.helicone",
-        "onLanguageModelProvider:aether.hicapai",
-        "onLanguageModelProvider:aether.huggingface",
-        "onLanguageModelProvider:aether.inworld",
-        "onLanguageModelProvider:aether.jiekou",
-        "onLanguageModelProvider:aether.kilo",
-        "onLanguageModelProvider:aether.knox",
-        "onLanguageModelProvider:aether.lightningai",
-        "onLanguageModelProvider:aether.llmgateway",
-        "onLanguageModelProvider:aether.meganova",
-        "onLanguageModelProvider:aether.minimax",
-        "onLanguageModelProvider:aether.mistral",
-        "onLanguageModelProvider:aether.moark",
-        "onLanguageModelProvider:aether.modal",
-        "onLanguageModelProvider:aether.modelark",
-        "onLanguageModelProvider:aether.modelscope",
-        "onLanguageModelProvider:aether.moonshot",
-        "onLanguageModelProvider:aether.nanogpt",
-        "onLanguageModelProvider:aether.nvidia",
-        "onLanguageModelProvider:aether.ofox",
-        "onLanguageModelProvider:aether.ollama",
-        "onLanguageModelProvider:aether.opencode",
-        "onLanguageModelProvider:aether.opencodego",
-        "onLanguageModelProvider:aether.pollinations",
-        "onLanguageModelProvider:aether.portkey",
-        "onLanguageModelProvider:aether.puter",
-        "onLanguageModelProvider:aether.qwencli",
-        "onLanguageModelProvider:aether.qzz",
-        "onLanguageModelProvider:aether.requesty",
-        "onLanguageModelProvider:aether.rinkoai",
-        "onLanguageModelProvider:aether.routingrun",
-        "onLanguageModelProvider:aether.seraphyn",
-        "onLanguageModelProvider:aether.sherlock",
-        "onLanguageModelProvider:aether.streamlake",
-        "onLanguageModelProvider:aether.tencent",
-        "onLanguageModelProvider:aether.together",
-        "onLanguageModelProvider:aether.vercelai",
-        "onLanguageModelProvider:aether.volcengine",
-        "onLanguageModelProvider:aether.vsllm",
-        "onLanguageModelProvider:aether.xiaomimimo",
-        "onLanguageModelProvider:aether.xinjianya",
-        "onLanguageModelProvider:aether.zenmux",
-        "onLanguageModelProvider:aether.zhipu",
-        "onLanguageModelProvider:aether.compatible"
-    ],
-    "contributes": {
-        "commands": [
-            {
-                "command": "aether.zhipu.setApiKey",
-                "title": "Configure ZhipuAI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.zhipu.configWizard",
-                "title": "ZhipuAI Configuration Wizard (API Key & Search MCP Mode)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.minimax.setApiKey",
-                "title": "Configure MiniMax",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.minimax.setCodingPlanApiKey",
-                "title": "Configure MiniMax Coding Plan Dedicated Key",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.minimax.setCodingPlanEndpoint",
-                "title": "Configure MiniMax Coding Plan Endpoint (Domestic/International)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.llmgateway.setApiKey",
-                "title": "Configure LLMGateway",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.minimax.configWizard",
-                "title": "MiniMax Configuration Wizard",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.kimi.setApiKey",
-                "title": "Configure Kimi For Coding Key",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.moonshot.setApiKey",
-                "title": "Configure MoonshotAI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.moonshot.configWizard",
-                "title": "MoonshotAI Configuration Wizard",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.deepseek.setApiKey",
-                "title": "Configure DeepSeek",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.aihubmix.setApiKey",
-                "title": "Configure AIHubMix",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.chutes.setApiKey",
-                "title": "Configure Chutes",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.zenmux.setApiKey",
-                "title": "Configure Zenmux",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.opencode.setApiKey",
-                "title": "Configure OpenCode",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.blackbox.setApiKey",
-                "title": "Configure Blackbox",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.huggingface.setApiKey",
-                "title": "Configure Hugging Face",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.kilo.setApiKey",
-                "title": "Configure Kilo AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.lightningai.setApiKey",
-                "title": "Configure Lightning AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.lightningai.configWizard",
-                "title": "Lightning AI Configuration Wizard",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.deepinfra.setApiKey",
-                "title": "Configure DeepInfra",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.nvidia.setApiKey",
-                "title": "Configure NVIDIA NIM",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mistral.setApiKey",
-                "title": "Configure Mistral AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.modelscope.setApiKey",
-                "title": "Configure ModelScope",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.ollama.setApiKey",
-                "title": "Configure Ollama Cloud",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.compatible.manageModels",
-                "title": "Compatible Provider Settings",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.codex.login",
-                "title": "Codex Login (OpenAI OAuth)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.codex.logout",
-                "title": "Codex Logout",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.qwencli.login",
-                "title": "Qwen Code Login (OAuth)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.qwencli.addAccount",
-                "title": "Qwen Code Add Account",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.gemini.login",
-                "title": "Gemini Code Login (OAuth)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.gemini.addAccount",
-                "title": "Gemini Code Add Account",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.nesCompletion.toggleManual",
-                "title": "Toggle NES Manual Trigger Mode",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.copilot.attachSelection",
-                "title": "Attach Selection to Copilot Chat",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.copilot.insertHandle",
-                "title": "Insert Handle Reference (#handle:filename:L1-L100)",
-                "category": "Aether",
-                "icon": "$(symbol-reference)"
-            },
-            {
-                "command": "aether.copilot.insertHandleFullPath",
-                "title": "Insert Handle Reference with Full Path",
-                "category": "Aether",
-                "icon": "$(file-symlink-file)"
-            },
-            {
-                "command": "aether.accounts.add",
-                "title": "Add Account",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.accounts.switch",
-                "title": "Switch Account",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.accounts.remove",
-                "title": "Remove Account",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.accounts.list",
-                "title": "View All Accounts",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.accounts.quickSwitch",
-                "title": "Quick Switch Account",
-                "category": "Aether",
-                "icon": "$(arrow-swap)"
-            },
-            {
-                "command": "aether.accounts.quickSwitchProvider",
-                "title": "Quick Switch Account for Provider",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.openSettings",
-                "title": "Open Aether Settings",
-                "category": "Aether",
-                "icon": "$(settings-gear)"
-            },
-            {
-                "command": "aether.selectModel",
-                "title": "Select Model",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.nanogpt.setApiKey",
-                "title": "Configure NanoGPT",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.vercelai.setApiKey",
-                "title": "Configure Vercel AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.cline.setApiKey",
-                "title": "Configure Cline",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.pollinations.setApiKey",
-                "title": "Configure Pollinations AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.opencodego.setApiKey",
-                "title": "Configure OpenCode Zen Go",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.knox.setApiKey",
-                "title": "Configure Knox",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.seraphyn.setApiKey",
-                "title": "Configure Seraphyn",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.apertis.setApiKey",
-                "title": "Configure Apertis AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.puter.setApiKey",
-                "title": "Configure Puter AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.hicapai.setApiKey",
-                "title": "Configure HicapAI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.showAllApiKeys",
-                "title": "Show All API Keys",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.baseten.setApiKey",
-                "title": "Configure Baseten",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.berget.setApiKey",
-                "title": "Configure Berget",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.clarifai.setApiKey",
-                "title": "Configure Clarifai",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.modal.setApiKey",
-                "title": "Configure Modal (Research)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.sherlock.setApiKey",
-                "title": "Configure Sherlock (CloudFerro)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.cortecs.setApiKey",
-                "title": "Configure Cortecs",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.dinference.setApiKey",
-                "title": "Configure Dinference",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.fastrouter.setApiKey",
-                "title": "Configure FastRouter",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.fireworks.setApiKey",
-                "title": "Configure Fireworks AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.friendli.setApiKey",
-                "title": "Configure Friendli",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.jiekou.setApiKey",
-                "title": "Configure Jiekou AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.meganova.setApiKey",
-                "title": "Configure MegaNova",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.moark.setApiKey",
-                "title": "Configure Moark",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.dashscope.setApiKey",
-                "title": "Configure DashScope (Ali Bailian)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.dialagram.setApiKey",
-                "title": "Configure Dialagram",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.crof.setApiKey",
-                "title": "Configure Crof AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.routingrun.setApiKey",
-                "title": "Configure Routing.run",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.openai.setApiKey",
-                "title": "Configure OpenAI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.aimlapi.setApiKey",
-                "title": "Configure AIML API",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.ofox.setApiKey",
-                "title": "Configure Ofox AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.requesty.setApiKey",
-                "title": "Configure Requesty Router",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.helicone.setApiKey",
-                "title": "Configure Helicone AI Gateway",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.portkey.setApiKey",
-                "title": "Configure Portkey",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.edenai.setApiKey",
-                "title": "Configure Eden AI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.commonstack.setApiKey",
-                "title": "Configure CommonStack",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.together.setApiKey",
-                "title": "Configure TogetherAI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.rinkoai.setApiKey",
-                "title": "Configure RinkoAI",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.vsllm.setApiKey",
-                "title": "Configure VSLLM",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.qzz.setApiKey",
-                "title": "Configure 0api (Qzz)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.xinjianya.setApiKey",
-                "title": "Configure Xinjianya",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.modelark.setApiKey",
-                "title": "Configure ModelArk (BytePlus)",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.baidu.setApiKey",
-                "title": "Configure Baidu Qianfan",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.streamlake.setApiKey",
-                "title": "Configure StreamLake",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.tencent.setApiKey",
-                "title": "Configure Tencent Hunyuan",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.volcengine.setApiKey",
-                "title": "Configure Volcengine",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.xiaomimimo.setApiKey",
-                "title": "Configure Xiaomi Mimo",
-                "category": "Aether"
-            },
-                        {
-                "command": "aether.mcpBridge.startServer",
-                "title": "Start MCP Server",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.stopServer",
-                "title": "Stop MCP Server",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.restartServer",
-                "title": "Restart MCP Server",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.refreshTools",
-                "title": "Refresh Tools",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.showLog",
-                "title": "Show MCP Bridge Log",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.copyMcpConfig",
-                "title": "Copy MCP Config to Clipboard",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.openSettings",
-                "title": "Open MCP Bridge Settings",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.toggleTool",
-                "title": "Toggle Tool Exposure",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.toggleGroup",
-                "title": "Toggle All Tools in Group",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.mcpBridge.expandGroup",
-                "title": "Expand/Collapse Group",
-                "category": "Aether"
-            },
-            {
-                "command": "aether.inworld.setApiKey",
-                "title": "Configure Inworld Router",
-                "category": "Aether"
-            }
-        ],
-        "configuration": {
-            "title": "Aether - AI Chat Models",
-            "properties": {
-                "aether.selectedModel": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Currently selected model in provider::model format (e.g. 'apertis::gpt-4o'). Set automatically when you pick a model via the status bar.",
-                    "scope": "application"
-                },
-                "aether.temperature": {
-                    "type": "number",
-                    "default": 0.1,
-                    "minimum": 0,
-                    "maximum": 2,
-                    "description": "Controls the randomness of AI model output. Lower values (like 0.1) produce more deterministic output, while higher values (like 1.0) produce more creative output.",
-                    "scope": "application"
-                },
-                "aether.topP": {
-                    "type": "number",
-                    "default": 1,
-                    "minimum": 0,
-                    "maximum": 1,
-                    "description": "Controls the diversity of AI model output. Using smaller values (like 0.9) reduces output randomness.",
-                    "scope": "application"
-                },
-                "aether.maxTokens": {
-                    "type": "number",
-                    "default": 8192,
-                    "minimum": 32,
-                    "maximum": 256000,
-                    "description": "Controls the maximum number of tokens in AI model output. Larger values allow longer responses.",
-                    "scope": "application"
-                },
-                "aether.rememberLastModel": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "When enabled, records and automatically restores the last used extension-provided model. (VSCode 1.106.0 will reset to default optimal model [e.g., Claude Sonnet 4.5])",
-                    "scope": "application"
-                },
-                "aether.hideThinkingInUI": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Completely hide model thinking/reasoning output in chat UI across all providers.",
-                    "scope": "application"
-                },
-                "aether.zhipu.search.enableMCP": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable ZhipuAI search MCP SDK mode. Uses standard MCP protocol and official SDK for search functionality, providing more stable connections and better error handling. Non-subscription plans should disable this switch to use standard billing interface (per-request billing). Requires valid ZhipuAI API key.",
-                    "scope": "application"
-                },
-                "aether.zhipu.endpoint": {
-                    "type": "string",
-                    "enum": [
-                        "open.bigmodel.cn",
-                        "api.z.ai"
-                    ],
-                    "default": "open.bigmodel.cn",
-                    "description": "ZhipuAI access site. open.bigmodel.cn is domestic site (recommended), api.z.ai is international site.",
-                    "scope": "application"
-                },
-                "aether.zhipu.plan": {
-                    "type": "string",
-                    "enum": [
-                        "coding",
-                        "normal"
-                    ],
-                    "default": "coding",
-                    "description": "ZhipuAI plan type. coding: use /api/coding/paas/v4 endpoint (GLM Coding Plan), normal: use /api/paas/v4 endpoint (standard billing).",
-                    "scope": "application"
-                },
-                "aether.zhipu.thinking": {
-                    "type": "string",
-                    "enum": [
-                        "enabled",
-                        "disabled",
-                        "auto"
-                    ],
-                    "default": "auto",
-                    "description": "ZhipuAI thinking mode (GLM-4.5+). enabled: always use thinking, disabled: never use thinking, auto: let model decide.",
-                    "scope": "application"
-                },
-                "aether.zhipu.clearThinking": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "ZhipuAI thinking context handling. true: clear prior reasoning_content from next-turn context (recommended). false: preserve prior reasoning_content in context.",
-                    "scope": "application"
-                },
-                "aether.minimax.endpoint": {
-                    "type": "string",
-                    "enum": [
-                        "minimaxi.com",
-                        "minimax.io"
-                    ],
-                    "default": "minimaxi.com",
-                    "description": "MiniMax Coding Plan access site. minimaxi.com is domestic site (recommended), minimax.io is international site.",
-                    "scope": "application"
-                },
-                "aether.fimCompletion.enabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Enable FIM (Fill In the Middle) suggestion feature.",
-                    "scope": "application"
-                },
-                "aether.fimCompletion.debounceMs": {
-                    "type": "number",
-                    "default": 500,
-                    "minimum": 50,
-                    "maximum": 1000,
-                    "description": "Debounce delay for FIM completion (milliseconds).",
-                    "scope": "application"
-                },
-                "aether.fimCompletion.timeoutMs": {
-                    "type": "number",
-                    "default": 5000,
-                    "minimum": 1000,
-                    "maximum": 30000,
-                    "description": "Request timeout for FIM completion (milliseconds).",
-                    "scope": "application"
-                },
-                "aether.fimCompletion.modelConfig": {
-                    "type": "object",
-                    "default": {
-                        "provider": "",
-                        "baseUrl": "",
-                        "model": ""
-                    },
-                    "description": "Model configuration for FIM completion.",
-                    "scope": "application",
-                    "properties": {
-                        "provider": {
-                            "type": "string",
-                            "description": "Model provider identifier"
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "API base URL",
-                            "format": "uri"
-                        },
-                        "model": {
-                            "type": "string",
-                            "description": "Model name used for FIM completion"
-                        },
-                        "maxTokens": {
-                            "type": "number",
-                            "description": "Maximum length returned by FIM completion",
-                            "default": 200,
-                            "minimum": 50,
-                            "maximum": 16000
-                        },
-                        "extraBody": {
-                            "type": "object",
-                            "description": "Additional request body parameters, merged into the request body",
-                            "additionalProperties": {
-                                "description": "Additional request body parameter values"
-                            }
-                        }
-                    },
-                    "required": [
-                        "provider",
-                        "baseUrl",
-                        "model"
-                    ]
-                },
-                "aether.nesCompletion.enabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Enable NES (Next Edit Suggestions) suggestion feature.",
-                    "scope": "application"
-                },
-                "aether.nesCompletion.debounceMs": {
-                    "type": "number",
-                    "default": 500,
-                    "minimum": 50,
-                    "maximum": 1000,
-                    "description": "Debounce delay for NES completion (milliseconds).",
-                    "scope": "application"
-                },
-                "aether.nesCompletion.timeoutMs": {
-                    "type": "number",
-                    "default": 5000,
-                    "minimum": 1000,
-                    "maximum": 30000,
-                    "description": "Request timeout for NES completion (milliseconds).",
-                    "scope": "application"
-                },
-                "aether.nesCompletion.manualOnly": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "When enabled, NES completion only responds to manual triggers (Alt+/), will not trigger automatically.",
-                    "scope": "application"
-                },
-                "aether.nesCompletion.modelConfig": {
-                    "type": "object",
-                    "default": {
-                        "provider": "",
-                        "baseUrl": "",
-                        "model": ""
-                    },
-                    "description": "Model configuration for NES completion.",
-                    "scope": "application",
-                    "properties": {
-                        "provider": {
-                            "type": "string",
-                            "description": "Model provider identifier"
-                        },
-                        "baseUrl": {
-                            "type": "string",
-                            "description": "API base URL",
-                            "format": "uri"
-                        },
-                        "model": {
-                            "type": "string",
-                            "description": "Model name used for NES completion"
-                        },
-                        "maxTokens": {
-                            "type": "number",
-                            "description": "Maximum length returned by NES completion",
-                            "default": 200,
-                            "minimum": 50,
-                            "maximum": 16000
-                        },
-                        "extraBody": {
-                            "type": "object",
-                            "description": "Additional request body parameters, will be merged into request body in API requests",
-                            "additionalProperties": {
-                                "description": "Additional request body parameter value"
-                            }
-                        }
-                    },
-                    "required": [
-                        "provider",
-                        "baseUrl",
-                        "model"
-                    ]
-                },
-                "aether.providerOverrides": {
-                    "type": "object",
-                    "default": {},
-                    "description": "Provider configuration overrides. Supports SDK mode, custom headers, and model-level overrides including custom models.",
-                    "scope": "application"
-                },
-                "aether.compatibleModels": {
-                    "type": "array",
-                    "default": [],
-                    "description": "Custom model configuration for Compatible Provider. Completely user-configured OpenAI/Anthropic compatible model list.",
-                    "scope": "application"
-                },
-                "aether.moonshot.plan": {
-                    "type": "string",
-                    "enum": [
-                        "coding",
-                        "normal"
-                    ],
-                    "default": "normal",
-                    "description": "MoonshotAI plan type. coding: use https://api.kimi.com/coding/v1, normal: use https://api.moonshot.ai/v1.",
-                    "scope": "application"
-                },
-                "aether.mcpBridge.http.port": {
-                    "type": "number",
-                    "default": 59684,
-                    "description": "Port for the MCP HTTP server"
-                },
-                "aether.mcpBridge.http.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable MCP HTTP server on startup"
-                },
-                "aether.mcpBridge.logging.logInvocations": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Log tool invocations to output channel"
-                },
-                "aether.mcpBridge.tools.include": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "**"
-                    ],
-                    "description": "Glob patterns for tools to include"
-                },
-                "aether.mcpBridge.tools.exclude": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [],
-                    "description": "Glob patterns for tools to exclude"
-                },
-                "aether.mcpBridge.extensions.include": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "**"
-                    ],
-                    "description": "Glob patterns for extensions to include"
-                },
-                "aether.mcpBridge.extensions.exclude": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [],
-                    "description": "Glob patterns for extensions to exclude"
-                },
-                "aether.mcpBridge.polling.intervalMs": {
-                    "type": "number",
-                    "default": 3000,
-                    "description": "Polling interval for tool registry in milliseconds"
-                },
-                "aether.aihubmix.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for AIHubMix.",
-                    "scope": "application"
-                },
-                "aether.apertis.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic",
-                        "oai-response"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Apertis AI.",
-                    "scope": "application"
-                },
-                "aether.blackbox.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic",
-                        "oai-response"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Blackbox AI.",
-                    "scope": "application"
-                },
-                "aether.clarifai.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "oai-response"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Clarifai.",
-                    "scope": "application"
-                },
-                "aether.commonstack.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for CommonStack.",
-                    "scope": "application"
-                },
-                "aether.dashscope.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for DashScope (Ali Bailian).",
-                    "scope": "application"
-                },
-                "aether.deepseek.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for DeepSeek.",
-                    "scope": "application"
-                },
-                "aether.dialagram.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Dialagram.",
-                    "scope": "application"
-                },
-                "aether.fastrouter.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic",
-                        "oai-response"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for FastRouter.",
-                    "scope": "application"
-                },
-                "aether.fireworks.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic",
-                        "oai-response"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Fireworks AI.",
-                    "scope": "application"
-                },
-                "aether.inworld.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Inworld Router.",
-                    "scope": "application"
-                },
-                "aether.jiekou.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for Jiekou AI.",
-                    "scope": "application"
-                },
-                "aether.llmgateway.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for LLMGateway.",
-                    "scope": "application"
-                },
-                "aether.minimax.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for MiniMax.",
-                    "scope": "application"
-                },
-                "aether.modelark.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for ModelArk (BytePlus).",
-                    "scope": "application"
-                },
-                "aether.modelscope.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for ModelScope.",
-                    "scope": "application"
-                },
-                "aether.ollama.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "anthropic",
-                    "description": "Select SDK compatibility mode for Ollama.",
-                    "scope": "application"
-                },
-                "aether.opencode.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for OpenCode.",
-                    "scope": "application"
-                },
-                "aether.opencodego.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for OpenCode Zen Go.",
-                    "scope": "application"
-                },
-                "aether.portkey.sdkMode": {
-                    "type": "string",
-                    "enum": [
-                        "openai",
-                        "anthropic",
-                        "oai-response"
-                    ],
-                    "default": "openai",
-                    "description": "Select SDK compatibility mode for Portkey.",
-                    "scope": "application"
-                }
-            }
+    "configuration": {
+      "title": "Aether - AI Chat Models",
+      "properties": {
+        "aether.selectedModel": {
+          "type": "string",
+          "default": "",
+          "description": "Currently selected model in provider::model format (e.g. 'apertis::gpt-4o'). Set automatically when you pick a model via the status bar.",
+          "scope": "application"
         },
-        "jsonValidation": [
-            {
-                "fileMatch": "settings.json",
-                "url": "aether-settings://root/schema.json"
-            }
-        ],
-        "languageModelChatProviders": [
-            {
-                "vendor": "aether.aihubmix",
-                "displayName": "⦿ AIHubMix",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "AIHubMix API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.aimlapi",
-                "displayName": "⦿ AIML API",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "AIML API API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.apertis",
-                "displayName": "⦿ Apertis AI (Apertis AI endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Apertis AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.baidu",
-                "displayName": "⦿ Baidu Qianfan",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Baidu Qianfan API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.baseten",
-                "displayName": "⦿ Baseten",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Baseten API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.berget",
-                "displayName": "⦿ Berget",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Berget API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.blackbox",
-                "displayName": "⦿ Blackbox AI (Blackbox AI)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Blackbox AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.chatjimmy",
-                "displayName": "⦿ ChatJimmy (ChatJimmy)",
-                "configuration": {
-                    "properties": {}
-                }
-            },
-            {
-                "vendor": "aether.chutes",
-                "displayName": "⦿ Chutes AI (Chutes AI endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Chutes AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.clarifai",
-                "displayName": "⦿ Clarifai",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Clarifai API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.cline",
-                "displayName": "⦿ Cline (Cline endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Cline API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.codex",
-                "displayName": "⦿ OpenAI Codex (OpenAI Codex specialized coding provider)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "OpenAI Codex API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.commonstack",
-                "displayName": "⦿ CommonStack",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "CommonStack API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.cortecs",
-                "displayName": "⦿ Cortecs",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Cortecs API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.crof",
-                "displayName": "⦿ Crof AI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Crof AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.dashscope",
-                "displayName": "⦿ DashScope (Ali Bailian)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "DashScope (Ali Bailian) API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.deepinfra",
-                "displayName": "⦿ DeepInfra (OpenAI-compatible endpoints from DeepInfra)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "DeepInfra API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.deepseek",
-                "displayName": "⦿ DeepSeek (DeepSeek model family)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "DeepSeek API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.dialagram",
-                "displayName": "⦿ Dialagram",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Dialagram API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.dinference",
-                "displayName": "⦿ Dinference",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Dinference API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.edenai",
-                "displayName": "⦿ Eden AI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Eden AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.fastrouter",
-                "displayName": "⦿ FastRouter",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "FastRouter API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.fireworks",
-                "displayName": "⦿ Fireworks AI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Fireworks AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.friendli",
-                "displayName": "⦿ Friendli",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Friendli API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.gemini",
-                "displayName": "⦿ Gemini CLI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Gemini CLI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.helicone",
-                "displayName": "⦿ Helicone AI Gateway",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Helicone AI Gateway API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.hicapai",
-                "displayName": "⦿ HicapAI (HicapAI - OpenAI SDK compatible endpoint)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "HicapAI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.huggingface",
-                "displayName": "⦿ Hugging Face (Hugging Face Router endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Hugging Face API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.inworld",
-                "displayName": "⦿ Inworld Router",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Inworld Router API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.jiekou",
-                "displayName": "⦿ Jiekou AI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Jiekou AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.kilo",
-                "displayName": "⦿ Kilo AI (Kilo AI endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Kilo AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.knox",
-                "displayName": "⦿ Knox (Knox Chat - OpenAI SDK compatible endpoint)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Knox API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.lightningai",
-                "displayName": "⦿ LightningAI (LightningAI endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "LightningAI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.llmgateway",
-                "displayName": "⦿ LLMGateway (Unified access to multiple AI models)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "LLMGateway API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.meganova",
-                "displayName": "⦿ MegaNova",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "MegaNova API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.minimax",
-                "displayName": "⦿ MiniMax (MiniMax family models with coding endpoint options)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "MiniMax API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.mistral",
-                "displayName": "⦿ Mistral AI (Mistral AI model endpoints)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Mistral AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.moark",
-                "displayName": "⦿ Moark",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Moark API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.modal",
-                "displayName": "⦿ Modal (Research)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Modal (Research) API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.modelark",
-                "displayName": "⦿ ModelArk (BytePlus)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "ModelArk (BytePlus) API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.modelscope",
-                "displayName": "⦿ ModelScope",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "ModelScope API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.moonshot",
-                "displayName": "⦿ MoonshotAI (MoonshotAI Kimi model family)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "MoonshotAI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.nanogpt",
-                "displayName": "⦿ NanoGPT (NanoGPT endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "NanoGPT API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.nvidia",
-                "displayName": "⦿ NVIDIA NIM (NVIDIA NIM hosted model endpoints)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "NVIDIA NIM API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.ofox",
-                "displayName": "⦿ Ofox AI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Ofox AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.ollama",
-                "displayName": "⦿ Ollama (Ollama)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Ollama API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.opencode",
-                "displayName": "⦿ OpenCode (OpenCode endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "OpenCode API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.opencodego",
-                "displayName": "⦿ OpenCode Zen Go (OpenCode Zen Go endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "OpenCode Zen Go API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.pollinations",
-                "displayName": "⦿ Pollinations AI (Pollinations AI - OpenAI-compatible API with diverse model selection)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Pollinations AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.portkey",
-                "displayName": "⦿ Portkey",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Portkey API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.puter",
-                "displayName": "⦿ Puter AI (Free AI API - access 500+ models including GPT, Claude, Gemini with Puter auth token)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Puter AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.qwencli",
-                "displayName": "⦿ Qwen CLI (Qwen CLI OAuth provider)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Qwen CLI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.qzz",
-                "displayName": "⦿ 0api (Qzz)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "0api (Qzz) API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.requesty",
-                "displayName": "⦿ Requesty Router",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Requesty Router API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.rinkoai",
-                "displayName": "⦿ RinkoAI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "RinkoAI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.routingrun",
-                "displayName": "⦿ Routing.run",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Routing.run API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.seraphyn",
-                "displayName": "⦿ Seraphyn (Seraphyn AI - OpenAI SDK compatible endpoint)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Seraphyn API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.sherlock",
-                "displayName": "⦿ Sherlock (CloudFerro)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Sherlock (CloudFerro) API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.streamlake",
-                "displayName": "⦿ StreamLake",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "StreamLake API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.tencent",
-                "displayName": "⦿ Tencent Hunyuan",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Tencent Hunyuan API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.together",
-                "displayName": "⦿ TogetherAI",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "TogetherAI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.vercelai",
-                "displayName": "⦿ Vercel AI (Vercel AI Gateway endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Vercel AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.volcengine",
-                "displayName": "⦿ Volcengine",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Volcengine API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.vsllm",
-                "displayName": "⦿ VSLLM",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "VSLLM API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.xiaomimimo",
-                "displayName": "⦿ Xiaomi Mimo",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Xiaomi Mimo API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.xinjianya",
-                "displayName": "⦿ Xinjianya (星见雅 API (api.xinjianya.top) — community gateway)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Xinjianya API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.zenmux",
-                "displayName": "⦿ Zenmux (Zenmux endpoint integration)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Zenmux API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.zhipu",
-                "displayName": "⦿ Zhipu AI (GLM family models and coding plan features)",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Zhipu AI API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            },
-            {
-                "vendor": "aether.compatible",
-                "displayName": "⦿ OpenAI/Anthropic Compatible",
-                "configuration": {
-                    "properties": {
-                        "apiKey": {
-                            "type": "string",
-                            "description": "Compatible provider API key.",
-                            "secret": true
-                        }
-                    }
-                }
-            }
-        ],
-        "languageModelTools": [
-            {
-                "name": "aether_zhipuWebSearch",
-                "displayName": "ZhipuAI Web Search",
-                "toolReferenceName": "zhipuWebSearch",
-                "modelDescription": "Uses ZhipuAI's web search functionality to get real-time information. Supports multiple search engines: search_std (standard search, ¥0.01), search_pro (advanced search, ¥0.03), search_pro_sogou (Sogou search, ¥0.05), search_pro_quark (Quark search, ¥0.05). Note: Pro+ plans can use MCP SSE calls, non-subscription plans use standard billing interface (per-request billing).",
-                "userDescription": "Get latest information through ZhipuAI web search",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "search_query": {
-                            "type": "string",
-                            "description": "Search query string"
-                        },
-                        "search_engine": {
-                            "type": "string",
-                            "enum": [
-                                "search_std",
-                                "search_pro",
-                                "search_pro_sogou",
-                                "search_pro_quark"
-                            ],
-                            "description": "Search engine type: search_std (standard, ¥0.01), search_pro (advanced, ¥0.03), search_pro_sogou (Sogou, ¥0.05), search_pro_quark (Quark, ¥0.05)",
-                            "default": "search_std"
-                        },
-                        "search_intent": {
-                            "type": "boolean",
-                            "description": "Whether to perform search intent analysis",
-                            "default": false
-                        },
-                        "count": {
-                            "type": "integer",
-                            "description": "Number of search results to return",
-                            "minimum": 1,
-                            "maximum": 20,
-                            "default": 10
-                        },
-                        "search_domain_filter": {
-                            "type": "string",
-                            "description": "Domain filter, limits search to specific websites"
-                        },
-                        "search_recency_filter": {
-                            "type": "string",
-                            "enum": [
-                                "noLimit",
-                                "day",
-                                "week",
-                                "month",
-                                "year"
-                            ],
-                            "description": "Time filter: noLimit (no limit), day (within one day), week (within one week), month (within one month), year (within one year)",
-                            "default": "noLimit"
-                        },
-                        "content_size": {
-                            "type": "string",
-                            "enum": [
-                                "low",
-                                "medium",
-                                "high"
-                            ],
-                            "description": "Content detail level: low (low), medium (medium), high (high)",
-                            "default": "medium"
-                        }
-                    },
-                    "required": [
-                        "search_query"
-                    ]
-                },
-                "canBeReferencedInPrompt": true
-            },
-            {
-                "name": "aether_minimaxWebSearch",
-                "displayName": "MiniMax Web Search",
-                "toolReferenceName": "minimaxWebSearch",
-                "modelDescription": "Uses MiniMax Coding Plan's web search functionality to get real-time information. Requires subscribing to MiniMax Coding Plan and setting dedicated API key.",
-                "userDescription": "Get latest information through MiniMax web search",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "q": {
-                            "type": "string",
-                            "description": "Search query string"
-                        }
-                    },
-                    "required": [
-                        "q"
-                    ]
-                },
-                "canBeReferencedInPrompt": true
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "editor.action.inlineSuggest.trigger",
-                "key": "alt+/",
-                "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
-            },
-            {
-                "command": "aether.nesCompletion.toggleManual",
-                "key": "shift+alt+/"
-            },
-            {
-                "command": "aether.copilot.attachSelection",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a",
-                "when": "editorTextFocus && editorHasSelection"
-            },
-            {
-                "command": "aether.copilot.insertHandle",
-                "key": "ctrl+shift+h",
-                "mac": "cmd+shift+h",
-                "when": "editorTextFocus"
-            },
-            {
-                "command": "aether.copilot.insertHandleFullPath",
-                "key": "ctrl+alt+shift+h",
-                "mac": "cmd+alt+shift+h",
-                "when": "editorTextFocus"
-            },
-            {
-                "command": "aether.accounts.quickSwitch",
-                "key": "ctrl+shift+q",
-                "mac": "cmd+shift+q"
-            }
-        ],
-        "menus": {
-            "editor/context": [
-                {
-                    "submenu": "aether.copilot.submenu",
-                    "group": "1_copilot",
-                    "when": "editorTextFocus"
-                }
-            ],
-            "aether.copilot.submenu": [
-                {
-                    "command": "aether.copilot.insertHandle",
-                    "group": "1_handle@1",
-                    "when": "editorTextFocus"
-                },
-                {
-                    "command": "aether.copilot.insertHandleFullPath",
-                    "group": "1_handle@2",
-                    "when": "editorTextFocus"
-                },
-                {
-                    "command": "aether.copilot.attachSelection",
-                    "group": "2_attach@1",
-                    "when": "editorTextFocus && editorHasSelection"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "aether.mcpBridge.toggleTool",
-                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-tool-exposed",
-                    "group": "1_tool@1"
-                },
-                {
-                    "command": "aether.mcpBridge.toggleTool",
-                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-tool-hidden",
-                    "group": "1_tool@1"
-                },
-                {
-                    "command": "aether.mcpBridge.toggleGroup",
-                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-extension",
-                    "group": "2_extension@1"
-                },
-                {
-                    "command": "aether.mcpBridge.expandGroup",
-                    "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-extension",
-                    "group": "2_extension@2"
-                }
-            ]
+        "aether.temperature": {
+          "type": "number",
+          "default": 0.1,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Controls the randomness of AI model output. Lower values (like 0.1) produce more deterministic output, while higher values (like 1.0) produce more creative output.",
+          "scope": "application"
         },
-        "submenus": [
-            {
-                "id": "aether.copilot.submenu",
-                "label": "Aether",
-                "icon": "$(copilot)"
-            }
-        ],
-        "viewContainers": {
-            "activitybar": [
-                {
-                    "id": "aether.mcpBridge",
-                    "title": "Aether MCP Bridge",
-                    "icon": "assets/aether.png"
-                }
-            ]
+        "aether.topP": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Controls the diversity of AI model output. Using smaller values (like 0.9) reduces output randomness.",
+          "scope": "application"
         },
-        "views": {
-            "aether.mcpBridge": [
-                {
-                    "id": "aether.mcpBridge.toolsView",
-                    "name": "Tools"
-                }
-            ]
+        "aether.maxTokens": {
+          "type": "number",
+          "default": 8192,
+          "minimum": 32,
+          "maximum": 256000,
+          "description": "Controls the maximum number of tokens in AI model output. Larger values allow longer responses.",
+          "scope": "application"
+        },
+        "aether.rememberLastModel": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, records and automatically restores the last used extension-provided model. (VSCode 1.106.0 will reset to default optimal model [e.g., Claude Sonnet 4.5])",
+          "scope": "application"
+        },
+        "aether.hideThinkingInUI": {
+          "type": "boolean",
+          "default": false,
+          "description": "Completely hide model thinking/reasoning output in chat UI across all providers.",
+          "scope": "application"
+        },
+        "aether.zhipu.search.enableMCP": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable ZhipuAI search MCP SDK mode. Uses standard MCP protocol and official SDK for search functionality, providing more stable connections and better error handling. Non-subscription plans should disable this switch to use standard billing interface (per-request billing). Requires valid ZhipuAI API key.",
+          "scope": "application"
+        },
+        "aether.zhipu.endpoint": {
+          "type": "string",
+          "enum": [
+            "open.bigmodel.cn",
+            "api.z.ai"
+          ],
+          "default": "open.bigmodel.cn",
+          "description": "ZhipuAI access site. open.bigmodel.cn is domestic site (recommended), api.z.ai is international site.",
+          "scope": "application"
+        },
+        "aether.zhipu.plan": {
+          "type": "string",
+          "enum": [
+            "coding",
+            "normal"
+          ],
+          "default": "coding",
+          "description": "ZhipuAI plan type. coding: use /api/coding/paas/v4 endpoint (GLM Coding Plan), normal: use /api/paas/v4 endpoint (standard billing).",
+          "scope": "application"
+        },
+        "aether.zhipu.thinking": {
+          "type": "string",
+          "enum": [
+            "enabled",
+            "disabled",
+            "auto"
+          ],
+          "default": "auto",
+          "description": "ZhipuAI thinking mode (GLM-4.5+). enabled: always use thinking, disabled: never use thinking, auto: let model decide.",
+          "scope": "application"
+        },
+        "aether.zhipu.clearThinking": {
+          "type": "boolean",
+          "default": true,
+          "description": "ZhipuAI thinking context handling. true: clear prior reasoning_content from next-turn context (recommended). false: preserve prior reasoning_content in context.",
+          "scope": "application"
+        },
+        "aether.minimax.endpoint": {
+          "type": "string",
+          "enum": [
+            "minimaxi.com",
+            "minimax.io"
+          ],
+          "default": "minimaxi.com",
+          "description": "MiniMax Coding Plan access site. minimaxi.com is domestic site (recommended), minimax.io is international site.",
+          "scope": "application"
+        },
+        "aether.fimCompletion.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable FIM (Fill In the Middle) suggestion feature.",
+          "scope": "application"
+        },
+        "aether.fimCompletion.debounceMs": {
+          "type": "number",
+          "default": 500,
+          "minimum": 50,
+          "maximum": 1000,
+          "description": "Debounce delay for FIM completion (milliseconds).",
+          "scope": "application"
+        },
+        "aether.fimCompletion.timeoutMs": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 1000,
+          "maximum": 30000,
+          "description": "Request timeout for FIM completion (milliseconds).",
+          "scope": "application"
+        },
+        "aether.fimCompletion.modelConfig": {
+          "type": "object",
+          "default": {
+            "provider": "",
+            "baseUrl": "",
+            "model": ""
+          },
+          "description": "Model configuration for FIM completion.",
+          "scope": "application",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "description": "Model provider identifier"
+            },
+            "baseUrl": {
+              "type": "string",
+              "description": "API base URL",
+              "format": "uri"
+            },
+            "model": {
+              "type": "string",
+              "description": "Model name used for FIM completion"
+            },
+            "maxTokens": {
+              "type": "number",
+              "description": "Maximum length returned by FIM completion",
+              "default": 200,
+              "minimum": 50,
+              "maximum": 16000
+            },
+            "extraBody": {
+              "type": "object",
+              "description": "Additional request body parameters, merged into the request body",
+              "additionalProperties": {
+                "description": "Additional request body parameter values"
+              }
+            }
+          },
+          "required": [
+            "provider",
+            "baseUrl",
+            "model"
+          ]
+        },
+        "aether.nesCompletion.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable NES (Next Edit Suggestions) suggestion feature.",
+          "scope": "application"
+        },
+        "aether.nesCompletion.debounceMs": {
+          "type": "number",
+          "default": 500,
+          "minimum": 50,
+          "maximum": 1000,
+          "description": "Debounce delay for NES completion (milliseconds).",
+          "scope": "application"
+        },
+        "aether.nesCompletion.timeoutMs": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 1000,
+          "maximum": 30000,
+          "description": "Request timeout for NES completion (milliseconds).",
+          "scope": "application"
+        },
+        "aether.nesCompletion.manualOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled, NES completion only responds to manual triggers (Alt+/), will not trigger automatically.",
+          "scope": "application"
+        },
+        "aether.nesCompletion.modelConfig": {
+          "type": "object",
+          "default": {
+            "provider": "",
+            "baseUrl": "",
+            "model": ""
+          },
+          "description": "Model configuration for NES completion.",
+          "scope": "application",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "description": "Model provider identifier"
+            },
+            "baseUrl": {
+              "type": "string",
+              "description": "API base URL",
+              "format": "uri"
+            },
+            "model": {
+              "type": "string",
+              "description": "Model name used for NES completion"
+            },
+            "maxTokens": {
+              "type": "number",
+              "description": "Maximum length returned by NES completion",
+              "default": 200,
+              "minimum": 50,
+              "maximum": 16000
+            },
+            "extraBody": {
+              "type": "object",
+              "description": "Additional request body parameters, will be merged into request body in API requests",
+              "additionalProperties": {
+                "description": "Additional request body parameter value"
+              }
+            }
+          },
+          "required": [
+            "provider",
+            "baseUrl",
+            "model"
+          ]
+        },
+        "aether.providerOverrides": {
+          "type": "object",
+          "default": {},
+          "description": "Provider configuration overrides. Supports SDK mode, custom headers, and model-level overrides including custom models.",
+          "scope": "application"
+        },
+        "aether.compatibleModels": {
+          "type": "array",
+          "default": [],
+          "description": "Custom model configuration for Compatible Provider. Completely user-configured OpenAI/Anthropic compatible model list.",
+          "scope": "application"
+        },
+        "aether.moonshot.plan": {
+          "type": "string",
+          "enum": [
+            "coding",
+            "normal"
+          ],
+          "default": "normal",
+          "description": "MoonshotAI plan type. coding: use https://api.kimi.com/coding/v1, normal: use https://api.moonshot.ai/v1.",
+          "scope": "application"
+        },
+        "aether.mcpBridge.http.port": {
+          "type": "number",
+          "default": 59684,
+          "description": "Port for the MCP HTTP server"
+        },
+        "aether.mcpBridge.http.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable MCP HTTP server on startup"
+        },
+        "aether.mcpBridge.logging.logInvocations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Log tool invocations to output channel"
+        },
+        "aether.mcpBridge.tools.include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**"
+          ],
+          "description": "Glob patterns for tools to include"
+        },
+        "aether.mcpBridge.tools.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Glob patterns for tools to exclude"
+        },
+        "aether.mcpBridge.extensions.include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**"
+          ],
+          "description": "Glob patterns for extensions to include"
+        },
+        "aether.mcpBridge.extensions.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Glob patterns for extensions to exclude"
+        },
+        "aether.mcpBridge.polling.intervalMs": {
+          "type": "number",
+          "default": 3000,
+          "description": "Polling interval for tool registry in milliseconds"
+        },
+        "aether.aihubmix.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for AIHubMix.",
+          "scope": "application"
+        },
+        "aether.apertis.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic",
+            "oai-response"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Apertis AI.",
+          "scope": "application"
+        },
+        "aether.blackbox.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic",
+            "oai-response"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Blackbox AI.",
+          "scope": "application"
+        },
+        "aether.clarifai.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "oai-response"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Clarifai.",
+          "scope": "application"
+        },
+        "aether.commonstack.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for CommonStack.",
+          "scope": "application"
+        },
+        "aether.dashscope.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for DashScope (Ali Bailian).",
+          "scope": "application"
+        },
+        "aether.deepseek.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for DeepSeek.",
+          "scope": "application"
+        },
+        "aether.dialagram.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Dialagram.",
+          "scope": "application"
+        },
+        "aether.fastrouter.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic",
+            "oai-response"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for FastRouter.",
+          "scope": "application"
+        },
+        "aether.fireworks.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic",
+            "oai-response"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Fireworks AI.",
+          "scope": "application"
+        },
+        "aether.inworld.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Inworld Router.",
+          "scope": "application"
+        },
+        "aether.jiekou.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for Jiekou AI.",
+          "scope": "application"
+        },
+        "aether.llmgateway.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for LLMGateway.",
+          "scope": "application"
+        },
+        "aether.minimax.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for MiniMax.",
+          "scope": "application"
+        },
+        "aether.modelark.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for ModelArk (BytePlus).",
+          "scope": "application"
+        },
+        "aether.modelscope.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for ModelScope.",
+          "scope": "application"
+        },
+        "aether.ollama.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "anthropic",
+          "description": "Select SDK compatibility mode for Ollama.",
+          "scope": "application"
+        },
+        "aether.opencode.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for OpenCode.",
+          "scope": "application"
+        },
+        "aether.opencodego.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for OpenCode Zen Go.",
+          "scope": "application"
+        },
+        "aether.portkey.sdkMode": {
+          "type": "string",
+          "enum": [
+            "openai",
+            "anthropic",
+            "oai-response"
+          ],
+          "default": "openai",
+          "description": "Select SDK compatibility mode for Portkey.",
+          "scope": "application"
         }
+      }
     },
-    "scripts": {
-        "vscode:prepublish": "npm run clean && npm run compile",
-        "compile": "node esbuild.config.js",
-        "compile:dev": "node esbuild.config.js --dev",
-        "clean": "rimraf dist",
-        "aether:build": "npm --prefix src/CLI run build",
-        "aether:start": "npm --prefix src/CLI run start",
-        "aether:dev": "npm --prefix src/CLI run dev",
-        "aether:cli:build": "npm --prefix src/CLI/packages/cli run build",
-        "aether:cli:start": "npm --prefix src/CLI/packages/cli run start",
-        "aether:cli:debug": "npm --prefix src/CLI/packages/cli run debug",
-        "aether:cli:bundle": "npm --prefix src/CLI run bundle -- --dev",
-        "aether:cli:test": "npm --prefix src/CLI/packages/cli run test",
-        "aether:cli:lint": "npm --prefix src/CLI/packages/cli run lint",
-        "aether:cli:format": "npm --prefix src/CLI/packages/cli run format",
-        "aether:cli:typecheck": "npm --prefix src/CLI/packages/cli run typecheck",
-        "lint": "biome check",
-        "lint:fix": "biome check --write --unsafe",
-        "format": "biome format",
-        "format:check": "biome format --check",
-        "watch": "node esbuild.config.js --watch --dev",
-        "sync-providers": "node scripts/sync-providers.js",
-        "package": "vsce package",
-        "publish": "vsce publish --allow-proposed-apis chatProvider chatParticipantAdditions defaultChatParticipant",
-        "pretest": "npm run compile:dev",
-        "release": "vsce package && ${VSCODE_BIN:-code} --install-extension *.vsix --force",
-        "test": "vitest"
+    "jsonValidation": [
+      {
+        "fileMatch": "settings.json",
+        "url": "aether-settings://root/schema.json"
+      }
+    ],
+    "languageModelChatProviders": [
+      {
+        "vendor": "aether.aihubmix",
+        "displayName": "⦿ AIHubMix",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "AIHubMix API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.aimlapi",
+        "displayName": "⦿ AIML API",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "AIML API API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.apertis",
+        "displayName": "⦿ Apertis AI (Apertis AI endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Apertis AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.baidu",
+        "displayName": "⦿ Baidu Qianfan",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Baidu Qianfan API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.baseten",
+        "displayName": "⦿ Baseten",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Baseten API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.berget",
+        "displayName": "⦿ Berget",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Berget API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.blackbox",
+        "displayName": "⦿ Blackbox AI (Blackbox AI)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Blackbox AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.chatjimmy",
+        "displayName": "⦿ ChatJimmy (ChatJimmy)",
+        "configuration": {
+          "properties": {}
+        }
+      },
+      {
+        "vendor": "aether.chutes",
+        "displayName": "⦿ Chutes AI (Chutes AI endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Chutes AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.clarifai",
+        "displayName": "⦿ Clarifai",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Clarifai API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.cline",
+        "displayName": "⦿ Cline (Cline endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Cline API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.codex",
+        "displayName": "⦿ OpenAI Codex (OpenAI Codex specialized coding provider)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "OpenAI Codex API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.commonstack",
+        "displayName": "⦿ CommonStack",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "CommonStack API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.cortecs",
+        "displayName": "⦿ Cortecs",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Cortecs API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.crof",
+        "displayName": "⦿ Crof AI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Crof AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.dashscope",
+        "displayName": "⦿ DashScope (Ali Bailian)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "DashScope (Ali Bailian) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.deepinfra",
+        "displayName": "⦿ DeepInfra (OpenAI-compatible endpoints from DeepInfra)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "DeepInfra API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.deepseek",
+        "displayName": "⦿ DeepSeek (DeepSeek model family)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "DeepSeek API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.dialagram",
+        "displayName": "⦿ Dialagram",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Dialagram API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.dinference",
+        "displayName": "⦿ Dinference",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Dinference API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.edenai",
+        "displayName": "⦿ Eden AI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Eden AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.fastrouter",
+        "displayName": "⦿ FastRouter",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "FastRouter API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.fireworks",
+        "displayName": "⦿ Fireworks AI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Fireworks AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.friendli",
+        "displayName": "⦿ Friendli",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Friendli API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.gemini",
+        "displayName": "⦿ Gemini CLI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Gemini CLI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.helicone",
+        "displayName": "⦿ Helicone AI Gateway",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Helicone AI Gateway API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.hicapai",
+        "displayName": "⦿ HicapAI (HicapAI - OpenAI SDK compatible endpoint)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "HicapAI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.huggingface",
+        "displayName": "⦿ Hugging Face (Hugging Face Router endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Hugging Face API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.inworld",
+        "displayName": "⦿ Inworld Router",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Inworld Router API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.jiekou",
+        "displayName": "⦿ Jiekou AI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Jiekou AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.kilo",
+        "displayName": "⦿ Kilo AI (Kilo AI endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Kilo AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.knox",
+        "displayName": "⦿ Knox (Knox Chat - OpenAI SDK compatible endpoint)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Knox API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.lightningai",
+        "displayName": "⦿ LightningAI (LightningAI endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "LightningAI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.llmgateway",
+        "displayName": "⦿ LLMGateway (Unified access to multiple AI models)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "LLMGateway API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.meganova",
+        "displayName": "⦿ MegaNova",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "MegaNova API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.minimax",
+        "displayName": "⦿ MiniMax (MiniMax family models with coding endpoint options)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "MiniMax API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.mistral",
+        "displayName": "⦿ Mistral AI (Mistral AI model endpoints)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Mistral AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.moark",
+        "displayName": "⦿ Moark",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Moark API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.modal",
+        "displayName": "⦿ Modal (Research)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Modal (Research) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.modelark",
+        "displayName": "⦿ ModelArk (BytePlus)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "ModelArk (BytePlus) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.modelscope",
+        "displayName": "⦿ ModelScope",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "ModelScope API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.moonshot",
+        "displayName": "⦿ MoonshotAI (MoonshotAI Kimi model family)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "MoonshotAI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.nanogpt",
+        "displayName": "⦿ NanoGPT (NanoGPT endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "NanoGPT API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.nvidia",
+        "displayName": "⦿ NVIDIA NIM (NVIDIA NIM hosted model endpoints)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "NVIDIA NIM API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.ofox",
+        "displayName": "⦿ Ofox AI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Ofox AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.ollama",
+        "displayName": "⦿ Ollama (Ollama)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Ollama API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.opencode",
+        "displayName": "⦿ OpenCode (OpenCode endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "OpenCode API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.opencodego",
+        "displayName": "⦿ OpenCode Zen Go (OpenCode Zen Go endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "OpenCode Zen Go API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.pollinations",
+        "displayName": "⦿ Pollinations AI (Pollinations AI - OpenAI-compatible API with diverse model selection)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Pollinations AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.portkey",
+        "displayName": "⦿ Portkey",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Portkey API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.puter",
+        "displayName": "⦿ Puter AI (Free AI API - access 500+ models including GPT, Claude, Gemini with Puter auth token)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Puter AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.qwencli",
+        "displayName": "⦿ Qwen CLI (Qwen CLI OAuth provider)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Qwen CLI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.qzz",
+        "displayName": "⦿ 0api (Qzz)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "0api (Qzz) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.requesty",
+        "displayName": "⦿ Requesty Router",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Requesty Router API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.rinkoai",
+        "displayName": "⦿ RinkoAI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "RinkoAI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.routingrun",
+        "displayName": "⦿ Routing.run",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Routing.run API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.seraphyn",
+        "displayName": "⦿ Seraphyn (Seraphyn AI - OpenAI SDK compatible endpoint)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Seraphyn API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.sherlock",
+        "displayName": "⦿ Sherlock (CloudFerro)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Sherlock (CloudFerro) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.streamlake",
+        "displayName": "⦿ StreamLake",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "StreamLake API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.tencent",
+        "displayName": "⦿ Tencent Hunyuan",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Tencent Hunyuan API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.together",
+        "displayName": "⦿ TogetherAI",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "TogetherAI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.vercelai",
+        "displayName": "⦿ Vercel AI (Vercel AI Gateway endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Vercel AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.volcengine",
+        "displayName": "⦿ Volcengine",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Volcengine API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.vsllm",
+        "displayName": "⦿ VSLLM",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "VSLLM API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.xiaomimimo",
+        "displayName": "⦿ Xiaomi Mimo",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Xiaomi Mimo API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.xinjianya",
+        "displayName": "⦿ Xinjianya (星见雅 API (api.xinjianya.top) — community gateway)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Xinjianya API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.zenmux",
+        "displayName": "⦿ Zenmux (Zenmux endpoint integration)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Zenmux API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.zhipu",
+        "displayName": "⦿ Zhipu AI (GLM family models and coding plan features)",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Zhipu AI API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "aether.compatible",
+        "displayName": "⦿ OpenAI/Anthropic Compatible",
+        "configuration": {
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Compatible provider API key.",
+              "secret": true
+            }
+          }
+        }
+      }
+    ],
+    "languageModelTools": [
+      {
+        "name": "aether_zhipuWebSearch",
+        "displayName": "ZhipuAI Web Search",
+        "toolReferenceName": "zhipuWebSearch",
+        "modelDescription": "Uses ZhipuAI's web search functionality to get real-time information. Supports multiple search engines: search_std (standard search, ¥0.01), search_pro (advanced search, ¥0.03), search_pro_sogou (Sogou search, ¥0.05), search_pro_quark (Quark search, ¥0.05). Note: Pro+ plans can use MCP SSE calls, non-subscription plans use standard billing interface (per-request billing).",
+        "userDescription": "Get latest information through ZhipuAI web search",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search_query": {
+              "type": "string",
+              "description": "Search query string"
+            },
+            "search_engine": {
+              "type": "string",
+              "enum": [
+                "search_std",
+                "search_pro",
+                "search_pro_sogou",
+                "search_pro_quark"
+              ],
+              "description": "Search engine type: search_std (standard, ¥0.01), search_pro (advanced, ¥0.03), search_pro_sogou (Sogou, ¥0.05), search_pro_quark (Quark, ¥0.05)",
+              "default": "search_std"
+            },
+            "search_intent": {
+              "type": "boolean",
+              "description": "Whether to perform search intent analysis",
+              "default": false
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of search results to return",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 10
+            },
+            "search_domain_filter": {
+              "type": "string",
+              "description": "Domain filter, limits search to specific websites"
+            },
+            "search_recency_filter": {
+              "type": "string",
+              "enum": [
+                "noLimit",
+                "day",
+                "week",
+                "month",
+                "year"
+              ],
+              "description": "Time filter: noLimit (no limit), day (within one day), week (within one week), month (within one month), year (within one year)",
+              "default": "noLimit"
+            },
+            "content_size": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "description": "Content detail level: low (low), medium (medium), high (high)",
+              "default": "medium"
+            }
+          },
+          "required": [
+            "search_query"
+          ]
+        },
+        "canBeReferencedInPrompt": true
+      },
+      {
+        "name": "aether_minimaxWebSearch",
+        "displayName": "MiniMax Web Search",
+        "toolReferenceName": "minimaxWebSearch",
+        "modelDescription": "Uses MiniMax Coding Plan's web search functionality to get real-time information. Requires subscribing to MiniMax Coding Plan and setting dedicated API key.",
+        "userDescription": "Get latest information through MiniMax web search",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "Search query string"
+            }
+          },
+          "required": [
+            "q"
+          ]
+        },
+        "canBeReferencedInPrompt": true
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "editor.action.inlineSuggest.trigger",
+        "key": "alt+/",
+        "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible"
+      },
+      {
+        "command": "aether.nesCompletion.toggleManual",
+        "key": "shift+alt+/"
+      },
+      {
+        "command": "aether.copilot.attachSelection",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "aether.copilot.insertHandle",
+        "key": "ctrl+shift+h",
+        "mac": "cmd+shift+h",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "aether.copilot.insertHandleFullPath",
+        "key": "ctrl+alt+shift+h",
+        "mac": "cmd+alt+shift+h",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "aether.accounts.quickSwitch",
+        "key": "ctrl+shift+q",
+        "mac": "cmd+shift+q"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "aether.copilot.submenu",
+          "group": "1_copilot",
+          "when": "editorTextFocus"
+        }
+      ],
+      "aether.copilot.submenu": [
+        {
+          "command": "aether.copilot.insertHandle",
+          "group": "1_handle@1",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "aether.copilot.insertHandleFullPath",
+          "group": "1_handle@2",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "aether.copilot.attachSelection",
+          "group": "2_attach@1",
+          "when": "editorTextFocus && editorHasSelection"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "aether.mcpBridge.toggleTool",
+          "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-tool-exposed",
+          "group": "1_tool@1"
+        },
+        {
+          "command": "aether.mcpBridge.toggleTool",
+          "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-tool-hidden",
+          "group": "1_tool@1"
+        },
+        {
+          "command": "aether.mcpBridge.toggleGroup",
+          "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-extension",
+          "group": "2_extension@1"
+        },
+        {
+          "command": "aether.mcpBridge.expandGroup",
+          "when": "view == aether.mcpBridge.toolsView && viewItem == aether-mcp-extension",
+          "group": "2_extension@2"
+        }
+      ]
     },
-    "dependencies": {
-        "@alcalzone/ansi-tokenize": "0.3.0",
-        "@anthropic-ai/bedrock-sdk": "0.26.4",
-        "@anthropic-ai/foundry-sdk": "0.2.3",
-        "@anthropic-ai/sandbox-runtime": "0.0.46",
-        "@anthropic-ai/sdk": "^0.81.0",
-        "@anthropic-ai/vertex-sdk": "0.14.4",
-        "@aws-crypto/crc32": "3.0.0",
-        "@aws-crypto/sha256-browser": "5.2.0",
-        "@aws-crypto/sha256-js": "4.0.0",
-        "@aws-crypto/supports-web-crypto": "5.2.0",
-        "@aws-crypto/util": "4.0.0",
-        "@aws-sdk/client-bedrock-runtime": "3.1036.0",
-        "@aws-sdk/client-cognito-identity": "3.1036.0",
-        "@aws-sdk/core": "3.974.5",
-        "@aws-sdk/credential-provider-cognito-identity": "3.972.28",
-        "@aws-sdk/credential-provider-env": "3.972.31",
-        "@aws-sdk/credential-provider-http": "3.972.33",
-        "@aws-sdk/credential-provider-ini": "3.972.35",
-        "@aws-sdk/credential-provider-login": "3.972.35",
-        "@aws-sdk/credential-provider-node": "3.972.36",
-        "@aws-sdk/credential-provider-process": "3.972.31",
-        "@aws-sdk/credential-provider-sso": "3.972.35",
-        "@aws-sdk/credential-provider-web-identity": "3.972.35",
-        "@aws-sdk/credential-providers": "3.1036.0",
-        "@aws-sdk/eventstream-handler-node": "3.972.14",
-        "@aws-sdk/middleware-eventstream": "3.972.10",
-        "@aws-sdk/middleware-host-header": "3.972.10",
-        "@aws-sdk/middleware-logger": "3.972.10",
-        "@aws-sdk/middleware-recursion-detection": "3.972.11",
-        "@aws-sdk/middleware-sdk-s3": "3.972.34",
-        "@aws-sdk/middleware-user-agent": "3.972.35",
-        "@aws-sdk/middleware-websocket": "3.972.16",
-        "@aws-sdk/nested-clients": "3.997.3",
-        "@aws-sdk/region-config-resolver": "3.972.13",
-        "@aws-sdk/signature-v4-multi-region": "3.996.22",
-        "@aws-sdk/token-providers": "3.1036.0",
-        "@aws-sdk/types": "3.973.8",
-        "@aws-sdk/util-arn-parser": "3.972.3",
-        "@aws-sdk/util-endpoints": "3.996.8",
-        "@aws-sdk/util-format-url": "3.972.10",
-        "@aws-sdk/util-locate-window": "3.965.5",
-        "@aws-sdk/util-user-agent-browser": "3.972.10",
-        "@aws-sdk/util-user-agent-node": "3.973.21",
-        "@aws-sdk/util-utf8-browser": "3.259.0",
-        "@aws-sdk/xml-builder": "3.972.19",
-        "@commander-js/extra-typings": "12.1.0",
-        "@microsoft/tiktokenizer": "^1.0.10",
-        "@modelcontextprotocol/sdk": "^1.29.0",
-        "@smithy/config-resolver": "4.4.17",
-        "@smithy/core": "3.23.17",
-        "@smithy/credential-provider-imds": "4.2.14",
-        "@smithy/eventstream-codec": "4.2.14",
-        "@smithy/eventstream-serde-browser": "4.2.14",
-        "@smithy/eventstream-serde-config-resolver": "4.3.14",
-        "@smithy/eventstream-serde-universal": "2.2.0",
-        "@smithy/fetch-http-handler": "5.3.17",
-        "@smithy/hash-node": "4.2.14",
-        "@smithy/invalid-dependency": "4.2.14",
-        "@smithy/is-array-buffer": "3.0.0",
-        "@smithy/middleware-content-length": "4.2.14",
-        "@smithy/middleware-endpoint": "4.4.32",
-        "@smithy/middleware-retry": "4.5.5",
-        "@smithy/middleware-serde": "4.2.20",
-        "@smithy/middleware-stack": "4.2.14",
-        "@smithy/node-config-provider": "4.3.14",
-        "@smithy/node-http-handler": "4.6.1",
-        "@smithy/property-provider": "4.2.14",
-        "@smithy/querystring-builder": "4.2.14",
-        "@smithy/querystring-parser": "4.2.14",
-        "@smithy/service-error-classification": "4.3.0",
-        "@smithy/shared-ini-file-loader": "4.4.9",
-        "@smithy/signature-v4": "3.1.2",
-        "@smithy/smithy-client": "2.5.1",
-        "@smithy/types": "2.12.0",
-        "@smithy/url-parser": "4.2.14",
-        "@smithy/util-base64": "2.3.0",
-        "@smithy/util-body-length-browser": "4.2.2",
-        "@smithy/util-body-length-node": "4.2.3",
-        "@smithy/util-buffer-from": "2.2.0",
-        "@smithy/util-config-provider": "4.2.2",
-        "@smithy/util-defaults-mode-browser": "4.3.49",
-        "@smithy/util-defaults-mode-node": "4.2.54",
-        "@smithy/util-endpoints": "3.4.2",
-        "@smithy/util-hex-encoding": "3.0.0",
-        "@smithy/util-middleware": "4.2.14",
-        "@smithy/util-retry": "4.3.4",
-        "@smithy/util-stream": "4.5.25",
-        "@smithy/util-uri-escape": "3.0.0",
-        "@smithy/uuid": "1.1.2",
-        "@vscode/chat-lib": "^0.2.0",
-        "ajv": "8.18.0",
-        "auto-bind": "5.0.1",
-        "axios": "1.14.0",
-        "better-sqlite3": "^12.8.0",
-        "bidi-js": "1.0.3",
-        "chalk": "^5.6.2",
-        "chokidar": "4.0.3",
-        "cli-boxes": "3.0.0",
-        "cli-highlight": "2.1.11",
-        "code-excerpt": "4.0.0",
-        "commander": "12.1.0",
-        "diff": "8.0.3",
-        "duck-duck-scrape": "^2.2.7",
-        "emoji-regex": "10.6.0",
-        "env-paths": "3.0.0",
-        "execa": "9.6.1",
-        "fflate": "0.8.2",
-        "figures": "6.1.0",
-        "fuse.js": "7.1.0",
-        "get-east-asian-width": "1.5.0",
-        "google-auth-library": "9.15.1",
-        "https-proxy-agent": "7.0.6",
-        "ignore": "7.0.5",
-        "indent-string": "5.0.0",
-        "jsonc-parser": "3.3.1",
-        "lodash-es": "4.18.0",
-        "lru-cache": "11.2.7",
-        "marked": "15.0.12",
-        "openai": "^6.7.0",
-        "p-map": "7.0.4",
-        "picomatch": "4.0.4",
-        "proper-lockfile": "4.1.2",
-        "qrcode": "1.5.4",
-        "react": "19.2.4",
-        "react-compiler-runtime": "1.0.0",
-        "react-reconciler": "0.33.0",
-        "semver": "7.7.4",
-        "sharp": "^0.34.5",
-        "shell-quote": "1.8.3",
-        "signal-exit": "4.1.0",
-        "stack-utils": "2.0.6",
-        "strip-ansi": "^7.2.0",
-        "supports-hyperlinks": "3.2.0",
-        "tree-kill": "1.2.2",
-        "turndown": "7.2.2",
-        "type-fest": "4.41.0",
-        "undici": "7.24.6",
-        "usehooks-ts": "3.1.1",
-        "vscode-languageserver-protocol": "3.17.5",
-        "wrap-ansi": "9.0.2",
-        "ws": "8.20.0",
-        "xss": "1.0.15",
-        "yaml": "2.8.3",
-        "zod": "3.25.76"
+    "submenus": [
+      {
+        "id": "aether.copilot.submenu",
+        "label": "Aether",
+        "icon": "$(copilot)"
+      }
+    ],
+    "viewContainers": {
+      "activitybar": [
+        {
+          "id": "aether.mcpBridge",
+          "title": "Aether MCP Bridge",
+          "icon": "assets/aether.png"
+        }
+      ]
     },
-    "devDependencies": {
-        "@biomejs/biome": "^2.3.10",
-        "@types/bun": "1.3.11",
-        "@types/json-schema": "^7.0.15",
-        "@types/node": "^22.19.0",
-        "@types/react": "19.2.14",
-        "@types/vscode": "^1.104.0",
-        "@vscode/vsce": "^3.6.2",
-        "cross-env": "^10.1.0",
-        "esbuild": "^0.25.10",
-        "prettier": "^3.6.2",
-        "rimraf": "^6.0.1",
-        "ts-node": "^10.9.1",
-        "tsx": "^4.21.0",
-        "typescript": "^5.9.2",
-        "vitest": "^3.2.4"
-    },
-    "volta": {
-        "node": "20.19.5"
+    "views": {
+      "aether.mcpBridge": [
+        {
+          "id": "aether.mcpBridge.toolsView",
+          "name": "Tools"
+        }
+      ]
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run clean && npm run compile",
+    "compile": "node esbuild.config.js",
+    "compile:dev": "node esbuild.config.js --dev",
+    "clean": "rimraf dist",
+    "aether:build": "npm --prefix src/CLI run build",
+    "aether:start": "npm --prefix src/CLI run start",
+    "aether:dev": "npm --prefix src/CLI run dev",
+    "aether:cli:build": "npm --prefix src/CLI/packages/cli run build",
+    "aether:cli:start": "npm --prefix src/CLI/packages/cli run start",
+    "aether:cli:debug": "npm --prefix src/CLI/packages/cli run debug",
+    "aether:cli:bundle": "npm --prefix src/CLI run bundle -- --dev",
+    "aether:cli:test": "npm --prefix src/CLI/packages/cli run test",
+    "aether:cli:lint": "npm --prefix src/CLI/packages/cli run lint",
+    "aether:cli:format": "npm --prefix src/CLI/packages/cli run format",
+    "aether:cli:typecheck": "npm --prefix src/CLI/packages/cli run typecheck",
+    "lint": "biome check",
+    "lint:fix": "biome check --write --unsafe",
+    "format": "biome format",
+    "format:check": "biome format --check",
+    "watch": "node esbuild.config.js --watch --dev",
+    "sync-providers": "node scripts/sync-providers.js",
+    "package": "vsce package",
+    "publish": "vsce publish --allow-proposed-apis chatProvider chatParticipantAdditions defaultChatParticipant",
+    "pretest": "npm run compile:dev",
+    "release": "vsce package && ${VSCODE_BIN:-code} --install-extension *.vsix --force",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@alcalzone/ansi-tokenize": "0.3.0",
+    "@anthropic-ai/bedrock-sdk": "0.26.4",
+    "@anthropic-ai/foundry-sdk": "0.2.3",
+    "@anthropic-ai/sandbox-runtime": "0.0.46",
+    "@anthropic-ai/sdk": "^0.81.0",
+    "@anthropic-ai/vertex-sdk": "0.14.4",
+    "@aws-crypto/crc32": "3.0.0",
+    "@aws-crypto/sha256-browser": "5.2.0",
+    "@aws-crypto/sha256-js": "4.0.0",
+    "@aws-crypto/supports-web-crypto": "5.2.0",
+    "@aws-crypto/util": "4.0.0",
+    "@aws-sdk/client-bedrock-runtime": "3.1036.0",
+    "@aws-sdk/client-cognito-identity": "3.1036.0",
+    "@aws-sdk/core": "3.974.5",
+    "@aws-sdk/credential-provider-cognito-identity": "3.972.28",
+    "@aws-sdk/credential-provider-env": "3.972.31",
+    "@aws-sdk/credential-provider-http": "3.972.33",
+    "@aws-sdk/credential-provider-ini": "3.972.35",
+    "@aws-sdk/credential-provider-login": "3.972.35",
+    "@aws-sdk/credential-provider-node": "3.972.36",
+    "@aws-sdk/credential-provider-process": "3.972.31",
+    "@aws-sdk/credential-provider-sso": "3.972.35",
+    "@aws-sdk/credential-provider-web-identity": "3.972.35",
+    "@aws-sdk/credential-providers": "3.1036.0",
+    "@aws-sdk/eventstream-handler-node": "3.972.14",
+    "@aws-sdk/middleware-eventstream": "3.972.10",
+    "@aws-sdk/middleware-host-header": "3.972.10",
+    "@aws-sdk/middleware-logger": "3.972.10",
+    "@aws-sdk/middleware-recursion-detection": "3.972.11",
+    "@aws-sdk/middleware-sdk-s3": "3.972.34",
+    "@aws-sdk/middleware-user-agent": "3.972.35",
+    "@aws-sdk/middleware-websocket": "3.972.16",
+    "@aws-sdk/nested-clients": "3.997.3",
+    "@aws-sdk/region-config-resolver": "3.972.13",
+    "@aws-sdk/signature-v4-multi-region": "3.996.22",
+    "@aws-sdk/token-providers": "3.1036.0",
+    "@aws-sdk/types": "3.973.8",
+    "@aws-sdk/util-arn-parser": "3.972.3",
+    "@aws-sdk/util-endpoints": "3.996.8",
+    "@aws-sdk/util-format-url": "3.972.10",
+    "@aws-sdk/util-locate-window": "3.965.5",
+    "@aws-sdk/util-user-agent-browser": "3.972.10",
+    "@aws-sdk/util-user-agent-node": "3.973.21",
+    "@aws-sdk/util-utf8-browser": "3.259.0",
+    "@aws-sdk/xml-builder": "3.972.19",
+    "@commander-js/extra-typings": "12.1.0",
+    "@microsoft/tiktokenizer": "^1.0.10",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@smithy/config-resolver": "4.4.17",
+    "@smithy/core": "3.23.17",
+    "@smithy/credential-provider-imds": "4.2.14",
+    "@smithy/eventstream-codec": "4.2.14",
+    "@smithy/eventstream-serde-browser": "4.2.14",
+    "@smithy/eventstream-serde-config-resolver": "4.3.14",
+    "@smithy/eventstream-serde-universal": "2.2.0",
+    "@smithy/fetch-http-handler": "5.3.17",
+    "@smithy/hash-node": "4.2.14",
+    "@smithy/invalid-dependency": "4.2.14",
+    "@smithy/is-array-buffer": "3.0.0",
+    "@smithy/middleware-content-length": "4.2.14",
+    "@smithy/middleware-endpoint": "4.4.32",
+    "@smithy/middleware-retry": "4.5.5",
+    "@smithy/middleware-serde": "4.2.20",
+    "@smithy/middleware-stack": "4.2.14",
+    "@smithy/node-config-provider": "4.3.14",
+    "@smithy/node-http-handler": "4.6.1",
+    "@smithy/property-provider": "4.2.14",
+    "@smithy/querystring-builder": "4.2.14",
+    "@smithy/querystring-parser": "4.2.14",
+    "@smithy/service-error-classification": "4.3.0",
+    "@smithy/shared-ini-file-loader": "4.4.9",
+    "@smithy/signature-v4": "3.1.2",
+    "@smithy/smithy-client": "2.5.1",
+    "@smithy/types": "2.12.0",
+    "@smithy/url-parser": "4.2.14",
+    "@smithy/util-base64": "2.3.0",
+    "@smithy/util-body-length-browser": "4.2.2",
+    "@smithy/util-body-length-node": "4.2.3",
+    "@smithy/util-buffer-from": "2.2.0",
+    "@smithy/util-config-provider": "4.2.2",
+    "@smithy/util-defaults-mode-browser": "4.3.49",
+    "@smithy/util-defaults-mode-node": "4.2.54",
+    "@smithy/util-endpoints": "3.4.2",
+    "@smithy/util-hex-encoding": "3.0.0",
+    "@smithy/util-middleware": "4.2.14",
+    "@smithy/util-retry": "4.3.4",
+    "@smithy/util-stream": "4.5.25",
+    "@smithy/util-uri-escape": "3.0.0",
+    "@smithy/uuid": "1.1.2",
+    "@vscode/chat-lib": "^0.2.0",
+    "ajv": "8.18.0",
+    "auto-bind": "5.0.1",
+    "axios": "1.14.0",
+    "better-sqlite3": "^12.8.0",
+    "bidi-js": "1.0.3",
+    "chalk": "^5.6.2",
+    "chokidar": "4.0.3",
+    "cli-boxes": "3.0.0",
+    "cli-highlight": "2.1.11",
+    "code-excerpt": "4.0.0",
+    "commander": "12.1.0",
+    "diff": "8.0.3",
+    "duck-duck-scrape": "^2.2.7",
+    "emoji-regex": "10.6.0",
+    "env-paths": "3.0.0",
+    "execa": "9.6.1",
+    "fflate": "0.8.2",
+    "figures": "6.1.0",
+    "fuse.js": "7.1.0",
+    "get-east-asian-width": "1.5.0",
+    "google-auth-library": "9.15.1",
+    "https-proxy-agent": "7.0.6",
+    "ignore": "7.0.5",
+    "indent-string": "5.0.0",
+    "jsonc-parser": "3.3.1",
+    "lodash-es": "4.18.0",
+    "lru-cache": "11.2.7",
+    "marked": "15.0.12",
+    "openai": "^6.7.0",
+    "p-map": "7.0.4",
+    "picomatch": "4.0.4",
+    "proper-lockfile": "4.1.2",
+    "qrcode": "1.5.4",
+    "react": "19.2.4",
+    "react-compiler-runtime": "1.0.0",
+    "react-reconciler": "0.33.0",
+    "semver": "7.7.4",
+    "sharp": "^0.34.5",
+    "shell-quote": "1.8.3",
+    "signal-exit": "4.1.0",
+    "stack-utils": "2.0.6",
+    "strip-ansi": "^7.2.0",
+    "supports-hyperlinks": "3.2.0",
+    "tree-kill": "1.2.2",
+    "turndown": "7.2.2",
+    "type-fest": "4.41.0",
+    "undici": "7.24.6",
+    "usehooks-ts": "3.1.1",
+    "vscode-languageserver-protocol": "3.17.5",
+    "wrap-ansi": "9.0.2",
+    "ws": "8.20.0",
+    "xss": "1.0.15",
+    "yaml": "2.8.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.10",
+    "@types/bun": "1.3.11",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^22.19.0",
+    "@types/react": "19.2.14",
+    "@types/vscode": "^1.104.0",
+    "@vscode/vsce": "^3.6.2",
+    "cross-env": "^10.1.0",
+    "esbuild": "^0.25.10",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "volta": {
+    "node": "20.19.5"
+  }
 }

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.4.8] - 2026-05-12
 
 ### Fixed
 - **MCP Bridge tool invocation**: Added CancellationToken parameter to tool invoke handlers in `zhipuSearch.ts` and `minimaxSearch.ts` to match VS Code API signature.
