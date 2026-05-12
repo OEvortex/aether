@@ -151,7 +151,8 @@ export class MiniMaxSearchTool {
         request: vscode.LanguageModelToolInvocationOptions<
             MiniMaxSearchRequest,
             unknown
-        >
+        >,
+        _token: vscode.CancellationToken
     ): Promise<vscode.LanguageModelToolResult> {
         try {
             Logger.info(

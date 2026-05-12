@@ -87,7 +87,11 @@ export async function invokeLmTool(
             toolName,
             { input, toolInvocationToken: undefined },
             undefined
-        );
+        ).catch((err: unknown) => {
+            // Wrap the error to preserve stack trace
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            throw new Error(`vscode.lm.invokeTool failed: ${errorMessage}`);
+        });
 
         const durationMs = Date.now() - startTime;
         const content: Array<{ type: 'text'; text: string } | { type: 'image'; data: string; mimeType: string }> = result.content.map((part) => {

@@ -228,7 +228,8 @@ export class ZhipuSearchTool {
         request: vscode.LanguageModelToolInvocationOptions<
             ZhipuSearchRequest,
             unknown
-        >
+        >,
+        _token: vscode.CancellationToken
     ): Promise<vscode.LanguageModelToolResult> {
         try {
             Logger.info(

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- **MCP Bridge tool invocation**: Added CancellationToken parameter to tool invoke handlers in `zhipuSearch.ts` and `minimaxSearch.ts` to match VS Code API signature.
+- **MCP Bridge error handling**: Added error wrapping for `vscode.lm.invokeTool` calls to provide better error messages when tool invocation fails.
+
 ### Changed
 - **VS Code Language Model API Alignment**: Updated all provider implementations to fully align with the latest VS Code Language Model API (v5).
   - Updated `vscode.proposed.chatProvider.d.ts` with complete type definitions including `LanguageModelChatCapabilities`, `LanguageModelChatRequestMessage`, tool interfaces, and new optional methods (`onDidChangeLanguageModelChatInformation`, `provideTokenCount`).
