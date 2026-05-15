@@ -12,7 +12,6 @@ import type {
     LanguageModelChatMessage,
     LanguageModelChatMessage2,
     LanguageModelChatProvider,
-    LanguageModelChatRequestMessage,
     LanguageModelResponsePart2,
     Progress,
     ProvideLanguageModelChatResponseOptions
@@ -36,8 +35,7 @@ import { CompatibleModelManager } from '../../utils/compatibleModelManager';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
-    isDeepSeekModel,
-    isDeepSeekV4Model,
+    requiresThinkingContentRoundTrip,
     resolveAdvertisedTokenLimits,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
@@ -176,10 +174,15 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             this.baseProviderConfig
         );
 
-        // Auto-detect DeepSeek V4 models and force includeThinking=true
-        // DeepSeek V4 API requires thinking content in multi-turn conversations with tool calls
-        const modelsWithAutoDetection = overriddenConfig.models.map(model => {
-            if (isDeepSeekV4Model(model.id) && model.includeThinking !== false) {
+        // Auto-detect DeepSeek thinking models and force includeThinking=true.
+        // These APIs require reasoning_content to be passed back in multi-turn tool conversations.
+        const modelsWithAutoDetection = overriddenConfig.models.map((model) => {
+            if (
+                requiresThinkingContentRoundTrip(
+                    `${model.id} ${model.model || ''} ${model.name || ''}`
+                ) &&
+                model.includeThinking !== false
+            ) {
                 return { ...model, includeThinking: true };
             }
             return model;
@@ -363,8 +366,10 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 
         // Build capabilities object for LanguageModelChatInformation
         const chatCapabilities: LanguageModelChatCapabilities = {
-            toolCalling: capabilities.toolCalling ?? model.capabilities?.toolCalling,
-            imageInput: capabilities.imageInput ?? model.capabilities?.imageInput
+            toolCalling:
+                capabilities.toolCalling ?? model.capabilities?.toolCalling,
+            imageInput:
+                capabilities.imageInput ?? model.capabilities?.imageInput
         };
 
         const info: LanguageModelChatInformation = {

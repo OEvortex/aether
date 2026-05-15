@@ -1,5 +1,6 @@
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
 import { getUserAgent, Logger } from '../../utils';
+import { requiresThinkingContentRoundTrip } from '../../utils/globalContextLengthManager';
 
 interface OpenCodeModelInfo {
     name?: string;
@@ -75,18 +76,24 @@ export class OpenCodeGoHandler {
                 (info.max_output_tokens as number) ||
                 128000;
             const maxOutputTokens = (info.max_output_tokens as number) || 8192;
+            const name =
+                (info.name as string) ||
+                modelId
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, (c) => c.toUpperCase());
+            const tooltip = (info.description as string) || modelId;
+            const includeThinking = requiresThinkingContentRoundTrip(
+                `${modelId} ${name} ${tooltip}`
+            );
 
             models.push({
                 id: this.sanitizeModelId(modelId),
-                name:
-                    (info.name as string) ||
-                    modelId
-                        .replace(/-/g, ' ')
-                        .replace(/\b\w/g, (c) => c.toUpperCase()),
-                tooltip: (info.description as string) || modelId,
+                name,
+                tooltip,
                 maxInputTokens: contextLength,
                 maxOutputTokens,
                 model: modelId,
+                ...(includeThinking ? { includeThinking: true } : {}),
                 capabilities: {
                     toolCalling: true,
                     imageInput: false

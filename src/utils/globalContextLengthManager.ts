@@ -177,6 +177,16 @@ export function isDeepSeekV4Model(modelId: string): boolean {
     return /deepseek[-_]?v4/i.test(modelId);
 }
 
+export function requiresThinkingContentRoundTrip(modelId: string): boolean {
+    const normalizedModelId = modelId.replace(/[\s/]+/g, '-');
+
+    return (
+        isDeepSeekV4Model(normalizedModelId) ||
+        /deepseek[-_]?.*(?:reasoner|r1)/i.test(normalizedModelId) ||
+        /(?:reasoner|r1)[-_]?.*deepseek/i.test(normalizedModelId)
+    );
+}
+
 export function isGemma3Model(modelId: string): boolean {
     return /gemma[-_]?3(?!\.|-)4/i.test(modelId);
 }

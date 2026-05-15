@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.9] - 2026-05-15
+
+### Fixed
+- **OpenCode Zen Go thinking round-trip**: Ensured dynamically fetched DeepSeek thinking models keep `includeThinking: true` so `reasoning_content` is preserved across multi-turn tool calls. This fixes the 400 error where DeepSeek rejects the next turn if the prior reasoning content is not replayed.
+
 ## [0.4.8] - 2026-05-12
 
 ### Fixed
