@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- **OpenGateway provider**: Added OpenGateway provider (`opengateway`) with OpenAI-compatible endpoint at `https://opengateway.gitlawb.com/v1/xiaomi-mimo`. Bundled config includes 5 MiMo v2.5 models (pro, v2, v2.5, omni, flash) with 1M context window support. No API key required - uses open/unauthenticated endpoint.
+
 ## [0.4.9] - 2026-05-15
 
 ### Fixed

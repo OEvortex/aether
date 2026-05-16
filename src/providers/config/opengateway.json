@@ -1,0 +1,61 @@
+{
+    "displayName": "OpenGateway",
+    "baseUrl": "https://opengateway.gitlawb.com/v1/xiaomi-mimo",
+    "models": [
+        {
+            "id": "mimo-v2.5-pro",
+            "name": "Mimo v2.5 Pro",
+            "tooltip": "Mimo v2.5 Pro - high-performance model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mimo-v2-pro",
+            "name": "Mimo v2 Pro",
+            "tooltip": "Mimo v2 Pro - balanced performance model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mimo-v2.5",
+            "name": "Mimo v2.5",
+            "tooltip": "Mimo v2.5 - general purpose model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        },
+        {
+            "id": "mimo-v2-omni",
+            "name": "Mimo v2 Omni",
+            "tooltip": "Mimo v2 Omni - multimodal model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": true
+            }
+        },
+        {
+            "id": "mimo-v2-flash",
+            "name": "Mimo v2 Flash",
+            "tooltip": "Mimo v2 Flash - fast response model",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 4096,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

@@ -51,6 +51,7 @@ export enum ProviderKey {
 	OpenAI = 'openai',
 	OpenCode = 'opencode',
 	Opencodego = 'opencodego',
+	Opengateway = 'opengateway',
 	Pollinations = 'pollinations',
 	Portkey = 'portkey',
 	Puter = 'puter',

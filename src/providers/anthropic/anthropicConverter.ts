@@ -18,6 +18,7 @@ import type {
     TextBlockParam,
     ThinkingBlockParam
 } from '@anthropic-ai/sdk/resources';
+import OpenAI from 'openai';
 import * as vscode from 'vscode';
 import type { ModelConfig } from '../../types/sharedTypes';
 import { Logger } from '../../utils/logger';
@@ -308,10 +309,31 @@ export function apiMessageToAnthropicMessage(
 
 /**
  * Convert tool definitions to Anthropic format
+ * @param tools - The tools to convert
+ * @param toolsFormat - Optional format to use ('anthropic' or 'openai'). Default: 'anthropic'
+ *                     Use 'openai' for providers like DeepSeek that use Anthropic SDK but expect OpenAI tool format
  */
 export function convertToAnthropicTools(
-    tools: readonly vscode.LanguageModelChatTool[]
-): Anthropic.Messages.Tool[] {
+    tools: readonly vscode.LanguageModelChatTool[],
+    toolsFormat: 'anthropic' | 'openai' = 'anthropic'
+): Anthropic.Messages.Tool[] | OpenAI.Chat.ChatCompletionTool[] {
+    // If format is 'openai', use OpenAI tool format even when in Anthropic SDK mode
+    // This is needed for providers like DeepSeek that use Anthropic SDK but internally expect OpenAI format
+    if (toolsFormat === 'openai') {
+        return tools.map((tool) => ({
+            type: 'function' as const,
+            function: {
+                name: tool.name,
+                description: tool.description || '',
+                parameters: (tool.inputSchema as object) || {
+                    type: 'object',
+                    properties: {}
+                }
+            }
+        }));
+    }
+
+    // Default: Anthropic tool format
     return tools.map((tool) => {
         const inputSchema = tool.inputSchema as
             | Anthropic.Messages.Tool.InputSchema

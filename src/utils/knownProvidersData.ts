@@ -32,6 +32,7 @@ export interface ProviderOverride {
     customHeader?: Record<string, string>;
     extraBody?: Record<string, unknown>;
     sdkMode?: 'openai' | 'anthropic' | 'oai-response';
+    toolsFormat?: 'anthropic' | 'openai';
 }
 
 export interface RateLimitConfig {
@@ -47,6 +48,7 @@ export interface RateLimitSelection {
 }
 
 export interface KnownProviderConfig extends Partial<ProviderOverride> {
+    toolsFormat?: 'anthropic' | 'openai';
     displayName: string;
     description?: string;
     settingsPrefix?: string;
@@ -338,6 +340,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
         family: 'DeepSeek',
         openai: { baseUrl: 'https://api.deepseek.com/v1' },
         anthropic: { baseUrl: 'https://api.deepseek.com/anthropic' },
+        // DeepSeek's Anthropic endpoint uses Anthropic SDK but internally expects OpenAI tool format
+        toolsFormat: 'openai',
         apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         fetchModels: true,
         modelsEndpoint: '/models',
@@ -1143,6 +1147,44 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             descriptionField: 'id',
             cooldownMinutes: 10
         }
+    },
+    opengateway: {
+        displayName: 'OpenGateway',
+        family: 'OpenGateway',
+        supportsApiKey: false,
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://opengateway.gitlawb.com/v1/xiaomi-mimo'
+        },
+        openModelEndpoint: true,
+        fetchModels: false,
+        models: [
+            {
+                id: 'mimo-v2.5-pro',
+                name: 'Mimo v2.5 Pro',
+                model: 'mimo-v2.5-pro'
+            },
+            {
+                id: 'mimo-v2-pro',
+                name: 'Mimo v2 Pro',
+                model: 'mimo-v2-pro'
+            },
+            {
+                id: 'mimo-v2.5',
+                name: 'Mimo v2.5',
+                model: 'mimo-v2.5'
+            },
+            {
+                id: 'mimo-v2-omni',
+                name: 'Mimo v2 Omni',
+                model: 'mimo-v2-omni'
+            },
+            {
+                id: 'mimo-v2-flash',
+                name: 'Mimo v2 Flash',
+                model: 'mimo-v2-flash'
+            }
+        ]
     }
 };
 

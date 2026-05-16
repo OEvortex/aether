@@ -47,6 +47,7 @@ import ofox from "./ofox.json";
 import ollama from "./ollama.json";
 import opencode from "./opencode.json";
 import opencodego from "./opencodego.json";
+import opengateway from "./opengateway.json";
 import pollinations from "./pollinations.json";
 import portkey from "./portkey.json";
 import puter from "./puter.json";
@@ -117,6 +118,7 @@ const providers = {
 	ollama: ollama,
 	opencode: opencode,
 	opencodego: opencodego,
+	opengateway: opengateway,
 	pollinations: pollinations,
 	portkey: portkey,
 	puter: puter,

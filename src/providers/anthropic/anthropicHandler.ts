@@ -155,9 +155,15 @@ export class AnthropicHandler {
             const { messages: anthropicMessages, system } =
                 apiMessageToAnthropicMessage(modelConfig, messages);
 
+            // Get toolsFormat from provider config - some providers like DeepSeek use Anthropic SDK
+            // but internally expect OpenAI tool format
+            const providerKey = modelConfig.provider || this.provider;
+            const providerConfig = KnownProviders[providerKey];
+            const toolsFormat = providerConfig?.toolsFormat || 'anthropic';
+
             // Prepare tool definitions
-            const tools: Anthropic.Messages.Tool[] = options.tools
-                ? convertToAnthropicTools([...options.tools])
+            const tools = options.tools
+                ? convertToAnthropicTools([...options.tools], toolsFormat)
                 : [];
 
             // Use model field from model configuration, if none, use model.id
@@ -194,8 +200,10 @@ export class AnthropicHandler {
             }
 
             // Add tools (if any)
+            // Note: When toolsFormat is 'openai' (e.g., for DeepSeek), we pass OpenAI format tools
+            // which DeepSeek's API expects even when using Anthropic SDK
             if (tools.length > 0) {
-                createParams.tools = tools;
+                createParams.tools = tools as Anthropic.Messages.Tool[];
             }
 
             Logger.debug(

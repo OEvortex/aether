@@ -459,6 +459,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Opengateway,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: false
+            }
+        ],
+        [
             ProviderKey.Pollinations,
             {
                 supportsMultiAccount: true,
