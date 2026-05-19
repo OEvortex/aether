@@ -927,14 +927,33 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                 );
         }
 
-        // Find corresponding model configuration
-        const modelConfig = this.providerConfig.models.find(
+        // Find corresponding model configuration.
+        // Prefer cachedProviderConfig (which has auto-detection applied) over static providerConfig.
+        const effectiveModels =
+            this.cachedProviderConfig?.models || this.providerConfig.models;
+        let modelConfig = effectiveModels.find(
             (m: ModelConfig) => m.id === model.id || m.model === model.id
         );
+
+        // If model config not found, create a fallback with auto-detection for DeepSeek
         if (!modelConfig) {
-            const errorMessage = `Model not found: ${model.id}`;
-            Logger.error(errorMessage);
-            throw new Error(errorMessage);
+            const includeThinking = requiresThinkingContentRoundTrip(
+                `${model.id} ${model.name || ''} ${model.tooltip || ''}`
+            );
+            Logger.warn(
+                `Model config not found for ${model.id}, using fallback config. includeThinking=${includeThinking}`
+            );
+            modelConfig = {
+                id: model.id,
+                name: model.name,
+                tooltip: model.tooltip || model.name,
+                maxInputTokens: model.maxInputTokens,
+                maxOutputTokens: model.maxOutputTokens,
+                model: model.version || model.id,
+                baseUrl: this.providerConfig.baseUrl,
+                capabilities: model.capabilities,
+                ...(includeThinking && { includeThinking: true })
+            };
         }
 
         // Determine actual provider based on provider field in model configuration

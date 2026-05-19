@@ -23,6 +23,7 @@ import { ApiKeyManager, Logger, RateLimiter } from '../../utils';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
+    requiresThinkingContentRoundTrip,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
@@ -218,6 +219,14 @@ export class OpenCodeGoProvider
             this.cachedModelConfigs.find((m) => m.id === model.id) ||
             this.providerConfig.models?.find((m) => m.id === model.id);
 
+        // Build fallback config with auto-detection for DeepSeek models.
+        // The includeThinking flag is lost during ModelConfig → LanguageModelChatInformation
+        // conversion, so we must re-detect it at request time to ensure DeepSeek API
+        // receives reasoning_content in replayed assistant messages.
+        const fallbackIncludeThinking = requiresThinkingContentRoundTrip(
+            `${model.id} ${model.name || ''} ${model.tooltip || ''}`
+        );
+
         await this.openaiHandler.handleRequest(
             model,
             modelConfig || {
@@ -228,7 +237,8 @@ export class OpenCodeGoProvider
                 maxOutputTokens: model.maxOutputTokens,
                 model: model.version || model.id,
                 baseUrl: this.providerConfig.baseUrl,
-                capabilities: model.capabilities
+                capabilities: model.capabilities,
+                ...(fallbackIncludeThinking && { includeThinking: true })
             },
             messages,
             options,
