@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.5.0] - 2026-05-25
 
-### Added
-- **OpenGateway provider**: Added OpenGateway provider (`opengateway`) with OpenAI-compatible endpoint at `https://opengateway.gitlawb.com/v1/xiaomi-mimo`. Bundled config includes 5 MiMo v2.5 models (pro, v2, v2.5, omni, flash) with 1M context window support. No API key required - uses open/unauthenticated endpoint.
+### Fixed
+- **DeepSeek V4 tool format compatibility**: Fixed DeepSeek V4 models (and other providers using Anthropic SDK with OpenAI-format expectations) failing on multi-turn tool calls due to tool format mismatch. Added `toolsFormat` parameter to `convertToAnthropicTools()` in `anthropicConverter.ts` to support OpenAI tool format when using Anthropic SDK, and updated `anthropicHandler.ts` to read `toolsFormat` from provider config. This enables DeepSeek V4 models to properly handle tool calling despite using Anthropic SDK internally.
+
+### Changed
+- **OpenGateway provider**: Updated base URL from `https://opengateway.gitlawb.com/v1/xiaomi-mimo` to `https://opengateway.gitlawb.com/v1`. Provider now requires an API key (`supportsApiKey: true`) and no longer uses the open/unauthenticated endpoint.
 
 ## [0.4.9] - 2026-05-15
 

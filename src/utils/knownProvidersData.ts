@@ -1151,12 +1151,11 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
     opengateway: {
         displayName: 'OpenGateway',
         family: 'OpenGateway',
-        supportsApiKey: false,
+        supportsApiKey: true,
         sdkMode: 'openai',
         openai: {
-            baseUrl: 'https://opengateway.gitlawb.com/v1/xiaomi-mimo'
+            baseUrl: 'https://opengateway.gitlawb.com/v1'
         },
-        openModelEndpoint: true,
         fetchModels: false,
         models: [
             {
