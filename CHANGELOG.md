@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2026-05-26
+
+### Fixed
+- **OpenGateway API key configuration**: Fixed bug where the API key input field was not shown in the Aether Settings page for OpenGateway. Root cause: `accountManager.ts` had `supportsApiKey: false` for OpenGateway despite the provider requiring an API key. Also added missing `apiKeyTemplate` to `opengateway.json` to enable the API key input prompt.
+
 ## [0.5.0] - 2026-05-25
 
 ### Fixed

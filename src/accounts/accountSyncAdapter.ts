@@ -271,6 +271,7 @@ export class AccountSyncAdapter {
             ProviderKey.OpenAI,
             ProviderKey.OpenCode,
             ProviderKey.Opencodego,
+            ProviderKey.Opengateway,
             ProviderKey.Pollinations,
             ProviderKey.Portkey,
             ProviderKey.Puter,

@@ -463,7 +463,7 @@ export class AccountManager {
             {
                 supportsMultiAccount: true,
                 supportsOAuth: false,
-                supportsApiKey: false
+                supportsApiKey: true
             }
         ],
         [

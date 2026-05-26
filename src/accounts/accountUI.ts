@@ -365,6 +365,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "OpenGateway",
+                value: ProviderKey.Opengateway,
+                authType: "apiKey" as const
+            },
+            {
                 label: "Pollinations AI",
                 value: ProviderKey.Pollinations,
                 authType: "apiKey" as const
@@ -1123,6 +1128,7 @@ export class AccountUI {
             openai: "OpenAI",
             opencode: "OpenCode",
             opencodego: "OpenCode Zen Go",
+            opengateway: "OpenGateway",
             pollinations: "Pollinations AI",
             portkey: "Portkey",
             puter: "Puter AI",
