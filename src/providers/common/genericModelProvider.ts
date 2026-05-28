@@ -1,4 +1,4 @@
-﻿/*---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
  *  Generic Provider Class
  *  Dynamically create provider implementation based on configuration file
  *--------------------------------------------------------------------------------------------*/
@@ -971,10 +971,37 @@ export class GenericModelProvider implements LanguageModelChatProvider {
 
             // If no accounts managed by AccountManager, fall back to ApiKeyManager
             if (accounts.length === 0) {
-                await ApiKeyManager.ensureApiKey(
-                    effectiveProviderKey,
-                    this.providerConfig.displayName
-                );
+                const knownProvider = KnownProviders[effectiveProviderKey];
+                const supportsApiKey = knownProvider?.supportsApiKey !== false;
+                const hasCustomHeaderApiKey =
+                    modelConfig.customHeader &&
+                    Object.keys(modelConfig.customHeader).some((key) => {
+                        const lowerKey = key.toLowerCase();
+                        return (
+                            lowerKey.includes('api') ||
+                            lowerKey.includes('key') ||
+                            lowerKey.includes('token') ||
+                            lowerKey.includes('authorization')
+                        );
+                    });
+                const isLocalEndpoint =
+                    modelConfig.baseUrl &&
+                    (modelConfig.baseUrl.includes('localhost') ||
+                        modelConfig.baseUrl.includes('127.0.0.1') ||
+                        modelConfig.baseUrl.includes('0.0.0.0') ||
+                        modelConfig.baseUrl.startsWith('/'));
+
+                const needApiKey =
+                    supportsApiKey &&
+                    !hasCustomHeaderApiKey &&
+                    !isLocalEndpoint;
+
+                if (needApiKey) {
+                    await ApiKeyManager.ensureApiKey(
+                        effectiveProviderKey,
+                        this.providerConfig.displayName
+                    );
+                }
 
                 const sdkMode = modelConfig.sdkMode || 'openai';
                 Logger.info(

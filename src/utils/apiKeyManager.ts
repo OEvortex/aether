@@ -118,6 +118,9 @@ export class ApiKeyManager {
         }
 
         const { KnownProviders } = await import('./knownProviders.js');
+        if (KnownProviders[vendor]?.supportsApiKey === false) {
+            return true;
+        }
         const defaultApiKey = KnownProviders[vendor]?.defaultApiKey?.trim();
         if (defaultApiKey) {
             return true;

@@ -239,17 +239,56 @@ export class CompatibleProvider extends GenericModelProvider {
             // Check API Key for each provider
             for (const provider of providers) {
                 if (!options.silent) {
-                    // In non-silent mode, use ensureApiKey to confirm and set one by one
-                    const hasValidKey = await ApiKeyManager.ensureApiKey(
-                        provider,
-                        provider,
-                        false
+                    // Check if all models for this provider actually need an API key
+                    const providerModels = currentConfig.models.filter(
+                        (m) => m.provider === provider
                     );
-                    if (!hasValidKey) {
-                        Logger.warn(
-                            `Compatible Provider: user has not set API key for provider "${provider}"`
+                    const allModelsNeedKey = providerModels.every(
+                        (modelConfig) => {
+                            const knownProvider = modelConfig.provider
+                                ? KnownProviders[modelConfig.provider]
+                                : undefined;
+                            const supportsApiKey =
+                                knownProvider?.supportsApiKey !== false;
+                            const hasCustomHeaderApiKey =
+                                modelConfig.customHeader &&
+                                Object.keys(modelConfig.customHeader).some(
+                                    (key) => {
+                                        const lowerKey = key.toLowerCase();
+                                        return (
+                                            lowerKey.includes('api') ||
+                                            lowerKey.includes('key') ||
+                                            lowerKey.includes('token') ||
+                                            lowerKey.includes('authorization')
+                                        );
+                                    }
+                                );
+                            const isLocalEndpoint =
+                                modelConfig.baseUrl &&
+                                (modelConfig.baseUrl.includes('localhost') ||
+                                    modelConfig.baseUrl.includes('127.0.0.1') ||
+                                    modelConfig.baseUrl.includes('0.0.0.0') ||
+                                    modelConfig.baseUrl.startsWith('/'));
+                            return (
+                                supportsApiKey &&
+                                !hasCustomHeaderApiKey &&
+                                !isLocalEndpoint
+                            );
+                        }
+                    );
+
+                    if (allModelsNeedKey) {
+                        // In non-silent mode, use ensureApiKey to confirm and set one by one
+                        const hasValidKey = await ApiKeyManager.ensureApiKey(
+                            provider,
+                            provider,
+                            false
                         );
-                        return [];
+                        if (!hasValidKey) {
+                            Logger.warn(
+                                `Compatible Provider: user has not set API key for provider "${provider}"`
+                            );
+                        }
                     }
                 }
             }
@@ -419,16 +458,43 @@ export class CompatibleProvider extends GenericModelProvider {
                 throw new Error(errorMessage);
             }
 
-            // Check API key (use throwError: false to allow silent failure)
-            const hasValidKey = await ApiKeyManager.ensureApiKey(
-                modelConfig.provider!,
-                currentConfig.displayName,
-                false
-            );
-            if (!hasValidKey) {
-                throw new Error(
-                    `API key for model ${modelConfig.name} has not been set yet`
+            // Check API key if required
+            const knownProvider = modelConfig.provider
+                ? KnownProviders[modelConfig.provider]
+                : undefined;
+            const supportsApiKey = knownProvider?.supportsApiKey !== false;
+            const hasCustomHeaderApiKey =
+                modelConfig.customHeader &&
+                Object.keys(modelConfig.customHeader).some((key) => {
+                    const lowerKey = key.toLowerCase();
+                    return (
+                        lowerKey.includes('api') ||
+                        lowerKey.includes('key') ||
+                        lowerKey.includes('token') ||
+                        lowerKey.includes('authorization')
+                    );
+                });
+            const isLocalEndpoint =
+                modelConfig.baseUrl &&
+                (modelConfig.baseUrl.includes('localhost') ||
+                    modelConfig.baseUrl.includes('127.0.0.1') ||
+                    modelConfig.baseUrl.includes('0.0.0.0') ||
+                    modelConfig.baseUrl.startsWith('/'));
+
+            const needApiKey =
+                supportsApiKey && !hasCustomHeaderApiKey && !isLocalEndpoint;
+
+            if (needApiKey) {
+                const hasValidKey = await ApiKeyManager.ensureApiKey(
+                    modelConfig.provider!,
+                    currentConfig.displayName,
+                    false
                 );
+                if (!hasValidKey) {
+                    throw new Error(
+                        `API key for model ${modelConfig.name} has not been set yet`
+                    );
+                }
             }
 
             // Select handler based on model's sdkMode

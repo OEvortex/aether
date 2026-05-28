@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.2] - 2026-05-28
+
+### Fixed
+- **Compatible Model API key validation**: Fixed bug where compatible models (such as custom providers like `BADALEJO` or local models) would disappear from the model list or throw validation errors (`API key for model has not been set yet`) when their credentials were provided via `customHeader` (like `apikey` or `Authorization`) or when they ran locally without requiring an API key. Softened listing rules to ensure models are always visible in VS Code's model picker, and bypassed API key checks when custom headers or local configurations are detected.
+
 ## [0.5.1] - 2026-05-26
 
 ### Fixed
