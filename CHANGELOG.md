@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - **Token Usage Status Bar**: Connected `TokenUsageStatusBar` to `TokenTelemetryTracker` so the context window usage indicator in the status bar automatically updates after each successful request. Previously the status bar existed but was never registered or wired to the telemetry tracker.
+- **Agent Workspace Detection**: Added `workspace.isAgentSessionsWorkspace` proposed API type declaration and detection in extension activation. Logs whether the extension is running in an agent sessions workspace.
 
 ## [0.5.2] - 2026-05-28
 
