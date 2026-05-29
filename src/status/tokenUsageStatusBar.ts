@@ -4,6 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
+import {
+    TokenTelemetryTracker,
+    type TokenTelemetryEvent
+} from '../utils/tokenTelemetryTracker';
 import { StatusLogger } from '../utils/statusLogger';
 
 export interface TokenUsageData {
@@ -54,6 +58,34 @@ export class TokenUsageStatusBar {
         this.statusBarItem.show();
 
         context.subscriptions.push(this.statusBarItem);
+
+        // Subscribe to TokenTelemetryTracker events to auto-update
+        const tracker = TokenTelemetryTracker.getInstance();
+        context.subscriptions.push(
+            tracker.onEvent((event: TokenTelemetryEvent) => {
+                if (
+                    event.status === 'success' &&
+                    event.responseMetrics
+                ) {
+                    const metrics = event.responseMetrics;
+                    const maxInput = metrics.maxInputTokens || 0;
+                    const percentage =
+                        maxInput > 0
+                            ? (metrics.promptTokens / maxInput) * 100
+                            : 0;
+                    this.updateTokenUsage({
+                        modelId: event.modelId || '',
+                        modelName:
+                            metrics.modelName || event.modelId || 'Unknown',
+                        inputTokens: metrics.promptTokens,
+                        maxInputTokens: maxInput,
+                        percentage,
+                        timestamp: event.timestamp
+                    });
+                }
+            })
+        );
+
         StatusLogger.debug('[TokenUsageStatusBar] Initialization completed');
     }
 

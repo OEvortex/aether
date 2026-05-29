@@ -5,6 +5,7 @@
 
 import type * as vscode from 'vscode';
 import { StatusLogger } from '../utils/statusLogger.js';
+import { TokenUsageStatusBar } from './tokenUsageStatusBar.js';
 
 interface IStatusBar {
     initialize(context: vscode.ExtensionContext): Promise<void>;
@@ -20,7 +21,12 @@ export class StatusBarManager {
     >();
     private static initialized = false;
 
-    private static registerBuiltInStatusBars(): void {}
+    private static registerBuiltInStatusBars(): void {
+        StatusBarManager.registerStatusBar(
+            'tokenUsage',
+            new TokenUsageStatusBar()
+        );
+    }
 
     static registerStatusBar(key: string, statusBar: IStatusBar): void {
         if (StatusBarManager.statusBars.has(key)) {

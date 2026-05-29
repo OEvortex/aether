@@ -7,3 +7,4 @@ export {
 export { LeaderElectionService } from './leaderElectionService.js';
 export { ProviderStatusBarItem } from './providerStatusBarItem.js';
 export { StatusBarManager } from './statusBarManager.js';
+export { TokenUsageStatusBar } from './tokenUsageStatusBar.js';

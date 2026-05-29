@@ -41,6 +41,7 @@ import {
     resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
 import { KnownProviders } from '../../utils/knownProviders';
+import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { ProviderWizard } from '../../utils/providerWizard';
 import { getUserAgent } from '../../utils/userAgent';
 import { MoonshotWizard } from '../moonshot/moonshotWizard';
@@ -890,6 +891,29 @@ export class GenericModelProvider implements LanguageModelChatProvider {
         }
     }
 
+    /**
+     * Emit a LanguageModelDataPart with usage data so the Copilot chat
+     * participant can read prompt/completion tokens and update the context bar.
+     * The Copilot extension looks for a DataPart with MIME type 'usage'.
+     */
+    private emitUsageDataPart(
+        progress: Progress<LanguageModelResponsePart2>
+    ): void {
+        const summary =
+            TokenTelemetryTracker.getInstance().getLastUsageSummary();
+        if (!summary) {
+            return;
+        }
+        const usageData = {
+            prompt_tokens: summary.promptTokens,
+            completion_tokens: summary.completionTokens,
+            total_tokens: summary.totalTokens
+        };
+        (
+            progress as Progress<vscode.LanguageModelResponsePart2>
+        ).report(vscode.LanguageModelDataPart.json(usageData, 'usage'));
+    }
+
     async provideLanguageModelChatResponse(
         model: LanguageModelChatInformation,
         messages: readonly vscode.LanguageModelChatRequestMessage[],
@@ -1036,6 +1060,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                         token
                     );
                 }
+                this.emitUsageDataPart(effectiveProgress);
                 return;
             }
 
@@ -1201,6 +1226,7 @@ export class GenericModelProvider implements LanguageModelChatProvider {
                             account.id
                         );
                     }
+                    this.emitUsageDataPart(effectiveProgress);
 
                     this.lastUsedAccountByModel.set(model.id, account.id);
 

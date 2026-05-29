@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- **Token counting double-counting bug**: Fixed `provideTokenCount` returning inflated token counts for message objects. The Copilot chat participant's `ExtensionContributedChatTokenizer` adds its own `BaseTokensPerMessage(3)` per message on top of what `countTokens` returns, but Aether's implementation was also adding a 3-token role overhead per message — causing each message to be counted with 6 tokens of overhead instead of 3. `countLanguageModelMessageTokens` now returns raw content tokens only, while `countMessagesTokens` (used internally for prompt estimation) correctly adds the structural overhead.
+- **Context bar not updating for Aether models**: The Copilot chat participant reads usage data from a `LanguageModelDataPart` with MIME type `'usage'` in the response stream, but Aether never emitted this data part. Added `emitUsageDataPart()` which reads from `TokenTelemetryTracker` after each request and emits the usage JSON as a `LanguageModelDataPart.json(...)` with MIME `'usage'`, enabling the Copilot chat participant to report `promptTokens`/`completionTokens` to the `ChatContextUsageWidget`.
+
+### Added
+- **Token Usage Status Bar**: Connected `TokenUsageStatusBar` to `TokenTelemetryTracker` so the context window usage indicator in the status bar automatically updates after each successful request. Previously the status bar existed but was never registered or wired to the telemetry tracker.
+
 ## [0.5.2] - 2026-05-28
 
 ### Fixed
