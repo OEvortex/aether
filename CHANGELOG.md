@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.5.3] - 2026-05-29
 
 ### Fixed
 - **Token counting double-counting bug**: Fixed `provideTokenCount` returning inflated token counts for message objects. The Copilot chat participant's `ExtensionContributedChatTokenizer` adds its own `BaseTokensPerMessage(3)` per message on top of what `countTokens` returns, but Aether's implementation was also adding a 3-token role overhead per message — causing each message to be counted with 6 tokens of overhead instead of 3. `countLanguageModelMessageTokens` now returns raw content tokens only, while `countMessagesTokens` (used internally for prompt estimation) correctly adds the structural overhead.
