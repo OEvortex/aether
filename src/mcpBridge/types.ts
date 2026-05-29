@@ -56,6 +56,20 @@ export interface InvocationLogEntry {
 }
 
 /**
+ * Result from invoking a VS Code LM tool via MCP
+ */
+export interface InvocationResult {
+    content: Array<
+        | { type: 'text'; text: string }
+        | { type: 'image'; data: string; mimeType: string }
+    >;
+    isError: boolean;
+    /** Error flag from ExtendedLanguageModelToolResult */
+    hasError?: boolean;
+    logEntry: InvocationLogEntry;
+}
+
+/**
  * Options for the HTTP MCP Server
  */
 export interface HttpMcpServerOptions {

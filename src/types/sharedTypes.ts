@@ -120,6 +120,7 @@ export interface ModelOverride {
      * When model requires tool messages to include thinking content, set to true
      */
     includeThinking?: boolean;
+}
 
 /**
  * Provider Override Configuration Interface - Used for user configuration override

@@ -323,25 +323,26 @@ export class TokenCounter {
     private async countLanguageModelMessageTokens(
         message: CountableLanguageModelChatMessage
     ): Promise<number> {
-        let numTokens = 3;
-        numTokens += await this.getTextTokenLength(String(message.role));
+        // Return raw content tokens only — no structural overhead.
+        // The Copilot chat participant adds its own BaseTokensPerMessage (3)
+        // and BaseTokensPerCompletion (3) on top of what provideTokenCount returns.
+        // If we added overhead here, it would be double-counted.
 
         if (typeof message.content === 'string') {
-            numTokens += await this.getTextTokenLength(message.content);
-            return numTokens;
+            return await this.getTextTokenLength(message.content);
         }
 
         if (Array.isArray(message.content)) {
+            let numTokens = 0;
             for (const part of message.content) {
                 numTokens += await this.countMessagePartTokens(part);
             }
             return numTokens;
         }
 
-        numTokens += await this.getTextTokenLength(
+        return await this.getTextTokenLength(
             this.stringifyUnknown(message.content)
         );
-        return numTokens;
     }
 
     /**
@@ -459,7 +460,9 @@ export class TokenCounter {
 
     /**
      * Calculate total token count for multiple messages
-     * Includes regular messages, system messages, and tool definitions
+     * Includes regular messages, system messages, and tool definitions.
+     * Adds per-message and per-completion structural overhead matching
+     * the Copilot chat participant's tokenizer expectations.
      */
     async countMessagesTokens(
         model: LanguageModelChatInformation,
@@ -467,16 +470,17 @@ export class TokenCounter {
         modelConfig?: { sdkMode?: string },
         options?: ProvideLanguageModelChatResponseOptions
     ): Promise<number> {
-        let totalTokens = 0;
-        // Logger.trace(`[Token Count] Starting calculation for ${messages.length} messages...`);
+        // Base tokens per completion (assistant<|message|> priming)
+        const BaseTokensPerCompletion = 3;
+        // Base tokens per message (role + separators)
+        const BaseTokensPerMessage = 3;
 
-        // Calculate message tokens
+        let totalTokens = BaseTokensPerCompletion;
+
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < messages.length; i++) {
-            const message = messages[i];
-            const messageTokens = await this.countTokens(model, message);
-            totalTokens += messageTokens;
-            // Logger.trace(`[Token Count] Message #${i + 1}: ${messageTokens} tokens (Cumulative: ${totalTokens})`);
+            const messageTokens = await this.countTokens(model, messages[i]);
+            totalTokens += BaseTokensPerMessage + messageTokens;
         }
 
         const sdkMode = modelConfig?.sdkMode || 'openai';

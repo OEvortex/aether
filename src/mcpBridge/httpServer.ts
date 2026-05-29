@@ -139,20 +139,19 @@ export async function startHttpMcpServer(
 
             outputChannel?.appendLine(`[HttpServer] CallTool request: ${name}`);
 
+            // Only block hidden tools at the HTTP level — disabled tools
+            // now go through invokeLmTool which attempts extension auto-activation.
             const toolEntry = registry.getTool(name);
             if (
                 toolEntry !== undefined &&
-                (!toolEntry.exposed || toolEntry.disabledInVscode)
+                !toolEntry.exposed &&
+                !toolEntry.disabledInVscode
             ) {
-                const blockedReason: 'hidden' | 'disabled' =
-                    toolEntry.disabledInVscode ? 'disabled' : 'hidden';
-                const reason = toolEntry.disabledInVscode
-                    ? `Tool "${name}" is disabled in VS Code`
-                    : `Tool "${name}" is hidden. Enable it in Aether MCP Bridge panel`;
+                const reason = `Tool "${name}" is hidden. Enable it in Aether MCP Bridge panel`;
                 outputChannel?.appendLine(
-                    `[HttpServer] Tool ${name} blocked (${blockedReason})`
+                    `[HttpServer] Tool ${name} blocked (hidden)`
                 );
-                onToolBlocked?.(name, blockedReason);
+                onToolBlocked?.(name, 'hidden');
                 return {
                     content: [{ type: 'text' as const, text: reason }],
                     isError: true
