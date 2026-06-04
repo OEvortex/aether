@@ -679,6 +679,24 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 30
         }
     },
+    openprovider: {
+        displayName: 'OpenProvider',
+        family: 'OpenProvider',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://openprovider.mimika.in/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     pollinations: {
         displayName: 'Pollinations AI',
         family: 'Pollinations',

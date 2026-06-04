@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.4] - 2026-06-04
+
+### Added
+- **OpenProvider compatible provider**: Added OpenProvider (`https://openprovider.mimika.in/v1`) as a built-in OpenAI-compatible provider with automatic model list synchronization.
+
 ## [0.5.3] - 2026-05-29
 
 ### Fixed

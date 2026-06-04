@@ -467,6 +467,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Openprovider,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Pollinations,
             {
                 supportsMultiAccount: true,
@@ -625,7 +633,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ],
+        ]
     ]);
 
     private constructor(context: vscode.ExtensionContext) {

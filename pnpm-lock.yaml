@@ -26,6 +26,123 @@ importers:
       '@anthropic-ai/vertex-sdk':
         specifier: 0.14.4
         version: 0.14.4(zod@3.25.76)
+      '@aws-crypto/crc32':
+        specifier: 3.0.0
+        version: 3.0.0
+      '@aws-crypto/sha256-browser':
+        specifier: 5.2.0
+        version: 5.2.0
+      '@aws-crypto/sha256-js':
+        specifier: 4.0.0
+        version: 4.0.0
+      '@aws-crypto/supports-web-crypto':
+        specifier: 5.2.0
+        version: 5.2.0
+      '@aws-crypto/util':
+        specifier: 4.0.0
+        version: 4.0.0
+      '@aws-sdk/client-bedrock-runtime':
+        specifier: 3.1036.0
+        version: 3.1036.0
+      '@aws-sdk/client-cognito-identity':
+        specifier: 3.1036.0
+        version: 3.1036.0
+      '@aws-sdk/core':
+        specifier: 3.974.5
+        version: 3.974.5
+      '@aws-sdk/credential-provider-cognito-identity':
+        specifier: 3.972.28
+        version: 3.972.28
+      '@aws-sdk/credential-provider-env':
+        specifier: 3.972.31
+        version: 3.972.31
+      '@aws-sdk/credential-provider-http':
+        specifier: 3.972.33
+        version: 3.972.33
+      '@aws-sdk/credential-provider-ini':
+        specifier: 3.972.35
+        version: 3.972.35
+      '@aws-sdk/credential-provider-login':
+        specifier: 3.972.35
+        version: 3.972.35
+      '@aws-sdk/credential-provider-node':
+        specifier: 3.972.36
+        version: 3.972.36
+      '@aws-sdk/credential-provider-process':
+        specifier: 3.972.31
+        version: 3.972.31
+      '@aws-sdk/credential-provider-sso':
+        specifier: 3.972.35
+        version: 3.972.35
+      '@aws-sdk/credential-provider-web-identity':
+        specifier: 3.972.35
+        version: 3.972.35
+      '@aws-sdk/credential-providers':
+        specifier: 3.1036.0
+        version: 3.1036.0
+      '@aws-sdk/eventstream-handler-node':
+        specifier: 3.972.14
+        version: 3.972.14
+      '@aws-sdk/middleware-eventstream':
+        specifier: 3.972.10
+        version: 3.972.10
+      '@aws-sdk/middleware-host-header':
+        specifier: 3.972.10
+        version: 3.972.10
+      '@aws-sdk/middleware-logger':
+        specifier: 3.972.10
+        version: 3.972.10
+      '@aws-sdk/middleware-recursion-detection':
+        specifier: 3.972.11
+        version: 3.972.11
+      '@aws-sdk/middleware-sdk-s3':
+        specifier: 3.972.34
+        version: 3.972.34
+      '@aws-sdk/middleware-user-agent':
+        specifier: 3.972.35
+        version: 3.972.35
+      '@aws-sdk/middleware-websocket':
+        specifier: 3.972.16
+        version: 3.972.16
+      '@aws-sdk/nested-clients':
+        specifier: 3.997.3
+        version: 3.997.3
+      '@aws-sdk/region-config-resolver':
+        specifier: 3.972.13
+        version: 3.972.13
+      '@aws-sdk/signature-v4-multi-region':
+        specifier: 3.996.22
+        version: 3.996.22
+      '@aws-sdk/token-providers':
+        specifier: 3.1036.0
+        version: 3.1036.0
+      '@aws-sdk/types':
+        specifier: 3.973.8
+        version: 3.973.8
+      '@aws-sdk/util-arn-parser':
+        specifier: 3.972.3
+        version: 3.972.3
+      '@aws-sdk/util-endpoints':
+        specifier: 3.996.8
+        version: 3.996.8
+      '@aws-sdk/util-format-url':
+        specifier: 3.972.10
+        version: 3.972.10
+      '@aws-sdk/util-locate-window':
+        specifier: 3.965.5
+        version: 3.965.5
+      '@aws-sdk/util-user-agent-browser':
+        specifier: 3.972.10
+        version: 3.972.10
+      '@aws-sdk/util-user-agent-node':
+        specifier: 3.973.21
+        version: 3.973.21
+      '@aws-sdk/util-utf8-browser':
+        specifier: 3.259.0
+        version: 3.259.0
+      '@aws-sdk/xml-builder':
+        specifier: 3.972.19
+        version: 3.972.19
       '@commander-js/extra-typings':
         specifier: 12.1.0
         version: 12.1.0(commander@12.1.0)
@@ -35,6 +152,129 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.29.0
         version: 1.29.0(zod@3.25.76)
+      '@smithy/config-resolver':
+        specifier: 4.4.17
+        version: 4.4.17
+      '@smithy/core':
+        specifier: 3.23.17
+        version: 3.23.17
+      '@smithy/credential-provider-imds':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/eventstream-codec':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/eventstream-serde-browser':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/eventstream-serde-config-resolver':
+        specifier: 4.3.14
+        version: 4.3.14
+      '@smithy/eventstream-serde-universal':
+        specifier: 2.2.0
+        version: 2.2.0
+      '@smithy/fetch-http-handler':
+        specifier: 5.3.17
+        version: 5.3.17
+      '@smithy/hash-node':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/invalid-dependency':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/is-array-buffer':
+        specifier: 3.0.0
+        version: 3.0.0
+      '@smithy/middleware-content-length':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/middleware-endpoint':
+        specifier: 4.4.32
+        version: 4.4.32
+      '@smithy/middleware-retry':
+        specifier: 4.5.5
+        version: 4.5.5
+      '@smithy/middleware-serde':
+        specifier: 4.2.20
+        version: 4.2.20
+      '@smithy/middleware-stack':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/node-config-provider':
+        specifier: 4.3.14
+        version: 4.3.14
+      '@smithy/node-http-handler':
+        specifier: 4.6.1
+        version: 4.6.1
+      '@smithy/property-provider':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/querystring-builder':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/querystring-parser':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/service-error-classification':
+        specifier: 4.3.0
+        version: 4.3.0
+      '@smithy/shared-ini-file-loader':
+        specifier: 4.4.9
+        version: 4.4.9
+      '@smithy/signature-v4':
+        specifier: 3.1.2
+        version: 3.1.2
+      '@smithy/smithy-client':
+        specifier: 2.5.1
+        version: 2.5.1
+      '@smithy/types':
+        specifier: 2.12.0
+        version: 2.12.0
+      '@smithy/url-parser':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/util-base64':
+        specifier: 2.3.0
+        version: 2.3.0
+      '@smithy/util-body-length-browser':
+        specifier: 4.2.2
+        version: 4.2.2
+      '@smithy/util-body-length-node':
+        specifier: 4.2.3
+        version: 4.2.3
+      '@smithy/util-buffer-from':
+        specifier: 2.2.0
+        version: 2.2.0
+      '@smithy/util-config-provider':
+        specifier: 4.2.2
+        version: 4.2.2
+      '@smithy/util-defaults-mode-browser':
+        specifier: 4.3.49
+        version: 4.3.49
+      '@smithy/util-defaults-mode-node':
+        specifier: 4.2.54
+        version: 4.2.54
+      '@smithy/util-endpoints':
+        specifier: 3.4.2
+        version: 3.4.2
+      '@smithy/util-hex-encoding':
+        specifier: 3.0.0
+        version: 3.0.0
+      '@smithy/util-middleware':
+        specifier: 4.2.14
+        version: 4.2.14
+      '@smithy/util-retry':
+        specifier: 4.3.4
+        version: 4.3.4
+      '@smithy/util-stream':
+        specifier: 4.5.25
+        version: 4.5.25
+      '@smithy/util-uri-escape':
+        specifier: 3.0.0
+        version: 3.0.0
+      '@smithy/uuid':
+        specifier: 1.1.2
+        version: 1.1.2
       '@vscode/chat-lib':
         specifier: ^0.2.0
         version: 0.2.0(ws@8.20.0)(zod@3.25.76)
@@ -3618,10 +3858,12 @@ packages:
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
