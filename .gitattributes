@@ -1,4 +1,17 @@
-# Track tiktoken BPE files with Git LFS
-*.tiktoken filter=lfs diff=lfs merge=lfs -text
-# Also track any in model/ explicitly
-model/*.tiktoken filter=lfs diff=lfs merge=lfs -text
+# Note: BPE rank files are intentionally NOT tracked with Git LFS.
+#
+# Earlier this file declared `*.tiktoken filter=lfs diff=lfs merge=lfs -text`,
+# which produced 132-byte LFS pointer files (e.g. `version
+# https://git-lfs.github.com/spec/v1`) in the working tree on machines
+# without `git-lfs` installed. The tokenizer then read those pointers
+# as if they were BPE dumps and crashed with:
+#
+#   Failed to load from BPE encoder file stream:
+#   Can't parse https://git-lfs.github.com/spec/v1 to integer
+#
+# The BPE files actually used at runtime live in
+# `@vscode/chat-lib/dist/.../tokenizer/node/` and are copied to
+# `dist/{o200k_base,cl100k_base}.tiktoken` by `esbuild.config.js →
+# copyBuildAssets()`, then loaded directly via
+# `@microsoft/tiktokenizer`'s `createTokenizer(filePath, ...)` (see
+# `src/utils/tokenCounter.ts`). Do NOT add `*.tiktoken` back here.

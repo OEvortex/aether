@@ -3,8 +3,13 @@
  *  Handles all logic related to token counting
  *--------------------------------------------------------------------------------------------*/
 
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import {
     createByEncoderName,
+    createTokenizer,
+    getRegexByEncoder,
+    getSpecialTokensByEncoder,
     type TikTokenizer
 } from '@microsoft/tiktokenizer';
 import * as vscode from 'vscode';
@@ -27,6 +32,98 @@ type CountableLanguageModelChatMessage =
  */
 let sharedTokenizerPromise: Promise<TikTokenizer> | null = null;
 let sharedTokenCounterInstance: TokenCounter | null = null;
+
+/**
+ * Marker that identifies a Git LFS pointer file (see .gitattributes).
+ * A real BPE file is a binary text stream of `base64-token rank` lines,
+ * so the LFS pointer must never reach the parser.
+ */
+const GIT_LFS_POINTER_PREFIX = 'version https://git-lfs.github.com/spec/v1';
+
+/**
+ * Resolve a vendored BPE encoder file path without going to the network.
+ *
+ * Mirrors the pattern used by VS Code's copilot-chat tokenizer
+ * (src/platform/tokenizer/node/tokenizer.ts) which colocates the BPE
+ * files with the bundled extension output and passes an absolute path
+ * to `createTokenizer()` instead of `createByEncoderName()`.
+ *
+ * The build (`esbuild.config.js → copyBuildAssets`) copies
+ * `cl100k_base.tiktoken` and `o200k_base.tiktoken` from
+ * `@vscode/chat-lib` into `dist/`, so they sit next to `extension.js`
+ * in the packaged extension.
+ */
+export function resolveVendoredEncoderPath(encoderName: string): string | null {
+    const fileName = `${encoderName}.tiktoken`;
+
+    const candidates: string[] = [
+        // Production: dist/extension.js → dist/{encoder}.tiktoken
+        path.join(__dirname, fileName),
+        // Dev (running from src via tsx/vitest): ../../dist/{encoder}.tiktoken
+        path.join(__dirname, '..', '..', 'dist', fileName),
+        // Fallback: package's own expected location (downloaded BPE)
+        path.join(
+            __dirname,
+            '..',
+            '..',
+            'node_modules',
+            '@microsoft',
+            'tiktokenizer',
+            'model',
+            fileName
+        )
+    ];
+
+    for (const candidate of candidates) {
+        if (isValidBpeFile(candidate)) {
+            return candidate;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Return true only when the file at `filePath` is a real BPE rank file.
+ * Rejects missing files, Git LFS pointer files, and anything that doesn't
+ * look like the first line of a tiktoken rank dump.
+ */
+export function isValidBpeFile(filePath: string): boolean {
+    try {
+        const stat = fs.statSync(filePath);
+        if (!stat.isFile() || stat.size < 1024) {
+            // A real o200k_base.tiktoken is ~3.5 MB; a 132-byte LFS pointer
+            // would otherwise pass the existence check and crash the parser
+            // with "Can't parse https://git-lfs.github.com/spec/v1 to integer".
+            return false;
+        }
+        // Peek the first line: a real BPE file starts with a base64 token
+        // (e.g. "IQ== 0"), while an LFS pointer starts with the spec URL.
+        const fd = fs.openSync(filePath, 'r');
+        try {
+            const buf = Buffer.alloc(64);
+            const bytesRead = fs.readSync(fd, buf, 0, 64, 0);
+            const head = buf.subarray(0, bytesRead).toString('utf-8');
+            if (head.startsWith(GIT_LFS_POINTER_PREFIX)) {
+                return false;
+            }
+            // First line must look like `<base64> <integer>`.
+            const firstLine = head.split(/\r?\n/, 1)[0] ?? '';
+            const parts = firstLine.split(' ');
+            if (parts.length !== 2) {
+                return false;
+            }
+            if (!/^\d+$/.test(parts[1])) {
+                return false;
+            }
+            return true;
+        } finally {
+            fs.closeSync(fd);
+        }
+    } catch {
+        return false;
+    }
+}
 
 /**
  * Simple LRU cache implementation
@@ -89,11 +186,55 @@ export class TokenCounter {
             Logger.trace(
                 '[TokenCounter] First request for tokenizer, initializing global shared instance...'
             );
-            // Use createByEncoderName which automatically downloads the BPE file if needed
-            sharedTokenizerPromise = createByEncoderName('o200k_base');
+            sharedTokenizerPromise =
+                TokenCounter.createEncoderTokenizer('o200k_base');
             Logger.trace('[TokenCounter] Tokenizer initialization complete');
         }
         return sharedTokenizerPromise;
+    }
+
+    /**
+     * Create a tokenizer for the given encoder, preferring a vendored
+     * local BPE file (copied into `dist/` by the build) over the
+     * network download path used by `createByEncoderName()`.
+     *
+     * This matches the approach used by VS Code's copilot-chat
+     * (`TokenizerProvider` in `src/platform/tokenizer/node/tokenizer.ts`):
+     * load `dist/{encoder}.tiktoken` directly with `createTokenizer()`,
+     * avoiding the LFS-pointer and network-failure cases that produce
+     * `Failed to load from BPE encoder file stream: Can't parse
+     * https://git-lfs.github.com/spec/v1 to integer`.
+     */
+    private static async createEncoderTokenizer(
+        encoderName: string
+    ): Promise<TikTokenizer> {
+        const vendoredPath = resolveVendoredEncoderPath(encoderName);
+        if (vendoredPath) {
+            try {
+                const tokenizer = createTokenizer(
+                    vendoredPath,
+                    getSpecialTokensByEncoder(encoderName),
+                    getRegexByEncoder(encoderName)
+                );
+                Logger.trace(
+                    `[TokenCounter] Loaded encoder "${encoderName}" from vendored file: ${vendoredPath}`
+                );
+                return tokenizer;
+            } catch (error) {
+                Logger.warn(
+                    `[TokenCounter] Failed to load vendored encoder file ${vendoredPath}, falling back to createByEncoderName:`,
+                    error
+                );
+            }
+        } else {
+            Logger.trace(
+                `[TokenCounter] No vendored BPE file found for "${encoderName}", falling back to createByEncoderName (network download).`
+            );
+        }
+
+        // Last-resort fallback: original behavior of downloading the BPE
+        // file from the upstream URL via @microsoft/tiktokenizer.
+        return createByEncoderName(encoderName);
     }
 
     constructor(private tokenizer?: TikTokenizer) {

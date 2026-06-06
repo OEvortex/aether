@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.5] - 2026-06-06
+
+### Fixed
+- **BPE encoder crash on `o200k_base` tokenization** (`Failed to load from BPE encoder file stream: Can't parse https://git-lfs.github.com/spec/v1 to integer`). Root cause: `model/o200k_base.tiktoken` was a 132-byte Git LFS pointer (3 lines: `version https://git-lfs.github.com/spec/v1` + oid + size) instead of the real ~3.6 MB BPE rank dump. The `.gitattributes` rule `*.tiktoken filter=lfs diff=lfs merge=lfs -text` produced those pointers on any machine without `git-lfs` installed, and `@microsoft/tiktokenizer`'s `createByEncoderName()` happily read the pointer text as a BPE file, then choked when `parseInt("https://git-lfs.github.com/spec/v1")` failed. Resolution matches the approach used by VS Code's `vscode-copilot-chat` (`src/platform/tokenizer/node/tokenizer.ts`):
+  - `src/utils/tokenCounter.ts` now resolves the vendored BPE file locally (`dist/o200k_base.tiktoken`, copied by `esbuild.config.js → copyBuildAssets()` from `@vscode/chat-lib`) and passes its absolute path to `createTokenizer(filePath, specialTokens, regexPattern)` instead of `createByEncoderName()`. No network fetch, no LFS dependency.
+  - Added `isValidBpeFile()` (size guard + LFS pointer prefix detection + `<base64> <integer>` first-line check) and `resolveVendoredEncoderPath()` to reject LFS pointers, truncated dumps, and garbage files before they ever reach the parser. The previous `createByEncoderName()` behavior is preserved as a last-resort fallback.
+  - Replaced the orphan `model/o200k_base.tiktoken` LFS pointer (132 B) with the real 3.6 MB BPE dump so existing checkouts recover immediately.
+  - Removed the `*.tiktoken` / `model/*.tiktoken` LFS tracking from `.gitattributes` and added an explanatory comment preventing the rule from being re-added.
+  - Added a regression test in `src/utils/tokenCounter.test.ts` covering the LFS pointer, truncated, garbage, missing, and valid BPE file shapes.
+
 ## [0.5.4] - 2026-06-04
 
 ### Added
