@@ -1,0 +1,6 @@
+{
+    "displayName": "TokenRouter",
+    "baseUrl": "https://api.tokenrouter.com/v1",
+    "apiKeyTemplate": "tr-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": []
+}

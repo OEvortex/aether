@@ -285,13 +285,14 @@ export class AccountSyncAdapter {
             ProviderKey.Streamlake,
             ProviderKey.Tencent,
             ProviderKey.Together,
+            ProviderKey.Tokenrouter,
             ProviderKey.Vercelai,
             ProviderKey.Volcengine,
             ProviderKey.Vsllm,
             ProviderKey.Xiaomimimo,
             ProviderKey.Xinjianya,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu
+            ProviderKey.Zhipu,
         ];
 
         // Sync Codex (OAuth)

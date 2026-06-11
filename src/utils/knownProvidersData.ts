@@ -1130,6 +1130,39 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    tokenrouter: {
+        displayName: 'TokenRouter',
+        family: 'TokenRouter',
+        supportsApiKey: true,
+        apiKeyTemplate: 'tr-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.tokenrouter.com/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
+    mimocode: {
+        displayName: 'MimoCode',
+        family: 'MimoCode',
+        description: 'Free AI provider via Xiaomi Mimo free API - no API key needed',
+        supportsApiKey: false,
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.xiaomimimo.com/api/free-ai/openai/chat'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelParser: {
+            cooldownMinutes: 30
+        }
+    },
     volcengine: {
         displayName: 'Volcengine',
         family: 'Volcengine',

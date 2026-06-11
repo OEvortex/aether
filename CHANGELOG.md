@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.6] - 2026-06-11
+
+### Added
+- **TokenRouter provider**: Added TokenRouter (`https://api.tokenrouter.com/v1`) as a built-in OpenAI-compatible provider with automatic model list synchronization via `/models`.
+- **MimoCode provider**: Added MimoCode — a free AI provider that automatically bootstraps JWT tokens from the Xiaomi Mimo free API. No API key required. Features custom JWT bootstrap handler with automatic 401 retry, SSE streaming, tool call support, and 1M context window with `mimo-auto` model.
+- **Fuzzy matching in settings search**: Provider search in Aether Settings page now uses subsequence-based fuzzy matching instead of exact substring matching. Typing "tr" matches "TokenRouter", "op" matches "OpenProvider", etc.
+
 ## [0.5.5] - 2026-06-06
 
 ### Fixed

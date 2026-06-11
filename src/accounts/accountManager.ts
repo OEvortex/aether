@@ -339,6 +339,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Mimocode,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: false
+            }
+        ],
+        [
             ProviderKey.MiniMax,
             {
                 supportsMultiAccount: true,
@@ -579,6 +587,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Tokenrouter,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Vercelai,
             {
                 supportsMultiAccount: true,
@@ -633,7 +649,7 @@ export class AccountManager {
                 supportsOAuth: false,
                 supportsApiKey: true
             }
-        ]
+        ],
     ]);
 
     private constructor(context: vscode.ExtensionContext) {

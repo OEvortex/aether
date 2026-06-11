@@ -298,6 +298,10 @@ const specializedProviderFactories: Record<string, ProviderFactory> = {
     inworld: createLazyFactory(
         () => import('../providers/inworld/provider.js'),
         'InworldProvider'
+    ),
+    mimocode: createLazyFactory(
+        () => import('../providers/mimocode/provider.js'),
+        'MimoCodeProvider'
     )
 };
 

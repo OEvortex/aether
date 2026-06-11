@@ -1,7 +1,7 @@
 {
     "name": "aether-ai",
     "publisher": "OEvortex",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "displayName": "Aether AI",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
     "license": "MIT",
@@ -87,6 +87,7 @@
         "onLanguageModelProvider:aether.lightningai",
         "onLanguageModelProvider:aether.llmgateway",
         "onLanguageModelProvider:aether.meganova",
+        "onLanguageModelProvider:aether.mimocode",
         "onLanguageModelProvider:aether.minimax",
         "onLanguageModelProvider:aether.mistral",
         "onLanguageModelProvider:aether.moark",
@@ -115,6 +116,7 @@
         "onLanguageModelProvider:aether.streamlake",
         "onLanguageModelProvider:aether.tencent",
         "onLanguageModelProvider:aether.together",
+        "onLanguageModelProvider:aether.tokenrouter",
         "onLanguageModelProvider:aether.vercelai",
         "onLanguageModelProvider:aether.volcengine",
         "onLanguageModelProvider:aether.vsllm",
@@ -652,6 +654,16 @@
             {
                 "command": "aether.openprovider.setApiKey",
                 "title": "Configure OpenProvider",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.tokenrouter.setApiKey",
+                "title": "Configure TokenRouter",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.mimocode.setApiKey",
+                "title": "Configure MimoCode",
                 "category": "Aether"
             }
         ],
@@ -1633,6 +1645,13 @@
                 }
             },
             {
+                "vendor": "aether.mimocode",
+                "displayName": "⦿ MimoCode (Free AI provider via Xiaomi Mimo free API - no API key needed)",
+                "configuration": {
+                    "properties": {}
+                }
+            },
+            {
                 "vendor": "aether.minimax",
                 "displayName": "⦿ MiniMax (MiniMax family models with coding endpoint options)",
                 "configuration": {
@@ -1991,6 +2010,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "TogetherAI API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.tokenrouter",
+                "displayName": "⦿ TokenRouter",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "TokenRouter API key.",
                             "secret": true
                         }
                     }

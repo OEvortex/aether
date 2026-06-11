@@ -1,0 +1,22 @@
+{
+    "displayName": "MimoCode",
+    "baseUrl": "https://api.xiaomimimo.com/api/free-ai/openai/chat",
+    "description": "Free AI provider via Xiaomi Mimo free API - no API key needed",
+    "apiKeyTemplate": "",
+    "supportsApiKey": false,
+    "models": [
+        {
+            "id": "mimo-auto",
+            "name": "Mimo Auto",
+            "tooltip": "MimoCode free model with 1M context window - automatically selects best available model",
+            "maxInputTokens": 1024000,
+            "maxOutputTokens": 16384,
+            "model": "mimo-auto",
+            "sdkMode": "openai",
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

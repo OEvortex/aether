@@ -141,9 +141,9 @@ function renderProviderCatalogSection() {
             return true;
         }
         return (
-            provider.id.toLowerCase().includes(query) ||
-            provider.displayName.toLowerCase().includes(query) ||
-            (provider.description || "").toLowerCase().includes(query)
+            fuzzyMatch(provider.id, query) ||
+            fuzzyMatch(provider.displayName, query) ||
+            fuzzyMatch(provider.description || "", query)
         );
     });
 
@@ -464,6 +464,23 @@ function formatDate(dateStr) {
     } catch {
         return "Unknown";
     }
+}
+
+/**
+ * Simple fuzzy matching: checks if all characters in the query appear in order in the text.
+ * This allows typing "tr" to match "TokenRouter", "op" to match "OpenProvider", etc.
+ */
+function fuzzyMatch(text, query) {
+    if (!query) return true;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    let queryIdx = 0;
+    for (let i = 0; i < lowerText.length && queryIdx < lowerQuery.length; i++) {
+        if (lowerText[i] === lowerQuery[queryIdx]) {
+            queryIdx++;
+        }
+    }
+    return queryIdx === lowerQuery.length;
 }
 
 function groupProvidersByCategory(providers) {
