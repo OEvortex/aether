@@ -63,6 +63,7 @@
         "onLanguageModelProvider:aether.chutes",
         "onLanguageModelProvider:aether.clarifai",
         "onLanguageModelProvider:aether.cline",
+        "onLanguageModelProvider:aether.clod",
         "onLanguageModelProvider:aether.codex",
         "onLanguageModelProvider:aether.commonstack",
         "onLanguageModelProvider:aether.cortecs",
@@ -664,6 +665,11 @@
             {
                 "command": "aether.mimocode.setApiKey",
                 "title": "Configure MimoCode",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.clod.setApiKey",
+                "title": "Configure Clod",
                 "category": "Aether"
             }
         ],
@@ -1327,6 +1333,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Cline API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.clod",
+                "displayName": "⦿ Clod",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Clod API key.",
                             "secret": true
                         }
                     }

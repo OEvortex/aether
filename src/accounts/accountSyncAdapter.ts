@@ -231,6 +231,7 @@ export class AccountSyncAdapter {
             ProviderKey.Chutes,
             ProviderKey.Clarifai,
             ProviderKey.Cline,
+            ProviderKey.Clod,
             ProviderKey.Commonstack,
             ProviderKey.Compatible,
             ProviderKey.Cortecs,

@@ -209,6 +209,24 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    clod: {
+        displayName: 'Clod',
+        family: 'Clod',
+        supportsApiKey: true,
+        apiKeyTemplate: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.clod.io/v1'
+        },
+        openModelEndpoint: false,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     codex: {
         displayName: 'OpenAI Codex',
         family: 'OpenAI Codex'

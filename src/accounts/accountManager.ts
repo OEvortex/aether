@@ -131,6 +131,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Clod,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Codex,
             {
                 supportsMultiAccount: true,

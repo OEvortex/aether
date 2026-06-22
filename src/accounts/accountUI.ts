@@ -170,6 +170,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Clod",
+                value: ProviderKey.Clod,
+                authType: "apiKey" as const
+            },
+            {
                 label: "CommonStack",
                 value: ProviderKey.Commonstack,
                 authType: "apiKey" as const
@@ -1099,6 +1104,7 @@ export class AccountUI {
             chutes: "Chutes AI",
             clarifai: "Clarifai",
             cline: "Cline",
+            clod: "Clod",
             commonstack: "CommonStack",
             cortecs: "Cortecs",
             crof: "Crof AI",
