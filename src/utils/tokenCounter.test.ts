@@ -193,7 +193,7 @@ describe('TokenCounter', () => {
             const realPath = path.join(tmpDir, 'real.tiktoken');
             const realHeader = 'IQ== 0\nIg== 1\nIw== 2\n';
             const realBody = 'x'.repeat(2048);
-            fs.writeFileSync(realPath, realHeader + realBody + '\n');
+            fs.writeFileSync(realPath, `${realHeader + realBody}\n`);
             expect(isValidBpeFile(realPath)).toBe(true);
         } finally {
             fs.rmSync(tmpDir, { recursive: true, force: true });

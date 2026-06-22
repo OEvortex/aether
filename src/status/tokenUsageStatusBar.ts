@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import {
-    TokenTelemetryTracker,
-    type TokenTelemetryEvent
-} from '../utils/tokenTelemetryTracker';
 import { StatusLogger } from '../utils/statusLogger';
+import {
+    type TokenTelemetryEvent,
+    TokenTelemetryTracker
+} from '../utils/tokenTelemetryTracker';
 
 export interface TokenUsageData {
     modelId: string;
@@ -63,10 +63,7 @@ export class TokenUsageStatusBar {
         const tracker = TokenTelemetryTracker.getInstance();
         context.subscriptions.push(
             tracker.onEvent((event: TokenTelemetryEvent) => {
-                if (
-                    event.status === 'success' &&
-                    event.responseMetrics
-                ) {
+                if (event.status === 'success' && event.responseMetrics) {
                     const metrics = event.responseMetrics;
                     const maxInput = metrics.maxInputTokens || 0;
                     const percentage =

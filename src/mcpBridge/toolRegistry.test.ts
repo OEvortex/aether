@@ -183,7 +183,10 @@ describe('ToolRegistry', () => {
         );
         expect(registry.getExposedTools()).toHaveLength(0);
 
-        registry.setGroupExposed(['aether_testTool', 'aether_secondTool'], true);
+        registry.setGroupExposed(
+            ['aether_testTool', 'aether_secondTool'],
+            true
+        );
         expect(registry.getExposedTools()).toHaveLength(2);
     });
 

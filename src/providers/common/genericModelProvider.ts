@@ -41,8 +41,8 @@ import {
     resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
 import { KnownProviders } from '../../utils/knownProviders';
-import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { ProviderWizard } from '../../utils/providerWizard';
+import { TokenTelemetryTracker } from '../../utils/tokenTelemetryTracker';
 import { getUserAgent } from '../../utils/userAgent';
 import { MoonshotWizard } from '../moonshot/moonshotWizard';
 
@@ -909,9 +909,9 @@ export class GenericModelProvider implements LanguageModelChatProvider {
             completion_tokens: summary.completionTokens,
             total_tokens: summary.totalTokens
         };
-        (
-            progress as Progress<vscode.LanguageModelResponsePart2>
-        ).report(vscode.LanguageModelDataPart.json(usageData, 'usage'));
+        (progress as Progress<vscode.LanguageModelResponsePart2>).report(
+            vscode.LanguageModelDataPart.json(usageData, 'usage')
+        );
     }
 
     async provideLanguageModelChatResponse(

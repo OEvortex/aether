@@ -18,7 +18,7 @@ import type {
     TextBlockParam,
     ThinkingBlockParam
 } from '@anthropic-ai/sdk/resources';
-import OpenAI from 'openai';
+import type OpenAI from 'openai';
 import * as vscode from 'vscode';
 import type { ModelConfig } from '../../types/sharedTypes';
 import { Logger } from '../../utils/logger';

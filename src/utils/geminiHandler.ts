@@ -3,12 +3,7 @@
  *  Processes model requests using Gemini Code Assist API
  *--------------------------------------------------------------------------------------------*/
 
-import * as vscode from 'vscode';
-import { GeminiOAuthManager } from '../providers/gemini/auth.js';
-import type { ModelConfig } from '../types/sharedTypes.js';
 import { Logger } from './logger.js';
-import { RetryManager } from './retryManager.js';
-import { TokenCounter } from './tokenCounter.js';
 import { getUserAgent } from './userAgent.js';
 
 export interface GeminiRequestOptions {
@@ -53,12 +48,12 @@ export class GeminiHandler {
         signal?: AbortSignal
     ): Promise<any> {
         const url = `${this.baseURL}/${endpoint}`;
-        
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 'User-Agent': getUserAgent()
             },
             body: JSON.stringify(body),
@@ -67,7 +62,9 @@ export class GeminiHandler {
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Gemini API error: ${response.status} ${response.statusText}. ${errorText}`);
+            throw new Error(
+                `Gemini API error: ${response.status} ${response.statusText}. ${errorText}`
+            );
         }
 
         return await response.json();
@@ -81,54 +78,59 @@ export class GeminiHandler {
         tools?: any[]
     ): any {
         // Convert messages to Gemini format
-        const contents = messages.map(msg => {
-            const role = msg.role === 'assistant' ? 'model' : 'user';
-            const parts: any[] = [];
+        const contents = messages
+            .map((msg) => {
+                const role = msg.role === 'assistant' ? 'model' : 'user';
+                const parts: any[] = [];
 
-            if (msg.content) {
-                if (typeof msg.content === 'string') {
-                    parts.push({ text: msg.content });
-                } else if (Array.isArray(msg.content)) {
-                    for (const part of msg.content) {
-                        if (part.text) {
-                            parts.push({ text: part.text });
-                        } else if (part.imageData && part.imageMimeType) {
-                            parts.push({
-                                inlineData: {
-                                    mimeType: part.imageMimeType,
-                                    data: part.imageData
-                                }
-                            });
+                if (msg.content) {
+                    if (typeof msg.content === 'string') {
+                        parts.push({ text: msg.content });
+                    } else if (Array.isArray(msg.content)) {
+                        for (const part of msg.content) {
+                            if (part.text) {
+                                parts.push({ text: part.text });
+                            } else if (part.imageData && part.imageMimeType) {
+                                parts.push({
+                                    inlineData: {
+                                        mimeType: part.imageMimeType,
+                                        data: part.imageData
+                                    }
+                                });
+                            }
                         }
                     }
                 }
-            }
 
-            if (msg.toolCalls) {
-                for (const tc of msg.toolCalls) {
+                if (msg.toolCalls) {
+                    for (const tc of msg.toolCalls) {
+                        parts.push({
+                            functionCall: {
+                                name: tc.function.name,
+                                args: tc.function.arguments
+                            }
+                        });
+                    }
+                }
+
+                if (msg.toolCallId) {
                     parts.push({
-                        functionCall: {
-                            name: tc.function.name,
-                            args: tc.function.arguments
+                        functionResponse: {
+                            name: msg.name || '',
+                            response:
+                                typeof msg.content === 'string'
+                                    ? { result: msg.content }
+                                    : msg.content
                         }
                     });
                 }
-            }
 
-            if (msg.toolCallId) {
-                parts.push({
-                    functionResponse: {
-                        name: msg.name || '',
-                        response: typeof msg.content === 'string' ? { result: msg.content } : msg.content
-                    }
-                });
-            }
-
-            if (parts.length > 0) {
-                return { role, parts };
-            }
-            return null;
-        }).filter((c): c is any => c !== null);
+                if (parts.length > 0) {
+                    return { role, parts };
+                }
+                return null;
+            })
+            .filter((c): c is any => c !== null);
 
         const request: any = {
             model,
@@ -150,12 +152,17 @@ export class GeminiHandler {
 
         // Add tools if provided
         if (tools && tools.length > 0) {
-            request.tools = tools.map(tool => ({
-                functionDeclarations: [{
-                    name: tool.name,
-                    description: tool.description || '',
-                    parameters: tool.parameters || { type: 'object', properties: {} }
-                }]
+            request.tools = tools.map((tool) => ({
+                functionDeclarations: [
+                    {
+                        name: tool.name,
+                        description: tool.description || '',
+                        parameters: tool.parameters || {
+                            type: 'object',
+                            properties: {}
+                        }
+                    }
+                ]
             }));
         }
 
@@ -164,7 +171,7 @@ export class GeminiHandler {
 
     private parseResponse(data: any): GeminiResponse {
         const candidates = data.candidates || [];
-        
+
         if (candidates.length === 0) {
             return {
                 content: '',
@@ -192,7 +199,9 @@ export class GeminiHandler {
             }
             if (part.functionCall) {
                 const fc = part.functionCall;
-                if (!toolCalls) toolCalls = [];
+                if (!toolCalls) {
+                    toolCalls = [];
+                }
                 toolCalls.push({
                     id: crypto.randomUUID(),
                     type: 'function',
@@ -236,7 +245,12 @@ export class GeminiHandler {
                 options.tools
             );
 
-            const data = await this.makeRequest('v1internal:generateContent', request, accessToken, signal);
+            const data = await this.makeRequest(
+                'v1internal:generateContent',
+                request,
+                accessToken,
+                signal
+            );
             return this.parseResponse(data);
         } catch (error) {
             Logger.error('Gemini API error:', error);
@@ -259,14 +273,14 @@ export class GeminiHandler {
             );
 
             const url = `${this.baseURL}/v1internal:streamGenerateContent?alt=sse`;
-            
+
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'User-Agent': getUserAgent(),
-                    'Accept': 'text/event-stream'
+                    Accept: 'text/event-stream'
                 },
                 body: JSON.stringify(request),
                 signal
@@ -274,7 +288,9 @@ export class GeminiHandler {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Gemini API error: ${response.status} ${response.statusText}. ${errorText}`);
+                throw new Error(
+                    `Gemini API error: ${response.status} ${response.statusText}. ${errorText}`
+                );
             }
 
             if (!response.body) {
@@ -287,7 +303,9 @@ export class GeminiHandler {
 
             while (true) {
                 const { done, value } = await reader.read();
-                if (done) break;
+                if (done) {
+                    break;
+                }
 
                 buffer += decoder.decode(value, { stream: true });
                 const lines = buffer.split('\n');
@@ -295,20 +313,29 @@ export class GeminiHandler {
 
                 for (const line of lines) {
                     const trimmed = line.trim();
-                    if (!trimmed || trimmed.startsWith(':')) continue;
+                    if (!trimmed || trimmed.startsWith(':')) {
+                        continue;
+                    }
 
                     if (trimmed.startsWith('data:')) {
                         const data = trimmed.slice(5).trim();
-                        if (data === '[DONE]') continue;
+                        if (data === '[DONE]') {
+                            continue;
+                        }
 
                         try {
                             const parsed = JSON.parse(data);
                             if (parsed.error) {
-                                throw new Error(parsed.error.message || 'Gemini API error');
+                                throw new Error(
+                                    parsed.error.message || 'Gemini API error'
+                                );
                             }
                             yield this.parseResponse(parsed);
                         } catch (e) {
-                            if (e instanceof Error && e.message.includes('Gemini API error')) {
+                            if (
+                                e instanceof Error &&
+                                e.message.includes('Gemini API error')
+                            ) {
                                 throw e;
                             }
                             // Skip invalid JSON (incomplete chunks)

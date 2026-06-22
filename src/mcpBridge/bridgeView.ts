@@ -39,8 +39,8 @@ export class ExtensionTreeItem extends vscode.TreeItem {
                 exposedTools === 0
                     ? vscode.TreeItemCheckboxState.Unchecked
                     : exposedTools >= toggleableToolNames.length
-                    ? vscode.TreeItemCheckboxState.Checked
-                    : vscode.TreeItemCheckboxState.Indeterminate;
+                      ? vscode.TreeItemCheckboxState.Checked
+                      : vscode.TreeItemCheckboxState.Indeterminate;
         }
 
         this.tooltip = new vscode.MarkdownString(

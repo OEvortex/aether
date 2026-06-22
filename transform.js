@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('node:fs');
 let c = fs.readFileSync('src/providers/gemini/provider.ts', 'utf8');
 const t = `const tryAccountRequest = async (account: Account, accountAccessToken?: string) => {
                 if (!accountAccessToken) {
@@ -25,11 +25,25 @@ const t = `const tryAccountRequest = async (account: Account, accountAccessToken
             };`;
 const start = c.indexOf('const tryAccountRequest = async (');
 if (start > 0) {
-    let br = 0, f = false, end = start;
+    let br = 0,
+        f = false,
+        end = start;
     for (let i = start; i < c.length; i++) {
-        if (c[i] === '{') { br++; f = true; }
-        else if (c[i] === '}') { br--; }
-        if (f && br === 0 && c[i+1] === ';' && (c[i+2] === '\n' || c[i+2] === ' ')) { end = i + 2; break; }
+        if (c[i] === '{') {
+            br++;
+            f = true;
+        } else if (c[i] === '}') {
+            br--;
+        }
+        if (
+            f &&
+            br === 0 &&
+            c[i + 1] === ';' &&
+            (c[i + 2] === '\n' || c[i + 2] === ' ')
+        ) {
+            end = i + 2;
+            break;
+        }
     }
     c = c.slice(0, start) + t + c.slice(end);
     console.log('Replaced tryAccountRequest');
@@ -75,6 +89,9 @@ const meth = `    private processGeminiChunk(chunk: any, thinkingParser: Thinkin
             }
         }
     }`;
-if (m > 0) { c = c.slice(0, m) + meth + c.slice(m); console.log('Added handler methods'); }
+if (m > 0) {
+    c = c.slice(0, m) + meth + c.slice(m);
+    console.log('Added handler methods');
+}
 fs.writeFileSync('src/providers/gemini/provider.ts', c, 'utf8');
 console.log('Done');

@@ -5,8 +5,8 @@
 
 import * as vscode from 'vscode';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
+import { getUserAgent, Logger } from '../../utils';
 import { ConfigManager } from '../../utils/configManager';
-import { Logger, getUserAgent } from '../../utils';
 
 interface MimoCodeStreamChunk {
     id?: string;
@@ -178,7 +178,9 @@ export class MimoCodeHandler {
 
                     // Handle tool results
                     for (const part of message.content) {
-                        if (part instanceof vscode.LanguageModelToolResultPart) {
+                        if (
+                            part instanceof vscode.LanguageModelToolResultPart
+                        ) {
                             const content = this.convertToolResultContent(
                                 part.content
                             );
@@ -196,9 +198,7 @@ export class MimoCodeHandler {
                     const toolCalls: MimoCodeMessage['tool_calls'] = [];
 
                     for (const part of message.content) {
-                        if (
-                            part instanceof vscode.LanguageModelToolCallPart
-                        ) {
+                        if (part instanceof vscode.LanguageModelToolCallPart) {
                             toolCalls.push({
                                 id: part.callId,
                                 type: 'function',
@@ -297,12 +297,14 @@ export class MimoCodeHandler {
                 function: {
                     name: tool.name,
                     description: tool.description || '',
-                    parameters:
-                        (tool.inputSchema as Record<string, unknown>) || {
-                            type: 'object',
-                            properties: {},
-                            required: []
-                        }
+                    parameters: (tool.inputSchema as Record<
+                        string,
+                        unknown
+                    >) || {
+                        type: 'object',
+                        properties: {},
+                        required: []
+                    }
                 }
             }));
             body.tool_choice = 'auto';
@@ -433,11 +435,7 @@ export class MimoCodeHandler {
                 );
             }
 
-            await this.handleStreamResponse(
-                response,
-                context,
-                cancellation
-            );
+            await this.handleStreamResponse(response, context, cancellation);
         } finally {
             cancellation.dispose();
         }
@@ -449,7 +447,7 @@ export class MimoCodeHandler {
     private async handleStreamResponse(
         response: Response,
         context: MimoCodeRequestContext,
-        cancellation: vscode.Disposable
+        _cancellation: vscode.Disposable
     ): Promise<void> {
         if (!response.body) {
             throw new Error('MimoCode response missing body');
@@ -604,7 +602,8 @@ export class MimoCodeHandler {
             {
                 id: 'mimo-auto',
                 name: 'Mimo Auto',
-                tooltip: 'MimoCode free model with 1M context window - automatically selects best available model',
+                tooltip:
+                    'MimoCode free model with 1M context window - automatically selects best available model',
                 maxInputTokens: 1024000,
                 maxOutputTokens: 16384,
                 model: 'mimo-auto',

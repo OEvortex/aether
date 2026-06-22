@@ -1169,7 +1169,8 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
     mimocode: {
         displayName: 'MimoCode',
         family: 'MimoCode',
-        description: 'Free AI provider via Xiaomi Mimo free API - no API key needed',
+        description:
+            'Free AI provider via Xiaomi Mimo free API - no API key needed',
         supportsApiKey: false,
         sdkMode: 'openai',
         openai: {

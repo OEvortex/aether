@@ -74,8 +74,10 @@ export class InworldProvider
 
         // Build capabilities object for LanguageModelChatInformation
         const chatCapabilities = {
-            toolCalling: capabilities.toolCalling ?? model.capabilities?.toolCalling,
-            imageInput: capabilities.imageInput ?? model.capabilities?.imageInput
+            toolCalling:
+                capabilities.toolCalling ?? model.capabilities?.toolCalling,
+            imageInput:
+                capabilities.imageInput ?? model.capabilities?.imageInput
         };
 
         return {

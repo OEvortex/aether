@@ -36,9 +36,7 @@ export interface InvocationResult {
  * This enables invoking tools from extensions that haven't been
  * activated yet (declared in package.json but not loaded).
  */
-async function tryActivateExtensionForTool(
-    toolName: string
-): Promise<boolean> {
+async function tryActivateExtensionForTool(toolName: string): Promise<boolean> {
     try {
         for (const ext of vscode.extensions.all) {
             const pkg = ext.packageJSON as Record<string, unknown> | undefined;
@@ -92,14 +90,21 @@ function convertContentParts(
 
 function convertSinglePart(
     part: unknown
-): { type: 'text'; text: string } | { type: 'image'; data: string; mimeType: string } | undefined {
+):
+    | { type: 'text'; text: string }
+    | { type: 'image'; data: string; mimeType: string }
+    | undefined {
     if (part === null || part === undefined) {
         return undefined;
     }
 
     // LanguageModelTextPart / LanguageModelTextPart2
     // Both have .value: string (TextPart2 adds .audience which we ignore for MCP)
-    if (typeof part === 'object' && 'value' in part && typeof (part as { value: unknown }).value === 'string') {
+    if (
+        typeof part === 'object' &&
+        'value' in part &&
+        typeof (part as { value: unknown }).value === 'string'
+    ) {
         // Distinguish TextPart from PromptTsxPart (both have .value but PromptTsxPart.value is unknown)
         const obj = part as Record<string, unknown>;
         // TextPart has only 'value'; PromptTsxPart also has only 'value' but it's not a string.
@@ -109,23 +114,31 @@ function convertSinglePart(
 
     // LanguageModelDataPart / LanguageModelDataPart2
     // Has .mimeType: string and .data: Uint8Array
-    if (
-        typeof part === 'object' &&
-        'mimeType' in part &&
-        'data' in part
-    ) {
+    if (typeof part === 'object' && 'mimeType' in part && 'data' in part) {
         const dataPart = part as { mimeType: string; data: Uint8Array };
-        if (typeof dataPart.mimeType === 'string' && dataPart.data instanceof Uint8Array) {
+        if (
+            typeof dataPart.mimeType === 'string' &&
+            dataPart.data instanceof Uint8Array
+        ) {
             if (dataPart.mimeType.startsWith('image/')) {
-                const base64Data = Buffer.from(dataPart.data).toString('base64');
-                return { type: 'image', data: base64Data, mimeType: dataPart.mimeType };
+                const base64Data = Buffer.from(dataPart.data).toString(
+                    'base64'
+                );
+                return {
+                    type: 'image',
+                    data: base64Data,
+                    mimeType: dataPart.mimeType
+                };
             }
             // Non-image binary: try UTF-8 decode, fall back to placeholder
             try {
                 const textData = Buffer.from(dataPart.data).toString('utf-8');
                 return { type: 'text', text: textData };
             } catch {
-                return { type: 'text', text: `[Binary data: ${dataPart.mimeType}]` };
+                return {
+                    type: 'text',
+                    text: `[Binary data: ${dataPart.mimeType}]`
+                };
             }
         }
     }

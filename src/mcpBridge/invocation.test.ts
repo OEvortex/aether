@@ -29,8 +29,8 @@ vi.mock('vscode', () => ({
         invokeTool: vi.fn(
             async (
                 name: string,
-                options: { input: Record<string, unknown> },
-                token?: unknown
+                _options: { input: Record<string, unknown> },
+                _token?: unknown
             ) => {
                 const result = mockInvokeToolResults.get(name);
                 if (result === undefined) {
@@ -182,9 +182,9 @@ describe('invokeLmTool', () => {
         expect(result.isError).toBe(false);
         expect(result.content).toHaveLength(1);
         expect(result.content[0].type).toBe('text');
-        expect(JSON.parse((result.content[0] as { text: string }).text)).toEqual(
-            promptJson
-        );
+        expect(
+            JSON.parse((result.content[0] as { text: string }).text)
+        ).toEqual(promptJson);
     });
 
     it('converts LanguageModelDataPart image correctly', async () => {
@@ -321,7 +321,9 @@ describe('invokeLmTool', () => {
 
         const result = await invokeLmTool('test_tool', {}, registry);
         expect(result.isError).toBe(true);
-        expect((result.content[0] as { type: string; text: string }).text).toContain('Tool crashed');
+        expect(
+            (result.content[0] as { type: string; text: string }).text
+        ).toContain('Tool crashed');
     });
 
     it('handles unknown part types gracefully', async () => {

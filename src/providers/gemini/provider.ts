@@ -6,7 +6,6 @@ import type {
     CancellationToken,
     LanguageModelChatInformation,
     LanguageModelChatMessage,
-    LanguageModelChatProvider,
     Progress,
     ProvideLanguageModelChatResponseOptions
 } from 'vscode';
@@ -24,7 +23,6 @@ import { Logger } from '../../utils/logger';
 import { getUserAgent } from '../../utils/userAgent';
 import { GenericModelProvider } from '../common/genericModelProvider';
 import { GeminiOAuthManager } from './auth.js';
-import { GeminiHandler } from '../../utils/geminiHandler.js';
 
 const GEMINI_MODEL_OUTPUT_LIMITS: Record<string, number> = {
     'gemini-2.5-pro': 65536,
@@ -82,9 +80,7 @@ class ThinkingBlockParser {
     }
 }
 
-export class GeminiCliProvider
-    extends GenericModelProvider
-{
+export class GeminiCliProvider extends GenericModelProvider {
     private buildGeminiModelConfig(
         modelConfig: ModelConfig,
         accessToken: string,
@@ -417,11 +413,14 @@ export class GeminiCliProvider
             // Try to use managed accounts first (load balancing if configured)
             const accountManager = AccountManager.getInstance();
             const accounts = accountManager.getAccountsByProvider('geminicli');
-            Logger.debug('[geminicli] provideLanguageModelChatResponse called', {
-                modelId: model.id,
-                hasAccounts: !!(accounts && accounts.length > 0),
-                accountCount: accounts?.length || 0
-            });
+            Logger.debug(
+                '[geminicli] provideLanguageModelChatResponse called',
+                {
+                    modelId: model.id,
+                    hasAccounts: !!(accounts && accounts.length > 0),
+                    accountCount: accounts?.length || 0
+                }
+            );
             const loadBalanceEnabled =
                 accountManager.getLoadBalanceEnabled('geminicli');
             const assignedAccountId = accountManager.getAccountIdForModel(
@@ -564,16 +563,23 @@ export class GeminiCliProvider
             }
 
             // Fallback: Ensure we read latest token (in case CLI updated credentials externally)
-            const creds = await GeminiOAuthManager.getInstance().getValidCredentials();
+            const creds =
+                await GeminiOAuthManager.getInstance().getValidCredentials();
             if (!creds) {
                 Logger.error('[geminicli] Debug: Credentials check failed', {
-                    hasAccessToken: !!(creds?.access_token),
-                    hasResourceUrl: !!(creds?.resource_url),
-                    message: 'GeminiOAuthManager.getValidCredentials returned null or undefined'
+                    hasAccessToken: !!creds?.access_token,
+                    hasResourceUrl: !!creds?.resource_url,
+                    message:
+                        'GeminiOAuthManager.getValidCredentials returned null or undefined'
                 });
                 throw new Error('Not authenticated');
             }
-            const { accessToken, baseURL } = { accessToken: creds.access_token, baseURL: creds.resource_url || 'https://generativelanguage.googleapis.com' };
+            const { accessToken, baseURL } = {
+                accessToken: creds.access_token,
+                baseURL:
+                    creds.resource_url ||
+                    'https://generativelanguage.googleapis.com'
+            };
 
             // Update handler with latest credentials (CLI)
             // Pass accessToken as apiKey so OpenAIHandler uses it for Authorization header
@@ -597,14 +603,16 @@ export class GeminiCliProvider
             // If we got a 401, invalidate cached credentials and retry once with fresh token
             if (this.isUnauthorizedError(error)) {
                 GeminiOAuthManager.getInstance().invalidateCredentials();
-                const creds = await GeminiOAuthManager.getInstance().startOAuthFlow();
+                const creds =
+                    await GeminiOAuthManager.getInstance().startOAuthFlow();
                 if (!creds) {
                     throw new Error('OAuth flow failed');
                 }
                 const configWithAuth = this.buildGeminiModelConfig(
                     modelConfig,
                     creds.access_token,
-                    creds.resource_url || 'https://generativelanguage.googleapis.com'
+                    creds.resource_url ||
+                        'https://generativelanguage.googleapis.com'
                 );
                 await this.openaiHandler.handleRequest(
                     model,

@@ -563,7 +563,12 @@ export async function activate(context: vscode.ExtensionContext) {
                             port,
                             registry: mcpRegistry!,
                             outputChannel: mcpOutputChannel!,
-                            onInvocation: (entry: { timestamp: string; toolName: string; status: string; durationMs: number }) => {
+                            onInvocation: (entry: {
+                                timestamp: string;
+                                toolName: string;
+                                status: string;
+                                durationMs: number;
+                            }) => {
                                 if (
                                     config.get<boolean>(
                                         'logging.logInvocations',
@@ -575,7 +580,10 @@ export async function activate(context: vscode.ExtensionContext) {
                                     );
                                 }
                             },
-                            onToolBlocked: (toolName: string, reason: 'hidden' | 'disabled') => {
+                            onToolBlocked: (
+                                toolName: string,
+                                reason: 'hidden' | 'disabled'
+                            ) => {
                                 const msg =
                                     reason === 'disabled'
                                         ? `Tool "${toolName}" is disabled in VS Code`
@@ -795,7 +803,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 (item) => {
                     if (item instanceof ExtensionTreeItem) {
                         const newState = !item.toggleableToolNames.every(
-                            (name: string) => mcpRegistry?.getTool(name)?.exposed
+                            (name: string) =>
+                                mcpRegistry?.getTool(name)?.exposed
                         );
                         mcpRegistry?.setGroupExposed(
                             item.toggleableToolNames,

@@ -15,13 +15,13 @@ import type {
 import * as vscode from 'vscode';
 import type { ModelConfig, ProviderConfig } from '../../types/sharedTypes';
 import { Logger, RateLimiter } from '../../utils';
-import { getProviderRateLimit } from '../../utils/knownProviders';
 import {
     DEFAULT_CONTEXT_LENGTH,
     DEFAULT_MAX_OUTPUT_TOKENS,
     resolveGlobalCapabilities,
     resolveGlobalTokenLimits
 } from '../../utils/globalContextLengthManager';
+import { getProviderRateLimit } from '../../utils/knownProviders';
 import { ProviderWizard } from '../../utils/providerWizard';
 import { GenericModelProvider } from '../common/genericModelProvider';
 import { MimoCodeHandler } from './handler';
