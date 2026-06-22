@@ -293,7 +293,7 @@ export class AccountSyncAdapter {
             ProviderKey.Xiaomimimo,
             ProviderKey.Xinjianya,
             ProviderKey.Zenmux,
-            ProviderKey.Zhipu
+            ProviderKey.Zhipu,
         ];
 
         // Sync Codex (OAuth)
