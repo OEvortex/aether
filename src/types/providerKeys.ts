@@ -65,6 +65,7 @@ export enum ProviderKey {
 	Routingrun = 'routingrun',
 	Seraphyn = 'seraphyn',
 	Sherlock = 'sherlock',
+	Starveri = 'starveri',
 	Streamlake = 'streamlake',
 	Tencent = 'tencent',
 	Together = 'together',

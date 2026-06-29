@@ -1,7 +1,7 @@
 {
     "name": "aether-ai",
     "publisher": "OEvortex",
-    "version": "0.5.7",
+    "version": "0.5.8",
     "displayName": "Aether AI",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
     "license": "MIT",
@@ -114,6 +114,7 @@
         "onLanguageModelProvider:aether.routingrun",
         "onLanguageModelProvider:aether.seraphyn",
         "onLanguageModelProvider:aether.sherlock",
+        "onLanguageModelProvider:aether.starveri",
         "onLanguageModelProvider:aether.streamlake",
         "onLanguageModelProvider:aether.tencent",
         "onLanguageModelProvider:aether.together",
@@ -670,6 +671,11 @@
             {
                 "command": "aether.clod.setApiKey",
                 "title": "Configure Clod",
+                "category": "Aether"
+            },
+            {
+                "command": "aether.starveri.setApiKey",
+                "title": "Configure Starveri",
                 "category": "Aether"
             }
         ],
@@ -1990,6 +1996,19 @@
                         "apiKey": {
                             "type": "string",
                             "description": "Sherlock (CloudFerro) API key.",
+                            "secret": true
+                        }
+                    }
+                }
+            },
+            {
+                "vendor": "aether.starveri",
+                "displayName": "⦿ Starveri",
+                "configuration": {
+                    "properties": {
+                        "apiKey": {
+                            "type": "string",
+                            "description": "Starveri API key.",
                             "secret": true
                         }
                     }

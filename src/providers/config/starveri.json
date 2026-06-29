@@ -1,0 +1,18 @@
+{
+    "displayName": "Starveri",
+    "baseUrl": "https://api.starveri.net/v1",
+    "apiKeyTemplate": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "models": [
+        {
+            "id": "gpt-5.5",
+            "name": "Starveri GPT 5.5",
+            "tooltip": "Starveri GPT 5.5",
+            "maxInputTokens": 128000,
+            "maxOutputTokens": 16384,
+            "capabilities": {
+                "toolCalling": true,
+                "imageInput": false
+            }
+        }
+    ]
+}

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.8] - 2026-06-29
+
+### Added
+- **Starveri provider**: Added Starveri (`https://api.starveri.net/v1`) as a built-in OpenAI-compatible provider with automatic model list synchronization via `/models`.
+
 ## [0.5.7] - 2026-06-11
 
 ### Added

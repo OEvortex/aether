@@ -420,6 +420,11 @@ export class AccountUI {
                 authType: "apiKey" as const
             },
             {
+                label: "Starveri",
+                value: ProviderKey.Starveri,
+                authType: "apiKey" as const
+            },
+            {
                 label: "StreamLake",
                 value: ProviderKey.Streamlake,
                 authType: "apiKey" as const
@@ -1154,6 +1159,7 @@ export class AccountUI {
             routingrun: "Routing.run",
             seraphyn: "Seraphyn",
             sherlock: "Sherlock (CloudFerro)",
+            starveri: "Starveri",
             streamlake: "StreamLake",
             tencent: "Tencent Hunyuan",
             together: "TogetherAI",

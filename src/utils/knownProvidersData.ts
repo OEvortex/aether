@@ -1111,6 +1111,22 @@ const knownProviderOverrides: Record<string, KnownProviderConfig> = {
             cooldownMinutes: 10
         }
     },
+    starveri: {
+        displayName: 'Starveri',
+        family: 'Starveri',
+        sdkMode: 'openai',
+        openai: {
+            baseUrl: 'https://api.starveri.net/v1'
+        },
+        openModelEndpoint: true,
+        fetchModels: true,
+        modelsEndpoint: '/models',
+        modelParser: {
+            arrayPath: 'data',
+            descriptionField: 'id',
+            cooldownMinutes: 10
+        }
+    },
     streamlake: {
         displayName: 'StreamLake',
         family: 'StreamLake',

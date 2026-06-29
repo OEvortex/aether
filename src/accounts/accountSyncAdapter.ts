@@ -283,6 +283,7 @@ export class AccountSyncAdapter {
             ProviderKey.Routingrun,
             ProviderKey.Seraphyn,
             ProviderKey.Sherlock,
+            ProviderKey.Starveri,
             ProviderKey.Streamlake,
             ProviderKey.Tencent,
             ProviderKey.Together,

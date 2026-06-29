@@ -571,6 +571,14 @@ export class AccountManager {
             }
         ],
         [
+            ProviderKey.Starveri,
+            {
+                supportsMultiAccount: true,
+                supportsOAuth: false,
+                supportsApiKey: true
+            }
+        ],
+        [
             ProviderKey.Streamlake,
             {
                 supportsMultiAccount: true,
