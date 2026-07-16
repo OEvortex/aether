@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.9] - 2026-07-16
+
+### Fixed
+- **Extension activation failure on `agentSessionsWorkspace` proposal**: Added `agentSessionsWorkspace` to `package.json#enabledApiProposals` so the proposed-API check no longer blocks activation when `vscode.workspace.isAgentSessionsWorkspace` is accessed. Access is now performed via a type-safe cast so the build stays resilient regardless of the proposed `.d.ts` load order.
+- **MCP Bridge view container not registered**: Fixed the `aether.mcpBridge` activity-bar view container, which pointed at a missing icon (`assets/aether.png`) and failed to register, dropping its `Tools` view into Explorer. The container icon now resolves to the bundled extension logo (`logo_ai.png`).
+
 ## [0.5.8] - 2026-06-29
 
 ### Added
