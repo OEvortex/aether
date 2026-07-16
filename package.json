@@ -45,6 +45,7 @@
     "icon": "./logo_ai.png",
     "main": "./dist/extension.js",
     "enabledApiProposals": [
+        "agentSessionsWorkspace",
         "chatProvider"
     ],
     "activationEvents": [
