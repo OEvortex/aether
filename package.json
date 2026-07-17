@@ -1,7 +1,7 @@
 {
     "name": "aether-ai",
     "publisher": "OEvortex",
-    "version": "0.5.9",
+    "version": "0.6.0",
     "displayName": "Aether AI",
     "description": "An extension that provides model support for GitHub Copilot Chat, including ZhipuAI, MiniMax, MoonshotAI, DeepSeek, Alibaba Cloud Bailian, and custom OpenAI/Anthropic compatible models.",
     "license": "MIT",
@@ -45,7 +45,6 @@
     "icon": "./logo_ai.png",
     "main": "./dist/extension.js",
     "enabledApiProposals": [
-        "agentSessionsWorkspace",
         "chatProvider"
     ],
     "activationEvents": [
@@ -2380,7 +2379,7 @@
         "watch": "node esbuild.config.js --watch --dev",
         "sync-providers": "node scripts/sync-providers.js",
         "package": "vsce package",
-        "publish": "vsce publish --allow-proposed-apis agentSessionsWorkspace chatProvider chatParticipantAdditions defaultChatParticipant",
+        "publish": "vsce publish --allow-proposed-apis chatProvider chatParticipantAdditions defaultChatParticipant",
         "pretest": "npm run compile:dev",
         "release": "vsce package && ${VSCODE_BIN:-code} --install-extension *.vsix --force",
         "test": "vitest"

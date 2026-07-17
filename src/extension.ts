@@ -154,10 +154,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
         const isDevelopment =
             context.extensionMode === vscode.ExtensionMode.Development;
-        const isAgentWorkspace =
-            (vscode.workspace as { isAgentSessionsWorkspace?: boolean }).isAgentSessionsWorkspace ?? false;
         Logger.info(
-            `Aether Extension Mode: ${isDevelopment ? 'Development' : 'Production'} | Agent Workspace: ${isAgentWorkspace}`
+            `Aether Extension Mode: ${isDevelopment ? 'Development' : 'Production'}`
         );
         // Check and prompt VS Code log level settings
         if (isDevelopment) {

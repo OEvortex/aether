@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.5.9] - 2026-07-16
+## [0.6.0] - 2026-07-17
 
 ### Fixed
-- **Extension activation failure on `agentSessionsWorkspace` proposal**: Added `agentSessionsWorkspace` to `package.json#enabledApiProposals` so the proposed-API check no longer blocks activation when `vscode.workspace.isAgentSessionsWorkspace` is accessed. Access is now performed via a type-safe cast so the build stays resilient regardless of the proposed `.d.ts` load order.
+- **Extension activation failure on `agentSessionsWorkspace` proposal**: Removed the dependency on the `agentSessionsWorkspace` proposed API. `agentSessionsWorkspace` is reserved by VS Code for first-party extensions (it is allow-listed only for `GitHub.copilot-chat` in `product.json#extensionEnabledApiProposals`); a third-party extension that declares it has its `enabledApiProposals` silently nulled by VS Code, which blocked activation with `CANNOT use API proposal: agentSessionsWorkspace`. The proposal has been dropped from `package.json#enabledApiProposals` and from the `vsce publish --allow-proposed-apis` list, and the `vscode.workspace.isAgentSessionsWorkspace` access (used only in a startup log line) plus its orphaned `vscode.proposed.agentSessionsWorkspace.d.ts` type declaration have been removed. The extension now ships without any dependency on a gated proposed API.
 - **MCP Bridge view container not registered**: Fixed the `aether.mcpBridge` activity-bar view container, which pointed at a missing icon (`assets/aether.png`) and failed to register, dropping its `Tools` view into Explorer. The container icon now resolves to the bundled extension logo (`logo_ai.png`).
 
 ## [0.5.8] - 2026-06-29
